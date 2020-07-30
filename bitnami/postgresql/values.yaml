@@ -109,18 +109,18 @@ replication:
   enabled: false
   user: repl_user
   password: repl_password
-  slaveReplicas: 1
+  readReplicas: 1
   ## Set synchronous commit mode: on, off, remote_apply, remote_write and local
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
   synchronousCommit: "off"
-  ## From the number of `slaveReplicas` defined above, set the number of those that will have synchronous replication
-  ## NOTE: It cannot be > slaveReplicas
+  ## From the number of `readReplicas` defined above, set the number of those that will have synchronous replication
+  ## NOTE: It cannot be > readReplicas
   numSynchronousReplicas: 0
   ## Replication Cluster application name. Useful for defining multiple replication policies
   applicationName: my_application
 
 ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/primary/README.md#creating-a-database-user-on-first-run (see note!)
 # postgresqlPostgresPassword:
 
 ## PostgreSQL user (has superuser privileges if username is `postgres`)
@@ -271,7 +271,7 @@ service:
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
 
-## Start master and slave(s) pod(s) without limitations on shm memory.
+## Start primary and read(s) pod(s) without limitations on shm memory.
 ## By default docker and containerd (and possibly other container runtimes)
 ## limit `/dev/shm` to `64M` (see e.g. the
 ## [docker issue](https://github.com/docker-library/postgres/issues/416) and the
@@ -320,15 +320,15 @@ persistence:
   size: 8Gi
   annotations: {}
 
-## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
+## updateStrategy for PostgreSQL StatefulSet and its reads StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 updateStrategy:
   type: RollingUpdate
 
 ##
-## PostgreSQL Master parameters
+## PostgreSQL Primary parameters
 ##
-master:
+primary:
   ## Node, affinity, tolerations, and priorityclass settings for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -351,10 +351,10 @@ master:
   ##     command: ['do', 'something']
   extraInitContainers: []
 
-  ## Additional PostgreSQL Master Volume mounts
+  ## Additional PostgreSQL primary Volume mounts
   ##
   extraVolumeMounts: []
-  ## Additional PostgreSQL Master Volumes
+  ## Additional PostgreSQL primary Volumes
   ##
   extraVolumes: []
   ## Add sidecars to the pod
@@ -369,7 +369,7 @@ master:
   ##         containerPort: 1234
   sidecars: []
 
-  ## Override the service configuration for master
+  ## Override the service configuration for primary
   ##
   service: {}
   # type:
@@ -377,9 +377,9 @@ master:
   # clusterIP:
 
 ##
-## PostgreSQL Slave parameters
+## PostgreSQL read only replica parameters
 ##
-slave:
+readReplicas:
   ## Node, affinity, tolerations, and priorityclass settings for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -397,10 +397,10 @@ slave:
     # - name: do-something
     #   image: busybox
     #   command: ['do', 'something']
-  ## Additional PostgreSQL Slave Volume mounts
+  ## Additional PostgreSQL read Volume mounts
   ##
   extraVolumeMounts: []
-  ## Additional PostgreSQL Slave Volumes
+  ## Additional PostgreSQL read Volumes
   ##
   extraVolumes: []
   ## Add sidecars to the pod
@@ -415,7 +415,7 @@ slave:
   ##         containerPort: 1234
   sidecars: []
 
-  ## Override the service configuration for slave
+  ## Override the service configuration for read
   ##
   service: {}
   # type:

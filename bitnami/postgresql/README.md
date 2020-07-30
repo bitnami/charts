@@ -99,9 +99,9 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `replication.enabled`                         | Enable replication                                                                                                                                                        | `false`                                                       |
 | `replication.user`                            | Replication user                                                                                                                                                          | `repl_user`                                                   |
 | `replication.password`                        | Replication user password                                                                                                                                                 | `repl_password`                                               |
-| `replication.slaveReplicas`                   | Number of slaves replicas                                                                                                                                                 | `1`                                                           |
+| `replication.readReplicas`                   | Number of read replicas                                                                                                                                                 | `1`                                                           |
 | `replication.synchronousCommit`               | Set synchronous commit mode. Allowed values: `on`, `remote_apply`, `remote_write`, `local` and `off`                                                                      | `off`                                                         |
-| `replication.numSynchronousReplicas`          | Number of replicas that will have synchronous replication. Note: Cannot be greater than `replication.slaveReplicas`.                                                      | `0`                                                           |
+| `replication.numSynchronousReplicas`          | Number of replicas that will have synchronous replication. Note: Cannot be greater than `replication.readReplicas`.                                                      | `0`                                                           |
 | `replication.applicationName`                 | Cluster application name. Useful for advanced replication settings                                                                                                        | `my_application`                                              |
 | `existingSecret`                              | Name of existing secret to use for PostgreSQL passwords. The secret has to contain the keys `postgresql-postgres-password` which is the password for `postgresqlUsername` when it is different of `postgres`, `postgresql-password` which will override `postgresqlPassword`, `postgresql-replication-password` which will override `replication.password` and `postgresql-ldap-password` which will be sed to authenticate on LDAP. The value is evaluated as a template.                                                                        | `nil`                                                         |
 | `postgresqlPostgresPassword`                  | PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username).                                              | _random 10 character alphanumeric string_                     |
@@ -130,7 +130,7 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `service.loadBalancerIP`                      | loadBalancerIP if service type is `LoadBalancer`                                                                                                                          | `nil`                                                         |
 | `service.loadBalancerSourceRanges`            | Address that are allowed when svc is LoadBalancer                                                                                                                         | `[]` (evaluated as a template)                                |
 | `schedulerName`                               | Name of the k8s scheduler (other than default)                                                                                                                            | `nil`                                                         |
-| `shmVolume.enabled`                           | Enable emptyDir volume for /dev/shm for master and slave(s) Pod(s)                                                                                                        | `true`                                                        |
+| `shmVolume.enabled`                           | Enable emptyDir volume for /dev/shm for primary and read replica Pod(s)                                                                                                        | `true`                                                        |
 | `shmVolume.chmod.enabled`                     | Run at init chmod 777 of the /dev/shm (ignored if `volumePermissions.enabled` is `false`)                                                                                 | `true`                                                        |
 | `persistence.enabled`                         | Enable persistence using PVC                                                                                                                                              | `true`                                                        |
 | `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template.                                                                                        | `nil`                                                         |
@@ -141,36 +141,36 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `persistence.size`                            | PVC Storage Request for PostgreSQL volume                                                                                                                                 | `8Gi`                                                         |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                                                                   | `{}`                                                          |
 | `commonAnnotations`                           | Annotations to be added to all deployed resources (rendered as a template)                                                                                                | `{}`                                                          |
-| `master.nodeSelector`                         | Node labels for pod assignment (postgresql master)                                                                                                                        | `{}`                                                          |
-| `master.affinity`                             | Affinity labels for pod assignment (postgresql master)                                                                                                                    | `{}`                                                          |
-| `master.tolerations`                          | Toleration labels for pod assignment (postgresql master)                                                                                                                  | `[]`                                                          |
-| `master.anotations`                           | Map of annotations to add to the statefulset (postgresql master)                                                                                                          | `{}`                                                          |
-| `master.labels`                               | Map of labels to add to the statefulset (postgresql master)                                                                                                               | `{}`                                                          |
-| `master.podAnnotations`                       | Map of annotations to add to the pods (postgresql master)                                                                                                                 | `{}`                                                          |
-| `master.podLabels`                            | Map of labels to add to the pods (postgresql master)                                                                                                                      | `{}`                                                          |
-| `master.priorityClassName`                    | Priority Class to use for each pod (postgresql master)                                                                                                                    | `nil`                                                         |
-| `master.extraInitContainers`                  | Additional init containers to add to the pods (postgresql master)                                                                                                         | `[]`                                                          |
-| `master.extraVolumeMounts`                    | Additional volume mounts to add to the pods (postgresql master)                                                                                                           | `[]`                                                          |
-| `master.extraVolumes`                         | Additional volumes to add to the pods (postgresql master)                                                                                                                 | `[]`                                                          |
-| `master.sidecars`                             | Add additional containers to the pod                                                                                                                                      | `[]`                                                          |
-| `master.service.type`                         | Allows using a different service type for Master                                                                                                                          | `nil`                                                         |
-| `master.service.nodePort`                     | Allows using a different nodePort for Master                                                                                                                              | `nil`                                                         |
-| `master.service.clusterIP`                    | Allows using a different clusterIP for Master                                                                                                                             | `nil`                                                         |
-| `slave.nodeSelector`                          | Node labels for pod assignment (postgresql slave)                                                                                                                         | `{}`                                                          |
-| `slave.affinity`                              | Affinity labels for pod assignment (postgresql slave)                                                                                                                     | `{}`                                                          |
-| `slave.tolerations`                           | Toleration labels for pod assignment (postgresql slave)                                                                                                                   | `[]`                                                          |
-| `slave.anotations`                            | Map of annotations to add to the statefulsets (postgresql slave)                                                                                                          | `{}`                                                          |
-| `slave.labels`                                | Map of labels to add to the statefulsets (postgresql slave)                                                                                                               | `{}`                                                          |
-| `slave.podAnnotations`                        | Map of annotations to add to the pods (postgresql slave)                                                                                                                  | `{}`                                                          |
-| `slave.podLabels`                             | Map of labels to add to the pods (postgresql slave)                                                                                                                       | `{}`                                                          |
-| `slave.priorityClassName`                     | Priority Class to use for each pod (postgresql slave)                                                                                                                     | `nil`                                                         |
-| `slave.extraInitContainers`                   | Additional init containers to add to the pods (postgresql slave)                                                                                                          | `[]`                                                          |
-| `slave.extraVolumeMounts`                     | Additional volume mounts to add to the pods (postgresql slave)                                                                                                            | `[]`                                                          |
-| `slave.extraVolumes`                          | Additional volumes to add to the pods (postgresql slave)                                                                                                                  | `[]`                                                          |
-| `slave.sidecars`                              | Add additional containers to the pod                                                                                                                                      | `[]`                                                          |
-| `slave.service.type`                          | Allows using a different service type for Slave                                                                                                                           | `nil`                                                         |
-| `slave.service.nodePort`                      | Allows using a different nodePort for Slave                                                                                                                               | `nil`                                                         |
-| `slave.service.clusterIP`                     | Allows using a different clusterIP for Slave                                                                                                                              | `nil`                                                         |
+| `primary.nodeSelector`                         | Node labels for pod assignment (postgresql primary)                                                                                                                        | `{}`                                                          |
+| `primary.affinity`                             | Affinity labels for pod assignment (postgresql primary)                                                                                                                    | `{}`                                                          |
+| `primary.tolerations`                          | Toleration labels for pod assignment (postgresql primary)                                                                                                                  | `[]`                                                          |
+| `primary.anotations`                           | Map of annotations to add to the statefulset (postgresql primary)                                                                                                          | `{}`                                                          |
+| `primary.labels`                               | Map of labels to add to the statefulset (postgresql primary)                                                                                                               | `{}`                                                          |
+| `primary.podAnnotations`                       | Map of annotations to add to the pods (postgresql primary)                                                                                                                 | `{}`                                                          |
+| `primary.podLabels`                            | Map of labels to add to the pods (postgresql primary)                                                                                                                      | `{}`                                                          |
+| `primary.priorityClassName`                    | Priority Class to use for each pod (postgresql primary)                                                                                                                    | `nil`                                                         |
+| `primary.extraInitContainers`                  | Additional init containers to add to the pods (postgresql primary)                                                                                                         | `[]`                                                          |
+| `primary.extraVolumeMounts`                    | Additional volume mounts to add to the pods (postgresql primary)                                                                                                           | `[]`                                                          |
+| `primary.extraVolumes`                         | Additional volumes to add to the pods (postgresql primary)                                                                                                                 | `[]`                                                          |
+| `primary.sidecars`                             | Add additional containers to the pod                                                                                                                                      | `[]`                                                          |
+| `primary.service.type`                         | Allows using a different service type for primary                                                                                                                          | `nil`                                                         |
+| `primary.service.nodePort`                     | Allows using a different nodePort for primary                                                                                                                              | `nil`                                                         |
+| `primary.service.clusterIP`                    | Allows using a different clusterIP for primary                                                                                                                             | `nil`                                                         |
+| `readReplicas.nodeSelector`                   | Node labels for pod assignment (postgresql read replicas)                                                                                                                         | `{}`                                                          |
+| `readReplicas.affinity`                       | Affinity labels for pod assignment (postgresql read replicas)                                                                                                                     | `{}`                                                          |
+| `readReplicas.tolerations`                    | Toleration labels for pod assignment (postgresql read replicas)                                                                                                                   | `[]`                                                          |
+| `readReplicas.anotations`                     | Map of annotations to add to the statefulsets (postgresql read replicas)                                                                                                          | `{}`                                                          |
+| `readReplicas.labels`                         | Map of labels to add to the statefulsets (postgresql read replicas)                                                                                                               | `{}`                                                          |
+| `readReplicas.podAnnotations`                 | Map of annotations to add to the pods (postgresql read replicas)                                                                                                                  | `{}`                                                          |
+| `readReplicas.podLabels`                      | Map of labels to add to the pods (ostgresql read replicas)                                                                                                                       | `{}`                                                          |
+| `readReplicas.priorityClassName`              | Priority Class to use for each pod (ostgresql read replicas)                                                                                                                     | `nil`                                                         |
+| `readReplicas.extraInitContainers`            | Additional init containers to add to the pods (postgresql read replicas)                                                                                                          | `[]`                                                          |
+| `readReplicas.extraVolumeMounts`              | Additional volume mounts to add to the pods (postgresql read replicas)                                                                                                            | `[]`                                                          |
+| `readReplicas.extraVolumes`                   | Additional volumes to add to the pods (postgresql read replicas)                                                                                                                  | `[]`                                                          |
+| `readReplicas.sidecars`                       | Add additional containers to the pod                                                                                                                                      | `[]`                                                          |
+| `readReplicas.service.type`                   | Allows using a different service type for read replicas                                                                                                                          | `nil`                                                         |
+| `readReplicas.service.nodePort`               | Allows using a different nodePort for read replicas                                                                                                                          | `nil`                                                         |
+| `readReplicas.service.clusterIP`              | Allows using a different clusterIP for read replicas                                                                                                                              | `nil`                                                         |
 | `terminationGracePeriodSeconds`               | Seconds the pod needs to terminate gracefully                                                                                                                             | `nil`                                                         |
 | `resources`                                   | CPU/Memory resource requests/limits                                                                                                                                       | Memory: `256Mi`, CPU: `250m`                                  |
 | `securityContext.enabled`                     | Enable security context                                                                                                                                                   | `true`                                                        |
@@ -275,10 +275,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + replication.enabled: true
 ```
 
-- Number of slaves replicas:
+- Number of read replicas:
 ```diff
-- replication.slaveReplicas: 1
-+ replication.slaveReplicas: 2
+- replication.readReplicas: 1
++ replication.readReplicas: 2
 ```
 
 - Set synchronous commit mode:
@@ -301,9 +301,9 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the `values-production.yaml` file or modify the parameters shown above.
 
-### Customizing Master and Slave services in a replicated configuration
+### Customizing primary and read replica services in a replicated configuration
 
-At the top level, there is a service object which defines the services for both master and slave. For deeper customization, there are service objects for both the master and slave types individually. This allows you to override the values in the top level service object so that the master and slave can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the master and slave to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the master.service or slave.service objects will take precedence over the top level service object.
+At the top level, there is a service object which defines the services for both primary and readReplicas. For deeper customization, there are service objects for both the primary and read types individually. This allows you to override the values in the top level service object so that the primary and read can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the primary.service or readReplicas.service objects will take precedence over the top level service object.
 
 ### Change PostgreSQL version
 
@@ -370,8 +370,8 @@ For example:
 If you need  additional containers to run within the same pod as PostgreSQL (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
-# For the PostgreSQL master
-master:
+# For the PostgreSQL primary
+primary:
   sidecars:
   - name: your-image-name
     image: your-image
@@ -380,7 +380,7 @@ master:
     - name: portname
      containerPort: 1234
 # For the PostgreSQL replicas
-slave:
+readReplicas:
   sidecars:
   - name: your-image-name
     image: your-image
@@ -550,6 +550,12 @@ INFO  ==> ** Starting PostgreSQL **
 ```
 
 In this case, you should migrate the data from the old chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.
+
+### 10.0.0
+
+#### Breaking changes
+
+The term `master` has been replaced with `primary` and `slave` with `readReplicas` throughout the chart. Role names have changed from `master` and `slave` to `primary` and `read`.
 
 ### 4.0.0
 
