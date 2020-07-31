@@ -907,4 +907,4 @@ zookeeper:
 externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
-  servers: ""
+  servers: []
