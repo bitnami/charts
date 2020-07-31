@@ -35,7 +35,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              read -r -a sasl_passwords <<< "$(tr ',;' ' ' <<< "${KAFKA_CLIENT_PASSWORDS}")"
+              read -r -a sasl_passwords <<< "$(tr ',;' ' ' <<< "${SASL_USER_PASSWORD}")"
               kafka_exporter \
               {{- range $i, $e := until $replicaCount }}
               --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
@@ -43,7 +43,7 @@ spec:
               {{- if (include "kafka.client.saslAuthentication" .) }}
               --sasl.enabled \
               --sasl.username="$SASL_USERNAME" \
-              --sasl.password="$sasl_passwords[0]" \
+              --sasl.password="${sasl_passwords[0]}" \
               {{- end }}
               {{- if (include "kafka.tlsEncryption" .) }}
               --tls.enabled \
