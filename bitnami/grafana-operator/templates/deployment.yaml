@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grafana-operator.fullname" . }}
+  labels: {{- include "grafana-operator.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: {{- include "grafana-operator.matchLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec: 
+      {{- include "grafana-operator.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "grafana-operator.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "grafana-operator.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations}}
+      tolerations: {{- include "grafana-operator.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "grafana-operator.serviceAccountName" . }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        {{- if .Values.securityContext.supplementalGroups }}
+        supplementalGroups:
+        {{- with .Values.securityContext.supplementalGroups }}
+          - {{ . }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: grafana-operator
+          image: {{ include "grafana-operator.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: {{ .Values.service.port }}
+            name: metrics
+          command:
+          - grafana-operator
+          args:
+          - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
+          - -grafana-image-tag={{ .Values.grafana.image.tag | quote}}
+          - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
+          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | quote}}
+          {{- if (and .Values.args.scanAllNamespaces (not .Values.args.scanNamespaces)) }}
+          - --scan-all=True
+          {{- else if .Values.args.scanNamespaces }}
+          - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.args.scanNamespaces }}
+          {{- end }}
+        {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+        {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - stat
+                - /tmp/operator-sdk-ready
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+          env:
+            - name: TEMPLATE_PATH
+              value: /usr/local/bin/templates
+            - name: WATCH_NAMESPACE
+          {{- if .Values.watchNamespace }}
+              value: {{ .Values.watchNamespace }}
+          {{- else }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: {{ include "grafana-operator.fullname" . }}

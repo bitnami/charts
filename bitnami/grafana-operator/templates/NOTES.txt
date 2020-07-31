@@ -1,0 +1,5 @@
+** Please be patient while the chart is being deployed **
+
+Watch the Grafana Operator Deployment status using the command:
+
+    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "grafana-operator.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
