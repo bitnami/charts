@@ -194,20 +194,13 @@ spec:
             - name: KAFKA_OPTS
               value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
             {{- if (include "kafka.client.saslAuthentication" .) }}
-            {{- if and .Values.auth.jaas.clientUsers .Values.auth.jaas.clientPasswords }}
             - name: KAFKA_CLIENT_USERS
               value: {{ join "," .Values.auth.jaas.clientUsers | quote }}
             - name: KAFKA_CLIENT_PASSWORDS
-              value: {{ join "," .Values.auth.jaas.clientPasswords | quote }}
-            {{- else }}
-            - name: KAFKA_CLIENT_USER
-              value: {{ .Values.auth.jaas.clientUser | quote }}
-            - name: KAFKA_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
-                  key: client-password
-            {{- end }}
+                  key: client-passwords
             {{- end }}
             {{- if .Values.auth.jaas.zookeeperUser }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL

@@ -278,21 +278,14 @@ auth:
   ## MANDATORY when method is 'sasl', or 'sasl_tls'
   ##
   jaas:
-    ## Kafka client user. If specified clientUsers takes precedence.
-    ##
-    clientUser: user
-
     ## Kafka client user list
     ##
     ## clientUsers:
     ##   - user1
     ##   - user2
     ##
-    clientUsers: []
-
-    ## Kafka client password. If specified clientPasswords takes precedence
-    ##
-    clientPassword: ""
+    clientUsers:
+      - user
 
     ## Kafka client passwords. This is mandatory if more than one user is specified in clientUsers.
     ##
@@ -318,9 +311,9 @@ auth:
     ##
     # zookeeperPassword:
 
-    ## Name of the existing secret containing credentials for clientUser, interBrokerUser and zookeeperUser.
+    ## Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser.
     ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
-    ##       kubectl create secret generic SECRET_NAME --from-literal=client-password=CLIENT_PASSWORD --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
+    ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
     ##
     # existingSecret:
 

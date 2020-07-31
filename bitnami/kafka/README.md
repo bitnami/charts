@@ -416,7 +416,7 @@ You can configure different authentication protocols for each listener you confi
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
-- `auth.jaas.clientUser`/`auth.jaas.clientPassword`: when enabling SASL authentication for communications with clients.
+- `auth.jaas.clientUsers`/`auth.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
@@ -442,7 +442,7 @@ auth.clientProtocol=sasl
 auth.interBrokerProtocol=tls
 auth.certificatesSecret=kafka-jks
 auth.certificatesPassword=jksPassword
-auth.jaas.clientUser=brokerUser
+auth.jaas.clientUsers[0]=brokerUser
 auth.jaas.clientPassword=brokerPassword
 auth.jaas.zookeeperUser=zookeeperUser
 auth.jaas.zookeeperPassword=zookeeperPassword
@@ -631,6 +631,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 11.7.0
+
+The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords. `auth.jaas.clientUser/clientPassword` were substituted by `auth.jaas.clientUsers/clientPasswords`.
+
 ### To 11.0.0
 
 The way to configure listeners and athentication on Kafka is totally refactored allowing users to configure different authentication protocols on different listeners. Please check the sections [Listeners Configuration](listeners-configuration) and [Listeners Configuration](enable-kafka-for-kafka-and-zookeeper) for more information.
@@ -642,8 +646,6 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `auth.certificatesSecret` -> renamed to `auth.jksSecret`.
 - `auth.certificatesPassword` -> renamed to `auth.jksPassword`.
 - `sslEndpointIdentificationAlgorithm` -> renamedo to `auth.tlsEndpointIdentificationAlgorithm`.
-- `auth.brokerUser` -> renamed to `auth.jaas.clientUser`
-- `auth.brokerPassword` -> renamed to `auth.jaas.clientPassword`
 - `auth.interBrokerUser` -> renamed to `auth.jaas.interBrokerUser`
 - `auth.interBrokerPassword` -> renamed to `auth.jaas.interBrokerPassword`
 - `auth.zookeeperUser` -> renamed to `auth.jaas.zookeeperUser`
