@@ -52,7 +52,7 @@ image:
   #   - myRegistryKeySecretName
 
 args:
-  ## If one of these options is set a clusterRole and clusterRoleBinding is created to 
+  ## If one of these options is set a clusterRole and clusterRoleBinding is created to
   ## ensure that the operator is able to get data from other namespaces.
   scanAllNamespaces: false
   scanNamespaces: []
