@@ -35,3 +35,6 @@ maintainers:
     url: cellebyte@gmail.com
   - name: Bitnami
     email: containers@bitnami.com
+
+annotations:
+  category: Analytics
