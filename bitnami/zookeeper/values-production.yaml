@@ -148,6 +148,14 @@ listenOnAllIPs: false
 ##
 allowAnonymousLogin: true
 
+autopurge:
+  ## Retains the snapRetainCount most recent snapshots and the corresponding transaction logs and deletes the rest
+  ##
+  snapRetainCount: 3
+  ## The time interval in hours for which the purge task has to be triggered. Set to a positive integer (1 and above) to enable the auto purging.
+  ##
+  purgeInterval: 0
+
 auth:
   ## Use existing secret (ignores previous password)
   ##
@@ -176,6 +184,8 @@ heapSize: 1024
 ##
 logLevel: ERROR
 
+## Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir.
+## This allows a dedicated log device to be used, and helps avoid competition between logging and snaphots.
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
@@ -418,4 +428,3 @@ metrics:
     #    for: 5m
     #    labels:
     #      severity: critical
-
