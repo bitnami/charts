@@ -90,6 +90,8 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
 | `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
 | `service.annotations`                | Service annotations                                                                                                                                       | `{}`                                                    |
+| `extraVolumes`                       | Extra Volumes                                                                                                                                             | `[]`                                                    |
+| `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |                      
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
