@@ -119,8 +119,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.jaas.zookeeperUser`                         | Kafka Zookeeper user for SASL authentication                                                                                      | `nil`                                                   |
 | `auth.jaas.zookeeperPassword`                     | Kafka Zookeeper password for SASL authentication                                                                                  | `nil`                                                   |
 | `auth.jaas.existingSecret`                        | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                              | `nil`                                                   |
-| `auth.jaas.clientUsers`                           | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                   | `nil`                                                   |
-| `auth.jaas.clientPasswords`                       | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`        | `nil`                                                   |
+| `auth.jaas.clientUsers`                           | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                   | `[]`                                                   |
+| `auth.jaas.clientPasswords`                       | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`        | `[]`                                                   |
 | `listeners`                                       | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                          | `[]`                                                    |
 | `advertisedListeners`                             | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array  | `[]`                                                    |
 | `listenerSecurityProtocolMap`                     | The protocol->listener mapping. Auto-calculated it's set to nil                                                                   | `nil`                                                   |
@@ -443,7 +443,7 @@ auth.interBrokerProtocol=tls
 auth.certificatesSecret=kafka-jks
 auth.certificatesPassword=jksPassword
 auth.jaas.clientUsers[0]=brokerUser
-auth.jaas.clientPassword=brokerPassword
+auth.jaas.clientPassword[0]=brokerPassword
 auth.jaas.zookeeperUser=zookeeperUser
 auth.jaas.zookeeperPassword=zookeeperPassword
 zookeeper.auth.enabled=true
@@ -633,7 +633,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### To 11.7.0
 
-The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords. `auth.jaas.clientUser/clientPassword` were substituted by `auth.jaas.clientUsers/clientPasswords`.
+The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords.
+
+- `auth.jaas.clientUser` (string) -> deprecated  in favor of `auth.jaas.clientUsers` (array).
+- `auth.jaas.clientPassword` (string) -> deprecated  in favor of `auth.jaas.clientPasswords` (array).
 
 ### To 11.0.0
 
