@@ -149,7 +149,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ include "kafka.zookeeper.fullname" . | quote }}
               {{- else }}
-              value: {{ .Values.externalZookeeper.servers | quote }}
+              value: {{ join "," .Values.externalZookeeper.servers | quote }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}
