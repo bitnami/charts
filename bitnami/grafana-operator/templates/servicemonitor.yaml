@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 8080
       targetPort: metrics
       protocol: TCP
       name: metrics

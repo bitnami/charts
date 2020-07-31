@@ -109,4 +109,38 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}
+{{- if or .Values.args.scanAllNamespaces  .Values.args.scanNamespaces}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "grafana-operator.fullname" . }}
+  labels: {{- include "grafana-operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadashboards
+      - grafanadashboards/status
+    verbs: ['get', 'list', 'update', 'watch']
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs: ['get', 'list', 'watch']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "grafana-operator.fullname" . }}
+  labels: {{- include "grafana-operator.labels" . | nindent 4 }}
+roleRef:
+  name: {{ include "grafana-operator.fullname" . }}
+  kind: ClusterRole
+  apiGroup: ""
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "grafana-operator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

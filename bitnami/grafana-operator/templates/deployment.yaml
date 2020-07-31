@@ -4,11 +4,12 @@ metadata:
   name: {{ include "grafana-operator.fullname" . }}
   labels: {{- include "grafana-operator.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector: 
     matchLabels: {{- include "grafana-operator.matchLabels" . | nindent 6 }}
-  strategy:
-    type: RollingUpdate
+  {{- if .Values.updateStrategy }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "grafana-operator.labels" . | nindent 8 }}
@@ -45,7 +46,7 @@ spec:
           image: {{ include "grafana-operator.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          - containerPort: {{ .Values.service.port }}
+          - containerPort: 8080
             name: metrics
           command:
           - grafana-operator
