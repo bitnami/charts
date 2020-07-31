@@ -67,10 +67,9 @@ spec:
             allowPrivilegeEscalation: false
         {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - stat
-                - /tmp/operator-sdk-ready
+            httpGet:
+              path: /metrics
+              port: metrics
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
