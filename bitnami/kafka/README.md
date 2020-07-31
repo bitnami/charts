@@ -261,7 +261,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `zookeeper.enabled`                               | Switch to enable or disable the Zookeeper helm chart                                                                              | `true`                                                  |
 | `zookeeper.persistence.enabled`                   | Enable Zookeeper persistence using PVC                                                                                            | `true`                                                  |
-| `externalZookeeper.servers`                       | Server or list of external Zookeeper servers to use                                                                               | `[]`                                                    |
+| `externalZookeeper.servers`                       | Server or list of external Zookeeper servers to use                                                                               | `""`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
