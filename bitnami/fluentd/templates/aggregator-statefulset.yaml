@@ -29,6 +29,7 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.securityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.aggregator.securityContext.runAsUser }}
