@@ -298,6 +298,8 @@ airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 ```
 
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
+
 ### Loading Plugins
 
 You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
