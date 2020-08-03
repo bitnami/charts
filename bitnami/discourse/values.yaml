@@ -521,7 +521,7 @@ redis:
   existingSecret:
   ##
   ## Password key to be retrieved from Redis secret
-  existingSecretPasswordKey: redis-password
+  existingSecretPasswordKey: 'redis-password'
   ##
   ## Cluster settings
   ##
@@ -554,4 +554,4 @@ externalRedis:
   existingSecret:
   ##
   ## Password key to be retrieved from Redis secret
-  existingSecretPasswordKey: redis-password
+  existingSecretPasswordKey: 'redis-password'

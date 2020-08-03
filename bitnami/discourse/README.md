@@ -189,7 +189,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
 | `postgresql.postgresqlPassword`           | Password for the Dicourse user - ignored if existingSecret is provided                | _random 10 character long alphanumeric string_               |
 | `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres") - ignored if existingSecret is provided      | `bitnami`                                                    |
-| `postgresql.existingSecret`               | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`, `postgresql-replication-password`           | `nil`                                                                                 |
+| `postgresql.existingSecret`               | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`     | `nil`                                       |
 | `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
 | `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
@@ -197,7 +197,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
 | `externalDatabase.password`               | Password for the above username                                                       | `""`                                                         |
 | `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `""`                                                         |
-| `externalDatabase.existingSecret`         | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`, `postgresql-replication-password`           | `nil`                                                                                 |
+| `externalDatabase.existingSecret`         | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`     | `nil`                                       |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
 
 ### Redis parameters
