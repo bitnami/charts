@@ -67,6 +67,20 @@ spec:
                 secretKeyRef:
                   name: {{ template "wildfly.fullname" . }}
                   key: wildfly-password
+            {{- if .Values.extraEnvVars }}
+            {{- include "wildfly.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
