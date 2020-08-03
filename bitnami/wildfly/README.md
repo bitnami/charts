@@ -94,7 +94,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |
 | `extraEnvVars`                       | Extra Environment Variables                                                                                                                               | `nil`                                                   |
 | `extraEnvVarsCM`                     | Extra Environment Variables ConfigMap                                                                                                                     | `nil`                                                   |
-| `extraEnvVarsSecret`                 | Extra Environment Variables Secret                                                                                                                        | `nil`                                                   |
+| `extraEnvVarsSecret`                 | Extra Environment Variables Secret                                                                                                                        | `nil`                                                   | 
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
