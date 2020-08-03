@@ -91,7 +91,8 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
 | `service.annotations`                | Service annotations                                                                                                                                       | `{}`                                                    |
 | `extraVolumes`                       | Extra Volumes                                                                                                                                             | `[]`                                                    |
-| `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |                      
+| `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |
+| `sidecars`                           | Sidecar images to add to the pod. Evaluated as a template.                                                                                                     | `[]`                                                    |                
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -120,6 +121,19 @@ $ helm install my-release -f values.yaml bitnami/wildfly
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Sidecars
+If you have a need for additional containers to run within the same pod as  Wildfly (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+```
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+      containerPort: 1234
+```
 
 ## Persistence
 
