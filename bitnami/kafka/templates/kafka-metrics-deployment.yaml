@@ -35,14 +35,15 @@ spec:
             - /bin/bash
             - -ec
             - |
+              read -r -a sasl_passwords <<< "$(tr ',;' ' ' <<< "${SASL_USER_PASSWORD}")"
               kafka_exporter \
               {{- range $i, $e := until $replicaCount }}
               --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
               {{- end }}
               {{- if (include "kafka.client.saslAuthentication" .) }}
               --sasl.enabled \
-              --sasl.username={{ .Values.auth.jaas.clientUser | quote }} \
-              --sasl.password="$SASL_USER_PASSWORD" \
+              --sasl.username="$SASL_USERNAME" \
+              --sasl.password="${sasl_passwords[0]}" \
               {{- end }}
               {{- if (include "kafka.tlsEncryption" .) }}
               --tls.enabled \
@@ -58,11 +59,13 @@ spec:
               --web.listen-address=:9308
           {{- if (include "kafka.client.saslAuthentication" .) }}
           env:
+            - name: SASL_USERNAME
+              value: {{ index .Values.auth.jaas.clientUsers 0 | quote }}
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
-                  key: client-password
+                  key: client-passwords
           {{- end }}
           ports:
             - name: metrics
