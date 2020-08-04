@@ -154,7 +154,7 @@ spec:
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
           {{- end }}
-          
+          {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
@@ -164,6 +164,7 @@ spec:
             {{- if .Values.updateJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
       restartPolicy: OnFailure
       volumes:
       {{- if .Values.tls.enabled }}
