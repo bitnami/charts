@@ -1,6 +1,6 @@
 apiVersion: v2
 name: grafana-operator
-description: A Helm chart for Kubernetes
+description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances
 
 # A chart can be either an 'application' or a 'library' chart.
 #
