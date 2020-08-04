@@ -536,9 +536,12 @@ postgresql	default  	3       	2020-08-04 13:42:08.020385884 +0000 UTC	deployed	p
 
 - We can kill the existing pod and the new statefulset is going to create a new one:
 ```console
+$ kubectl delete pod postgresql-postgresql-0
+pod "postgresql-postgresql-0" deleted
+
 $ kubectl get pods
 NAME                      READY   STATUS    RESTARTS   AGE
-postgresql-postgresql-0   1/1     Running   0          102s
+postgresql-postgresql-0   1/1     Running   0          19s
 ```
 
 Please, note that without the `--cascade=false` both objects (statefulset and pod) are going to be removed and both objects will be deployed again with the `helm upgrade` command
