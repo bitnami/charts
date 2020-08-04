@@ -514,14 +514,14 @@ NAME                      READY   STATUS    RESTARTS   AGE
 postgresql-postgresql-0   1/1     Running   0          76s
 ```
 
-- Upgrade to the latest one (9.X.X)
+- The upgrade to the latest one (9.X.X) is going to fail
 ```console
 $ helm upgrade postgresql bitnami/postgresql
 Error: UPGRADE FAILED: cannot patch "postgresql-postgresql" with kind StatefulSet: StatefulSet.apps "postgresql-postgresql" is invalid: spec: Forbidden: updates to statefulset spec for fields other than 'replicas', 'template', and 'updateStrategy' are forbidden
 ```
 
-- Delete statefulset
-```
+- Delete the statefulset
+```console
 $ kubectl delete statefulsets.apps --cascade=false postgresql-postgresql
 statefulset.apps "postgresql-postgresql" deleted
 ```
