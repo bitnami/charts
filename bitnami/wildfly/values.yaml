@@ -200,7 +200,7 @@ extraVolumeMounts: []
 ##  - name: GF_DEFAULT_INSTANCE_NAME
 ##    value: my-instance
 ##
-extraEnvVars: 
+extraEnvVars:
 
 ## ConfigMap with extra env vars:
 ##
