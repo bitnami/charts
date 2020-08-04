@@ -209,3 +209,14 @@ extraEnvVarsCM:
 ## Secret with extra env vars:
 ##
 extraEnvVarsSecret:
+
+## Add sidecar containers to the pod (evaluated as a template)
+##
+sidecars:
+## e.g.
+# - name: your-image-name
+#   image: your-image
+#   imagePullPolicy: Always
+#   ports:
+#     - name: portname
+#       containerPort: 1234

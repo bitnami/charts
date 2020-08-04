@@ -106,6 +106,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/wildfly
+        {{- if .Values.sidecars }}
+        {{- include "wildfly.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: data
           {{- if .Values.persistence.enabled }}
