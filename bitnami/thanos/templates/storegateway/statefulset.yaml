@@ -102,7 +102,6 @@ spec:
               mountPath: /conf
               {{- else }}
               mountPath: /conf/objstore.yml
-              subPath: objstore.yml
               {{- end }}
             - name: data
               mountPath: /data

@@ -88,7 +88,7 @@ spec:
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop="replica"
             - --objstore.config-file=/conf/objstore.yml
-            - --rule-file=/conf/ruler.yml
+            - --rule-file=/conf/rules/ruler.yml
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
@@ -118,14 +118,12 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ruler-config
-              mountPath: /conf/ruler.yml
-              subPath: ruler.yml
+              mountPath: /conf/rules/ruler.yml
             - name: objstore-config
               {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
               {{- else }}
               mountPath: /conf/objstore.yml
-              subPath: objstore.yml
               {{- end }}
             - name: data
               mountPath: /data

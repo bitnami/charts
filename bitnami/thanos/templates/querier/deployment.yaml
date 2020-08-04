@@ -110,7 +110,6 @@ spec:
       {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - name: sd-config
               mountPath: /conf/servicediscovery.yml
-              subPath: servicediscovery.yml
       {{- end }}
       {{- if .Values.querier.grpcTLS.server.secure }}
             - name: tls-server
