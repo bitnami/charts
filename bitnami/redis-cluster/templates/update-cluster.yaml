@@ -154,10 +154,13 @@ spec:
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
           {{- end }}
+          
           volumeMounts:
+            {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
             {{- if .Values.updateJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
