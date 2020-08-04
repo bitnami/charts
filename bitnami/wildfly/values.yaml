@@ -193,3 +193,19 @@ extraVolumes: []
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
 ##
 extraVolumeMounts: []
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: GF_DEFAULT_INSTANCE_NAME
+##    value: my-instance
+##
+extraEnvVars:
+
+## ConfigMap with extra env vars:
+##
+extraEnvVarsCM:
+
+## Secret with extra env vars:
+##
+extraEnvVarsSecret:
