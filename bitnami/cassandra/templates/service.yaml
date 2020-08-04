@@ -28,4 +28,11 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
+    - name: metrics
+      port: {{ .Values.service.metricsPort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.service.nodePorts.metrics }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "cassandra.matchLabels" . | nindent 4 }}
