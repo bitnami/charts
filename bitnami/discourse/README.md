@@ -182,20 +182,21 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Database parameters
 
-| Parameter                                 | Description                                                                           | Default                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `postgresql.enabled`                      | Deploy PostgreSQL container(s)                                                        | `true`                                                       |
-| `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
-| `postgresql.postgresqlPassword`           | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_               |
-| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")                                              | `bitnami`                                                    |
-| `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
-| `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
-| `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
-| `externalDatabase.port`                   | Database port number                                                                  | `5432`                                                       |
-| `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
-| `externalDatabase.password`               | Password for the above username                                                       | `""`                                                         |
-| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `""`                                                         |
-| `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
+| Parameter                                    | Description                                                                           | Default                                                   |
+|----------------------------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| `postgresql.enabled`                         | Deploy PostgreSQL container(s)                                                        | `true`                                                    |
+| `postgresql.postgresqlUsername`              | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                            |
+| `postgresql.postgresqlPassword`              | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_            |
+| `postgresql.postgresqlPostgresPassword`      | Password for the admin user ("postgres")                                              | `bitnami`                                                 |
+| `postgresql.postgresqlDatabase`              | Name of the database to create                                                        | `bitnami_application`                                     |
+| `postgresql.persistence.enabled`             | Enable database persistence using PVC                                                 | `true`                                                    |
+| `externalDatabase.host`                      | Host of the external database                                                         | `""`                                                      |
+| `externalDatabase.port`                      | Database port number (when using an external db)                                      | `5432`                                                    |
+| `externalDatabase.user`                      | PostgreSQL username (when using an external db)                                       | `bn_discourse`                                            |
+| `externalDatabase.password`                  | Password for the above username (when using an external db)                           | `""`                                                      |
+| `externalDatabase.postgresqlPostgresUser`    | PostgreSQL admin user, used during the installation stage (when using an external db) | `""`                                                      |
+| `externalDatabase.postgresqlPostgresPassword`| Password for PostgreSQL admin user (when using an external db)                        | `""`                                                      |
+| `externalDatabase.database`                  | Name of the existing database (when using an external db)                             | `bitnami_application`                                     |
 
 ### Redis parameters
 
@@ -341,6 +342,7 @@ postgresql.enabled=false
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
+externalDatabase.postgresqlPostgresUser=postgres
 externalDatabase.postgresqlPostgresPassword=rootpassword
 externalDatabase.database=mydatabase
 externalDatabase.port=5432
