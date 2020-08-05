@@ -110,7 +110,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | `discourse.host`                          | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
 | `discourse.siteName`                      | Discourse site name                                                                   | `My Site!`                                                   |
 | `discourse.username`                      | Admin user of the application                                                         | `user`                                                       |
-| `discourse.password`                      | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
+| `discourse.password`                      | Application password (min length of 10 chars) - ignored if existingSecret is provided | _random 10 character long alphanumeric string_               |
+| `discourse.existingSecret`                | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
 | `discourse.email`                         | Admin user email of the application                                                   | `user@example.com`                                           |
 | `discourse.command`                       | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                              |
 | `discourse.args`                          | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
@@ -186,8 +187,9 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `postgresql.enabled`                      | Deploy PostgreSQL container(s)                                                        | `true`                                                       |
 | `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
-| `postgresql.postgresqlPassword`           | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_               |
-| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")                                              | `bitnami`                                                    |
+| `postgresql.postgresqlPassword`           | Password for the Dicourse user - ignored if existingSecret is provided                | _random 10 character long alphanumeric string_               |
+| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres") - ignored if existingSecret is provided      | `bitnami`                                                    |
+| `postgresql.existingSecret`               | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`     | `nil`                                       |
 | `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
 | `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
@@ -195,6 +197,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
 | `externalDatabase.password`               | Password for the above username                                                       | `""`                                                         |
 | `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `""`                                                         |
+| `externalDatabase.existingSecret`         | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password`     | `nil`                                       |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
 
 ### Redis parameters
@@ -203,12 +206,17 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `redis.enabled`                           | Deploy Redis container(s)                                                             | `true`                                                       |
 | `redis.usePassword`                       | Use password authentication                                                           | `false`                                                      |
-| `redis.password`                          | Password for Redis authentication                                                     | `nil`                                                        |
+| `redis.password`                          | Password for Redis authentication  - ignored if existingSecret is provided            | `nil`                                                        |
+| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
+| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret                    | `redis-password`                                             |
 | `redis.cluster.enabled`                   | Whether to use cluster replication                                                    | `false`                                                      |
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
 | `externalRedis.port`                      | Database port number                                                                  | `6379`                                                       |
 | `externalRedis.password`                  | Password for the above username                                                       | `nil`                                                        |
+| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
+| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                    | `redis-password`                                             |
+
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 

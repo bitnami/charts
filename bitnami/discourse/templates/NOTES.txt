@@ -17,10 +17,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if (include "discourse.redis.usePassword" .) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data. {{- include "discourse.redis.secretPasswordKey" . -}} }" | base64 --decode)
   {{- end }}
 2. Complete your Discourse deployment by running:
 
@@ -32,11 +32,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
-    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
-    --set redis.externalRedis=$APP_REDIS_PASSWORD \
-    --set redis.enabled=false \
     {{- end }}
     --set postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD
 
@@ -56,11 +53,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
-    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
-    --set redis.externalRedis=$APP_REDIS_PASSWORD \
-    --set redis.enabled=false \
     {{- end }}
     --set postgresql.enabled=false
 {{- end }}
@@ -78,10 +72,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 2. Get your Discourse login credentials by running:
 
   Username: {{ .Values.discourse.username }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if (include "discourse.redis.usePassword" .) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data. {{- include "discourse.redis.secretPasswordKey" . -}} }" | base64 --decode)
   {{- end }}
 {{- end }}
 
@@ -107,10 +101,10 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   export APP_HOST=127.0.0.1
 {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "discourse.fullname" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.databaseSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-  {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
-  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redisSecretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.secretName" . }} -o jsonpath="{.data.discourse-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  {{- if (include "discourse.redis.usePassword" .) }}
+  export APP_REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "discourse.redis.secretName" . }} -o jsonpath="{.data. {{- include "discourse.redis.secretPasswordKey" . -}} }" | base64 --decode)
   {{- end }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
@@ -132,11 +126,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if (and .Values.redis.enabled .Values.redis.usePassword) }}
+    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
     --set redis.password=$APP_REDIS_PASSWORD \
-    {{- else if and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password)) }}
-    --set redis.externalRedis=$APP_REDIS_PASSWORD \
-    --set redis.enabled=false \
     {{- end }}
     --set service.type={{ .Values.service.type }}
 {{- end }}
@@ -148,7 +139,7 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 
 {{- end }}
 
-{{ if and .Values.postgresql.enabled (eq .Values.postgresql.postgresqlPostgresPassword "bitnami") -}}
+{{ if and .Values.postgresql.enabled (not .Values.postgresql.existingSecret) (eq .Values.postgresql.postgresqlPostgresPassword "bitnami") -}}
 #####################################################################################
 ### WARNING: You did not change the default password for the PostgreSQL root user ###
 #####################################################################################
