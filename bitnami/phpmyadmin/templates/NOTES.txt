@@ -30,25 +30,25 @@
 {{- end }}
 
 2. How to log in
-{{ if or (.Values.db.chartName) (.Values.db.host)}}
+{{- if or (.Values.db.chartName) (.Values.db.host) }}
 
 phpMyAdmin has been configured to connect to a database in {{ if .Values.db.chartName}}{{template "phpmyadmin.dbfullname" .}}{{ else }}{{.Values.db.host}}{{end}}
-{{if .Values.db.port}}with port {{.Values.db.port}} {{end }}
+{{- if .Values.db.port}}with port {{.Values.db.port}} {{end }}
 Please login using a database username and password.
-{{ else if .Values.db.bundleTestDB }}
+{{- else if .Values.db.bundleTestDB }}
 For testing purposes, phpMyAdmin has been configured to point to a test MariaDB
 instance. Please login using the following credentials:
 
   Username: root
   Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 
-{{ else }}
+{{- else }}
 phpMyAdmin has not been configure to point to a specific database. Please provide the db host,
 username and password at log in or upgrade the release with a specific database:
 
 $ helm upgrade {{.Release.Name}} bitnami/phpmyadmin --set db.host=mydb
 
-{{end}}
+{{- end }}
 
 {{- include "phpmyadmin.validateValues" . -}}
 
@@ -60,3 +60,24 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 {{- end }}
 
 ** Please be patient while the chart is being deployed **
+
+{{- if and (not .Values.mariadb.existingSecret) .Values.db.bundleTestDB -}}
+  {{- $requiredPasswords := list -}}
+  {{- $secretName := include "mariadb.fullname" . -}}
+
+  {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" $secretName "field" "mariadb-root-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
+
+  {{- if not (empty .Values.mariadb.db.user) -}}
+    {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" $secretName "field" "mariadb-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
+  {{- end -}}
+
+  {{- if .Values.mariadb.replication.enabled -}}
+    {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" $secretName "field" "mariadb-replication-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
+  {{- end -}}
+
+  {{- $passwordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+{{- end -}}
