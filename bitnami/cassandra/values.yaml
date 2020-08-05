@@ -85,12 +85,16 @@ service:
   ## Thrift Client API port
   ##
   thriftPort: 9160
+  ## Metrics port
+  ##
+  metricsPort: 8080
   ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    cql: ""
-    thriftPort: ""
+    cql: ''
+    thriftPort: ''
+    metrics: ''
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -277,8 +281,8 @@ securityContext:
 
 ## Container entrypoint and cmd (useful for using different images)
 ##
-entrypoint: "/entrypoint.sh"
-cmd: "/run.sh"
+entrypoint: '/entrypoint.sh'
+cmd: '/run.sh'
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -329,5 +333,26 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8080'
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
