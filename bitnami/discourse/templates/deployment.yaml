@@ -64,6 +64,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.postgresqlPostgresUser }}
+            - name: POSTGRESQL_ROOT_USER
+              value: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
+            {{- end }}
             - name: POSTGRESQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:

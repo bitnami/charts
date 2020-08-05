@@ -491,7 +491,10 @@ externalDatabase:
   ## Database password
   ##
   password: ''
-  ## Root "postgres" password (used in the installation stage)
+  ## PostgreSQL admin user (used in the installation stage)
+  ##
+  postgresqlPostgresUser: postgres
+  ## PostgreSQL admin password (used in the installation stage)
   ##
   postgresqlPostgresPassword: ''
   ## Name of existing secret object
