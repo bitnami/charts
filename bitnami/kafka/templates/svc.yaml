@@ -31,10 +31,19 @@ spec:
       port: {{ .Values.service.port }}
       protocol: TCP
       targetPort: kafka-client
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
-      nodePort: {{ .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.client)) }}
+      nodePort: {{ .Values.service.nodePorts.client }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if and .Values.externalAccess.enabled (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+    - name: tcp-external
+      port: {{ .Values.service.externalPort }}
+      protocol: TCP
+      targetPort: kafka-external
+      {{- if (not (empty .Values.service.nodePorts.external)) }}
+      nodePort: {{ .Values.service.nodePorts.external }}
+      {{- end }}
+    {{- end }}
   selector: {{- include "kafka.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
