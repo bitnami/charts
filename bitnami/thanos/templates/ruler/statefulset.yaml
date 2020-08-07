@@ -118,7 +118,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ruler-config
-              mountPath: /conf/rules/ruler.yml
+              mountPath: /conf/rules
             - name: objstore-config
               {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
