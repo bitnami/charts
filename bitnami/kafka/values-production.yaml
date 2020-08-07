@@ -474,10 +474,15 @@ service:
   ## Kafka port for inter-broker connections
   ##
   internalPort: 9093
+  ## Kafka port for external connections
+  ##
+  externalPort: 9094
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    client: ""
+    external: ""
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##

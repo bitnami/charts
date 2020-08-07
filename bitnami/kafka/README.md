@@ -161,8 +161,10 @@ The following tables lists the configurable parameters of the Kafka chart and th
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                                                           | `ClusterIP`                                             |
 | `service.port`                                    | Kafka port for client connections                                                                                                 | `9092`                                                  |
-| `service.internalPort`                            | Kafka port for inter-broker connectionsKafka port for inter-broker connections                                                    | `9093`                                                  |
-| `service.nodePort`                                | Nodeport for client connections                                                                                                   | `""`                                                    |
+| `service.internalPort`                            | Kafka port for inter-broker connections                                                                                           | `9093`                                                  |
+| `service.externalPort`                            | Kafka port for external connections                                                                                               | `9094`                                                  |
+| `service.nodePorts.client`                        | Nodeport for client connections                                                                                                   | `""`                                                    |
+| `service.nodePorts.external`                      | Nodeport for external connections                                                                                                 | `""`                                                    |
 | `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                                                                  | `nil`                                                   |
 | `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                                                         | `[]`                                                    |
 | `service.annotations`                             | Service annotations                                                                                                               | `{}`(evaluated as a template)                           |
@@ -523,6 +525,8 @@ Note: You need to know in advance the node ports that will be exposed so each Ka
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
 
+Following the aforementioned steps will also allow to connect the brokers from the outside using the cluster's default service (when `service.type` is `LoadBalancer` or `NodePort`). Use the property `service.externalPort` to specify the port used for external connections.
+
 ### Sidecars
 
 If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
@@ -630,6 +634,12 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 11.8.0
+
+External access to brokers can now be achived through the cluster's Kafka service.
+
+- `service.nodePort` -> deprecated  in favor of `service.nodePorts.client` and `service.nodePorts.external`
 
 ### To 11.7.0
 
