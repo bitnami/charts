@@ -635,6 +635,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 11.8.0
+
+External access to brokers can now be achived through the cluster's Kafka service.
+
+- `service.nodePort` -> deprecated  in favor of `service.nodePorts.client` and `service.nodePorts.external`
+
 ### To 11.7.0
 
 The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords.
