@@ -57,6 +57,9 @@ spec:
         - --contour-cert-file=/certs/tls.crt
         - --contour-key-file=/certs/tls.key
         - --config-path=/config/contour.yaml
+        {{- if .Values.ingressClass }}
+        - --ingress-class-name={{ .Values.ingressClass }}
+        {{- end }}
         image: {{ include "contour.image" . }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         name: contour
