@@ -318,6 +318,10 @@ envoy:
     ##
     type: LoadBalancer
     externalTrafficPolicy: Local
+    # clusterIP: ""
+    # externalIPs: []
+    # loadBalancerIP: ""
+    # loadBalancerSourceRanges: []
 
     ## Service annotations
     ##
