@@ -25,8 +25,14 @@ spec:
         {{- if .Values.postgresql.podLabels }}
         {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.postgresql.podAnnotations (and .Values.metrics.enabled .Values.metrics.annotations) }}
+      annotations:
       {{- if .Values.postgresql.podAnnotations }}
-      annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+      {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
+      {{- include "postgresql-ha.tplValue" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
     spec:
 {{- include "postgresql-ha.imagePullSecrets" . | indent 6 }}
