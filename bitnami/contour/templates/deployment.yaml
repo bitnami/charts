@@ -19,6 +19,10 @@ spec:
       app.kubernetes.io/component: contour
   template:
     metadata:
+      {{- if .Values.configInline }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
       labels: {{- include "contour.labels" . | nindent 8 }}
         app.kubernetes.io/component: contour
     spec: {{- include "contour.imagePullSecrets" . | nindent 6 }}
