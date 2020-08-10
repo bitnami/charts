@@ -54,3 +54,83 @@ Validate value params:
     {{- printf "\n    '%s' must not be empty, please add '--set %s=$%s' to the command.%s" .valueKey .valueKey $varname $getCurrentValue -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Validate a mariadb required password must not be empty.
+
+Usage:
+{{ include "common.validations.values.mariadb.passwords" (dict "secret" "secretName" "context" $) }}
+
+Validate value params:
+  - secret - String - Required. Name of the secret where mysql values, e.g: "mysql-passwords-secret"
+*/}}
+{{- define "common.validations.values.mariadb.passwords" -}}
+  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
+    {{- $requiredPasswords := list -}}
+
+    {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
+
+    {{- if not (empty .context.Values.mariadb.db.user) -}}
+        {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" .secretName "field" "mariadb-password" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
+    {{- end -}}
+
+    {{- if .context.Values.mariadb.replication.enabled -}}
+        {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" .secretName "field" "mariadb-replication-password" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
+    {{- end -}}
+
+    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Validate a postgresql required password must not be empty.
+
+Usage:
+{{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
+
+Validate value params:
+  - secret - String - Required. Name of the secret where mysql values, e.g: "mysql-passwords-secret"
+  - subChart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+*/}}
+{{- define "common.validations.values.postgresql.passwords" -}}
+  {{- $existingSecret := false -}}
+  {{- $existingSecretGlobal := false -}}
+  {{- if .context.Values.global -}}
+    {{- if .context.Values.global.postgresql -}}
+      {{- $existingSecretGlobal = .context.Values.global.postgresql.existingSecret -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $enabled := true -}}
+  {{- $valueKeyPostgresqlPassword := "postgresqlPassword" -}}
+  {{- $enabledReplication := false -}}
+  {{- $valueKeyPostgresqlReplicationEnabled := "replication.password" -}}
+
+  {{- if .subchart -}}
+    {{- $existingSecret = .context.Values.postgresql.existingSecret -}}
+    {{- $existingSecretGlobal = false -}}
+    {{- $enabled = .context.Values.postgresql.enabled -}}
+    {{- $valueKeyPostgresqlPassword = "postgresql.postgresqlPassword" -}}
+    {{- $enabledReplication = .context.Values.postgresql.replication.enabled -}}
+    {{- $valueKeyPostgresqlReplicationEnabled = "postgresql.replication.password" -}}
+  {{- else -}}
+    {{- $existingSecret = .context.Values.existingSecret -}}
+    {{- $enabledReplication = .context.Values.replication.enabled -}}
+  {{- end -}}
+
+  {{- if and (not $existingSecret) (not $existingSecretGlobal) $enabled -}}
+    {{- $requiredPasswords := list -}}
+
+    {{- $requiredPostgresqlPassword := dict "valueKey" $valueKeyPostgresqlPassword "secret" .secret "field" "postgresql-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
+
+    {{- if $enabledReplication -}}
+        {{- $requiredPostgresqlReplicationPassword := dict "valueKey" $valueKeyPostgresqlReplicationEnabled "secret" .secret "field" "postgresql-replication-password" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlReplicationPassword -}}
+    {{- end -}}
+
+    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+  {{- end -}}
+{{- end -}}
