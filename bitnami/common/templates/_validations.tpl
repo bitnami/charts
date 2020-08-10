@@ -62,7 +62,7 @@ Usage:
 {{ include "common.validations.values.mariadb.passwords" (dict "secret" "secretName" "context" $) }}
 
 Validate value params:
-  - secret - String - Required. Name of the secret where mysql values, e.g: "mysql-passwords-secret"
+  - secret - String - Required. Name of the secret where mysql values are stored, e.g: "mysql-passwords-secret"
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
   {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
@@ -92,8 +92,8 @@ Usage:
 {{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
 
 Validate value params:
-  - secret - String - Required. Name of the secret where mysql values, e.g: "mysql-passwords-secret"
-  - subChart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+  - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "mysql-passwords-secret"
+  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.postgresql.passwords" -}}
   {{- $existingSecret := false -}}
