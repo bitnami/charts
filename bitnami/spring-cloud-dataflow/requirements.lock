@@ -10,6 +10,6 @@ dependencies:
   version: 7.5.8
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 11.7.2
-digest: sha256:67e6168e7c500fdf49b157d038368a006fb87b29195c08d64bc708aed5d59639
-generated: "2020-08-07T08:05:04.827968344Z"
+  version: 11.8.0
+digest: sha256:be1be4c50bf977195b40d6b39465c270efa5627d46fbb5120ac83aa1c73926bc
+generated: "2020-08-10T10:44:45.104730418Z"
