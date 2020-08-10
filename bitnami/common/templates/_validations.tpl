@@ -36,7 +36,7 @@ Validate value params:
   {{- $latestObj := $.context.Values -}}
   {{- range $valueKeyArray -}}
     {{- if not $latestObj -}}
-      {{- printf "please review the entire path of '%s' exists in values" .valueKey | fail -}}
+      {{- printf "please review the entire path of '%s' exists in values" $.valueKey | fail -}}
     {{- end -}}
 
     {{- $value = ( index $latestObj . ) -}}
