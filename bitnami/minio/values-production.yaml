@@ -334,7 +334,7 @@ ingress:
   # annotations:
   #   kubernetes.io/ingress.class: nginx
 
-  ## Ingress labels done as key:value pairs
+  ## Ingress additional labels done as key:value pairs
   labels: {}
 
   ## The list of hostnames to be covered with this ingress record.
