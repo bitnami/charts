@@ -6,9 +6,6 @@ metadata:
   labels: {{- include "consul.labels" . | nindent 4 }}
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-{{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 4 }}
-{{- end }}
 spec:
   ports:
     - name: http
@@ -28,11 +25,6 @@ spec:
       port: {{.Values.service.consulDnsPort}}
     - name: consuldns-udp
       protocol: "UDP"
-      port: {{.Values.service.consulDnsPort}}
-{{- if .Values.metrics.enabled }}
-    - name: metrics
-      port: 9104
-      targetPort: metrics
-{{- end }}     
+      port: {{.Values.service.consulDnsPort}}   
   clusterIP: None
   selector: {{- include "consul.matchLabels" . | nindent 4 }}

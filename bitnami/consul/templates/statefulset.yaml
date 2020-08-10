@@ -18,10 +18,13 @@ spec:
   template:
     metadata:
       labels: {{- include "consul.labels" . | nindent 8 }}
-      {{- if .Values.podAnnotations }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
           {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+          {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
