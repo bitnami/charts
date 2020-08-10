@@ -85,6 +85,10 @@ configInline:
   #   - "user_agent"
   #   - "x_forwarded_for"
 
+## Name of the ingress class to route through this controller
+##
+# ingressClass: contour
+
 ## String to partially override contour.fullname include (will maintain the release name)
 ##
 # nameOverride:
@@ -314,6 +318,10 @@ envoy:
     ##
     type: LoadBalancer
     externalTrafficPolicy: Local
+    # clusterIP: ""
+    # externalIPs: []
+    # loadBalancerIP: ""
+    # loadBalancerSourceRanges: []
 
     ## Service annotations
     ##
