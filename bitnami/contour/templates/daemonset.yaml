@@ -52,10 +52,11 @@ spec:
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         lifecycle:
           preStop:
-            httpGet:
-              path: /shutdown
-              port: 8090
-              scheme: HTTP
+            exec:
+              command:
+                - contour
+                - envoy
+                - shutdown
         {{- if .Values.contour.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
@@ -150,6 +151,7 @@ spec:
         - /config/envoy.json
         - --xds-address={{ template "contour.fullname" . }}
         - --xds-port=8001
+        - --resources-dir=/config/resources
         - --envoy-cafile=/certs/ca.crt
         - --envoy-cert-file=/certs/tls.crt
         - --envoy-key-file=/certs/tls.key
@@ -169,6 +171,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+      automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
       - name: envoy-config

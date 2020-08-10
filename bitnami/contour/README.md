@@ -173,6 +173,12 @@ configInline:
   tls:
   #   minimum TLS version that Contour will negotiate
   #   minimum-protocol-version: "1.1"
+  # Defines the Kubernetes name/namespace matching a secret to use
+  # as the fallback certificate when requests which don't match the
+  # SNI defined for a vhost.
+    fallback-certificate:
+  #   name: fallback-secret-name
+  #   namespace: projectcontour
   # The following config shows the defaults for the leader election.
   # leaderelection:
   #   configmap-name: leader-elect
@@ -208,6 +214,18 @@ configInline:
   #   - "upstream_service_time"
   #   - "user_agent"
   #   - "x_forwarded_for"
+  #
+  # default-http-versions:
+  # - "HTTP/2"
+  # - "HTTP/1.1"
+  #
+  # The following shows the default proxy timeout settings.
+  # timeouts:
+  #   request-timeout: infinity
+  #   connection-idle-timeout: 60s
+  #   stream-idle-timeout: 5m
+  #   max-connection-duration: infinity
+  #   connection-shutdown-grace-period: 5s
 ```
 
 ### Deploying Contour with an AWS NLB
