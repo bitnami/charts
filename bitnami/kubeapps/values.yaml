@@ -16,6 +16,9 @@ useHelm3: false
 ## When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
 allowNamespaceDiscovery: true
 
+## Enable IPv6 Configuration for Nginx
+enableIPv6: true
+
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
 ## set frontend.service.type=LoadBalancer in the frontend configuration.
@@ -105,7 +108,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.18.0-debian-10-r38
+    tag: 1.19.1-debian-10-r16
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -193,7 +196,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.10.3-scratch-r0
+    tag: 1.11.0-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -205,7 +208,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.10.3-scratch-r0
+    tag: 1.11.0-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -279,7 +282,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.3-debian-10-r85
+    tag: 1.16.3-debian-10-r176
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -305,7 +308,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.10.3-scratch-r0
+    tag: 1.11.0-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -352,7 +355,7 @@ tillerProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.10.3-scratch-r0
+    tag: 1.11.0-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -430,7 +433,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.10.3-scratch-r0
+    tag: 1.11.0-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -495,7 +498,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.10.3-debian-10-r0
+    tag: 1.11.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -561,7 +564,8 @@ mongodb:
     size: 8Gi
   ## MongoDB credentials are handled by kubeapps to facilitate upgrades
   ##
-  existingSecret: kubeapps-mongodb
+  auth:
+    existingSecret: kubeapps-mongodb
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -633,7 +637,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.18.0-debian-10-r38
+  tag: 1.19.1-debian-10-r16
 
 # Auth Proxy for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -646,7 +650,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 5.1.0-debian-10-r24
+    tag: 6.0.0-debian-10-r23
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -668,10 +672,10 @@ authProxy:
   ## Additional flags for oauth2-proxy
   ##
   additionalFlags: []
-  # - -ssl-insecure-skip-verify
-  # - -cookie-secure=false
-  # - -scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
-  # - -oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
+  # - --ssl-insecure-skip-verify
+  # - --cookie-secure=false
+  # - --scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
+  # - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -696,6 +700,9 @@ featureFlags:
   invalidateCache: true
   operators: false
   # additionalClusters is a WIP feature for multi-cluster support.
+  # The base64-encoded certificateAuthorityData can be obtained from the additional cluster's kube config
+  # file, for example:
+  # kubectl --kubeconfig ~/.kube/kind-config-kubeapps-additional config view --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
   additionalClusters: []
   # additionalClusters:
   # - name: second-cluster

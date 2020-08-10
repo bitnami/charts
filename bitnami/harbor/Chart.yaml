@@ -1,7 +1,7 @@
 apiVersion: v1
 name: harbor
-version: 6.0.10
-appVersion: 2.0.1
+version: 7.0.3
+appVersion: 2.0.2
 description: Harbor is an an open source trusted cloud native registry project that stores, signs, and scans content
 keywords:
   - docker

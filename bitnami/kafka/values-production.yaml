@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.5.0-debian-10-r96
+  tag: 2.6.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -244,6 +244,13 @@ auth:
   clientProtocol: sasl
   interBrokerProtocol: sasl
 
+  ## Allowed SASL mechanisms when clientProtocol or interBrokerProtocol are using either sasl or sasl_tls
+  ##
+  saslMechanisms: plain,scram-sha-256,scram-sha-512
+  ## SASL mechanism for inter broker communication
+  ##
+  saslInterBrokerMechanism: plain
+
   ## Name of the existing secret containing the truststore and
   ## one keystore per Kafka broker you have in the Kafka cluster.
   ## MANDATORY when 'tls', 'mtls', or 'sasl_tls' authentication protocols are used.
@@ -271,13 +278,22 @@ auth:
   ## MANDATORY when method is 'sasl', or 'sasl_tls'
   ##
   jaas:
-    ## Kafka client user
+    ## Kafka client user list
     ##
-    clientUser: user
+    ## clientUsers:
+    ##   - user1
+    ##   - user2
+    ##
+    clientUsers:
+      - user
 
-    ## Kafka client password
+    ## Kafka client passwords
     ##
-    clientPassword: ""
+    ## clientPasswords:
+    ##   - password1
+    ##   - password2
+    ##
+    clientPasswords: []
 
     ## Kafka inter broker communication user
     ##
@@ -295,9 +311,9 @@ auth:
     ##
     zookeeperPassword: zookeeperPassword
 
-    ## Name of the existing secret containing credentials for clientUser, interBrokerUser and zookeeperUser.
+    ## Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser.
     ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
-    ##       kubectl create secret generic SECRET_NAME --from-literal=client-password=CLIENT_PASSWORD --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
+    ##       kubectl create secret generic SECRET_NAME --from-literal=client-password=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
     ##
     # existingSecret:
 
@@ -458,10 +474,15 @@ service:
   ## Kafka port for inter-broker connections
   ##
   internalPort: 9093
+  ## Kafka port for external connections
+  ##
+  externalPort: 9094
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    client: ""
+    external: ""
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -498,7 +519,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.4-debian-10-r119
+      tag: 1.17.9-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -668,7 +689,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r168
+      tag: 1.2.0-debian-10-r184
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -742,7 +763,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.kafka.port }}"
+        prometheus.io/port: "{{ .Values.metrics.kafka.service.port }}"
         prometheus.io/path: "/metrics"
 
   ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
@@ -756,7 +777,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.13.0-debian-10-r57
+      tag: 0.13.0-debian-10-r73
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -817,7 +838,7 @@ metrics:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.jmx.exporterPort }}"
+        prometheus.io/port: "{{ .Values.metrics.jmx.service.port }}"
         prometheus.io/path: "/"
 
     ## JMX Whitelist Objects, can be set to control which JMX metrics are exposed. Only whitelisted

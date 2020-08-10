@@ -5,7 +5,7 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 - A new deployment, service have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -122,6 +122,9 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpoolImage.pullPolicy`                       | Pgpool image pull policy                                                                                                                                             | `IfNotPresent`                                               |
 | `pgpoolImage.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `pgpoolImage.debug`                            | Specify if debug logs should be enabled                                                                                                                              | `false`                                                      |
+| `pgpool.customUsers.usernames`                 | Comma or semicolon separeted list of postgres usernames to be added to pgpool_passwd                                                                                 | `nil`                                                        |
+| `pgpool.customUsers.passwords`                 | Comma or semicolon separeted list of the associated passwords for the users to be added to pgpool_passwd                                                             | `nil`                                                        |
+| `pgpool.customUsersSecret`                     | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                                              | `nil`                                                        |
 | `pgpool.labels`                                | Map of labels to add to the deployment. Evaluated as a template                                                                                                      | `{}`                                                         |
 | `pgpool.podLabels`                             | Map of labels to add to the pods. Evaluated as a template                                                                                                            | `{}`                                                         |
 | `pgpool.replicaCount`                          | The number of replicas to deploy                                                                                                                                     | `2`                                                          |

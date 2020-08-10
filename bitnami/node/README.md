@@ -2,7 +2,7 @@
 
 [Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

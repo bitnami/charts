@@ -207,6 +207,9 @@ spec:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
       {{- end }}
+      {{- if .Values.prometheus.thanos.resources }}
+      resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- end }}
       ports:
         - name: grpc
           containerPort: 10901

@@ -2,7 +2,7 @@
 
 [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
