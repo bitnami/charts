@@ -74,7 +74,7 @@ volumePermissions:
 ## Statefulset parameters
 ##
 statefulset:
-  ## Number od replicas
+  ## Number of replicas
   ##
   replicaCount: 1
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
