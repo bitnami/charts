@@ -110,6 +110,13 @@ securityContext:
 ##
 # existingSecret:
 
+## Allow customization of the secret resource
+##
+secret:
+  ## Add custom annotations to the secret (evaluated as a template)
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  annotations: {}
+
 ## MariaDB admin credentials
 ##
 rootUser:
