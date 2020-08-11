@@ -78,10 +78,10 @@ spec:
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
             {{- if .Values.indexCacheConfig }}
-            - --index-cache.config-file=index-cache.yml
+            - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
             {{- if .Values.bucketCacheConfig }}
-            - --store.caching-bucket.config-file=bucket-cache.yml
+            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
             {{- end }}
             {{- range .Values.storegateway.extraFlags }}
             - {{ . }}
