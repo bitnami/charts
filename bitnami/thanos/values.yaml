@@ -52,11 +52,6 @@ clusterDomain: cluster.local
 ##
 # bucketCacheConfig:
 
-## Objstore Configuration
-## Specify content for objstore.yml
-##
-# objstoreConfig:
-
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
