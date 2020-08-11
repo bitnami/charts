@@ -77,6 +77,9 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap}}
+            - --index-cache.config-file=/conf/cache/config.yml
+            {{- end}}
             {{- range .Values.storegateway.extraFlags }}
             - {{ . }}
             {{- end }}
@@ -105,6 +108,10 @@ spec:
               {{- end }}
             - name: data
               mountPath: /data
+            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap}}
+            - name: cache-config
+              mountPath: /conf/cache
+            {{- end}}
       volumes:
         - name: objstore-config
           secret:
@@ -112,6 +119,11 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap}}
+        - name: cache-config
+          configMap:
+            name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end}}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
