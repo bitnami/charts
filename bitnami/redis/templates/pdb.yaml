@@ -17,4 +17,5 @@ spec:
     matchLabels:
       app: {{ template "redis.name" . }}
       chart: {{ template "redis.chart" . }}
+      release: {{ .Release.Name }}
 {{- end }}

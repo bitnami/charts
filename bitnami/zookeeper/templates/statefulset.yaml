@@ -7,10 +7,10 @@ metadata:
     app.kubernetes.io/component: zookeeper
     role: zookeeper
     {{- if .Values.commonLabels }}
-    {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
@@ -36,7 +36,7 @@ spec:
         {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -247,7 +247,7 @@ spec:
           readinessProbe:
             exec:
               {{- if not .Values.service.tls.disable_base_client_port }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
               {{- else }}
               command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
               {{- end }}

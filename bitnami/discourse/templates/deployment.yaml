@@ -20,7 +20,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        checksum/secrets-discourse: {{ include (print $.Template.BasePath "/secrets-discourse.yaml") . | sha256sum }}
+        checksum/secrets-database: {{ include (print $.Template.BasePath "/secrets-database.yaml") . | sha256sum }}
+        checksum/secrets-redis: {{ include (print $.Template.BasePath "/secrets-redis.yaml") . | sha256sum }}
       labels: {{- include "discourse.labels" . | nindent 8 }}
         component: discourse
         {{- if .Values.podLabels }}
@@ -55,24 +57,28 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
+                  name: {{ include "discourse.secretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.postgresqlPostgresUser }}
+            - name: POSTGRESQL_ROOT_USER
+              value: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
+            {{- end }}
             - name: POSTGRESQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-postgres-password
-            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+            {{- if (include "discourse.redis.usePassword" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.redisSecretName" . }}
-                  key: redis-password
+                  name: {{ include "discourse.redis.secretName" . }}
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
             {{- include "discourse.tplValue" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
@@ -146,19 +152,19 @@ spec:
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.fullname" . }}
+                  name: {{ include "discourse.secretName" . }}
                   key: discourse-password
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.databaseSecretName" . }}
+                  name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (not (empty .Values.externalRedis.password))) }}
+            {{- if (include "discourse.redis.usePassword" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.redisSecretName" . }}
-                  key: redis-password
+                  name: {{ include "discourse.redis.secretName" . }}
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "discourse.tplValue" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
