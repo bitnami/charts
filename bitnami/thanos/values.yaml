@@ -762,7 +762,7 @@ storegateway:
   ## NOTE: This will override storegateway.config
   ##
   # existingConfigmap:
-  
+
   ## Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1
