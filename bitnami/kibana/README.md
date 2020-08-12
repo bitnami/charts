@@ -2,7 +2,7 @@
 
 [Kibana](https://kibana.com/) is an open source, browser based analytics and search dashboard for Elasticsearch.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

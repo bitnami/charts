@@ -2,7 +2,7 @@
 
 [Drupal](https://www.drupal.org/) is one of the most versatile open source content management systems on the market.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

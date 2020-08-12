@@ -2,7 +2,7 @@
 
 [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
 
-## TL;DR;
+## TL;DR
 
 ```console
   helm repo add bitnami https://charts.bitnami.com/bitnami

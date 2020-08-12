@@ -237,6 +237,7 @@ spec:
             - name: AZURE_TENANT_ID
               value: {{ .Values.azure.tenantId }}
             {{- end }}
+            {{- if not .Values.azure.useManagedIdentityExtension }}
             {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
             - name: AZURE_CLIENT_SECRET
               valueFrom:
@@ -248,6 +249,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: azure_aad_client_id
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -447,7 +449,7 @@ spec:
               mountPath: {{ .Values.aws.credentials.mountPath }}
               readOnly: true
             {{- end }}
-            {{- if eq .Values.provider "azure" }}
+            {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
             # Azure mountPath(s)
             - name: azure-config-file
               {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
@@ -505,7 +507,7 @@ spec:
           secret:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
-        {{- if eq .Values.provider "azure" }}
+        {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
         # Azure volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}

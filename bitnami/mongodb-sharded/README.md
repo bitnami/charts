@@ -4,7 +4,7 @@
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -58,7 +58,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `global.imagePullSecrets`                     | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)  |
 | `global.storageClass`                         | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                    |
 | `image.registry`                              | MongoDB image registry                                                                                                                                    | `docker.io`                                              |
-| `image.repository`                            | MongoDB Image name                                                                                                                                        | `bitnami/mongodb`                                        |
+| `image.repository`                            | MongoDB Image name                                                                                                                                        | `bitnami/mongodb-sharded`                                |
 | `image.tag`                                   | MongoDB Image tag                                                                                                                                         | `{TAG_NAME}`                                             |
 | `image.pullPolicy`                            | Image pull policy                                                                                                                                         | `IfNotPresent`                                           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)  |

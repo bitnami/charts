@@ -1055,6 +1055,93 @@ spec:
             baseImage:
               description: Base image to use for a Prometheus deployment.
               type: string
+            probeNamespaceSelector:
+              description: '*Experimental* Namespaces to be selected for Probe
+                discovery. If nil, only check own namespace.'
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
+            probeSelector:
+              description: '*Experimental* Probes to be selected for target discovery.'
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
             configMaps:
               description: ConfigMaps is a list of ConfigMaps in the same namespace
                 as the Prometheus object, which shall be mounted into the Prometheus
@@ -1325,7 +1412,8 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported'
+                              a TCP port. TCP hooks not yet supported TODO: implement
+                              a realistic TCP lifecycle hook'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -1420,7 +1508,8 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported'
+                              a TCP port. TCP hooks not yet supported TODO: implement
+                              a realistic TCP lifecycle hook'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -1530,7 +1619,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -1691,7 +1781,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -1843,15 +1934,11 @@ spec:
                             description: GMSACredentialSpec is where the GMSA admission
                               webhook (https://github.com/kubernetes-sigs/windows-gmsa)
                               inlines the contents of the GMSA credential spec named
-                              by the GMSACredentialSpecName field. This field is alpha-level
-                              and is only honored by servers that enable the WindowsGMSA
-                              feature flag.
+                              by the GMSACredentialSpecName field.
                             type: string
                           gmsaCredentialSpecName:
                             description: GMSACredentialSpecName is the name of the
-                              GMSA credential spec to use. This field is alpha-level
-                              and is only honored by servers that enable the WindowsGMSA
-                              feature flag.
+                              GMSA credential spec to use.
                             type: string
                           runAsUserName:
                             description: The UserName in Windows to run the entrypoint
@@ -1859,8 +1946,7 @@ spec:
                               in image metadata if unspecified. May also be set in
                               PodSecurityContext. If set in both SecurityContext and
                               PodSecurityContext, the value specified in SecurityContext
-                              takes precedence. This field is beta-level and may be
-                              disabled with the WindowsRunAsUserName feature flag.
+                              takes precedence.
                             type: string
                         type: object
                     type: object
@@ -1872,7 +1958,7 @@ spec:
                       be used to provide different probe parameters at the beginning
                       of a Pod''s lifecycle, when it might take a long time to load
                       data or warm a cache, than during steady-state operation. This
-                      cannot be updated. This is an alpha feature enabled by the StartupProbe
+                      cannot be updated. This is a beta feature enabled by the StartupProbe
                       feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                     properties:
                       exec:
@@ -1961,7 +2047,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -2026,7 +2113,7 @@ spec:
                     type: boolean
                   volumeDevices:
                     description: volumeDevices is the list of block devices to be
-                      used by the container. This is a beta feature.
+                      used by the container.
                     items:
                       description: volumeDevice describes a mapping of a raw block
                         device within a container.
@@ -2411,7 +2498,8 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported'
+                              a TCP port. TCP hooks not yet supported TODO: implement
+                              a realistic TCP lifecycle hook'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -2506,7 +2594,8 @@ spec:
                             type: object
                           tcpSocket:
                             description: 'TCPSocket specifies an action involving
-                              a TCP port. TCP hooks not yet supported'
+                              a TCP port. TCP hooks not yet supported TODO: implement
+                              a realistic TCP lifecycle hook'
                             properties:
                               host:
                                 description: 'Optional: Host name to connect to, defaults
@@ -2616,7 +2705,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -2777,7 +2867,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -2929,15 +3020,11 @@ spec:
                             description: GMSACredentialSpec is where the GMSA admission
                               webhook (https://github.com/kubernetes-sigs/windows-gmsa)
                               inlines the contents of the GMSA credential spec named
-                              by the GMSACredentialSpecName field. This field is alpha-level
-                              and is only honored by servers that enable the WindowsGMSA
-                              feature flag.
+                              by the GMSACredentialSpecName field.
                             type: string
                           gmsaCredentialSpecName:
                             description: GMSACredentialSpecName is the name of the
-                              GMSA credential spec to use. This field is alpha-level
-                              and is only honored by servers that enable the WindowsGMSA
-                              feature flag.
+                              GMSA credential spec to use.
                             type: string
                           runAsUserName:
                             description: The UserName in Windows to run the entrypoint
@@ -2945,8 +3032,7 @@ spec:
                               in image metadata if unspecified. May also be set in
                               PodSecurityContext. If set in both SecurityContext and
                               PodSecurityContext, the value specified in SecurityContext
-                              takes precedence. This field is beta-level and may be
-                              disabled with the WindowsRunAsUserName feature flag.
+                              takes precedence.
                             type: string
                         type: object
                     type: object
@@ -2958,7 +3044,7 @@ spec:
                       be used to provide different probe parameters at the beginning
                       of a Pod''s lifecycle, when it might take a long time to load
                       data or warm a cache, than during steady-state operation. This
-                      cannot be updated. This is an alpha feature enabled by the StartupProbe
+                      cannot be updated. This is a beta feature enabled by the StartupProbe
                       feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                     properties:
                       exec:
@@ -3047,7 +3133,8 @@ spec:
                         type: integer
                       tcpSocket:
                         description: 'TCPSocket specifies an action involving a TCP
-                          port. TCP hooks not yet supported'
+                          port. TCP hooks not yet supported TODO: implement a realistic
+                          TCP lifecycle hook'
                         properties:
                           host:
                             description: 'Optional: Host name to connect to, defaults
@@ -3112,7 +3199,7 @@ spec:
                     type: boolean
                   volumeDevices:
                     description: volumeDevices is the list of block devices to be
-                      used by the container. This is a beta feature.
+                      used by the container.
                     items:
                       description: volumeDevice describes a mapping of a raw block
                         device within a container.
@@ -3228,6 +3315,13 @@ spec:
                     selectors of replication controllers and services. More info:
                     http://kubernetes.io/docs/user-guide/labels'
                   type: object
+                name:
+                  description: 'Name must be unique within a namespace. Is required
+                    when creating resources, although some resources may allow a client
+                    to request the generation of an appropriate name automatically.
+                    Name is primarily intended for creation idempotence and configuration
+                    definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                  type: string
               type: object
             podMonitorNamespaceSelector:
               description: Namespaces to be selected for PodMonitor discovery. If
@@ -3274,7 +3368,9 @@ spec:
                   type: object
               type: object
             podMonitorSelector:
-              description: '*Experimental* PodMonitors to be selected for target discovery.'
+              description: '*Experimental* PodMonitors to be selected for target discovery.
+                *Deprecated:* if neither this nor serviceMonitorSelector are specified,
+                configuration is unmanaged.'
               properties:
                 matchExpressions:
                   description: matchExpressions is a list of label selector requirements.
@@ -3351,6 +3447,15 @@ spec:
                   description: Maximum time a query may take before being aborted.
                   type: string
               type: object
+            queryLogFile:
+              description: QueryLogFile specifies the file to which PromQL queries
+                are logged. Note that this location must be writable, and can be persisted
+                using an attached volume. Alternatively, the location can be set to
+                a stdout location such as `/dev/stdout` to log querie information
+                to the default Prometheus log stream. This is only available in versions
+                of Prometheus >= 2.16.0. For more details, see the Prometheus docs
+                (https://prometheus.io/docs/guides/query-log/)
+              type: string
             remoteRead:
               description: If specified, the remote_read spec. This is an experimental
                 feature, it may change in any upcoming release in a breaking way.
@@ -3403,6 +3508,12 @@ spec:
                     type: string
                   bearerTokenFile:
                     description: File to read bearer token for remote read.
+                    type: string
+                  name:
+                    description: The name of the remote read queue, must be unique
+                      if specified. The name is used in metrics and logging in order
+                      to differentiate read configurations.  Only valid in Prometheus
+                      versions 2.15.0 and newer.
                     type: string
                   proxyUrl:
                     description: Optional ProxyURL
@@ -3596,6 +3707,12 @@ spec:
                     type: string
                   bearerTokenFile:
                     description: File to read bearer token for remote write.
+                    type: string
+                  name:
+                    description: The name of the remote write queue, must be unique
+                      if specified. The name is used in metrics and logging in order
+                      to differentiate queues. Only valid in Prometheus versions 2.15.0
+                      and newer.
                     type: string
                   proxyUrl:
                     description: Optional ProxyURL
@@ -3897,11 +4014,11 @@ spec:
               type: object
             ruleSelector:
               description: A selector to select which PrometheusRules to mount for
-                loading alerting rules from. Until (excluding) Prometheus Operator
-                v0.24.0 Prometheus Operator will migrate any legacy rule ConfigMaps
-                to PrometheusRule custom resources selected by RuleSelector. Make
-                sure it does not match any config maps that you do not want to be
-                migrated.
+                loading alerting/recording rules from. Until (excluding) Prometheus
+                Operator v0.24.0 Prometheus Operator will migrate any legacy rule
+                ConfigMaps to PrometheusRule custom resources selected by RuleSelector.
+                Make sure it does not match any config maps that you do not want to
+                be migrated.
               properties:
                 matchExpressions:
                   description: matchExpressions is a list of label selector requirements.
@@ -3988,6 +4105,15 @@ spec:
                     ownership and permissions of any volume."
                   format: int64
                   type: integer
+                fsGroupChangePolicy:
+                  description: 'fsGroupChangePolicy defines behavior of changing ownership
+                    and permission of the volume before being exposed inside Pod.
+                    This field will only apply to volume types which support fsGroup
+                    based ownership(and permissions). It will have no effect on ephemeral
+                    volume types such as: secret, configmaps and emptydir. Valid values
+                    are "OnRootMismatch" and "Always". If not specified defaults to
+                    "Always".'
+                  type: string
                 runAsGroup:
                   description: The GID to run the entrypoint of the container process.
                     Uses runtime default if unset. May also be set in SecurityContext.  If
@@ -4072,23 +4198,18 @@ spec:
                       description: GMSACredentialSpec is where the GMSA admission
                         webhook (https://github.com/kubernetes-sigs/windows-gmsa)
                         inlines the contents of the GMSA credential spec named by
-                        the GMSACredentialSpecName field. This field is alpha-level
-                        and is only honored by servers that enable the WindowsGMSA
-                        feature flag.
+                        the GMSACredentialSpecName field.
                       type: string
                     gmsaCredentialSpecName:
                       description: GMSACredentialSpecName is the name of the GMSA
-                        credential spec to use. This field is alpha-level and is only
-                        honored by servers that enable the WindowsGMSA feature flag.
+                        credential spec to use.
                       type: string
                     runAsUserName:
                       description: The UserName in Windows to run the entrypoint of
                         the container process. Defaults to the user specified in image
                         metadata if unspecified. May also be set in PodSecurityContext.
                         If set in both SecurityContext and PodSecurityContext, the
-                        value specified in SecurityContext takes precedence. This
-                        field is beta-level and may be disabled with the WindowsRunAsUserName
-                        feature flag.
+                        value specified in SecurityContext takes precedence.
                       type: string
                   type: object
               type: object
@@ -4141,7 +4262,9 @@ spec:
                   type: object
               type: object
             serviceMonitorSelector:
-              description: ServiceMonitors to be selected for target discovery.
+              description: ServiceMonitors to be selected for target discovery. *Deprecated:*
+                if neither this nor podMonitorSelector are specified, configuration
+                is unmanaged.
               properties:
                 matchExpressions:
                   description: matchExpressions is a list of label selector requirements.
@@ -4192,6 +4315,11 @@ spec:
             storage:
               description: Storage spec to specify how storage shall be used.
               properties:
+                disableMountSubPath:
+                  description: 'Deprecated: subPath usage will be disabled by default
+                    in a future release, this option will become unnecessary. DisableMountSubPath
+                    allows to remove any subPath usage in volume mounts.'
+                  type: boolean
                 emptyDir:
                   description: 'EmptyDirVolumeSource to be used by the Prometheus
                     StatefulSets. If specified, used in place of any volumeClaimTemplate.
@@ -4228,7 +4356,34 @@ spec:
                         More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
                       type: string
                     metadata:
-                      description: 'Standard object''s metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata'
+                      description: EmbeddedMetadata contains metadata relevant to
+                        an EmbeddedResource.
+                      properties:
+                        annotations:
+                          additionalProperties:
+                            type: string
+                          description: 'Annotations is an unstructured key value map
+                            stored with a resource that may be set by external tools
+                            to store and retrieve arbitrary metadata. They are not
+                            queryable and should be preserved when modifying objects.
+                            More info: http://kubernetes.io/docs/user-guide/annotations'
+                          type: object
+                        labels:
+                          additionalProperties:
+                            type: string
+                          description: 'Map of string keys and values that can be
+                            used to organize and categorize (scope and select) objects.
+                            May match selectors of replication controllers and services.
+                            More info: http://kubernetes.io/docs/user-guide/labels'
+                          type: object
+                        name:
+                          description: 'Name must be unique within a namespace. Is
+                            required when creating resources, although some resources
+                            may allow a client to request the generation of an appropriate
+                            name automatically. Name is primarily intended for creation
+                            idempotence and configuration definition. Cannot be updated.
+                            More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                          type: string
                       type: object
                     spec:
                       description: 'Spec defines the desired characteristics of a
@@ -4241,16 +4396,20 @@ spec:
                             type: string
                           type: array
                         dataSource:
-                          description: This field requires the VolumeSnapshotDataSource
-                            alpha feature gate to be enabled and currently VolumeSnapshot
-                            is the only supported data source. If the provisioner
-                            can support VolumeSnapshot data source, it will create
-                            a new volume and data will be restored to the volume at
-                            the same time. If the provisioner does not support VolumeSnapshot
-                            data source, volume will not be created and the failure
-                            will be reported as an event. In the future, we plan to
-                            support more data source types and the behavior of the
-                            provisioner may change.
+                          description: 'This field can be used to specify either:
+                            * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot
+                            - Beta) * An existing PVC (PersistentVolumeClaim) * An
+                            existing custom resource/object that implements data population
+                            (Alpha) In order to use VolumeSnapshot object types, the
+                            appropriate feature gate must be enabled (VolumeSnapshotDataSource
+                            or AnyVolumeDataSource) If the provisioner or an external
+                            controller can support the specified data source, it will
+                            create a new volume based on the contents of the specified
+                            data source. If the specified data source is not supported,
+                            the volume will not be created and the failure will be
+                            reported as an event. In the future, we plan to support
+                            more data source types and the behavior of the provisioner
+                            may change.'
                           properties:
                             apiGroup:
                               description: APIGroup is the group for the resource
@@ -4341,7 +4500,7 @@ spec:
                         volumeMode:
                           description: volumeMode defines what type of volume is required
                             by the claim. Value of Filesystem is implied when not
-                            included in claim spec. This is a beta feature.
+                            included in claim spec.
                           type: string
                         volumeName:
                           description: VolumeName is the binding reference to the
@@ -4550,6 +4709,12 @@ spec:
                   description: ListenLocal makes the Thanos sidecar listen on loopback,
                     so that it does not bind against the Pod IP.
                   type: boolean
+                logFormat:
+                  description: LogFormat for Thanos sidecar to be configured with.
+                  type: string
+                logLevel:
+                  description: LogLevel for Thanos sidecar to be configured with.
+                  type: string
                 objectStorageConfig:
                   description: ObjectStorageConfig configures object storage in Thanos.
                   properties:

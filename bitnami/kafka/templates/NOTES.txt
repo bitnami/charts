@@ -73,15 +73,25 @@ You need to configure your Kafka client to access using SASL authentication. To 
     - kafka_jaas.conf:
 
         KafkaClient {
+            {{- if .Values.auth.saslMechanisms | regexFind "scram" }}
+            org.apache.kafka.common.security.scram.ScramLoginModule required
+            {{- else }}
             org.apache.kafka.common.security.plain.PlainLoginModule required
-            username="{{ .Values.auth.jaas.clientUser }}"
-            password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-password}' | base64 --decode)";
+            {{- end }}
+            username="{{ index .Values.auth.jaas.clientUsers 0 }}"
+            password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
         };
 
     - client.properties:
 
         security.protocol={{ $clientProtocol }}
+        {{- if .Values.auth.saslMechanisms | regexFind "scram-sha-256" }}
+        sasl.mechanism=SCRAM-SHA-256
+        {{- else if  .Values.auth.saslMechanisms | regexFind "scram-sha-512" }}
+        sasl.mechanism=SCRAM-SHA-512
+        {{- else -}}
         sasl.mechanism=PLAIN
+        {{- end }}
         {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
         ssl.truststore.location=/tmp/kafka.truststore.jks
         {{- if .Values.auth.jksPassword }}
@@ -101,7 +111,7 @@ To create a pod that you can use as a Kafka client run the following commands:
     kubectl cp --namespace {{ $releaseNamespace }} /path/to/client.properties {{ $fullname }}-client:/tmp/client.properties
     kubectl cp --namespace {{ $releaseNamespace }} /path/to/kafka_jaas.conf {{ $fullname }}-client:/tmp/kafka_jaas.conf
     {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
-    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks kafka-client:/tmp/kafka.truststore.jks
+    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks {{ $fullname }}-client:/tmp/kafka.truststore.jks
     {{- end }}
     {{- end }}
     kubectl exec --tty -i {{ $fullname }}-client --namespace {{ $releaseNamespace }} -- bash
