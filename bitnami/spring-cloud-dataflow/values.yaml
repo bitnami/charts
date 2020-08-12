@@ -590,7 +590,7 @@ deployer:
   ## The node selectors to apply to the streaming applications deployments in "key:value" format.
   ## Multiple node selectors are comma separated.
   ##
-  nodeSelector: ""
+  nodeSelector: ''
   tolerations: {}
   ## Extra volume mounts.
   ##
@@ -601,7 +601,7 @@ deployer:
   ## List of extra environment variables to set for any deployed app container. These environments will not override
   ## RabbitMQ/Kafka envs. Multiple values are comma separated.
   ##
-  environmentVariables: ""
+  environmentVariables: ''
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
