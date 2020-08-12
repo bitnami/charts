@@ -67,6 +67,9 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
+    ## Endpoint to the grafana instance
+    ##
+    grafanaInfo:
 
   ## ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
