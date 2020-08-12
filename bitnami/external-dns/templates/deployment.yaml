@@ -166,6 +166,7 @@ spec:
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
             - --infoblox-grid-host={{ .Values.infoblox.gridHost }}
+            - --infoblox-view={{ .Values.infoblox.view }}
               {{- if .Values.infoblox.domainFilter }}
             - --domain-filter={{ .Values.infoblox.domainFilter }}
               {{- end }}
