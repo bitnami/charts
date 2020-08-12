@@ -3,7 +3,7 @@
 
 Credentials:
 
-    echo "Username      : {{ .Values.auth.username }}"
+    echo "Username      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretUsernameName" . }} -o jsonpath="{.data.rabbitmq-username}" | base64 --decode)" 
     echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
     echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
