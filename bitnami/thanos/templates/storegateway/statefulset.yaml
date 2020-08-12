@@ -77,6 +77,12 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if .Values.indexCacheConfig }}
+            - --index-cache.config-file=/conf/index-cache.yml
+            {{- end }}
+            {{- if .Values.bucketCacheConfig }}
+            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            {{- end }}
             {{- range .Values.storegateway.extraFlags }}
             - {{ . }}
             {{- end }}
@@ -98,11 +104,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
-              {{- else }}
-              mountPath: /conf/objstore.yml
-              {{- end }}
             - name: data
               mountPath: /data
       volumes:

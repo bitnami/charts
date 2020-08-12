@@ -42,6 +42,16 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
+## Index cache Configuration
+## Specify content for index-cache.yml
+##
+# indexCacheConfig:
+
+## Bucket cache Configuration
+## Specify content for bucket-cache.yml
+##
+# bucketCacheConfig:
+
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
