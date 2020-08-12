@@ -187,7 +187,7 @@ extraContainerPorts: []
 configuration: |-
   ## Username and password
   default_user = CHANGEME 
-  default_pass = CHANGEMEn
+  default_pass = CHANGEME
   ## Clustering
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
   cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
