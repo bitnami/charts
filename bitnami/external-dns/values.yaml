@@ -273,7 +273,7 @@ infoblox:
   wapiUsername: "admin"
   wapiPassword: ""
   gridHost: ""
-  view: "default"
+  view: ""
   ## Optional keys
   ##
   domainFilter: ""
