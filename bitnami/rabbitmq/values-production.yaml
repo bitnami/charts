@@ -52,7 +52,8 @@ auth:
   ## RabbitMQ application username
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
-  username: user
+  #  username:
+  #  existingUsernameSecret: name-of-existing-secret
 
   ## RabbitMQ application password
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -185,7 +186,7 @@ extraContainerPorts: []
 ##
 configuration: |-
   ## Username and password
-  default_user = {{ .Values.auth.username }}
+  default_user = CHANGEME 
   default_pass = CHANGEME
   ## Clustering
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
