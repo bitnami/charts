@@ -186,7 +186,7 @@ extraContainerPorts: []
 ##
 configuration: |-
   ## Username and password
-  default_user = CHANGEME 
+  default_user = CHANGEME
   default_pass = CHANGEME
   ## Clustering
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
