@@ -12,6 +12,11 @@ spec:
   {{- else }}
   serviceMonitorSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.podMonitorSelector }}
+  podMonitorSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMonitorSelector "context" $) | nindent 4 }}
+  {{- else }}
+  podMonitorSelector: {}
+  {{- end }}
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
@@ -80,6 +85,11 @@ spec:
   serviceMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.serviceMonitorNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   serviceMonitorNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.podMonitorNamespaceSelector }}
+  podMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMonitorNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  podMonitorNamespaceSelector: {}
   {{- end }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
