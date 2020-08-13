@@ -154,7 +154,7 @@ spec:
             - name: RABBITMQ_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "rabbitmq.secretUserName" . }}
+                  name: {{ template "rabbitmq.secretUsernameName" . }}
                   key: rabbitmq-username
             - name: RABBITMQ_PASSWORD
               valueFrom:
