@@ -60,6 +60,17 @@ Return podAnnotations
 {{- end -}}
 
 {{/*
+Get the username secret.
+*/}}
+{{- define "rabbitmq.secretUsernameName" -}}
+    {{- if .Values.auth.existingUsernameSecret -}}
+        {{- printf "%s" .Values.auth.existingUsernameSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "rabbitmq.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Get the password secret.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
