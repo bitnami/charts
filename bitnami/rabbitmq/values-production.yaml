@@ -197,7 +197,7 @@ configuration: |-
   queue_master_locator = min-masters
   # enable guest user
   loopback_users.guest = false
-  {{ .Values.extraConfiguration }}
+  {{ tpl .Values.extraConfiguration . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
   listeners.ssl.default = {{ .Values.service.tlsPort }}
