@@ -13,6 +13,10 @@ spec:
       port: {{ .Values.kubeProxy.service.port }}
       protocol: TCP
       targetPort: {{ .Values.kubeProxy.service.targetPort }}
+    - name: https-metrics
+      port: {{ .Values.kubeProxy.service.httpsPort }}
+      protocol: TCP
+      targetPort: {{ .Values.kubeProxy.service.httpsTargetPort }}
 {{- if .Values.kubeProxy.endpoints }}{{- else }}
   selector:
     {{- if .Values.kubeProxy.service.selector }}

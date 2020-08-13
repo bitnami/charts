@@ -348,6 +348,8 @@ The following table lists the configurable parameters of the Prometheus Operator
 | `kubeProxy.service.enabled`                        | Whether or not to create a Service object for kube-proxy     | `true`        |
 | `kubeProxy.service.port`                           | Listening port of the kube-proxy Service object              | `10249`       |
 | `kubeProxy.service.targetPort`                     | Port to target on the kube-proxy Pods. This should be the port that kube-proxy is listening on | `10249`       |
+| `kubeProxy.service.httpsPort`                      | Listening https port of the kube-proxy Service object              | `10250`       |
+| `kubeProxy.service.httpsTargetPort`                | Https Port to target on the kube-proxy Pods. This should be the port that kube-proxy is listening on | `10250`       |
 | `kubeProxy.service.selector`                       | Service label selector to discover the kube-proxy Pods       | `{}`          |
 | `kubeProxy.serviceMonitor.enabled`                 | Create a ServiceMonitor object                               | `true`        |
 | `kubeProxy.serviceMonitor.interval`                | Scrape interval (use by default, falling back to Prometheus' default) | `""`          |

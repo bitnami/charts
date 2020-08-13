@@ -1104,6 +1104,8 @@ kubeProxy:
     enabled: true
     port: 10249
     targetPort: 10249
+    httpsPort: 10250
+    httpsTargetPort: 10250
     # selector:
     #   k8s-app: kube-proxy
 
