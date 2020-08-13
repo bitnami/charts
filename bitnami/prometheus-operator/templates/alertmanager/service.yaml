@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "prometheus-operator.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.alertmanager.labels" . | nindent 4 }}
   {{- with .Values.alertmanager.service.annotations }}
   annotations: {{- toYaml . | nindent 4 }}

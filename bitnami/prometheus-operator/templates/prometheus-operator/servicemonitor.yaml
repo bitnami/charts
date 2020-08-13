@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "prometheus-operator.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.operator.labels" . | nindent 4 }}
 spec:
   endpoints:
