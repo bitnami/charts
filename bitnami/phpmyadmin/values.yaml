@@ -233,4 +233,6 @@ metrics:
   ##
   resources: {}
 
-mariadb: {}
+mariadb:
+  replication:
+    enabled: false
