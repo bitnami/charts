@@ -61,3 +61,23 @@ host. To configure Moodle to use and external database host:
 {{- end }}
 
 {{- include "moodle.checkRollingTags" . }}
+
+{{- $passwordErrors := list -}}
+{{- if not .Values.existingSecret -}}
+  {{- $requiredMoodlePassword := dict "valueKey" "moodlePassword" "secret" (include "moodle.fullname" .) "field" "moodle-password" "context" $ -}}
+  {{- $requiredMoodlePasswordError := include "common.validations.values.single.empty" $requiredMoodlePassword -}}
+  {{- $passwordErrors =  append $passwordErrors $requiredMoodlePasswordError -}}
+{{- end -}}
+
+{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" (include "moodle.mariadb.fullname" .) "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+
+{{- if and .Values.externalDatabase.host .Release.IsUpgrade  -}}
+  {{- $externaldbSecretName := printf "%s-%s" .Release.Name "externaldb" -}}
+  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $externaldbSecretName "field" "db-password" }}
+
+WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
+  {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
+{{- end -}}

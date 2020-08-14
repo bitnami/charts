@@ -77,6 +77,10 @@ data:
                         port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
+          {{- if .Values.server.configuration.grafanaInfo }}
+          grafana-info:
+            url: {{ .Values.server.configuration.grafanaInfo }}
+          {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
