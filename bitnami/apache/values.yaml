@@ -79,6 +79,7 @@ cloneHtdocsFromGit:
   # repository:
   # branch:
   interval: 60
+  resources: {}
 
 ## Name of a config map with the server static content
 ##
