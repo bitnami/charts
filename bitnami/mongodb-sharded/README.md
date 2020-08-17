@@ -82,6 +82,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `common.mongodbMaxWaitTimeout`                | Maximum time (in seconds) for MongoDB nodes to wait for another MongoDB node to be ready                                                                  | `120`                                                    |
 | `common.podLabels`                            | Extra labels for all pods in the cluster (evaluated as a template)                                                                                        | `{}`                                                     |
 | `common.podAnnotations`                       | Extra annotations for all pods in the cluster (evaluated as a template)                                                                                   | `{}`                                                     |
+| `common.serviceAccount.name`                  | Name of a Service Account to be used by all Pods                                                                                                          | `nil`                                                    |
+| `common.serviceAccount.create`                | Whether to create a Service Account for all pods automatically                                                                                            | `false`                                                  |
 | `common.sidecars`                             | Attach additional containers to all pods in the cluster (evaluated as a template)                                                                         | `nil`                                                    |
 | `common.useHostnames`                         | Enable DNS hostnames in the replica set config                                                                                                            | `true`                                                   |
 | `common.initContainers`                       | Add additional init containers to all pods in the cluster (evaluated as a template)                                                                       | `nil`                                                    |
@@ -162,6 +164,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.external.rootPassword`           | Root passworrd of the external config server replicaset                                                                                                                              | `nil`                                                     |
 | `configsvr.external.replicasetName`           | Replicaset name of an external config server                                                                                                                              | `nil`                                                     |
 | `configsvr.external.replicasetKey`           | Replicaset key of an external config server                                                                                                                              | `nil`                                                     |
+| `configsvr.serviceAccount.name`                 | Name of a Service Account to be used by configsvr                                                                                                            | `nil`                                                    |
+| `configsvr.serviceAccount.create`               | Whether to create a Service Account for configsvr automatically                                                                                              | `false`                                                  |
 
 ### Mongos configuration
 
@@ -190,6 +194,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `mongos.extraEnvVarsSecret`                   | Secret containing extra env vars (evaluated as a template)                                                                                                | `nil`                                                    |
 | `mongos.extraVolumes`                         | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`                                                               | `nil`                                                    |
 | `mongos.extraVolumeMounts`                    | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`.                                                           | `nil`                                                    |
+| `mongos.serviceAccount.name`                  | Name of a Service Account to be used by mongos                                                                                                            | `nil`                                                    |
+| `mongos.serviceAccount.create`                | Whether to create a Service Account for mongos automatically                                                                                              | `false`                                                  |
 
 ### Shard configuration: Data nodes
 
@@ -219,6 +225,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.dataNode.extraEnvVarsSecret`        | Secret containing extra env vars (evaluated as a template)                                                                                                | `nil`                                                    |
 | `shardsvr.dataNode.extraVolumes`              | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`                                                               | `nil`                                                    |
 | `shardsvr.dataNode.extraVolumeMounts`         | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`.                                                           | `nil`                                                    |
+| `shardsvr.dataNode.serviceAccount.name`       | Name of a Service Account to be used by shardsvr data pods                                                                                                | `nil`                                                    |
+| `shardsvr.dataNode.serviceAccount.create`     | Whether to create a Service Account for shardsvr data pods automatically                                                                                  | `false`                                                  |
 | `shardsvr.persistence.enabled`                | Use a PVC to persist data                                                                                                                                 | `true`                                                   |
 | `shardsvr.persistence.mountPath`              | Path to mount the volume at                                                                                                                               | `/bitnami/mongodb`                                       |
 | `shardsvr.persistence.subPath`                | Subdirectory of the volume to mount at                                                                                                                    | `""`                                                     |
@@ -252,6 +260,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.arbiter.extraEnvVarsSecret`         | Secret containing extra env vars (evaluated as a template)                                                                                                | `nil`                                                    |
 | `shardsvr.arbiter.extraVolumes`               | Array of extra volumes (evaluated as template). Requires setting `common.extraVolumeMounts`                                                               | `nil`                                                    |
 | `shardsvr.arbiter.extraVolumeMounts`          | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`.                                                           | `nil`                                                    |
+| `shardsvr.arbiter.serviceAccount.name`        | Name of a Service Account to be used by shardsvr arbiter pods                                                                                             | `nil`                                                    |
+| `shardsvr.arbiter.serviceAccount.create`      | Whether to create a Service Account for shardsvr arbiter pods automatically                                                                               | `false`                                                  |
 
 ### Metrics exporter
 

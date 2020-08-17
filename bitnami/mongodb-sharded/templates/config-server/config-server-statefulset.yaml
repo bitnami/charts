@@ -36,6 +36,7 @@ spec:
       {{- if .Values.common.schedulerName }}
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.configsvr.serviceAccount "context" $) }}
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.nodeSelector "context" $ ) | nindent 8 }}
       affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.affinity "context" $ ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.tolerations "context" $ ) | nindent 8 }}
