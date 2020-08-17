@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
   name: {{ template "prometheus-operator.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.alertmanager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.alertmanager.replicaCount }}
