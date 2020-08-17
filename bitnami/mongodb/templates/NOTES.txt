@@ -84,7 +84,7 @@ To get the password for "{{ .Values.auth.username }}" run:
 To connect to your database, create a MongoDB client container:
 
     kubectl run --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "mongodb.image" . }} --command -- bash
-   
+
 Then, run the following command:
 
     {{- if eq .Values.architecture "replicaset" }}
@@ -169,3 +169,22 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "mongodb.validateValues" . }}
+
+{{- $secretName := include "mongodb.fullname" . -}}
+{{- $requiredPasswords := list -}}
+
+{{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mongodb-root-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
+
+{{- if and .Values.auth.username .Values.auth.database }}
+  {{- $requiredDBPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mongodb-password" "context" $ -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
+{{- end -}}
+
+{{- if eq .Values.architecture "replicaset" }}
+  {{- $requiredReplicaSetKey := dict "valueKey" "auth.replicaSetKey" "secret" $secretName "field" "mongodb-replica-set-key" "context" $ -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
+{{- end -}}
+
+{{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}

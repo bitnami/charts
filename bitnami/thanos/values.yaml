@@ -753,6 +753,16 @@ storegateway:
   ##
   extraFlags: []
 
+  ## Store Gateway Cache Configuration
+  ## Specify content for config.yml
+  ##
+  # config:
+
+  ## ConfigMap with Store Gateway Cache  Configuration
+  ## NOTE: This will override storegateway.config
+  ##
+  # existingConfigmap:
+
   ## Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1

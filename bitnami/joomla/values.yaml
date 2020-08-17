@@ -262,7 +262,7 @@ ingress:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: drupal.local
+  hostname: joomla.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -327,7 +327,7 @@ persistence:
   ##
   # existingClaim:
 
-  ## If defined, the drupal-data volume will mount to the specified hostPath.
+  ## If defined, the joomla-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
