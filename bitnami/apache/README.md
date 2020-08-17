@@ -4,7 +4,7 @@ The [Apache HTTP Server Project](https://httpd.apache.org/) is an effort to deve
 
 The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `cloneHtdocsFromGit.repository`  | Repository to clone static content from                 | `nil`                                                        |
 | `cloneHtdocsFromGit.branch`      | Branch inside the git repository                        | `nil`                                                        |
 | `cloneHtdocsFromGit.interval`    | Interval for sidecar container pull from the repository | `60`                                                         |
+| `cloneHtdocsFromGit.resources`   | Init container git resource requests/limit              | `{}`                                                         |
 | `podAnnotations`                 | Pod annotations                                         | `{}`                                                         |
 | `livenessProbe.enabled`          | Enable liveness probe                                   | `true`                                                       |
 | `livenessProbe.path`             | Path to access on the HTTP server                       | `/`                                                          |

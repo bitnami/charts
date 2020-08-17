@@ -1,4 +1,4 @@
-{{- if .Values.configsvr.config }}
+{{- if and (not .Values.configsvr.external.host) .Values.configsvr.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

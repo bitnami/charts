@@ -4,7 +4,7 @@
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -58,7 +58,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `global.imagePullSecrets`                     | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)  |
 | `global.storageClass`                         | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                    |
 | `image.registry`                              | MongoDB image registry                                                                                                                                    | `docker.io`                                              |
-| `image.repository`                            | MongoDB Image name                                                                                                                                        | `bitnami/mongodb`                                        |
+| `image.repository`                            | MongoDB Image name                                                                                                                                        | `bitnami/mongodb-sharded`                                |
 | `image.tag`                                   | MongoDB Image tag                                                                                                                                         | `{TAG_NAME}`                                             |
 | `image.pullPolicy`                            | Image pull policy                                                                                                                                         | `IfNotPresent`                                           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)  |
@@ -90,6 +90,8 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `common.extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods in the cluster (evaluated as a template)                                                         | `nil`                                                    |
 | `common.extraVolumes`                         | Array of extra volumes to be added to all pods in the cluster  (evaluated as template). Requires setting `common.extraVolumeMounts`                       | `nil`                                                    |
 | `common.extraVolumeMounts`                    | Array of extra volume mounts to be added to all pods in the cluster (evaluated as template). Normally used with `common.extraVolumes`.                    | `nil`                                                    |
+| `common.initScriptsCM`                        | ConfigMap containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (evaluated as a template)                                | `nil`                                                    |
+| `common.initScriptsSecret`                    | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.     | `nil`                                                    |
 | `service.name`                                | Kubernetes service name                                                                                                                                   | `nil`                                                    |
 | `service.annotations`                         | Kubernetes service annotations                                                                                                                            | `{}`                                                     |
 | `service.type`                                | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                              |
@@ -120,8 +122,6 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `readinessProbe.timeoutSeconds`               | When the probe times out                                                                                                                                  | `5`                                                      |
 | `readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                                                      |
 | `readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                                                      |
-| `initScriptsCM`                               | ConfigMap containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (evaluated as a template)                                | `nil`                                                    |
-| `initScriptsSecret`                           | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.     | `nil`                                                    |
 
 ### Config Server configuration
 
@@ -135,6 +135,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.nodeSelector`                      | Node labels for pod assignment (evaluated as a template)                                                                                                  | `{}`                                                     |
 | `configsvr.affinity`                          | Affinity for pod assignment (evaluated as a template)                                                                                                     | `{}`                                                     |
 | `configsvr.tolerations`                       | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
+| `configsvr.podManagementPolicy`               | Statefulsets pod management policy (evaluated as a template)                                                                                              | `OrderedReady`                                           |
 | `configsvr.updateStrategy`                    | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `configsvr.schedulerName`                     | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
 | `configsvr.pdb.enabled`                       | Enable pod disruption budget                                                                                                                              | `false`                                                  |
@@ -157,6 +158,10 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.persistence.accessModes`           | Use volume as ReadOnly or ReadWrite                                                                                                                       | `[ReadWriteOnce]`                                        |
 | `configsvr.persistence.size`                  | Size of data volume                                                                                                                                       | `8Gi`                                                    |
 | `configsvr.persistence.annotations`           | Persistent Volume annotations                                                                                                                             | `{}`                                                     |
+| `configsvr.external.host`           | Primary node of an external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.rootPassword`           | Root passworrd of the external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetName`           | Replicaset name of an external config server                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetKey`           | Replicaset key of an external config server                                                                                                                              | `nil`                                                     |
 
 ### Mongos configuration
 
@@ -198,6 +203,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.dataNode.nodeSelector`              | Node labels for pod assignment (evaluated as a template)                                                                                                  | `{}`                                                     |
 | `shardsvr.dataNode.affinity`                  | Affinity for pod assignment (evaluated as a template). Will include `.arbiterLoopId` which identifies the shard.                                          | `{}`                                                     |
 | `shardsvr.dataNode.tolerations`               | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
+| `shardsvr.podManagementPolicy`                | Statefulsets pod management policy (evaluated as a template)                                                                                              | `OrderedReady`                                           |
 | `shardsvr.dataNode.updateStrategy`            | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `shardsvr.dataNode.schedulerName`             | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
 | `shardsvr.dataNode.pdb.enabled`               | Enable pod disruption budget                                                                                                                              | `false`                                                  |
@@ -233,6 +239,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.arbiter.nodeSelector`               | Node labels for pod assignment (evaluated as a template)                                                                                                  | `{}`                                                     |
 | `shardsvr.arbiter.affinity`                   | Affinity for pod assignment (evaluated as a template). Will include `.arbiterLoopId` which identifies the shard.                                          | `{}`                                                     |
 | `shardsvr.arbiter.tolerations`                | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
+| `shardsvr.arbiter.podManagementPolicy`        | Statefulsets pod management policy (evaluated as a template)                                                                                              | `OrderedReady`                                           |
 | `shardsvr.arbiter.updateStrategy`             | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `shardsvr.arbiter.schedulerName`              | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
 | `shardsvr.arbiter.sidecars`                   | Attach additional containers (evaluated as a template)                                                                                                    | `nil`                                                    |
@@ -391,6 +398,10 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using an external config server
+
+It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
 
 ## Persistence
 

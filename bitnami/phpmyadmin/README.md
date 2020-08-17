@@ -2,7 +2,7 @@
 
 [phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB. As a portable web application written primarily in PHP, it has become one of the most popular MySQL administration tools, especially for web hosting services.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -59,6 +59,7 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `fullnameOverride`           | String to fully override phpmyadmin.fullname template with a string                                     | `nil`                                                        |
 | `service.type`               | Type of service for phpMyAdmin frontend                                                                 | `ClusterIP`                                                  |
 | `service.port`               | Port to expose service                                                                                  | `80`                                                         |
+| `db.allowArbitraryServer`    | Enable connection to arbitrary MySQL server                                                             | `true`                                                       |
 | `db.port`                    | Database port to use to connect                                                                         | `3306`                                                       |
 | `db.chartName`               | Database suffix if included in the same release                                                         | `nil`                                                        |
 | `db.host`                    | Database host to connect to                                                                             | `nil`                                                        |
@@ -78,6 +79,9 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `ingress.hosts[0].tls`       | Utilize TLS backend in ingress                                                                          | `false`                                                      |
 | `ingress.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                    | `nil`                                                        |
 | `ingress.hosts[0].tlsSecret` | TLS Secret (certificates)                                                                               | `phpmyadmin.local-tls-secret`                                |
+| `extraEnvVars`               | Any extra environment variables to be passed to the pod (evaluated as a template)                       | `{}`                                                         |
+| `extraEnvVarsCM`             | Name of a Config Map containing extra environment variables to be passed to the pod (evaluated as a template) | `nil`                                                  |
+| `extraEnvVarsSecret`         | Secret with extra environment variables                                                                 | `nil`                                                        |
 | `podSecurityContext`         | phpMyAdmin pods' Security Context                                                                       | `{ fsGroup: "1001" }`                                        |
 | `containerSecurityContext`   | phpMyAdmin containers' Security Context                                                                 | `{ runAsUser: "1001" }`                                      |
 | `resources.limits`           | The resources limits for the PhpMyAdmin container                                                       | `{}`                                                         |
@@ -139,6 +143,8 @@ Consequences:
 - Backwards compatibility is not guaranteed.
 
 To upgrade to `6.0.0`, backup your previous MariaDB databases, install a new phpMyAdmin chart and import the MariaDB backups.
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 

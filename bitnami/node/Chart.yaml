@@ -1,7 +1,7 @@
 apiVersion: v1
 name: node
-version: 11.4.24
-appVersion: 10.21.0
+version: 12.0.4
+appVersion: 10.22.0
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
   - node
@@ -16,3 +16,5 @@ maintainers:
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
+annotations:
+  category: Infrastructure

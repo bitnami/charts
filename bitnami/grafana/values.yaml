@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 7.0.3-debian-10-r7
+  tag: 7.1.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -105,16 +105,13 @@ extraEnvVars: {}
 ##
 extraConfigmaps: {}
 
-## Parameters to override the default grafana.ini and custom.ini files.
-## It is needed to create a configmap or a secret containing the grafana.ini and custom.ini files.
+## Parameters to override the default grafana.ini file.
+## It is needed to create a configmap or a secret containing the grafana.ini file.
 ##
 config:
   useGrafanaIniFile: false
   grafanaIniConfigMap:
   grafanaIniSecret:
-  useCustomIniFile: false
-  customIniConfigMap:
-  customIniSecret:
 
 ## Create dasboard provider to load dashboards, a default one is created to load
 ## dashboards from "/opt/bitnami/grafana/dashboards"
@@ -173,6 +170,8 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   # name:
+  ## Annotations to add to the ServiceAccount Metadata
+  annotations: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -268,6 +267,20 @@ persistence:
 ##
 sidecars: {}
 
+## Add extra volumes to the Grafana pod
+## Example:
+## extraVolumes:
+##   - name: my-volume
+##     emptyDir: {}
+extraVolumes: []
+
+## Add extra volume mounts to the grafana pod
+## Example:
+## extraVolumeMounts:
+##   - name: my-volume
+##     mountPath: /opt/bitnami/grafana/my-stuff
+extraVolumeMounts: []
+
 ## Service parameters
 ##
 service:
@@ -321,6 +334,13 @@ ingress:
   hosts:
     - name: grafana.local
       paths: ["/"]
+
+      ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+      extraPaths: []
+      # - path: /*
+      #   backend:
+      #     serviceName: ssl-redirect
+      #     servicePort: use-annotation
 
       ## Set this to true in order to enable TLS on the ingress record
       tls: false
@@ -378,7 +398,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 1.0.12-debian-10-r24
+    tag: 2.0.0-debian-10-r46
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

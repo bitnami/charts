@@ -2,11 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
@@ -19,7 +16,9 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/kubeapps-frontend-config.yaml") . | sha256sum }}
       labels:
         app: {{ template "kubeapps.fullname" . }}
+        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.frontend.affinity }}
@@ -58,20 +57,21 @@ spec:
         {{- if .Values.authProxy.enabled }}
         - name: auth-proxy
           args:
-            - -provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
-            - -client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
-            - -client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
-            - -cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
-            - -upstream=http://localhost:8080/
-            - -http-address=0.0.0.0:3000
-            - -email-domain={{ .Values.authProxy.emailDomain }}
-            - -pass-basic-auth=false
-            - -pass-access-token=true
-            - -pass-authorization-header=true
-            - -skip-auth-regex=^\/config\.json$
-            - -skip-auth-regex=^\/favicon.*\.png$
-            - -skip-auth-regex=^\/static\/
-            - -skip-auth-regex=^\/$
+            - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
+            - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
+            - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
+            - --cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
+            - --upstream=http://localhost:8080/
+            - --http-address=0.0.0.0:3000
+            - --email-domain={{ .Values.authProxy.emailDomain }}
+            - --pass-basic-auth=false
+            - --pass-access-token=true
+            - --pass-authorization-header=true
+            - --skip-auth-regex=^\/config\.json$
+            - --skip-auth-regex=^\/favicon.*\.png$
+            - --skip-auth-regex=^\/static\/
+            - --skip-auth-regex=^\/$
+            - --scope=openid email groups
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}

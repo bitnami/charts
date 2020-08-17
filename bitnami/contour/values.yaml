@@ -1,0 +1,350 @@
+## Default values for contour.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## To configure Contour, you must specify ONE of the following two
+## options.
+#
+## existingConfigMap specifies the name of an externally-defined
+## ConfigMap to use as the configuration. Helm will not manage the
+## contents of this ConfigMap, it is your responsibility to create it.
+#
+# existingConfigMap: contour
+#
+## configInline specifies Contour's configuration directly, in yaml
+## format. When configInline is used, Helm manages Contour's
+## configuration ConfigMap as part of the release, and
+## existingConfigMap is ignored.
+## Refer to https://projectcontour.io/docs/v1.2.1/configuration/ for
+## available options.
+## Evaluated as a template
+#
+configInline:
+  # should contour expect to be running inside a k8s cluster
+  # incluster: true
+  #
+  # path to kubeconfig (if not running inside a k8s cluster)
+  # kubeconfig: /path/to/.kube/config
+  #
+  # Client request timeout to be passed to Envoy
+  # as the connection manager request_timeout.
+  # Defaults to 0, which Envoy interprets as disabled.
+  # Note that this is the timeout for the whole request,
+  # not an idle timeout.
+  # request-timeout: 0s
+  # disable ingressroute permitInsecure field
+  disablePermitInsecure: false
+  tls:
+  #   minimum TLS version that Contour will negotiate
+  #   minimum-protocol-version: "1.1"
+  # The following config shows the defaults for the leader election.
+  ## This needs to be edited by when you deploy to a namespace other than projectcontour
+  leaderelection:
+  #   configmap-name: leader-elect
+    configmap-namespace: '{{ .Release.Namespace }}'
+  ### Logging options
+  # Default setting
+  accesslog-format: envoy
+  # To enable JSON logging in Envoy
+  # accesslog-format: json
+  # The default fields that will be logged are specified below.
+  # To customise this list, just add or remove entries.
+  # The canonical list is available at
+  # https://godoc.org/github.com/projectcontour/contour/internal/envoy#JSONFields
+  # json-fields:
+  #   - "@timestamp"
+  #   - "authority"
+  #   - "bytes_received"
+  #   - "bytes_sent"
+  #   - "downstream_local_address"
+  #   - "downstream_remote_address"
+  #   - "duration"
+  #   - "method"
+  #   - "path"
+  #   - "protocol"
+  #   - "request_id"
+  #   - "requested_server_name"
+  #   - "response_code"
+  #   - "response_flags"
+  #   - "uber_trace_id"
+  #   - "upstream_cluster"
+  #   - "upstream_host"
+  #   - "upstream_local_address"
+  #   - "upstream_service_time"
+  #   - "user_agent"
+  #   - "x_forwarded_for"
+
+## Name of the ingress class to route through this controller
+##
+# ingressClass: contour
+
+## String to partially override contour.fullname include (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override contour.fullname template
+##
+# fullnameOverride:
+
+## Number of contour Pod replicas
+##
+replicaCount: 2
+
+rbac:
+  # create specifies whether to install and use RBAC rules.
+  create: true
+
+contour:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/contour
+    tag: 1.7.0-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+
+  ## Contour container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://projectcontour.io/guides/resource-limits/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+      # cpu: 400m
+      # memory: 250Mi
+    requests: {}
+      # cpu: 100m
+      # memory: 25Mi
+
+  ## Create Contour CRDs
+  createCustomResource: true
+
+  ## Contour CRD deletion policy
+  ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
+  ##
+  # customResourceDeletePolicy: before-hook-creation
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  serviceAccount:
+    # Specifies whether a ServiceAccount should be created
+    create: true
+    # The name of the ServiceAccount to use.  If not set and create is
+    # true, a name is generated using the fullname template
+    name: ""
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+  securityContext:
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+
+  certgen:
+    serviceAccount:
+      # Specifies whether a ServiceAccount should be created
+      create: true
+      # The name of the ServiceAccount to use.  If not set and create is
+      # true, a name is generated using the fullname template
+      name: ""
+
+envoy:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/envoy
+    tag: 1.15.0-debian-10-r14
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+
+  ## Envoy container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://projectcontour.io/guides/resource-limits/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+
+    limits: {}
+      # cpu: 400m
+      # memory: 250Mi
+    requests: {}
+      # cpu: 100m
+      # memory: 25Mi
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: false
+
+  ## Envoy container security context - envoy needs to run as root to bind to 80, 443
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+
+  ## Pod host network access
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
+  ##
+  hostNetwork: false
+
+  ## Pod's DNS Policy
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  ##
+  dnsPolicy: ClusterFirst
+
+  serviceAccount:
+    # Specifies whether a ServiceAccount should be created
+    create: true
+    # The name of the ServiceAccount to use.  If not set and create is
+    # true, a name is generated using the fullname template
+    name: ""
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 3
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+
+  terminationGracePeriodSeconds: 300
+
+  logLevel: info
+
+  ## Envoy Service properties
+  ##
+  service:
+    ## Service type
+    ##
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    # clusterIP: ""
+    # externalIPs: []
+    # loadBalancerIP: ""
+    # loadBalancerSourceRanges: []
+
+    ## Service annotations
+    ##
+    annotations: {}
+
+    ports:
+      ## HTTP Port
+      ##
+      http: 80
+      ## HTTPS Port
+      ##
+      https: 443
+
+    ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+
+prometheus:
+  # Prometheus Operator service monitors
+  serviceMonitor:
+    # enable support for Prometheus Operator
+    enabled: false
+    # Job label for scrape target
+    jobLabel: "app.kubernetes.io/name"
+    # Scrape interval. If not set, the Prometheus default scrape interval is used.
+    interval: ""
+    metricRelabelings: []
+    relabelings: []

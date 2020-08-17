@@ -1,8 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "redis-cluster.fullname" . }}-default
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-default
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   redis-default.conf: |-
     # Redis configuration file example.
@@ -232,7 +238,7 @@ data:
     #
     # Creating a pid file is best effort: if Redis is not able to create it
     # nothing bad happens, the server will start and run normally.
-    pidfile /var/run/redis_6379.pid
+    pidfile /opt/bitnami/redis/tmp/redis_6379.pid
 
     # Specify the server verbosity level.
     # This can be one of:
@@ -350,7 +356,7 @@ data:
     # The Append Only File will also be created inside this directory.
     #
     # Note that you must specify a directory here, not a file name.
-    dir ./
+    dir /bitnami/redis/data
 
     ################################# REPLICATION #################################
 
@@ -1176,7 +1182,7 @@ data:
     # started as cluster nodes can. In order to start a Redis instance as a
     # cluster node enable the cluster support uncommenting the following:
     #
-    # cluster-enabled yes
+    cluster-enabled yes
 
     # Every cluster node has a cluster configuration file. This file is not
     # intended to be edited by hand. It is created and updated by Redis nodes.
@@ -1184,7 +1190,7 @@ data:
     # Make sure that instances running in the same system do not have
     # overlapping cluster configuration file names.
     #
-    # cluster-config-file nodes-6379.conf
+    cluster-config-file /bitnami/redis/data/nodes.conf
 
     # Cluster node timeout is the amount of milliseconds a node must be unreachable
     # for it to be considered in failure state.
@@ -1817,6 +1823,6 @@ data:
     #
     # Set bgsave child process to cpu affinity 1,10,11
     # bgsave_cpulist 1,10-11
-{{- if .Values.configmap }}
-{{- include "common.tplvalues.render" (dict "value" .Values.configmap "context" $) | nindent 4 }}
+{{- if .Values.redis.configmap }}
+{{- include "common.tplvalues.render" (dict "value" .Values.redis.configmap "context" $) | nindent 4 }}
 {{- end }}

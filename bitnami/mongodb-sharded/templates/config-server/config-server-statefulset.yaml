@@ -1,3 +1,4 @@
+{{- if not .Values.configsvr.external.host }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -10,6 +11,7 @@ spec:
       app.kubernetes.io/component: configsvr
   serviceName: {{ include "mongodb-sharded.fullname" . }}-headless
   replicas: {{ .Values.configsvr.replicas }}
+  podManagementPolicy: {{ .Values.configsvr.podManagementPolicy }}
   updateStrategy: {{- toYaml .Values.configsvr.updateStrategy | nindent 4 }}
   template:
     metadata:
@@ -55,6 +57,12 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
         {{- end }}
+        {{- with $.Values.configsvr.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       containers:
         - name: mongodb
           image: {{ include "mongodb-sharded.image" . }}
@@ -88,7 +96,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: MONGODB_PRIMARY_HOST
+            - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-configsvr" ( include "mongodb-sharded.fullname" . ) }}
@@ -292,7 +300,7 @@ spec:
             name: {{ include "mongodb-sharded.configsvr.configCM" . }}
         {{- end }}
         {{- if .Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" . }}
             defaultMode: 0755
@@ -330,3 +338,4 @@ spec:
         - name: datadir
           emptyDir: {}
   {{- end }}
+{{- end }}

@@ -84,23 +84,22 @@ spec:
             - name: DATABASE_PORT
               value: "27017"
             - name: DATABASE_USER
-              value: {{ .Values.mongodb.mongodbUsername | quote }}
+              value: {{ .Values.mongodb.auth.username | quote }}
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.mongodb.fullname" . }}
                   key: mongodb-password
             - name: DATABASE_NAME
-              value: {{ .Values.mongodb.mongodbDatabase | quote }}
+              value: {{ .Values.mongodb.auth.database | quote }}
             - name: DATABASE_CONNECTION_OPTIONS
               value: ""
             {{- else }}
-            {{- $type := dict "type" .Values.externaldb.type }}
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
-                  key: {{ template "externaldb.host" $type }}
+                  key: host
             {{- if not .Values.externaldb.broker.serviceInstanceName }}
             - name: DATABASE_NAME
               valueFrom:
@@ -115,17 +114,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
-                  key: {{ template "externaldb.port" $type }}
+                  key: port
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
-                  key: {{ template "externaldb.username" $type }}
+                  key: username
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
-                  key: {{ template "externaldb.password" $type }}
+                  key: password
             {{- if .Values.externaldb.ssl }}
             - name: DATABASE_CONNECTION_OPTIONS
               value: "ssl=true"

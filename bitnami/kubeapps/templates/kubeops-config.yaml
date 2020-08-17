@@ -1,0 +1,14 @@
+{{- if .Values.featureFlags.additionalClusters -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.kubeops-config.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.kubeops-config.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  additional-clusters.conf: |-
+{{ .Values.featureFlags.additionalClusters | toPrettyJson | indent 4 }}
+{{- end -}}

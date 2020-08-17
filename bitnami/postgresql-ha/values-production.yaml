@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.8.0-debian-10-r29
+  tag: 11.8.0-debian-10-r64
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.2-debian-10-r23
+  tag: 4.1.2-debian-10-r69
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r139
+  tag: 0.8.0-debian-10-r184
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -219,6 +219,9 @@ postgresql:
   # password:
   # database:
 
+  ## PostgreSQL password using existing secret
+  # existingSecret: secret
+
   ## PostgreSQL admin password (used when `postgresql.username` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   # postgresPassword:
@@ -233,6 +236,10 @@ postgresql:
   ## Configures pg_hba.conf to trust every user
   ##
   pgHbaTrustAll: false
+
+  ## Synchronous replication
+  ##
+  syncReplication: false
 
   ## Repmgr configuration parameters
   ##
@@ -302,6 +309,24 @@ postgresql:
 ## Pgpool parameters
 ##
 pgpool:
+
+  ## Additional users that will be performing connections to the database using
+  ## pgpool. Use this property in order to create new user/password entries that
+  ## will be appended to the "pgpool_passwd" file
+  ##
+  customUsers: {}
+  ##  Comma or semicolon separeted list of postgres usernames
+  #   usernames: 'user01;user02'
+
+  ##  Comma or semicolon separated list of the associated passwords for the
+  ##  users above
+  #   passwords: 'pass01;pass02'
+
+  ## Alternatively, you can provide the name of a secret containing this information.
+  ## The secret must contain the keys "usernames" and "passwords" respectively.
+  ##
+  customUsersSecret:
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -388,6 +413,15 @@ pgpool:
     create: false
     minAvailable: 1
     # maxUnavailable: 1
+
+  ## strategy used to replace old Pods by new ones
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy: {}
+
+  ## minReadySeconds to avoid killing pods before we are ready
+  ##
+  # minReadySeconds: 0
 
   ## Pgpool configuration parameters
   ##
@@ -540,6 +574,7 @@ metrics:
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ##
     selector:
       prometheus: kube-prometheus
 
@@ -615,51 +650,6 @@ service:
   ## Provide any additional annotations which may be required
   ##
   annotations: {}
-
-## Ingress paramaters
-##
-ingress:
-  ## Set to true to enable ingress record generation
-  enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  certManager: false
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
-  ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations: {}
-  #  kubernetes.io/ingress.class: nginx
-
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: postgresql.local
-      path: /
-
-  ## The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  tls:
-    - hosts:
-        - postgresql.local
-      secretName: postgresql.local-tls
-
-  secrets:
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  # - name: airflow.local-tls
-  #   key:
-  #   certificate:
 
 ## NetworkPolicy paramaters
 ##

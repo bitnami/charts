@@ -1,0 +1,44 @@
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
+{{- $fullName := include "mongodb.fullname" . }}
+{{- $replicaCount := .Values.replicaCount | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $replicaCount }}
+{{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-{{ $i }}-external
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+    pod: {{ $targetPod }}
+  {{- if $root.Values.externalAccess.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $root.Values.externalAccess.service.type }}
+  {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
+  {{- if not (empty $root.Values.externalAccess.service.loadBalancerIPs) }}
+  loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
+  {{- end }}
+  {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  publishNotReadyAddresses: true
+  ports:
+    - name: {{ $root.Values.service.portName }}
+      port: {{ $root.Values.externalAccess.service.port }}
+      {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
+      nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+      targetPort: mongodb
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}

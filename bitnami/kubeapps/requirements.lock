@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
-  version: 7.11.1
+  version: 8.2.1
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 8.9.1
-digest: sha256:bec1eb6964d077d775be68be65a04a46a7244d426091b6179acf2df9076a76f2
-generated: "2020-04-22T10:21:48.840081009Z"
+  version: 8.10.14
+digest: sha256:0ee57ab834a01756bd7861923711a4b2052726349fc47788ca033ddf4c44025d
+generated: "2020-07-29T10:57:26.484335228+02:00"

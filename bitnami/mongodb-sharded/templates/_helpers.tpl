@@ -71,7 +71,19 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{- define "mongodb-sharded.configServer.primaryHost" -}}
+  {{- if .Values.configsvr.external.host -}}
+  {{- .Values.configsvr.external.host }}
+  {{- else -}}
   {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" . ) (include "mongodb-sharded.fullname" .) .Release.Namespace .Values.clusterDomain -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "mongodb-sharded.configServer.rsName" -}}
+  {{- if .Values.configsvr.external.replicasetName -}}
+    {{- .Values.configsvr.external.replicasetName }}
+  {{- else }}
+    {{- printf "%s-configsvr" ( include "mongodb-sharded.fullname" . ) -}}
+  {{- end }}
 {{- end -}}
 
 {{- define "mongodb-sharded.mongos.configCM" -}}
@@ -110,14 +122,14 @@ Create chart name and version as used by the chart label.
 Get the initialization scripts Secret name.
 */}}
 {{- define "mongodb-sharded.initScriptsSecret" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsSecret "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsSecret "context" $)) -}}
 {{- end -}}
 
 {{/*
 Get the initialization scripts configmap name.
 */}}
 {{- define "mongodb-sharded.initScriptsCM" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsCM "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsCM "context" $)) -}}
 {{- end -}}
 
 {{/*
@@ -235,6 +247,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "mongodb-sharded.validateValues" -}}
   {{- $messages := list -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicas" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.config" .) -}}
   {{- $messages := without $messages "" -}}
@@ -259,24 +272,43 @@ mongodb: mongodbUsername, mongodbDatabase
 {{- end -}}
 
 {{/*
+Validate values of MongoDB - If using an external config server, then both the host and the replicaset name should be set.
+*/}}
+{{- define "mongodb-sharded.validateValues.externalCfgServer" -}}
+{{- if and .Values.configsvr.external.replicasetName (not .Values.configsvr.external.host) -}}
+mongodb: invalidExternalConfigServer
+    You specified a replica set name for the external config server but not a host. Set both configsvr.external.replicasetName and configsvr.external.host
+{{- end -}}
+{{- if and (not .Values.configsvr.external.replicasetName) .Values.configsvr.external.host -}}
+mongodb: invalidExternalConfigServer
+    You specified a host for the external config server but not the replica set name. Set both configsvr.external.replicasetName and configsvr.external.host
+{{- end -}}
+{{- if and .Values.configsvr.external.host (not .Values.configsvr.external.rootPassword) -}}
+mongodb: invalidExternalConfigServer
+    You specified a host for the external config server but not the root password. Set the configsvr.external.rootPassword value.
+{{- end -}}
+{{- if and .Values.configsvr.external.host (not .Values.configsvr.external.replicasetKey) -}}
+mongodb: invalidExternalConfigServer
+    You specified a host for the external config server but not the replica set key. Set the configsvr.external.replicasetKey value.
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of MongoDB - The number of shards must be positive, as well as the data node replicas
 */}}
 {{- define "mongodb-sharded.validateValues.replicas" -}}
-{{- if le (int .Values.shards) 0 }}
-mongodb: invalidShardNumber
-    You specified an invalid number of shards. Please set shards with a positive number
-{{- end -}}
-{{- if le (int .Values.shardsvr.dataNode.replicas) 0 }}
+{{- if and (le (int .Values.shardsvr.dataNode.replicas) 0) (ge (int .Values.shards) 1) }}
 mongodb: invalidShardSvrReplicas
-    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicas with a positive number
+    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicas with a positive number or set the number of shards to 0.
 {{- end -}}
 {{- if lt (int .Values.shardsvr.arbiter.replicas) 0 }}
 mongodb: invalidShardSvrArbiters
     You specified an invalid number of arbiters per shard. Please set shardsvr.arbiter.replicas with a number greater or equal than 0
 {{- end -}}
-{{- if le (int .Values.configsvr.replicas) 0 }}
+{{- if and (le (int .Values.configsvr.replicas) 0) (not .Values.configsvr.external.host) }}
 mongodb: invalidConfigSvrReplicas
-    You specified an invalid number of replicas per shard. Please set configsvr.replicas with a positive number
+    You specified an invalid number of replicas per shard. Please set configsvr.replicas with a positive number or set the configsvr.external.host value to use
+    an external config server replicaset
 {{- end -}}
 {{- end -}}
 

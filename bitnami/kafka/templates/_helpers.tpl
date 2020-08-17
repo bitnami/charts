@@ -324,6 +324,26 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
+Return the SASL type
+Usage:
+{{ include "kafka.auth.saslMechanisms" ( dict "type" .Values.path.to.the.Value ) }}
+*/}}
+{{- define "kafka.auth.saslMechanisms" -}}
+{{- $mechanisms := list -}}
+{{- if .type | regexFind "plain" -}}
+{{- $mechanisms = append $mechanisms "PLAIN" -}}
+{{- end -}}
+{{- if .type | regexFind "scram-sha-256" -}}
+{{- $mechanisms = append $mechanisms "SCRAM-SHA-256" -}}
+{{- end -}}
+{{- if .type | regexFind "scram-sha-512" -}}
+{{- $mechanisms = append $mechanisms "SCRAM-SHA-512" -}}
+{{- end -}}
+{{- $mechanisms = join "," $mechanisms -}}
+{{- printf "%s" $mechanisms -}}
+{{- end -}}
+
+{{/*
 Return the Kafka JAAS credentials secret
 */}}
 {{- define "kafka.jaasSecretName" -}}
@@ -339,6 +359,26 @@ Return true if a JAAS credentials secret object should be created
 */}}
 {{- define "kafka.createJaasSecret" -}}
 {{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) .Values.auth.jaas.zookeeperUser) (not .Values.auth.jaas.existingSecret) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka JKS credentials secret
+*/}}
+{{- define "kafka.jksSecretName" -}}
+{{- if .Values.auth.jksSecret -}}
+    {{- printf "%s" (tpl .Values.auth.jksSecret $) -}}
+{{- else -}}
+    {{- printf "%s-jks" (include "kafka.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a JAAS credentials secret object should be created
+*/}}
+{{- define "kafka.createJksSecret" -}}
+{{- if and (.Files.Glob "files/jks/*.jks") (not .Values.auth.jksSecret) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -447,6 +487,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.jksSecret" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -469,8 +511,8 @@ kafka: auth.clientProtocol auth.interBrokerProtocol
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
 {{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) (eq .Values.externalAccess.service.type "NodePort") -}}
-kafka: .Values.externalAccess.service.nodePort
-    Number of replicas and nodePort array length must be the same.
+kafka: .Values.externalAccess.service.nodePorts
+    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
 {{- end -}}
 {{- end -}}
 
@@ -490,5 +532,25 @@ kafka: rbac.create
     an initContainer will be used to autodetect the external IPs/ports by querying the
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - A secret containing JKS files must be provided when TLS authentication is enabled */}}
+{{- define "kafka.validateValues.jksSecret" -}}
+{{- if and (include "kafka.tlsEncryption" .) (not .Values.auth.jksSecret) (not (.Files.Glob "files/jks/*.jks")) }}
+kafka: auth.jksSecret
+    A secret containing the Kafka JKS files is required when TLS encryption in enabled
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - SASL mechanisms must be provided when using SASL */}}
+{{- define "kafka.validateValues.saslMechanisms" -}}
+{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") .Values.auth.jaas.zookeeperUser) (not .Values.auth.saslMechanisms) }}
+kafka: auth.saslMechanisms
+    The SASL mechanisms are required when either auth.clientProtocol or auth.interBrokerProtocol use SASL or Zookeeper user is provided.
+{{- end }}
+{{- if not (contains .Values.auth.saslInterBrokerMechanism .Values.auth.saslMechanisms) }}
+kafka: auth.saslMechanisms
+    auth.saslInterBrokerMechanism must be provided and it should be one of the specified mechanisms at auth.saslMechanisms
 {{- end -}}
 {{- end -}}

@@ -28,9 +28,25 @@ mattermost:
 flock:
   enabled: false
   # url: ""
+msteams:
+  enabled: false
+  # webhookurl: ""
 webhook:
   enabled: false
   # url: ""
+smtp:
+  enabled: false
+  # to: ""
+  # from: ""
+  # hello: ""
+  # smarthost: ""
+  # subject: ""
+  # auth:
+  #   username: ""
+  #   password: ""
+  #   secret: ""
+  #   identity: ""
+  # requireTLS: false
 
 # namespace to watch, leave it empty for watching all.
 namespaceToWatch: ""
@@ -49,7 +65,7 @@ resourcesToWatch:
 image:
   registry: docker.io
   repository: bitnami/kubewatch
-  tag: 0.0.4-debian-10-r137
+  tag: 0.1.0-debian-10-r30
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

@@ -3,13 +3,13 @@ apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
+{{- if .namespace }}
+  namespace: {{ .namespace }}
+{{- end }}
   annotations:
     "helm.sh/hook": post-install
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
-    chart: {{ template "kubeapps.chart" $ }}
-    release: {{ $.Release.Name }}
-    heritage: {{ $.Release.Service }}
 spec:
   type: helm
   url: {{ .url }}

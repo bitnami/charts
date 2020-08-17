@@ -29,6 +29,7 @@ rules:
       - networking.istio.io
     resources:
       - gateways
+      - virtualservices
     verbs:
       - get
       - list

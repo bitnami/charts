@@ -2,17 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "grafana.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: grafana
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels: {{- include "grafana.labels" . | nindent 8 }}
+        app.kubernetes.io/component: grafana
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -80,13 +84,10 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
               subPath: grafana.ini
             {{- end }}
-            {{- if .Values.config.useCustomIniFile }}
-            - name: custom-ini
-              mountPath: /opt/bitnami/grafana/conf/custom.ini
-              subPath: custom.ini
-            {{- end }}
+            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /opt/bitnami/grafana/data
+            {{- end }}
             {{- if .Values.dashboardsProvider.enabled }}
             - name: dashboards-provider
               mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
@@ -110,6 +111,9 @@ spec:
               mountPath: {{ .mountPath }}
               subPath: {{ .subPath | default "" }}
               readOnly: {{ .readOnly }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
           ports:
             - name: dashboard
@@ -144,8 +148,8 @@ spec:
         {{- include "grafana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: data
         {{- if .Values.persistence.enabled }}
+        - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "grafana.fullname" .) }}
         {{- end }}
@@ -183,18 +187,11 @@ spec:
             secretName: {{ .Values.config.grafanaIniSecret }}
           {{- end }}
         {{- end }}
-        {{- if .Values.config.useCustomIniFile }}
-        - name: custom-ini
-          {{- if .Values.config.customIniConfigMap }}
-          configMap:
-            name: {{ .Values.config.customIniConfigMap }}
-          {{- else if .Values.config.customIniSecret }}
-          secret:
-            secretName: {{ .Values.config.customIniSecret }}
-          {{- end }}
-        {{- end }}
         {{- range .Values.extraConfigmaps }}
         - name: {{ .name }}
           configMap:
             name: {{ .name }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}

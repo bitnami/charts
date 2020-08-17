@@ -2,7 +2,7 @@
 
 [Jenkins](https://jenkins.io) is widely recognized as the most feature-rich CI available with easy configuration, continuous delivery and continuous integration support, easily test, build and stage your app, and more. It supports multiple SCM tools including CVS, Subversion and Git. It can execute Apache Ant and Apache Maven-based projects as well as arbitrary scripts.
 
-## TL;DR;
+## TL;DR
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -171,7 +171,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set jenkinsUsername=admin,jenkinsPassword=password \
+  --set jenkinsUser=admin,jenkinsPassword=password \
     bitnami/jenkins
 ```
 

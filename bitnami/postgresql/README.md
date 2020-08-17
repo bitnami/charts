@@ -4,7 +4,7 @@
 
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -42,7 +42,15 @@ To uninstall/delete the `my-release` deployment:
 $ helm delete my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components but PVC's associated with the chart and deletes the release.
+
+To delete the PVC's associated with `my-release`:
+
+```console
+$ kubectl delete pvc -l release=my-release
+```
+
+> **Note**: Deleting the PVC's will delete postgresql data as well. Please be cautious before doing it.
 
 ## Parameters
 
@@ -169,7 +177,7 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `securityContext.fsGroup`                     | Group ID for the container                                                                                                                                                | `1001`                                                        |
 | `securityContext.runAsUser`                   | User ID for the container                                                                                                                                                 | `1001`                                                        |
 | `serviceAccount.enabled`                      | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                                                     | `false`                                                       |
-| `serviceAcccount.name`                        | Name of existing service account                                                                                                                                          | `nil`                                                         |
+| `serviceAccount.name`                         | Name of existing service account                                                                                                                                          | `nil`                                                         |
 | `livenessProbe.enabled`                       | Would you like a livenessProbe to be enabled                                                                                                                              | `true`                                                        |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                                      | `false`                                                       |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                | `true`                                                        |
@@ -185,6 +193,13 @@ The following tables lists the configurable parameters of the PostgreSQL chart a
 | `readinessProbe.timeoutSeconds`               | When the probe times out                                                                                                                                                  | 5                                                             |
 | `readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                | 6                                                             |
 | `readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed                                                                               | 1                                                             |
+| `tls.enabled`                                 | Enable TLS traffic support                                                                                                                                                | `false`                                                       |
+| `tls.preferServerCiphers`                     | Whether to use the server's TLS cipher preferences rather than the client's                                                                                               | `true`                                                        |
+| `tls.certificatesSecret`                      | Name of an existing secret that contains the certificates                                                                                                                 | `nil`                                                         |
+| `tls.certFilename`                            | Certificate filename                                                                                                                                                      | `""`                                                          |
+| `tls.certKeyFilename`                         | Certificate key filename                                                                                                                                                  | `""`                                                          |
+| `tls.certCAFilename`                          | CA Certificate filename. If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate.                                                      |`nil`                                                          |
+| `tls.crlFilename`                             | File containing a Certificate Revocation List                                                                                                                             |`nil`                                                          |
 | `metrics.enabled`                             | Start a prometheus exporter                                                                                                                                               | `false`                                                       |
 | `metrics.service.type`                        | Kubernetes Service type                                                                                                                                                   | `ClusterIP`                                                   |
 | `service.clusterIP`                           | Static clusterIP or None for headless services                                                                                                                            | `nil`                                                         |
@@ -321,6 +336,35 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+* First, create the secret with the cetificates files:
+
+    ```console
+    kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+* Then, use the following parameters:
+
+    ```console
+    volumePermissions.enabled=true
+    tls.enabled=true
+    tls.certificatesSecret="certificates-tls-secret"
+    tls.certFilename="cert.crt"
+    tls.certKeyFilename="cert.key"
+    ```
+
+    > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
+
 ### Sidecars
 
 If you need  additional containers to run within the same pod as PostgreSQL (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
@@ -447,6 +491,60 @@ $ helm upgrade my-release stable/postgresql \
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPLICATION_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+## 9.0.0
+
+In this version the chart was adapted to follow the Helm label best practices, see [PR 3021](https://github.com/bitnami/charts/pull/3021). That means the backward compatibility is not guarantee when upgrading the chart to this major version.
+
+As a workaround, you can delete the existing statefulset (using the `--cascade=false` flag pods are not deleted) before upgrade the chart. For example, this can be a valid workflow:
+
+- Deploy an old version (8.X.X)
+```console
+$ helm install postgresql bitnami/postgresql --version 8.10.14
+```
+
+- Old version is up and running
+```console
+$ helm ls
+NAME      	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART             	APP VERSION
+postgresql	default  	1       	2020-08-04 13:39:54.783480286 +0000 UTC	deployed	postgresql-8.10.14	11.8.0
+
+$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+postgresql-postgresql-0   1/1     Running   0          76s
+```
+
+- The upgrade to the latest one (9.X.X) is going to fail
+```console
+$ helm upgrade postgresql bitnami/postgresql
+Error: UPGRADE FAILED: cannot patch "postgresql-postgresql" with kind StatefulSet: StatefulSet.apps "postgresql-postgresql" is invalid: spec: Forbidden: updates to statefulset spec for fields other than 'replicas', 'template', and 'updateStrategy' are forbidden
+```
+
+- Delete the statefulset
+```console
+$ kubectl delete statefulsets.apps --cascade=false postgresql-postgresql
+statefulset.apps "postgresql-postgresql" deleted
+```
+
+- Now the upgrade works
+```cosnole
+$ helm upgrade postgresql bitnami/postgresql
+$ helm ls
+NAME      	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART           	APP VERSION
+postgresql	default  	3       	2020-08-04 13:42:08.020385884 +0000 UTC	deployed	postgresql-9.1.2	11.8.0
+```
+
+- We can kill the existing pod and the new statefulset is going to create a new one:
+```console
+$ kubectl delete pod postgresql-postgresql-0
+pod "postgresql-postgresql-0" deleted
+
+$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+postgresql-postgresql-0   1/1     Running   0          19s
+```
+
+Please, note that without the `--cascade=false` both objects (statefulset and pod) are going to be removed and both objects will be deployed again with the `helm upgrade` command
 
 ## 8.0.0
 

@@ -159,11 +159,14 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
+            {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
             - --infoblox-grid-host={{ .Values.infoblox.gridHost }}
+            - --infoblox-view={{ .Values.infoblox.view }}
               {{- if .Values.infoblox.domainFilter }}
             - --domain-filter={{ .Values.infoblox.domainFilter }}
               {{- end }}
@@ -235,6 +238,7 @@ spec:
             - name: AZURE_TENANT_ID
               value: {{ .Values.azure.tenantId }}
             {{- end }}
+            {{- if not .Values.azure.useManagedIdentityExtension }}
             {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
             - name: AZURE_CLIENT_SECRET
               valueFrom:
@@ -246,6 +250,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: azure_aad_client_id
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -388,7 +393,7 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
             {{- end }}
-            {{- if and (eq .Values.provider "pdns") (or .Values.pdns.apiKey .Values.pdns.secretName) }}
+            {{- if eq .Values.provider "pdns" }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
               valueFrom:
@@ -445,7 +450,7 @@ spec:
               mountPath: {{ .Values.aws.credentials.mountPath }}
               readOnly: true
             {{- end }}
-            {{- if eq .Values.provider "azure" }}
+            {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
             # Azure mountPath(s)
             - name: azure-config-file
               {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
@@ -503,7 +508,7 @@ spec:
           secret:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
-        {{- if eq .Values.provider "azure" }}
+        {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
         # Azure volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}

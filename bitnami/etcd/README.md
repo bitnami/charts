@@ -2,7 +2,7 @@
 
 [etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -75,6 +75,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `envVarsConfigMap`                              | ConfigMap that contains environment variables to be set in the container                                                                                  | `nil`                                                       |
 | `allowNoneAuthentication`                       | Allow to use etcd without configuring RBAC authentication                                                                                                 | `true`                                                      |
 | `maxProcs`                                      | Set GOMAXPROCS environment variable to limit the number of CPUs                                                                                           | `nil`                                                       |
+| `etcd.initialClusterState`                      | Initial cluster state. Allowed values: 'new' or 'existing'                                                                                                | `nil`                                                       |
 | `auth.rbac.enabled`                             | Switch to enable the etcd authentication.                                                                                                                 | `true`                                                      |
 | `auth.rbac.rootPassword`                        | Password for the root user                                                                                                                                | `nil`                                                       |
 | `auth.rbac.existingSecret`                      | Name of the existing secret containing the root password                                                                                                  | `nil`                                                       |
@@ -274,7 +275,7 @@ auth.client.existingSecret=etcd-client-certs
 You can enable auto disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot. You can enable it using the following parameters:
 
 ```console
-persistence.enable=true
+persistence.enabled=true
 disasterRecovery.enabled=true
 disasterRecovery.pvc.size=2Gi
 disasterRecovery.pvc.storageClassName=nfs
@@ -320,7 +321,7 @@ You can use the command below to upgrade your chart by starting a new cluster us
 ```console
 $ helm install new-release bitnami/etcd \
   --set statefulset.replicaCount=3 \
-  --set persistence.enable=true \
+  --set persistence.enabled=true \
   --set persistence.size=8Gi \
   --set startFromSnapshot.enabled=true \
   --set startFromSnapshot.existingClaim=my-claim \

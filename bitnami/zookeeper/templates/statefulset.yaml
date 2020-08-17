@@ -6,6 +6,12 @@ metadata:
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
+    {{- if .Values.commonLabels }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -29,10 +35,13 @@ spec:
         {{- if .Values.podLabels }}
         {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
-      annotations: {{- include "zookeeper.podAnnotations" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
@@ -58,7 +67,15 @@ spec:
         - name: volume-permissions
           image: {{ template "zookeeper.volumePermissions.image" . }}
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/zookeeper"]
+          command:
+            - chown
+          args:
+            - -R
+            - {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}
+            - /bitnami/zookeeper
+            {{- if .Values.dataLogDir }}
+            - {{ .Values.dataLogDir }}
+            {{- end }}
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -67,6 +84,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/zookeeper
+            {{- if .Values.dataLogDir }}
+            - name: data-log
+              mountPath: {{ .Values.dataLogDir }}
+            {{- end }}
       {{- end }}
       containers:
         - name: zookeeper
@@ -94,6 +115,8 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           env:
+            - name: ZOO_DATA_LOG_DIR
+              value: {{ .Values.dataLogDir | quote }}
             - name: ZOO_PORT_NUMBER
               value: {{ .Values.service.port | quote }}
             - name: ZOO_TICK_TIME
@@ -112,6 +135,8 @@ spec:
               value: {{ .Values.autopurge.purgeInterval | quote }}
             - name: ZOO_AUTOPURGE_RETAIN_COUNT
               value: {{ .Values.autopurge.snapRetainCount | quote }}
+            - name: ZOO_MAX_SESSION_TIMEOUT
+              value: {{ .Values.maxSessionTimeout | quote }}
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $followerPort := int .Values.service.followerPort }}
@@ -153,7 +178,7 @@ spec:
             - name: ZOO_ENABLE_PROMETHEUS_METRICS
               value: "yes"
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
-              value: {{ .Values.metrics.port | quote }}
+              value: {{ .Values.metrics.containerPort | quote }}
             {{- end }}
             {{- if .Values.service.tls.client_enable }}
             - name: ZOO_TLS_CLIENT_ENABLE
@@ -202,16 +227,16 @@ spec:
               containerPort: {{ .Values.service.electionPort }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.metrics.port }}
+              containerPort: {{ .Values.metrics.containerPort }}
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -220,12 +245,12 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              {{ if not .Values.service.tls.disable_base_client_port }}
-              port: client
-              {{ else }}
-              port: client-tls
-              {{ end }}
+            exec:
+              {{- if not .Values.service.tls.disable_base_client_port }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              {{- else }}
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tls.client_port }} | grep imok']
+              {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -235,6 +260,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/zookeeper
+            {{- if .Values.dataLogDir }}
+            - name: data-log
+              mountPath: {{ .Values.dataLogDir }}
+            {{- end }}
             {{- if .Values.config }}
             - name: config
               mountPath: /opt/bitnami/zookeeper/conf/zoo.cfg
@@ -257,11 +286,20 @@ spec:
         - name: data
           emptyDir: {}
         {{- end }}
+        {{- if and .Values.persistence.enabled .Values.persistence.dataLogDir.existingClaim }}
+        - name: data-log
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl .Values.persistence.dataLogDir.existingClaim .) }}
+        {{- else if and ( not .Values.persistence.enabled ) .Values.dataLogDir }}
+        - name: data-log
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
-  {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim )}}
+  {{- if and .Values.persistence.enabled (not (and .Values.persistence.existingClaim .Values.persistence.dataLogDir.existingClaim) )}}
   volumeClaimTemplates:
+  {{- if not .Values.persistence.existingClaim }}
     - metadata:
         name: data
         annotations:
@@ -277,4 +315,22 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{- include "zookeeper.storageClass" . | nindent 8 }}
+    {{- end }}
+    {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
+    - metadata:
+        name: data-log
+        annotations:
+        {{- range $key, $value := .Values.persistence.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.dataLogDir.size | quote }}
+        {{- include "zookeeper.storageClass" . | nindent 8 }}
+    {{- end }}
   {{- end }}

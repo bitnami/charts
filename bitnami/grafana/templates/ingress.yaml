@@ -3,7 +3,9 @@ apiVersion: {{ template "grafana.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "grafana.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -17,6 +19,12 @@ spec:
     - host: {{ .name | quote }}
       http:
         paths:
+        {{- range .extraPaths }}
+          - path: {{ .path }}
+            backend:
+              serviceName: {{ .backend.serviceName }}
+              servicePort: {{ .backend.servicePort}}
+        {{- end }}
         {{- $paths := default (list "/") .paths }}
         {{- range $paths }}
           - path: {{ . }}

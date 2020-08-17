@@ -7,6 +7,7 @@ spec:
   selector:
     matchLabels: {{- include "redmine.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicas }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels: {{- include "redmine.labels" . | nindent 8 }}
@@ -28,6 +29,8 @@ spec:
       {{- with .Values.securityContext }}
       securityContext: {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+      {{- include "certificates.initContainer" . | indent 8 }}
       containers:
         - name: {{ template "redmine.fullname" . }}
           image: {{ template "redmine.image" . }}
@@ -50,7 +53,11 @@ spec:
             - name: REDMINE_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.mariadb.existingSecret }}
+                  name: {{ .Values.mariadb.existingSecret }}
+                  {{- else }}
                   name: {{ template "redmine.mariadb.fullname" . }}
+                  {{- end }}
                   key: mariadb-password
             {{- else }}
               value: {{ .Values.externalDatabase.host | quote }}
@@ -145,9 +152,11 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
+            {{- include "certificates.volumeMount" . | indent 12 }}
             - name: redmine-data
               mountPath: /bitnami/redmine
       volumes:
+        {{- include "certificates.volumes" . | indent 8 }}
         - name: redmine-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

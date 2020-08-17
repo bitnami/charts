@@ -5,8 +5,17 @@ metadata:
   name: {{ template "kafka.fullname" . }}-jmx-metrics
   labels: {{- include "kafka.labels" . | nindent 4 }}
     app.kubernetes.io/component: kafka
-  {{- if .Values.metrics.jmx.service.annotations }}
-  annotations: {{ include "kafka.tplValue" ( dict "value" .Values.metrics.jmx.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "kafka.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.metrics.jmx.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.metrics.jmx.service.annotations }}
+    {{ include "kafka.tplValue" ( dict "value" .Values.metrics.jmx.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "kafka.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.jmx.service.type }}

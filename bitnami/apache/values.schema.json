@@ -19,8 +19,8 @@
           "title": "Enable TLS annotations via cert-manager",
           "description": "Set this to true in order to add the corresponding annotations for cert-manager",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "hostname": {
@@ -28,8 +28,8 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         }
       }

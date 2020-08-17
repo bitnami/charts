@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.39.0-debian-10-r32
+    tag: 0.41.0-debian-10-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -171,6 +171,10 @@ operator:
   ##
   tolerations: []
 
+  ## Priority class assigned to the Pods
+  ##
+  priorityClassName: ""
+
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
@@ -216,7 +220,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.3.0-debian-10-r133
+      tag: 0.4.0-debian-10-r18
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -247,7 +251,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.18.1-debian-10-r28
+    tag: 2.20.1-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -390,6 +394,7 @@ prometheus:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   podAntiAffinity: soft
+  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
 
   ## Pod Affinity. The value is evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -483,6 +488,16 @@ prometheus:
   ##
   serviceMonitorNamespaceSelector: {}
 
+  ## PodMonitors to be selected for target discovery.
+  ## If {}, select all PodMonitors
+  ##
+  podMonitorSelector: {}
+
+  ## Namespaces to be selected for PodMonitor discovery
+  ## See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
+  ##
+  podMonitorNamespaceSelector: {}
+
   ## How long to retain metrics
   ##
   retention: 30d
@@ -520,10 +535,11 @@ prometheus:
   ## Standard object’s metadata
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
-  podMetadata: {}
-  # labels:
-  #   app: prometheus
-  #   k8s-app: prometheus
+  podMetadata:
+    labels: {}
+    # app: prometheus
+    # k8s-app: prometheus
+    annotations: {}
 
   ## The remote_read spec configuration for Prometheus.
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#remotereadspec
@@ -583,50 +599,70 @@ prometheus:
   ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
   ##
   additionalPrometheusRules: []
-    # - name: custom-recording-rules
-    #  groups:
-    #    - name: sum_node_by_job
-    #      rules:
-    #        - record: job:kube_node_labels:sum
-    #          expr: sum(kube_node_labels) by (job)
-    #    - name: sum_prometheus_config_reload_by_pod
-    #      rules:
-    #        - record: job:prometheus_config_last_reload_successful:sum
-    #          expr: sum(prometheus_config_last_reload_successful) by (pod)
-    # - name: custom-alerting-rules
-    #  groups:
-    #    - name: prometheus-config
-    #      rules:
-    #        - alert: PrometheusConfigurationReload
-    #          expr: prometheus_config_last_reload_successful > 0
-    #          for: 1m
-    #          labels:
-    #            severity: error
-    #          annotations:
-    #            summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
-    #            description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    #    - name: custom-node-exporter-alerting-rules
-    #      rules:
-    #        - alert: PhysicalComponentTooHot
-    #          expr: node_hwmon_temp_celsius > 75
-    #          for: 5m
-    #          labels:
-    #            severity: warning
-    #          annotations:
-    #            summary: "Physical component too hot (instance {{ $labels.instance }})"
-    #            description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    #        - alert: NodeOvertemperatureAlarm
-    #          expr: node_hwmon_temp_alarm == 1
-    #          for: 5m
-    #          labels:
-    #            severity: critical
-    #          annotations:
-    #            summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
-    #            description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  # - name: custom-recording-rules
+  #  groups:
+  #    - name: sum_node_by_job
+  #      rules:
+  #        - record: job:kube_node_labels:sum
+  #          expr: sum(kube_node_labels) by (job)
+  #    - name: sum_prometheus_config_reload_by_pod
+  #      rules:
+  #        - record: job:prometheus_config_last_reload_successful:sum
+  #          expr: sum(prometheus_config_last_reload_successful) by (pod)
+  # - name: custom-alerting-rules
+  #  groups:
+  #    - name: prometheus-config
+  #      rules:
+  #        - alert: PrometheusConfigurationReload
+  #          expr: prometheus_config_last_reload_successful > 0
+  #          for: 1m
+  #          labels:
+  #            severity: error
+  #          annotations:
+  #            summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
+  #            description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #    - name: custom-node-exporter-alerting-rules
+  #      rules:
+  #        - alert: PhysicalComponentTooHot
+  #          expr: node_hwmon_temp_celsius > 75
+  #          for: 5m
+  #          labels:
+  #            severity: warning
+  #          annotations:
+  #            summary: "Physical component too hot (instance {{ $labels.instance }})"
+  #            description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #        - alert: NodeOvertemperatureAlarm
+  #          expr: node_hwmon_temp_alarm == 1
+  #          for: 5m
+  #          labels:
+  #            severity: critical
+  #          annotations:
+  #            summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
+  #            description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
   ## Enable additional scrape configs that are managed externally to this chart
+  ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ##
-  additionalScrapeConfigsExternal: false
+  additionalScrapeConfigsExternal:
+    enabled: false
+    ## Name of the secret that Prometheus should use for the additional scrape configuration
+    ##
+    # name:
+    ## Name of the key inside the secret to be used for the additional scrape configuration.
+    ##
+    # key:
+
+  ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
+  ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ##
+  additionalAlertRelabelConfigsExternal:
+    enabled: false
+    ## Name of the secret that Prometheus should use for the additional alert relabel configuration.
+    ##
+    # name:
+    ## Name of the key inside the secret to be used for the additional alert relabel configuration.
+    ##
+    # key:
 
   ## Thanos sidecar container configuration
   ##
@@ -640,7 +676,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.12.2-scratch-r15
+      tag: 0.14.0-scratch-r3
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -656,6 +692,21 @@ prometheus:
     objectStorageConfig: {}
     #   secretName: thanos-objstore-config
     #   secretKey: thanos.yaml
+
+    ## Thanos sidecar container resource requests and limits.
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #   cpu: 100m
+      #   memory: 128Mi
+      requests: {}
+      #   cpu: 100m
+      #   memory: 128Mi
 
     ## Thanos Sidecar Service
     ##
@@ -686,6 +737,15 @@ prometheus:
       ##
       annotations: {}
 
+      ## Extra ports to expose from the Thanos sidecar container
+      ##
+      # extraPorts:
+      #   - name: http
+      #     port: 10902
+      #     targetPort: http
+      #     protocol: TCP
+      extraPorts: []
+
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
@@ -698,7 +758,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.20.0-debian-10-r135
+    tag: 0.21.0-debian-10-r41
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -843,6 +903,7 @@ alertmanager:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   podAntiAffinity: soft
+  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
 
   ## Pod Affinity. The value is evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -903,7 +964,9 @@ alertmanager:
   ## Standard object’s metadata.
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
-  podMetadata: {}
+  podMetadata:
+    labels: {}
+    annotations: {}
 
   ## Secrets that should be mounted into the Alertmanager Pods
   ##
@@ -1007,6 +1070,49 @@ kubeApiServer:
   enabled: true
 
   serviceMonitor:
+    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+
+    ## Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+
+    ## Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+
+## Component scraping the kube-proxy
+kubeProxy:
+  ## Create a ServiceMonitor to scrape kube-proxy service
+  enabled: true
+
+  ## If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  endpoints: []
+  # - 10.141.4.22
+  # - 10.141.4.23
+  # - 10.141.4.24
+
+  ## Namespace where kube-proxy service is deployed
+  namespace: kube-system
+
+  ## Service ports and selector information
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+    # selector:
+    #   k8s-app: kube-proxy
+
+  serviceMonitor:
+    ## Enable scraping kube-proxy over https.
+    ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
+    ##
+    https: false
+
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##

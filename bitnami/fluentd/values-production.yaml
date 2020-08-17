@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.0-debian-10-r10
+  tag: 1.11.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -407,6 +407,9 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the fluentd.fullname template
   # name:
+  ## Annotations for the Service Account (evaluated as a template)
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/

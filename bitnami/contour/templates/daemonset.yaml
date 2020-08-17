@@ -1,0 +1,180 @@
+{{- if .Values.envoy.enabled }}
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "contour.fullname" . }}-envoy
+  labels: {{- include "contour.labels" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 10%
+  selector:
+    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: envoy
+  template:
+    metadata:
+      labels: {{- include "contour.labels" . | nindent 8 }}
+        app.kubernetes.io/component: envoy
+    spec: {{- include "envoy.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.envoy.affinity }}
+      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.nodeSelector }}
+      nodeSelector: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.affinity }}
+      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.tolerations}}
+      tolerations: {{- include "contour.tplValue" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
+      hostNetwork: {{ .Values.envoy.hostNetwork }}
+      dnsPolicy: {{ .Values.envoy.dnsPolicy }}
+      {{- if .Values.envoy.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.envoy.podSecurityContext.fsGroup }}
+        {{- if .Values.envoy.podSecurityContext.sysctls }}
+        sysctls:
+          {{- toYaml .Values.envoy.podSecurityContext.sysctls | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+      - command:
+        - contour
+        args:
+          - envoy
+          - shutdown-manager
+        image: {{ include "contour.image" . }}
+        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        lifecycle:
+          preStop:
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
+        {{- if .Values.contour.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+          initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
+        {{- end }}
+        name: shutdown-manager
+      - command:
+        - envoy
+        args:
+        - -c
+        - /config/envoy.json
+        - --service-cluster $(CONTOUR_NAMESPACE)
+        - --service-node $(ENVOY_POD_NAME)
+        - --log-level {{ .Values.envoy.logLevel }}
+        image: {{ include "envoy.image" . }}
+        imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+        name: envoy
+        {{- if .Values.envoy.containerSecurityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.envoy.containerSecurityContext.runAsUser }}
+        {{- end }}
+        env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: ENVOY_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        ports:
+        - containerPort: 80
+          hostPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          hostPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 8002
+          name: metrics
+          protocol: TCP
+
+        {{- if .Values.envoy.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8002
+          initialDelaySeconds: {{ .Values.envoy.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.envoy.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.envoy.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /ready
+            port: 8002
+          initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.envoy.resources | indent 10 }}
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /config
+        - name: envoycert
+          mountPath: /certs
+        lifecycle:
+          preStop:
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
+      initContainers:
+      - command:
+        - contour
+        args:
+        - bootstrap
+        - /config/envoy.json
+        - --xds-address={{ template "contour.fullname" . }}
+        - --xds-port=8001
+        - --envoy-cafile=/certs/ca.crt
+        - --envoy-cert-file=/certs/tls.crt
+        - --envoy-key-file=/certs/tls.key
+        image: {{ include "contour.image" . }}
+        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        name: envoy-initconfig
+        resources:
+{{ toYaml .Values.contour.resources | indent 10 }}
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /config
+        - name: envoycert
+          mountPath: /certs
+          readOnly: true
+        env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
+      volumes:
+      - name: envoy-config
+        emptyDir: {}
+      - name: envoycert
+        secret:
+          secretName: envoycert
+      restartPolicy: Always
+{{- end }}

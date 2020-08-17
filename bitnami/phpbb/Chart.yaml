@@ -1,7 +1,7 @@
 apiVersion: v1
 name: phpbb
-version: 7.0.16
-appVersion: 3.3.0
+version: 7.0.19
+appVersion: 3.3.1
 description: Community forum that supports the notion of users and groups, file attachments, full-text search, notifications and more.
 keywords:
 - phpbb
@@ -16,3 +16,5 @@ maintainers:
 - name: Bitnami
   email: containers@bitnami.com
 engine: gotpl
+annotations:
+  category: Forum

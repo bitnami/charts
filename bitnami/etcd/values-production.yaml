@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.4.9-debian-10-r22
+  tag: 3.4.10-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -74,7 +74,7 @@ volumePermissions:
 ## Statefulset parameters
 ##
 statefulset:
-  ## Number od replicas
+  ## Number of replicas
   ##
   replicaCount: 3
   ## Update strategy, can be set to RollingUpdate or OnDelete by default.
@@ -160,6 +160,16 @@ securityContext:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## etcd variables
+##
+etcd:
+  ## Initial cluster state. Allowed values: 'new' or 'existing'
+  ## If this values is not set, the default values below are set:
+  ## - 'new': when installing the chart ('helm install ...')
+  ## - 'existing': when upgrading the chart ('helm upgrade ...')
+  ##
+  initialClusterState: ""
 
 ## Service parameters
 ##

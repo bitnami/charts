@@ -12,7 +12,7 @@
 - Secure authentication to Kubeapps using an [OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md)
 - Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md)
 
-## TL;DR;
+## TL;DR
 
 For Helm 2:
 
@@ -197,6 +197,16 @@ kubectl delete namespace kubeapps
 ```
 
 ## Troubleshooting
+
+### Nginx Ipv6 error
+
+When starting the application, the Nginx server present in the services `kubeapps` and `kubeapps-internal-dashboard` may fail with the following:
+
+```
+nginx: [emerg] socket() [::]:8080 failed (97: Address family not supported by protocol)
+```
+
+This usually means that your cluster is not compatible with IPv6. To disable it, install kubeapps with the flag: `--set enableIPv6=false`.
 
 ### Forbidden error while installing the Chart
 
