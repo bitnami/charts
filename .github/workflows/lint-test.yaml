@@ -27,10 +27,10 @@ jobs:
         run: git fetch --prune --unshallow
 
       - name: Create kind cluster
-        uses: helm/kind-action@v1.0.0
+        uses: helm/kind-action@v1.0.0-rc.1
 
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@v1.0.0
+        uses: helm/chart-testing-action@v1.0.0-rc.2
         with:
           config: .github/ct-install.yaml
           command: install
