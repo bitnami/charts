@@ -4,7 +4,7 @@
 
 MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `securityContext.fsGroup`                    | Group ID for the container                                                                                                                                                                                                                                               | `1001`                                                            |
 | `securityContext.runAsUser`                  | User ID for the container                                                                                                                                                                                                                                                | `1001`                                                            |
 | `existingSecret`                             | Use existing secret for password details (`rootUser.password`, `db.password`, `replication.password` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password`. | `nil`                                                             |
+| `secret.annotations`                         | Secret annotations (evaluated as a template)                                                                                                                                                                                                                             | `{}`                                                              |
 | `rootUser.password`                          | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                    | _random 10 character alphanumeric string_                         |
 | `rootUser.forcePassword`                     | Force users to specify a password                                                                                                                                                                                                                                        | `false`                                                           |
 | `rootUser.injectSecretsAsVolume`             | Mount admin user password as a file instead of using an environment variable                                                                                                                                                                                             | `false`                                                           |
@@ -290,7 +291,7 @@ master:
 
 The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
-The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
 ### Adjust permissions of persistent volume mountpoint
 

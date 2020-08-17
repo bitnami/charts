@@ -2,7 +2,7 @@
 
 [Spring Cloud Data Flow](https://dataflow.spring.io/) is a microservices-based Streaming and Batch data processing pipeline in Cloud Foundry and Kubernetes.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami

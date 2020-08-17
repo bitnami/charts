@@ -8,7 +8,9 @@ data:
   vhost.conf: |-
     server {
       listen 8080;
+  {{- if .Values.enableIPv6 }}
       listen [::]:8080;
+  {{- end}}
       server_name _;
 
       gzip on;

@@ -5,6 +5,8 @@ metadata:
   name: {{ include "grafana.fullname" . }}-image-renderer
   {{- if .Values.imageRenderer.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer

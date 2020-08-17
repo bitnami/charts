@@ -2,7 +2,7 @@
 
 [Redmine](http://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

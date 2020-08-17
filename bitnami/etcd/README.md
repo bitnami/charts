@@ -2,7 +2,7 @@
 
 [etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -75,6 +75,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `envVarsConfigMap`                              | ConfigMap that contains environment variables to be set in the container                                                                                  | `nil`                                                       |
 | `allowNoneAuthentication`                       | Allow to use etcd without configuring RBAC authentication                                                                                                 | `true`                                                      |
 | `maxProcs`                                      | Set GOMAXPROCS environment variable to limit the number of CPUs                                                                                           | `nil`                                                       |
+| `etcd.initialClusterState`                      | Initial cluster state. Allowed values: 'new' or 'existing'                                                                                                | `nil`                                                       |
 | `auth.rbac.enabled`                             | Switch to enable the etcd authentication.                                                                                                                 | `true`                                                      |
 | `auth.rbac.rootPassword`                        | Password for the root user                                                                                                                                | `nil`                                                       |
 | `auth.rbac.existingSecret`                      | Name of the existing secret containing the root password                                                                                                  | `nil`                                                       |

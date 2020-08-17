@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/component: kafka
     pod: {{ $targetPod }}
     {{- if $root.Values.commonLabels }}
-    {{- include "kafka.tplvalue" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "kafka.tplValue" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
   annotations:
@@ -22,7 +22,7 @@ metadata:
     {{ include "kafka.tplValue" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if $root.Values.commonAnnotations }}
-    {{- include "kafka.tplvalue" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- include "kafka.tplValue" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -43,13 +43,7 @@ spec:
       {{- else }}
       nodePort: null
       {{- end }}
-      {{- if or (eq $root.Values.externalAccess.service.type "LoadBalancer") }}
       targetPort: kafka-external
-      {{- else if $root.Values.externalAccess.autoDiscovery.enabled }}
-      targetPort: null
-      {{- else }}
-      targetPort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- end }}
   selector: {{- include "kafka.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: {{ template "prometheus-operator.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
@@ -11,6 +12,11 @@ spec:
   serviceMonitorSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.serviceMonitorSelector "context" $) | nindent 4 }}
   {{- else }}
   serviceMonitorSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.podMonitorSelector }}
+  podMonitorSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMonitorSelector "context" $) | nindent 4 }}
+  {{- else }}
+  podMonitorSelector: {}
   {{- end }}
   alerting:
     alertmanagers:
@@ -80,6 +86,11 @@ spec:
   serviceMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.serviceMonitorNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   serviceMonitorNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.podMonitorNamespaceSelector }}
+  podMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMonitorNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  podMonitorNamespaceSelector: {}
   {{- end }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
@@ -207,6 +218,9 @@ spec:
               name: {{ .Values.prometheus.thanos.objectStorageConfig.secretName }}
               key: {{ .Values.prometheus.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
       {{- end }}
+      {{- if .Values.prometheus.thanos.resources }}
+      resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- end }}
       ports:
         - name: grpc
           containerPort: 10901
@@ -217,7 +231,7 @@ spec:
       volumeMounts:
         - mountPath: /prometheus
           name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
-          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default true) }}
+          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
     {{- end }}

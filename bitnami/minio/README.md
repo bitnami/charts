@@ -2,7 +2,7 @@
 
 [MinIO](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -65,6 +65,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                 |
 | `nameOverride`                       | String to partially override minio.fullname template with a string (will prepend the release name)                                                        | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override minio.fullname template with a string                                                                                            | `nil`                                                   |
+| `schedulerName`                      | Specifies the schedulerName, if it's nil uses kube-scheduler                                                                                              | `nil`                                                   |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                                                                                      | `true`                                                  |
 | `serviceAccount.name`                | If serviceAccount.create is enabled, what should the serviceAccount name be - otherwise defaults to the fullname                                          | `nil`                                                   |
 | `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
@@ -127,6 +128,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `ingress.enabled`                    | Enable/disable ingress                                                                                                                                    | `false`                                                 |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
 | `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
+| `ingress.labels`                     | Ingress additional labels                                                                                                                                 | `{}`                                                    |
 | `ingress.hosts[0].name`              | Hostname to your MinIO installation                                                                                                                       | `minio.local`                                           |
 | `ingress.hosts[0].path`              | Path within the url structure                                                                                                                             | `/`                                                     |
 | `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |

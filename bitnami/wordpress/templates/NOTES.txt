@@ -1,5 +1,9 @@
 ** Please be patient while the chart is being deployed **
 
+Your WordPress site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "wordpress.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.port }})
+
 To access your WordPress site from outside the cluster follow the steps below:
 
 {{- if .Values.ingress.enabled }}

@@ -87,8 +87,8 @@ spec:
             - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
             {{- end }}
             {{- end }}
-            {{- range $key, $value := .Values.querier.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.querier.extraFlags }}
+            - {{ . }}
             {{- end }}
           ports:
             - name: http
@@ -110,7 +110,6 @@ spec:
       {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - name: sd-config
               mountPath: /conf/servicediscovery.yml
-              subPath: servicediscovery.yml
       {{- end }}
       {{- if .Values.querier.grpcTLS.server.secure }}
             - name: tls-server

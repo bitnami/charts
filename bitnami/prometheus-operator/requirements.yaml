@@ -1,7 +1,7 @@
 dependencies:
   - name: node-exporter
     repository: https://charts.bitnami.com/bitnami
-    version: 0.x.x
+    version: 1.x.x
     condition: exporters.enabled,exporters.node-exporter.enabled
   - name: kube-state-metrics
     repository: https://charts.bitnami.com/bitnami
