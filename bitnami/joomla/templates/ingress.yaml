@@ -26,15 +26,15 @@ spec:
           backend:
             serviceName: {{ include "joomla.fullname" $ }}
             servicePort: 80
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .name }}
-      http:
-        paths:
-        - path: {{ default "/" .path }}
-          backend:
-            serviceName: {{ include "joomla.fullname" $ }}
-            servicePort: http
-    {{- end }}
+  {{- range .Values.ingress.hosts }}
+  - host: {{ .name }}
+    http:
+      paths:
+      - path: {{ default "/" .path }}
+        backend:
+          serviceName: {{ include "joomla.fullname" $ }}
+          servicePort: http
+  {{- end }}
   {{- if .Values.ingress.tls }}
   tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}

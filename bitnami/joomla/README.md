@@ -274,7 +274,7 @@ Consequences:
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed.
 
-To upgrade to `7.0.0`, backup Joomla data and the previous MariaDB databases, install a new Drupal chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+To upgrade to `7.0.0`, backup Joomla data and the previous MariaDB databases, install a new Joomla chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 

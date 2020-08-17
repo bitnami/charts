@@ -87,7 +87,7 @@ spec:
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop="replica"
-            - --objstore.config-file=/conf/objstore.yml
+            - --objstore.config-file=/conf/objstore/objstore.yml
             - --rule-file=/conf/rules/ruler.yml
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
@@ -123,7 +123,7 @@ spec:
               {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
               {{- else }}
-              mountPath: /conf/objstore.yml
+              mountPath: /conf/objstore
               {{- end }}
             - name: data
               mountPath: /data

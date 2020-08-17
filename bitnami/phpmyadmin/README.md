@@ -59,6 +59,7 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `fullnameOverride`           | String to fully override phpmyadmin.fullname template with a string                                     | `nil`                                                        |
 | `service.type`               | Type of service for phpMyAdmin frontend                                                                 | `ClusterIP`                                                  |
 | `service.port`               | Port to expose service                                                                                  | `80`                                                         |
+| `db.allowArbitraryServer`    | Enable connection to arbitrary MySQL server                                                             | `true`                                                       |
 | `db.port`                    | Database port to use to connect                                                                         | `3306`                                                       |
 | `db.chartName`               | Database suffix if included in the same release                                                         | `nil`                                                        |
 | `db.host`                    | Database host to connect to                                                                             | `nil`                                                        |
