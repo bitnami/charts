@@ -185,6 +185,9 @@ disableWebUI: false
 ##
 extraEnv: {}
 
+## Define a custom command for the minio container
+command: {}
+
 ## Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
