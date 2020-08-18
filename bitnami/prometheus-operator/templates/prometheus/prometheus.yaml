@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: {{ template "prometheus-operator.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
@@ -230,7 +231,7 @@ spec:
       volumeMounts:
         - mountPath: /prometheus
           name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
-          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default true) }}
+          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
     {{- end }}

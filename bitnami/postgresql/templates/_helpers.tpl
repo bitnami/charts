@@ -221,12 +221,19 @@ Get the password secret.
 {{- end -}}
 
 {{/*
+Return true if we should use an existingSecret.
+*/}}
+{{- define "postgresql.useExistingSecret" -}}
+{{- if or .Values.global.postgresql.existingSecret .Values.existingSecret -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
-{{- if .Values.global.postgresql.existingSecret }}
-{{- else if .Values.existingSecret -}}
-{{- else -}}
+{{- if not (include "postgresql.useExistingSecret" .) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}

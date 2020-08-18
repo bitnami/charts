@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "prometheus-operator.prometheus.fullname" . }}-thanos
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
   {{- if .Values.prometheus.thanos.service.annotations }}
