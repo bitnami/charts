@@ -111,7 +111,7 @@ replication:
   slaveReplicas: 2
   ## Set synchronous commit mode: on, off, remote_apply, remote_write and local
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
-  synchronousCommit: "on"
+  synchronousCommit: 'on'
   ## From the number of `slaveReplicas` defined above, set the number of those that will have synchronous replication
   ## NOTE: It cannot be > slaveReplicas
   numSynchronousReplicas: 1
@@ -231,17 +231,17 @@ extraEnv: []
 ##
 ldap:
   enabled: false
-  url: ""
-  server: ""
-  port: ""
-  prefix: ""
-  suffix: ""
-  baseDN: ""
-  bindDN: ""
+  url: ''
+  server: ''
+  port: ''
+  prefix: ''
+  suffix: ''
+  baseDN: ''
+  bindDN: ''
   bind_password:
-  search_attr: ""
-  search_filter: ""
-  scheme: ""
+  search_attr: ''
+  search_filter: ''
+  scheme: ''
   tls: false
 
 ## PostgreSQL service configuration
@@ -263,7 +263,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   # loadBalancerIP:
-
   ## Load Balancer sources. Evaluated as a template.
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -311,7 +310,7 @@ persistence:
   ## The subdirectory of the volume to mount to, useful in dev environments
   ## and one PV for multiple services.
   ##
-  subPath: ""
+  subPath: ''
 
   # storageClass: "-"
   accessModes:
@@ -340,7 +339,7 @@ master:
   annotations: {}
   podLabels: {}
   podAnnotations: {}
-  priorityClassName: ""
+  priorityClassName: ''
   ## Additional PostgreSQL Master Volume mounts
   ##
   extraVolumeMounts: []
@@ -382,7 +381,7 @@ slave:
   annotations: {}
   podLabels: {}
   podAnnotations: {}
-  priorityClassName: ""
+  priorityClassName: ''
   ## Extra init containers
   ## Example
   ##
@@ -415,6 +414,10 @@ slave:
   # type:
   # nodePort:
   # clusterIP:
+  ## Whether to enable PostgreSQL slave replicas data Persistent
+  ##
+  persistence:
+    enabled: true
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -482,13 +485,13 @@ tls:
   preferServerCiphers: true
   #
   # Name of the Secret that contains the certificates
-  certificatesSecret: ""
+  certificatesSecret: ''
   #
   # Certificate filename
-  certFilename: ""
+  certFilename: ''
   #
   # Certificate Key filename
-  certKeyFilename: ""
+  certKeyFilename: ''
   #
   # CA Certificate filename
   # If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
@@ -506,8 +509,8 @@ metrics:
   service:
     type: ClusterIP
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "9187"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '9187'
     loadBalancerIP:
   serviceMonitor:
     enabled: false
@@ -521,7 +524,7 @@ metrics:
   prometheusRule:
     enabled: false
     additionalLabels: {}
-    namespace: ""
+    namespace: ''
     ## These are just examples rules, please adapt them to your needs.
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
