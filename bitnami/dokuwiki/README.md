@@ -71,13 +71,7 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `image.tag`                                          | DokuWiki image tag                                                                                                                                        | `{TAG_NAME}`                                                 |
 | `image.debug`                                        | Enable image debugging                                                                                                                                    | `false`                                                      |
 | `nameOverride`                                       | String to partially override dokuwiki.fullname template with a string (will prepend the release name)                                                     | `nil`                                                        |
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+
 ### Dokuwiki parameters
 
 | Parameter                                            | Description                                                                                                                                               | Default                                                      |
@@ -146,6 +140,18 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `ingress.secrets[0].name`                            | TLS Secret Name                                                                                                                                           | `nil`                                                        |
 | `ingress.secrets[0].certificate`                     | TLS Secret Certificate                                                                                                                                    | `nil`                                                        |
 | `ingress.secrets[0].key`                             | TLS Secret Key                                                                                                                                            | `nil`                                                        |
+
+### Volume Permissions parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
+| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 
 ### Metrics parameters
 
