@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "prometheus-operator.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.operator.labels" . | nindent 4 }}
   {{- with .Values.operator.service.annotations }}
   annotations: {{- toYaml . | nindent 4 }}

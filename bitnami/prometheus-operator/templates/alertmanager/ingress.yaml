@@ -3,6 +3,7 @@ apiVersion: {{ template "prometheus-operator.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "prometheus-operator.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "prometheus-operator.alertmanager.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.alertmanager.ingress.certManager }}

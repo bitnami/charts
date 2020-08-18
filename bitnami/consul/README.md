@@ -132,6 +132,9 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `metrics.imagePullPolicy`            | Exporter image pull policy                                                                                                                                | `IfNotPresent`                                          |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                    |
 | `metrics.podAnnotations`             | Exporter annotations                                                                                                                                      | `{}`                                                    |
+| `metrics.service.type`               | Kubernetes Service type (consul metrics)                                                                                                                  | `ClusterIP`                                             |
+| `metrics.service.annotations`        | Annotations for the services to monitor                                                                                                                  | {}                                                      |
+| `metrics.service.loadBalancerIP`     | loadBalancerIP if redis metrics service type is `LoadBalancer`                                                                                            | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

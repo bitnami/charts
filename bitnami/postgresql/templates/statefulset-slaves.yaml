@@ -317,7 +317,7 @@ spec:
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
     rollingUpdate: null
     {{- end }}
-{{- if .Values.persistence.enabled }}
+{{- if and .Values.persistence.enabled .Values.slave.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data

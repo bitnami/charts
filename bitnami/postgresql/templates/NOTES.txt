@@ -52,9 +52,8 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- include "postgresql.validateValues" . -}}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+{{- include "common.warnings.rollingTag" .Values.image -}}
 
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- $passwordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" (include "postgresql.fullname" .) "context" $) -}}
 
-{{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
