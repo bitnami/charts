@@ -65,7 +65,7 @@ Validate value params:
   - secret - String - Required. Name of the secret where mysql values are stored, e.g: "mysql-passwords-secret"
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
-  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
+  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled .context.Values.mariadb.secret.requirePasswords -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
