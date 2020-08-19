@@ -116,6 +116,9 @@ secret:
   ## Add custom annotations to the secret (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   annotations: {}
+  ## Require all passwords at the secret resource
+  ##
+  requirePasswords: true
 
 ## MariaDB admin credentials
 ##
