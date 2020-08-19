@@ -3,8 +3,8 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "contour.fullname" . }}-envoy
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-envoy
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
 spec:
   updateStrategy:
@@ -12,24 +12,24 @@ spec:
     rollingUpdate:
       maxUnavailable: 10%
   selector:
-    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy
   template:
     metadata:
-      labels: {{- include "contour.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: envoy
     spec: {{- include "envoy.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.envoy.affinity }}
-      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.nodeSelector }}
-      nodeSelector: {{- include "contour.tplValue" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.affinity }}
-      affinity: {{- include "contour.tplValue" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.tolerations}}
-      tolerations: {{- include "contour.tplValue" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
       hostNetwork: {{ .Values.envoy.hostNetwork }}
@@ -149,7 +149,7 @@ spec:
         args:
         - bootstrap
         - /config/envoy.json
-        - --xds-address={{ template "contour.fullname" . }}
+        - --xds-address={{ template "common.names.fullname" . }}
         - --xds-port=8001
         - --resources-dir=/config/resources
         - --envoy-cafile=/certs/ca.crt

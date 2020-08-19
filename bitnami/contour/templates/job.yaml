@@ -3,14 +3,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "contour.fullname" . }}-contour-certgen
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-contour-certgen
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour-certgen
 spec:
   ttlSecondsAfterFinished: 0
   template:
     metadata:
-      labels: {{- include "contour.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour-certgen
     spec:
 {{- include "contour.imagePullSecrets" . | nindent 6 }}

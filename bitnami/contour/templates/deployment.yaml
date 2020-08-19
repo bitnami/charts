@@ -3,8 +3,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "contour.fullname" . }}-contour
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-contour
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -15,7 +15,7 @@ spec:
       # the new ReplicaSet will be created first.
       maxSurge: 50%
   selector:
-    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
   template:
     metadata:
@@ -23,7 +23,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- end }}
-      labels: {{- include "contour.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour
     spec: {{- include "contour.imagePullSecrets" . | nindent 6 }}
       affinity:
@@ -31,21 +31,21 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
               labelSelector:
-                matchLabels: {{- include "contour.matchLabels" . | nindent 18 }}
+                matchLabels: {{- include "common.labels.matchLabels" . | nindent 18 }}
                   app.kubernetes.io/component: contour
               topologyKey: kubernetes.io/hostname
             weight: 100
       {{- if .Values.contour.affinity }}
-{{- include "contour.tplValue" (dict "value" .Values.contour.nodeSelector "context" $) | indent 8 }}
+{{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | indent 8 }}
       {{- end }}
       {{- if .Values.contour.nodeSelector }}
-      nodeSelector: {{- include "contour.tplValue" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.contour.affinity }}
-      affinity: {{- include "contour.tplValue" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.contour.tolerations}}
-      tolerations: {{- include "contour.tplValue" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
       - command:

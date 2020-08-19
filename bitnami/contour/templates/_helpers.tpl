@@ -1,12 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "contour.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Return the proper contour image name
 */}}
 {{- define "contour.image" -}}
@@ -50,50 +43,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "contour.labels" -}}
-app.kubernetes.io/name: {{ include "contour.name" . }}
-helm.sh/chart: {{ include "contour.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "contour.matchLabels" -}}
-app.kubernetes.io/name: {{ include "contour.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "contour.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "contour.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -160,7 +109,7 @@ Create the name of the envoy service account to use
 */}}
 {{- define "envoy.envoyServiceAccountName" -}}
 {{- if .Values.contour.serviceAccount.create -}}
-    {{ default (printf "%s-envoy" (include "contour.fullname" .)) .Values.envoy.serviceAccount.name }}
+    {{ default (printf "%s-envoy" (include "common.names.fullname" .)) .Values.envoy.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.envoy.serviceAccount.name }}
 {{- end -}}
@@ -171,7 +120,7 @@ Create the name of the contour service account to use
 */}}
 {{- define "contour.contourServiceAccountName" -}}
 {{- if .Values.contour.serviceAccount.create -}}
-    {{ default (printf "%s-contour" (include "contour.fullname" .)) .Values.contour.serviceAccount.name }}
+    {{ default (printf "%s-contour" (include "common.names.fullname" .)) .Values.contour.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.contour.serviceAccount.name }}
 {{- end -}}
@@ -182,7 +131,7 @@ Create the name of the contour-certgen service account to use
 */}}
 {{- define "contour.contourCertGenServiceAccountName" -}}
 {{- if .Values.contour.certgen.serviceAccount.create -}}
-    {{ default (printf "%s-contour-certgen" (include "contour.fullname" .)) .Values.contour.certgen.serviceAccount.name }}
+    {{ default (printf "%s-contour-certgen" (include "common.names.fullname" .)) .Values.contour.certgen.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.contour.certgen.serviceAccount.name }}
 {{- end -}}
@@ -193,21 +142,8 @@ Create the name of the settings ConfigMap to use.
 */}}
 {{- define "contour.configMapName" -}}
 {{- if .Values.configInline -}}
-    {{ include "contour.fullname" . }}
+    {{ include "common.names.fullname" . }}
 {{- else -}}
     {{ .Values.existingConfigMap }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "contour.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "contour.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}

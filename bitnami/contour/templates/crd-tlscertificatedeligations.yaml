@@ -9,7 +9,7 @@ metadata:
     {{- if .Values.contour.customResourceDeletePolicy }}
     "helm.sh/hook-delete-policy": {{ .Values.contour.customResourceDeletePolicy }}
     {{- end }}
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   name: tlscertificatedelegations.projectcontour.io
 spec:
   group: projectcontour.io

@@ -4,12 +4,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "contour.fullname" . }}-contour-metrics
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-contour-metrics
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
   type: ClusterIP
-  selector: {{- include "contour.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
   ports:
   - name: metrics
@@ -20,13 +20,13 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "contour.fullname" . }}-contour
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-contour
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
   jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
   namespaceSelector:
     matchNames:
@@ -48,12 +48,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "contour.fullname" . }}-envoy-metrics
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-envoy-metrics
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
 spec:
   type: ClusterIP
-  selector: {{- include "contour.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   ports:
   - name: metrics
@@ -64,13 +64,13 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "contour.fullname" . }}-envoy
-  labels: {{- include "contour.labels" . | nindent 4}}
+  name: {{ include "common.names.fullname" . }}-envoy
+  labels: {{- include "common.labels.standard" . | nindent 4}}
     app.kubernetes.io/component: envoy
 spec:
   jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "contour.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy
   namespaceSelector:
     matchNames:

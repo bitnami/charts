@@ -3,8 +3,8 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: {{ include "contour.fullname" .}}:contour
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
 - apiGroups:
   - ""
@@ -87,8 +87,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ include "contour.fullname" .}}:contour-leaderelection
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour-leaderelection
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
 - apiGroups:
   - ""
@@ -112,8 +112,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ include "contour.fullname" .}}:contour-certgen
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour-certgen
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
 - apiGroups:
   - ""
@@ -126,12 +126,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "contour.fullname" .}}:contour
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "contour.fullname" .}}:contour
+  name: {{ include "common.names.fullname" .}}:contour
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourServiceAccountName" . }}
@@ -140,12 +140,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: {{ include "contour.fullname" .}}:contour-leaderelection
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour-leaderelection
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "contour.fullname" . }}:contour-leaderelection
+  name: {{ include "common.names.fullname" . }}:contour-leaderelection
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourServiceAccountName" . }}
@@ -153,12 +153,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: {{ include "contour.fullname" .}}:contour-certgen
-  labels: {{- include "contour.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" .}}:contour-certgen
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "contour.fullname" .}}:contour-certgen
+  name: {{ include "common.names.fullname" .}}:contour-certgen
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourCertGenServiceAccountName" . }}
