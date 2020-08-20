@@ -44,5 +44,10 @@ data:
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
-      "featureFlags": {{ .Values.featureFlags | toJson }}
+      "featureFlags": {{ .Values.featureFlags | toJson }},
+      {{- $sanitizedClusters := list }}
+      {{- range .Values.clusters }}
+        {{- $sanitizedClusters = append $sanitizedClusters (pick . "name" "apiServiceURL") }}
+      {{- end }}
+      "clusters": {{ $sanitizedClusters | toJson }}
     }
