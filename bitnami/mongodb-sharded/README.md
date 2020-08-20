@@ -4,7 +4,7 @@
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -203,7 +203,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.dataNode.nodeSelector`              | Node labels for pod assignment (evaluated as a template)                                                                                                  | `{}`                                                     |
 | `shardsvr.dataNode.affinity`                  | Affinity for pod assignment (evaluated as a template). Will include `.arbiterLoopId` which identifies the shard.                                          | `{}`                                                     |
 | `shardsvr.dataNode.tolerations`               | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
-| `shardsvr.podManagementPolicy`                | Statefulsets pod management policy (evaluated as a template)                                                                                              | `OrderedReady`                                           |
+| `shardsvr.dataNode.podManagementPolicy`                | Statefulsets pod management policy (evaluated as a template)                                                                                              | `OrderedReady`                                           |
 | `shardsvr.dataNode.updateStrategy`            | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `shardsvr.dataNode.schedulerName`             | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
 | `shardsvr.dataNode.pdb.enabled`               | Enable pod disruption budget                                                                                                                              | `false`                                                  |

@@ -2,7 +2,7 @@
 
 [Kong](https://konghq.com/kong/) is a scalable, open source API layer (aka API gateway or API middleware) that runs in front of any RESTful API. Extra functionalities beyond the core platform are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
-## TL;DR;
+## TL;DR
 
 ```console
   helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -182,7 +182,7 @@ The following tables list the configurable parameters of the kong chart and thei
 
 | Parameter                                       | Description                                                                                                                                           | Default                                                                                                     |
 |-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| `postgresql.enabled`                            | Deploy the PostgreSQL sub-chart                                                                                                                       | `false`                                                                                                     |
+| `postgresql.enabled`                            | Deploy the PostgreSQL sub-chart                                                                                                                       | `true`                                                                                                      |
 | `postgresql.usePasswordFile`                    | Mount the PostgreSQL secret as a file                                                                                                                 | `no`                                                                                                        |
 | `postgresql.existingSecret`                     | Use an existing secret file with the PostgreSQL password (can be used with the bundled chart or with an existing installation)                        | `nil`                                                                                                       |
 | `postgresql.postgresqlDatabase`                 | Database name to be used by Kong                                                                                                                      | `kong`                                                                                                      |
@@ -404,5 +404,3 @@ $ helm upgrade my-release bitnami/kong \
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
-
-

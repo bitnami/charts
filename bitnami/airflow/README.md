@@ -2,7 +2,7 @@
 
 [Apache Airflow]() is a platform to programmatically author, schedule and monitor workflows.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm install my-release bitnami/airflow
@@ -297,6 +297,8 @@ airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 ```
+
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
 
 ### Loading Plugins
 

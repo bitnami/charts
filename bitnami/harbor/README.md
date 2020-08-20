@@ -12,7 +12,7 @@ For example, the following changes have been introduced:
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
-## TL;DR;
+## TL;DR
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -827,6 +827,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+## 7.0.0
+
+This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
+
+You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
 ## 6.0.0 to 6.0.2
 

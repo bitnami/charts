@@ -238,7 +238,7 @@ spec:
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{- else }}{{ template "mongodb.fullname" . }}{{- end }}
+                name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
           {{- end }}
           ports:

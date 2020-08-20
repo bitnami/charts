@@ -10,6 +10,12 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- include "wordpress.tplValue" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "wordpress.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "wordpress.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   endpoints:
     - port: metrics

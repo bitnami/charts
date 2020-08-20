@@ -2,7 +2,7 @@
 
 [phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB. As a portable web application written primarily in PHP, it has become one of the most popular MySQL administration tools, especially for web hosting services.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -59,6 +59,7 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `fullnameOverride`           | String to fully override phpmyadmin.fullname template with a string                                     | `nil`                                                        |
 | `service.type`               | Type of service for phpMyAdmin frontend                                                                 | `ClusterIP`                                                  |
 | `service.port`               | Port to expose service                                                                                  | `80`                                                         |
+| `db.allowArbitraryServer`    | Enable connection to arbitrary MySQL server                                                             | `true`                                                       |
 | `db.port`                    | Database port to use to connect                                                                         | `3306`                                                       |
 | `db.chartName`               | Database suffix if included in the same release                                                         | `nil`                                                        |
 | `db.host`                    | Database host to connect to                                                                             | `nil`                                                        |
