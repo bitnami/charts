@@ -28,7 +28,7 @@ spec:
     {{- end }}
       containers:
       - name: contour
-        image: {{ include "contour.image" . }}
+        image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         command:
         - contour

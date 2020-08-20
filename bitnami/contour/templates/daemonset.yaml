@@ -48,7 +48,7 @@ spec:
         args:
           - envoy
           - shutdown-manager
-        image: {{ include "contour.image" . }}
+        image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         lifecycle:
           preStop:
@@ -77,7 +77,7 @@ spec:
         - --service-cluster $(CONTOUR_NAMESPACE)
         - --service-node $(ENVOY_POD_NAME)
         - --log-level {{ .Values.envoy.logLevel }}
-        image: {{ include "envoy.image" . }}
+        image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
         imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
         name: envoy
         {{- if .Values.envoy.containerSecurityContext.enabled }}
@@ -155,7 +155,7 @@ spec:
         - --envoy-cafile=/certs/ca.crt
         - --envoy-cert-file=/certs/tls.crt
         - --envoy-key-file=/certs/tls.key
-        image: {{ include "contour.image" . }}
+        image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
         name: envoy-initconfig
         resources:
