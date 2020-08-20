@@ -125,7 +125,7 @@ spec:
               value: "root"
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_MASTER_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.rootUser.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_MASTER_ROOT_PASSWORD
               valueFrom:
@@ -137,7 +137,7 @@ spec:
               value: "{{ .Values.replication.user }}"
             {{- if .Values.replication.injectSecretsAsVolume }}
             - name: MARIADB_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-replication-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-replication-password" .Values.replication.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_REPLICATION_PASSWORD
               valueFrom:

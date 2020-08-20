@@ -134,6 +134,9 @@ rootUser:
   ## Mount admin password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: true
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to /opt/bitnami/mariadb/secrets/mariadb-root-password
+  # injectSecretsFile: "/vault/secrets/root-password"
 
 ## Custom user/db credentials
 ##
@@ -154,6 +157,9 @@ db:
   ## Mount user password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: true
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to /opt/bitnami/mariadb/secrets/mariadb-password
+  # injectSecretsFile: "/vault/secrets/user-password"
 
 ## Replication configuration
 ##
@@ -177,6 +183,9 @@ replication:
   ## Mount replication user password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: true
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to //opt/bitnami/mariadb/secrets/mariadb-replication-password
+  # injectSecretsFile: "/vault/secrets/replication-password"
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
