@@ -2,7 +2,7 @@
 
 [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
 
-## TL;DR;
+## TL;DR
 
 ```console
   helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -164,6 +164,18 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
 | `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
 | `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
+| `healthIngress.enabled`                 | Enable healthIngress controller resource                                                 | `false`                                                 |
+| `healthIngress.certManager`             | Add annotations for cert-manager                                                         | `false`                                                 |
+| `healthIngress.hostname`                | Default host for the healthIngress resource                                              | `aspnet-core.local`                                     |
+| `healthIngress.tls`                     | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter  | `false`                                                 |
+| `healthIngress.annotations`             | Ingress annotations                                                                      | `[]`                                                    |
+| `healthIngress.extraHosts[0].name`      | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `healthIngress.extraHosts[0].path`      | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `healthIngress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `healthIngress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `healthIngress.secrets[0].name`         | TLS Secret Name                                                                          | `nil`                                                   |
+| `healthIngress.secrets[0].certificate`  | TLS Secret Certificate                                                                   | `nil`                                                   |
+| `healthIngress.secrets[0].key`          | TLS Secret Key                                                                           | `nil`                                                   |
 
 ### RBAC parameters
 

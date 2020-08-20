@@ -2,7 +2,7 @@
 
 [etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

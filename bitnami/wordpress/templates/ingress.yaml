@@ -4,12 +4,18 @@ kind: Ingress
 metadata:
   name: {{ template "wordpress.fullname" . }}
   labels: {{- include "wordpress.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "wordpress.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- include "wordpress.tplValue" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "wordpress.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:

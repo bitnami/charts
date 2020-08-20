@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.40.0-debian-10-r25
+    tag: 0.41.0-debian-10-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -220,7 +220,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.4.0-debian-10-r3
+      tag: 0.4.0-debian-10-r18
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -251,7 +251,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.19.2-debian-10-r16
+    tag: 2.20.1-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -488,6 +488,16 @@ prometheus:
   ##
   serviceMonitorNamespaceSelector: {}
 
+  ## PodMonitors to be selected for target discovery.
+  ## If {}, select all PodMonitors
+  ##
+  podMonitorSelector: {}
+
+  ## Namespaces to be selected for PodMonitor discovery
+  ## See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
+  ##
+  podMonitorNamespaceSelector: {}
+
   ## How long to retain metrics
   ##
   retention: 10d
@@ -666,7 +676,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.14.0-scratch-r0
+      tag: 0.14.0-scratch-r3
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -688,6 +698,21 @@ prometheus:
     objectStorageConfig: {}
     #   secretName: thanos-objstore-config
     #   secretKey: thanos.yaml
+
+    ## Thanos sidecar container resource requests and limits.
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #   cpu: 100m
+      #   memory: 128Mi
+      requests: {}
+      #   cpu: 100m
+      #   memory: 128Mi
 
     ## Thanos Sidecar Service
     ##
@@ -739,7 +764,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r25
+    tag: 0.21.0-debian-10-r41
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

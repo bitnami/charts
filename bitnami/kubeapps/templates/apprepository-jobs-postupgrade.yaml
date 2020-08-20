@@ -62,7 +62,7 @@ spec:
                 secretKeyRef:
             {{- if .Values.mongodb.enabled }}
                   key: mongodb-root-password
-                  name: {{ .Values.mongodb.existingSecret }}
+                  name: {{ .Values.mongodb.auth.existingSecret }}
             {{- end }}
             {{- if .Values.postgresql.enabled }}
                   key: postgresql-password

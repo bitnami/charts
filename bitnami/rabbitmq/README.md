@@ -2,7 +2,7 @@
 
 [RabbitMQ](https://www.rabbitmq.com/) is an open source message broker software that implements the Advanced Message Queuing Protocol (AMQP).
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -73,7 +73,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `image.debug`                             | Set to true if you would like to see extra information on logs                                                       | `false`                                                      |
 | `auth.username`                           | RabbitMQ application username                                                                                        | `user`                                                       |
 | `auth.password`                           | RabbitMQ application password                                                                                        | _random 10 character long alphanumeric string_               |
-| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil`                                                        |
+| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil` (evaluated as a template)                              |
 | `auth.erlangCookie`                       | Erlang cookie                                                                                                        | _random 32 character long alphanumeric string_               |
 | `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie                                                                          | `nil`                                                        |
 | `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                       | `false`                                                      |

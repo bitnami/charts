@@ -2,7 +2,7 @@
 
 [MariaDB Galera](https://mariadb.com/kb/en/library/what-is-mariadb-galera-cluster/) is a multi-master database cluster solution for synchronous replication and high availability.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

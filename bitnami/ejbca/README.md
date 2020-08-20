@@ -2,7 +2,7 @@
 
 [EJBCA](https://www.ejbca.org/) is a free software public key infrastructure certificate authority software package.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami

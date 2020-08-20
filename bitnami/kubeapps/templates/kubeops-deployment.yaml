@@ -54,6 +54,8 @@ spec:
           volumeMounts:
             - name: kubeops-config
               mountPath: /config
+            - name: ca-certs
+              mountPath: /etc/additional-clusters-cafiles
           {{- end }}
           env:
             - name: POD_NAMESPACE
@@ -77,6 +79,8 @@ spec:
         - name: kubeops-config
           configMap:
             name: {{ template "kubeapps.kubeops-config.fullname" . }}
+        - name: ca-certs
+          emptyDir: {}
       {{- end }}
 
 {{- end }}{{/* matches useHelm3 */}}

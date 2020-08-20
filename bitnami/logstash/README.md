@@ -2,7 +2,7 @@
 
 [Logstash](https://www.elastic.co/products/logstash) is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -71,7 +71,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `existingConfiguration`                    | Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored). | `nil`                                                   |
 | `containerPorts`                           | Array containing the ports to open in the Logstash container                                                         | `Check values.yaml file`                                |
 | `extraVolumes`                             | Array to add extra volumes (evaluated as a template)                                                                 | `[]`                                                    |
-| `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                 | `[]`                                                    | 
+| `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                 | `[]`                                                    |
 | `replicaCount`                             | The number of Logstash replicas to deploy                                                                            | `1`                                                     |
 | `updateStrategy`                           | Update strategy (`RollingUpdate`, or `OnDelete`)                                                                     | `RollingUpdate`                                         |
 | `podManagementPolicy`                      | Pod management policy                                                                                                | `OrderedReady`                                          |
