@@ -91,6 +91,9 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb.fullname template
   # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
