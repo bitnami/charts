@@ -96,6 +96,10 @@ wordpressScheme: http
 ##
 wordpressSkipInstall: false
 
+## Add extra content to the default configuration file
+##
+wordpressExtraConfigContent: ""
+
 ## Set to `false` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
