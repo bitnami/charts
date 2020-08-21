@@ -220,6 +220,14 @@ contour:
       # true, a name is generated using the fullname template
       name: ""
 
+  ## Array to add extra volumes
+  ##
+  extraVolumes: []
+
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  extraVolumeMounts: []
+
 envoy:
   enabled: true
   image:
@@ -354,6 +362,14 @@ envoy:
     nodePorts:
       http: ""
       https: ""
+
+  ## Array to add extra volumes
+  ##
+  extraVolumes: []
+
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  extraVolumeMounts: []
 
 prometheus:
   # Prometheus Operator service monitors

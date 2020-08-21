@@ -104,6 +104,9 @@ spec:
         - name: contour-config
           mountPath: /config
           readOnly: true
+        {{- if .Values.contour.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 8 }}
+        {{- end }}
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
@@ -135,4 +138,7 @@ spec:
           items:
           - key: contour.yaml
             path: contour.yaml
+      {{- if .Values.contour.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumes "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end }}

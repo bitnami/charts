@@ -69,6 +69,10 @@ spec:
           failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
         {{- end }}
         name: shutdown-manager
+        {{- if .Values.envoy.extraVolumeMounts }}
+        volumeMounts:
+          {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 8 }}
+        {{- end }}
       - command:
         - envoy
         args:
@@ -137,6 +141,9 @@ spec:
           mountPath: /config
         - name: envoycert
           mountPath: /certs
+        {{- if .Values.envoy.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 8 }}
+        {{- end }}
         lifecycle:
           preStop:
             httpGet:
@@ -166,6 +173,9 @@ spec:
         - name: envoycert
           mountPath: /certs
           readOnly: true
+        {{- if .Values.envoy.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 8 }}
+        {{- end }}
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
@@ -179,5 +189,8 @@ spec:
       - name: envoycert
         secret:
           secretName: envoycert
+      {{- if .Values.envoy.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumes "context" $ ) | nindent 6 }}
+      {{- end }}
       restartPolicy: Always
 {{- end }}
