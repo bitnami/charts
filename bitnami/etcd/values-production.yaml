@@ -224,6 +224,10 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  ## Persistent Volume selector
+  ## Can specify a label selector to further filter the set of volumes.
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  selector: {}
 
 ## Define a disruption budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
