@@ -87,7 +87,9 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.port`                             | Service HTTP port                                                                            | `80`                                                         |
 | `service.httpsPort`                        | Service HTTPS port                                                                           | `443`                                                        |
 | `service.nodePorts.http`                   | Kubernetes http node port                                                                    | `""`                                                         |
-| `service.nodePorts.https`                  | Kubernetes https node port                                                                   | `""`                                                         |
+| `service.nodePorts.https`                  | Kubernetes https node port
+| `service.targetPort.http`                  | Kubernetes http targetPort                                                                   | `http`                   |
+| `service.targetPort.https`                 | Kubernetes https targetPort                                                                  | `https`                  |
 | `service.externalTrafficPolicy`            | Enable client source IP preservation                                                         | `Cluster`                                                    |
 | `service.loadBalancerIP`                   | LoadBalancer service IP address                                                              | `""`                                                         |
 | `service.annotations`                      | Service annotations                                                                          | `{}`                                                         |

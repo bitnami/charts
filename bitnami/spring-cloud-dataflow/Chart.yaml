@@ -1,7 +1,7 @@
 apiVersion: v1
 name: spring-cloud-dataflow
-version: 0.6.0
-appVersion: 2.5.3
+version: 0.6.1
+appVersion: 2.6.0
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 keywords:
   - spring-cloud
