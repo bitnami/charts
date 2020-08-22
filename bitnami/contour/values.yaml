@@ -220,6 +220,15 @@ contour:
       # true, a name is generated using the fullname template
       name: ""
 
+  ## Contour Service properties
+  ##
+  service:
+
+    ## Extra ports to expose (normally used with the `sidecar` value)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+    ##
+    extraPorts: []
+
   ## Add init containers to the pod
   ## For example:
   ## initContainers:
@@ -387,6 +396,11 @@ envoy:
     nodePorts:
       http: ""
       https: ""
+
+    ## Extra ports to expose (normally used with the `sidecar` value)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+    ##
+    extraPorts: []
 
   ## Add init containers to the pod
   ## For example:

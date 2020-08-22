@@ -12,6 +12,9 @@ spec:
       name: xds
       protocol: TCP
       targetPort: 8001
+    {{- if .Values.contour.service.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
   type: ClusterIP
@@ -76,6 +79,9 @@ spec:
       {{- else if eq .Values.envoy.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.envoy.service.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   type: {{ .Values.envoy.service.type }}
