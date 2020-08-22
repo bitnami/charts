@@ -118,6 +118,9 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
+        {{- if .Values.contour.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
       {{- if .Values.contour.securityContext.enabled }}

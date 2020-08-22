@@ -44,6 +44,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        {{- if .Values.contour.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
         resources:
 {{ toYaml .Values.contour.resources | indent 10 }}
       restartPolicy: Never

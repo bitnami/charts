@@ -50,6 +50,10 @@ spec:
           - shutdown-manager
         image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
         imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+        {{- if .Values.contour.extraEnvVars }}
+        env:
+          {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
         lifecycle:
           preStop:
             exec:
@@ -99,6 +103,9 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
+        {{- if .Values.envoy.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
         ports:
         - containerPort: 80
           hostPort: 80
@@ -181,6 +188,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        {{- if .Values.contour.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:

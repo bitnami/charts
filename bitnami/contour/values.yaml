@@ -228,6 +228,14 @@ contour:
   ##
   extraVolumeMounts: []
 
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
+
 envoy:
   enabled: true
   image:
@@ -370,6 +378,14 @@ envoy:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
 
 prometheus:
   # Prometheus Operator service monitors
