@@ -121,6 +121,17 @@ spec:
         {{- if .Values.contour.extraEnvVars }}
           {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
         {{- end }}
+        {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.contour.extraEnvVarsConfigMap }}
+          - configMapRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+          {{- end }}
+          {{- if .Values.contour.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+          {{- end }}
+        {{- end }}
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
       {{- if .Values.contour.securityContext.enabled }}

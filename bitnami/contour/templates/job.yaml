@@ -47,6 +47,17 @@ spec:
         {{- if .Values.contour.extraEnvVars }}
           {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
         {{- end }}
+        {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.contour.extraEnvVarsConfigMap }}
+          - configMapRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+          {{- end }}
+          {{- if .Values.contour.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+          {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.contour.resources | indent 10 }}
       restartPolicy: Never

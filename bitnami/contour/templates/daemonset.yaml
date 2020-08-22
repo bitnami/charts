@@ -54,6 +54,17 @@ spec:
         env:
           {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
         {{- end }}
+        {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.contour.extraEnvVarsConfigMap }}
+          - configMapRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+          {{- end }}
+          {{- if .Values.contour.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+          {{- end }}
+        {{- end }}
         lifecycle:
           preStop:
             exec:
@@ -105,6 +116,17 @@ spec:
               fieldPath: metadata.name
         {{- if .Values.envoy.extraEnvVars }}
           {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if or .Values.envoy.extraEnvVarsConfigMap .Values.envoy.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.envoy.extraEnvVarsConfigMap }}
+          - configMapRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.envoy.extraEnvVarsConfigMap "context" $ ) }}
+          {{- end }}
+          {{- if .Values.envoy.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.envoy.extraEnvVarsSecret "context" $ ) }}
+          {{- end }}
         {{- end }}
         ports:
         - containerPort: 80
@@ -190,6 +212,17 @@ spec:
               fieldPath: metadata.namespace
         {{- if .Values.contour.extraEnvVars }}
           {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+        envFrom:
+          {{- if .Values.contour.extraEnvVarsConfigMap }}
+          - configMapRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+          {{- end }}
+          {{- if .Values.contour.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+          {{- end }}
         {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}

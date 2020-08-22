@@ -240,6 +240,14 @@ contour:
   ##
   extraEnvVars: []
 
+  ## Name of a ConfigMap containing extra env vars
+  ##
+  extraEnvVarsConfigMap: ""
+
+  ## Name of a Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+
 envoy:
   enabled: true
   image:
@@ -391,6 +399,14 @@ envoy:
   ##    value: env_var_value
   ##
   extraEnvVars: []
+
+  ## Name of a ConfigMap containing extra env vars
+  ##
+  extraEnvVarsConfigMap: ""
+
+  ## Name of a Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
 
 prometheus:
   # Prometheus Operator service monitors
