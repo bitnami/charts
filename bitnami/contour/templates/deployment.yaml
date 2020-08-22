@@ -47,6 +47,10 @@ spec:
       {{- if .Values.contour.tolerations}}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.contour.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
+      {{- end }}
       containers:
       - command:
         - contour

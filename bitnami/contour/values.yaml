@@ -220,6 +220,15 @@ contour:
       # true, a name is generated using the fullname template
       name: ""
 
+  ## Add init containers to the pod
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
+
   ## Array to add extra volumes
   ##
   extraVolumes: []
@@ -378,6 +387,15 @@ envoy:
     nodePorts:
       http: ""
       https: ""
+
+  ## Add init containers to the pod
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
 
   ## Array to add extra volumes
   ##

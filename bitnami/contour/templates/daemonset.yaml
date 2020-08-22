@@ -224,6 +224,9 @@ spec:
               name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
           {{- end }}
         {{- end }}
+      {{- if .Values.envoy.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 6 }}
+      {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
