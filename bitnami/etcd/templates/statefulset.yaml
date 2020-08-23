@@ -294,4 +294,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "etcd.storageClass" . }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "etcd.tplValue" ( dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
 {{- end }}

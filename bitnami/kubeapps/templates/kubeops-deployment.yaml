@@ -47,10 +47,10 @@ spec:
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
             - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
-            {{- if .Values.featureFlags.additionalClusters }}
+            {{- if .Values.clusters }}
             - --additional-clusters-config-path=/config/additional-clusters.conf
             {{- end }}
-          {{- if .Values.featureFlags.additionalClusters }}
+          {{- if .Values.clusters }}
           volumeMounts:
             - name: kubeops-config
               mountPath: /config
@@ -74,7 +74,7 @@ spec:
           {{- if .Values.kubeops.resources }}
           resources: {{- toYaml .Values.kubeops.resources | nindent 12 }}
           {{- end }}
-      {{- if .Values.featureFlags.additionalClusters }}
+      {{- if .Values.clusters }}
       volumes:
         - name: kubeops-config
           configMap:

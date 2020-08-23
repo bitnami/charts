@@ -18,6 +18,11 @@ spec:
   {{- else }}
   podMonitorSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.probeSelector }}
+  probeSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.probeSelector "context" $) | nindent 4 }}
+  {{- else }}
+  probeSelector: {}
+  {{- end }}
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
@@ -91,6 +96,11 @@ spec:
   podMonitorNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.podMonitorNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   podMonitorNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.probeNamespaceSelector }}
+  probeNamespaceSelector: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.probeNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  probeNamespaceSelector: {}
   {{- end }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "prometheus-operator.tplValue" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
@@ -231,7 +241,7 @@ spec:
       volumeMounts:
         - mountPath: /prometheus
           name: prometheus-{{ template "prometheus-operator.prometheus.fullname" . }}-db
-          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default true) }}
+          {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
     {{- end }}

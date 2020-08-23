@@ -498,6 +498,16 @@ prometheus:
   ##
   podMonitorNamespaceSelector: {}
 
+  ## Probes to be selected for target discovery.
+  ## If {}, select all Probes
+  ##
+  probeSelector: {}
+
+  ## Namespaces to be selected for Probe discovery
+  ## See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
+  ##
+  probeNamespaceSelector: {}
+
   ## How long to retain metrics
   ##
   retention: 10d
