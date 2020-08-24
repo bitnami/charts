@@ -136,7 +136,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.prometheus.persistence.size | quote }}
-        {{- include "prometheus-operator.prometheus.storageClass" . | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.prometheus.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
   {{- if or .Values.prometheus.podMetadata.labels .Values.prometheus.podMetadata.annotations (eq .Values.prometheus.podAntiAffinity "soft") (eq .Values.prometheus.podAntiAffinity "hard") }}
   podMetadata:
@@ -201,7 +201,7 @@ spec:
     name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
-{{- include "prometheus-operator.prometheus.imagePullSecrets" . | indent 2 }}
+{{- include "prometheus-operator.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
   containers:
     {{- if .Values.prometheus.thanos.create }}

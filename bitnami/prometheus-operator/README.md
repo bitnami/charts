@@ -458,3 +458,8 @@ prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-co
 ```bash
 $ helm upgrade my-release bitnami/prometheus-operator
 ```
+
+### To 1.0.0
+
+- New CRDs were added and some existing ones were introduced. This implies some backwards incompatibilities when enabling new features that were not available in the old CRDs.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.

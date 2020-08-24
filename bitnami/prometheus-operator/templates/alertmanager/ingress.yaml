@@ -1,5 +1,5 @@
 {{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled }}
-apiVersion: {{ template "prometheus-operator.ingress.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "prometheus-operator.alertmanager.fullname" . }}

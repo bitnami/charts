@@ -1,5 +1,5 @@
 {{- if .Values.operator.enabled }}
-apiVersion: {{ template "prometheus-operator.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "prometheus-operator.operator.fullname" . }}
