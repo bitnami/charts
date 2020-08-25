@@ -68,13 +68,9 @@ spec:
           {{- if .Values.kong.args }}
           args: {{- include "kong.tplValue" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - kong quit
+          {{- if .Values.kong.lifecycle }}
+          lifecycle: {{- include "kong.tplValue" (dict "value" .Values.kong.lifecycle "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.service.exposeAdmin }}
             - name: KONG_ADMIN_LISTEN_ADDRESS
