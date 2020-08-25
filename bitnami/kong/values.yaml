@@ -424,6 +424,11 @@ affinity: {}
 ##
 podAnnotations: {}
 
+## Pod labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Prometheus metrics
 ##
 metrics:

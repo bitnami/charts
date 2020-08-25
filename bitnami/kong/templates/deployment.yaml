@@ -17,6 +17,9 @@ spec:
     metadata:
       labels: {{- include "kong.labels" . | nindent 8 }}
         app.kubernetes.io/component: server
+        {{- if .Values.podLabels }}
+        {{- include "kong.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         {{- if (include "kong.createExternalDBSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/external-database-secret.yaml") . | sha256sum }}
