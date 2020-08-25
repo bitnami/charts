@@ -233,6 +233,7 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
+    podAnnotations:
 
   ## Airflow web specific configuration
   #

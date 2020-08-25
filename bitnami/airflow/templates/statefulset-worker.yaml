@@ -29,6 +29,7 @@ spec:
     {{- end }}
   template:
     metadata:
+      annotations: {{- toYaml .Values.airflow.worker.podAnnotations | nindent 8 }}
       labels:
         app.kubernetes.io/name: {{ include "airflow.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
