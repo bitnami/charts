@@ -512,6 +512,13 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
 
+### To 9.0.0
+
+MongoDB container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB. Refer to the following guides to upgrade your applications:
+
+- [Standalone](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-standalone/)
+- [Replica Set](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-replica-set/)
+
 ### To 8.0.0
 
 - Architecture used to configure MongoDB as a replicaset was completely refactored. Now, both primary and secondary nodes are part of the same statefulset.
