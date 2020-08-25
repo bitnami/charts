@@ -530,6 +530,11 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the metrics-server.fullname template
   # name:
 
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
 ## If true, create & use Pod Security Policy resources
 ## https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##

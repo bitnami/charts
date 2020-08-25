@@ -192,7 +192,7 @@ spec:
               value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
             {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) }}
             - name: KAFKA_OPTS
-              value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
+              value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf"
             {{- if (include "kafka.client.saslAuthentication" .) }}
             - name: KAFKA_CLIENT_USERS
               value: {{ join "," .Values.auth.jaas.clientUsers | quote }}

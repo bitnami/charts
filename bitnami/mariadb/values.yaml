@@ -91,6 +91,9 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the mariadb.fullname template
   # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -116,6 +119,9 @@ secret:
   ## Add custom annotations to the secret (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   annotations: {}
+  ## Require all passwords at the secret resource
+  ##
+  requirePasswords: true
 
 ## MariaDB admin credentials
 ##
@@ -131,6 +137,9 @@ rootUser:
   ## Mount admin password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: false
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to /opt/bitnami/mariadb/secrets/mariadb-root-password
+  # injectSecretsFile: "/vault/secrets/root-password"
 
 ## Custom user/db credentials
 ##
@@ -151,6 +160,9 @@ db:
   ## Mount user password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: false
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to /opt/bitnami/mariadb/secrets/mariadb-password
+  # injectSecretsFile: "/vault/secrets/user-password"
 
 ## Replication configuration
 ##
@@ -174,6 +186,9 @@ replication:
   ## Mount replication user password as a file instead of using an environment variable
   ##
   injectSecretsAsVolume: false
+  ## Specify custom secrets file location if injectSecretsAsVolume is true,
+  ## defaults to //opt/bitnami/mariadb/secrets/mariadb-replication-password
+  # injectSecretsFile: "/vault/secrets/replication-password"
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot

@@ -220,6 +220,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.schedulerName`                         | Name of an alternate scheduler                                                                                                                      | `nil`                                                   |
 | `slave.resources`                             | Redis slave CPU/Memory resource requests/limits                                                                                                     | `{}`                                                    |
 | `slave.affinity`                              | Enable node/pod affinity for slaves                                                                                                                 | {}                                                      |
+| `slave.tolerations`                           | Toleration labels for Redis slave pod assignment                                                                  | []                                                      |
 | `slave.spreadConstraints`                     | [Topology Spread Constraints](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) for Redis slave pod              | {}                                                      |
 | `slave.priorityClassName`                     | Redis Slave pod priorityClassName                                                                                                                   | {}                                                      |
 | `sentinel.enabled`                            | Enable sentinel containers                                                                                                                          | `false`                                                 |
@@ -337,7 +338,7 @@ In case the master crashes, the slaves will wait until the master node is respaw
 
 #### Master-Slave with Sentinel
 
-When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain en extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain an extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
 
    - Redis service: Exposes port 6379 for Redis read-only operations and port 26379 for accesing Redis Sentinel.
 

@@ -403,7 +403,7 @@ stringData:
     }
 ```
 
-Then, specify the `management.load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
+Then, specify the `load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
 
 > Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
@@ -424,7 +424,7 @@ loadDefinition:
   enabled: true
   existingSecret: load-definition
 extraConfiguration: |
-  management.load_definitions = /app/load_definition.json
+  load_definitions = /app/load_definition.json
 ```
 
 ### LDAP

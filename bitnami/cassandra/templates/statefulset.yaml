@@ -126,8 +126,6 @@ spec:
                   name: {{ .Values.tlsEncryptionSecretName }}
                   key: keystore-password
             {{- end }}
-            - name: CASSANDRA_ENDPOINT_SNITCH
-              value: {{ .Values.cluster.endpointSnitch }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
             {{- if .Values.jvm.maxHeapSize }}

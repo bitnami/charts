@@ -120,11 +120,7 @@ spec:
             - name: ruler-config
               mountPath: /conf/rules
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
-              mountPath: /conf
-              {{- else }}
               mountPath: /conf/objstore
-              {{- end }}
             - name: data
               mountPath: /data
       volumes:

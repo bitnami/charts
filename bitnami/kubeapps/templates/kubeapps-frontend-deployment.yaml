@@ -54,7 +54,7 @@ spec:
           {{- if .Values.frontend.resources }}
           resources: {{- toYaml .Values.frontend.resources | nindent 12 }}
           {{- end }}
-        {{- if .Values.authProxy.enabled }}
+        {{- if and .Values.authProxy.enabled (not .Values.authProxy.external) }}
         - name: auth-proxy
           args:
             - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
@@ -83,6 +83,9 @@ spec:
           {{- if .Values.authProxy.resources }}
           resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if and (gt (len .Values.clusters) 0) (not .Values.authProxy.enabled) }}
+          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
         {{- end }}
       volumes:
         - name: vhost

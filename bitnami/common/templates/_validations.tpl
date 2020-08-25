@@ -65,7 +65,7 @@ Validate value params:
   - secret - String - Required. Name of the secret where mysql values are stored, e.g: "mysql-passwords-secret"
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
-  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
+  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled .context.Values.mariadb.secret.requirePasswords -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
@@ -90,37 +90,18 @@ Validate a postgresql required password must not be empty.
 
 Usage:
 {{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
-
-Validate value params:
+Params:
   - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "mysql-passwords-secret"
   - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.postgresql.passwords" -}}
-  {{- $existingSecret := false -}}
-  {{- $existingSecretGlobal := false -}}
-  {{- if .context.Values.global -}}
-    {{- if .context.Values.global.postgresql -}}
-      {{- $existingSecretGlobal = .context.Values.global.postgresql.existingSecret -}}
-    {{- end -}}
-  {{- end -}}
-  {{- $enabled := true -}}
-  {{- $valueKeyPostgresqlPassword := "postgresqlPassword" -}}
-  {{- $enabledReplication := false -}}
-  {{- $valueKeyPostgresqlReplicationEnabled := "replication.password" -}}
+  {{- $existingSecret := include "common.postgresql.values.existingSecret" . -}}
+  {{- $enabled := include "common.postgresql.values.enabled" . -}}
+  {{- $valueKeyPostgresqlPassword := include "common.postgresql.values.key.postgressPassword" . -}}
+  {{- $enabledReplication := include "common.postgresql.values.enabled.replication" . -}}
+  {{- $valueKeyPostgresqlReplicationEnabled := include "common.postgresql.values.key.replicationPassword" . -}}
 
-  {{- if .subchart -}}
-    {{- $existingSecret = .context.Values.postgresql.existingSecret -}}
-    {{- $existingSecretGlobal = false -}}
-    {{- $enabled = .context.Values.postgresql.enabled -}}
-    {{- $valueKeyPostgresqlPassword = "postgresql.postgresqlPassword" -}}
-    {{- $enabledReplication = .context.Values.postgresql.replication.enabled -}}
-    {{- $valueKeyPostgresqlReplicationEnabled = "postgresql.replication.password" -}}
-  {{- else -}}
-    {{- $existingSecret = .context.Values.existingSecret -}}
-    {{- $enabledReplication = .context.Values.replication.enabled -}}
-  {{- end -}}
-
-  {{- if and (not $existingSecret) (not $existingSecretGlobal) $enabled -}}
+  {{- if and (not $existingSecret) $enabled -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredPostgresqlPassword := dict "valueKey" $valueKeyPostgresqlPassword "secret" .secret "field" "postgresql-password" -}}
@@ -132,5 +113,105 @@ Validate value params:
     {{- end -}}
 
     {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to decide whether evaluate global values.
+
+Usage:
+{{ include "common.postgresql.values.use.global" (dict "key" "key-of-global" "context" $) }}
+Params:
+  - key - String - Required. Field to be evaluated within global, e.g: "existingSecret"
+*/}}
+{{- define "common.postgresql.values.use.global" -}}
+  {{- if .context.Values.global -}}
+    {{- if .context.Values.global.postgresql -}}
+      {{- index .context.Values.global.postgresql .key | quote -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for existingSecret.
+
+Usage:
+{{ include "common.postgresql.values.existingSecret" (dict "context" $) }}
+*/}}
+{{- define "common.postgresql.values.existingSecret" -}}
+  {{- $globalValue := include "common.postgresql.values.use.global" (dict "key" "existingSecret" "context" .context) -}}
+
+  {{- if .subchart -}}
+    {{- default (.context.Values.postgresql.existingSecret | quote) $globalValue -}}
+  {{- else -}}
+    {{- default (.context.Values.existingSecret | quote) $globalValue -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for enabled postgresql.
+
+Usage:
+{{ include "common.postgresql.values.enabled" (dict "context" $) }}
+*/}}
+{{- define "common.postgresql.values.enabled" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.postgresql.enabled | quote -}}
+  {{- else -}}
+    true
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for the key postgressPassword.
+
+Usage:
+{{ include "common.postgresql.values.key.postgressPassword" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+*/}}
+{{- define "common.postgresql.values.key.postgressPassword" -}}
+  {{- $globalValue := include "common.postgresql.values.use.global" (dict "key" "postgresqlUsername" "context" .context) -}}
+
+  {{- if not $globalValue -}}
+    {{- if .subchart -}}
+      postgresql.postgresqlPassword
+    {{- else -}}
+      postgresqlPassword
+    {{- end -}}
+  {{- else -}}
+    global.postgresql.postgresqlPassword
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for enabled.replication.
+
+Usage:
+{{ include "common.postgresql.values.enabled.replication" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+*/}}
+{{- define "common.postgresql.values.enabled.replication" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.postgresql.replication.enabled | quote -}}
+  {{- else -}}
+    {{- .context.Values.replication.enabled | quote -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for the key replication.password.
+
+Usage:
+{{ include "common.postgresql.values.key.replicationPassword" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+*/}}
+{{- define "common.postgresql.values.key.replicationPassword" -}}
+  {{- if .subchart -}}
+    postgresql.replication.password
+  {{- else -}}
+    replication.password
   {{- end -}}
 {{- end -}}
