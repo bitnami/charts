@@ -337,7 +337,6 @@ proxy:
   #       search  : "[&\\$!@]"
   #       replace : "_"
 
-
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
