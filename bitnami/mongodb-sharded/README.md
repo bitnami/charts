@@ -288,11 +288,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install my-release \
-  --set mongodbRootPassword=secretpassword,mongodbUsername=my-user,mongodbPassword=my-password,mongodbDatabase=my-database \
+  --set shards=4,configsvr.replicas=3,shardsvr.dataNode.replicas=2 \
     bitnami/mongodb-sharded
 ```
 
-The above command sets the MongoDB `root` account password to `secretpassword`. Additionally, it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+The above command sets the number of shards to 4, the number of replicas for the config servers to 3 and number of replicas for data nodes to 2.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
