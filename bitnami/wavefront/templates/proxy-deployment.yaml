@@ -16,84 +16,84 @@ spec:
         app.kubernetes.io/component: proxy
     spec:
       containers:
-      - name: wavefront-proxy
-        image: {{ template "wavefront.proxy.image" . }}
-        imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
-        env:
-        - name: WAVEFRONT_URL
-          value: {{ .Values.wavefront.url }}/api
-        - name: WAVEFRONT_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "common.names.fullname" . }}
-              key: api-token
-        - name: WAVEFRONT_PROXY_ARGS
-          value: {{ .Values.proxy.args }}
-          {{- if .Values.proxy.tracePort }} --traceListenerPorts {{ .Values.proxy.tracePort }}{{- end -}}
-          {{- if .Values.proxy.jaegerPort }} --traceJaegerListenerPorts {{ .Values.proxy.jaegerPort }}{{- end -}}
-          {{- if .Values.proxy.traceJaegerHttpListenerPort }} --traceJaegerHttpListenerPorts {{ .Values.proxy.traceJaegerHttpListenerPort }}{{- end -}}
-          {{- if .Values.proxy.zipkinPort }} --traceZipkinListenerPorts {{ .Values.proxy.zipkinPort }}{{- end -}}
-          {{- if .Values.proxy.traceSamplingRate }} --traceSamplingRate {{ .Values.proxy.traceSamplingRate }}{{- end -}}
-          {{- if .Values.proxy.traceSamplingDuration }} --traceSamplingDuration {{ .Values.proxy.traceSamplingDuration }}{{- end -}}
-          {{- if .Values.proxy.histogramPort }} --histogramDistListenerPorts {{ .Values.proxy.histogramPort }}{{- end -}}
-          {{- if .Values.proxy.histogramMinutePort }} --histogramMinuteListenerPorts {{ .Values.proxy.histogramMinutePort }}{{- end -}}
-          {{- if .Values.proxy.histogramHourPort }} --histogramHourListenerPorts {{ .Values.proxy.histogramHourPort }}{{- end -}}
-          {{- if .Values.proxy.histogramDayPort }} --histogramDayListenerPorts {{ .Values.proxy.histogramDayPort }}{{- end -}}
-          {{- if .Values.proxy.deltaCounterPort }} --deltaCounterPorts {{ .Values.proxy.deltaCounterPort }}{{- end -}}
-          {{- if .Values.proxy.preprocessor }} --preprocessorConfigFile /etc/wavefront/wavefront-proxy/preprocessor/rules.yaml{{- end -}}
-        {{- if .Values.proxy.heap }}
-        - name: JAVA_HEAP_USAGE
-          value: {{ .Values.proxy.heap | quote }}
-        {{- end }}
-        ports:
-        - containerPort: {{ .Values.proxy.port }}
-          protocol: TCP
-        {{- if .Values.proxy.tracePort }}
-        - containerPort: {{ .Values.proxy.tracePort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.jaegerPort }}
-        - containerPort: {{ .Values.proxy.jaegerPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.traceJaegerHttpListenerPort }}
-        - containerPort: {{ .Values.proxy.traceJaegerHttpListenerPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.zipkinPort }}
-        - containerPort: {{ .Values.proxy.zipkinPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.histogramPort }}
-        - containerPort: {{ .Values.proxy.histogramPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.histogramMinutePort }}
-        - containerPort: {{ .Values.proxy.histogramMinutePort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.histogramHourPort }}
-        - containerPort: {{ .Values.proxy.histogramHourPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.histogramDayPort }}
-        - containerPort: {{ .Values.proxy.histogramDayPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.proxy.deltaCounterPort }}
-        - containerPort: {{ .Values.proxy.deltaCounterPort }}
-          protocol: TCP
-        {{- end }}
-        {{- if .Values.collector.resources}}
-        resources: {{ toYaml .Values.collector.resources | indent 10 }}
-        {{- end }}
-        securityContext:
-          privileged: false
-        volumeMounts:
-        {{- if .Values.proxy.preprocessor }}
-        - name: preprocessor
-          mountPath: /etc/wavefront/wavefront-proxy/preprocessor
-        {{- end }}
+        - name: wavefront-proxy
+          image: {{ template "wavefront.proxy.image" . }}
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          env:
+            - name: WAVEFRONT_URL
+              value: {{ .Values.wavefront.url }}/api
+            - name: WAVEFRONT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "common.names.fullname" . }}
+                  key: api-token
+            - name: WAVEFRONT_PROXY_ARGS
+              value: {{ .Values.proxy.args }}
+              {{- if .Values.proxy.tracePort }} --traceListenerPorts {{ .Values.proxy.tracePort }}{{- end -}}
+              {{- if .Values.proxy.jaegerPort }} --traceJaegerListenerPorts {{ .Values.proxy.jaegerPort }}{{- end -}}
+              {{- if .Values.proxy.traceJaegerHttpListenerPort }} --traceJaegerHttpListenerPorts {{ .Values.proxy.traceJaegerHttpListenerPort }}{{- end -}}
+              {{- if .Values.proxy.zipkinPort }} --traceZipkinListenerPorts {{ .Values.proxy.zipkinPort }}{{- end -}}
+              {{- if .Values.proxy.traceSamplingRate }} --traceSamplingRate {{ .Values.proxy.traceSamplingRate }}{{- end -}}
+              {{- if .Values.proxy.traceSamplingDuration }} --traceSamplingDuration {{ .Values.proxy.traceSamplingDuration }}{{- end -}}
+              {{- if .Values.proxy.histogramPort }} --histogramDistListenerPorts {{ .Values.proxy.histogramPort }}{{- end -}}
+              {{- if .Values.proxy.histogramMinutePort }} --histogramMinuteListenerPorts {{ .Values.proxy.histogramMinutePort }}{{- end -}}
+              {{- if .Values.proxy.histogramHourPort }} --histogramHourListenerPorts {{ .Values.proxy.histogramHourPort }}{{- end -}}
+              {{- if .Values.proxy.histogramDayPort }} --histogramDayListenerPorts {{ .Values.proxy.histogramDayPort }}{{- end -}}
+              {{- if .Values.proxy.deltaCounterPort }} --deltaCounterPorts {{ .Values.proxy.deltaCounterPort }}{{- end -}}
+              {{- if .Values.proxy.preprocessor }} --preprocessorConfigFile /etc/wavefront/wavefront-proxy/preprocessor/rules.yaml{{- end -}}
+            {{- if .Values.proxy.heap }}
+            - name: JAVA_HEAP_USAGE
+              value: {{ .Values.proxy.heap | quote }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.proxy.port }}
+              protocol: TCP
+            {{- if .Values.proxy.tracePort }}
+            - containerPort: {{ .Values.proxy.tracePort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.jaegerPort }}
+            - containerPort: {{ .Values.proxy.jaegerPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.traceJaegerHttpListenerPort }}
+            - containerPort: {{ .Values.proxy.traceJaegerHttpListenerPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.zipkinPort }}
+            - containerPort: {{ .Values.proxy.zipkinPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.histogramPort }}
+            - containerPort: {{ .Values.proxy.histogramPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.histogramMinutePort }}
+            - containerPort: {{ .Values.proxy.histogramMinutePort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.histogramHourPort }}
+            - containerPort: {{ .Values.proxy.histogramHourPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.histogramDayPort }}
+            - containerPort: {{ .Values.proxy.histogramDayPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.proxy.deltaCounterPort }}
+            - containerPort: {{ .Values.proxy.deltaCounterPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.collector.resources}}
+          resources: {{ toYaml .Values.collector.resources | indent 10 }}
+          {{- end }}
+          securityContext:
+            privileged: false
+          volumeMounts:
+            {{- if .Values.proxy.preprocessor }}
+            - name: preprocessor
+              mountPath: /etc/wavefront/wavefront-proxy/preprocessor
+            {{- end }}
     {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName }}
     {{- end }}
@@ -101,9 +101,9 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
     {{- end }}
       volumes:
-      {{- if .Values.proxy.preprocessor }}
-      - name: preprocessor
-        configMap:
-          name: {{ template "common.names.fullname" . }}-proxy-preprocessor
-      {{- end }}
+        {{- if .Values.proxy.preprocessor }}
+        - name: preprocessor
+          configMap:
+            name: {{ template "common.names.fullname" . }}-proxy-preprocessor
+        {{- end }}
 {{- end }}

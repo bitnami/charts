@@ -9,61 +9,61 @@ metadata:
     rbac.authorization.kubernetes.io/autoupdate: "true"
   name: {{ template "common.names.fullname" . }}-collector
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - events
-  - namespaces
-  - nodes
-  - nodes/stats
-  - pods
-  - services
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - update
-  - create
-  - list
-  - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+      - namespaces
+      - nodes
+      - nodes/stats
+      - pods
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - update
+      - create
+      - list
+      - watch
 
 {{- if .Values.collector.kubernetesState }}
-- apiGroups:
-  - apps
-  resources:
-  - daemonsets
-  - deployments
-  - statefulsets
-  - replicasets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - batch
-  resources:
-  - jobs
-  - cronjobs
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - autoscaling
-  resources:
-  - horizontalpodautoscalers
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - apps
+    resources:
+      - daemonsets
+      - deployments
+      - statefulsets
+      - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+      - cronjobs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - get
+      - list
+      - watch
 {{- end }}
-- nonResourceURLs: ["/metrics"]
-  verbs:
-  - get
+  - nonResourceURLs: ["/metrics"]
+    verbs:
+      - get
 {{- end }}

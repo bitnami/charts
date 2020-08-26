@@ -22,6 +22,7 @@ wavefront:
 ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
 ## It will capture Kubernetes resources metrics available from the kubelets,
 ## as well as auto-discovery capabilities.
+##
 collector:
   enabled: true
   image:

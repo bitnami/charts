@@ -10,7 +10,7 @@ roleRef:
   kind: ClusterRole
   name: {{ template "common.names.fullname" . }}-collector
 subjects:
-- kind: ServiceAccount
-  name: {{ template "wavefront.collector.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ template "wavefront.collector.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end }}

@@ -4,14 +4,14 @@ description: Chart for Wavefront Collector for Kubernetes
 appVersion: 1.2.2
 version: 0.1.0
 keywords:
-- metric
-- monitoring
-- observability
-- alerting
+  - metric
+  - monitoring
+  - observability
+  - alerting
 home: https://www.wavefront.com
 sources:
-- https://github.com/bitnami/bitnami-docker-wavefront-collector
-- https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://github.com/bitnami/bitnami-docker-wavefront-collector
+  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
