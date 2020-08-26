@@ -84,8 +84,9 @@ spec:
         - containerPort: {{ .Values.proxy.deltaCounterPort }}
           protocol: TCP
         {{- end }}
-        resources:
-{{ toYaml .Values.proxy.resources | trim | indent 10 }}
+        {{- if .Values.collector.resources}}
+        resources: {{ toYaml .Values.collector.resources | indent 10 }}
+        {{- end }}
         securityContext:
           privileged: false
         volumeMounts:
@@ -96,9 +97,8 @@ spec:
     {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName }}
     {{- end }}
-{{- if .Values.proxy.tolerations }}
-      tolerations:
-{{ toYaml .Values.proxy.tolerations | indent 6 }}
+    {{- if .Values.proxy.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
     {{- end }}
       volumes:
       {{- if .Values.proxy.preprocessor }}

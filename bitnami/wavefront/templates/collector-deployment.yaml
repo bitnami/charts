@@ -6,7 +6,6 @@ metadata:
     app.kubernetes.io/component: collector
   name: {{ template "common.names.fullname" . }}-collector
 spec:
-  replicas: 1
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: collector
@@ -30,14 +29,14 @@ spec:
         {{- if .Values.collector.logLevel }}
         - --log-level={{ .Values.collector.logLevel }}
         {{- end }}
-        resources:
-{{ toYaml .Values.collector.resources | indent 10 }}
+        {{- if .Values.collector.resources}}
+        resources: {{ toYaml .Values.collector.resources | indent 10 }}
+        {{- end }}
     {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName }}
     {{- end }}
     {{- if .Values.collector.tolerations }}
-      tolerations:
-{{ toYaml .Values.collector.tolerations | indent 6 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.tolerations "context" .) | nindent 8 }}
     {{- end }}
         volumeMounts:
         - name: config

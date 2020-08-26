@@ -196,7 +196,7 @@ collector:
   ## Optionally set tolerations for the collector
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
   ##
-  # tolerations:
+  tolerations: []
 
 ## Wavefront Proxy is a metrics forwarder that is used to relay metrics to the Wavefront SaaS service.
 ## It can receive metrics from the Wavefront Collector as well as other metrics collection services
@@ -246,7 +246,7 @@ proxy:
   ## Optionally set tolerations for the proxy
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
   ##
-  # tolerations:
+  tolerations: []
 
   ## The number of pod replicas to run for the Wavefront Proxy deployment
   ##
