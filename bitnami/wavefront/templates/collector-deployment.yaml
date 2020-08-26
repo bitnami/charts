@@ -1,5 +1,4 @@
-{{- if .Values.collector.enabled }}
-{{- if not .Values.collector.useDaemonset }}
+{{- if and .Values.collector.enabled (not .Values.collector.useDaemonset) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,13 +12,13 @@ spec:
       app.kubernetes.io/component: collector
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8}}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: collector
     spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       containers:
       - name: wavefront-collector
-        image: {{ .Values.collector.image.repository }}:{{ .Values.collector.image.tag }}
+        image: {{ template "wavefront.collector.image" . }}
         imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
         command:
         - wavefront-collector
@@ -54,5 +53,4 @@ spec:
       - name: ssl-certs
         hostPath:
           path: /etc/ssl/certs
-{{- end }}
 {{- end }}

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: wavefront-proxy
-        image: {{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}
+        image: {{ template "wavefront.proxy.image" . }}
         imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
         env:
         - name: WAVEFRONT_URL
