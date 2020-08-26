@@ -89,27 +89,28 @@ kong:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
   ##
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe: |-
-    exec:
-      command:
-        - /bin/bash
-        - -ec
-        - /health/kong-container-health.sh
+  livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe: |-
-    exec:
-      command:
-        - /bin/bash
-        - -ec
-        - /health/kong-container-health.sh
+  readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -119,13 +120,8 @@ kong:
   ## Container lifecycle hooks
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
-  lifecycle: |-
-    preStop:
-      exec:
-        command:
-          - /bin/sh
-          - -c
-          - kong quit
+  lifecycleHooks: {}
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -186,25 +182,28 @@ ingressController:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
   ##
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe: |-
-    httpGet:
-      path: "/healthz"
-      port: http-health
-      scheme: HTTP
+  livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe: |-
-    httpGet:
-      path: "/healthz"
-      port: http-health
-      scheme: HTTP
+  readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5

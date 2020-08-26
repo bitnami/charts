@@ -68,8 +68,16 @@ spec:
           {{- if .Values.kong.args }}
           args: {{- include "kong.tplValue" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.lifecycle }}
-          lifecycle: {{- include "kong.tplValue" (dict "value" .Values.kong.lifecycle "context" $) | nindent 12 }}
+          {{- if not .Values.kong.lifecycleHooks }}
+          lifecycle: 
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - kong quit
+          {{ else }}
+          lifecycle: {{- include "kong.tplValue" (dict "value" .Values.kong.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.service.exposeAdmin }}
@@ -150,11 +158,35 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.kong.livenessProbe }}
-          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.kong.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - /health/kong-container-health.sh
+            initialDelaySeconds: {{ .Values.kong.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.kong.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.kong.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.kong.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.kong.livenessProbe.successThreshold }}
+          {{- else if .Values.kong.customLivenessProbe }}
+          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.readinessProbe }}
-          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.kong.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - /health/kong-container-health.sh
+            initialDelaySeconds: {{ .Values.kong.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.kong.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.kong.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.kong.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.kong.readinessProbe.successThreshold }}
+          {{- else if .Values.kong.customReadinessProbe }}
+          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
@@ -232,11 +264,33 @@ spec:
             - name: http-health
               containerPort: 10254
               protocol: TCP
-          {{- if .Values.ingressController.livenessProbe }}
-          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.ingressController.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: "/healthz"
+              port: http-health
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.ingressController.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ingressController.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ingressController.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.ingressController.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.ingressController.livenessProbe.successThreshold }}
+          {{- else if .Values.ingressController.customLivenessProbe }}
+          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.readinessProbe }}
-          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.ingressController.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: "/healthz"
+              port: http-health
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.ingressController.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ingressController.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ingressController.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.ingressController.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.ingressController.readinessProbe.successThreshold }}
+          {{- else if .Values.ingressController.customReadinessProbe }}
+          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}
