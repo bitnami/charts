@@ -2,11 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app.kubernetes.io/name : {{ template "wavefront.fullname" . }}
-    helm.sh/chart: {{ template "wavefront.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io.instance: {{ .Release.Name | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
   name: {{ template "wavefront.proxy.fullname" . }}
 spec:
@@ -60,7 +56,7 @@ spec:
     protocol: TCP
   {{- end }}
   selector:
-    app.kubernetes.io/name : {{ template "wavefront.fullname" .}}
+    app.kubernetes.io/name : {{ template "wavefront.fullname" . }}
     app.kubernetes.io/component: proxy
   type: ClusterIP
 {{ end }}

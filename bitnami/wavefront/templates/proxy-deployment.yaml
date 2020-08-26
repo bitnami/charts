@@ -2,23 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app.kubernetes.io/name : {{ template "wavefront.fullname" . }}
-    helm.sh/chart: {{ template "wavefront.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io.instance: {{ .Release.Name | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
   name: {{ template "wavefront.proxy.fullname" . }}
 spec:
   replicas: {{ .Values.proxy.replicas }}
   selector:
-    matchLabels:
-      app.kubernetes.io/name : {{ template "wavefront.fullname" .}}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: proxy
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name : {{ template "wavefront.fullname" .}}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: proxy
     spec:
       containers:

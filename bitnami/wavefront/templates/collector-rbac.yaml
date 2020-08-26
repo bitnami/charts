@@ -2,11 +2,7 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  labels:
-    app.kubernetes.io/name : {{ template "wavefront.fullname" . }}
-    helm.sh/chart: {{ template "wavefront.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io.instance: {{ .Release.Name | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
   name: {{ template "wavefront.collector.fullname" . }}
 roleRef:
