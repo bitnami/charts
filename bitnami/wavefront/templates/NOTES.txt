@@ -27,7 +27,7 @@ Collector is set to use direct ingestion API but `wavefront.url` or `wavefront.t
 
 {{- if .Values.proxy.enabled }}
 	{{- if or (not $validUrl) (not $validToken) }}
-	
+
 ##### ERROR:
 Proxy is enabled but `wavefront.url` or `wavefront.token` are not specified.
 #####
@@ -52,4 +52,3 @@ should see metrics flowing within a few minutes.
 You can visit this dashboard in Wavefront to see your Kubernetes metrics:
 
 {{ .Values.wavefront.url }}/dashboard/integration-kubernetes-summary
-

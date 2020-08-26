@@ -96,10 +96,3 @@ The following tables lists the configurable parameters of the Wavefront chart an
 | `serviceAccount.name` | Name of Wavefront service account | `nil` |
 | `kubeStateMetrics.enabled` | Setup and enable Kube State Metrics for collection | `false` |
 | `projectPacific.enabled` | Enable and create role binding for Tanzu kubernetes cluster | `false` |
-
-
-## Upgrading
-### Upgrading from 1.0
-Openshift support has been removed from the helm chart.  Use the Wavefront Openshift operator available [here](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/tree/master/deploy/openshift) instead.
-
-The `collector.kubernetesSource` parameter has been replaced with the `collector.useReadOnlyPort` option.

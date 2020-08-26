@@ -27,8 +27,8 @@ spec:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
         operator: Exists
-{{ if .Values.collector.tolerations }} 
-{{- toYaml .Values.collector.tolerations | indent 6 }}  
+{{ if .Values.collector.tolerations }}
+{{- toYaml .Values.collector.tolerations | indent 6 }}
 {{ end }}
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       containers:
@@ -36,7 +36,7 @@ spec:
         image: {{ .Values.collector.image.repository }}:{{ .Values.collector.image.tag }}
         imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
         command:
-        - /wavefront-collector
+        - wavefront-collector
         - --daemon=true
         - --config-file=/etc/collector/config.yaml
         {{- if .Values.collector.maxProcs }}
@@ -57,7 +57,7 @@ spec:
           valueFrom:
             fieldRef:
               apiVersion: v1
-              fieldPath: metadata.namespace        
+              fieldPath: metadata.namespace
         ports:
         - containerPort: 8088
           protocol: TCP
@@ -66,13 +66,13 @@ spec:
         volumeMounts:
         - name: procfs
           mountPath: /host/proc
-          readOnly: true          
+          readOnly: true
         - name: config
           mountPath: /etc/collector/
           readOnly: true
     {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName }}
-    {{- end }}     
+    {{- end }}
       volumes:
       - name: procfs
         hostPath:
