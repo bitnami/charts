@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
-  name: {{ template "wavefront.proxy.fullname" . }}-preprocessor
+  name: {{ template "common.names.fullname" . }}-proxy-preprocessor
 data:
 {{ tpl (toYaml .Values.proxy.preprocessor) . | indent 2 }}
 {{- end }}

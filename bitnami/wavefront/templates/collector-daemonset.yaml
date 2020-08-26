@@ -4,7 +4,7 @@ kind: DaemonSet
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
-  name: {{ template "wavefront.collector.fullname" . }}
+  name: {{ template "common.names.fullname" . }}-collector
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6}}
@@ -73,5 +73,5 @@ spec:
           path: /proc
       - name: config
         configMap:
-          name: {{ template "wavefront.collector.fullname" . }}-config
+          name: {{ template "common.names.fullname" . }}-collector-config
 {{- end }}

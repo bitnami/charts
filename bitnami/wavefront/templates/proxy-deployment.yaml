@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
-  name: {{ template "wavefront.proxy.fullname" . }}
+  name: {{ template "common.names.fullname" . }}-proxy
 spec:
   replicas: {{ .Values.proxy.replicas }}
   selector:
@@ -25,7 +25,7 @@ spec:
         - name: WAVEFRONT_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ template "wavefront.fullname" . }}
+              name: {{ template "common.names.fullname" . }}
               key: api-token
         - name: WAVEFRONT_PROXY_ARGS
           value: {{ .Values.proxy.args }}
@@ -104,6 +104,6 @@ spec:
       {{- if .Values.proxy.preprocessor }}
       - name: preprocessor
         configMap:
-          name: {{ template "wavefront.proxy.fullname" . }}-preprocessor
+          name: {{ template "common.names.fullname" . }}-proxy-preprocessor
       {{- end }}
 {{- end }}

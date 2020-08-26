@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
-  name: {{ template "wavefront.collector.fullname" . }}
+  name: {{ template "common.names.fullname" . }}-collector
 spec:
   replicas: 1
   selector:
@@ -50,7 +50,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "wavefront.collector.fullname" . }}-config
+          name: {{ template "common.names.fullname" . }}-collector-config
       - name: ssl-certs
         hostPath:
           path: /etc/ssl/certs

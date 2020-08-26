@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
-  name: {{ template "wavefront.collector.fullname" . }}-config
+  name: {{ template "common.names.fullname" . }}-collector-config
 data:
   config.yaml: |
     clusterName: {{ .Values.clusterName }}
@@ -19,7 +19,7 @@ data:
     {{- if .Values.collector.proxyAddress }}
     - proxyAddress: {{ .Values.collector.proxyAddress }}
     {{- else }}
-    - proxyAddress: {{ template "wavefront.proxy.fullname" . }}:{{ .Values.proxy.port }}
+    - proxyAddress: {{ template "common.names.fullname" . }}-proxy:{{ .Values.proxy.port }}
     {{- end }}
     {{- else }}
     - server: {{ .Values.wavefront.url }}

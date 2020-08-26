@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
-  name: {{ template "wavefront.proxy.fullname" . }}
+  name: {{ template "common.names.fullname" . }}-proxy
 spec:
   ports:
   - name: wavefront
@@ -55,8 +55,7 @@ spec:
     port: {{ .Values.proxy.deltaCounterPort }}
     protocol: TCP
   {{- end }}
-  selector:
-    app.kubernetes.io/name : {{ template "wavefront.fullname" . }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: proxy
   type: ClusterIP
 {{ end }}
