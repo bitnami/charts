@@ -5,7 +5,10 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
     kubernetes.io/bootstrapping: rbac-defaults
-  annotations:
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     rbac.authorization.kubernetes.io/autoupdate: "true"
   name: {{ template "common.names.fullname" . }}-collector
 rules:

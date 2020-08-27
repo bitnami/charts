@@ -19,6 +19,18 @@ wavefront:
   url: https://YOUR_CLUSTER.wavefront.com
   token: YOUR_API_TOKEN
 
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
 ## It will capture Kubernetes resources metrics available from the kubelets,
 ## as well as auto-discovery capabilities.
