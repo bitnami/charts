@@ -75,3 +75,72 @@ Return the token secret name
     {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "wavefront.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "wavefront.validateValues.clusterName" .) -}}
+{{- $messages := append $messages (include "wavefront.validateValues.collector-proxy" .) -}}
+{{- $messages := append $messages (include "wavefront.validateValues.api" .) -}}
+{{- $messages := append $messages (include "wavefront.validateValues.proxy" .) -}}
+{{- $messages := append $messages (include "wavefront.validateValues.instance" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Wavefront - clusterName */}}
+{{- define "wavefront.validateValues.clusterName" -}}
+{{- if or (not .Values.clusterName) (eq .Values.clusterName "KUBERNETES_CLUSTER_NAME") -}}
+wavefront: clusterName
+    You must set the value for 'clusterName' to uniquely identify this Kubernetes cluster in Wavefront.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Wavfront - collector-proxy */}}
+{{- define "wavefront.validateValues.collector-proxy" -}}
+{{- if and .Values.collector.useProxy (not .Values.proxy.enabled) (not .Values.collector.proxyAddress) -}}
+wavefront: collector-proxy
+    Collector is set to use proxy but `proxy.enabled` is not true and `collector.proxyAddress` is not provided.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Wavefront - API */}}
+{{- define "wavefront.validateValues.api" -}}
+{{- $validUrl := and (.Values.wavefront.url) (ne .Values.wavefront.url "https://YOUR_CLUSTER.wavefront.com") -}}
+{{- $validToken := or .Values.wavefront.existingSecret (and (.Values.wavefront.token) (ne .Values.wavefront.token "YOUR_API_TOKEN")) -}}
+{{- if and (not .Values.collector.useProxy) (or (not $validUrl) (not $validToken)) -}}
+wavefront: api
+    Collector is set to use direct ingestion API but `wavefront.url` or `wavefront.token` are not specified.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Wavefront - Proxy */}}
+{{- define "wavefront.validateValues.proxy" -}}
+{{- $validUrl := and (.Values.wavefront.url) (ne .Values.wavefront.url "https://YOUR_CLUSTER.wavefront.com") -}}
+{{- $validToken := or .Values.wavefront.existingSecret (and (.Values.wavefront.token) (ne .Values.wavefront.token "YOUR_API_TOKEN")) -}}
+{{- if and .Values.proxy.enabled (or (not $validUrl) (not $validToken)) }}
+wavefront: proxy
+    Proxy is enabled but `wavefront.url` or `wavefront.token` are not specified.
+{{- end }}
+{{- end }}
+
+{{/* Validate values of Wavefront - URL or token */}}
+{{- define "wavefront.validateValues.instance" -}}
+{{- $validUrl := and (.Values.wavefront.url) (ne .Values.wavefront.url "https://YOUR_CLUSTER.wavefront.com") -}}
+{{- $validToken := or .Values.wavefront.existingSecret (and (.Values.wavefront.token) (ne .Values.wavefront.token "YOUR_API_TOKEN")) -}}
+{{- if or (not $validUrl) (not $validToken) }}
+wavefront: instance
+    You did not specify a valid URL or Token for Wavefront.
+    If you do not have a Wavefront instance you can get a free trial here
+
+    https://www.wavefront.com/sign-up
+
+    If you already have access to Wavefront please specify your URL and Token then try again.
+{{- end }}
+{{- end }}
