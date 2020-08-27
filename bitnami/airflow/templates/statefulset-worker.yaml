@@ -36,6 +36,7 @@ spec:
         app.kubernetes.io/component: worker
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "airflow.fullname" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
