@@ -21,8 +21,7 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
-          - path:
-            backend:
+          - backend:
               serviceName: {{ template "ejbca.fullname" . }}
               servicePort: https
     {{- end }}
