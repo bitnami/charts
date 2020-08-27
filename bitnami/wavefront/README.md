@@ -106,6 +106,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.discovery.annotationPrefix`     | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints | `prometheus.io`            |
 | `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                   | `false`                              |
 | `collector.discovery.config`               | Configuration for rules based auto-discovery                                     | `nil`                                |
+| `collector.existingConfigmap`              | Name of existing ConfigMap with collector configuration                          | `nil`                                |
 | `collector.command`                        | Override default container command (useful when using custom images)             | `nil`                                |
 | `collector.args`                           | Override default container args (useful when using custom images)                | `nil`                                |
 | `collector.resources.limits`               | The resources limits for the collector container                                 | `{}`                                 |
@@ -178,6 +179,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.deltaCounterPort`            | Port to accumulate 1-minute delta counters on Wavefront data format (usually 50000)    | `nil`                          |
 | `proxy.args`                        | Additional Wavefront proxy properties to be passed as command line arguments in the `--<property_name> <value>` format | `nil` |
 | `proxy.heap`                        | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                | `nil`                          |
+| `proxy.existingConfigmap`           | Name of existing ConfigMap with Proxy preprocessor configuration                       | `nil`                          |
 | `proxy.preprocessor.rules.yaml`     | YAML configuraiton for Wavefront proxy preprocessor rules                              | `nil`                          |
 
 #### Kube State Metrics parameters

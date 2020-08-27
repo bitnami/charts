@@ -186,6 +186,10 @@ collector:
   #       username = "USER"
   #       password = "PASSWORD"
 
+  ## ConfigMap with Collector Configuration
+  ##
+  # existingConfigmap:
+
   ## Command and args for running the container (set to default if not set). Use array form
   ##
   command: []
@@ -544,6 +548,10 @@ proxy:
   ## This can be used to override the default. Uses the `-Xmx` command line option for java
   ##
   # heap: 1024m
+
+  ## ConfigMap with Proxy preprocessor Configuration
+  ##
+  # existingConfigmap:
 
   ## Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow
   ## through the proxy. You can configure the rules here. By default a rule to drop Kubernetes

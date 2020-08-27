@@ -177,7 +177,7 @@ spec:
         {{- if .Values.proxy.preprocessor }}
         - name: preprocessor
           configMap:
-            name: {{ template "common.names.fullname" . }}-proxy-preprocessor
+            name: {{ include "wavefront.proxy.configmapName" . }}
         {{- end }}
         {{- if .Values.proxy.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}

@@ -138,7 +138,7 @@ spec:
             path: /proc
         - name: config
           configMap:
-            name: {{ template "common.names.fullname" . }}-collector-config
+            name: {{ include "wavefront.collector.configmapName" . }}
         {{- if .Values.collector.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.proxy.preprocessor }}
+{{- if (include "wavefront.proxy.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

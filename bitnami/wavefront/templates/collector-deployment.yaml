@@ -116,7 +116,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ template "common.names.fullname" . }}-collector-config
+            name: {{ include "wavefront.collector.configmapName" . }}
         - name: ssl-certs
           hostPath:
             path: /etc/ssl/certs
