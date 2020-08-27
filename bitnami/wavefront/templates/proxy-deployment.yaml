@@ -42,8 +42,9 @@ spec:
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.proxy.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.proxy.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.proxy.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.proxy.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.initContainers "context" $) | nindent 8 }}
@@ -55,8 +56,10 @@ spec:
           {{- if .Values.proxy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.proxy.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.proxy.containerSecurityContext.runAsUser }}
+            runAsNonRoot: {{ .Values.proxy.containerSecurityContext.runAsNonRoot }}
           {{- end }}
           env:
             - name: WAVEFRONT_URL

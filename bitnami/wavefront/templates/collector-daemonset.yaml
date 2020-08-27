@@ -49,8 +49,9 @@ spec:
       {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.collector.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.collector.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.collector.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.collector.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.collector.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.collector.initContainers "context" $) | nindent 8 }}
@@ -62,8 +63,10 @@ spec:
           {{- if .Values.collector.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.collector.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.collector.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.collector.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.collector.containerSecurityContext.runAsUser }}
+            runAsNonRoot: {{ .Values.collector.containerSecurityContext.runAsNonRoot }}
           {{- end }}
           command:
           {{- if .Values.collector.command }}
