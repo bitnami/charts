@@ -1,0 +1,37 @@
+{{- if .Values.alertmanager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+  {{- with .Values.alertmanager.service.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.alertmanager.service.type }}
+  {{- if index .Values.alertmanager "stickySessions" }}
+  sessionAffinity: ClientIP
+  {{- end }}
+  {{- if and .Values.alertmanager.service.loadBalancerIP (eq .Values.alertmanager.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") .Values.alertmanager.service.loadBalancerSourceRanges }}
+  {{- with .Values.alertmanager.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "ClusterIP") .Values.alertmanager.service.clusterIP }}
+  clusterIP: {{ .Values.alertmanager.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.alertmanager.service.port }}
+      targetPort: 9093
+      {{- if and .Values.alertmanager.service.nodePort (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.alertmanager.service.nodePort }}
+      {{- end }}
+  selector:
+    app: alertmanager
+    alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
+{{- end }}
