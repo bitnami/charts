@@ -31,16 +31,6 @@ commonAnnotations: {}
 ##
 extraDeploy: []
 
-## SecurityContext configuration
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-containerSecurityContext:
-  runAsUser: 1001
-  runAsNonRoot: true
-
-podSecurityContext:
-  fsGroup: 1001
-
 ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
 ## It will capture Kubernetes resources metrics available from the kubelets,
 ## as well as auto-discovery capabilities.
@@ -216,6 +206,16 @@ collector:
     #   cpu: 200m
     #   memory: 10Mi
 
+  ## SecurityContext configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  podSecurityContext:
+    fsGroup: 1001
+
   ## Affinity for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -352,6 +352,16 @@ proxy:
     requests: {}
     #   cpu: 100m
     #   memory: 1Gi
+
+  ## SecurityContext configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  podSecurityContext:
+    fsGroup: 1001
 
   ## Affinity for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

@@ -32,8 +32,7 @@ data:
       token: {{ .Values.wavefront.token }}
     {{- end }}
     {{- if .Values.collector.tags }}
-      tags:
-{{ tpl (toYaml .Values.collector.tags) . | nindent 8 }}
+      tags: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.tags "context" . ) | nindent 8 }}
     {{- end }}
       filters:
         # Filter out infrequently used kube-state-metrics.
@@ -123,8 +122,7 @@ data:
     {{- if .Values.collector.events.enabled }}
     events:
       {{- if .Values.collector.events.filters }}
-      filters:
-{{ tpl (toYaml .Values.collector.events.filters) . | nindent 8 }}
+      filters: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.events.filters "context" . ) | nindent 8 }}
       {{- end }}
     {{- end }}
 
@@ -189,7 +187,7 @@ data:
     {{- if .Values.collector.discovery.config }}
 
     # user supplied discovery config
-{{ tpl (toYaml .Values.collector.discovery.config) . | nindent 6 }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.collector.discovery.config "context" . ) | nindent 6 }}
     {{- end }}
     {{- end }}
 

@@ -15,7 +15,7 @@ $ helm install my-release bitnami/wavefront \
 
 This chart will deploy the Wavefront Collector for Kubernetes and Wavefront Proxy to your Kubernetes cluster. You can use this chart to install multiple Wavefront Proxy releases, though only one Wavefront Collector for Kubernetes per cluster should be used.
 
-You can learn more about the Wavefront and Kubernetes integration [here](https://docs.wavefront.com/wavefront_kubernetes.html)
+You can learn more about the Wavefront and Kubernetes integration [in the official documentation](https://docs.wavefront.com/wavefront_kubernetes.html)
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -38,7 +38,7 @@ $ helm install my-release bitnami/wavefront \
 
 The command deploys Wavefront on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
-The **requried** parameters are `clusterName`, `wavefront.url` and `wavefront.token`. You will need to provide values for those options for a successful installation of the chart.
+The **required** parameters are `clusterName`, `wavefront.url` and `wavefront.token`. You will need to provide values for those options for a successful installation of the chart.
 
 > **Tip**: List all releases using `helm list`
 
@@ -74,12 +74,9 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `commonLabels`               | Labels to add to all deployed objects                       | `{}`                                      |
 | `commonAnnotations`          | Annotations to add to all deployed objects                  | `{}`                                      |
 | `extraDeploy`                | Array of extra objects to deploy with the release           | `[]` (evaluated as a template)            |
-| `containerSecurityContext`   | Container security podSecurityContext                       | `{ runAsUser: 1001, runAsNonRoot: true }` |
-| `podSecurityContext`         | Pod security                                                | `{ fsGroup: 1001 }`                       |
 | `rbac.create`                | Create RBAC resources                                       | `true`                                    |
 | `serviceAccount.create`      | Create Wavefront service account                            | `true`                                    |
 | `serviceAccount.name`        | Name of Wavefront service account                           | `nil`                                     |
-| `kube-state-metrics.enabled` | Setup and enable Kube State Metrics for collection          | `false`                                   |
 | `projectPacific.enabled`     | Enable and create role binding for Tanzu kubernetes cluster | `false`                                   |
 
 #### Collector parameters
@@ -113,6 +110,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.args`                           | Override default container args (useful when using custom images)                | `nil`                                |
 | `collector.resources.limits`               | The resources limits for the collector container                                 | `{}`                                 |
 | `collector.resources.requests`             | The requested resources for the collector container                              | `{}`                                 |
+| `collector.containerSecurityContext`       | Container security podSecurityContext                                            | `{ runAsUser: 1001, runAsNonRoot: true }` |
+| `collector.podSecurityContext`             | Pod security                                                                     | `{ fsGroup: 1001 }`                       |
 | `collector.affinity`                       | Affinity for pod assignment                                                      | `{}` (evaluated as a template)       |
 | `collector.nodeSelector`                   | Node labels for pod assignment                                                   | `{}` (evaluated as a template)       |
 | `collector.tolerations`                    | Tolerations for pod assignment                                                   | `[]` (evaluated as a template)       |
@@ -144,6 +143,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.replicas`                    | Replicas to deploy for Wavefront proxy (usually 1)                                     | `1`                            |
 | `proxy.resources.limits`            | The resources limits for the proxy container                                           | `{}`                           |
 | `proxy.resources.requests`          | The requested resources for the proxy container                                        | `{}`                           |
+| `proxy.containerSecurityContext`    | Container security podSecurityContext                                                  | `{ runAsUser: 1001, runAsNonRoot: true }` |
+| `proxy.podSecurityContext`          | Pod security                                                                           | `{ fsGroup: 1001 }`                       |
 | `proxy.affinity`                    | Affinity for pod assignment                                                            | `{}` (evaluated as a template) |
 | `proxy.nodeSelector`                | Node labels for pod assignment                                                         | `{}` (evaluated as a template) |
 | `proxy.tolerations`                 | Tolerations for pod assignment                                                         | `[]` (evaluated as a template) |
@@ -179,6 +180,12 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.heap`                        | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                | `nil`                          |
 | `proxy.preprocessor.rules.yaml`     | YAML configuraiton for Wavefront proxy preprocessor rules                              | `nil`                          |
 
+#### Kube State Metrics parameters
+
+| Parameter                    | Description                                                 | Default                                   |
+|------------------------------|-------------------------------------------------------------|-------------------------------------------|
+| `kube-state-metrics.enabled` | Setup and enable Kube State Metrics for collection          | `false`                                   |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
@@ -197,7 +204,6 @@ $ helm install my-release -f values.yaml bitnami/wavefront
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
@@ -205,6 +211,14 @@ $ helm install my-release -f values.yaml bitnami/wavefront
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### DaemonSet (preferred) VS Deployment
+
+It is possible to deploy the collector as a `Daemonset` or a `Deployment`.
+
+Using it as `Deployment`, Kubernetes will deploy the Wavefront collector in one node, while deploying it as `DaemonSet` Kubernetes will attempt to adhere to a one-Pod-per-node model. `DaemonSet` will not run more than one replica per node. In the same way, if you add a node to the cluster then `DaemonSet` will automatically spawn pod on that node, which `Deployment` will not do.
+
+At the end the most common use case is deploy the Wavefront collector as `DaemonSet` to obtain information from the different nodes, but there are some use cases where you want to use a `Deployment` to obtain some data (application level) without deploying a pod per node.
 
 ### Change Wavefront version
 
