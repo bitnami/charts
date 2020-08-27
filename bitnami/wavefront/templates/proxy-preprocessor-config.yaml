@@ -12,5 +12,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-{{ tpl (toYaml .Values.proxy.preprocessor) . | indent 2 }}
+{{ tpl (toYaml .Values.proxy.preprocessor) . | nindent 2 }}
 {{- end }}

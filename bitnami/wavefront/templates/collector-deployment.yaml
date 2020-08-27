@@ -100,13 +100,13 @@ spec:
           {{- if .Values.collector.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-        volumeMounts:
-          - name: config
-            mountPath: /etc/collector/
-            readOnly: true
-          - name: ssl-certs
-            mountPath: /etc/ssl/certs
-            readOnly: true
+          volumeMounts:
+            - name: config
+              mountPath: /etc/collector/
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
           {{- if .Values.collector.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

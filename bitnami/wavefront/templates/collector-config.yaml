@@ -33,7 +33,7 @@ data:
     {{- end }}
     {{- if .Values.collector.tags }}
       tags:
-{{ tpl (toYaml .Values.collector.tags) . | indent 8 }}
+{{ tpl (toYaml .Values.collector.tags) . | nindent 8 }}
     {{- end }}
       filters:
         # Filter out infrequently used kube-state-metrics.
@@ -124,7 +124,7 @@ data:
     events:
       {{- if .Values.collector.events.filters }}
       filters:
-{{ tpl (toYaml .Values.collector.events.filters) . | indent 8 }}
+{{ tpl (toYaml .Values.collector.events.filters) . | nindent 8 }}
       {{- end }}
     {{- end }}
 
@@ -189,7 +189,7 @@ data:
     {{- if .Values.collector.discovery.config }}
 
     # user supplied discovery config
-{{ tpl (toYaml .Values.collector.discovery.config) . | indent 6 }}
+{{ tpl (toYaml .Values.collector.discovery.config) . | nindent 6 }}
     {{- end }}
     {{- end }}
 
