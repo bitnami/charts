@@ -22,6 +22,9 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: collector
+        {{- if .Values.collector.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.collector.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       {{- if .Values.collector.affinity }}

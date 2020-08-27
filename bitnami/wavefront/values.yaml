@@ -216,6 +216,11 @@ collector:
   ##
   tolerations: []
 
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
   ## Annotations for server pods.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -339,6 +344,11 @@ proxy:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
 
   ## Annotations for server pods.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

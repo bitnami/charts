@@ -112,6 +112,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.affinity`                       | Affinity for pod assignment                                                      | `{}` (evaluated as a template)       |
 | `collector.nodeSelector`                   | Node labels for pod assignment                                                   | `{}` (evaluated as a template)       |
 | `collector.tolerations`                    | Tolerations for pod assignment                                                   | `[]` (evaluated as a template)       |
+| `collector.podLabels`                      | Add additional labels to the pod (evaluated as a template)                       | `nil`                                |
 | `collector.podAnnotations`                 | Annotations for Wavefront collector pods                                         | `{}`                                 |
 | `collector.priorityClassName`              | Collector priorityClassName                                                      | `nil`                                |
 | `collector.lifecycleHooks`                 | LifecycleHooks to set additional configuration at startup.                       | `{}` (evaluated as a template)       |
@@ -141,6 +142,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.affinity`                    | Affinity for pod assignment                                                            | `{}` (evaluated as a template) |
 | `proxy.nodeSelector`                | Node labels for pod assignment                                                         | `{}` (evaluated as a template) |
 | `proxy.tolerations`                 | Tolerations for pod assignment                                                         | `[]` (evaluated as a template) |
+| `proxy.podLabels`                   | Add additional labels to the pod (evaluated as a template)                             | `nil`                          |
 | `proxy.podAnnotations`              | Annotations for Wavefront proxy pods                                                   | `{}`                           |
 | `proxy.priorityClassName`           | Proxy priorityClassName                                                                | `nil`                          |
 | `proxy.lifecycleHooks`              | LifecycleHooks to set additional configuration at startup.                             | `{}` (evaluated as a template) |
@@ -170,7 +172,6 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.args`                        | Additional Wavefront proxy properties to be passed as command line arguments in the `--<property_name> <value>` format | `nil` |
 | `proxy.heap`                        | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                | `nil`                          |
 | `proxy.preprocessor.rules.yaml`     | YAML configuraiton for Wavefront proxy preprocessor rules                              | `nil`                          |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

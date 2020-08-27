@@ -23,6 +23,9 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: proxy
+        {{- if .Values.proxy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- if .Values.proxy.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.affinity "context" $) | nindent 8 }}
