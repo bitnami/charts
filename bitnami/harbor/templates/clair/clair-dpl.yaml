@@ -140,6 +140,9 @@ spec:
             - name: config
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.clair.server.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -228,9 +231,13 @@ spec:
             - name: clair-internal-certs
               mountPath: /bitnami/certs
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.clair.adapter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+
         {{- if .Values.clair.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.clair.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -242,6 +249,9 @@ spec:
         - name: clair-internal-certs
           secret:
             secretName: {{ template "harbor.clair.tls.secretName" . }}
+        {{- end }}
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
         {{- end }}
       {{- if .Values.clair.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 6 }}

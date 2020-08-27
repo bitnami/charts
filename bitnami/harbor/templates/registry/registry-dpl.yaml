@@ -181,6 +181,9 @@ spec:
             - name: registry-internal-certs
               mountPath: /bitnami/certs/
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
@@ -306,6 +309,9 @@ spec:
               mountPath: /harbor_cust_cert/custom-ca-bundle.crt
               subPath: ca.crt
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
@@ -345,6 +351,9 @@ spec:
             claimName: {{ .Values.persistence.persistentVolumeClaim.registry.existingClaim | default (include "harbor.registry" .) }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
         {{- end }}
         {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
         - name: gcs-key
