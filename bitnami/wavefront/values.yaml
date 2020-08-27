@@ -31,6 +31,16 @@ commonAnnotations: {}
 ##
 extraDeploy: []
 
+## SecurityContext configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+containerSecurityContext:
+  runAsUser: 1001
+  runAsNonRoot: true
+
+podSecurityContext:
+  fsGroup: 1001
+
 ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
 ## It will capture Kubernetes resources metrics available from the kubelets,
 ## as well as auto-discovery capabilities.

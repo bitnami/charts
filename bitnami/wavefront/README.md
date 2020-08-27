@@ -66,19 +66,21 @@ The following table lists the configurable parameters of the Wavefront chart and
 
 #### Common parameters
 
-| Parameter                    | Description                                                    | Default                              |
-|------------------------------|----------------------------------------------------------------|--------------------------------------|
-| `clusterName`                | Unique name for the Kubernetes cluster (required)              | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`              | Wavefront URL for your cluster (required)                      | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`            | Wavefront API Token (required)                                 | `YOUR_API_TOKEN`                     |
-| `commonLabels`               | Labels to add to all deployed objects                          | `{}`                                 |
-| `commonAnnotations`          | Annotations to add to all deployed objects                     | `{}`                                 |
-| `extraDeploy`                | Array of extra objects to deploy with the release              | `[]` (evaluated as a template)       |
-| `rbac.create`                | Create RBAC resources                                          | `true`                               |
-| `serviceAccount.create`      | Create Wavefront service account                               | `true`                               |
-| `serviceAccount.name`        | Name of Wavefront service account                              | `nil`                                |
-| `kube-state-metrics.enabled` | Setup and enable Kube State Metrics for collection             | `false`                              |
-| `projectPacific.enabled`     | Enable and create role binding for Tanzu kubernetes cluster    | `false`                              |
+| Parameter                    | Description                                                 | Default                                   |
+|------------------------------|-------------------------------------------------------------|-------------------------------------------|
+| `clusterName`                | Unique name for the Kubernetes cluster (required)           | `KUBERNETES_CLUSTER_NAME`                 |
+| `wavefront.url`              | Wavefront URL for your cluster (required)                   | `https://YOUR_CLUSTER.wavefront.com`      |
+| `wavefront.token`            | Wavefront API Token (required)                              | `YOUR_API_TOKEN`                          |
+| `commonLabels`               | Labels to add to all deployed objects                       | `{}`                                      |
+| `commonAnnotations`          | Annotations to add to all deployed objects                  | `{}`                                      |
+| `extraDeploy`                | Array of extra objects to deploy with the release           | `[]` (evaluated as a template)            |
+| `containerSecurityContext`   | Container security podSecurityContext                       | `{ runAsUser: 1001, runAsNonRoot: true }` |
+| `podSecurityContext`         | Pod security                                                | `{ fsGroup: 1001 }`                       |
+| `rbac.create`                | Create RBAC resources                                       | `true`                                    |
+| `serviceAccount.create`      | Create Wavefront service account                            | `true`                                    |
+| `serviceAccount.name`        | Name of Wavefront service account                           | `nil`                                     |
+| `kube-state-metrics.enabled` | Setup and enable Kube State Metrics for collection          | `false`                                   |
+| `projectPacific.enabled`     | Enable and create role binding for Tanzu kubernetes cluster | `false`                                   |
 
 #### Collector parameters
 

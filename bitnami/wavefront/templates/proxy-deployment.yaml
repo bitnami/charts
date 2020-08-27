@@ -42,6 +42,9 @@ spec:
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.proxy.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -51,6 +54,9 @@ spec:
           imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
           {{- if .Values.proxy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: WAVEFRONT_URL
@@ -156,8 +162,6 @@ spec:
           {{- else if .Values.proxy.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          securityContext:
-            privileged: false
           volumeMounts:
             {{- if .Values.proxy.preprocessor }}
             - name: preprocessor
