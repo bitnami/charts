@@ -107,7 +107,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.discovery.annotationPrefix`          | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints | `prometheus.io` |
 | `collector.discovery.enableRuntimeConfigs`      | Enable runtime discovery rules                                 | `false`                              |
 | `collector.discovery.config`                    | Configuration for rules based auto-discovery                   | `nil`                                |
-| `collector.resources.limits`                    | The resources limits for the collector container	           | `{}`                                 |
+| `collector.resources.limits`                    | The resources limits for the collector container               | `{}`                                 |
 | `collector.resources.requests`                  | The requested resources for the collector container            | `{}`                                 |
 | `collector.priorityClassName`                   | Collector priorityClassName                                    | `nil`                                |
 | `collector.tolerations`                         | Tolerations for pod assignment                                 | `[]` (evaluated as a template)       |
@@ -123,7 +123,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.image.pullPolicy`            | Image pull policy                                                                      | `IfNotPresent`                 |
 | `proxy.image.pullSecrets`           | Specify docker-registry secret names as an array                                       | `nil`                          |
 | `proxy.replicas`                    | Replicas to deploy for Wavefront proxy (usually 1)                                     | `1`                            |
-| `proxy.resources.limits`            | The resources limits for the proxy container	                                       | `{}`                           |
+| `proxy.resources.limits`            | The resources limits for the proxy container                                           | `{}`                           |
 | `proxy.resources.requests`          | The requested resources for the proxy container                                        | `{}`                           |
 | `proxy.priorityClassName`           | Proxy priorityClassName                                                                | `nil`                          |
 | `proxy.tolerations`                 | Tolerations for pod assignment                                                         | `[]` (evaluated as a template) |

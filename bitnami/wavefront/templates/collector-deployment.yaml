@@ -22,22 +22,22 @@ spec:
     spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       containers:
-      - name: wavefront-collector
-        image: {{ template "wavefront.collector.image" . }}
-        imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
-        command:
-        - wavefront-collector
-        - --daemon=false
-        - --config-file=/etc/collector/config.yaml
-        {{- if .Values.collector.maxProcs }}
-        - --max-procs={{ .Values.collector.maxProcs }}
-        {{- end }}
-        {{- if .Values.collector.logLevel }}
-        - --log-level={{ .Values.collector.logLevel }}
-        {{- end }}
-        {{- if .Values.collector.resources}}
-        resources: {{ toYaml .Values.collector.resources | indent 10 }}
-        {{- end }}
+        - name: wavefront-collector
+          image: {{ template "wavefront.collector.image" . }}
+          imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
+          command:
+            - wavefront-collector
+            - --daemon=false
+            - --config-file=/etc/collector/config.yaml
+            {{- if .Values.collector.maxProcs }}
+            - --max-procs={{ .Values.collector.maxProcs }}
+            {{- end }}
+            {{- if .Values.collector.logLevel }}
+            - --log-level={{ .Values.collector.logLevel }}
+            {{- end }}
+          {{- if .Values.collector.resources }}
+          resources: {{- toYaml .Values.collector.resources | nindent 12 }}
+          {{- end }}
     {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName }}
     {{- end }}
@@ -45,17 +45,17 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.tolerations "context" .) | nindent 8 }}
     {{- end }}
         volumeMounts:
-        - name: config
-          mountPath: /etc/collector/
-          readOnly: true
-        - name: ssl-certs
-          mountPath: /etc/ssl/certs
-          readOnly: true
+          - name: config
+            mountPath: /etc/collector/
+            readOnly: true
+          - name: ssl-certs
+            mountPath: /etc/ssl/certs
+            readOnly: true
       volumes:
-      - name: config
-        configMap:
-          name: {{ template "common.names.fullname" . }}-collector-config
-      - name: ssl-certs
-        hostPath:
-          path: /etc/ssl/certs
+        - name: config
+          configMap:
+            name: {{ template "common.names.fullname" . }}-collector-config
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
 {{- end }}

@@ -189,17 +189,17 @@ collector:
   ## Wavefront Collector resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  ##  We usually recommend not to specify default resources and to leave this as a conscious
-  ##  choice for the user. This also increases chances charts run on environments with little
-  ##  resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ##  lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 200m
-  #     memory: 256Mi
-  #   requests:
-  #     cpu: 200m
-  #     memory: 10Mi
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
 
   ## Name of the priority class to be used by the collector, priority class needs to be created beforehand
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -239,17 +239,17 @@ proxy:
   ## Wavefront Proxy resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  ##  We usually recommend not to specify default resources and to leave this as a conscious
-  ##  choice for the user. This also increases chances charts run on environments with little
-  ##  resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ##  lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 100m
-  #     memory: 4Gi
-  #   requests:
-  #     cpu: 100m
-  #     memory: 1Gi
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 4Gi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 1Gi
 
   ## Name of the priority class to be used by the proxy, priority class needs to be created beforehand
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/

@@ -61,8 +61,8 @@ spec:
           ports:
             - containerPort: 8088
               protocol: TCP
-          {{- if .Values.collector.resources}}
-          resources: {{ toYaml .Values.collector.resources | indent 10 }}
+          {{- if .Values.collector.resources }}
+          resources: {{- toYaml .Values.collector.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: procfs

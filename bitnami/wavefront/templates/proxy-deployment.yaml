@@ -90,8 +90,8 @@ spec:
             - containerPort: {{ .Values.proxy.deltaCounterPort }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.collector.resources}}
-          resources: {{ toYaml .Values.collector.resources | indent 10 }}
+          {{- if .Values.proxy.resources }}
+          resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
           {{- end }}
           securityContext:
             privileged: false
