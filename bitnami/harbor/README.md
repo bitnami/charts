@@ -785,7 +785,7 @@ core:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the .extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
 
 ### Configure the external URL:
 
