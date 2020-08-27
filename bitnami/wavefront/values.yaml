@@ -201,6 +201,35 @@ collector:
     #   cpu: 200m
     #   memory: 10Mi
 
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Wavefront Collector pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## lifecycleHooks for the Wavefront Collector container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
+
   ## Custom Liveness probes for Wavefront Collector
   ##
   customLivenessProbe: {}
@@ -208,16 +237,6 @@ collector:
   ## Custom Rediness probes Wavefront Collector
   ##
   customReadinessProbe: {}
-
-  ## Name of the priority class to be used by the collector, priority class needs to be created beforehand
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
-
-  ## Optionally set tolerations for the collector
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-  ##
-  tolerations: []
 
 ## Wavefront Proxy is a metrics forwarder that is used to relay metrics to the Wavefront SaaS service.
 ## It can receive metrics from the Wavefront Collector as well as other metrics collection services
@@ -259,6 +278,35 @@ proxy:
     #   cpu: 100m
     #   memory: 1Gi
 
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Wavefront proxy pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## lifecycleHooks for the Wavefront proxy container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
+
   ## Wavefront Proxy liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -284,16 +332,6 @@ proxy:
   ## Custom Rediness probes Wavefront Proxy
   ##
   customReadinessProbe: {}
-
-  ## Name of the priority class to be used by the proxy, priority class needs to be created beforehand
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
-
-  ## Optionally set tolerations for the proxy
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-  ##
-  tolerations: []
 
   ## The number of pod replicas to run for the Wavefront Proxy deployment
   ##

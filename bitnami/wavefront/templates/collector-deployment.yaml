@@ -17,14 +17,39 @@ spec:
       app.kubernetes.io/component: collector
   template:
     metadata:
+      {{- if .Values.collector.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: collector
     spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
+      {{- if .Values.collector.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.collector.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      tolerations:
+        - effect: NoSchedule
+          key: node.alpha.kubernetes.io/role
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+        {{- if .Values.collector.tolerations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.collector.tolerations "context" .) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.collector.priorityClassName }}
+      priorityClassName: {{ .Values.collector.priorityClassName | quote }}
+      {{- end }}
       containers:
         - name: wavefront-collector
           image: {{ template "wavefront.collector.image" . }}
           imagePullPolicy: {{ .Values.collector.image.pullPolicy }}
+          {{- if .Values.collector.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           command:
             - wavefront-collector
             - --daemon=false
@@ -44,12 +69,6 @@ spec:
           {{- if .Values.collector.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-    {{- if .Values.collector.priorityClassName }}
-      priorityClassName: {{ .Values.collector.priorityClassName }}
-    {{- end }}
-    {{- if .Values.collector.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.tolerations "context" .) | nindent 8 }}
-    {{- end }}
         volumeMounts:
           - name: config
             mountPath: /etc/collector/

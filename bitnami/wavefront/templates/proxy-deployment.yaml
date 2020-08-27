@@ -18,13 +18,31 @@ spec:
       app.kubernetes.io/component: proxy
   template:
     metadata:
+      {{- if .Values.proxy.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: proxy
     spec:
+      {{- if .Values.proxy.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.priorityClassName }}
+      priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
+      {{- end }}
       containers:
         - name: wavefront-proxy
           image: {{ template "wavefront.proxy.image" . }}
           imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          {{- if .Values.proxy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: WAVEFRONT_URL
               value: {{ .Values.wavefront.url }}/api
@@ -124,12 +142,6 @@ spec:
             - name: preprocessor
               mountPath: /etc/wavefront/wavefront-proxy/preprocessor
             {{- end }}
-    {{- if .Values.proxy.priorityClassName }}
-      priorityClassName: {{ .Values.proxy.priorityClassName }}
-    {{- end }}
-    {{- if .Values.proxy.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
-    {{- end }}
       volumes:
         {{- if .Values.proxy.preprocessor }}
         - name: preprocessor
