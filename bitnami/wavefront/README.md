@@ -118,6 +118,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.lifecycleHooks`                 | LifecycleHooks to set additional configuration at startup.                       | `{}` (evaluated as a template)       |
 | `collector.customLivenessProbe`            | Override default liveness probe                                                  | `nil`                                |
 | `collector.customReadinessProbe`           | Override default readiness probe                                                 | `nil`                                |
+| `collector.updateStrategy`                 | Deployment update strategy                                                       | `nil`                                |
 | `collector.extraEnvVars`                   | Extra environment variables to be set on collector container                     | `{}`                                 |
 | `collector.extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                             | `nil`                                |
 | `collector.extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                | `nil`                                |
@@ -150,6 +151,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.readinessProbe`              | Readiness probe configuration for Wavefront proxy                                      | Check `values.yaml` file       |
 | `proxy.customLivenessProbe`         | Override default liveness probe                                                        | `nil`                          |
 | `proxy.customReadinessProbe`        | Override default readiness probe                                                       | `nil`                          |
+| `proxy.updateStrategy`              | Deployment update strategy                                                             | `nil`                          |
 | `proxy.extraEnvVars`                | Extra environment variables to be set on proxy container                               | `{}`                           |
 | `proxy.extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                   | `nil`                          |
 | `proxy.extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                      | `nil`                          |
