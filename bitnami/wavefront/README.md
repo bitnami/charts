@@ -107,6 +107,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.discovery.annotationPrefix`     | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints | `prometheus.io`            |
 | `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                   | `false`                              |
 | `collector.discovery.config`               | Configuration for rules based auto-discovery                                     | `nil`                                |
+| `collector.command`                        | Override default container command (useful when using custom images)             | `nil`                                |
+| `collector.args`                           | Override default container args (useful when using custom images)                | `nil`                                |
 | `collector.resources.limits`               | The resources limits for the collector container                                 | `{}`                                 |
 | `collector.resources.requests`             | The requested resources for the collector container                              | `{}`                                 |
 | `collector.affinity`                       | Affinity for pod assignment                                                      | `{}` (evaluated as a template)       |

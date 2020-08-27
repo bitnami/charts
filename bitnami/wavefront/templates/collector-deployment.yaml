@@ -60,6 +60,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           command:
+          {{- if .Values.collector.command }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.collector.command "context" $) | nindent 12 }}
+          {{- else }}
             - wavefront-collector
             - --daemon=false
             - --config-file=/etc/collector/config.yaml
@@ -69,6 +72,10 @@ spec:
             {{- if .Values.collector.logLevel }}
             - --log-level={{ .Values.collector.logLevel }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.collector.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.collector.args "context" $) | nindent 12 }}
+          {{- end }}
           envFrom:
             {{- if .Values.collector.extraEnvVarsCM }}
             - configMapRef:

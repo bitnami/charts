@@ -186,6 +186,11 @@ collector:
   #       username = "USER"
   #       password = "PASSWORD"
 
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
   ## Wavefront Collector resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
