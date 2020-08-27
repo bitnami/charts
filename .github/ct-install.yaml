@@ -13,5 +13,4 @@ excluded-charts:
   - ejbca
   - wavefront
   - harbor
-  - wavefront
 remote: origin
