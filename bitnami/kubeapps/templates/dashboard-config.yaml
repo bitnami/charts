@@ -39,7 +39,8 @@ data:
     }
   config.json: |-
     {
-      "namespace": "{{ .Release.Namespace }}",
+      "kubeappsCluster": "default",
+      "kubeappsNamespace": "{{ .Release.Namespace }}",
       "appVersion": "{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
@@ -47,7 +48,7 @@ data:
       "featureFlags": {{ .Values.featureFlags | toJson }},
       {{- $sanitizedClusters := list }}
       {{- range .Values.clusters }}
-        {{- $sanitizedClusters = append $sanitizedClusters (pick . "name" "apiServiceURL") }}
+        {{- $sanitizedClusters = append $sanitizedClusters .name }}
       {{- end }}
       "clusters": {{ $sanitizedClusters | toJson }}
     }

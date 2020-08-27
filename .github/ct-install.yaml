@@ -12,4 +12,5 @@ excluded-charts:
   - discourse
   - ejbca
   - wavefront
+  - harbor
 remote: origin
