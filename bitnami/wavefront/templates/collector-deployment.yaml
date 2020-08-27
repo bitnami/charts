@@ -63,6 +63,15 @@ spec:
             {{- if .Values.collector.logLevel }}
             - --log-level={{ .Values.collector.logLevel }}
             {{- end }}
+          envFrom:
+            {{- if .Values.collector.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.collector.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.collector.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.collector.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- if .Values.collector.resources }}
           resources: {{- toYaml .Values.collector.resources | nindent 12 }}
           {{- end }}
@@ -79,6 +88,9 @@ spec:
           - name: ssl-certs
             mountPath: /etc/ssl/certs
             readOnly: true
+          {{- if .Values.collector.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
         {{- if .Values.collector.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.collector.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -89,4 +101,7 @@ spec:
         - name: ssl-certs
           hostPath:
             path: /etc/ssl/certs
+        {{- if .Values.collector.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

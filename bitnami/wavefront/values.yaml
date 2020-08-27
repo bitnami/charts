@@ -238,6 +238,29 @@ collector:
   ##
   customReadinessProbe: {}
 
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
   ## Add init containers to the Wavefront proxy pods.
   ## Example:
   ## initContainers:
@@ -356,6 +379,29 @@ proxy:
   ## Custom Rediness probes Wavefront Proxy
   ##
   customReadinessProbe: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
 
   ## Add init containers to the Wavefront proxy pods.
   ## Example:

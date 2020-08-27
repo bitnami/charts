@@ -82,43 +82,48 @@ The following table lists the configurable parameters of the Wavefront chart and
 
 #### Collector parameters
 
-| Parameter                                  | Description                                                    | Default                              |
-|--------------------------------------------|----------------------------------------------------------------|--------------------------------------|
-| `collector.enabled`                        | Setup and enable the Wavefront collector to gather metrics     | `true`                               |
-| `collector.image.registry`                 | Wavefront collector Image registry                             | `docker.io`                          |
-| `collector.image.repository`               | Wavefront collector Image name                                 | `bitnami/wavefront-collector`        |
-| `collector.image.tag`                      | Wavefront collector Image tag                                  | `{TAG_NAME}`                         |
-| `collector.image.pullPolicy`               | Image pull policy                                              | `IfNotPresent`                       |
-| `collector.image.pullSecrets`              | Specify docker-registry secret names as an array               | `nil`                                |
-| `collector.useDaemonset`                   | Use Wavefront collector in Daemonset mode                      | `true`                               |
-| `collector.maxProx`                        | Max number of CPU cores that can be used (< 1 for default)     | `0`                                  |
-| `collector.logLevel`                       | Min logging level (info, debug, trace)                         | `info`                               |
-| `collector.interval`                       | Default metrics collection interval                            | `60s`                                |
-| `collector.flushInterval`                  | How often to force a metrics flush                             | `10s`                                |
-| `collector.sinkDelay`                      | Timout for exporting data                                      | `10s`                                |
-| `collector.useReadOnlyPort`                | Use un-authenticated port for kubelet                          | `false`                              |
-| `collector.useProxy`                       | Use a Wavefront Proxy to send metrics through                  | `true`                               |
-| `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false | `nil`  |
-| `collector.apiServerMetrics`               | Collect metrics about Kubernetes API server                    | `false`                              |
-| `collector.kubernetesState`                | Collect metrics about Kubernetes resource states               | `true`                               |
-| `collector.tags`                           | Map of tags (key/value) to add to all metrics collected        | `nil`                                |
-| `collector.events.enabled`                 | Events can also be collected and sent to Wavefront             | `false`                              |
-| `collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery            | `true`                               |
-| `collector.discovery.annotationPrefix`     | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints | `prometheus.io` |
-| `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                 | `false`                              |
-| `collector.discovery.config`               | Configuration for rules based auto-discovery                   | `nil`                                |
-| `collector.resources.limits`               | The resources limits for the collector container               | `{}`                                 |
-| `collector.resources.requests`             | The requested resources for the collector container            | `{}`                                 |
-| `collector.affinity`                       | Affinity for pod assignment                                    | `{}` (evaluated as a template)       |
-| `collector.nodeSelector`                   | Node labels for pod assignment                                 | `{}` (evaluated as a template)       |
-| `collector.tolerations`                    | Tolerations for pod assignment                                 | `[]` (evaluated as a template)       |
-| `collector.podAnnotations`                 | Annotations for Wavefront collector pods                       | `{}`                                 |
-| `collector.priorityClassName`              | Collector priorityClassName                                    | `nil`                                |
-| `collector.lifecycleHooks`                 | LifecycleHooks to set additional configuration at startup.     | `{}` (evaluated as a template)       |
-| `collector.customLivenessProbe`            | Override default liveness probe                                | `nil`                                |
-| `collector.customReadinessProbe`           | Override default readiness probe                               | `nil`                                |
-| `collector.initContainers`                 | Add additional init containers to the collector pods           | `{}` (evaluated as a template)       |
-| `collector.sidecars`                       | Add additional sidecar containers to the collector pods        | `{}` (evaluated as a template)       |
+| Parameter                                  | Description                                                                      | Default                              |
+|--------------------------------------------|----------------------------------------------------------------------------------|--------------------------------------|
+| `collector.enabled`                        | Setup and enable the Wavefront collector to gather metrics                       | `true`                               |
+| `collector.image.registry`                 | Wavefront collector Image registry                                               | `docker.io`                          |
+| `collector.image.repository`               | Wavefront collector Image name                                                   | `bitnami/wavefront-collector`        |
+| `collector.image.tag`                      | Wavefront collector Image tag                                                    | `{TAG_NAME}`                         |
+| `collector.image.pullPolicy`               | Image pull policy                                                                | `IfNotPresent`                       |
+| `collector.image.pullSecrets`              | Specify docker-registry secret names as an array                                 | `nil`                                |
+| `collector.useDaemonset`                   | Use Wavefront collector in Daemonset mode                                        | `true`                               |
+| `collector.maxProx`                        | Max number of CPU cores that can be used (< 1 for default)                       | `0`                                  |
+| `collector.logLevel`                       | Min logging level (info, debug, trace)                                           | `info`                               |
+| `collector.interval`                       | Default metrics collection interval                                              | `60s`                                |
+| `collector.flushInterval`                  | How often to force a metrics flush                                               | `10s`                                |
+| `collector.sinkDelay`                      | Timout for exporting data                                                        | `10s`                                |
+| `collector.useReadOnlyPort`                | Use un-authenticated port for kubelet                                            | `false`                              |
+| `collector.useProxy`                       | Use a Wavefront Proxy to send metrics through                                    | `true`                               |
+| `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false | `nil`                    |
+| `collector.apiServerMetrics`               | Collect metrics about Kubernetes API server                                      | `false`                              |
+| `collector.kubernetesState`                | Collect metrics about Kubernetes resource states                                 | `true`                               |
+| `collector.tags`                           | Map of tags (key/value) to add to all metrics collected                          | `nil`                                |
+| `collector.events.enabled`                 | Events can also be collected and sent to Wavefront                               | `false`                              |
+| `collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery                              | `true`                               |
+| `collector.discovery.annotationPrefix`     | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints | `prometheus.io`            |
+| `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                   | `false`                              |
+| `collector.discovery.config`               | Configuration for rules based auto-discovery                                     | `nil`                                |
+| `collector.resources.limits`               | The resources limits for the collector container                                 | `{}`                                 |
+| `collector.resources.requests`             | The requested resources for the collector container                              | `{}`                                 |
+| `collector.affinity`                       | Affinity for pod assignment                                                      | `{}` (evaluated as a template)       |
+| `collector.nodeSelector`                   | Node labels for pod assignment                                                   | `{}` (evaluated as a template)       |
+| `collector.tolerations`                    | Tolerations for pod assignment                                                   | `[]` (evaluated as a template)       |
+| `collector.podAnnotations`                 | Annotations for Wavefront collector pods                                         | `{}`                                 |
+| `collector.priorityClassName`              | Collector priorityClassName                                                      | `nil`                                |
+| `collector.lifecycleHooks`                 | LifecycleHooks to set additional configuration at startup.                       | `{}` (evaluated as a template)       |
+| `collector.customLivenessProbe`            | Override default liveness probe                                                  | `nil`                                |
+| `collector.customReadinessProbe`           | Override default readiness probe                                                 | `nil`                                |
+| `collector.extraEnvVars`                   | Extra environment variables to be set on collector container                     | `{}`                                 |
+| `collector.extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                             | `nil`                                |
+| `collector.extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                | `nil`                                |
+| `collector.extraVolumeMounts`              | Optionally specify extra list of additional volumeMounts for collector container | `[]`                                 |
+| `collector.extraVolumes`                   | Optionally specify extra list of additional volumes for collector container      | `[]`                                 |
+| `collector.initContainers`                 | Add additional init containers to the collector pods                             | `{}` (evaluated as a template)       |
+| `collector.sidecars`                       | Add additional sidecar containers to the collector pods                          | `{}` (evaluated as a template)       |
 
 #### Proxy parameters
 
@@ -143,6 +148,11 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.readinessProbe`              | Readiness probe configuration for Wavefront proxy                                      | Check `values.yaml` file       |
 | `proxy.customLivenessProbe`         | Override default liveness probe                                                        | `nil`                          |
 | `proxy.customReadinessProbe`        | Override default readiness probe                                                       | `nil`                          |
+| `proxy.extraEnvVars`                | Extra environment variables to be set on proxy container                               | `{}`                           |
+| `proxy.extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                   | `nil`                          |
+| `proxy.extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                      | `nil`                          |
+| `proxy.extraVolumeMounts`           | Optionally specify extra list of additional volumeMounts for proxy container           | `[]`                           |
+| `proxy.extraVolumes`                | Optionally specify extra list of additional volumes for proxy container                | `[]`                           |
 | `proxy.initContainers`              | Add additional init containers to the proxy pods                                       | `{}` (evaluated as a template) |
 | `proxy.sidecars`                    | Add additional sidecar containers to the proxy pods                                    | `{}` (evaluated as a template) |
 | `proxy.port`                        | Primary port for Wavefront data format metrics                                         | `2878`                         |

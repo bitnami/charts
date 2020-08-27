@@ -76,6 +76,18 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            {{- if .Values.collector.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.collector.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.collector.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.collector.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.collector.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - containerPort: 8088
               protocol: TCP
@@ -95,6 +107,9 @@ spec:
             - name: config
               mountPath: /etc/collector/
               readOnly: true
+            {{- if .Values.collector.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.collector.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.collector.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -105,4 +120,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "common.names.fullname" . }}-collector-config
+        {{- if .Values.collector.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}
