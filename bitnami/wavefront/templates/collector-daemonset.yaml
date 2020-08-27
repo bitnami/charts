@@ -64,6 +64,12 @@ spec:
           {{- if .Values.collector.resources }}
           resources: {{- toYaml .Values.collector.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.collector.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.collector.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: procfs
               mountPath: /host/proc

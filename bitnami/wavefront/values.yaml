@@ -201,6 +201,14 @@ collector:
     #   cpu: 200m
     #   memory: 10Mi
 
+  ## Custom Liveness probes for Wavefront Collector
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Wavefront Collector
+  ##
+  customReadinessProbe: {}
+
   ## Name of the priority class to be used by the collector, priority class needs to be created beforehand
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -250,6 +258,32 @@ proxy:
     requests: {}
     #   cpu: 100m
     #   memory: 1Gi
+
+  ## Wavefront Proxy liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for Wavefront Proxy
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Wavefront Proxy
+  ##
+  customReadinessProbe: {}
 
   ## Name of the priority class to be used by the proxy, priority class needs to be created beforehand
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/

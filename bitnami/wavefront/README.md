@@ -109,6 +109,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.discovery.config`                    | Configuration for rules based auto-discovery                   | `nil`                                |
 | `collector.resources.limits`                    | The resources limits for the collector container               | `{}`                                 |
 | `collector.resources.requests`                  | The requested resources for the collector container            | `{}`                                 |
+| `collector.customLivenessProbe`                 | Override default liveness probe                                | `nil`                                |
+| `collector.customReadinessProbe`                | Override default readiness probe                               | `nil`                                |
 | `collector.priorityClassName`                   | Collector priorityClassName                                    | `nil`                                |
 | `collector.tolerations`                         | Tolerations for pod assignment                                 | `[]` (evaluated as a template)       |
 
@@ -125,6 +127,10 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.replicas`                    | Replicas to deploy for Wavefront proxy (usually 1)                                     | `1`                            |
 | `proxy.resources.limits`            | The resources limits for the proxy container                                           | `{}`                           |
 | `proxy.resources.requests`          | The requested resources for the proxy container                                        | `{}`                           |
+| `proxy.livenessProbe`               | Liveness probe configuration for Wavefront proxy                                       | Check `values.yaml` file       |
+| `proxy.readinessProbe`              | Readiness probe configuration for Wavefront proxy                                      | Check `values.yaml` file       |
+| `proxy.customLivenessProbe`         | Override default liveness probe                                                        | `nil`                          |
+| `proxy.customReadinessProbe`        | Override default readiness probe                                                       | `nil`                          |
 | `proxy.priorityClassName`           | Proxy priorityClassName                                                                | `nil`                          |
 | `proxy.tolerations`                 | Tolerations for pod assignment                                                         | `[]` (evaluated as a template) |
 | `proxy.port`                        | Primary port for Wavefront data format metrics                                         | `2878`                         |
@@ -173,7 +179,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Change Wavefront version
 
-To modify the Wavefront version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/Wavefront-controller/tags/) using the `controller.image.tag` parameter. For example, `controller.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
+To modify the Wavefront version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/Wavefront-collector/tags/) using the `collector.image.tag` parameter. For example, `collector.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
 
 ### Sidecars and Init Containers
 
