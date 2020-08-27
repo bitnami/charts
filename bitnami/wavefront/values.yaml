@@ -18,6 +18,9 @@ clusterName: KUBERNETES_CLUSTER_NAME
 wavefront:
   url: https://YOUR_CLUSTER.wavefront.com
   token: YOUR_API_TOKEN
+  ## Name of an existing secret containing the token
+  ##
+  existingSecret:
 
 ## Add labels to all the deployed resources
 ##

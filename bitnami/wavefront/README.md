@@ -71,6 +71,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `clusterName`                | Unique name for the Kubernetes cluster (required)           | `KUBERNETES_CLUSTER_NAME`                 |
 | `wavefront.url`              | Wavefront URL for your cluster (required)                   | `https://YOUR_CLUSTER.wavefront.com`      |
 | `wavefront.token`            | Wavefront API Token (required)                              | `YOUR_API_TOKEN`                          |
+| `wavefront.existingSecret`   | Name of an existing secret containing the token             | `nil`                                     |
 | `commonLabels`               | Labels to add to all deployed objects                       | `{}`                                      |
 | `commonAnnotations`          | Annotations to add to all deployed objects                  | `{}`                                      |
 | `extraDeploy`                | Array of extra objects to deploy with the release           | `[]` (evaluated as a template)            |

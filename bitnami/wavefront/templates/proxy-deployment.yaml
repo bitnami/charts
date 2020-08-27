@@ -64,7 +64,7 @@ spec:
             - name: WAVEFRONT_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ include "wavefront.token.secretName" . }}
                   key: api-token
             - name: WAVEFRONT_PROXY_ARGS
               value: {{ .Values.proxy.args }}

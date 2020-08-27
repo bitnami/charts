@@ -64,3 +64,14 @@ Return the collector configuration configmap name
     {{- printf "%s-collector-config" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the token secret name
+*/}}
+{{- define "wavefront.token.secretName" -}}
+{{- if .Values.wavefront.existingSecret -}}
+    {{- printf "%s" (tpl .Values.wavefront.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
