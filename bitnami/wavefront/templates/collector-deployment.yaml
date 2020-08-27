@@ -43,6 +43,9 @@ spec:
       {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.collector.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.collector.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: wavefront-collector
           image: {{ template "wavefront.collector.image" . }}
@@ -76,6 +79,9 @@ spec:
           - name: ssl-certs
             mountPath: /etc/ssl/certs
             readOnly: true
+        {{- if .Values.collector.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.collector.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: config
           configMap:

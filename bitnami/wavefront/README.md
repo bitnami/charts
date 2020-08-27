@@ -113,10 +113,12 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.nodeSelector`                   | Node labels for pod assignment                                 | `{}` (evaluated as a template)       |
 | `collector.tolerations`                    | Tolerations for pod assignment                                 | `[]` (evaluated as a template)       |
 | `collector.podAnnotations`                 | Annotations for Wavefront collector pods                       | `{}`                                 |
-| `collector.priorityClassName`              | Controller priorityClassName                                   | `nil`                                |
+| `collector.priorityClassName`              | Collector priorityClassName                                    | `nil`                                |
 | `collector.lifecycleHooks`                 | LifecycleHooks to set additional configuration at startup.     | `{}` (evaluated as a template)       |
 | `collector.customLivenessProbe`            | Override default liveness probe                                | `nil`                                |
 | `collector.customReadinessProbe`           | Override default readiness probe                               | `nil`                                |
+| `collector.initContainers`                 | Add additional init containers to the collector pods           | `{}` (evaluated as a template)       |
+| `collector.sidecars`                       | Add additional sidecar containers to the collector pods        | `{}` (evaluated as a template)       |
 
 #### Proxy parameters
 
@@ -135,12 +137,14 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.nodeSelector`                | Node labels for pod assignment                                                         | `{}` (evaluated as a template) |
 | `proxy.tolerations`                 | Tolerations for pod assignment                                                         | `[]` (evaluated as a template) |
 | `proxy.podAnnotations`              | Annotations for Wavefront proxy pods                                                   | `{}`                           |
-| `proxy.priorityClassName`           | Controller priorityClassName                                                           | `nil`                          |
+| `proxy.priorityClassName`           | Proxy priorityClassName                                                                | `nil`                          |
 | `proxy.lifecycleHooks`              | LifecycleHooks to set additional configuration at startup.                             | `{}` (evaluated as a template) |
 | `proxy.livenessProbe`               | Liveness probe configuration for Wavefront proxy                                       | Check `values.yaml` file       |
 | `proxy.readinessProbe`              | Readiness probe configuration for Wavefront proxy                                      | Check `values.yaml` file       |
 | `proxy.customLivenessProbe`         | Override default liveness probe                                                        | `nil`                          |
 | `proxy.customReadinessProbe`        | Override default readiness probe                                                       | `nil`                          |
+| `proxy.initContainers`              | Add additional init containers to the proxy pods                                       | `{}` (evaluated as a template) |
+| `proxy.sidecars`                    | Add additional sidecar containers to the proxy pods                                    | `{}` (evaluated as a template) |
 | `proxy.port`                        | Primary port for Wavefront data format metrics                                         | `2878`                         |
 | `proxy.tracePort`                   | Port for distributed tracing data (usually 30000)                                      | `nil`                          |
 | `proxy.jaegerPort`                  | Port for Jaeger format distributed tracing data (usually 30001)                        | `nil`                          |

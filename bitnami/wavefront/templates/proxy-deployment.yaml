@@ -36,6 +36,9 @@ spec:
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.proxy.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: wavefront-proxy
           image: {{ template "wavefront.proxy.image" . }}
@@ -142,6 +145,9 @@ spec:
             - name: preprocessor
               mountPath: /etc/wavefront/wavefront-proxy/preprocessor
             {{- end }}
+        {{- if .Values.proxy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.proxy.preprocessor }}
         - name: preprocessor
