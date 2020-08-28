@@ -212,7 +212,6 @@ forwarder:
   ## Extra labels to add to Pod
   podLabels: {}
 
-
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
   # extraVolumes:
