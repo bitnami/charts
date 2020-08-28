@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the fluentd chart and their default values.
 
 | Parameter                                       | Description                                                                                                    | Default                                                                                                 |
-|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `global.imageRegistry`                          | Global Docker image registry                                                                                   | `nil`                                                                                                   |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods)                                                 |
 | `image.registry`                                | Fluentd image registry                                                                                         | `docker.io`                                                                                             |
@@ -99,6 +99,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
 | `forwarder.extraVolumes`                        | Extra volumes                                                                                                  | `nil`                                                                                                   |
 | `forwarder.extraVolumeMounts`                   | Mount extra volume(s),                                                                                         | `nil`                                                                                                   |
+| `forwarder.priorityClassName`                   | Set Pods Priority Class                                                                                        | `nil`                                                                                                   |
 | `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
 | `aggregator.replicaCount`                       | Number of aggregator pods to deploy in the Stateful Set                                                        | `2`                                                                                                     |
 | `aggregator.securityContext.enabled`            | Enable security context for aggregator pods                                                                    | `true`                                                                                                  |
@@ -157,6 +158,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `tls.serverCertificate`                         | Server certificate                                                                                             | Server certificate content                                                                              |
 | `tls.serverKey`                                 | Server Key                                                                                                     | Server private key content                                                                              |
 | `tls.existingSecret`                            | Existing secret with certificate content                                                                       | `nil`                                                                                                   |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -187,12 +189,14 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of aggregator nodes:
+
 ```diff
 - aggregator.replicaCount: 1
 + aggregator.replicaCount: 2
 ```
 
 - Enable prometheus to access fluentd metrics endpoint:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true

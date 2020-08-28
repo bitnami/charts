@@ -73,6 +73,11 @@ forwarder:
   ##
   extraArgs: ""
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
@@ -448,17 +453,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
