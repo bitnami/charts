@@ -1,19 +1,29 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
+We need to truncate to 50 characters due to the long names generated for pods
 */}}
 {{- define "kube-prometheus.name" -}}
-{{- include "common.names.name" . -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 50 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+We truncate at 26 chars due to the long names generated (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "kube-prometheus.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end }}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 26 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 26 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 26 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
 
 {{/* Name suffixed with operator */}}
 {{- define "kube-prometheus.operator.name" -}}
