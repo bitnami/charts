@@ -1,0 +1,19 @@
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.podDisruptionBudget.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: alertmanager
+      alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  {{- if .Values.alertmanager.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.alertmanager.podDisruptionBudget.minAvailable }}
+  {{- end }}
+  {{- if .Values.alertmanager.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.alertmanager.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+{{- end }}
