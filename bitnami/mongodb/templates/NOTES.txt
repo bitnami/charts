@@ -172,7 +172,7 @@ Then, open the obtained URL in a browser.
 {{- $secretName := include "mongodb.fullname" . -}}
 {{- $requiredPasswords := list -}}
 
-{{- if .Values.auth.enabled }}
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
 
 {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mongodb-root-password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
