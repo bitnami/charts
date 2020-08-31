@@ -59,7 +59,7 @@ spec:
         podAffinity: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAffinity "context" $) | nindent 10 }}
         {{- end }}
       containers:
-        - name: {{ template "kube-prometheus.name" . }}
+        - name: prometheus-operator
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           args:
