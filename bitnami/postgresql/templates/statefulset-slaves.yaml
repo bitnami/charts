@@ -305,7 +305,7 @@ spec:
             medium: Memory
             sizeLimit: 1Gi
         {{- end }}
-        {{- if not .Values.persistence.enabled }}
+        {{- if or (not .Values.persistence.enabled) (not .Values.slave.persistence.enabled) }}
         - name: data
           emptyDir: {}
         {{- end }}

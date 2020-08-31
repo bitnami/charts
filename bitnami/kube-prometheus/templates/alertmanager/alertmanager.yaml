@@ -1,0 +1,116 @@
+{{- if .Values.alertmanager.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.alertmanager.replicaCount }}
+  serviceAccountName: {{ template "kube-prometheus.alertmanager.serviceAccountName" . }}
+  {{- if .Values.alertmanager.image }}
+  image: {{ template "kube-prometheus.alertmanager.image" . }}
+  {{- end }}
+  listenLocal: {{ .Values.alertmanager.listenLocal }}
+  {{- if index .Values.alertmanager "externalUrl" }}
+  externalUrl: "{{ .Values.alertmanager.externalUrl }}"
+  {{- else if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}
+  externalUrl: {{ if .Values.alertmanager.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.alertmanager.ingress.hosts 0).name }}/
+  {{- else }}
+  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.alertmanager.service.port }}
+  {{- end }}
+  paused: {{ .Values.alertmanager.paused }}
+  logFormat: {{ .Values.alertmanager.logFormat }}
+  logLevel: {{ .Values.alertmanager.logLevel }}
+  retention: {{ .Values.alertmanager.retention }}
+  {{- if .Values.alertmanager.secrets }}
+  secrets: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.secrets "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.configMaps }}
+  configMaps: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configMaps "context" $) | nindent 4 }}
+  {{- end }}
+  resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  routePrefix: "/"
+  {{- if .Values.alertmanager.securityContext.enabled }}
+  securityContext:
+    runAsUser: {{ .Values.alertmanager.securityContext.runAsUser }}
+    fsGroup: {{ .Values.alertmanager.securityContext.fsGroup }}
+  {{- end }}
+  {{- if .Values.alertmanager.storageSpec }}
+  storage: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
+  {{- else }}
+  {{- if .Values.alertmanager.persistence.enabled }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          {{- range .Values.alertmanager.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- include "common.storage.class" (dict "persistence" .Values.alertmanager.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+  {{- end }}
+  {{- if or .Values.alertmanager.podMetadata.labels .Values.alertmanager.podMetadata.annotations (eq .Values.alertmanager.podAntiAffinity "soft") (eq .Values.alertmanager.podAntiAffinity "hard") }}
+  podMetadata:
+    labels:
+    {{- if .Values.alertmanager.podMetadata.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.labels "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if or (eq .Values.alertmanager.podAntiAffinity "soft") (eq .Values.alertmanager.podAntiAffinity "hard") }}
+    {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.alertmanager.podMetadata.annotations }}
+    annotations:
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.annotations "context" $) | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.alertmanager.nodeSelector }}
+  nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.nodeSelector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.tolerations }}
+  tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.tolerations "context" $) | nindent 4 }}
+  {{- end }}
+  affinity:
+    {{- if .Values.alertmanager.nodeAffinity }}
+    nodeAffinity: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.nodeAffinity "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if index .Values.alertmanager "podAntiAffinitySpec" }}
+    podAntiAffinity: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podAntiAffinitySpec "context" $) | nindent 6 }}
+    {{- else if eq .Values.alertmanager.podAntiAffinity "hard" }}
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: {{ .Values.alertmanager.podAntiAffinityTopologyKey | quote }}
+          labelSelector:
+            matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 14 }}
+    {{- else if eq .Values.alertmanager.podAntiAffinity "soft" }}
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: {{ .Values.alertmanager.podAntiAffinityTopologyKey | quote }}
+            labelSelector:
+              matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 16 }}
+    {{- end }}
+    {{- if .Values.alertmanager.podAffinity }}
+    podAffinity: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podAffinity "context" $) | nindent 6 }}
+    {{- end }}
+  {{- if .Values.alertmanager.volumes }}
+  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.volumeMounts }}
+  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
+  {{- end }}
+{{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
+  {{- if .Values.alertmanager.containers }}
+  containers: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.alertmanager.priorityClassName }}
+  priorityClassName: {{ .Values.alertmanager.priorityClassName }}
+  {{- end }}
+  {{- if .Values.alertmanager.additionalPeers }}
+  additionalPeers: {{ .Values.alertmanager.additionalPeers }}
+  {{- end }}
+{{- end }}

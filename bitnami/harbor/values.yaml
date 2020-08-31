@@ -2261,6 +2261,8 @@ postgresql:
   nameOverride:
   postgresqlUsername: postgres
   postgresqlPassword: not-secure-database-password
+  postgresqlExtendedConf:
+    maxConnections: 1024
   replication:
     enabled: false
   persistence:

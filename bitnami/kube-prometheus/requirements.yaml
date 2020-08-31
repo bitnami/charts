@@ -1,0 +1,14 @@
+dependencies:
+  - name: common
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+  - name: node-exporter
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
+    condition: exporters.enabled,exporters.node-exporter.enabled
+  - name: kube-state-metrics
+    repository: https://charts.bitnami.com/bitnami
+    version: 0.x.x
+    condition: exporters.enabled,exporters.kube-state-metrics.enabled
