@@ -65,23 +65,25 @@ Validate value params:
   - secret - String - Required. Name of the secret where mysql values are stored, e.g: "mysql-passwords-secret"
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
-  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled .context.Values.mariadb.secret.requirePasswords -}}
+  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
     {{- $requiredPasswords := list -}}
 
-    {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
+    {{- if .context.Values.mariadb.secret.requirePasswords -}}
+      {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
+      {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
 
-    {{- if not (empty .context.Values.mariadb.db.user) -}}
-        {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" .secretName "field" "mariadb-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
+      {{- if not (empty .context.Values.mariadb.db.user) -}}
+          {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" .secretName "field" "mariadb-password" -}}
+          {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
+      {{- end -}}
+
+      {{- if .context.Values.mariadb.replication.enabled -}}
+          {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" .secretName "field" "mariadb-replication-password" -}}
+          {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
+      {{- end -}}
+
+      {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
     {{- end -}}
-
-    {{- if .context.Values.mariadb.replication.enabled -}}
-        {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" .secretName "field" "mariadb-replication-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
-    {{- end -}}
-
-    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
   {{- end -}}
 {{- end -}}
 
