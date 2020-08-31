@@ -638,6 +638,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                            |
 | `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                       |
 | `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-a-secure-database-password` |
+| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{"maxConnections": "1024"}`     |
 | `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                          |
 | `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                           |
 | `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `See values.yaml file`           |
@@ -784,7 +785,7 @@ core:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the .extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
 
 ### Configure the external URL:
 

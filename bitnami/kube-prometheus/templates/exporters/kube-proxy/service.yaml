@@ -1,0 +1,25 @@
+{{- if and .Values.kubeProxy.enabled .Values.kubeProxy.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-proxy
+  namespace: {{ .Values.kubeProxy.namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kube-proxy
+spec:
+  clusterIP: None
+  ports:
+    - name: http-metrics
+      port: {{ .Values.kubeProxy.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.kubeProxy.service.targetPort }}
+{{- if .Values.kubeProxy.endpoints }}{{- else }}
+  selector:
+    {{- if .Values.kubeProxy.service.selector }}
+    {{ toYaml .Values.kubeProxy.service.selector | nindent 4 }}
+    {{- else }}
+    k8s-app: kube-proxy
+    {{- end }}
+{{- end }}
+  type: ClusterIP
+{{- end -}}

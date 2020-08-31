@@ -1,0 +1,38 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  {{- if .Values.prometheus.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.prometheus.service.type }}
+  {{- if index .Values.prometheus "stickySessions" }}
+  sessionAffinity: ClientIP
+  {{- end }}
+  {{- if and .Values.prometheus.service.loadBalancerIP (eq .Values.prometheus.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.prometheus.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "LoadBalancer") .Values.prometheus.service.loadBalancerSourceRanges }}
+  {{- with .Values.prometheus.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "ClusterIP") .Values.prometheus.service.clusterIP }}
+  clusterIP: {{ .Values.prometheus.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.prometheus.service.port }}
+      targetPort: 9090
+      protocol: TCP
+      {{- if and .Values.prometheus.service.nodePort (or (eq .Values.prometheus.service.type "NodePort") (eq .Values.prometheus.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.prometheus.service.nodePort }}
+      {{- end }}
+  selector:
+    app: prometheus
+    prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
+{{- end }}
