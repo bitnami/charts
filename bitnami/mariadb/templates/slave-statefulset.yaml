@@ -26,11 +26,9 @@ spec:
     {{- end }}
   template:
     metadata:
-      {{- if .Values.slave.annotations }}
+      {{- with .Values.slave.annotations }}
       annotations:
-        {{- range $key, $value := .Values.slave.annotations }}
-        {{ $key }}: {{ $value }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         app: {{ template "mariadb.name" . }}
