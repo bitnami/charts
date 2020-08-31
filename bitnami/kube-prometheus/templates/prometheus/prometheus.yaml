@@ -54,9 +54,9 @@ spec:
   {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
   {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
-  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}/
+  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090
+  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090{{ .Values.prometheus.routePrefix }}
   {{- end }}
   paused: {{ .Values.prometheus.paused }}
   logLevel: {{ .Values.prometheus.logLevel }}
@@ -80,7 +80,7 @@ spec:
   {{- if .Values.prometheus.walCompression }}
   walCompression: {{ .Values.prometheus.walCompression }}
   {{- end }}
-  routePrefix: "/"
+  routePrefix: "{{ .Values.prometheus.routePrefix }}"
   {{- if .Values.prometheus.secrets }}
   secrets: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.secrets "context" $) | nindent 4 }}
   {{- end }}

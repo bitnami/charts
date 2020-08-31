@@ -1,4 +1,5 @@
 {{- if and .Values.prometheus.enabled .Values.prometheus.ingress.enabled }}
+{{- $routePrefix := .Values.prometheus.routePrefix -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -18,7 +19,7 @@ spec:
     - host: {{ .name }}
       http:
         paths:
-        - path: {{ default "/" .path }}
+        - path: {{ default $routePrefix .path }}
           backend:
             serviceName: {{ template "kube-prometheus.prometheus.fullname" $ }}
             servicePort: http

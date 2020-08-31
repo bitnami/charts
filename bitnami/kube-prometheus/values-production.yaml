@@ -445,6 +445,11 @@ prometheus:
   ##
   replicaExternalLabelNameClear: false
 
+  ## Prefix used to register routes, overriding externalUrl route.
+  ## Useful for proxies that rewrite URLs.
+  ##
+  routePrefix: /
+
   ## Name of the external label used to denote Prometheus instance name
   ##
   prometheusExternalLabelName: ""
