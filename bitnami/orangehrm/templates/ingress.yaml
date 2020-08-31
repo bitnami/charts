@@ -27,17 +27,17 @@ spec:
           servicePort: http
   {{- end }}
   tls:
-  {{- range .Values.ingress.hosts }}
-  {{- if .tls }}
-  - hosts:
-  {{- if .tlsHosts }}
-  {{- range $host := .tlsHosts }}
-    - {{ $host }}
-  {{- end }}
-  {{- else }}
-    - {{ .name }}
-  {{- end }}
-    secretName: {{ .tlsSecret }}
-  {{- end }}
-  {{- end }}
+    {{- range .Values.ingress.hosts }}
+    {{- if .tls }}
+    - hosts:
+    {{- if .tlsHosts }}
+    {{- range $host := .tlsHosts }}
+      - {{ $host }}
+    {{- end }}
+    {{- else }}
+      - {{ .name }}
+    {{- end }}
+      secretName: {{ .tlsSecret }}
+    {{- end }}
+    {{- end }}
 {{- end }}
