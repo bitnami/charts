@@ -93,6 +93,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           workingDir: /app
+          {{- if .Values.commandrequired.enabled }}
           command:
           {{- if .Values.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -101,9 +102,11 @@ spec:
           {{- else }}
             - dotnet
           {{- end }}
+          {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.env.enabled }}
           env:
             - name: ASPNETCORE_URLS
               value: {{ .Values.bindURLs | quote }}
@@ -111,6 +114,7 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}

@@ -120,6 +120,14 @@ appFromExistingPVC:
 command: []
 args: []
 
+## enable dotnet Command
+commandrequired:
+  enabled: true
+
+## enable environment to setup the bindURLs
+env: 
+  enabled: true
+
 ## URLs to bind
 ##
 bindURLs: http://+:8080
