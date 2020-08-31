@@ -261,6 +261,11 @@ aggregator:
   ##
   extraArgs: ""
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR

@@ -18,129 +18,145 @@ spec:
         app: {{ template "orangehrm.fullname" . }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
-    spec:
-{{- include "orangehrm.imagePullSecrets" . | indent 6 }}
-      hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
-      containers:
-      - name: {{ template "orangehrm.fullname" . }}
-        image: {{ template "orangehrm.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword | quote }}
-        {{- if .Values.mariadb.enabled }}
-        - name: MARIADB_HOST
-          value: {{ template "orangehrm.mariadb.fullname" . }}
-        - name: MARIADB_PORT_NUMBER
-          value: "3306"
-        - name: ORANGEHRM_DATABASE_NAME
-          value: {{ .Values.mariadb.db.name | quote }}
-        - name: ORANGEHRM_DATABASE_USER
-          value: {{ .Values.mariadb.db.user | quote }}
-        - name: ORANGEHRM_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "orangehrm.mariadb.fullname" . }}
-              key: mariadb-password
-        {{- else }}
-        - name: MARIADB_HOST
-          value: {{ .Values.externalDatabase.host | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ .Values.externalDatabase.port | quote }}
-        - name: ORANGEHRM_DATABASE_NAME
-          value: {{ .Values.externalDatabase.database | quote }}
-        - name: ORANGEHRM_DATABASE_USER
-          value: {{ .Values.externalDatabase.user | quote }}
-        - name: ORANGEHRM_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
-        - name: ORANGEHRM_USERNAME
-          value: {{ default "" .Values.orangehrmUsername | quote }}
-        - name: ORANGEHRM_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "orangehrm.fullname" . }}
-              key: orangehrm-password
-        - name: SMTP_HOST
-          value: {{ default "" .Values.smtpHost | quote }}
-        - name: SMTP_PORT
-          value: {{ default "" .Values.smtpPort | quote }}
-        - name: SMTP_USER
-          value: {{ default "" .Values.smtpUser | quote }}
-        - name: SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "orangehrm.fullname" . }}
-              key: smtp-password
-        - name: SMTP_PROTOCOL
-          value: {{ default "none" .Values.smtpProtocol | quote }}
-        ports:
-        - name: http
-          containerPort: 80
-        - name: https
-          containerPort: 443
-        livenessProbe:
-          httpGet:
-            path: /symfony/web/index.php
-            port: http
-          initialDelaySeconds: 120
-        readinessProbe:
-          httpGet:
-            path: /symfony/web/index.php
-            port: http
-          initialDelaySeconds: 30
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        - name: orangehrm-data
-          mountPath: /bitnami/orangehrm
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "orangehrm.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
-        ports:
+        {{- if .Values.metrics.podAnnotations }}
+        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "orangehrm.imagePullSecrets" . | nindent 6 }}
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "status.localhost"
+      {{- if .Values.affinity }}
+      affinity: {{- toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ template "orangehrm.fullname" . }}
+          image: {{ template "orangehrm.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ .Values.allowEmptyPassword | quote }}
+            {{- if .Values.mariadb.enabled }}
+            - name: MARIADB_HOST
+              value: {{ template "orangehrm.mariadb.fullname" . }}
+            - name: MARIADB_PORT_NUMBER
+              value: "3306"
+            - name: ORANGEHRM_DATABASE_NAME
+              value: {{ .Values.mariadb.db.name | quote }}
+            - name: ORANGEHRM_DATABASE_USER
+              value: {{ .Values.mariadb.db.user | quote }}
+            - name: ORANGEHRM_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "orangehrm.mariadb.fullname" . }}
+                  key: mariadb-password
+            {{- else }}
+            - name: MARIADB_HOST
+              value: {{ .Values.externalDatabase.host | quote }}
+            - name: MARIADB_PORT_NUMBER
+              value: {{ .Values.externalDatabase.port | quote }}
+            - name: ORANGEHRM_DATABASE_NAME
+              value: {{ .Values.externalDatabase.database | quote }}
+            - name: ORANGEHRM_DATABASE_USER
+              value: {{ .Values.externalDatabase.user | quote }}
+            - name: ORANGEHRM_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+            {{- end }}
+            - name: ORANGEHRM_USERNAME
+              value: {{ default "" .Values.orangehrmUsername | quote }}
+            - name: ORANGEHRM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "orangehrm.fullname" . }}
+                  key: orangehrm-password
+            - name: SMTP_HOST
+              value: {{ default "" .Values.smtpHost | quote }}
+            - name: SMTP_PORT
+              value: {{ default "" .Values.smtpPort | quote }}
+            - name: SMTP_USER
+              value: {{ default "" .Values.smtpUser | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "orangehrm.fullname" . }}
+                  key: smtp-password
+            - name: SMTP_PROTOCOL
+              value: {{ default "none" .Values.smtpProtocol | quote }}
+            {{- range $key, $value := .Values.extraEnvVars }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+          livenessProbe:
+            httpGet:
+              path: /symfony/web/index.php
+              port: http
+            initialDelaySeconds: 120
+          readinessProbe:
+            httpGet:
+              path: /symfony/web/index.php
+              port: http
+            initialDelaySeconds: 30
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: orangehrm-data
+              mountPath: /bitnami/orangehrm
+        {{- if .Values.metrics.enabled }}
         - name: metrics
-          containerPort: 9117
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-  {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
+          image: {{ template "orangehrm.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          ports:
+            - name: metrics
+              containerPort: 9117
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
       volumes:
-      - name: orangehrm-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "orangehrm.fullname" . }}-orangehrm
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-      {{- end }}
+        - name: orangehrm-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ template "orangehrm.fullname" . }}-orangehrm
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
