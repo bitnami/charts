@@ -25,7 +25,8 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour
-    spec: {{- include "contour.imagePullSecrets" . | nindent 6 }}
+    spec:
+      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

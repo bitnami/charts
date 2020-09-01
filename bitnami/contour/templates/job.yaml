@@ -13,7 +13,7 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour-certgen
     spec:
-{{- include "contour.imagePullSecrets" . | nindent 6 }}
+    {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
     {{- with .Values.contour.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
