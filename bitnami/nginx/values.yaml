@@ -369,7 +369,7 @@ ingress:
     - hosts:
         - example.local
       secretName: example.local-tls
-  
+
   hosts:
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
@@ -378,7 +378,6 @@ ingress:
       #   backend:
       #     serviceName: ssl-redirect
       #     servicePort: use-annotation
-    
 
 
 healthIngress:
