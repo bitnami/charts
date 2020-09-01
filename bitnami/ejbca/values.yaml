@@ -215,7 +215,12 @@ service:
   port: 8080
   ## HTTPS Port
   ##
+  # httpsPort: 8443
   httpsPort: 8443
+  ## HTTPS Advertised port
+  ##
+  advertisedHttpsPort: 443
+
   ## HTTPS Target Port
   ## defaults to https unless overridden to the specified port.
   ## if you want the target port to be "http" or "80" you can specify that here.
@@ -240,6 +245,27 @@ service:
   loadBalancerSourceRanges: []
   ## Extra ports to expose (normally used with the `sidecar` value)
   # extraPorts:
+
+## Configure the ingress resource that allows you to access the
+## WordPress installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  ##
+  enabled: false
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: ejbca.local
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

@@ -220,6 +220,12 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ## Upgrading
 
+### To 12.0.0
+
+MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+
 ### To 11.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
