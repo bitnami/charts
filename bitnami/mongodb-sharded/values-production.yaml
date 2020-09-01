@@ -209,6 +209,17 @@ shardsvr:
       ## Use 0 to disable
       ##
       maxUnavailable: 1
+    ## K8s Service Account.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created.
+      ##
+      create: true
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the XXX.fullname template
+      ##
+      name: mongo-shard-data
 
   ## Properties for arbiter nodes
   ## ref: https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
@@ -312,6 +323,17 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName:
+    ## K8s Service Account.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created.
+      ##
+      create: true
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the XXX.fullname template
+      ##
+      name: mongo-arbiter
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -489,6 +511,17 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created.
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    name: mongo-configsvr
 
   ## Use a external config server instead of deploying one
   ##
@@ -614,6 +647,17 @@ mongos:
     ## Use 0 to disable
     ##
     maxUnavailable: 1
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for mongos.
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    name: mongo-mongos
 
 ## Properties for all of the pods in the cluster (shards, config servers and mongos)
 ##
@@ -692,6 +736,17 @@ common:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts:
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created.
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    # name:
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
