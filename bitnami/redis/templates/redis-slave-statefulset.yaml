@@ -62,6 +62,9 @@ spec:
       {{- if .Values.slave.tolerations }}
       tolerations: {{- toYaml .Values.slave.tolerations | nindent 8 }}
       {{- end }}
+      {{- if .Values.slave.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.slave.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.slave.schedulerName }}
       schedulerName: {{ .Values.slave.schedulerName }}
       {{- end }}
@@ -191,7 +194,7 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.slave.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.slave.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.slave.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ add1 .Values.slave.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.slave.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.slave.livenessProbe.failureThreshold}}
             exec:
@@ -210,7 +213,7 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.slave.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.slave.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.slave.readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ add1 .Values.slave.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.slave.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.slave.readinessProbe.failureThreshold }}
             exec:
@@ -218,9 +221,9 @@ spec:
                 - sh
                 - -c
                 {{- if .Values.sentinel.enabled }}
-                - /health/ping_readiness_local.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local.sh {{ .Values.slave.readinessProbe.timeoutSeconds }}
                 {{- else }}
-                - /health/ping_readiness_local_and_master.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local_and_master.sh {{ .Values.slave.readinessProbe.timeoutSeconds }}
                 {{- end }}
           {{- else if .Values.slave.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.slave.customReadinessProbe | nindent 12 }}
@@ -331,7 +334,7 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.sentinel.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ add1 .Values.sentinel.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sentinel.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.sentinel.livenessProbe.failureThreshold }}
             exec:
@@ -346,14 +349,14 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ add1 .Values.sentinel.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sentinel.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.sentinel.readinessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+                - /health/ping_sentinel.sh {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
