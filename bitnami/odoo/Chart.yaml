@@ -1,6 +1,6 @@
 apiVersion: v1
 name: odoo
-version: 14.0.14
+version: 14.0.16
 appVersion: 13.0.20200810
 description: A suite of web based open source business apps.
 home: https://www.odoo.com/
