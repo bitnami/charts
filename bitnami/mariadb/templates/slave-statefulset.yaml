@@ -26,9 +26,8 @@ spec:
     {{- end }}
   template:
     metadata:
-      {{- with .Values.slave.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.slave.annotations }}
+      annotations: {{- include "mariadb.tplValue" (dict "value" .Values.slave.annotations "context" $) | nindent 8 }}
       {{- end }}
       labels:
         app: {{ template "mariadb.name" . }}
