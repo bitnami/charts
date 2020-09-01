@@ -219,7 +219,6 @@ service:
   httpsPort: 8443
   ## HTTPS Advertised port
   ##
-  #
   advertisedHttpsPort: 443
 
   ## HTTPS Target Port
