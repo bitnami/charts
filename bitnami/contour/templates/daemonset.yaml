@@ -20,9 +20,6 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
-      {{- if .Values.envoy.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
