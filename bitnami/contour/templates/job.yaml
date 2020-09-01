@@ -13,19 +13,16 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour-certgen
     spec:
-    {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
-    {{- with .Values.contour.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.contour.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.contour.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.contour.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.tolerations}}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       containers:
       - name: contour
         image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
