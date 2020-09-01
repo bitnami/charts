@@ -23,15 +23,15 @@ Return the proper Docker Image Registry Secret Names
   {{- $pullSecrets := list }}
 
   {{- if .global }}
-      {{- range .global.imagePullSecrets -}}
-        {{- $pullSecrets = append $pullSecrets . -}}
+    {{- range .global.imagePullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
     {{- end -}}
   {{- end -}}
 
   {{- range .images -}}
-      {{- range .pullSecrets -}}
-        {{- $pullSecrets = append $pullSecrets . -}}
-      {{- end -}}
+    {{- range .pullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
   {{- end -}}
 
   {{- if (not (empty $pullSecrets)) }}
