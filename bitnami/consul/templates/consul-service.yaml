@@ -25,6 +25,6 @@ spec:
       port: {{.Values.service.consulDnsPort}}
     - name: consuldns-udp
       protocol: "UDP"
-      port: {{.Values.service.consulDnsPort}}
+      port: {{.Values.service.consulDnsPort}}   
   clusterIP: None
   selector: {{- include "consul.matchLabels" . | nindent 4 }}

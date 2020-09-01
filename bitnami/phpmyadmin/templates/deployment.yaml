@@ -73,7 +73,7 @@ spec:
             - name: PHPMYADMIN_ALLOW_NO_PASSWORD
               value: "true"
             - name: PHPMYADMIN_ALLOW_ARBITRARY_SERVER
-              value: "true"
+              value: {{ .Values.db.allowArbitraryServer | quote }}
             {{- else }}
             - name: PHPMYADMIN_ALLOW_NO_PASSWORD
               value: "false"

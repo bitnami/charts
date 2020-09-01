@@ -12,7 +12,7 @@ spec:
   ports:
   {{- range $key, $value := .Values.aggregator.service.ports }}
     - name: {{ $key }}
-      {{ toYaml $value | nindent 6 }}
+      {{ omit $value "nodePort" | toYaml | nindent 6 }}
   {{- end }}
   selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator

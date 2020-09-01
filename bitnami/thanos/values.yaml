@@ -42,6 +42,16 @@ clusterDomain: cluster.local
 ##
 # objstoreConfig:
 
+## Index cache Configuration
+## Specify content for index-cache.yml
+##
+# indexCacheConfig:
+
+## Bucket cache Configuration
+## Specify content for bucket-cache.yml
+##
+# bucketCacheConfig:
+
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
@@ -742,6 +752,16 @@ storegateway:
   ## Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: []
+
+  ## Store Gateway Cache Configuration
+  ## Specify content for config.yml
+  ##
+  # config:
+
+  ## ConfigMap with Store Gateway Cache  Configuration
+  ## NOTE: This will override storegateway.config
+  ##
+  # existingConfigmap:
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##

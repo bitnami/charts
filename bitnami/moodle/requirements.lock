@@ -4,6 +4,6 @@ dependencies:
   version: 7.7.2
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 0.4.0
-digest: sha256:59f2311758eb67f75b8bc6dd97f0f403a3b8fcade90751c53399ccf00456c4ac
-generated: "2020-08-06T07:46:52.833866928Z"
+  version: 0.5.1
+digest: sha256:d89ec9a674eb93b916841062aafecb1fde654137427b990a8c35d7aaed2a65ec
+generated: "2020-08-13T14:19:58.467993655Z"
