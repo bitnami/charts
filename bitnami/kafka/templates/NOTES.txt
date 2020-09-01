@@ -68,7 +68,7 @@ Each Kafka broker can be accessed by producers via port {{ $servicePort }} on th
 
 {{- if (include "kafka.client.saslAuthentication" .) }}
 
-You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files with the content below:
+You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files by executing these commands:
 
     - kafka_jaas.conf:
 
