@@ -280,4 +280,4 @@ security.ssl.needClientAuth=true
 
 - Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/bitnami-docker-spark#300-debian-10-r44)
 
-> Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
+> Note: There is no backwards compatibility due to the above mentioned changes.
