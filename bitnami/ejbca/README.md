@@ -108,7 +108,6 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `ejbcaAdminPassword`                      | EJBCA administrator password                                                          | _random 10 character long alphanumeric string_               |
 | `existingSecret`                          | Name of an existing secret containing EJBCA admin password ('ejbca-admin-password' key) | `nil`                                                      |
 | `ejbcaJavaOpts`                           | Options used to launch the WildFly server                                             | `nil`                                                        |
-| `ejbcaHttpsServerHostname`                | Hostname of the server when using HTTPS                                               | `hostname`                                                   |
 | `ejbcaCA.name`                            | Name of the CA EJBCA will instantiate by default                                      | `ManagementCA`                                               |
 | `ejbcaCA.baseDN`                          | Base DomainName of the CA EJBCA will instantiate by default                           | `nil`                                                        |
 | `ejbcaKeystoreExistingSecret`             | Existing Secret containing a Keystore to be imported by EBJCA                         | `nil`                                                        |
