@@ -136,7 +136,6 @@ Return the appropriate apiVersion for deployment.
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the appropriate apiVersion for ingress.
 */}}
