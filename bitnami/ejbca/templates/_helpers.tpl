@@ -117,7 +117,7 @@ Return the MariaDB Port
 {{- if .Values.mariadb.enabled }}
     {{- printf "3306" | quote -}}
 {{- else -}}
-    {{- printf "%d" (.Values.externalDatabase.port | quote ) -}}
+    {{- printf "%s" (.Values.externalDatabase.port | quote ) -}}
 {{- end -}}
 {{- end -}}
 
