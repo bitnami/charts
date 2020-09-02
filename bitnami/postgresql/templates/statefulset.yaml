@@ -170,9 +170,19 @@ spec:
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
             {{- end }}
-            {{- if .Values.replication.enabled }}
+            {{- if .Values.masterAsStandBy.enabled }}
+            - name: POSTGRES_MASTER_HOST
+              value: {{ .Values.masterAsStandBy.masterHost }}
+            - name: POSTGRES_MASTER_PORT_NUMBER
+              value: {{ .Values.masterAsStandBy.masterPort | quote }}
+            {{- end }}
+            {{- if or .Values.replication.enabled .Values.masterAsStandBy.enabled }}
             - name: POSTGRES_REPLICATION_MODE
+            {{- if .Values.masterAsStandBy.enabled }}
+              value: "slave"
+            {{- else }}
               value: "master"
+            {{- end }}
             - name: POSTGRES_REPLICATION_USER
               value: {{ include "postgresql.replication.username" . | quote }}
             {{- if .Values.usePasswordFile }}
