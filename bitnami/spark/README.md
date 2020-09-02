@@ -280,4 +280,4 @@ security.ssl.needClientAuth=true
 
 - Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/bitnami-docker-spark#300-debian-10-r44)
 
-> Note: There is no backwards compatibility due to the above mentioned changes.
+> Note: Backwards compatibility is not guaranteed due to the above mentioned changes. Please make sure your workloads are compatible with the new version of Hadoop before upgrading. Backups are always recommended before any upgrade operation.
