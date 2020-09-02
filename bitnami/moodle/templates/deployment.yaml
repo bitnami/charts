@@ -186,7 +186,11 @@ spec:
         - name: metrics
           image: {{ template "moodle.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command: [ '/bin/apache_exporter']
+          args: ['--scrape_uri', 'http://status.localhost:$(APACHE_HTTP_PORT_NUMBER)/server-status/?auto']
+          env:
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
           ports:
             - name: metrics
               containerPort: 9117

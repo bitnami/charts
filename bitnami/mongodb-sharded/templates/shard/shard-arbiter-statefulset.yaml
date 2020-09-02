@@ -36,6 +36,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.arbiter.serviceAccount "context" $) }}
       {{- if $.Values.common.schedulerName }}
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}

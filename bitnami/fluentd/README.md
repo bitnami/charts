@@ -71,6 +71,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.configFile`                          | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `forwarder.configMap`                           | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
 | `forwarder.extraArgs`                           | Extra arguments for the Fluentd command line                                                                   | `nil`                                                                                                   |
+| `forwarder.priorityClassName`                   | Set Pods Priority Class                                                                                        | `nil`                                                                                                   |
 | `forwarder.extraEnv`                            | Extra environment variables to pass to the container                                                           | `[]`                                                                                                    |
 | `forwarder.containerPorts`                      | Ports the forwarder containers will listen on                                                                  | `Check values.yaml`                                                                                     |
 | `forwarder.service.type`                        | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`) for the forwarders                        | `ClusterIP`                                                                                             |
@@ -97,6 +98,10 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.tolerations`                         | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
 | `forwarder.affinity`                            | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
+| `forwarder.serviceAccount.create`               | Specify whether a ServiceAccount should be created.                                                            | `true`                                                                                                  |
+| `forwarder.serviceAccount.name`                 | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
+| `forwarder.serviceAccount.annotations`          | Additional Service Account annotations (evaluated as a template)                                               | `{}`                                                                                                    |
+| `forwarder.rbac.create`                         | Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces | `true`                                                                                                  |
 | `forwarder.extraVolumes`                        | Extra volumes                                                                                                  | `nil`                                                                                                   |
 | `forwarder.extraVolumeMounts`                   | Mount extra volume(s),                                                                                         | `nil`                                                                                                   |
 | `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
@@ -138,9 +143,9 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.tolerations`                        | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
 | `aggregator.affinity`                           | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
 | `aggregator.podAnnotations`                     | Pod annotations                                                                                                | `{}`                                                                                                    |
-| `serviceAccount.create`                         | Specify whether a ServiceAccount should be created                                                             | `true`                                                                                                  |
-| `serviceAccount.name`                           | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
-| `rbac.create`                                   | Specify whether RBAC resources should be created and used                                                      | `true`                                                                                                  |
+| `aggregator.serviceAccount.create`              | Specify whether a ServiceAccount should be created.                                                            | `false`                                                                                                 |
+| `aggregator.serviceAccount.name`                | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
+| `aggregator.serviceAccount.annotations`         | Additional Service Account annotations (evaluated as a template)                                               | `{}`                                                                                                    |
 | `metrics.enabled`                               | Enable the export of Prometheus metrics                                                                        | `nil`                                                                                                   |
 | `metrics.service.type`                          | Prometheus metrics service type                                                                                | `ClusterIP`                                                                                             |
 | `metrics.service.loadBalancerIP`                | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                       | `nil`                                                                                                   |
@@ -286,9 +291,45 @@ aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
 ```
 
-### Notable changes
+## Upgrading
 
-## 1.0.0
+### To 2.0.0
+
+This version introduces the ability to create/customise a `ServiceAccount` to be used by the **aggregator**, making it
+possible to target the aggregator with [`PodSecurityPolicy`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/)
+independent of the **forwarder**'s `ServiceAccount`.
+
+The **forwarder** previously used the below top-level values to configure its own `ServiceAccount`, which have been moved
+under the `forwarder.` prefix to avoid confusion, and only created if `forwarder.enabled=true`. There is no functional 
+change as a result of this, and if you did not override the defaults for `serviceAccount` or `rbac`, this change does
+not require any action from you.
+
+If you are overriding the default values from the `1.x` chart, the chart will fail installation with your old overrides 
+and warn you of the necessary changes.
+
+```yaml
+# before - 1.x
+serviceAccount:
+  create: true
+  name: my-custom-service-account
+  annotations:
+    my-custom-annotation: my-custom-annotation-value
+rbac:
+  create: true
+
+# after - 2.x
+forwarder:
+  # ...
+  serviceAccount:
+    create: true
+    name: my-custom-service-account
+    annotations:
+      my-custom-annotation: my-custom-annotation-value
+  rbac:
+    create: true
+```
+
+### To 1.0.0
 
 In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
 

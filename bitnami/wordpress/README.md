@@ -87,6 +87,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `wordpressBlogName`                       | Blog name                                                                             | `User's Blog!`                                               |
 | `wordpressTablePrefix`                    | Table prefix                                                                          | `wp_`                                                        |
 | `wordpressScheme`                         | Scheme to generate application URLs [`http`, `https`]                                 | `http`                                                       |
+| `wordpressExtraConfigContent`             | Add extra content to the configuration file                                           | `""`                                                           |
 | `allowEmptyPassword`                      | Allow DB blank passwords                                                              | `true`                                                       |
 | `allowOverrideNone`                       | Set Apache AllowOverride directive to None                                            | `false`                                                      |
 | `htaccessPersistenceEnabled`              | Make `.htaccess` persistence so that it can be customized. [See](#disabling-htaccess) | `false`                                                      |

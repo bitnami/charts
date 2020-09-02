@@ -76,6 +76,11 @@ spec:
             - -cx
             - |
               {{- if .Values.persistence.enabled }}
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+              {{- else }}
+              chown {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              {{- end }}
               mkdir -p {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
               chmod 700 {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 {{- if not (include "postgresql.mountConfigurationCM" .) }} -not -name "conf" {{- end }} -not -name ".snapshot" -not -name "lost+found" | \
@@ -165,9 +170,19 @@ spec:
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
             {{- end }}
-            {{- if .Values.replication.enabled }}
+            {{- if .Values.masterAsStandBy.enabled }}
+            - name: POSTGRES_MASTER_HOST
+              value: {{ .Values.masterAsStandBy.masterHost }}
+            - name: POSTGRES_MASTER_PORT_NUMBER
+              value: {{ .Values.masterAsStandBy.masterPort | quote }}
+            {{- end }}
+            {{- if or .Values.replication.enabled .Values.masterAsStandBy.enabled }}
             - name: POSTGRES_REPLICATION_MODE
+            {{- if .Values.masterAsStandBy.enabled }}
+              value: "slave"
+            {{- else }}
               value: "master"
+            {{- end }}
             - name: POSTGRES_REPLICATION_USER
               value: {{ include "postgresql.replication.username" . | quote }}
             {{- if .Values.usePasswordFile }}
@@ -189,7 +204,7 @@ spec:
             - name: POSTGRES_CLUSTER_APP_NAME
               value: {{ .Values.replication.applicationName }}
             {{- end }}
-            {{- if and .Values.postgresqlPostgresPassword (not (eq .Values.postgresqlUsername "postgres")) }}
+            {{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"

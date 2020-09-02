@@ -26,6 +26,12 @@ spec:
     - host: {{ .name }}
       http:
         paths:
+        {{- range .extraPaths }}
+          - path: {{ .path }}
+            backend:
+              serviceName: {{ .backend.serviceName }}
+              servicePort: {{ .backend.servicePort }}
+        {{- end }}
           - path: {{ default "/" .path }}
             backend:
               serviceName: "{{ template "nginx.fullname" $ }}"

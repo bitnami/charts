@@ -73,6 +73,11 @@ forwarder:
   ##
   extraArgs: ""
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
@@ -211,6 +216,25 @@ forwarder:
 
   ## Extra labels to add to Pod
   podLabels: {}
+
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
+
+  ## Role Based Access
+  ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+  ##
+  rbac:
+    create: true
 
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
@@ -384,6 +408,19 @@ aggregator:
   ## Extra labels to add to Pod
   podLabels: {}
 
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
+
   ## Persist data to a persistent volume
   persistence:
     enabled: false
@@ -400,19 +437,16 @@ aggregator:
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fluentd.fullname template
-  # name:
+## This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead. Only the
+## forwarder was affected by the historical usage here.
+serviceAccount: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-rbac:
-  create: true
+## This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead. Only the
+## forwarder was affected by the historical usage here.
+rbac: {}
 
 ## Prometheus Exporter / Metrics
 ##

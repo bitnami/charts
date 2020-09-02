@@ -1,0 +1,85 @@
+{{- if .Values.kubelet.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kubelet
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kubelet
+spec:
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      k8s-app: kubelet
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.kubelet.namespace }}
+  endpoints:
+    {{- if .Values.kubelet.serviceMonitor.https }}
+    - port: https-metrics
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        serverName: kubernetes
+        insecureSkipVerify: true
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      {{- if .Values.kubelet.serviceMonitor.interval }}
+      interval: {{ .Values.kubelet.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml .Values.kubelet.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
+    - port: https-metrics
+      path: /metrics/cadvisor
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        serverName: kubernetes
+        insecureSkipVerify: true
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      {{- if .Values.kubelet.serviceMonitor.interval }}
+      interval: {{ .Values.kubelet.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.cAdvisorRelabelings }}
+      relabelings: {{- toYaml .Values.kubelet.serviceMonitor.cAdvisorRelabelings | nindent 8 }}
+      {{- end }}
+    {{- else }}
+    - port: http-metrics
+      scheme: http
+      tlsConfig:
+        insecureSkipVerify: false
+      honorLabels: true
+      {{- if .Values.kubelet.serviceMonitor.interval }}
+      interval: {{ .Values.kubelet.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml .Values.kubelet.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
+    - port: http-metrics
+      path: /metrics/cadvisor
+      scheme: http
+      tlsConfig:
+        insecureSkipVerify: false
+      honorLabels: true
+      {{- if .Values.kubelet.serviceMonitor.interval }}
+      interval: {{ .Values.kubelet.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.cAdvisorRelabelings }}
+      relabelings: {{- toYaml .Values.kubelet.serviceMonitor.cAdvisorRelabelings | nindent 8 }}
+      {{- end }}
+    {{- end }}
+{{- end }}

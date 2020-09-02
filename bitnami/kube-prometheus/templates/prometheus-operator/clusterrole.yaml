@@ -1,0 +1,90 @@
+{{- if and .Values.operator.enabled .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - create
+  - apiGroups:
+      - apiextensions.k8s.io
+    resourceNames:
+      - alertmanagers.monitoring.coreos.com
+      - podmonitors.monitoring.coreos.com
+      - prometheuses.monitoring.coreos.com
+      - prometheusrules.monitoring.coreos.com
+      - servicemonitors.monitoring.coreos.com
+      - thanosrulers.monitoring.coreos.com
+      - probes.monitoring.coreos.com
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - alertmanagers
+      - alertmanagers/finalizers
+      - prometheuses
+      - prometheuses/finalizers
+      - thanosrulers
+      - thanosrulers/finalizers
+      - servicemonitors
+      - podmonitors
+      - probes
+      - prometheusrules
+    verbs:
+      - '*'
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - secrets
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - list
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - services/finalizers
+      - endpoints
+    verbs:
+      - get
+      - create
+      - update
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+{{- end }}

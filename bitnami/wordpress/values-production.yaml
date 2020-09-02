@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.4.2-debian-10-r46
+  tag: 5.5.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,6 +95,10 @@ wordpressScheme: http
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: false
+
+## Add extra content to the default configuration file
+##
+wordpressExtraConfigContent: ""
 
 ## Set to `false` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -469,7 +473,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r117
+    tag: 0.8.0-debian-10-r135
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

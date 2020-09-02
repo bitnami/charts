@@ -109,6 +109,8 @@ spec:
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
               value: {{ .Values.wordpressScheme | quote }}
+            - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
+              value: {{ .Values.wordpressExtraConfigContent | quote }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}

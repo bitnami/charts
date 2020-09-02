@@ -39,10 +39,16 @@ data:
     }
   config.json: |-
     {
-      "namespace": "{{ .Release.Namespace }}",
+      "kubeappsCluster": "default",
+      "kubeappsNamespace": "{{ .Release.Namespace }}",
       "appVersion": "{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
-      "featureFlags": {{ .Values.featureFlags | toJson }}
+      "featureFlags": {{ .Values.featureFlags | toJson }},
+      {{- $sanitizedClusters := list }}
+      {{- range .Values.clusters }}
+        {{- $sanitizedClusters = append $sanitizedClusters .name }}
+      {{- end }}
+      "clusters": {{ $sanitizedClusters | toJson }}
     }

@@ -1,4 +1,4 @@
 dependencies:
   - name: mongodb
-    version: 8.x.x
+    version: 9.x.x
     repository: https://charts.bitnami.com/bitnami

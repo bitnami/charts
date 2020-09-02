@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ template "node-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "node-exporter.labels" . | nindent 4 }}
 spec:
   selector:

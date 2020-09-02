@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2020.8.7-debian-10-r0
+  tag: 2020.8.27-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,7 +67,7 @@ clusterDomain: cluster.local
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2020.7.31-debian-10-r0
+  tag: 2020.8.20-debian-10-r7
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -184,6 +184,9 @@ disableWebUI: false
 ## Define custom environment variables to pass to the image here
 ##
 extraEnv: {}
+
+## Define a custom command for the minio container
+command: {}
 
 ## Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -330,6 +333,9 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   # annotations:
   #   kubernetes.io/ingress.class: nginx
+
+  ## Ingress additional labels done as key:value pairs
+  labels: {}
 
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array

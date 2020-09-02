@@ -39,6 +39,10 @@ service:
   port: 80
 
 db:
+  ## If you do not want the user to be able to specify an arbitrary MySQL server
+  ## at login time, set this to false
+  allowArbitraryServer: true
+
   ## Database port
   ##
   port: 3306
@@ -228,3 +232,5 @@ metrics:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+
+mariadb: {}

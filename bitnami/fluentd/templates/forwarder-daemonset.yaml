@@ -27,7 +27,8 @@ spec:
         {{- end }}
     spec:
 {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "fluentd.serviceAccountName" . }}
+      serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
+      priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
       {{- end }}
