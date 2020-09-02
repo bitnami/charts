@@ -28,14 +28,14 @@ spec:
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
       affinity:
-        {{- if eq .Values.contour.antiAffinity "hard" }}
+        {{- if eq .Values.contour.antiAffinityPolicy "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels: {{- include "common.labels.matchLabels" . | nindent 18 }}
                   app.kubernetes.io/component: contour
               topologyKey: kubernetes.io/hostname
-        {{- else if eq .Values.contour.antiAffinity "soft" }}
+        {{- else if eq .Values.contour.antiAffinityPolicy "soft" }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
