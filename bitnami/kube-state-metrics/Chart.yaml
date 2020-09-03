@@ -12,7 +12,6 @@ icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metric
 sources:
   - https://github.com/bitnami/bitnami-docker-kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
-  - https://github.com/kubernetes/kube-state-metrics
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
