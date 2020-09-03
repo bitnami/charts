@@ -7,7 +7,7 @@ metadata:
     {{- if not .Values.serviceMonitor.enabled }}
     prometheus.io/scrape: "true"
     {{- end }}
-    {{- with .Values.service.annotations }}
+    {{- if .Values.service.annotations }}
     {{- include "kube-state-metrics.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
   labels: {{- include "kube-state-metrics.labels" . | nindent 4 }}
