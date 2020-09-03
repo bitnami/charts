@@ -9,9 +9,10 @@ keywords:
   - http
   - web
   - php
-home: https://magento.com/
+home: https://github.com/bitnami/charts/tree/master/bitnami/magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
+  - https://magento.com/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

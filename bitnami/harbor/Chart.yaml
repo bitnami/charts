@@ -8,13 +8,14 @@ keywords:
   - registry
   - vulnerability
   - scan
-home: https://goharbor.io/
+home: https://github.com/bitnami/charts/tree/master/bitnami/harbor
 sources:
   - https://github.com/bitnami/bitnami-docker-harbor-core
   - https://github.com/bitnami/bitnami-docker-harbor-portal
   - https://github.com/bitnami/bitnami-docker-harbor-jobservice
   - https://github.com/bitnami/bitnami-docker-harbor-registry
   - https://github.com/bitnami/bitnami-docker-harbor-registryctl
+  - https://goharbor.io/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

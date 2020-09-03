@@ -12,9 +12,10 @@ keywords:
   - web
   - application
   - php
-home: http://www.wordpress.com/
+home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
+  - http://www.wordpress.com/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

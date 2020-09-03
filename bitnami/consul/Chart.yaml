@@ -3,9 +3,10 @@ name: consul
 version: 7.1.6
 appVersion: 1.8.3
 description: Highly available and distributed service discovery and key-value store designed with support for the modern data center to make distributed systems and configuration easy.
-home: https://www.consul.io/
+home: https://github.com/bitnami/charts/tree/master/bitnami/consul
 sources:
   - https://github.com/bitnami/bitnami-docker-consul
+  - https://www.consul.io/
 icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
 maintainers:
   - name: Bitnami

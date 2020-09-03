@@ -10,10 +10,11 @@ keywords:
   - www
   - web
   - reverse proxy
-home: https://httpd.apache.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/apache
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
+  - https://httpd.apache.org
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

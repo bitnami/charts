@@ -9,9 +9,10 @@ keywords:
   - ca
   - pki
   - certificate
-home: https://www.ejbca.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
+  - https://www.ejbca.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

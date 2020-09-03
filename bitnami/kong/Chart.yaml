@@ -12,9 +12,10 @@ keywords:
   - web
   - www
   - reverse proxy
-home: https://konghq.com/
+home: https://github.com/bitnami/charts/tree/master/bitnami/kong
 sources:
   - https://github.com/bitnami/bitnami-docker-kong
+  - https://konghq.com/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

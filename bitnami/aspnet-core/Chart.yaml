@@ -6,10 +6,11 @@ description: ASP.NET Core is an open-source framework created by Microsoft for b
 keywords:
   - asp.net
   - dotnet
-home: https://dotnet.microsoft.com/apps/aspnet
+home: https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core
 icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-aspnet-core
+  - https://dotnet.microsoft.com/apps/aspnet
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

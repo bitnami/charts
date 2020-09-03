@@ -10,9 +10,10 @@ keywords:
   - web
   - application server
   - jsp
-home: http://wildfly.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
+  - http://wildfly.org
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
