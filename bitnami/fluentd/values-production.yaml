@@ -58,6 +58,15 @@ forwarder:
     runAsUser: 0
     fsGroup: 0
 
+  ## K8s Security Context for forwarder container
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
+
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -264,6 +273,15 @@ aggregator:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## K8s Security Context for Aggregator containers
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory

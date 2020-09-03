@@ -39,9 +39,7 @@ spec:
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.forwarder.securityContext.runAsUser }}
-        fsGroup: {{ .Values.forwarder.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd
@@ -93,6 +91,9 @@ spec:
           {{- if .Values.forwarder.resources }}
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.forwarder.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{ end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
