@@ -1,4 +1,4 @@
-{{- if and .Values.rbac.create (not .Values.namespace) }}
+{{- if .Values.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRoleBinding
 metadata:
