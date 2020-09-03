@@ -10,10 +10,11 @@ keywords:
   - web
   - www
   - reverse proxy
-home: https://github.com/kubernetes/ingress-nginx
+home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
 icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
+  - https://github.com/kubernetes/ingress-nginx
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

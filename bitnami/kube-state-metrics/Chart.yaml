@@ -7,10 +7,11 @@ keywords:
   - prometheus
   - kube-state-metrics
   - monitoring
-home: https://github.com/kubernetes/kube-state-metrics
+home: https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics
 icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-kube-state-metrics
+  - https://github.com/kubernetes/kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
 maintainers:
   - name: Bitnami

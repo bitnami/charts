@@ -11,11 +11,12 @@ keywords:
   - prometheus
   - galera
   - percona
-home: https://mariadb.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/mariadb-galera
 icon: https://bitnami.com/assets/stacks/mariadb-galera/img/mariadb-galera-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-mariadb-galera
   - https://github.com/prometheus/mysqld_exporter
+  - https://mariadb.org
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

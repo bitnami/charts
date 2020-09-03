@@ -9,10 +9,11 @@ keywords:
   - blog
   - http
   - php
-home: http://www.joomla.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/joomla
 icon: https://bitnami.com/assets/stacks/joomla/img/joomla-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-joomla
+  - http://www.joomla.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

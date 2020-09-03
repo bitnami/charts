@@ -11,11 +11,12 @@ keywords:
   - "arp"
   - "vrrp"
   - "vip"
-home: https://metallb.universe.tf
+home: https://github.com/bitnami/charts/tree/master/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
 sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
+  - https://metallb.universe.tf
 maintainers:
   - name: cellebyte
     email: cellebyte@gmail.com
