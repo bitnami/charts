@@ -42,7 +42,13 @@ To uninstall/delete the `my-release` helm release:
 $ helm uninstall my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components associated with the chart and deletes the release, except the `CustomResourceDefinition`s (CRD for short).  
+:warning: To also remove the CRDs, please **remember that all instances of the CRDs are removed too**.  
+If you are okay with that, you can remove the CRDs like this:
+
+```console
+$ kubectl delete crd httpproxies.projectcontour.io tlscertificatedelegations.projectcontour.io
+```
 
 ## Parameters
 
@@ -61,8 +67,8 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `contour.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                                 | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                       | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
-| `contour.createCustomResource`                     | Creation of customResources via helm hooks (only helm v2)                                              | `true`                                                  |
-| `contour.customResourceDeletePolicy`               | Deletion hook of customResources viah helm hooks (only helm v2)                                        | `nil`                                                   |
+| `contour.createCustomResource`                     | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)           | `true`                                                  |
+| `contour.customResourceDeletePolicy`               | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                               | `nil`                                                   |
 | `contour.nodeSelector`                             | Node labels for contour pod assignment                                                                 | `{}`                                                    |
 | `contour.tolerations`                              | Tolerations for contour pod assignment                                                                 | `[]`                                                    |
 | `contour.antiAffinityPolicy`                       | Contour anti-affinity policy (`soft`, `hard` or `""`)                                                  | `soft`                                                  |
