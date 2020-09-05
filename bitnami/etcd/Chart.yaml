@@ -9,9 +9,10 @@ keywords:
   - database
   - cache
   - key-value
-home: https://coreos.com/etcd/
+home: https://github.com/bitnami/charts/tree/master/bitnami/etcd
 sources:
   - https://github.com/bitnami/bitnami-docker-etcd
+  - https://coreos.com/etcd/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

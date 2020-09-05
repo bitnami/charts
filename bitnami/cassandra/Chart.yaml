@@ -10,7 +10,8 @@ keywords:
 icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
-home: http://cassandra.apache.org
+  - http://cassandra.apache.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/cassandra
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

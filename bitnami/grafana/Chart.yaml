@@ -8,9 +8,10 @@ keywords:
   - monitoring
   - metrics
   - logs
-home: https://grafana.com/
+home: https://github.com/bitnami/charts/tree/master/bitnami/grafana
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana
+  - https://grafana.com/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

@@ -7,9 +7,10 @@ keywords:
   - metrics-server
   - cluster
   - metrics
-home: https://github.com/kubernetes-incubator/metrics-server
+home: https://github.com/bitnami/charts/tree/master/bitnami/metrics-server
 sources:
   - https://github.com/bitnami/bitnami-docker-metrics-server
+  - https://github.com/kubernetes-incubator/metrics-server
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

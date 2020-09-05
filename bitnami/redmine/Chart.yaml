@@ -12,10 +12,11 @@ keywords:
   - application
   - ruby
   - rails
-home: http://www.redmine.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/redmine
 icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
+  - http://www.redmine.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

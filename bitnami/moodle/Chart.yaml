@@ -7,9 +7,10 @@ keywords:
   - moodle
   - learning
   - php
-home: http://www.moodle.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
+  - http://www.moodle.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
