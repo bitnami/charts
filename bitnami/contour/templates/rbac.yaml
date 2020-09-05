@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" .}}:contour
+  name: {{ include "common.names.fullname" .}}-contour
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
 - apiGroups:
@@ -86,7 +86,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" .}}:contour-certgen
+  name: {{ include "common.names.fullname" .}}-contour-certgen
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -103,12 +103,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" .}}:contour
+  name: {{ include "common.names.fullname" .}}-contour
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" .}}:contour
+  name: {{ include "common.names.fullname" .}}-contour
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourServiceAccountName" . }}
@@ -117,7 +117,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" .}}:contour-certgen
+  name: {{ include "common.names.fullname" .}}-contour-certgen
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -125,7 +125,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "common.names.fullname" .}}:contour-certgen
+  name: {{ include "common.names.fullname" .}}-contour-certgen
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourCertGenServiceAccountName" . }}
