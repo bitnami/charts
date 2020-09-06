@@ -21,7 +21,7 @@ spec:
     metadata:
       {{- if .Values.configInline }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/contour/configmap.yaml") . | sha256sum }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour
