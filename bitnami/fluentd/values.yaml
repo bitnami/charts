@@ -199,6 +199,11 @@ forwarder:
   ##
   tolerations: []
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -279,11 +284,6 @@ aggregator:
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
   extraArgs: ""
-
-  ## Set Priority Class Name to allow priority control over other pods
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  priorityClassName: ""
 
   ## Extra environment variables to pass to the container
   ## extraEnv:
