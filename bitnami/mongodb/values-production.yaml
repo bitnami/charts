@@ -806,6 +806,11 @@ metrics:
   ##
   extraFlags: ""
 
+  ## String with additional URI options to the metrics exporter
+  ## ref: https://docs.mongodb.com/manual/reference/connection-string
+  ##
+  extraUri: ""
+
   ## Metrics exporter container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
