@@ -256,8 +256,8 @@ spec:
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret
-          configMap:
-            name: {{ tpl .Values.initDBSecret $ }}
+          secret:
+            secretName: {{ tpl .Values.initDBSecret $ }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data
