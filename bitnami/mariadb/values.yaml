@@ -270,6 +270,11 @@ master:
     ## Persistent Volume size
     ##
     size: 8Gi
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
 
   ## Add extra init Containers (evaluated as a templ
   ##
@@ -409,6 +414,11 @@ slave:
     ## Persistent Volume size
     ##
     size: 8Gi
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
 
   ## Add extra init containers
   ##

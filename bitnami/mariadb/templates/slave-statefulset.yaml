@@ -309,5 +309,8 @@ spec:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
         {{ include "mariadb.slave.storageClass" . }}
+        {{- if .Values.slave.persistence.selector }}
+        selector: {{- include "mariadb.tplValue" (dict "value" .Values.slave.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- end }}
