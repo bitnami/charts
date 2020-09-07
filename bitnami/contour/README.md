@@ -67,7 +67,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `contour.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                                 | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                       | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
-| `contour.createCustomResource`                     | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)           | `true`                                                  |
+| `contour.installCRDs`                              | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)           | `true`                                                  |
 | `contour.customResourceDeletePolicy`               | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                               | `nil`                                                   |
 | `contour.nodeSelector`                             | Node labels for contour pod assignment                                                                 | `{}`                                                    |
 | `contour.tolerations`                              | Tolerations for contour pod assignment                                                                 | `[]`                                                    |
@@ -271,7 +271,8 @@ Please carefully read through the guide "Upgrading Contour" at https://projectco
 Most important changes are:
 
 - Using helm hooks to generate new TLS certificates for gRPC calls between Contour and Envoy. This enables us to use the same container image for the contour controller and the certgen job without upgrade issues due to JobSpec immutablility.
-- Sync CRDs with [upstream project examples](https://github.com/projectcontour/contour/tree/main/examples/contour). Please remember that helm does not touch existing CRDs. As of today, the most reliable way to update the CRDs is, to do it outside helm (Use `--skip-crds` when using helm v3 and `--set contour.createCustomResource=false` when using helm v2). Read [Upgrading Contour](https://projectcontour.io/resources/upgrading/) and execute the following `kubectl` command before helm upgrade:
+- Rename parameter `contour.createCustomResource` to `contour.installCRDs`
+- Sync CRDs with [upstream project examples](https://github.com/projectcontour/contour/tree/main/examples/contour). Please remember that helm does not touch existing CRDs. As of today, the most reliable way to update the CRDs is, to do it outside helm (Use `--skip-crds` when using helm v3 and `--set contour.installCRDs=false` when using helm v2). Read [Upgrading Contour](https://projectcontour.io/resources/upgrading/) and execute the following `kubectl` command before helm upgrade:
 
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/projectcontour/contour/release-{{version}}/examples/contour/01-crds.yaml

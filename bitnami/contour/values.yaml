@@ -156,7 +156,7 @@ contour:
       # memory: 25Mi
 
   ## Create Contour CRDs
-  createCustomResource: true
+  installCRDs: true
 
   ## Contour CRD deletion policy
   ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
