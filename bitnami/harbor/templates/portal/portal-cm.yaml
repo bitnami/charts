@@ -39,9 +39,9 @@ data:
             listen {{ template "harbor.portal.containerPort" . }};
             {{- end }}
             server_name  localhost;
-            root   /usr/share/nginx/html;
+            root   /opt/bitnami/harbor;
             index  index.html index.htm;
-            include /etc/nginx/mime.types;
+            include /opt/bitnami/nginx/conf/mime.types;
             gzip on;
             gzip_min_length 1000;
             gzip_proxied expired no-cache no-store private auth;
