@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/component: contour
 spec:
   type: ClusterIP
+  clusterIP: None
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
   ports:
@@ -53,6 +54,7 @@ metadata:
     app.kubernetes.io/component: envoy
 spec:
   type: ClusterIP
+  clusterIP: None
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   ports:
