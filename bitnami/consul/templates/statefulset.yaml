@@ -88,9 +88,6 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           env:
-            {{- $consulFullName := include "consul.fullname" . }}
-            {{- $consulHeadlessSvcName := include "consul.fullname" . }}
-            {{- $clusterDomain := .Values.clusterDomain }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: CONSUL_NODE_NAME
