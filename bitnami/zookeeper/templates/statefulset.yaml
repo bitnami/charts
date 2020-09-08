@@ -43,9 +43,7 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
-      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
