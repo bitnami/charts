@@ -470,6 +470,8 @@ serviceAccount:
 ##
 rbac:
   create: true
+  ## Deploys ClusterRole by Default
+  clusterRole: true
   ## RBAC API version
   ##
   apiVersion: v1beta1

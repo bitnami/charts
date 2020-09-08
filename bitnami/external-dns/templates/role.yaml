@@ -1,8 +1,9 @@
-{{- if and .Values.rbac.create .Values.rbac.clusterRole }}
+{{- if and .Values.rbac.create (not .Values.rbac.clusterRole) }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
-kind: ClusterRole
+kind: Role
 metadata:
   name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 rules:
   - apiGroups:
@@ -10,7 +11,6 @@ rules:
     resources:
       - services
       - pods
-      - nodes
       - endpoints
     verbs:
       - get
