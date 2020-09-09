@@ -131,11 +131,11 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: INTERNAL_TLS_KEY_PATH
-              value: /etc/harbor/ssl/chartmuseum.key
+              value: /etc/harbor/ssl/chartmuseum/tls.key
             - name: INTERNAL_TLS_CERT_PATH
-              value: /etc/harbor/ssl/chartmuseum.crt
+              value: /etc/harbor/ssl/chartmuseum/tls.crt
             - name: INTERNAL_TLS_TRUST_CA_PATH
-              value: /harbor_cust_cert/harbor_internal_ca.crt
+              value: /etc/harbor/ssl/chartmuseum/ca.crt
             {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
@@ -160,14 +160,7 @@ spec:
             {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/chartmuseum.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/chartmuseum.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/chartmuseum
             {{- end }}
             {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
             - name: storage-service-ca

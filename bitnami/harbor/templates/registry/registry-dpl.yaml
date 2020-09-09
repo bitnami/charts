@@ -131,11 +131,11 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: INTERNAL_TLS_KEY_PATH
-              value: /etc/harbor/tls/registry.key
+              value: /etc/harbor/ssl/registry/tls.key
             - name: INTERNAL_TLS_CERT_PATH
-              value: /etc/harbor/tls/registry.crt
+              value: /etc/harbor/ssl/registry/tls.crt
             - name: INTERNAL_TLS_TRUST_CA_PATH
-              value: /harbor_cust_cert/harbor_internal_ca.crt
+              value: /etc/harbor/ssl/registry/ca.crt
             {{- end }}
             {{- if has "chartmuseum" .Values.proxy.components }}
             - name: HTTP_PROXY
@@ -179,14 +179,7 @@ spec:
               subPath: config.yml
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/tls/registry.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/tls/registry.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/registry
             {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
@@ -282,11 +275,11 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: INTERNAL_TLS_KEY_PATH
-              value: /etc/harbor/ssl/registryctl.key
+              value: /etc/harbor/ssl/registry/tls.key
             - name: INTERNAL_TLS_CERT_PATH
-              value: /etc/harbor/ssl/registryctl.crt
+              value: /etc/harbor/ssl/registry/tls.crt
             - name: INTERNAL_TLS_TRUST_CA_PATH
-              value: /harbor_cust_cert/harbor_internal_ca.crt
+              value: /etc/harbor/ssl/registry/ca.crt
             {{- end }}
             {{- if .Values.registry.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.extraEnvVars "context" $) | nindent 12 }}
@@ -300,14 +293,7 @@ spec:
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/registryctl.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/registryctl.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/registry
             {{- end }}
             - name: registry-config
               mountPath: /etc/registry/config.yml

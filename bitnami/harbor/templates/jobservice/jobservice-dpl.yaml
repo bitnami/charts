@@ -142,11 +142,11 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: INTERNAL_TLS_KEY_PATH
-              value: /etc/harbor/ssl/job_service.key
+              value: /etc/harbor/ssl/jobservice/tls.key
             - name: INTERNAL_TLS_CERT_PATH
-              value: /etc/harbor/ssl/job_service.crt
+              value: /etc/harbor/ssl/jobservice/tls.crt
             - name: INTERNAL_TLS_TRUST_CA_PATH
-              value: /harbor_cust_cert/harbor_internal_ca.crt
+              value: /etc/harbor/ssl/jobservice/ca.crt
             {{- end }}
             {{- if .Values.jobservice.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVars "context" $) | nindent 12 }}
@@ -176,14 +176,7 @@ spec:
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/job_service.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/job_service.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/jobservice
             {{- end }}
             {{- if .Values.jobservice.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumeMounts "context" $) | nindent 12 }}

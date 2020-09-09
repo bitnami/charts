@@ -134,8 +134,7 @@ spec:
               subPath: config.yaml
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/clair
             {{- end }}
             {{- if .Values.clair.server.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraVolumeMounts "context" $) | nindent 12 }}
@@ -199,9 +198,9 @@ spec:
             - name: SCANNER_API_SERVER_ADDR
               value: {{ printf ":%s" ( include "harbor.clairAdapter.containerPort" . ) | quote }}
             - name: SCANNER_API_SERVER_TLS_KEY
-              value: /etc/harbor/ssl/clair_adapter.key
+              value: /etc/harbor/ssl/clair/tls.key
             - name: SCANNER_API_SERVER_TLS_CERTIFICATE
-              value: /etc/harbor/ssl/clair_adapter.crt
+              value: /etc/harbor/ssl/clair/tls.crt
             {{- end }}
             {{- if .Values.clair.adapter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVars "context" $) | nindent 12 }}
@@ -223,14 +222,7 @@ spec:
           volumeMounts:
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/clair_adapter.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/ssl/clair_adapter.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/clair
             {{- end }}
             {{- if .Values.clair.adapter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}

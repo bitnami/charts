@@ -123,14 +123,7 @@ spec:
               subPath: nginx.conf
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
-              mountPath: /etc/harbor/tls/portal.crt
-              subPath: tls.crt
-            - name: internal-tls-certs
-              mountPath: /etc/harbor/tls/portal.key
-              subPath: tls.key
-            - name: internal-tls-certs
-              mountPath: /harbor_cust_cert/harbor_internal_ca.crt
-              subPath: ca.crt
+              mountPath: /etc/harbor/ssl/portal
             {{- end }}
           {{- if .Values.portal.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumeMounts "context" $) | nindent 12 }}
