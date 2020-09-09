@@ -42,6 +42,8 @@ rbac:
   create: true
 
 prometheus:
+  enabled: false
+
   # Prometheus Operator service monitors
   serviceMonitor:
     # enable support for Prometheus Operator
