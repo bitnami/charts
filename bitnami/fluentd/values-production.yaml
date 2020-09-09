@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.2-debian-10-r18
+  tag: 1.11.2-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -58,6 +58,17 @@ forwarder:
     runAsUser: 0
     fsGroup: 0
 
+  ## K8s Security Context for forwarder container
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
+    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    # readOnlyRootFilesystem: true
+
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -72,11 +83,6 @@ forwarder:
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
   extraArgs: ""
-
-  ## Set Priority Class Name to allow priority control over other pods
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  priorityClassName: ""
 
   ## Extra environment variables to pass to the container
   ## extraEnv:
@@ -204,6 +210,11 @@ forwarder:
   ##
   tolerations: []
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -264,6 +275,17 @@ aggregator:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## K8s Security Context for Aggregator containers
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
+    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    # readOnlyRootFilesystem: true
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -433,6 +455,16 @@ aggregator:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 10Gi
+
+  ## Extra volumes to mount
+  ## Example Use Case: mount an emptyDir into /tmp to support running with readOnlyRootFileSystem
+  # extraVolumes:
+  #   - name: tmpDir
+  #       emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: tmpDir
+  #     mountPath: /tmp
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

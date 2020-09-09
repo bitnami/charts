@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/prestashop
-  tag: 1.7.6-7-debian-10-r19
+  tag: 1.7.6-7-debian-10-r37
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -126,7 +126,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.1.45-debian-10-r78
+    tag: 10.1.46-debian-10-r18
   ## Disable MariaDB replication
   replication:
     enabled: false
@@ -305,7 +305,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r117
+    tag: 0.8.0-debian-10-r137
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

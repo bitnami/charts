@@ -27,7 +27,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.16+
 - Helm 2.12+ or Helm 3.0-beta3+
 
 ## Installing the Chart
@@ -465,3 +465,9 @@ $ helm upgrade my-release bitnami/kube-prometheus
 - This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
+
+### To 2.0.0
+
+- CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
+  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
+  - Kubernetes 1.16 is required
