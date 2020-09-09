@@ -27,4 +27,5 @@ spec:
       protocol: "UDP"
       port: {{.Values.service.consulDnsPort}}   
   clusterIP: None
+  sessionAffinity: {{.Values.service.sessionAffinity}}
   selector: {{- include "consul.matchLabels" . | nindent 4 }}
