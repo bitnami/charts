@@ -154,6 +154,12 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.configuration`                         | Content of pgpool.conf                                                                                                                                               | `nil`                                                        |
 | `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`). The file used must be named `pgpool.conf`.                                     | `nil` (The value is evaluated as a template)                 |
 | `pgpool.useLoadBalancing`                      | If true, use Pgpool Load-Balancing                                                                                                                                   | `true`                                                       |
+| `pgpool.tls.enabled`                                 | Enable TLS traffic support                                                                                                                                                | `false`                                                       |
+| `pgpool.tls.preferServerCiphers`                     | Whether to use the server's TLS cipher preferences rather than the client's                                                                                               | `true`                                                        |
+| `pgpool.tls.certificatesSecret`                      | Name of an existing secret that contains the certificates                                                                                                                 | `nil`                                                         |
+| `pgpool.tls.certFilename`                            | Certificate filename                                                                                                                                                      | `""`                                                          |
+| `pgpool.tls.certKeyFilename`                         | Certificate key filename                                                                                                                                                  | `""`                                                          |
+| `pgpool.tls.certCAFilename`                          | CA Certificate filename. If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate.                                                      |`nil`                                                          |
 | **LDAP**                                       |                                                                                                                                                                      |                                                              |
 | `ldap.enabled`                                 | Enable LDAP support                                                                                                                                                  | `false`                                                      |
 | `ldap.existingSecret`                          | Name of existing secret to use for LDAP passwords                                                                                                                    | `nil`                                                        |
@@ -278,6 +284,35 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+### Securing Pgpool traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `pgpool.tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+
+- `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`
+- `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `pgpool.tls.certFilename`: Certificate filename. No defaults.
+- `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+* First, create the secret with the cetificates files:
+
+    ```console
+    kubectl create secret generic certificates-pgpool.tls.secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+* Then, use the following parameters:
+
+    ```console
+    volumePermissions.enabled=true
+    pgpool.tls.enabled=true
+    pgpool.tls.certificatesSecret="certificates-pgpool.tls.secret"
+    pgpool.tls.certFilename="cert.crt"
+    pgpool.tls.certKeyFilename="cert.key"
+    ```
+
+    > Note TLS and VolumePermissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### LDAP
 
