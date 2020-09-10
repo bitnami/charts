@@ -618,7 +618,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the LDAP credentials secret.
 */}}
@@ -814,4 +813,25 @@ pool_passwd file.
 {{- else -}}
 {{- printf "%s-custom-users" (include "postgresql-ha.pgpool" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.pgpool.tls.certFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.pgpool.tls.certKeyFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCACert" -}}
+{{- printf "/opt/bitnami/pgpool/certs/%s" .Values.pgpool.tls.certCAFilename -}}
 {{- end -}}
