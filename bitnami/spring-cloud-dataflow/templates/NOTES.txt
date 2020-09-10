@@ -64,6 +64,7 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 2. Open a browser and access the Data Flow dashboard using the obtained URL.
 
 {{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.server.composedTaskRunner.image }}
 {{- include "common.warnings.rollingTag" .Values.skipper.image }}
 {{- include "common.warnings.rollingTag" .Values.waitForBackends.image }}
 {{- include "scdf.validateValues" . }}
