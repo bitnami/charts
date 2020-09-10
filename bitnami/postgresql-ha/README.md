@@ -311,7 +311,7 @@ For example:
     pgpool.tls.certKeyFilename="cert.key"
     ```
 
-    > Note TLS and VolumePermissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
+    > Note TLS and VolumePermissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `securityContext.runAsUser`, the `volumePermissions` init container will ensure everything works as expected.
 
 ### LDAP
 
