@@ -435,7 +435,7 @@ pgpool:
 
   ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  # maxPools:
+  # maxPool:
 
   ## Pgpool configuration
   ## Specify content for pgpool.conf
