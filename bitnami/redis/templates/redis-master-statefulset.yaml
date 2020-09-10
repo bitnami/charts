@@ -9,6 +9,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  replicas: 0
   selector:
     matchLabels:
       app: {{ template "redis.name" . }}
@@ -78,6 +79,14 @@ spec:
             - /bin/bash
             - -c
             - |
+              HOSTNAME=`hostname -s`
+              if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                ORD=${BASH_REMATCH[2]}
+                echo "nodo $ORD" > /opt/bitnami/redis/etc/nodo.txt
+              else
+                echo "Failed to get index from hostname $HOST"
+                exit 1
+              fi
               {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
               useradd redis
               chown -R redis {{ .Values.master.persistence.path }}

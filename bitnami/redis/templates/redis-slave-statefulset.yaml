@@ -86,21 +86,84 @@ spec:
             - /bin/bash
             - -c
             - |
+              echo "hola redis"
+              is_boolean_yes() {
+                  local -r bool="${1:-}"
+                  # comparison is performed without regard to the case of alphabetic characters
+                  shopt -s nocasematch
+                  if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
+                      true
+                  else
+                      false
+                  fi
+              }
+
+              export REDIS_REPLICATION_MODE="slave"
+              if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                if [[ ${BASH_REMATCH[2]} == "0" ]]; then
+                  if [[ ! -f /data/redisboot.lock ]]; then
+                    export REDIS_REPLICATION_MODE="master"
+                  else
+                    if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+                      echo "getting master ssl"
+                      sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
+                    else
+                      echo "getting master"
+                      echo "sentinel_info_command=redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                      sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
+                    fi
+                    if [[ ! ($($sentinel_info_command)) ]]; then
+                       export REDIS_REPLICATION_MODE="master"
+                       rm /data/redisboot.lock
+                    fi
+                  fi
+                fi
+              fi
+              echo "Modo: $REDIS_REPLICATION_MODE"
+
               {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
               useradd redis
               chown -R redis {{ .Values.slave.persistence.path }}
               {{- end }}
+
               if [[ -n $REDIS_PASSWORD_FILE ]]; then
                 password_aux=`cat ${REDIS_PASSWORD_FILE}`
                 export REDIS_PASSWORD=$password_aux
               fi
+
               if [[ -n $REDIS_MASTER_PASSWORD_FILE ]]; then
                 password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
                 export REDIS_MASTER_PASSWORD=$password_aux
               fi
-              if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
-                cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
+
+
+              if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
+                echo "I am master"
+                if [[ ! -f /opt/bitnami/redis/etc/master.conf ]];then
+                  cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
+                fi
+              else
+                echo "I am slave"
+                if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+                  cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
+                fi
+
+                if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+                  echo "getting master ssl"
+                  sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                else
+                  echo "getting master"
+                  echo "sentinel_info_command=redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                  sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                fi
+                REDIS_SENTINEL_INFO=($($sentinel_info_command))
+                REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
+                REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+                echo "Obtained master:" $REDIS_MASTER_HOST $REDIS_MASTER_PORT_NUMBER
+
               fi
+
               if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
                 cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
               fi
@@ -118,30 +181,45 @@ spec:
               {{- else }}
               ARGS=("--port" "${REDIS_PORT}")
               {{- end }}
-              ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+
+              if [[ "$REDIS_REPLICATION_MODE" == "slave" ]]; then
+                ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+              fi
+
               {{- if .Values.usePassword }}
               ARGS+=("--requirepass" "${REDIS_PASSWORD}")
               ARGS+=("--masterauth" "${REDIS_MASTER_PASSWORD}")
               {{- else }}
               ARGS+=("--protected-mode" "no")
               {{- end }}
+
+              if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
+                ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
+              else
+                ARGS+=("--include" "/opt/bitnami/redis/etc/replica.conf")
+              fi
+
               ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
-              ARGS+=("--include" "/opt/bitnami/redis/etc/replica.conf")
               {{- if .Values.slave.extraFlags }}
               {{- range .Values.slave.extraFlags }}
               ARGS+=({{ . | quote }})
               {{- end }}
               {{- end }}
+
+              touch /data/redisboot.lock
+              echo {{ .Values.slave.command }} "${ARGS[@]}"
               {{- if .Values.slave.command }}
               {{ .Values.slave.command }} "${ARGS[@]}"
               {{- else }}
               redis-server "${ARGS[@]}"
               {{- end }}
           env:
-            - name: REDIS_REPLICATION_MODE
-              value: slave
-            - name: REDIS_MASTER_HOST
-              value: {{ template "redis.fullname" . }}-master-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+#            - name: REDIS_REPLICATION_MODE
+#              value: slave
+#            - name: REDIS_MASTER_HOST
+#              value: {{ template "redis.fullname" . }}-master-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             - name: REDIS_MASTER_PORT_NUMBER
               value: {{ .Values.redisPort | quote }}
             {{- if .Values.usePassword }}
@@ -273,11 +351,55 @@ spec:
             - /bin/bash
             - -c
             - |
+              echo "hola sentinel"
+              replace_in_file() {
+                  local filename="${1:?filename is required}"
+                  local match_regex="${2:?match regex is required}"
+                  local substitute_regex="${3:?substitute regex is required}"
+                  local posix_regex=${4:-true}
+
+                  local result
+
+                  # We should avoid using 'sed in-place' substitutions
+                  # 1) They are not compatible with files mounted from ConfigMap(s)
+                  # 2) We found incompatibility issues with Debian10 and "in-place" substitutions
+                  del=$'\001' # Use a non-printable character as a 'sed' delimiter to avoid issues
+                  if [[ $posix_regex = true ]]; then
+                      result="$(sed -E "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+                  else
+                      result="$(sed "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+                  fi
+                  echo "$result" > "$filename"
+              }
+              sentinel_conf_set() {
+                  local -r key="${1:?missing key}"
+                  local value="${2:-}"
+
+                  # Sanitize inputs
+                  value="${value//\\/\\\\}"
+                  value="${value//&/\\&}"
+                  value="${value//\?/\\?}"
+                  [[ "$value" = "" ]] && value="\"$value\""
+
+                  replace_in_file "/opt/bitnami/redis-sentinel/etc/sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
+              }
+              is_boolean_yes() {
+                  local -r bool="${1:-}"
+                  # comparison is performed without regard to the case of alphabetic characters
+                  shopt -s nocasematch
+                  if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
+                      true
+                  else
+                      false
+                  fi
+              }
+
               if [[ -n $REDIS_PASSWORD_FILE ]]; then
                 password_aux=`cat ${REDIS_PASSWORD_FILE}`
                 export REDIS_PASSWORD=$password_aux
               fi
-              if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]];then
+              echo "sentinel 1..."
+              if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
                 cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
                 {{- if .Values.usePassword }}
                 printf "\nsentinel auth-pass {{ .Values.sentinel.masterSet }} $REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -289,6 +411,58 @@ spec:
                 printf "\nsentinel myid $(echo $HOSTNAME | openssl sha1 | awk '{ print $2 }')" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
                 {{- end }}
               fi
+              echo "hola redis"
+
+              export REDIS_REPLICATION_MODE="slave"
+              if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                if [[ ${BASH_REMATCH[2]} == "0" ]]; then
+                  if [[ ! -f /data/sentinelboot.lock ]]; then
+                    export REDIS_REPLICATION_MODE="master"
+                  else
+                    if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+                      echo "getting master ssl"
+                      sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
+                    else
+                      echo "getting master"
+                      echo "sentinel_info_command=redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                      sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
+                    fi
+                    if [[ ! ($($sentinel_info_command)) ]]; then
+                       export REDIS_REPLICATION_MODE="master"
+                       rm /data/sentinelboot.lock
+                    fi
+                  fi
+                fi
+              fi
+              echo "Modo: $REDIS_REPLICATION_MODE"
+
+              if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
+                echo "sentinel master"
+                echo "sentinel_conf_set sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-slave-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}"
+                sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-slave-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}"
+              else
+                echo "sentinel slave"
+                if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+                  echo "tls"
+                  echo "sentinel_info_command=redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                  sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                else
+                  echo "no tls"
+                  echo "sentinel_info_command=redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                  sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+                fi
+                echo "redis-cli called"
+                REDIS_SENTINEL_INFO=($($sentinel_info_command))
+                REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
+                REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+                echo "Resultado: $REDIS_MASTER_HOST $REDIS_MASTER_PORT_NUMBER"
+                echo "sentinel_conf_set sentinel monitor {{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+                sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+              fi
+              echo "sentinel 6..."
+
+              echo "sentinel 6..."
 
               {{- if .Values.tls.enabled }}
               ARGS=("--port" "0")
@@ -302,7 +476,9 @@ spec:
               ARGS+=("--tls-dh-params-file" "${REDIS_SENTINEL_TLS_DH_PARAMS_FILE}")
               {{- end }}
               {{- end }}
-
+              echo "sentinel 7 start..."
+              echo redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+              touch /data/sentinelboot.lock
               redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
           env:
             {{- if .Values.usePassword }}
