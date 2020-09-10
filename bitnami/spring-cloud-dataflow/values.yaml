@@ -44,6 +44,15 @@ server:
     ##
     debug: false
 
+  composedTaskRunner:
+    ## Bitnami Spring Cloud Dataflow Composed Task Runner image
+    ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/spring-cloud-dataflow-composed-task-runner
+      tag: 2.6.1-debian-10-r0
+
   ## Spring Cloud Dataflow Server configuration parameters
   ##
   configuration:
