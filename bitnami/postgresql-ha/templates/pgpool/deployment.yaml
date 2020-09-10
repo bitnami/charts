@@ -50,7 +50,7 @@ spec:
       {{- if .Values.pgpool.tls.enabled }}
         - name: init-chmod-data
           image: {{ template "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
           command:
             - /bin/sh
             - -cx
