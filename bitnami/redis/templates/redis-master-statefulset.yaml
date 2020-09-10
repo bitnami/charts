@@ -162,6 +162,9 @@ spec:
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
             {{- end }}
+            {{- if .Values.master.statefulset.extraEnv }}
+            {{- toYaml .Values.master.statefulset.extraEnv | trim | nindent 12 }}
+            {{- end }}
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
