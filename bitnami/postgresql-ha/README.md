@@ -154,7 +154,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.configuration`                         | Content of pgpool.conf                                                                                                                                               | `nil`                                                        |
 | `pgpool.configurationCM`                       | ConfigMap with the Pgpool configuration file (Note: Overrides `pgpol.configuration`). The file used must be named `pgpool.conf`.                                     | `nil` (The value is evaluated as a template)                 |
 | `pgpool.useLoadBalancing`                      | If true, use Pgpool Load-Balancing                                                                                                                                   | `true`                                                       |
-| `pgpool.tls.enabled`                                 | Enable TLS traffic support                                                                                                                                                | `false`                                                       |
+| `pgpool.tls.enabled`                                 | Enable TLS traffic support for end-client connections                                                                                                                                               | `false`                                                       |
 | `pgpool.tls.preferServerCiphers`                     | Whether to use the server's TLS cipher preferences rather than the client's                                                                                               | `true`                                                        |
 | `pgpool.tls.certificatesSecret`                      | Name of an existing secret that contains the certificates                                                                                                                 | `nil`                                                         |
 | `pgpool.tls.certFilename`                            | Certificate filename                                                                                                                                                      | `""`                                                          |
@@ -287,7 +287,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Securing Pgpool traffic using TLS
 
-TLS support can be enabled in the chart by specifying the `pgpool.tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
 
 - `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`
 - `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
@@ -305,7 +305,6 @@ For example:
 * Then, use the following parameters:
 
     ```console
-    volumePermissions.enabled=true
     pgpool.tls.enabled=true
     pgpool.tls.certificatesSecret="certificates-pgpool.tls.secret"
     pgpool.tls.certFilename="cert.crt"
