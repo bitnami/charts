@@ -554,7 +554,6 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-
   ## MySQL exporter additional command line flags
   ## Can be used to specify command line flags, for example:
   ##
