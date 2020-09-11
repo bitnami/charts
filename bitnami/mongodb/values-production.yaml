@@ -487,7 +487,7 @@ externalAccess:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
-  ## Parameters to configure K8s service(s) used to externally access Kafka brokers
+  ## Parameters to configure K8s service(s) used to externally access MongoDB
   ## A new service per broker will be created
   ##
   service:
@@ -497,7 +497,7 @@ externalAccess:
     ## Port used when service type is LoadBalancer
     ##
     port: 27017
-    ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
+    ## Array of load balancer IPs for each MongoDB node. Length must be the same as replicaCount
     ## Example:
     ## loadBalancerIPs:
     ##   - X.X.X.X
@@ -511,14 +511,14 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## Array of node ports used for each Kafka broker. Length must be the same as replicaCount
+    ## Array of node ports used for each MongoDB node. Length must be the same as replicaCount
     ## Example:
     ## nodePorts:
     ##   - 30001
     ##   - 30002
     ##
     nodePorts: []
-    ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
+    ## When service type is NodePort, you can specify the domain used for MongoDB advertised hostnames.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     # domain: mydomain.com
@@ -737,8 +737,8 @@ serviceAccount:
 ##
 rbac:
   ## Specifies whether RBAC rules should be created
-  ## binding Kafka ServiceAccount to a role
-  ## that allows Kafka pods querying the K8s API
+  ## binding MongoDB ServiceAccount to a role
+  ## that allows MongoDB pods querying the K8s API
   ##
   create: false
 
