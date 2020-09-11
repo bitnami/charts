@@ -243,7 +243,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           env:
             - name: MARIADB_METRICS_EXTRA_FLAGS
-              value: {{ default "" .Values.metrics.extraFlags | quote }}
+              value: {{ default "" (join " " .Values.metrics.extraFlags) | quote }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
