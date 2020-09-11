@@ -251,6 +251,7 @@ service:
   serverPort: 8300
   consulDnsPort: 8600
   uiPort: 80
+  sessionAffinity: "None"
 
 ## HashiCorp Consul UI service parameters
 ##
