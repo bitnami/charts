@@ -25,6 +25,9 @@ spec:
         {{- if .Values.forwarder.podAnnotations }}
         {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.forwarder.rbac.pspEnabled }}
+        checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
+        {{- end }}
     spec:
 {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
