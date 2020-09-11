@@ -76,7 +76,7 @@ host. To configure Ghost with the URL of your service:
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
 
-{{- if and (not .Values.mariadb.enabled) .Values.externalDatabase.host .Release.IsUpgrade  -}}
+{{- if and (not .Values.mariadb.enabled) .Values.externalDatabase.host .Release.IsUpgrade -}}
   {{- $externaldbSecretName := include "ghost.externalDb.secret.name" . -}}
   {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $externaldbSecretName "field" "mariadb-password" -}}
 
