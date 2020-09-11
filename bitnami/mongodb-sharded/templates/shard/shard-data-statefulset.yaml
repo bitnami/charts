@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: shardsvr
+  podManagementPolicy: {{ $.Values.shardsvr.dataNode.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.dataNode.updateStrategy | nindent 4 }}
   serviceName: {{ include "mongodb-sharded.fullname" $ }}-headless
   replicas: {{ $.Values.shardsvr.dataNode.replicas }}
@@ -41,6 +42,7 @@ spec:
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $ ) | nindent 8 }}
       affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i) ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.tolerations "context" $ ) | nindent 8 }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.dataNode.serviceAccount "context" $) }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}
@@ -58,6 +60,12 @@ spec:
           volumeMounts:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
+        {{- end }}
+        {{- with $.Values.shardsvr.dataNode.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       containers:
         - name: mongodb
@@ -268,7 +276,7 @@ spec:
             secretName: {{ include "mongodb-sharded.secret" $ }}
         {{- end }}
         {{- if $.Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" $ }}
             defaultMode: 0755

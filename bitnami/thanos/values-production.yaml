@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.14.0-scratch-r1
+  tag: 0.15.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -104,7 +104,7 @@ querier:
 
   ## Extra Flags to passed to Thanos Querier
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Number of Thanos Querier replicas to deploy
   ##
@@ -383,7 +383,7 @@ bucketweb:
 
   ## Extra Flags to passed to Bucket Web
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Number of Thanos Querier replicas to deploy
   ##
@@ -588,7 +588,7 @@ compactor:
 
   ## Extra Flags to passed to Thanos Compactor
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## StrategyType, can be set to RollingUpdate or Recreate by default.
   ##
@@ -739,7 +739,17 @@ storegateway:
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
-  extraFlags: {}
+  extraFlags: []
+
+  ## Store Gateway Cache Configuration
+  ## Specify content for config.yml
+  ##
+  # config:
+
+  ## ConfigMap with Store Gateway Cache  Configuration
+  ## NOTE: This will override storegateway.config
+  ##
+  # existingConfigmap:
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##
@@ -943,7 +953,7 @@ ruler:
 
   ## Extra Flags to passed to Thanos Ruler
   ##
-  extraFlags: {}
+  extraFlags: []
 
   ## Ruler Configuration
   ## Specify content for ruler.yml

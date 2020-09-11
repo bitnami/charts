@@ -3,7 +3,7 @@
 [kubewatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes watcher that currently publishes notification to Slack. Run it in your k8s cluster, and you will get event notifications in a slack channel.
 
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -75,6 +75,8 @@ The following table lists the configurable parameters of the kubewatch chart and
 | `mattermost.url`                         | Mattermost URL                                                                                                              | `""`                                                    |
 | `flock.enabled`                          | Enable Flock notifications                                                                                                  | `false`                                                 |
 | `flock.url`                              | Flock URL                                                                                                                   | `""`                                                    |
+| `msteams.enabled`                        | Enable Microsoft Teams notifications                                                                                        | `false`                                                 |
+| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                                                                                 | `""`                                                    |
 | `webhook.enabled`                        | Enable Webhook notifications                                                                                                | `false`                                                 |
 | `webhook.url`                            | Webhook URL                                                                                                                 | `""`                                                    |
 | `smtp.enabled`                           | Enable SMTP (email) notifications                                                                                           | `false`                                                 |

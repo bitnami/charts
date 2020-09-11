@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.8.0-debian-10-r55
+  tag: 11.9.0-debian-10-r18
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.2-debian-10-r59
+  tag: 4.1.3-debian-10-r21
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r173
+  tag: 0.8.0-debian-10-r208
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -309,6 +309,23 @@ postgresql:
 ## Pgpool parameters
 ##
 pgpool:
+  ## Additional users that will be performing connections to the database using
+  ## pgpool. Use this property in order to create new user/password entries that
+  ## will be appended to the "pgpool_passwd" file
+  ##
+  customUsers: {}
+  ##  Comma or semicolon separeted list of postgres usernames
+  #   usernames: 'user01;user02'
+
+  ##  Comma or semicolon separated list of the associated passwords for the
+  ##  users above
+  #   passwords: 'pass01;pass02'
+
+  ## Alternatively, you can provide the name of a secret containing this information.
+  ## The secret must contain the keys "usernames" and "passwords" respectively.
+  ##
+  customUsersSecret:
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -417,7 +434,7 @@ pgpool:
 
   ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  # maxPools:
+  # maxPool:
 
   ## Pgpool configuration
   ## Specify content for pgpool.conf
@@ -453,6 +470,36 @@ pgpool:
   ## Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
+
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## Enable TLS traffic
+    ##
+    enabled: false
+    ##
+    ## Whether to use the server's TLS cipher preferences rather than the client's.
+    ##
+    preferServerCiphers: true
+    ##
+    ## Name of the Secret that contains the certificates
+    ##
+    certificatesSecret: ""
+    ##
+    ## Certificate filename
+    ##
+    certFilename: ""
+    ##
+    ## Certificate Key filename
+    ##
+    certKeyFilename: ""
+    ##
+    ## CA Certificate filename
+    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
+    ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
+    ##
+    certCAFilename:
 
 ## LDAP parameters
 ##

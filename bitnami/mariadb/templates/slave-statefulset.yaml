@@ -27,10 +27,7 @@ spec:
   template:
     metadata:
       {{- if .Values.slave.annotations }}
-      annotations:
-        {{- range $key, $value := .Values.slave.annotations }}
-        {{ $key }}: {{ $value }}
-        {{- end }}
+      annotations: {{- include "mariadb.tplValue" (dict "value" .Values.slave.annotations "context" $) | nindent 8 }}
       {{- end }}
       labels:
         app: {{ template "mariadb.name" . }}
@@ -125,7 +122,7 @@ spec:
               value: "root"
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_MASTER_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.rootUser.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_MASTER_ROOT_PASSWORD
               valueFrom:
@@ -137,7 +134,7 @@ spec:
               value: "{{ .Values.replication.user }}"
             {{- if .Values.replication.injectSecretsAsVolume }}
             - name: MARIADB_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-replication-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-replication-password" .Values.replication.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_REPLICATION_PASSWORD
               valueFrom:
@@ -312,5 +309,8 @@ spec:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
         {{ include "mariadb.slave.storageClass" . }}
+        {{- if .Values.slave.persistence.selector }}
+        selector: {{- include "mariadb.tplValue" (dict "value" .Values.slave.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- end }}

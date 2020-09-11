@@ -46,7 +46,7 @@ spec:
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
             {{- if .Values.mongodb.enabled }}
-            - --database-secret-name={{ .Values.mongodb.existingSecret }}
+            - --database-secret-name={{ .Values.mongodb.auth.existingSecret }}
             - --database-secret-key=mongodb-root-password
             - --database-type=mongodb
             - --database-url={{ template "kubeapps.mongodb.fullname" . }}

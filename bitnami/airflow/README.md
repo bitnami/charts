@@ -2,7 +2,7 @@
 
 [Apache Airflow]() is a platform to programmatically author, schedule and monitor workflows.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm install my-release bitnami/airflow
@@ -113,6 +113,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `airflow.worker.extraEnvVarsSecret`            | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                   | `nil`                                                        |
 | `airflow.worker.command`                       | Override default container command (useful when using custom images)                                                                                                                                                           | `nil`                                                        |
 | `airflow.worker.args`                          | Override default container args (useful when using custom images)                                                                                                                                                              | `nil`                                                        |
+| `airflow.worker.podAnnotations`                | Additional annotations for Airflow worker pods                                                                                                                                                                                 | []                                                       |
 | `airflow.worker.extraVolumeMounts`             | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.                                                                                                                           | `nil`                                                        |
 | `airflow.worker.extraVolumes`                  | Array of extra volumes to be added deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                    | `nil`                                                        |
 | `airflow.auth.forcePassword`                   | Force users to specify a password                                                                                                                                                                                              | `false`                                                      |
@@ -297,6 +298,8 @@ airflow.cloneDagFilesFromGit.enabled=true
 airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 ```
+
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
 
 ### Loading Plugins
 

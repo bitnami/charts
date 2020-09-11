@@ -9,6 +9,6 @@ data:
   config.json: {{- toYaml .Values.configmap | nindent 4}}
   connection.json: |
     {
-      "retry_join": ["{{ template "consul.fullname" . }}-0.{{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc"]
+      "retry_join": ["{{ include "consul.retryjoin.endpoint" . }}"]
     }
 {{- end }}

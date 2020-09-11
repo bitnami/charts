@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   name: {{ template "wordpress.fullname" . }}
   labels: {{- include "wordpress.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "wordpress.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "wordpress.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels: {{- include "wordpress.matchLabels" . | nindent 6 }}
@@ -52,6 +58,12 @@ spec:
         - name: wordpress
           image: {{ template "wordpress.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "wordpress.tplValue" ( dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "wordpress.tplValue" ( dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.image.debug }}
             - name: NAMI_DEBUG
@@ -97,6 +109,8 @@ spec:
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
               value: {{ .Values.wordpressScheme | quote }}
+            - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
+              value: {{ .Values.wordpressExtraConfigContent | quote }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -140,7 +154,7 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             httpGet:
-              path: /wp-login.php
+              path: /wp-admin/install.php
               port: {{ ternary "https" "http" .Values.healthcheckHttps }}
               {{- if .Values.healthcheckHttps }}
               scheme: HTTPS

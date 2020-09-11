@@ -29,6 +29,7 @@ spec:
     {{- end }}
   template:
     metadata:
+      annotations: {{- include "airflow.tplValue" (dict "value" .Values.airflow.worker.podAnnotations "context" $) | nindent 8 }}
       labels:
         app.kubernetes.io/name: {{ include "airflow.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}

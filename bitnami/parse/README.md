@@ -2,7 +2,7 @@
 
 [Parse](https://parse.com/) is an open source version of the Parse backend that can be deployed to any infrastructure that can run Node.js.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -219,6 +219,12 @@ extraEnvVars:
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
 ## Upgrading
+
+### To 12.0.0
+
+MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 11.0.0
 

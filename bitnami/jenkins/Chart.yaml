@@ -1,7 +1,7 @@
 apiVersion: v1
 name: jenkins
-version: 5.0.19
-appVersion: 2.235.2
+version: 5.0.25
+appVersion: 2.249.1
 description: The leading open source automation server
 keywords:
   - jenkins
@@ -10,9 +10,10 @@ keywords:
   - http
   - web
   - application
-home: https://jenkins.io/
+home: https://github.com/bitnami/charts/tree/master/bitnami/jenkins
 sources:
   - https://github.com/bitnami/bitnami-docker-jenkins
+  - https://jenkins.io/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

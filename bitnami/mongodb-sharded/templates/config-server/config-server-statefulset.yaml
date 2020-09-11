@@ -11,6 +11,7 @@ spec:
       app.kubernetes.io/component: configsvr
   serviceName: {{ include "mongodb-sharded.fullname" . }}-headless
   replicas: {{ .Values.configsvr.replicas }}
+  podManagementPolicy: {{ .Values.configsvr.podManagementPolicy }}
   updateStrategy: {{- toYaml .Values.configsvr.updateStrategy | nindent 4 }}
   template:
     metadata:
@@ -35,6 +36,7 @@ spec:
       {{- if .Values.common.schedulerName }}
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.configsvr.serviceAccount "context" $) }}
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.nodeSelector "context" $ ) | nindent 8 }}
       affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.affinity "context" $ ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.configsvr.tolerations "context" $ ) | nindent 8 }}
@@ -55,6 +57,12 @@ spec:
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
+        {{- end }}
+        {{- with $.Values.configsvr.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       containers:
         - name: mongodb
@@ -293,7 +301,7 @@ spec:
             name: {{ include "mongodb-sharded.configsvr.configCM" . }}
         {{- end }}
         {{- if .Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" . }}
             defaultMode: 0755

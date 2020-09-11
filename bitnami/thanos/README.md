@@ -2,7 +2,7 @@
 
 [Thanos](https://thanos.io/) is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -99,7 +99,9 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `nameOverride`                                       | String to partially override thanos.fullname                                                           | `nil`                                                   |
 | `fullnameOverride`                                   | String to fully override thanos.fullname                                                               | `nil`                                                   |
 | `clusterDomain`                                      | Default Kubernetes cluster domain                                                                      | `cluster.local`                                         |
-| `objstoreConfig`                                     | Objstore configuration                                                                                 | `nil`                                                   |
+| `objstoreConfig`                                     | [Objstore configuration](https://thanos.io/storage.md/#configuration)                                  | `nil`                                                   |
+| `indexCacheConfig`                                   | [Index cache configuration](https://thanos.io/components/store.md/#memcached-index-cache)              | `nil`                                                   |
+| `bucketCacheConfig`                                  | [Bucket cache configuration](https://thanos.io/components/store.md/#caching-bucket)                    | `nil`                                                   |
 | `existingObjstoreSecret`                             | Name of existing secret with Objstore configuration                                                    | `nil`                                                   |
 | `existingObjstoreSecretItems`                        | List of Secret Keys and Paths                                                                          | `[]`                                                    |
 | `existingServiceAccount`                             | Name for the existing service account to be shared between the components                              | `nil`                                                   |
@@ -117,7 +119,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.stores`                                | Store APIs to connect with Thanos Querier                                                              | `[]`                                                    |
 | `querier.sdConfig`                              | Service Discovery configuration                                                                        | `nil`                                                   |
 | `querier.existingSDConfigmap`                   | Name of existing ConfigMap with Ruler configuration                                                    | `nil`                                                   |
-| `querier.extraFlags`                            | Extra Flags to passed to Thanos Querier                                                                | `{}`                                                    |
+| `querier.extraFlags`                            | Extra Flags to passed to Thanos Querier                                                                | `[]`                                                    |
 | `querier.replicaCount`                          | Number of Thanos Querier replicas to deploy                                                            | `1`                                                     |
 | `querier.strategyType`                          | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
 | `querier.affinity`                              | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
@@ -190,7 +192,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.logLevel`                                 | Thanos Bucket Web log level                                                                            | `info`                                                  |
 | `bucketweb.refresh`                                  | Refresh interval to download metadata from remote storage                                              | `30m`                                                   |
 | `bucketweb.timeout`                                  | Timeout to download metadata from remote storage                                                       | `5m`                                                    |
-| `bucketweb.extraFlags`                               | Extra Flags to passed to Thanos Bucket Web                                                             | `{}`                                                    |
+| `bucketweb.extraFlags`                               | Extra Flags to passed to Thanos Bucket Web                                                             | `[]`                                                    |
 | `bucketweb.replicaCount`                             | Number of Thanos Bucket Web replicas to deploy                                                         | `1`                                                     |
 | `bucketweb.strategyType`                             | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
 | `bucketweb.affinity`                                 | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
@@ -239,7 +241,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.retentionResolution5m`                    | Resolution and Retention flag                                                                          | `30d`                                                   |
 | `compactor.retentionResolution1h`                    | Resolution and Retention flag                                                                          | `10y`                                                   |
 | `compactor.consistencyDelay`                         | Minimum age of fresh blocks before they are being processed                                            | `30m`                                                   |
-| `compactor.extraFlags`                               | Extra Flags to passed to Thanos Compactor                                                              | `{}`                                                    |
+| `compactor.extraFlags`                               | Extra Flags to passed to Thanos Compactor                                                              | `[]`                                                    |
 | `compactor.strategyType`                             | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
 | `compactor.affinity`                                 | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
 | `compactor.nodeSelector`                             | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
@@ -274,7 +276,9 @@ The following tables lists the configurable parameters of the Thanos chart and t
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                          | `false`                                                 |
 | `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                         | `info`                                                  |
-| `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                          | `{}`                                                    |
+| `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                          | `[]`                                                    |
+| `storegateway.config`                                | Thanos Store Gateway cache configuration                                                               | `nil`                                                   |
+| `storegateway.existingConfigmap`                     | Name of existing ConfigMap with Thanos Store Gateway cache configuration                               | `nil`                                                   |
 | `storegateway.updateStrategyType`                    | Statefulset Update Strategy Type                                                                       | `RollingUpdate`                                         |
 | `storegateway.replicaCount`                          | Number of Thanos Store Gateway replicas to deploy                                                      | `1`                                                     |
 | `storegateway.affinity`                              | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
@@ -325,7 +329,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.alertmanagers`                                | Alermanager URLs array                                                                                 | `[]`                                                    |
 | `ruler.evalInterval`                                 | The default evaluation interval to use                                                                 | `1m`                                                    |
 | `ruler.clusterName`                                  | Used to set the 'ruler_cluster' label                                                                  | `nil`                                                   |
-| `ruler.extraFlags`                                   | Extra Flags to passed to Thanos Ruler                                                                  | `{}`                                                    |
+| `ruler.extraFlags`                                   | Extra Flags to passed to Thanos Ruler                                                                  | `[]`                                                    |
 | `ruler.config`                                       | Ruler configuration                                                                                    | `nil`                                                   |
 | `ruler.existingConfigmap`                            | Name of existing ConfigMap with Ruler configuration                                                    | `nil`                                                   |
 | `ruler.updateStrategyType`                           | Statefulset Update Strategy Type                                                                       | `RollingUpdate`                                         |
@@ -376,6 +380,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Volume Permissions parameters
 
+| Parameter                                            | Description                                                                                            | Default                                                 |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
@@ -457,8 +463,8 @@ In case you want to add extra flags to any Thanos component, you can use `XXX.ex
 ```yaml
 storegateway:
   extraFlags:
-    sync-block-duration: 3m
-    chunk-pool-size: 2GB
+    - --sync-block-duration=3m
+    - --chunk-pool-size=2GB
 ```
 
 ### Using custom Objstore configuration
@@ -570,7 +576,28 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 2.0.0
+
+The format of the chart's `extraFlags` option has been updated to be an array (instead of an object), to support passing multiple flags with the same name to Thanos.
+
+Now you need to specify the flags in the following way in your values file (where component is one of `querier/bucketweb/compactor/storegateway/ruler`):
+
+```yaml
+component:
+  ...
+  extraFlags
+    - --sync-block-duration=3m
+    - --chunk-pool-size=2GB
+```
+
+To specify the values via CLI::
+
+```console
+--set 'component.extraFlags[0]=--sync-block-duration=3m' --set 'ruler.extraFlags[1]=--chunk-pool-size=2GB'
+```
+
 ### To 1.0.0
+
 If you are upgrading from a `<1.0.0` release you need to move your Querier Ingress information to the new values settings:
 ```
 ingress.enabled -> querier.ingress.enabled

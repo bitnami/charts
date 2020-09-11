@@ -2,7 +2,7 @@
 
 [NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -87,7 +87,9 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `service.port`                             | Service HTTP port                                                                            | `80`                                                         |
 | `service.httpsPort`                        | Service HTTPS port                                                                           | `443`                                                        |
 | `service.nodePorts.http`                   | Kubernetes http node port                                                                    | `""`                                                         |
-| `service.nodePorts.https`                  | Kubernetes https node port                                                                   | `""`                                                         |
+| `service.nodePorts.https`                  | Kubernetes https node port
+| `service.targetPort.http`                  | Kubernetes http targetPort                                                                   | `http`                   |
+| `service.targetPort.https`                 | Kubernetes https targetPort                                                                  | `https`                  |
 | `service.externalTrafficPolicy`            | Enable client source IP preservation                                                         | `Cluster`                                                    |
 | `service.loadBalancerIP`                   | LoadBalancer service IP address                                                              | `""`                                                         |
 | `service.annotations`                      | Service annotations                                                                          | `{}`                                                         |
@@ -114,6 +116,7 @@ The following tables lists the configurable parameters of the NGINX Open Source 
 | `ingress.annotations`                      | Ingress annotations                                                                          | `[]`                                                         |
 | `ingress.hosts[0].name`                    | Hostname to your NGINX installation                                                          | `nginx.local`                                                |
 | `ingress.hosts[0].path`                    | Path within the url structure                                                                | `/`                                                          |
+| `ingress.hosts[0].extraPaths`              | Ingress extra paths to prepend to every host configuration. Useful when configuring [custom actions with AWS ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#actions). | `[]`                |
 | `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                    | `nginx.local`                                                |
 | `ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                    | `nginx.local-tls`                                            |
 | `ingress.secrets[0].name`                  | TLS Secret Name                                                                              | `nil`                                                        |

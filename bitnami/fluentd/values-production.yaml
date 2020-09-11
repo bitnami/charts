@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.1-debian-10-r24
+  tag: 1.11.2-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -57,6 +57,17 @@ forwarder:
     enabled: true
     runAsUser: 0
     fsGroup: 0
+
+  ## K8s Security Context for forwarder container
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
+    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    # readOnlyRootFilesystem: true
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -199,6 +210,11 @@ forwarder:
   ##
   tolerations: []
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -211,6 +227,25 @@ forwarder:
 
   ## Extra labels to add to Pod
   podLabels: {}
+
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
+
+  ## Role Based Access
+  ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+  ##
+  rbac:
+    create: true
 
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
@@ -240,6 +275,17 @@ aggregator:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## K8s Security Context for Aggregator containers
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ['ALL']
+    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    # readOnlyRootFilesystem: true
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -384,6 +430,19 @@ aggregator:
   ## Extra labels to add to Pod
   podLabels: {}
 
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
+
   ## Persist data to a persistent volume
   persistence:
     enabled: false
@@ -397,22 +456,29 @@ aggregator:
     accessMode: ReadWriteOnce
     size: 10Gi
 
+  ## Extra volumes to mount
+  ## Example Use Case: mount an emptyDir into /tmp to support running with readOnlyRootFileSystem
+  # extraVolumes:
+  #   - name: tmpDir
+  #       emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: tmpDir
+  #     mountPath: /tmp
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fluentd.fullname template
-  # name:
+## This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead. Only the
+## forwarder was affected by the historical usage here.
+serviceAccount: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-rbac:
-  create: true
+## This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead. Only the
+## forwarder was affected by the historical usage here.
+rbac: {}
 
 ## Prometheus Exporter / Metrics
 ##

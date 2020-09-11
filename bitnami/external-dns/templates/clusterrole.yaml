@@ -1,4 +1,4 @@
-{{- if .Values.rbac.create }}
+{{- if and .Values.rbac.create .Values.rbac.clusterRole }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRole
 metadata:
@@ -29,6 +29,7 @@ rules:
       - networking.istio.io
     resources:
       - gateways
+      - virtualservices
     verbs:
       - get
       - list

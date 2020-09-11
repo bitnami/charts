@@ -86,14 +86,14 @@ spec:
             {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
-            - --alert.label-drop="replica"
-            - --objstore.config-file=/conf/objstore.yml
-            - --rule-file=/conf/ruler.yml
+            - --alert.label-drop=replica
+            - --objstore.config-file=/conf/objstore/objstore.yml
+            - --rule-file=/conf/rules/ruler.yml
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
-            {{- range $key, $value := .Values.ruler.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.ruler.extraFlags }}
+            - {{ . }}
             {{- end }}
           env:
             - name: POD_NAME
@@ -118,15 +118,9 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ruler-config
-              mountPath: /conf/ruler.yml
-              subPath: ruler.yml
+              mountPath: /conf/rules
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
-              mountPath: /conf
-              {{- else }}
-              mountPath: /conf/objstore.yml
-              subPath: objstore.yml
-              {{- end }}
+              mountPath: /conf/objstore
             - name: data
               mountPath: /data
       volumes:

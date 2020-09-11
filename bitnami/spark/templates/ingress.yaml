@@ -2,8 +2,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "spark.fullname" . }}-ingress
-  labels: {{- include "spark.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-ingress
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingress
   annotations:
     {{- if .Values.ingress.certManager }}

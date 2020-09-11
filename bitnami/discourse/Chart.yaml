@@ -1,14 +1,15 @@
 apiVersion: v1
 name: discourse
 description: A Helm chart for deploying Discourse to Kubernetes
-version: 0.1.7
-appVersion: 2.5.0
+version: 0.3.5
+appVersion: 2.5.1
 engine: gotpl
-home: https://www.discourse.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
+  - https://www.discourse.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

@@ -2,7 +2,7 @@
 
 [etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -75,6 +75,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `envVarsConfigMap`                              | ConfigMap that contains environment variables to be set in the container                                                                                  | `nil`                                                       |
 | `allowNoneAuthentication`                       | Allow to use etcd without configuring RBAC authentication                                                                                                 | `true`                                                      |
 | `maxProcs`                                      | Set GOMAXPROCS environment variable to limit the number of CPUs                                                                                           | `nil`                                                       |
+| `etcd.initialClusterState`                      | Initial cluster state. Allowed values: 'new' or 'existing'                                                                                                | `nil`                                                       |
 | `auth.rbac.enabled`                             | Switch to enable the etcd authentication.                                                                                                                 | `true`                                                      |
 | `auth.rbac.rootPassword`                        | Password for the root user                                                                                                                                | `nil`                                                       |
 | `auth.rbac.existingSecret`                      | Name of the existing secret containing the root password                                                                                                  | `nil`                                                       |
@@ -97,9 +98,11 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `service.nodePorts.peerPort`                    | Kubernetes etcd peer node port                                                                                                                            | `""`                                                        |
 | `service.annotations`                           | Annotations for etcd service                                                                                                                              | `{}`                                                        |
 | `service.loadBalancerIP`                        | loadBalancerIP if etcd service type is `LoadBalancer`                                                                                                     | `nil`                                                       |
+| `service.loadBalancerSourceRanges`              | loadBalancerSourceRanges if etcd service type is `LoadBalancer`                                                                                           | `nil`                                                       |
 | `persistence.enabled`                           | Enable persistence using PVC                                                                                                                              | `true`                                                      |
 | `persistence.storageClass`                      | PVC Storage Class for etcd volume                                                                                                                         | `nil`                                                       |
 | `persistence.accessMode`                        | PVC Access Mode for etcd volume                                                                                                                           | `ReadWriteOnce`                                             |
+| `persistence.selector`                          | PVC label selector for etcd volume                                                                                                                        | `{}`                                                        |
 | `persistence.size`                              | PVC Storage Request for etcd volume                                                                                                                       | `8Gi`                                                       |
 | `persistence.annotations`                       | Annotations for the PVC                                                                                                                                   | `{}`                                                        |
 | `pdb.enabled`                                   | Pod Disruption Budget toggle                                                                                                                              | `false`                                                     |

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r79
+  tag: 3.6.2-debian-10-r0
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -133,7 +133,7 @@ maxClientCnxns: 60
 
 ## A list of comma separated Four Letter Words commands to use
 ##
-fourlwCommandsWhitelist: srvr, mntr
+fourlwCommandsWhitelist: srvr, mntr, ruok
 
 ## Allow zookeeper to listen for peers on all IPs
 ##
@@ -323,6 +323,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+  probeCommandTimeout: 2
 
 readinessProbe:
   enabled: true
@@ -331,6 +332,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+  probeCommandTimeout: 2
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -347,17 +349,30 @@ networkPolicy:
   ##
   # allowExternal: true
 
-## Prometheus Metrics
+## Zookeeper Prometheus Exporter configuration
 ##
 metrics:
   enabled: false
-  port: 9141
-  ## Prometheus pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+
+  ## Zookeeper Prometheus Exporter container port
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.metrics.port }}"
+  containerPort: 9141
+
+  ## Service configuration
+  ##
+  service:
+    ## Zookeeper Prometheus Exporter service type
+    ##
+    type: ClusterIP
+    ## Zookeeper Prometheus Exporter service port
+    ##
+    port: 9141
+    ## Annotations for the Zookeeper Prometheus Exporter metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/path: "/metrics"
 
   ## Prometheus Operator ServiceMonitor configuration
   ##

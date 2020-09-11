@@ -2,7 +2,7 @@
 
 [HashiCorp Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -111,6 +111,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `service.serverPort`                 | Container server listening port                                                                                                                           | `8300`                                                  |
 | `service.consulDnsPort`              | Container dns listening port                                                                                                                              | `8600`                                                  |
 | `service.uiPort`                     | HashiCorp Consul UI port                                                                                                                                  | `80`                                                    |
+| `service.sessionAffinity`            | Session affinity of the service                                                                                                                           | `None`                                                  |
 | `ui.service.enabled`                 | Use a service to access HashiCorp Consul Ui                                                                                                               | `true`                                                  |
 | `ui.service.type`                    | Kubernetes Service Type                                                                                                                                   | `ClusterIP`                                             |
 | `ui.service.nodePort`                | Kubernetes node port for HashiCorp Consul UI                                                                                                              | `""`                                                    |
@@ -132,6 +133,9 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `metrics.imagePullPolicy`            | Exporter image pull policy                                                                                                                                | `IfNotPresent`                                          |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                    |
 | `metrics.podAnnotations`             | Exporter annotations                                                                                                                                      | `{}`                                                    |
+| `metrics.service.type`               | Kubernetes Service type (consul metrics)                                                                                                                  | `ClusterIP`                                             |
+| `metrics.service.annotations`        | Annotations for the services to monitor                                                                                                                  | {}                                                      |
+| `metrics.service.loadBalancerIP`     | loadBalancerIP if redis metrics service type is `LoadBalancer`                                                                                            | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

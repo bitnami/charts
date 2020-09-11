@@ -2,7 +2,7 @@
 
 [WordPress](https://wordpress.org/) is one of the most versatile open source content management systems on the market. A publishing platform for building blogs and websites.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -65,6 +65,8 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nameOverride`                            | String to partially override wordpress.fullname                                       | `nil`                                                        |
 | `fullnameOverride`                        | String to fully override wordpress.fullname                                           | `nil`                                                        |
 | `clusterDomain`                           | Default Kubernetes cluster domain                                                     | `cluster.local`                                              |
+| `commonLabels`                            | Labels to add to all deployed objects                                                 | `{}`                                                         |
+| `commonAnnotations`                       | Annotations to add to all deployed objects                                            | `{}`                                                         |
 
 ### WordPress parameters
 
@@ -85,6 +87,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `wordpressBlogName`                       | Blog name                                                                             | `User's Blog!`                                               |
 | `wordpressTablePrefix`                    | Table prefix                                                                          | `wp_`                                                        |
 | `wordpressScheme`                         | Scheme to generate application URLs [`http`, `https`]                                 | `http`                                                       |
+| `wordpressExtraConfigContent`             | Add extra content to the configuration file                                           | `""`                                                           |
 | `allowEmptyPassword`                      | Allow DB blank passwords                                                              | `true`                                                       |
 | `allowOverrideNone`                       | Set Apache AllowOverride directive to None                                            | `false`                                                      |
 | `htaccessPersistenceEnabled`              | Make `.htaccess` persistence so that it can be customized. [See](#disabling-htaccess) | `false`                                                      |
@@ -95,6 +98,8 @@ The following table lists the configurable parameters of the WordPress chart and
 | `smtpPassword`                            | SMTP password                                                                         | `nil`                                                        |
 | `smtpUsername`                            | User name for SMTP emails                                                             | `nil`                                                        |
 | `smtpProtocol`                            | SMTP protocol [`tls`, `ssl`, `none`]                                                  | `nil`                                                        |
+| `command`                                 | Override default container command (useful when using custom images)                  | `nil`                                                        |
+| `args`                                    | Override default container args (useful when using custom images)                     | `nil`                                                        |
 | `extraEnv`                                | Additional container environment variables                                            | `[]`                                                         |
 | `extraVolumeMounts`                       | Additional volume mounts                                                              | `[]`                                                         |
 | `extraVolumes`                            | Additional volumes                                                                    | `[]`                                                         |
@@ -119,7 +124,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `livenessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `livenessProbe.successThreshold`          | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `livenessProbeHeaders`                    | Headers to use for livenessProbe                                                      | `{}`                                                         |
-| `customLivenessProbe`                    | Override default liveness probe (evaluated as a template)                                                     | `{}`                                                         |
+| `customLivenessProbe`                     | Override default liveness probe (evaluated as a template)                             | `{}`                                                         |
 | `readinessProbe.enabled`                  | Enable/disable readinessProbe                                                         | `true`                                                       |
 | `readinessProbe.initialDelaySeconds`      | Delay before readiness probe is initiated                                             | `30`                                                         |
 | `readinessProbe.periodSeconds`            | How often to perform the probe                                                        | `10`                                                         |
@@ -127,7 +132,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `readinessProbe.failureThreshold`         | Minimum consecutive failures for the probe                                            | `6`                                                          |
 | `readinessProbe.successThreshold`         | Minimum consecutive successes for the probe                                           | `1`                                                          |
 | `readinessProbeHeaders`                   | Headers to use for readinessProbe                                                     | `{}`                                                         |
-| `customReadinessProbe`                    | Override default readiness probe (evaluated as a template)                                                     | `{}`                                                         |
+| `customReadinessProbe`                    | Override default readiness probe (evaluated as a template)                            | `{}`                                                         |
 | `service.annotations`                     | Service annotations                                                                   | `{}` (evaluated as a template)                               |
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `80`                                                         |
@@ -277,13 +282,25 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-Note that [values-production.yaml](values-production.yaml) includes a replicaCount of 3, so there will be 3 WordPress pods. As a result, to use the "/admin" portal and to ensure you can scale wordpress you need to provide a ReadWriteMany PVC, if you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
+Note that [values-production.yaml](values-production.yaml) includes a replicaCount of 3, so there will be 3 WordPress pods. As a result, to use the "/admin" portal and to ensure you can scale wordpress you need to provide a ReadWriteMany PVC, if you don't have a provisioner for this type of storage, we recommend that you install the [NFS Server Provisioner chart](https://github.com/helm/charts/tree/master/stable/nfs-server-provisioner) (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
 
-Then you can deploy WordPress chart using the proper parameters:
+Then, you can deploy WordPress chart using the proper parameters:
 
 ```console
 persistence.storageClass=nfs
 mariadb.master.persistence.storageClass=nfs
+```
+
+#### Known limitations
+
+When performing admin operations that require activating the maintenance mode (such as updating a plugin or theme), it's activated in only one replica (see: [bug report](https://core.trac.wordpress.org/ticket/50797)). This implies that WP could be attending requests on other replicas while performing admin operations, with unpredictable consequences.
+
+To avoid that, you can manually activate/deactivate the maintenance mode on every replica using the WP CLI. For instance, if you installed WP with three replicas, you can run the commands below to activate the maintenance mode in all of them (assuming that the release name is `wordpress`):
+
+```console
+kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath='{.items[0].metadata.name}') -c wordpress -- wp maintenance-mode activate
+kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath='{.items[1].metadata.name}') -c wordpress -- wp maintenance-mode activate
+kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath='{.items[2].metadata.name}') -c wordpress -- wp maintenance-mode activate
 ```
 
 ### Sidecars
