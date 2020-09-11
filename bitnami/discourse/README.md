@@ -214,10 +214,9 @@ The following table lists the configurable parameters of the Discourse chart and
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
 | `externalRedis.port`                      | Database port number                                                                  | `6379`                                                       |
-| `externalRedis.password`                  | Password for the above username                                                       | `nil`                                                        |
+| `externalRedis.password`                  | Password for the external Redis                                                       | `nil`                                                        |
 | `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
 | `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                    | `redis-password`                                             |
-
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 
