@@ -42,7 +42,13 @@ To uninstall/delete the `my-release` helm release:
 $ helm uninstall my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components associated with the chart and deletes the release, except the `CustomResourceDefinition`s (CRD for short).  
+:warning: To also remove the CRDs, please **remember that all instances of the CRDs are removed too**.  
+If you are okay with that, you can remove the CRDs like this:
+
+```console
+$ kubectl delete crd httpproxies.projectcontour.io tlscertificatedelegations.projectcontour.io
+```
 
 ## Parameters
 
@@ -55,20 +61,21 @@ The following tables lists the configurable parameters of the contour chart and 
 | `rbac.create`                                      | create the RBAC roles for API accessibility                                                            | `true`                                                  |
 | `contour.enabled`                                  | Contour Deployment creation.                                                                           | `true`                                                  |
 | `contour.image.registry`                           | Contour image registry                                                                                 | `docker.io`                                             |
-| `contour.image.repository`                         | Contour image name                                                                                     | `projectcontour/contour`                                |
+| `contour.image.repository`                         | Contour image name                                                                                     | `bitnami/contour`                                       |
 | `contour.image.tag`                                | Contour image tag                                                                                      | `{TAG_NAME}`                                            |
 | `contour.pullPolicy`                               | Contour image pull policy                                                                              | `IfNotPresent`                                          |
 | `contour.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `contour.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                                 | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                       | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
-| `contour.createCustomResource`                     | Creation of customResources via helm hooks (only helm v2)                                              | `true`                                                  |
-| `contour.customResourceDeletePolicy`               | Deletion hook of customResources viah helm hooks (only helm v2)                                        | `nil`                                                   |
+| `contour.installCRDs`                              | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)           | `true`                                                  |
+| `contour.customResourceDeletePolicy`               | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                               | `nil`                                                   |
 | `contour.nodeSelector`                             | Node labels for contour pod assignment                                                                 | `{}`                                                    |
 | `contour.tolerations`                              | Tolerations for contour pod assignment                                                                 | `[]`                                                    |
+| `contour.antiAffinityPolicy`                       | Contour anti-affinity policy (`soft`, `hard` or `""`)                                                  | `soft`                                                  |
 | `contour.affinity`                                 | Affinity for contour pod assignment                                                                    | `{}`                                                    |
 | `contour.podAnnotations`                           | Contour Pod annotations                                                                                | `{}`                                                    |
 | `contour.serviceAccount.create`                    | create a serviceAccount for the contour pod                                                            | `true`                                                  |
-| `contour.serviceAccount.name`                      | use the serviceAccount with the specified name                                                         | ""                                                      |
+| `contour.serviceAccount.name`                      | use the serviceAccount with the specified name                                                         | `""`                                                    |
 | `contour.livenessProbe.enabled`                    | Enable/disable the Liveness probe                                                                      | `true`                                                  |
 | `contour.livenessProbe.initialDelaySeconds`        | Delay before liveness probe is initiated                                                               | `120`                                                   |
 | `contour.livenessProbe.periodSeconds`              | How often to perform the probe                                                                         | `20`                                                    |
@@ -87,9 +94,16 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.securityContext.runAsNonRoot`             | If the pod should run as a non root container.                                                         | `true`                                                  |
 | `contour.securityContext.runAsUser`                | define the uid with which the pod will run                                                             | `65534`                                                 |
 | `contour.securityContext.runAsGroup`               | define the gid with which the pod will run                                                             | `65534`                                                 |
+| `contour.service.extraPorts`                       | Service extra ports, normally used with the `sidecar` value. Evaluated as a template                   | `[]`                                                    |
+| `contour.initContainers`                           | Attach additional init containers to contour pods (evaluated as a template)                            | `[]`                                                    |
+| `contour.extraVolumes`                             | Array to add extra volumes                                                                             | `[]`                                                    |
+| `contour.extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes)                                            | `[]`                                                    |
+| `contour.extraEnvVars`                             | Array containing extra env vars to be added to all contour containers (evaluated as a template)        | `[]`                                                    |
+| `contour.extraEnvVarsConfigMap`                    | ConfigMap containing extra env vars to be added to all contour containers (evaluated as a template)    | `""`                                                    |
+| `contour.extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all contour containers (evaluated as a template)       | `""`                                                    |
 | `envoy.enabled`                                    | Envoy Proxy Daemonset creation.                                                                        | `true`                                                  |
 | `envoy.image.registry`                             | Envoy Proxy image registry                                                                             | `docker.io`                                             |
-| `envoy.image.repository`                           | Envoy Proxy image name                                                                                 | `envoyproxy/envoy`                                      |
+| `envoy.image.repository`                           | Envoy Proxy image name                                                                                 | `bitnami/envoy`                                         |
 | `envoy.image.tag`                                  | Envoy Proxy image tag                                                                                  | `{TAG_NAME}`                                            |
 | `envoy.pullPolicy`                                 | Envoy Proxy image pull policy                                                                          | `IfNotPresent`                                          |
 | `envoy.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
@@ -99,10 +113,10 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.tolerations`                                | Tolerations for envoy pod assignment                                                                   | `[]`                                                    |
 | `envoy.affinity`                                   | Affinity for envoy pod assignment                                                                      | `{}`                                                    |
 | `envoy.podAnnotations`                             | Envoy Pod annotations                                                                                  | `{}`                                                    |
-| `envoy.podSecurityContext`                         | Envoy Pod securityContext                                                                                  | `{}`                                                    |
-| `envoy.containerSecurityContext`                   | Envoy Container securityContext                                                                                  | `{}`                                                    |
-| `envoy.dnsPolicy`                                  | Envoy Pod Dns Policy                                                                                   | `ClusterFirst`                                                    |
-| `envoy.hostNetwork`                                | Envoy Pod host network access                                                                                   | `false`                                                    |
+| `envoy.podSecurityContext`                         | Envoy Pod securityContext                                                                              | `{}`                                                    |
+| `envoy.containerSecurityContext`                   | Envoy Container securityContext                                                                        | `{}`                                                    |
+| `envoy.dnsPolicy`                                  | Envoy Pod Dns Policy                                                                                   | `ClusterFirst`                                          |
+| `envoy.hostNetwork`                                | Envoy Pod host network access                                                                          | `false`                                                 |
 | `envoy.readynessProbe.enabled`                     | Enable/disable the Readyness probe                                                                     | `true`                                                  |
 | `envoy.readynessProbe.initialDelaySeconds`         | Delay before readyness probe is initiated                                                              | `10`                                                    |
 | `envoy.readynessProbe.periodSeconds`               | How often to perform the probe                                                                         | `3`                                                     |
@@ -113,6 +127,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.service.externalTrafficPolicy`              | If `envoy.service.type` is NodePort or LoadBalancer, set this to Local to enable [source IP preservation](https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typenodeport) | `Local` |
 | `envoy.service.clusterIP`                          | Internal envoy cluster service IP                                                                      | `""`                                                    |
 | `envoy.service.externalIPs`                        | Envoy service external IP addresses.                                                                   | `[]`                                                    |
+| `envoy.service.extraPorts`                         | Service extra ports, normally used with the `sidecar` value. Evaluated as a template                   | `[]`                                                    |
 | `envoy.service.loadBalancerIP`                     | IP address to assign to load balancer (if supported)                                                   | `""`                                                    |
 | `envoy.service.loadBalancerSourceRanges`           | List of IP CIDRs allowed access to load balancer (if supported)                                        | `[]`                                                    |
 | `envoy.service.annotations`                        | Annotations for envoy service                                                                          | `{}`                                                    |
@@ -120,6 +135,12 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.service.ports.https`                        | Sets service https port                                                                                | `443`                                                   |
 | `envoy.service.nodePorts.http`                     | If `envoy.service.type` is NodePort and this is non-empty, it sets the nodePort that maps to envoys http port  | `""`                                            |
 | `envoy.service.nodePorts.https`                    | If `envoy.service.type` is NodePort and this is non-empty, it sets the nodePort that maps to envoys https port | `""`                                            |
+| `envoy.initContainers`                             | Attach additional init containers to envoy pods (evaluated as a template)                              | `[]`                                                    |
+| `envoy.extraVolumes`                               | Array to add extra volumes                                                                             | `[]`                                                    |
+| `envoy.extraVolumeMounts`                          | Array to add extra mounts (normally used with extraVolumes)                                            | `[]`                                                    |
+| `envoy.extraEnvVars`                               | Array containing extra env vars to be added to all envoy containers (evaluated as a template)          | `[]`                                                    |
+| `envoy.extraEnvVarsConfigMap`                      | ConfigMap containing extra env vars to be added to all envoy containers (evaluated as a template)      | `""`                                                    |
+| `envoy.extraEnvVarsSecret`                         | Secret containing extra env vars to be added to all envoy containers (evaluated as a template)         | `""`                                                    |
 | `existingConfigMap`                                | Specify an existing configMapName to use. (this mutually exclusive with existingConfigMap)             | `nil`                                                   |
 | `configInline`                                     | Specify the config for contour as a new configMap inline.                                              | `{Quickstart Config}` (evaluated as a template)         |
 | `ingressClass`                                     | Name of the ingress class to route through this controller (defaults to `contour` if `nil`)            | `nil`                                                   |
@@ -173,6 +194,12 @@ configInline:
   tls:
   #   minimum TLS version that Contour will negotiate
   #   minimum-protocol-version: "1.1"
+  # Defines the Kubernetes name/namespace matching a secret to use
+  # as the fallback certificate when requests which don't match the
+  # SNI defined for a vhost.
+    fallback-certificate:
+  #   name: fallback-secret-name
+  #   namespace: projectcontour
   # The following config shows the defaults for the leader election.
   # leaderelection:
   #   configmap-name: leader-elect
@@ -208,6 +235,18 @@ configInline:
   #   - "upstream_service_time"
   #   - "user_agent"
   #   - "x_forwarded_for"
+  #
+  # default-http-versions:
+  # - "HTTP/2"
+  # - "HTTP/1.1"
+  #
+  # The following shows the default proxy timeout settings.
+  # timeouts:
+  #   request-timeout: infinity
+  #   connection-idle-timeout: 60s
+  #   stream-idle-timeout: 5m
+  #   max-connection-duration: infinity
+  #   connection-shutdown-grace-period: 5s
 ```
 
 ### Deploying Contour with an AWS NLB
@@ -222,3 +261,21 @@ envoy:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
 ```
+
+## Upgrading
+
+Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
+
+### To 2.0.0
+
+Most important changes are:
+
+- Using helm hooks to generate new TLS certificates for gRPC calls between Contour and Envoy. This enables us to use the same container image for the contour controller and the certgen job without upgrade issues due to JobSpec immutablility.
+- Rename parameter `contour.createCustomResource` to `contour.installCRDs`
+- Sync CRDs with [upstream project examples](https://github.com/projectcontour/contour/tree/main/examples/contour). Please remember that helm does not touch existing CRDs. As of today, the most reliable way to update the CRDs is, to do it outside helm (Use `--skip-crds` when using helm v3 and `--set contour.installCRDs=false` when using helm v2). Read [Upgrading Contour](https://projectcontour.io/resources/upgrading/) and execute the following `kubectl` command before helm upgrade:
+
+```console
+$ kubectl apply -f https://raw.githubusercontent.com/projectcontour/contour/release-{{version}}/examples/contour/01-crds.yaml
+```
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.

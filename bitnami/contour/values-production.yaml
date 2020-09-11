@@ -47,6 +47,12 @@ configInline:
   tls:
   #   minimum TLS version that Contour will negotiate
   #   minimum-protocol-version: "1.1"
+  # Defines the Kubernetes name/namespace matching a secret to use
+  # as the fallback certificate when requests which don't match the
+  # SNI defined for a vhost.
+    fallback-certificate:
+  #   name: fallback-secret-name
+  #   namespace: '{{ .Release.Namespace }}'
   # The following config shows the defaults for the leader election.
   ## This needs to be edited by when you deploy to a namespace other than projectcontour
   ##
@@ -84,6 +90,18 @@ configInline:
   #   - "upstream_service_time"
   #   - "user_agent"
   #   - "x_forwarded_for"
+  #
+  # default-http-versions:
+  # - "HTTP/2"
+  # - "HTTP/1.1"
+  #
+  # The following shows the default proxy timeout settings.
+  # timeouts:
+  #   request-timeout: infinity
+  #   connection-idle-timeout: 60s
+  #   stream-idle-timeout: 5m
+  #   max-connection-duration: infinity
+  #   connection-shutdown-grace-period: 5s
 
 ## Name of the ingress class to route through this controller
 ##
@@ -142,7 +160,7 @@ contour:
 
   ## Create Contour CRDs
   ##
-  createCustomResource: true
+  installCRDs: true
 
   ## Contour CRD deletion policy
   ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
@@ -162,6 +180,7 @@ contour:
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
+  antiAffinityPolicy: soft
   affinity: {}
 
   ## Pod annotations
@@ -205,6 +224,48 @@ contour:
       # The name of the ServiceAccount to use.  If not set and create is
       # true, a name is generated using the fullname template
       name: ""
+
+  ## Contour Service properties
+  ##
+  service:
+
+    ## Extra ports to expose (normally used with the `sidecar` value)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+    ##
+    extraPorts: []
+
+  ## Add init containers to the pod
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
+
+  ## Array to add extra volumes
+  ##
+  extraVolumes: []
+
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  extraVolumeMounts: []
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
+
+  ## Name of a ConfigMap containing extra env vars
+  ##
+  extraEnvVarsConfigMap: ""
+
+  ## Name of a Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
 
 envoy:
   enabled: true
@@ -341,6 +402,44 @@ envoy:
     nodePorts:
       http: ""
       https: ""
+
+    ## Extra ports to expose (normally used with the `sidecar` value)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+    ##
+    extraPorts: []
+
+  ## Add init containers to the pod
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
+
+  ## Array to add extra volumes
+  ##
+  extraVolumes: []
+
+  ## Array to add extra mounts (normally used with extraVolumes)
+  ##
+  extraVolumeMounts: []
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
+
+  ## Name of a ConfigMap containing extra env vars
+  ##
+  extraEnvVarsConfigMap: ""
+
+  ## Name of a Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
 
 prometheus:
   # Prometheus Operator service monitors
