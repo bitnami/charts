@@ -398,7 +398,6 @@ master:
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
-    extraEnv: []
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -407,6 +406,26 @@ master:
   ## Redis Master pod priorityClassName
   ##
   priorityClassName: {}
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: name
+  ##    value: value
+  ##  - name: other_name
+  ##    valueFrom:
+  ##      fieldRef:
+  ##        fieldPath: fieldPath
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM: []
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret: []
 
 ##
 ## Redis Slave properties
@@ -561,11 +580,30 @@ slave:
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
-    extraEnv: []
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
+
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: name
+  ##    value: value
+  ##  - name: other_name
+  ##    valueFrom:
+  ##      fieldRef:
+  ##        fieldPath: fieldPath
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM: []
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret: []
 
 ## Prometheus Exporter / Metrics
 ##
