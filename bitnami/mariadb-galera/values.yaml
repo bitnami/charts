@@ -558,8 +558,8 @@ metrics:
   ## Can be used to specify command line flags
   ## E.g.:
   ## extraFlags:
-  ##   --collect.binlog_size
-  ## 
+  ##   - --collect.binlog_size
+  ##
   extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
