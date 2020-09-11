@@ -62,7 +62,7 @@ To access your EJBCA site from outside the cluster follow the steps below:
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
 
-{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade  -}}
+{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
   {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $databaseSecretName "field" "mariadb-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.

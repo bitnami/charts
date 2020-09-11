@@ -74,7 +74,7 @@ host. To configure Moodle to use and external database host:
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
 
-{{- if and .Values.externalDatabase.host .Release.IsUpgrade  -}}
+{{- if and .Values.externalDatabase.host .Release.IsUpgrade -}}
   {{- $externaldbSecretName := printf "%s-%s" .Release.Name "externaldb" -}}
   {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $externaldbSecretName "field" "db-password" }}
 
