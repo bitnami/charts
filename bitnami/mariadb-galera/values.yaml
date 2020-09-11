@@ -554,6 +554,13 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## MySQL exporter additional command line flags
+  ## Can be used to specify command line flags
+  ## E.g.:
+  ## extraFlags:
+  ##   - --collect.binlog_size
+  ##
+  extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

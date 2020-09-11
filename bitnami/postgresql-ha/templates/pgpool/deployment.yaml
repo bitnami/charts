@@ -29,7 +29,7 @@ spec:
       annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-{{- include "postgresql-ha.imagePullSecrets" . | indent 6 }}
+      {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.pgpool.affinity }}
       affinity: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -45,6 +45,34 @@ spec:
       {{- if .Values.pgpool.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.pgpool.securityContext.fsGroup }}
+      {{- end }}
+      initContainers:
+      {{- if .Values.pgpool.tls.enabled }}
+        - name: init-chmod-data
+          image: {{ template "postgresql-ha.volumePermissionsImage" . }}
+          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -cx
+            - |
+              cp /tmp/certs/* /opt/bitnami/pgpool/certs/
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/pgpool/certs/
+              {{- else }}
+              chown -R {{ .Values.pgpool.securityContext.runAsUser }}:{{ .Values.pgpool.securityContext.fsGroup }} /opt/bitnami/pgpool/certs/
+              {{- end }}
+              chmod 600 {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+          securityContext:
+          {{- else }}
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          {{- end }}
+          volumeMounts:
+            - name: raw-certificates
+              mountPath: /tmp/certs
+            - name: pgpool-certificates
+              mountPath: /opt/bitnami/pgpool/certs
       {{- end }}
       # Auxiliar vars to populate environment variables
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
@@ -156,6 +184,20 @@ spec:
             - name: PGPOOL_NUM_INIT_CHILDREN
               value: {{ .Values.pgpool.numInitChildren | quote }}
             {{- end }}
+            - name: PGPOOL_ENABLE_TLS
+              value: {{ ternary "yes" "no" .Values.pgpool.tls.enabled | quote }}
+            {{- if .Values.pgpool.tls.enabled }}
+            - name: PGPOOL_TLS_PREFER_SERVER_CIPHERS
+              value: {{ ternary "yes" "no" .Values.pgpool.tls.preferServerCiphers | quote }}
+            - name: PGPOOL_TLS_CERT_FILE
+              value: {{ template "postgresql-ha.pgpool.tlsCert" . }}
+            - name: PGPOOL_TLS_KEY_FILE
+              value: {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
+            {{- if .Values.pgpool.tls.certCAFilename }}
+            - name: PGPOOL_TLS_CA_FILE
+              value: {{ template "postgresql-ha.pgpool.tlsCACert" . }}
+            {{- end }}
+            {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
@@ -177,7 +219,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h 127.0.0.1 -tA -c "SELECT 1" >/dev/null
+                - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null
             initialDelaySeconds: {{ .Values.pgpool.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.pgpool.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.pgpool.readinessProbe.timeoutSeconds }}
@@ -207,6 +249,10 @@ spec:
             {{- if .Values.pgpool.usePasswordFile }}
             - name: pgpool-password
               mountPath: /opt/bitnami/pgpool/secrets/
+            {{- end }}
+            {{- if .Values.pgpool.tls.enabled }}
+            - name: pgpool-certificates
+              mountPath: /opt/bitnami/pgpool/certs
             {{- end }}
       volumes:
         {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
@@ -241,4 +287,11 @@ spec:
             items:
               - key: admin-password
                 path: admin-password
+        {{- end }}
+        {{- if .Values.pgpool.tls.enabled }}
+        - name: raw-certificates
+          secret:
+            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.pgpool.tls.certificatesSecret }}
+        - name: pgpool-certificates
+          emptyDir: {}
         {{- end }}
