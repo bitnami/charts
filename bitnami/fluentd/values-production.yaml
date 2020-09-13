@@ -274,6 +274,7 @@ aggregator:
   securityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
     fsGroup: 1001
 
   ## K8s Security Context for Aggregator containers
