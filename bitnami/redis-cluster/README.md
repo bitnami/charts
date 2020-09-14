@@ -5,13 +5,21 @@
 
 ## TL;DR
 
+Verify the default or Kubernetes StorageClass to use has `VolumeBindingMode` set to `WaitForFirstConsumer`, if it does not then skip to [full installation](#installing-the-chart) instructions.
+
 ```bash
-# Testing configuration
+$ kubectl get storageclass -o wide
+```
+
+Testing configuration
+
+```bash
 $ helm install my-release bitnami/redis-cluster
 ```
 
+Production configuration
+
 ```bash
-# Production configuration
 $ helm install my-release bitnami/redis-cluster --values values-production.yaml
 ```
 
@@ -41,6 +49,46 @@ The main features of each chart are the following:
 
 ## Installing the Chart
 
+### Verify Kubernetes StorageClass
+
+Before installing the chart the Kubernetes StorageClass being used must have set `volumeBindingMode: WaitForFirstConsumer`.
+
+Check the (default) StorageClass or any other you intend to use.  
+
+```bash
+$ kubectl get storageclass -o wide
+```
+
+The default output below for a Kubernetes environment with digitalocean.com does not have the required StorageClass set with `VOLUMEBINDINGMODE` equal to `WaitForFirstConsumer`. 
+Create one before moving onto the chart deployment step.
+
+```
+NAME                         PROVISIONER                 RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+do-block-storage (default)   dobs.csi.digitalocean.com   Delete          Immediate              true                   26d
+```
+
+Create a new StorageClass in file `storage-class.yaml` with contents as followed, making sure you edit the `provisioner` field to match that of your Kubernetes cloud provider.
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: redis-storage
+provisioner: dobs.csi.digitalocean.com
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+```
+
+Apply the StorageClass
+
+```bash
+$ kubectl apply -f storage-class.yaml
+```
+
+
+### Deploy Chart
+
 To install the chart with the release name `my-release`:
 
 ```bash
@@ -54,6 +102,13 @@ NOTE: if you get a timeout error waiting for the hook to complete increase the d
 ```
 helm install --timeout 600s myrelease bitnami/redis-cluster
 ```
+
+If you had to create a new StorageClass in the steps above then deploy the chart passing the required parameter.
+
+```bash
+$ helm install my-release bitnami/redis-cluster --set persistence.storageClass=redis-storage
+```
+
 
 > **Tip**: List all releases using `helm list`
 
