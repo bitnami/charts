@@ -5,7 +5,7 @@
 
 ## TL;DR
 
-Verify the default or Kubernetes StorageClass to use has `VolumeBindingMode` set to `WaitForFirstConsumer`, if it does not then skip to [full installation](#installing-the-chart) instructions.
+Verify the Kubernetes StorageClass to use has `VolumeBindingMode` set to `WaitForFirstConsumer`, if not then skip to the [full installation](#installing-the-chart) instructions.
 
 ```bash
 $ kubectl get storageclass -o wide
@@ -67,7 +67,7 @@ NAME                         PROVISIONER                 RECLAIMPOLICY   VOLUMEB
 do-block-storage (default)   dobs.csi.digitalocean.com   Delete          Immediate              true                   26d
 ```
 
-Create a new StorageClass in file `storage-class.yaml` with contents as followed, making sure you edit the `provisioner` field to match that of your Kubernetes cloud provider.
+Create a new StorageClass in file `storage-class.yaml` with contents as followed, make sure you edit the `provisioner` field to match that of your Kubernetes cloud provider.
 
 ```yaml
 apiVersion: storage.k8s.io/v1
