@@ -1,0 +1,10 @@
+1. Verify that the CRDs exist:
+
+     You can list the CRDs installed by running:
+
+         $ kubectl get crd httpproxies.projectcontour.io
+
+     and
+
+         $ kubectl get crd tlscertificatedelegations.projectcontour.io
+

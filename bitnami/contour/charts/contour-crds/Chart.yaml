@@ -1,0 +1,23 @@
+apiVersion: v1
+name: contour-crds
+description: CRDs for the Contour Ingress controller
+version: 1.0.0
+apiVersion: v2
+appVersion: 1.11.0
+keywords:
+  - ingress
+  - envoy
+  - contour
+  - crd
+home: https://github.com/bitnami/charts/tree/master/bitnami/contour
+icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
+sources:
+  - https://github.com/projectcontour/contour
+  - https://github.com/envoyproxy/envoy
+  - https://github.com/bitnami/bitnami-docker-contour
+  - https://projectcontour.io
+maintainers:
+  - name: Bitnami
+    email: containers@bitnami.com
+annotations:
+  category: Infrastructure
