@@ -49,6 +49,9 @@ spec:
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{ toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if .Values.extraInitContainers }}
