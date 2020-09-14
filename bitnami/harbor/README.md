@@ -67,7 +67,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
-| `internalTLS.enabled`                   | Use TLS in all Harbor containers objects                                                                                                                | `false`                                                 |
+| `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
 | `logLevel`                            | The log level                                                                                                                                             | `debug`                                                 |
 | `forcePassword`                       | Option to ensure all passwords and keys are set by the user                                                                                               | `false`                                                 |
 | `harborAdminPassword`                 | The initial password of Harbor admin. Change it from portal after launching Harbor                                                                        | _random 10 character long alphanumeric string_          |
@@ -548,7 +548,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.signer.tolerations`          | Tolerations for pod assignment                                                                                                                                                                                                                                                                               | `[]`                                                    |
 | `notary.signer.affinity`             | Node/Pod affinities                                                                                                                                                                                                                                                                                          | `{}`                                                    |
 | `notary.signer.podAnnotations`       | Annotations to add to the notary pod                                                                                                                                                                                                                                                                         | `{}`                                                    |
-| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `tls.ca`, `tls.crt` and `tls.key` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
+| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `ca.crt`, `tls.crt` and `tls.key` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
 | `notary.server.extraEnvVars`         | Array containing extra env vars                                                                                                                                                                                                                                                                              | `nil`                                                   |
 | `notary.server.extraEnvVarsCM`       | ConfigMap containing extra env vars                                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.server.extraEnvVarsSecret`   | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                                                                                                 | `nil`                                                   |
@@ -736,6 +736,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```diff
 - postgresql.replication.enabled: false
 + postgresql.replication.enabled: true
+```
+
+- Internal TLS is enabled by default:
+```diff
+- internalTLS.enabled: false
++ internalTLS.enabled: true
 ```
 
 ### Configure the way how to expose Harbor service:
