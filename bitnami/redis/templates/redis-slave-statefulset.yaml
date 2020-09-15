@@ -187,6 +187,20 @@ spec:
             - name: REDIS_PORT
               value: {{ .Values.redisPort | quote }}
             {{- end }}
+            {{- if .Values.slave.extraEnvVars }}
+            {{- include "redis.tplValue" (dict "value" .Values.slave.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+         {{- if or .Values.slave.extraEnvVarsCM .Values.slave.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.slave.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.slave.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.slave.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.slave.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
