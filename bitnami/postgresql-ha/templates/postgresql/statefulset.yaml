@@ -15,6 +15,7 @@ spec:
     {{- if (eq "Recreate" .Values.postgresql.updateStrategyType) }}
     rollingUpdate: null
     {{- end }}
+  podManagementPolicy: Parallel
   selector:
     matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
