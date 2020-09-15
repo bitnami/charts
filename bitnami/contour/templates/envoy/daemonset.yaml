@@ -127,13 +127,13 @@ spec:
           {{- end }}
         {{- end }}
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.envoy.containerPorts.http }}
           {{- if .Values.envoy.useHostPort }}
           hostPort: {{ .Values.envoy.hostPorts.http }}
           {{- end }}
           name: http
           protocol: TCP
-        - containerPort: 443
+        - containerPort: {{ .Values.envoy.containerPorts.https }}
           {{- if .Values.envoy.useHostPort }}
           hostPort: {{ .Values.envoy.hostPorts.https }}
           {{- end }}
