@@ -555,7 +555,7 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 
 ## Notable changes
 
-### 10.9.0
+### 10.10.0
 When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
