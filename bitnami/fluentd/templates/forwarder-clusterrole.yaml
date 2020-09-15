@@ -14,4 +14,14 @@ rules:
       - "get"
       - "watch"
       - "list"
+  {{- if .Values.forwarder.rbac.pspEnabled }}
+  - apiGroups:
+      - "policy"
+    resources:
+      - "podsecuritypolicies"
+    resourceNames:
+      - {{ include "fluentd.fullname" . }}-forwarder
+    verbs:
+      - "use"
+  {{- end }}
 {{- end }}

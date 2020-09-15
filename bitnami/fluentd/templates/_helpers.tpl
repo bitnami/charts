@@ -156,6 +156,19 @@ fluentd: forwarder.rbac.create
     A ServiceAccount is required ("forwarder.rbac.create=true" is set)
     Please create a ServiceAccount (--set serviceAccount.forwarder.create=true)
 {{- end -}}
+{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.rbac.create) }}
+fluentd: forwarder.rbac.pspEnabled
+    Enabling PSP requires RBAC to be created ("forwarder.rbac.create=true" is set)
+    Please enable RBAC, or disable creation of PSP (--set forwarder.rbac.create=true) or (--set forwarder.rbac.pspEnabled=false)
+{{- end -}}
+{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.securityContext.enabled) }}
+fluentd: forwarder.rbac.pspEnabled
+    Enabling PSP requires enabling forwarder pod security context ("forwarder.securityContext.enabled=true")
+{{- end -}}
+{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.containerSecurityContext.enabled) }}
+fluentd: forwarder.rbac.pspEnabled
+    Enabling PSP requires enabling forwarder container security context ("forwarder.containerSecurityContext.enabled=true")
+{{- end -}}
 {{- end -}}
 
 {{/* Validate values of Fluentd - prefer per component serviceAccounts to top-level definition */}}

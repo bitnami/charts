@@ -68,6 +68,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.securityContext.enabled`             | Enable security context for forwarder pods                                                                     | `true`                                                                                                  |
 | `forwarder.securityContext.fsGroup`             | Group ID for forwarder's containers filesystem                                                                 | `0`                                                                                                     |
 | `forwarder.securityContext.runAsUser`           | User ID for forwarder's containers                                                                             | `0`                                                                                                     |
+| `forwarder.securityContext.runAsGroup`          | Group ID for forwarder's containers                                                                            | `0`                                                                                                     |
 | `forwarder.securityContext.*`                   | Other pod security context to be included as-is in pod spec                                                    | `{}`                                                                                                    |
 | `forwarder.containerSecurityContext.enabled`    | Enable security context for the forwarder container                                                            | `true`                                                                                                  |
 | `forwarder.containerSecurityContext.*`          | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
@@ -105,6 +106,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.serviceAccount.name`                 | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
 | `forwarder.serviceAccount.annotations`          | Additional Service Account annotations (evaluated as a template)                                               | `{}`                                                                                                    |
 | `forwarder.rbac.create`                         | Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces | `true`                                                                                                  |
+| `forwarder.rbac.pspEnabled`                     | Specify whether the bundled Pod Security Policy should be created and bound with RBAC                          | `false`                                                                                                  |
 | `forwarder.extraVolumes`                        | Extra volumes                                                                                                  | `nil`                                                                                                   |
 | `forwarder.extraVolumeMounts`                   | Mount extra volume(s),                                                                                         | `nil`                                                                                                   |
 | `aggregator.enabled`                            | Enable Fluentd aggregator                                                                                      | `true`                                                                                                  |
@@ -112,6 +114,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.securityContext.enabled`            | Enable security context for aggregator pods                                                                    | `true`                                                                                                  |
 | `aggregator.securityContext.fsGroup`            | Group ID for aggregator's containers filesystem                                                                | `1001`                                                                                                  |
 | `aggregator.securityContext.runAsUser`          | User ID for aggregator's containers                                                                            | `1001`                                                                                                  |
+| `aggregator.securityContext.runAsGroup`         | Group ID for aggregator's containers                                                                           | `1001`                                                                                                  |
 | `aggregator.securityContext.*`                  | Other pod security context to be included as-is in pod spec                                                    | `{}`                                                                                                    |
 | `aggregator.containerSecurityContext.enabled`   | Enable security context for the aggregator container                                                           | `true`                                                                                                  |
 | `aggregator.containerSecurityContext.*`         | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
@@ -210,6 +213,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+- Recommendation to run with [PodSecurityPolicy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) created by the chart:
+```diff
+- forwarder.rbac.pspEnabled: false
++ forwarder.rbac.pspEnabled: true
+```
+
 To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
 
 ### Forwarding the logs to another service
@@ -299,21 +308,51 @@ aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
 ```
 
+### Forwarder Security Context & Policy
+
+By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
+
+The default behaviour is to run as `root` because
+- the forwarder needs to mount `hostPath` volumes from the underlying node to read Docker container (& potentially other) logs
+- in many Kubernetes node distributions, these log files are not readable by anyone other than `root`
+- `fsGroup` doesn't work with `hostPath` volumes to allow the process to run non-root with alternate file system permissions
+
+Since we would like the chart to work out-of-the-box for as many users as possible, the `forwarder` thus runs as root by default. You can read more about the motivation for this at [#1905](https://github.com/bitnami/charts/issues/1905) and [#2323](https://github.com/bitnami/charts/pull/2323), however you should be aware of this, and the risks of running root containers in general.
+
+If you enable the forwarder's [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) with `forwarder.rbac.pspEnabled=true` it will allow the pod to run as `root` by default, while ensuring as many other privileges as possible are dropped.
+
+#### Running as non-root
+
+You can run as the `fluentd` user/group (non-root) with the below overrides if
+- you have control of the `hostPath` filesystem permissions on your nodes sufficient to allow the fluentd user to read from them
+- don't need to write to the `hostPath`s
+
+Note that if you have enabled the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml), it will adapt to the Chart values overrides.
+
+```yaml
+forwarder:
+  daemonUser: fluentd
+  daemonGroup: fluentd
+
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+```
+
+#### Pod Security Policy & Custom `hostPath`s
+
+Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
+
 ## Upgrading
 
 ### To 2.0.0
 
-This version introduces the ability to create/customise a `ServiceAccount` to be used by the **aggregator**, making it
-possible to target the aggregator with [`PodSecurityPolicy`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/)
-independent of the **forwarder**'s `ServiceAccount`.
+This version introduces the ability to create/customise a `ServiceAccount` to be used by the **aggregator**, making it possible to target the aggregator with [`PodSecurityPolicy`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) independent of the **forwarder**'s `ServiceAccount`.
 
-The **forwarder** previously used the below top-level values to configure its own `ServiceAccount`, which have been moved
-under the `forwarder.` prefix to avoid confusion, and only created if `forwarder.enabled=true`. There is no functional 
-change as a result of this, and if you did not override the defaults for `serviceAccount` or `rbac`, this change does
-not require any action from you.
+The **forwarder** previously used the below top-level values to configure its own `ServiceAccount`, which have been moved under the `forwarder.` prefix to avoid confusion, and only created if `forwarder.enabled=true`. There is no functional change as a result of this, and if you did not override the defaults for `serviceAccount` or `rbac`, this change does not require any action from you.
 
-If you are overriding the default values from the `1.x` chart, the chart will fail installation with your old overrides 
-and warn you of the necessary changes.
+If you are overriding the default values from the `1.x` chart, the chart will fail installation with your old overrides and warn you of the necessary changes.
 
 ```yaml
 # before - 1.x
