@@ -188,7 +188,7 @@ spec:
               value: {{ .Values.redisPort | quote }}
             {{- end }}
             {{- if .Values.slave.extraEnvVars }}
-            {{- include "redis.tplValue" (dict "value" .Values.slave.extraEnvVars "context" $) | trim | nindent 12 }}
+            {{- include "redis.tplValue" (dict "value" .Values.slave.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
          {{- if or .Values.slave.extraEnvVarsCM .Values.slave.extraEnvVarsSecret }}
           envFrom:
