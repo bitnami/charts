@@ -576,6 +576,22 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Upgrading
 
+### To 2.4.0
+
+The Ingress API object name for Querier changes from:
+
+```yaml
+{{ include "thanos.fullname" . }}
+```
+
+> **NOTE**: Which in most cases (depending on any set values in `fullnameOverride` or `nameOverride`) resolves to the used Helm release name (`.Release.Name`).
+
+To:
+
+```yaml
+{{ include "thanos.fullname" . }}-querier
+```
+
 ### To 2.0.0
 
 The format of the chart's `extraFlags` option has been updated to be an array (instead of an object), to support passing multiple flags with the same name to Thanos.

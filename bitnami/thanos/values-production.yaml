@@ -188,7 +188,7 @@ querier:
   ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/query.md#flags
   grpcTLS:
-    # TLS server side 
+    # TLS server side
     server:
       # Enable TLS for GRPC server
       secure: false
@@ -296,16 +296,16 @@ querier:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    ## extraHosts:
-    ## - name: thanos.local
-    ##   path: /
+    # extraHosts:
+    # - name: thanos.local
+    #   path: /
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    ## extraTls:
-    ## - hosts:
-    ##     - thanos.local
-    ##   secretName: thanos.local-tls
+    # extraTls:
+    # - hosts:
+    #     - thanos.local
+    #   secretName: thanos.local-tls
 
     ## If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -318,8 +318,9 @@ querier:
     ## Please see README.md for more information
     ##
     secrets: []
-    ## - name: thanos.local-tls
-    ##   key:
+    # - name: thanos.local-tls
+    #   key:
+    #   certificate:
 
     ## Create an ingress object for the GRPC service. This requires an HTTP/2
     ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
@@ -336,23 +337,33 @@ querier:
       hostname: thanos-grpc.local
       annotations: {}
 
-      ## - hosts:
-      ##     - thanos.local
-      ##   secretName: thanos-grpc.local-tls
+      ## The list of additional hostnames to be covered with this ingress record.
+      ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+      # extraHosts:
+      # - name: thanos-grpc.local
+      #   path: /
 
-      ## extraHosts:
-      ## - name: thanos-grpc.local
-      ##   path: /
+      ## The tls configuration for additional hostnames to be covered with this ingress record.
+      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      # extraTls:
+      # - hosts:
+      #     - thanos-grpc.local
+      #   secretName: thanos-grpc.local-tls
 
-      ## extraTls:
-      ## - hosts:
-      ##     - thanos-grpc.local
-      ##   secretName: thanos-grpc.local-tls
-
+      ## If you're providing your own certificates, please use this to add the certificates as secrets
+      ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+      ## -----BEGIN RSA PRIVATE KEY-----
+      ##
+      ## name should line up with a tlsSecret set further up
+      ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+      ##
+      ## It is also possible to create and manage the certificates outside of this helm chart
+      ## Please see README.md for more information
+      ##
       secrets: []
-      ## - name: thanos-grpc.local-tls
-      ##   key:
-      ##   certificate:
+      # - name: thanos-grpc.local-tls
+      #   key:
+      #   certificate:
 
 ## Thanos Bucket Web parameters
 ##
@@ -531,16 +542,16 @@ bucketweb:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    ## extraHosts:
-    ## - name: thanos-bucketweb.local
-    ##   path: /
+    # extraHosts:
+    # - name: thanos-bucketweb.local
+    #   path: /
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    ## extraTls:
-    ## - hosts:
-    ##     - thanos-bucketweb.local
-    ##   secretName: thanos-bucketweb.local-tls
+    # extraTls:
+    # - hosts:
+    #     - thanos-bucketweb.local
+    #   secretName: thanos-bucketweb.local-tls
 
     ## If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -553,8 +564,8 @@ bucketweb:
     ## Please see README.md for more information
     ##
     secrets: []
-    ## - name: thanos-bucketweb.local-tls
-    ##   key:
+    # - name: thanos-bucketweb.local-tls
+    #   key:
 
 ## Thanos Compactor parameters
 ##

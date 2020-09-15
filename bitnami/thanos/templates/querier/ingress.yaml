@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "thanos.fullname" . }}
+  name: {{ include "thanos.fullname" . }}-querier
   labels: {{- include "thanos.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.querier.ingress.certManager }}
@@ -33,7 +33,7 @@ spec:
     {{- end }}
   {{- if or .Values.querier.ingress.tls .Values.querier.ingress.extraTls .Values.querier.ingress.hosts }}
   tls:
-    {{- if .Values.querier.ingress.tls }}
+    {{- if .Values.querier.ingress.secrets }}
     - hosts:
         - {{ .Values.querier.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.querier.ingress.hostname }}
