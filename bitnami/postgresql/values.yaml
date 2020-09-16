@@ -82,7 +82,7 @@ volumePermissions:
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-podSecurityContext:
+securityContext:
   enabled: true
   fsGroup: 1001
 
