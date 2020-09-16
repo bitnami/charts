@@ -80,6 +80,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
 | `wordpressSkipInstall`                    | Skip wizard installation when the external db already contains data from a previous WordPress installation [see](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database) | `false`                                                      |
 | `wordpressUsername`                       | User of the application                                                               | `user`                                                       |
+| `existingSecret`                          | Name of the existing Wordpress Secret Object                                          | `nil`               |
 | `wordpressPassword`                       | Application password                                                                  | _random 10 character long alphanumeric string_               |
 | `wordpressEmail`                          | Admin email                                                                           | `user@example.com`                                           |
 | `wordpressFirstName`                      | First name                                                                            | `FirstName`                                                  |
@@ -98,6 +99,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `smtpPassword`                            | SMTP password                                                                         | `nil`                                                        |
 | `smtpUsername`                            | User name for SMTP emails                                                             | `nil`                                                        |
 | `smtpProtocol`                            | SMTP protocol [`tls`, `ssl`, `none`]                                                  | `nil`                                                        |
+| `smtpExistingPassword`                    | Existing secret containing SMTP password in key `smtp-password`                        | `nil`                                                        |
 | `command`                                 | Override default container command (useful when using custom images)                  | `nil`                                                        |
 | `args`                                    | Override default container args (useful when using custom images)                     | `nil`                                                        |
 | `extraEnv`                                | Additional container environment variables                                            | `[]`                                                         |
@@ -183,6 +185,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `mariadb.master.persistence.size`         | Database Persistent Volume Size                                                       | `8Gi`                                                        |
 | `externalDatabase.host`                   | Host of the external database                                                         | `localhost`                                                  |
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_wordpress`                                               |
+| `externalDatabase.existingSecret`         | Name of the database existing Secret Object                                           | `nil`                                                        |
 | `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
 | `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_wordpress`                                          |
 | `externalDatabase.port`                   | Database port number                                                                  | `3306`                                                       |

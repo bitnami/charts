@@ -50,6 +50,10 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Use existing secret (does not create the WordPress Secret object)
+## must contain key `wordpress-secret`
+# existingSecret:
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
@@ -151,6 +155,11 @@ updateStrategy:
 # smtpPassword:
 # smtpUsername:
 # smtpProtocol:
+## Use an existing secret for the SMTP Password
+## Can be the same secret as existingSecret
+## Must contain the key `smtp-password`
+# smtpExistingSecret:
+
 
 replicaCount: 1
 
@@ -451,6 +460,10 @@ externalDatabase:
   ## Database password
   ##
   password: ""
+  
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  # existingSecret:
 
   ## Database name
   ##

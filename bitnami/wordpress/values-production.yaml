@@ -458,6 +458,13 @@ externalDatabase:
   ##
   password: ""
 
+  ## Use existing secret (ignores previous password)
+  # existingSecret:
+
+  ## Password key to be retrieved from secret if not `mariadb-password`
+  ##
+  # existingSecretPasswordKey:
+
   ## Database name
   ##
   database: bitnami_wordpress
