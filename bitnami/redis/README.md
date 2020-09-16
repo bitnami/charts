@@ -480,6 +480,10 @@ networkPolicy:
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
 incompatible breaking change needing manual actions.
 
+### To 11.0.0
+
+When using sentinel, a new statefulset called `-node` was introduced. This will break upgrading from a previous version where the statefulsets are called master and slave. Hence the PVC will not match the new naming and won't be reused. If you want to keep your data, you will need to perform a backup and then a restore the data in this new version.
+
 ### To 10.0.0
 
 For releases with `usePassword: true`, the value `sentinel.usePassword` controls whether the password authentication also applies to the sentinel port. This defaults to `true` for a secure configuration, however it is possible to disable to account for the following cases:
@@ -555,7 +559,7 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 
 ## Notable changes
 
-### 10.10.0
+### 11.0.0
 When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
