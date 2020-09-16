@@ -359,7 +359,7 @@ spec:
           {{- else if .Values.sentinel.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.sentinel.customLivenessProbe | nindent 12 }}
           {{- end }}
-          {{- if .Values.sentinel.readinessProbe.enabled}}
+          {{- if .Values.sentinel.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.readinessProbe.periodSeconds }}
@@ -374,7 +374,9 @@ spec:
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
+          {{- if .Values.sentinel.resources }}
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: health
               mountPath: /health
@@ -383,8 +385,10 @@ spec:
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
             - name: redis-data
-              mountPath: {{ .Values.master.persistence.path }}
-              subPath: {{ .Values.master.persistence.subPath }}
+              mountPath: {{ .Values.master.persistence.path | quote }}
+              {{- if .Values.master.persistence.subPath }}
+              subPath: {{ .Values.master.persistence.subPath | quote }}
+              {{- end }}
             - name: config
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
             - name: sentinel-tmp-conf
@@ -423,6 +427,7 @@ spec:
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
             {{- end }}
+          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
@@ -433,10 +438,13 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9121
+          {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
   {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and .Values.slave.persistence.enabled .Values.securityContext.enabled) }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
@@ -452,7 +460,9 @@ spec:
           volumeMounts:
             - name: redis-data
               mountPath: {{ .Values.slave.persistence.path }}
+              {{- if .Values.slave.persistence.subPath }}
               subPath: {{ .Values.slave.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.sysctlImage.enabled }}
         - name: init-sysctl
@@ -522,6 +532,7 @@ spec:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
         {{ include "redis.slave.storageClass" . }}
+        {{- if or .Values.slave.persistence.matchLabels .Values.slave.persistence.matchExpressions }}
         selector:
         {{- if .Values.slave.persistence.matchLabels }}
           matchLabels: {{- toYaml .Values.slave.persistence.matchLabels | nindent 12 }}
@@ -529,6 +540,7 @@ spec:
         {{- if .Values.slave.persistence.matchExpressions }}
           matchExpressions: {{- toYaml .Values.slave.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+        {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.slave.statefulset.updateStrategy }}
