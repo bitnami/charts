@@ -5,7 +5,8 @@
 ## TL;DR
 
 ```console
-$ helm install my-release bitnami/wavefront \
+$ kubectl create namespace wavefront
+$ helm install my-release bitnami/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -27,16 +28,17 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `my-release` (if not already done, create a `wavefront` namespace):
 
 ```console
-$ helm install my-release bitnami/wavefront \
+$ kubectl create namespace wavefront
+$ helm install my-release bitnami/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
 ```
 
-The command deploys Wavefront on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Wavefront on the Kubernetes cluster in the `wavefront` namespace using the configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 The **required** parameters are `clusterName`, `wavefront.url` and `wavefront.token`. You will need to provide values for those options for a successful installation of the chart.
 
@@ -50,7 +52,7 @@ To uninstall/delete the `my-release` deployment:
 $ helm delete my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components associated with the chart and deletes the release. If you want to also remove the namespace please execute `kubectl delete namespace wavefront`.
 
 ## Parameters
 
