@@ -86,7 +86,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 |--------------------------------------------|----------------------------------------------------------------------------------|--------------------------------------|
 | `collector.enabled`                        | Setup and enable the Wavefront collector to gather metrics                       | `true`                               |
 | `collector.image.registry`                 | Wavefront collector Image registry                                               | `docker.io`                          |
-| `collector.image.repository`               | Wavefront collector Image name                                                   | `bitnami/wavefront-collector`        |
+| `collector.image.repository`               | Wavefront collector Image name                                                   | `bitnami/wavefront-kubernetes-collector` |
 | `collector.image.tag`                      | Wavefront collector Image tag                                                    | `{TAG_NAME}`                         |
 | `collector.image.pullPolicy`               | Image pull policy                                                                | `IfNotPresent`                       |
 | `collector.image.pullSecrets`              | Specify docker-registry secret names as an array                                 | `nil`                                |
@@ -225,7 +225,7 @@ At the end the most common use case is deploy the Wavefront collector as `Daemon
 
 ### Change Wavefront version
 
-To modify the Wavefront version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/Wavefront-collector/tags/) using the `collector.image.tag` parameter. For example, `collector.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
+To modify the Wavefront version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/Wavefront-kubernetes-collector/tags/) using the `collector.image.tag` parameter. For example, `collector.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
 
 ### Sidecars and Init Containers
 
