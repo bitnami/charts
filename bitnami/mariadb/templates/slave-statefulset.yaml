@@ -217,7 +217,7 @@ spec:
           env:
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password" .Values.rootUser.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
