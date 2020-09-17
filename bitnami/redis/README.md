@@ -449,6 +449,100 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/redis
 ```
 
+## Backup and restore
+
+### Backup
+
+To perform a backup you will need to connect to one of the nodes and execute:
+
+```bash
+$ kubectl exec -it my-redis-master-0 bash
+
+$ redis-cli
+127.0.0.1:6379> auth your_current_redis_password
+OK
+127.0.0.1:6379> save
+OK
+```
+
+Then you will need to get the created dump file form the redis node:
+
+```bash
+$ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
+```
+
+### Restore
+
+To restore in a new cluster, you will need to change a parameter in the redis.conf file and then upload the `dump.rdb` to the volume.
+
+Follow the following steps:
+
+- First you will need to set in the `values.yaml` the parameter `appendonly` to `no`, if it is already `no` you can skip this step.
+
+
+```yaml
+configmap: |-
+  # Enable AOF https://redis.io/topics/persistence#append-only-file
+  appendonly no
+  # Disable RDB persistence, AOF persistence already enabled.
+  save ""
+```
+
+- Start the new cluster to create the PVCs.
+
+
+For example, :
+
+```bash
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
+- Now that the PVC were created, stop it and copy the `dump.rdp` on the persisted data by using a helping pod.
+
+```
+$ helm delete new-redis
+
+$ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "redisvolpod"
+    },
+    "spec": {
+        "containers": [{
+            "command": [
+                "tail",
+                "-f",
+                "/dev/null"
+            ],
+            "image": "bitnami/minideb",
+            "name": "mycontainer",
+            "volumeMounts": [{
+                "mountPath": "/mnt",
+                "name": "redisdata"
+            }]
+        }],
+        "restartPolicy": "Never",
+        "volumes": [{
+            "name": "redisdata",
+            "persistentVolumeClaim": {
+                "claimName": "redis-data-new-redis-master-0"
+            }
+        }]
+    }
+}' --image="bitnami/minideb"
+
+$ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+$ kubectl delete pod volpod
+```
+
+- Start again the cluster:
+
+```
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
 ## NetworkPolicy
 
 To enable network policy for Redis, install
@@ -479,6 +573,10 @@ networkPolicy:
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
 incompatible breaking change needing manual actions.
+
+### To 11.0.0
+
+When using sentinel, a new statefulset called `-node` was introduced. This will break upgrading from a previous version where the statefulsets are called master and slave. Hence the PVC will not match the new naming and won't be reused. If you want to keep your data, you will need to perform a backup and then a restore the data in this new version.
 
 ### To 10.0.0
 
@@ -554,6 +652,9 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 ```
 
 ## Notable changes
+
+### 11.0.0
+When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
 The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
