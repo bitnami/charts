@@ -460,7 +460,7 @@ externalDatabase:
   ## Database password
   ##
   password: ""
-  
+
   ## Use existing secret (ignores previous password)
   ## must contain key `mariadb-password`
   # existingSecret:
