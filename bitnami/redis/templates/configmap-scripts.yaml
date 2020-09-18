@@ -121,9 +121,9 @@ data:
 
     touch /data/redisboot.lock
     {{- if .Values.slave.command }}
-    {{ .Values.slave.command }} "${ARGS[@]}"
+    exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
   start-sentinel.sh: |
@@ -235,7 +235,7 @@ data:
     {{- end }}
     {{- end }}
     touch /data/sentinelboot.lock
-    redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+    exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
 {{- else }}
   start-master.sh: |
     #!/bin/bash
@@ -280,9 +280,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.master.command }}
-    {{ .Values.master.command }} ${ARGS[@]}
+    exec {{ .Values.master.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
   start-slave.sh: |
@@ -334,9 +334,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.slave.command }}
-    {{ .Values.slave.command }} "${ARGS[@]}"
+    exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
 {{- end -}}
