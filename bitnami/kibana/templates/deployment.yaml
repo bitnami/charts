@@ -149,7 +149,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "kibana.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 10 }}
+            {{- include "kibana.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.sidecars }}
       {{- include "kibana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
