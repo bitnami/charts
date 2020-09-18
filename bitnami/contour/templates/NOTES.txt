@@ -5,7 +5,7 @@
 
      You can watch the status by running:
 
-         $ kubectl get svc {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }} -w
+         $ kubectl get svc {{ include "common.names.fullname" . }}-envoy --namespace {{ .Release.Namespace }} -w
 
      Once 'EXTERNAL-IP' is no longer '<pending>':
 
