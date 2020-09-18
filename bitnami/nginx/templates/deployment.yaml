@@ -35,6 +35,23 @@ spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if eq .Values.podAffinityPreset "soft" }}
+        podAffinity: {{- include "common.affinity.pod.soft" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- else if eq .Values.podAffinityPreset "hard" }}
+        podAffinity: {{- include "common.affinity.pod.hard" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if eq .Values.podAntiAffinityPreset "soft" }}
+        podAffinity: {{- include "common.affinity.pod.soft" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- else if eq .Values.podAntiAffinityPreset "hard" }}
+        podAffinity: {{- include "common.affinity.pod.hard" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if eq .Values.nodeAffinityPreset "soft" }}
+        nodeAffinity: {{- include "common.affinity.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) | nindent 10 }}
+        {{- else if eq .Values.nodeAffinityPreset "hard" }}
+        nodeAffinity: {{- include "common.affinity.node.hard" (dict "key" "FOO" "values" (list "BAR" "BAZ")) | nindent 10 }}
+        {{- end }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
