@@ -13,38 +13,50 @@ spec:
     matchLabels: {{- include "kibana.matchLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "kibana.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       labels: {{- include "kibana.labels" . | nindent 8 }}
         app: kibana
-      {{- if .Values.podLabels }}
-      {{- include "kibana.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-      {{- end }}
+        {{- if .Values.podLabels }}
+        {{- include "kibana.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
-    {{- if .Values.schedulerName }}
+      {{- include "kibana.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "kibana.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "kibana.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "kibana.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
-    {{- end }}
-{{- include "kibana.imagePullSecrets" . | indent 6 }}
-    {{- if .Values.securityContext.enabled }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
-    {{- end }}
-    {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- end }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-      - name: volume-permissions
-        image: "{{ template "kibana.volumePermissions.image" . }}"
-        imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-        command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kibana"]
-        securityContext:
-          runAsUser: 0
-        resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
-        volumeMounts:
-        - name: kibana-data
-          mountPath: /bitnami/kibana
+        - name: volume-permissions
+          image: "{{ template "kibana.volumePermissions.image" . }}"
+          imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+          command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kibana"]
+          securityContext:
+            runAsUser: 0
+          resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+          volumeMounts:
+          - name: kibana-data
+            mountPath: /bitnami/kibana
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "kibana.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
-      {{- if .Values.initContainers }}
-      {{- tpl (toYaml .Values.initContainers) $ | nindent 8 }}
-      {{- end }}
-    {{- end }}
       containers:
         - name: kibana
           image: {{ include "kibana.image" . }}
@@ -61,18 +73,18 @@ spec:
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
           {{- if .Values.extraEnvVars }}
-          {{- tpl (toYaml .Values.extraEnvVars) $ | nindent 12 }}
+          {{- include "kibana.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
-          {{- if .Values.extraEnvVarsCM }}
-          - configMapRef:
-              name: {{ .Values.extraEnvVarsCM }}
-          {{- end }}
-          {{- if .Values.extraEnvVarsSecret }}
-          - secretRef:
-              name: {{ .Values.extraEnvVarsSecret }}
-          {{- end }}
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
@@ -109,38 +121,38 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- tpl (toYaml .Values.resources) $ | nindent 12 }}
+          resources: {{- include "kibana.tplValue" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: kibana-data
-            mountPath: /bitnami/kibana
-          - name: kibana-config
-            mountPath: /bitnami/kibana/conf
-          {{- if .Values.plugins }}
-          - name: plugins-init-scripts
-            mountPath: /docker-entrypoint-initdb.d/plugin-install
-          {{- end }}
-          {{- if (include "kibana.importSavedObjects" .) }}
-          - name: saved-objects-init-scripts
-            mountPath: /docker-entrypoint-initdb.d/saved-objects-import
-          {{- end }}
-          {{- if .Values.savedObjects.configmap }}
-          - name: saved-objects-configmap
-            mountPath: /bitnami/kibana/saved-objects
-          {{- end }}
-          {{- if .Values.initScriptsCM }}
-          - name: custom-init-scripts-cm
-            mountPath: /docker-entrypoint-initdb.d/cm
-          {{- end }}
-          {{- if .Values.initScriptsSecret }}
-          - name: custom-init-scripts-secret
-            mountPath: /docker-entrypoint-initdb.d/secret
-          {{- end }}
-          {{- if .Values.extraVolumeMounts }}
-          {{- tpl (toYaml .Values.extraVolumeMounts) $ | nindent 10 }}
-          {{- end }}
+            - name: kibana-data
+              mountPath: /bitnami/kibana
+            - name: kibana-config
+              mountPath: /bitnami/kibana/conf
+            {{- if .Values.plugins }}
+            - name: plugins-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/plugin-install
+            {{- end }}
+            {{- if (include "kibana.importSavedObjects" .) }}
+            - name: saved-objects-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/saved-objects-import
+            {{- end }}
+            {{- if .Values.savedObjects.configmap }}
+            - name: saved-objects-configmap
+              mountPath: /bitnami/kibana/saved-objects
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "kibana.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       {{- if .Values.sidecars }}
-      {{- tpl (toYaml .Values.sidecars) $ | nindent 8 }}
+      {{- include "kibana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         - name: kibana-data
@@ -182,19 +194,7 @@ spec:
           configMap:
             name: {{ template "kibana.savedObjectsCM" . }}
         {{- end }}
-      {{- if .Values.extraVolumes }}
-      {{- tpl (toYaml .Values.extraVolumes) $ | nindent 8 }}
-      {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-      {{- tpl (toYaml .Values.nodeSelector) $ | nindent 8 }}
-      {{- end }}
-      {{- if .Values.affinity }}
-      affinity:
-      {{- tpl (toYaml .Values.affinity) $ | nindent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations:
-      {{- tpl (toYaml .Values.tolerations) $ | nindent 8 }}
-      {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "kibana.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}
