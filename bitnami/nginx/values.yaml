@@ -494,7 +494,7 @@ ingress:
   ## secrets:
   ##   - name: example.local-tls
   ##     key:
-  ##     certificate: 
+  ##     certificate:
   ##
   secrets: []
 
@@ -559,7 +559,7 @@ healthIngress:
   ## secrets:
   ##   - name: example.local-tls
   ##     key:
-  ##     certificate: 
+  ##     certificate:
   ##
   secrets: []
 
@@ -586,9 +586,7 @@ metrics:
   ## Prometheus exporter pods' annotation and labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9113"
+  podAnnotations: {}
 
   ## Prometheus exporter service parameters
   ##
@@ -599,7 +597,7 @@ metrics:
     ## Annotations for the Prometheus exporter service
     ##
     annotations:
-      prometheus.io/scrape: "true"
+      prometheus.io/scrape: true
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
   ## NGINX Prometheus exporter resource requests and limits
