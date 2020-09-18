@@ -1,0 +1,19 @@
+{{- if and .Values.kubeScheduler.enabled .Values.kubeScheduler.endpoints }}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+  namespace: kube-system
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+    k8s-app: kube-scheduler
+subsets:
+  - addresses:
+      {{- range .Values.kubeScheduler.endpoints }}
+      - ip: {{ . }}
+      {{- end }}
+    ports:
+      - name: http-metrics
+        port: {{ .Values.kubeScheduler.service.port }}
+        protocol: TCP
+{{- end }}
