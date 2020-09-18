@@ -244,11 +244,11 @@ spec:
             {{- if .Values.ldap.tls }}
             - name: POSTGRESQL_LDAP_TLS
               value: "1"
-            {{- end}}
+            {{- end }}
             - name: POSTGRESQL_LDAP_PREFIX
               value: {{ .Values.ldap.prefix | quote }}
             - name: POSTGRESQL_LDAP_SUFFIX
-              value: {{ .Values.ldap.suffix | quote}}
+              value: {{ .Values.ldap.suffix | quote }}
             - name: POSTGRESQL_LDAP_BASE_DN
               value: {{ .Values.ldap.baseDN }}
             - name: POSTGRESQL_LDAP_BIND_DN
@@ -284,6 +284,62 @@ spec:
             - name: POSTGRESQL_TLS_CRL_FILE
               value: {{ template "postgresql.tlsCRL" . }}
             {{- end }}
+            {{- end }}
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: {{ .Values.audit.logHostname | quote }}
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: {{ .Values.audit.logConnections | quote }}
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: {{ .Values.audit.logDisconnections | quote }}
+            {{- if .Values.audit.logLinePrefix }}
+            - name: POSTGRESQL_LOG_LINE_PREFIX
+              value: {{ .Values.audit.logLinePrefix | quote }}
+            {{- end }}
+            {{- if .Values.audit.logTimezone }}
+            - name: POSTGRESQL_LOG_TIMEZONE
+              value: {{ .Values.audit.logTimezone | quote }}
+            {{- end }}
+            {{- if .Values.audit.pgAuditLog }}
+            - name: POSTGRESQL_PGAUDIT_LOG
+              value: {{ .Values.audit.pgAuditLog | quote }}
+            {{- end }}
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: {{ .Values.audit.pgAuditLogCatalog | quote }}
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: {{ .Values.audit.clientMinMessages | quote }}
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: {{ .Values.postgresqlSharedPreloadLibraries | quote }}
+            {{- if .Values.postgresqlMaxConnections }}
+            - name: POSTGRESQL_MAX_CONNECTIONS
+              value: {{ .Values.postgresqlMaxConnections | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlPostgresConnectionLimit }}
+            - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
+              value: {{ .Values.postgresqlPostgresConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlDbUserConnectionLimit }}
+            - name: POSTGRESQL_USERNAME_CONNECTION_LIMIT
+              value: {{ .Values.postgresqlDbUserConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeepalivesInterval }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_INTERVAL
+              value: {{ .Values.postgresqlTcpKeepalivesInterval | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeepalivesIdle }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_IDLE
+              value: {{ .Values.postgresqlTcpKeepalivesIdle | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlStatementTimeout }}
+            - name: POSTGRESQL_STATEMENT_TIMEOUT
+              value: {{ .Values.postgresqlStatementTimeout | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeealivesCount }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
+              value: {{ .Values.postgresqlTcpKeealivesCount | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlPghbaRemoveFilters }}
+            - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
+              value: {{ .Values.postgresqlPghbaRemoveFilters | quote }}
             {{- end }}
           {{- if .Values.extraEnvVarsCM }}
           envFrom:

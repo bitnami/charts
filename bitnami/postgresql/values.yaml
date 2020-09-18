@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.9.0-debian-10-r16
+  tag: 11.9.0-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -31,6 +31,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override postgresql.fullname template (will maintain the release name)
@@ -95,6 +96,7 @@ containerSecurityContext:
 
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
   enabled: false
   ## Name of an already existing service account. Setting this value disables the automatic service account creation.
@@ -102,11 +104,13 @@ serviceAccount:
 
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
 psp:
   create: false
 
 ## Creates role for ServiceAccount
 ## Required for PSP
+##
 rbac:
   create: false
 
@@ -117,11 +121,14 @@ replication:
   slaveReplicas: 1
   ## Set synchronous commit mode: on, off, remote_apply, remote_write and local
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
+  ##
   synchronousCommit: 'off'
   ## From the number of `slaveReplicas` defined above, set the number of those that will have synchronous replication
   ## NOTE: It cannot be > slaveReplicas
+  ##
   numSynchronousReplicas: 0
   ## Replication Cluster application name. Useful for defining multiple replication policies
+  ##
   applicationName: my_application
 
 ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
@@ -130,6 +137,7 @@ replication:
 
 ## PostgreSQL user (has superuser privileges if username is `postgres`)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+##
 postgresqlUsername: postgres
 
 ## PostgreSQL password
@@ -139,6 +147,7 @@ postgresqlUsername: postgres
 
 ## PostgreSQL password using existing secret
 ## existingSecret: secret
+##
 
 ## Mount PostgreSQL secret as a file instead of passing environment variable
 # usePasswordFile: false
@@ -237,6 +246,72 @@ masterAsStandBy:
 # initdbUser:
 # initdbPassword:
 
+## Audit settings
+## https://github.com/bitnami/bitnami-docker-postgresql#auditing
+##
+audit:
+  ## Log client hostnames
+  ##
+  logHostname: false
+  ## Log connections to the server
+  ##
+  logConnections: false
+  ## Log disconnections
+  ##
+  logDisconnections: false
+  ## Operation to audit using pgAudit (default if not set)
+  ##
+  pgAuditLog: ""
+  ## Log catalog using pgAudit
+  ##
+  pgAuditLogCatalog: "off"
+  ## Log level for clients
+  ##
+  clientMinMessages: error
+  ## Template for log line prefix (default if not set)
+  ##
+  logLinePrefix: ""
+  ## Log timezone
+  ##
+  logTimezone: ""
+
+## Shared preload libraries
+##
+postgresqlSharedPreloadLibraries: "pgaudit"
+
+## Maximum total connections
+##
+postgresqlMaxConnections:
+
+## Maximum connections for the postgres user
+##
+postgresqlPostgresConnectionLimit:
+
+## Maximum connections for the created user
+##
+postgresqlDbUserConnectionLimit:
+
+## TCP keepalives interval
+##
+postgresqlTcpKeepalivesInterval:
+
+## TCP keepalives idle
+##
+postgresqlTcpKeepalivesIdle:
+
+## TCP keepalives count
+##
+postgresqlTcpKeepalivesCount:
+
+## Statement timeout
+##
+postgresqlStatementTimeout:
+
+## Remove pg_hba.conf lines with the following comma-separated patterns
+## (cannot be used with custom pg_hba.conf)
+##
+postgresqlPghbaRemoveFilters:
+
 ## Optional duration in seconds the pod needs to terminate gracefully.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
@@ -260,8 +335,10 @@ ldap:
   tls: false
 
 ## PostgreSQL service configuration
+##
 service:
   ## PosgresSQL service type
+  ##
   type: ClusterIP
   # clusterIP: None
   port: 5432
@@ -335,6 +412,7 @@ persistence:
 
 ## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
 updateStrategy:
   type: RollingUpdate
 
@@ -347,6 +425,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption
+  ##
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -362,6 +441,7 @@ master:
   ##   - name: do-something
   ##     image: busybox
   ##     command: ['do', 'something']
+  ##
   extraInitContainers: []
 
   ## Additional PostgreSQL Master Volume mounts
@@ -380,6 +460,7 @@ master:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
+  ##
   sidecars: []
 
   ## Override the service configuration for master
@@ -398,6 +479,7 @@ slave:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption
+  ##
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -426,6 +508,7 @@ slave:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
+  ##
   sidecars: []
 
   ## Override the service configuration for slave
@@ -474,10 +557,12 @@ networkPolicy:
   ##     role: frontend
   ##   matchExpressions:
   ##    - {key: role, operator: In, values: [frontend]}
+  ##
   explicitNamespacesSelector: {}
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -541,6 +626,7 @@ metrics:
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
   prometheusRule:
     enabled: false
     additionalLabels: {}
@@ -556,6 +642,7 @@ metrics:
     ##     annotations:
     ##       description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
     ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
+    ##
     rules: []
 
   image:
@@ -598,6 +685,7 @@ metrics:
     runAsUser: 1001
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## Configure extra options for liveness and readiness probes
+  ##
   livenessProbe:
     enabled: true
     initialDelaySeconds: 5
@@ -613,3 +701,7 @@ metrics:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
