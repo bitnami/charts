@@ -169,6 +169,12 @@ postgresql:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## PostgreSQL containers' resource requests and limits
@@ -378,6 +384,12 @@ pgpool:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
