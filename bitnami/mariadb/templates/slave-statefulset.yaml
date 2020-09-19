@@ -33,6 +33,7 @@ spec:
         app: {{ template "mariadb.name" . }}
         chart: {{ template "mariadb.chart" . }}
         release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
         component: slave
         {{- include "mariadb.podLabels" . | nindent 8 }}
     spec:
