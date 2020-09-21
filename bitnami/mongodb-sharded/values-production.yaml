@@ -787,7 +787,7 @@ service:
   ## Specify an explicit service name
   ##
   name:
-  ## Additional service annotations
+  ## Additional service annotations (evaluate as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   annotations: {}
