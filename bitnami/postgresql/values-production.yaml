@@ -574,6 +574,14 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Rediness probe
+##
+customReadinessProbe: {}
+
 ##
 ## TLS configuration
 ##
