@@ -341,3 +341,13 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 ```console
 $ kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## Bitnami Kubernetes Documentation
+
+Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
+
+- [Documentation for NGINX Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/nginx/)
+- [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
+- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
+- [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
+- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
