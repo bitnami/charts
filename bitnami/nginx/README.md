@@ -89,9 +89,9 @@ The following tables lists the configurable parameters of the NGINX chart and th
 |-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `replicaCount`                          | Number of NGINX replicas to deploy                                                       | `1`                                                     |
 | `strategyType`                          | Deployment Strategy Type                                                                 | `RollingUpdate`                                         |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `nil`                                                   |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
-| `nodeAffinityPreset`                    | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `nil`                                                   |
+| `nodeAffinityPreset`                    | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                                                    |
 | `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
 | `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
 | `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |

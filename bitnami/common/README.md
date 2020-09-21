@@ -39,14 +39,14 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 The following table lists the helpers available in the library which are scoped in different sections.
 
-### Affinity
+### Affinities
 
 | Helper identifier                   | Description                                                     | Expected Input                                                   |
 |-------------------------------------|-----------------------------------------------------------------|------------------------------------------------------------------|
-| `common.affinity.node.soft`         | Return a soft nodeAffinity definition                           | `dict "key" "FOO" "values" (list "BAR" "BAZ")`                   |
-| `common.affinity.node.hard`         | Return a hard nodeAffinity definition                           | `dict "key" "FOO" "values" (list "BAR" "BAZ")`                   |
-| `common.affinity.pod.soft`          | Return a soft podAffinity/podAntiAffinity definition            | `dict "component" "FOO" "context" $`                             |
-| `common.affinity.pod.hard`          | Return a hard podAffinity/podAntiAffinity definition            | `dict "component" "FOO" "context" $`                             |
+| `common.affinities.node.soft`       | Return a soft nodeAffinity definition                           | `dict "key" "FOO" "values" (list "BAR" "BAZ")`                   |
+| `common.affinities.node.hard`       | Return a hard nodeAffinity definition                           | `dict "key" "FOO" "values" (list "BAR" "BAZ")`                   |
+| `common.affinities.pod.soft`        | Return a soft podAffinity/podAntiAffinity definition            | `dict "component" "FOO" "context" $`                             |
+| `common.affinities.pod.hard`        | Return a hard podAffinity/podAntiAffinity definition            | `dict "component" "FOO" "context" $`                             |
 
 ### Capabilities
 
@@ -94,7 +94,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier              | Description                                                     | Expected Input                                                                                                      |
 |--------------------------------|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinity.node.soft`    | Return a soft nodeAffinity definition                           | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.affinities.node.soft`    | Return a soft nodeAffinity definition                           | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 

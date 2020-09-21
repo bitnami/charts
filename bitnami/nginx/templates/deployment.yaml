@@ -37,20 +37,14 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        {{- if eq .Values.podAffinityPreset "soft" }}
-        podAffinity: {{- include "common.affinity.pod.soft" (dict "component" "nginx" "context" $) | nindent 10 }}
-        {{- else if eq .Values.podAffinityPreset "hard" }}
-        podAffinity: {{- include "common.affinity.pod.hard" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- if not (empty .Values.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pod" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
         {{- end }}
-        {{- if eq .Values.podAntiAffinityPreset "soft" }}
-        podAffinity: {{- include "common.affinity.pod.soft" (dict "component" "nginx" "context" $) | nindent 10 }}
-        {{- else if eq .Values.podAntiAffinityPreset "hard" }}
-        podAffinity: {{- include "common.affinity.pod.hard" (dict "component" "nginx" "context" $) | nindent 10 }}
+        {{- if not (empty .Values.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pod" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         {{- end }}
-        {{- if eq .Values.nodeAffinityPreset "soft" }}
-        nodeAffinity: {{- include "common.affinity.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) | nindent 10 }}
-        {{- else if eq .Values.nodeAffinityPreset "hard" }}
-        nodeAffinity: {{- include "common.affinity.node.hard" (dict "key" "FOO" "values" (list "BAR" "BAZ")) | nindent 10 }}
+        {{- if not (empty .Values.nodeAffinityPreset) }}
+        nodeAffinity: {{- include "common.affinities.node" (dict "type" .Values.nodeAffinityPreset "key" "some-label-key" "values" (list "some-label-value")) | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.nodeSelector }}

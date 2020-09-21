@@ -159,7 +159,7 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: nil
+podAffinityPreset: ""
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -171,7 +171,7 @@ podAntiAffinityPreset: soft
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ## Allowed values: soft, hard
 ##
-nodeAffinityPreset: nil
+nodeAffinityPreset: ""
 
 ## Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

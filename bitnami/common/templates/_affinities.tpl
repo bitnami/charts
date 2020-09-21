@@ -2,9 +2,9 @@
 
 {{/*
 Return a soft nodeAffinity definition 
-{{ include "common.affinity.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+{{ include "common.affinities.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinity.node.soft" -}}
+{{- define "common.affinities.node.soft" -}}
 preferredDuringSchedulingIgnoredDuringExecution:
   - preference:
       matchExpressions:
@@ -18,10 +18,10 @@ preferredDuringSchedulingIgnoredDuringExecution:
 {{- end -}}
 
 {{/*
-Return a hard nodeAffinity definition 
-{{ include "common.affinity.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+Return a hard nodeAffinity definition
+{{ include "common.affinities.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinity.node.hard" -}}
+{{- define "common.affinities.node.hard" -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   nodeSelectorTerms:
     - matchExpressions:
@@ -34,10 +34,22 @@ requiredDuringSchedulingIgnoredDuringExecution:
 {{- end -}}
 
 {{/*
-Return a soft podAffinity/podAntiAffinity definition 
-{{ include "common.affinity.pod.soft" (dict "component" "FOO" "context" $) -}}
+Return a nodeAffinity definition
+{{ include "common.affinities.node" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinity.pod.soft" -}}
+{{- define "common.affinities.node" -}}
+  {{- if eq .type "soft" }}
+    {{- include "common.affinities.node.soft" . -}}
+  {{- else if eq .type "hard" }}
+    {{- include "common.affinities.node.hard" . -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return a soft podAffinity/podAntiAffinity definition
+{{ include "common.affinities.pod.soft" (dict "component" "FOO" "context" $) -}}
+*/}}
+{{- define "common.affinities.pod.soft" -}}
 {{- $component := default "" .component -}}
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
@@ -53,10 +65,10 @@ preferredDuringSchedulingIgnoredDuringExecution:
 {{- end -}}
 
 {{/*
-Return a hard podAffinity/podAntiAffinity definition 
-{{ include "common.affinity.pod.hard" (dict "component" "FOO" "context" $) -}}
+Return a hard podAffinity/podAntiAffinity definition
+{{ include "common.affinities.pod.hard" (dict "component" "FOO" "context" $) -}}
 */}}
-{{- define "common.affinity.pod.hard" -}}
+{{- define "common.affinities.pod.hard" -}}
 {{- $component := default "" .component -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
@@ -67,4 +79,16 @@ requiredDuringSchedulingIgnoredDuringExecution:
     namespaces:
       - {{ .context.Release.Namespace }}
     topologyKey: kubernetes.io/hostname
+{{- end -}}
+
+{{/*
+Return a podAffinity/podAntiAffinity definition
+{{ include "common.affinities.pod" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+*/}}
+{{- define "common.affinities.pod" -}}
+  {{- if eq .type "soft" }}
+    {{- include "common.affinities.pod.soft" . -}}
+  {{- else if eq .type "hard" }}
+    {{- include "common.affinities.pod.hard" . -}}
+  {{- end -}}
 {{- end -}}
