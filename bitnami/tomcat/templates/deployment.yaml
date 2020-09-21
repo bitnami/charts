@@ -56,6 +56,11 @@ spec:
         - name: tomcat
           image: {{ template "tomcat.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.image.command }}
+          command : {{- range .Values.image.command }}
+            - {{ . }}
+             {{- end }}
+          {{- end }}
           env:
             - name: TOMCAT_USERNAME
               value: {{ .Values.tomcatUsername | quote }}

@@ -57,6 +57,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `image.registry`                     | Tomcat image registry                                                                               | `docker.io`                                             |
 | `image.repository`                   | Tomcat Image name                                                                                   | `bitnami/tomcat`                                        |
 | `image.tag`                          | Tomcat Image tag                                                                                    | `{TAG_NAME}`                                            |
+| `image.command`                      | Tomcat Image command to run                                                                         | `[]`                                                    |
 | `image.pullPolicy`                   | Tomcat image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                    | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory                         | `false`                                                 |
