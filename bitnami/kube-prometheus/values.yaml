@@ -736,7 +736,10 @@ prometheus:
       ##
       type: ClusterIP
       port: 10901
-      # clusterIP: None
+      ## Use a "headless" service by default so it returns every pod's IP
+      ## instead of loadbalancing requests.
+      ##
+      clusterIP: None
 
       ## Specify the nodePort value for the LoadBalancer and NodePort service types.
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
