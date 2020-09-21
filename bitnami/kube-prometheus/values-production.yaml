@@ -1178,7 +1178,7 @@ kubeScheduler:
 
     ## Skip TLS certificate validation when scraping
     insecureSkipVerify: null
-	
+
     ## Name of the server to use when validating TLS certificate
     serverName: null
 
