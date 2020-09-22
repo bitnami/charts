@@ -2,9 +2,9 @@
 
 {{/*
 Return a soft nodeAffinity definition 
-{{ include "common.affinities.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+{{ include "common.affinities.nodes.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinities.node.soft" -}}
+{{- define "common.affinities.nodes.soft" -}}
 preferredDuringSchedulingIgnoredDuringExecution:
   - preference:
       matchExpressions:
@@ -19,9 +19,9 @@ preferredDuringSchedulingIgnoredDuringExecution:
 
 {{/*
 Return a hard nodeAffinity definition
-{{ include "common.affinities.node.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+{{ include "common.affinities.nodes.hard" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinities.node.hard" -}}
+{{- define "common.affinities.nodes.hard" -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   nodeSelectorTerms:
     - matchExpressions:
@@ -35,21 +35,21 @@ requiredDuringSchedulingIgnoredDuringExecution:
 
 {{/*
 Return a nodeAffinity definition
-{{ include "common.affinities.node" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+{{ include "common.affinities.nodes" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinities.node" -}}
+{{- define "common.affinities.nodes" -}}
   {{- if eq .type "soft" }}
-    {{- include "common.affinities.node.soft" . -}}
+    {{- include "common.affinities.nodes.soft" . -}}
   {{- else if eq .type "hard" }}
-    {{- include "common.affinities.node.hard" . -}}
+    {{- include "common.affinities.nodes.hard" . -}}
   {{- end -}}
 {{- end -}}
 
 {{/*
 Return a soft podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pod.soft" (dict "component" "FOO" "context" $) -}}
+{{ include "common.affinities.pods.soft" (dict "component" "FOO" "context" $) -}}
 */}}
-{{- define "common.affinities.pod.soft" -}}
+{{- define "common.affinities.pods.soft" -}}
 {{- $component := default "" .component -}}
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
@@ -66,9 +66,9 @@ preferredDuringSchedulingIgnoredDuringExecution:
 
 {{/*
 Return a hard podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pod.hard" (dict "component" "FOO" "context" $) -}}
+{{ include "common.affinities.pods.hard" (dict "component" "FOO" "context" $) -}}
 */}}
-{{- define "common.affinities.pod.hard" -}}
+{{- define "common.affinities.pods.hard" -}}
 {{- $component := default "" .component -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
@@ -83,12 +83,12 @@ requiredDuringSchedulingIgnoredDuringExecution:
 
 {{/*
 Return a podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pod" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
+{{ include "common.affinities.pods" (dict "type" "soft" "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
-{{- define "common.affinities.pod" -}}
+{{- define "common.affinities.pods" -}}
   {{- if eq .type "soft" }}
-    {{- include "common.affinities.pod.soft" . -}}
+    {{- include "common.affinities.pods.soft" . -}}
   {{- else if eq .type "hard" }}
-    {{- include "common.affinities.pod.hard" . -}}
+    {{- include "common.affinities.pods.hard" . -}}
   {{- end -}}
 {{- end -}}

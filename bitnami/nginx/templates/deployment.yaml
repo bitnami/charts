@@ -37,15 +37,9 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        {{- if not (empty .Values.podAffinityPreset) }}
-        podAffinity: {{- include "common.affinities.pod" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        {{- end }}
-        {{- if not (empty .Values.podAntiAffinityPreset) }}
-        podAntiAffinity: {{- include "common.affinities.pod" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
-        {{- end }}
-        {{- if not (empty .Values.nodeAffinityPreset) }}
-        nodeAffinity: {{- include "common.affinities.node" (dict "type" .Values.nodeAffinityPreset "key" "some-label-key" "values" (list "some-label-value")) | nindent 10 }}
-        {{- end }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}

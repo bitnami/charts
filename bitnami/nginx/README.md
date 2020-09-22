@@ -91,7 +91,9 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `strategyType`                          | Deployment Strategy Type                                                                 | `RollingUpdate`                                         |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
-| `nodeAffinityPreset`                    | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                                                    |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                    | `""`                                                    |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                | `[]`                                                    |
 | `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
 | `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
 | `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
@@ -299,7 +301,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters to `soft` or `hard` depending on the kind of configuration you want.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
