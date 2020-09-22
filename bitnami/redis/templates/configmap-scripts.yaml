@@ -121,9 +121,9 @@ data:
 
     touch /data/redisboot.lock
     {{- if .Values.slave.command }}
-    {{ .Values.slave.command }} "${ARGS[@]}"
+    exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
   start-sentinel.sh: |
@@ -194,8 +194,8 @@ data:
         if [[ ! -f /data/sentinelboot.lock ]]; then
           export REDIS_REPLICATION_MODE="master"
         else
-          if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
+          if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} info"
           else
             sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
           fi
@@ -210,8 +210,8 @@ data:
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
       sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-node-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}"
     else
-      if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       else
         sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
@@ -235,7 +235,7 @@ data:
     {{- end }}
     {{- end }}
     touch /data/sentinelboot.lock
-    redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+    exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
 {{- else }}
   start-master.sh: |
     #!/bin/bash
@@ -280,9 +280,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.master.command }}
-    {{ .Values.master.command }} ${ARGS[@]}
+    exec {{ .Values.master.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
   start-slave.sh: |
@@ -334,9 +334,9 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.slave.command }}
-    {{ .Values.slave.command }} "${ARGS[@]}"
+    exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
-    redis-server "${ARGS[@]}"
+    exec redis-server "${ARGS[@]}"
     {{- end }}
 
 {{- end -}}

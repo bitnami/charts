@@ -17,7 +17,7 @@ serverBlock: |-
 
 ingress:
   enabled: true
-  tls: []
+  tls: true
 
 metrics:
   enabled: true
