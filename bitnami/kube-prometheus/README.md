@@ -347,6 +347,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `kubeApiServer.serviceMonitor.relabelings`               | Relabel configs                                                                                                                  | `[]`          |
 | `kubeControllerManager.enabled`                          | Create a ServiceMonitor to scrape kube-controller-manager service                                                                | `true`        |
 | `kubeControllerManager.endpoints`                        | If your kube controller manager is not deployed as a pod, specify IPs it can be found on                                         | `[]`          |
+| `kubeControllerManager.namespace`                        | Namespace where kube-controller-manager service is deployed.                                                                     | `kube-system` |
 | `kubeControllerManager.service.port`                     | Listening port of the kube-controller-manager Service object                                                                     | '10252'       |
 | `kubeControllerManager.service.targetPort`               | Port to target on the kube-controller-manager Pods. This should be the port that kube-controller-manager is exposing metrics on  | '10252'       |
 | `kubeControllerManager.service.selector`                 | Optional PODs Label selector for the service                                                                                     | 'nil'         |
@@ -358,6 +359,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `kubeControllerManager.serviceMonitor.relabelings`       | Relabel configs                                                                                                                  | `[]`          |
 | `kubeScheduler.enabled`                                  | Create a ServiceMonitor to scrape kube-scheduler service                                                                         | `true`        |
 | `kubeScheduler.endpoints`                                | If your kube scheduler is not deployed as a pod, specify IPs it can be found on                                                  | `[]`          |
+| `kubeScheduler.namespace`                                | Namespace where kube-scheduler service is deployed.                                                                              | `kube-system` |
 | `kubeScheduler.service.port`                             | Listening port of the kube scheduler Service object                                                                              | '10251'       |
 | `kubeScheduler.service.targetPort`                       | Port to target on the kube scheduler Pods. This should be the port that kube scheduler is exposing metrics on                    | '10251'       |
 | `kubeScheduler.service.selector`                         | Optional PODs Label selector for the service                                                                                     | 'nil'         |
@@ -368,6 +370,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `kubeScheduler.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                                                | `[]`          |
 | `kubeScheduler.serviceMonitor.relabelings`               | Relabel configs                                                                                                                  | `[]`          |
 | `coreDns.enabled`                                        | Create a ServiceMonitor to scrape coredns service                                                                                | `true`        |
+| `coreDns.namespace`                                      | Namespace where core dns service is deployed.                                                                                    | `kube-system` |
 | `coreDns.service.port`                                   | Listening port of the coredns Service object                                                                                     | '9153'        |
 | `coreDns.service.targetPort`                             | Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on                                  | '9153'        |
 | `coreDns.service.selector`                               | Optional PODs Label selector for the service                                                                                     | 'nil'         |

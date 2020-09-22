@@ -5,7 +5,7 @@ metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app: {{ template "kube-prometheus.fullname" . }}-coredns
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
 spec:
   clusterIP: None
   ports:

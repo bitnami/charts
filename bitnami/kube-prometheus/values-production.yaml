@@ -1112,6 +1112,9 @@ kubeControllerManager:
   # - 10.141.4.23
   # - 10.141.4.24
 
+  ## Namespace where kube-controller-manager service is deployed
+  namespace: kube-system
+
   ## Service ports and selector information
   service:
     port: 10252
@@ -1159,6 +1162,9 @@ kubeScheduler:
   # - 10.141.4.23
   # - 10.141.4.24
 
+  ## Namespace where kube-scheduler service is deployed
+  namespace: kube-system
+
   ## If using kubeScheduler.endpoints only the port and targetPort are used
   ##
   service:
@@ -1203,6 +1209,9 @@ kubeScheduler:
 ##
 coreDns:
   enabled: true
+
+  ## Namespace where coreDns service is deployed
+  namespace: kube-system
 
   ## Create a ServiceMonitor to scrape coredns service
   service:

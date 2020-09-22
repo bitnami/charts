@@ -5,7 +5,7 @@ metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
     k8s-app: kube-controller-manager
 subsets:
   - addresses:
