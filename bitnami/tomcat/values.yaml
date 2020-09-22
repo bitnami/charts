@@ -26,8 +26,6 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
-  ## Optionally specify a command to pass to the image
-  # command: []
 
 ## String to partially override tomcat.fullname template (will maintain the release name)
 ##
@@ -36,6 +34,11 @@ image:
 ## String to fully override tomcat.fullname template
 ##
 # fullnameOverride:
+
+## Optionally specify a command to pass to the image
+##
+# command: []
+
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
