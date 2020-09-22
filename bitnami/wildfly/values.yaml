@@ -220,3 +220,27 @@ sidecars:
 #   ports:
 #     - name: portname
 #       containerPort: 1234
+
+## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes liveness probe
+## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Evaulated as a template
+##
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 120
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes readiness probe
+## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Evaulated as a template
+##
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  timeoutSeconds: 3
+  periodSeconds: 5
