@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.7-debian-10-r0
+  tag: 6.0.8-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 6.0.7-debian-10-r1
+    tag: 6.0.8-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -407,6 +407,26 @@ master:
   ##
   priorityClassName: {}
 
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: name
+  ##    value: value
+  ##  - name: other_name
+  ##    valueFrom:
+  ##      fieldRef:
+  ##        fieldPath: fieldPath
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM: []
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret: []
+
 ##
 ## Redis Slave properties
 ## Note: service.type is a mandatory parameter
@@ -565,6 +585,26 @@ slave:
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
 
+  ## An array to add extra env vars
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: name
+  ##    value: value
+  ##  - name: other_name
+  ##    valueFrom:
+  ##      fieldRef:
+  ##        fieldPath: fieldPath
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM: []
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret: []
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -573,7 +613,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.11.1-debian-10-r3
+    tag: 1.11.1-debian-10-r12
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

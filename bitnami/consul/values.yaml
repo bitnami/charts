@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.8.3-debian-10-r0
+  tag: 1.8.4-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -251,6 +251,7 @@ service:
   serverPort: 8300
   consulDnsPort: 8600
   uiPort: 80
+  sessionAffinity: "None"
 
 ## HashiCorp Consul UI service parameters
 ##
@@ -330,7 +331,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.7.1-debian-10-r12
+    tag: 0.7.1-debian-10-r47
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

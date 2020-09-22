@@ -179,7 +179,7 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "node.fullname" . }}
+            claimName: {{ template "node.fullname" . }}-binding
           {{- else }}
           emptyDir: {}
           {{- end }}

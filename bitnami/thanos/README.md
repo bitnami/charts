@@ -112,7 +112,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `querier.enabled`                               | Enable/disable Thanos Querier component                                                                | `true`                                                  |
 | `querier.logLevel`                              | Thanos Querier log level                                                                               | `info`                                                  |
-| `querier.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                  | `replica`                                               |
+| `querier.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                  | `[replica]`                                             |
 | `querier.dnsDiscovery.enabled`                  | Enable store APIs discovery via DNS                                                                    | `true`                                                  |
 | `querier.dnsDiscovery.sidecarsService`          | Sidecars service name to discover them using DNS discovery                                             | `nil` (evaluated as a template)                         |
 | `querier.dnsDiscovery.sidecarsNamespace`        | Sidecars namespace to discover them using DNS discovery                                                | `nil` (evaluated as a template)                         |
@@ -575,6 +575,22 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 2.4.0
+
+The Ingress API object name for Querier changes from:
+
+```yaml
+{{ include "thanos.fullname" . }}
+```
+
+> **NOTE**: Which in most cases (depending on any set values in `fullnameOverride` or `nameOverride`) resolves to the used Helm release name (`.Release.Name`).
+
+To:
+
+```yaml
+{{ include "thanos.fullname" . }}-querier
+```
 
 ### To 2.0.0
 

@@ -33,6 +33,7 @@ spec:
         app: {{ template "mariadb.name" . }}
         chart: {{ template "mariadb.chart" . }}
         release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
         component: slave
         {{- include "mariadb.podLabels" . | nindent 8 }}
     spec:
@@ -217,7 +218,7 @@ spec:
           env:
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password" .Values.rootUser.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -309,5 +310,8 @@ spec:
           requests:
             storage: {{ .Values.slave.persistence.size | quote }}
         {{ include "mariadb.slave.storageClass" . }}
+        {{- if .Values.slave.persistence.selector }}
+        selector: {{- include "mariadb.tplValue" (dict "value" .Values.slave.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- end }}

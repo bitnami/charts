@@ -14,8 +14,8 @@ metadata:
 data:
   PORT: {{ include "harbor.chartmuseum.containerPort" .  | quote }}
   {{- if .Values.internalTLS.enabled }}
-  TLS_CERT: "/bitnami/certs/tls.crt"
-  TLS_KEY: "/bitnami/certs/tls.key"
+  TLS_CERT: "/etc/harbor/ssl/chartmuseum/tls.crt"
+  TLS_KEY: "/etc/harbor/ssl/chartmuseum/tls.key"
   {{- end }}
   {{- if .Values.chartmuseum.useRedisCache }}
   CACHE: "redis"

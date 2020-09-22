@@ -408,6 +408,22 @@ envoy:
     ##
     extraPorts: []
 
+  ## Use hostPorts
+  ##
+  useHostPort: true
+
+  ## HTTP and HTTPS ports
+  ##
+  hostPorts:
+    http: 80
+    https: 443
+
+  ## Configures the ports the Envoy proxy listens on
+  ##
+  containerPorts:
+    http: 80
+    https: 443
+
   ## Add init containers to the pod
   ## For example:
   ## initContainers:

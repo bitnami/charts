@@ -13,8 +13,8 @@ metadata:
 data:
   app.conf: |+
     appname = Harbor
-    runmode = dev
+    runmode = prod
     enablegzip = true
 
-    [dev]
-    httpport = 8080
+    [prod]
+    httpport = {{ include "harbor.core.containerPort" . | quote }}

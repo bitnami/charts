@@ -261,6 +261,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `volumePermissions.image.pullSecrets`     | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `volumePermissions.resources.limits`      | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
 | `volumePermissions.resources.requests`    | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| `volumePermissions.securityContext`       | Security context of the init container                                                                               | Check `values.yaml` file                                     |
 
 ### Arbiter parameters
 

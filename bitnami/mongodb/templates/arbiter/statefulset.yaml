@@ -52,12 +52,7 @@ spec:
       priorityClassName: {{ .Values.arbiter.priorityClassName }}
       {{- end }}
       {{- if .Values.arbiter.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.arbiter.podSecurityContext.fsGroup }}
-        {{- if .Values.arbiter.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.arbiter.podSecurityContext.sysctls | nindent 10 }}
-        {{- end }}
+      securityContext: {{- omit .Values.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.arbiter.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
@@ -67,8 +62,7 @@ spec:
           image: {{ include "mongodb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.arbiter.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.arbiter.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.arbiter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.command "context" $) | nindent 12 }}
