@@ -133,8 +133,14 @@ The following tables lists the configurable parameters of the cassandra chart an
 | `securityContext.enabled`              | Enable security context                                                                                                                                   | `true`                                                       |
 | `securityContext.fsGroup`              | Group ID for the container                                                                                                                                | `1001`                                                       |
 | `securityContext.runAsUser`            | User ID for the container                                                                                                                                 | `1001`                                                       |
-| `affinity`                             | Enable node/pod affinity                                                                                                                                  | {}                                                           |
-| `tolerations`                          | Toleration labels for pod assignment                                                                                                                      | \[]                                                          |
+| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                         |
+| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                       |
+| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                         |
+| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                         |
+| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                         |
+| `affinity`                             | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                               |
+| `nodeSelector`                         | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                          | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                               |
 | `networkPolicy.enabled`                | Enable NetworkPolicy                                                                                                                                      | `false`                                                      |
 | `networkPolicy.allowExternal`          | Don't require client label for connections                                                                                                                | `true`                                                       |
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                                                                                                      | `false`                                                      |
@@ -250,6 +256,12 @@ initDBConfigMap=init-db
 
 If the scripts contain sensitive information, you can use the `initDBSecret` parameter as well (both can be used at the same time).
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the cassandra data at the `/bitnami/cassandra` path of the container.
@@ -267,6 +279,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrade
+
+### 5.7.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### 5.4.0
 

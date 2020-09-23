@@ -20,11 +20,16 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
-      {{- if .Values.envoy.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
       {{- if .Values.envoy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.envoy.podAffinityPreset "component" "envoy" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.envoy.podAntiAffinityPreset "component" "envoy" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.envoy.nodeAffinityPreset.type "key" .Values.envoy.nodeAffinityPreset.key "values" .Values.envoy.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.envoy.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.tolerations}}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}

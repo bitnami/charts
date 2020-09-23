@@ -107,10 +107,15 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `readinessProbe.timeoutSeconds`                      | When the probe times out                                                                                                                                  | 5                                                            |
 | `readinessProbe.failureThreshold`                    | Minimum consecutive failures to be considered failed                                                                                                      | 6                                                            |
 | `readinessProbe.successThreshold`                    | Minimum consecutive successes to be considered successful                                                                                                 | 1                                                            |
-| `nodeSelector`                                       | Node labels for pod assignment                                                                                                                            | `{}`                                                         |
-| `affinity`                                           | Affinity settings for pod assignment                                                                                                                      | `{}`                                                         |
-| `tolerations`                                        | Toleration labels for pod assignment                                                                                                                      | `[]`                                                         |
 | `podAnnotations`                                     | Pod annotations                                                                                                                                           | `{}`                                                         |
+| `podAffinityPreset`                                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                         |
+| `podAntiAffinityPreset`                              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                       |
+| `nodeAffinityPreset.type`                            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                         |
+| `nodeAffinityPreset.key`                             | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                         |
+| `nodeAffinityPreset.values`                          | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                         |
+| `affinity`                                           | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                               |
+| `nodeSelector`                                       | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                                        | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                               |
 | `customLivenessProbe`                                | Override default liveness probe                                                                                                                           | `nil`                                                        |
 | `customReadinessProbe`                               | Override default readiness probe                                                                                                                          | `nil`                                                        |
 | `extraVolumeMounts`                                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                                     | `nil`                                                        |
@@ -216,6 +221,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami DokuWiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image stores the DokuWiki data and configurations at the `/bitnami/dokuwiki` path of the container.
@@ -227,6 +238,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 ## Certificates
 
 ### CA Certificates
+
 Custom CA certificates not included in the base docker image can be added with
 the following configuration. The secret must exist in the same namespace as the
 deployment. Will load all certificates files it finds in the secret.
@@ -239,6 +251,7 @@ certificates:
 ```
 
 #### Secret
+
 Secret can be created with:
 
 ```bash
@@ -246,6 +259,7 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ### TLS Certificate
+
 A web server TLS Certificate can be injected into the container with the
 following configuration. The certificate will be stored at the location
 specified in the certificateLocation value.
@@ -262,6 +276,7 @@ certificates:
 ```
 
 #### Secret
+
 The certificate tls secret can be created with:
 
 ```bash
@@ -276,6 +291,8 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ## Upgrading
 
 ### To 7.0.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 The [Bitnami Dokuwiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
