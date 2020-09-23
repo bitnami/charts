@@ -458,6 +458,25 @@ prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-co
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
 
+### To 2.1.0
+
+> Note: ignore these instructions if you did not enabled the Thanos sidecar on Prometheus pods.
+
+The Thanos sidecar svc is transformed into a headless service by default so Thanos can discover every available sidecar. You can undo this change by setting the `prometheus.thanos.service.clusterIP` parameter to an emtpy string `""`.
+
+To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
+
+```bash
+$ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
+$ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prometheus
+```
+
+### To 2.0.0
+
+- CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
+  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
+  - Kubernetes 1.16 is required
+  
 ### To 1.0.0
 
 - The chart was renamed to `kube-prometheus` to be more accurate with the actual capabilities of the chart: it does not just deploy the Prometheus operator, it deploys an entire cluster monitoring stack, that includes other components (e.g. NodeExporter or Kube State metrics). Find more information about the reasons behind this decision at [#3490](https://github.com/bitnami/charts/issues/3490).
@@ -465,9 +484,3 @@ $ helm upgrade my-release bitnami/kube-prometheus
 - This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
-
-### To 2.0.0
-
-- CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
-  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
-  - Kubernetes 1.16 is required
