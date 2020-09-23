@@ -13,10 +13,10 @@ metadata:
   {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
   {{- if .Values.commonAnnotations }}
-  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if $serviceAnnotations }}
-  {{- include "postgresql.tplValue" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ $serviceType }}
@@ -24,7 +24,7 @@ spec:
   loadBalancerIP: {{ $serviceLoadBalancerIP }}
   {{- end }}
   {{- if and (eq $serviceType "LoadBalancer") $serviceLoadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- include "postgresql.tplValue" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if and (eq $serviceType "ClusterIP") $serviceClusterIP }}
   clusterIP: {{ $serviceClusterIP }}
