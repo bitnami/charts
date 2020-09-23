@@ -284,7 +284,7 @@ data:
     {{- else }}
     exec redis-server "${ARGS[@]}"
     {{- end }}
-
+  {{- if .Values.cluster.enabled }}
   start-slave.sh: |
     #!/bin/bash
     {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
@@ -338,5 +338,6 @@ data:
     {{- else }}
     exec redis-server "${ARGS[@]}"
     {{- end }}
+  {{- end }}
 
 {{- end -}}
