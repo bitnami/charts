@@ -332,6 +332,10 @@ pgpool:
   ##
   customUsersSecret:
 
+  ## Database to perform streaming replication checks
+  ##
+  srCheckDatabase: postgres
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
