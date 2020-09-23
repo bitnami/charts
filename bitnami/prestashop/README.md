@@ -188,6 +188,20 @@ The [Bitnami PrestaShop](https://github.com/bitnami/bitnami-docker-prestashop) i
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
+## Troubleshooting
+
+### SSL
+
+One needs to explicitly turn on SSL in the Prestashop administration panel, else a `302` redirect to `http` scheme is returned on any page of the site by default.
+
+To enable SSL on all pages, follow these steps:
+  - Browse to the administration panel and log in.
+  - Click “Shop Parameters” in the left navigation panel.
+  - Set the option “Enable SSL” to “Yes”.
+  - Click the “Save” button.
+  - Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
+  - Click the “Save” button.
+
 ## Upgrading
 
 ### To 9.0.0
