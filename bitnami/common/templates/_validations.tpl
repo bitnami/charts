@@ -103,13 +103,13 @@ Params:
   {{- $enabledReplication := include "common.postgresql.values.enabled.replication" . -}}
   {{- $valueKeyPostgresqlReplicationEnabled := include "common.postgresql.values.key.replicationPassword" . -}}
 
-  {{- if and (not $existingSecret) $enabled -}}
+  {{- if and (not $existingSecret) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredPostgresqlPassword := dict "valueKey" $valueKeyPostgresqlPassword "secret" .secret "field" "postgresql-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
 
-    {{- if $enabledReplication -}}
+    {{- if (eq $enabledReplication "true") -}}
         {{- $requiredPostgresqlReplicationPassword := dict "valueKey" $valueKeyPostgresqlReplicationEnabled "secret" .secret "field" "postgresql-replication-password" -}}
         {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlReplicationPassword -}}
     {{- end -}}
@@ -158,9 +158,9 @@ Usage:
 */}}
 {{- define "common.postgresql.values.enabled" -}}
   {{- if .subchart -}}
-    {{- .context.Values.postgresql.enabled | quote -}}
+    {{- printf "%v" .context.Values.postgresql.enabled -}}
   {{- else -}}
-    true
+    {{- printf "%v" (not .context.Values.enabled) -}}
   {{- end -}}
 {{- end -}}
 
@@ -196,9 +196,9 @@ Params:
 */}}
 {{- define "common.postgresql.values.enabled.replication" -}}
   {{- if .subchart -}}
-    {{- .context.Values.postgresql.replication.enabled | quote -}}
+    {{- printf "%v" .context.Values.postgresql.replication.enabled -}}
   {{- else -}}
-    {{- .context.Values.replication.enabled | quote -}}
+    {{- printf "%v" .context.Values.replication.enabled -}}
   {{- end -}}
 {{- end -}}
 
