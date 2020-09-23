@@ -1117,6 +1117,7 @@ kubeControllerManager:
 
   ## Service ports and selector information
   service:
+    enabled: true
     port: 10252
     targetPort: 10252
     # selector:
@@ -1168,6 +1169,7 @@ kubeScheduler:
   ## If using kubeScheduler.endpoints only the port and targetPort are used
   ##
   service:
+    enabled: true
     port: 10251
     targetPort: 10251
     # selector:
@@ -1215,6 +1217,7 @@ coreDns:
 
   ## Create a ServiceMonitor to scrape coredns service
   service:
+    enabled: true
     port: 9153
     targetPort: 9153
     # selector:
