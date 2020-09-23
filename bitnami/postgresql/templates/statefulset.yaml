@@ -9,7 +9,7 @@ metadata:
   {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
-  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- with .Values.master.annotations }}
   {{- toYaml . | nindent 4 }}
@@ -124,7 +124,7 @@ spec:
             {{- end }}
       {{- end }}
       {{- if .Values.master.extraInitContainers }}
-      {{- include "postgresql.tplValue" ( dict "value" .Values.master.extraInitContainers "context" $ ) | nindent 8 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.master.extraInitContainers "context" $ ) | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- if .Values.master.priorityClassName }}
@@ -230,7 +230,7 @@ spec:
               value: {{ (include "postgresql.database" .) | quote }}
             {{- end }}
             {{- if .Values.extraEnv }}
-            {{- include "postgresql.tplValue" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
             - name: POSTGRESQL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
@@ -423,7 +423,7 @@ spec:
             {{- toYaml .Values.master.extraVolumeMounts | nindent 12 }}
             {{- end }}
 {{- if .Values.master.sidecars }}
-{{- include "postgresql.tplValue" ( dict "value" .Values.master.sidecars "context" $ ) | nindent 8 }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $ ) | nindent 8 }}
 {{- end }}
 {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -455,7 +455,7 @@ spec:
             - name: DATA_SOURCE_USER
               value: {{ template "postgresql.username" . }}
             {{- if .Values.metrics.extraEnvVars }}
-            {{- include "postgresql.tplValue" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:

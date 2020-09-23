@@ -50,6 +50,11 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Use existing secret (does not create the WordPress Secret object)
+## Must contain key `wordpress-secret`
+## NOTE: When it's set, the `wordpressPassword` parameter is ignored
+# existingSecret:
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
@@ -145,6 +150,13 @@ updateStrategy:
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/#smtp-configuration
 ##
+
+## Use an existing secret for the SMTP Password
+## Can be the same secret as existingSecret
+## Must contain key `smtp-password`
+## NOTE: When it's set, the `smtpPassword` parameter is ignored
+# smtpExistingSecret:
+
 # smtpHost:
 # smtpPort:
 # smtpUser:
@@ -440,6 +452,11 @@ mariadb:
 ## All of these values are only used when mariadb.enabled is set to false
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   ##
   host: localhost

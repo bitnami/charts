@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.4-debian-10-r3
+  tag: 4.1.4-debian-10-r7
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -340,6 +340,10 @@ pgpool:
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret:
+
+  ## Database to perform streaming replication checks
+  ##
+  srCheckDatabase: postgres
 
   ## Labels to add to the Deployment. Evaluated as template
   ##
