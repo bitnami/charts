@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `volumePermissions.resources`        | Init container resource requests/limit                                                              | `{}`                                                    |
 | `nameOverride`                       | String to partially override tomcat.fullname template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override tomcat.fullname template with a string                                     | `nil`                                                   |
+| `command`                            | Tomcat Image command to run                                                                         | `[]`                                                    |
 | `updateStrategy`                     | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods           | `RollingUpdate`                                         |
 | `tomcatUsername`                     | Tomcat admin user                                                                                   | `user`                                                  |
 | `tomcatPassword`                     | Tomcat admin password                                                                               | _random 10 character alphanumeric string_               |
