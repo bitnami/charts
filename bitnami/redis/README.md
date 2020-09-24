@@ -136,6 +136,9 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.statefulset.rollingUpdatePartition`   | Partition update strategy                                                                                                                           | `nil`                                                   |
 | `master.podLabels`                            | Additional labels for Redis master pod                                                                                                              | {}                                                      |
 | `master.podAnnotations`                       | Additional annotations for Redis master pod                                                                                                         | {}                                                      |
+| `master.extraEnvVars`                         | Additional Environement Variables passed to the pod of the master's stateful set set                                                                | `[]`
+| `master.extraEnvVarCMs`                       | Additional Environement Variables  ConfigMappassed to the pod of the master's stateful set set                                                      | `[]`
+| `master.extraEnvVarsSecret`                   | Additional Environement Variables Secret passed to the master's stateful set                                                                        | `[]`
 | `podDisruptionBudget.enabled`        | Pod Disruption Budget toggle                                                                                                                                                                                                                                                                                                                                                                         | `false`                                                 |
 | `podDisruptionBudget.minAvailable`   | Minimum available pods                                                                                                                                                                                                                                                                                                                                                                               | `1`                                                   |
 | `podDisruptionBudget.maxUnavailable` | Maximum unavailable pods                                                                                                                                                                                                                                                                                                                                                                             | `nil`                                                   |
@@ -175,6 +178,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.readinessProbe.timeoutSeconds`        | When the probe times out (redis master pod)                                                                                                         | `1`                                                     |
 | `master.readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (redis master pod)                                      | `1`                                                     |
 | `master.readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                          | `5`                                                     |
+| `master.shareProcessNamespace`                | Redis Master pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                                   | `false`                                                 |
 | `master.priorityClassName`                    | Redis Master pod priorityClassName                                                                                                                  | {}                                                      |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`                                             |
@@ -205,6 +209,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.readinessProbe.timeoutSeconds`         | When the probe times out (redis slave pod)                                                                                                          | `1`                                                     |
 | `slave.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (redis slave pod)                                       | `1`                                                     |
 | `slave.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded. (redis slave pod)                                        | `5`                                                     |
+| `slave.shareProcessNamespace`                 | Redis slave pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                                    | `false`                                                 |
 | `slave.persistence.enabled`                   | Use a PVC to persist data (slave node)                                                                                                              | `true`                                                  |
 | `slave.persistence.path`                      | Path to mount the volume at, to use other images                                                                                                    | `/data`                                                 |
 | `slave.persistence.subPath`                   | Subdirectory of the volume to mount at                                                                                                              | `""`                                                    |
@@ -215,11 +220,15 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.persistence.matchExpressions`          | matchExpressions persistent volume selector                                                                                                         | `{}`                                                    |
 | `slave.statefulset.updateStrategy`            | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
 | `slave.statefulset.rollingUpdatePartition`    | Partition update strategy                                                                                                                           | `nil`                                                   |
+| `slave.extraEnvVars`                          | Additional Environement Variables passed to the pod of the slave's stateful set set                                                                 | `[]`
+| `slave.extraEnvVarCMs`                        | Additional Environement Variables  ConfigMappassed to the pod of the slave's stateful set set                                                       | `[]`
+| `masslaveter.extraEnvVarsSecret`              | Additional Environement Variables Secret passed to the slave's stateful set                                                                         | `[]`
 | `slave.podLabels`                             | Additional labels for Redis slave pod                                                                                                               | `master.podLabels`                                      |
 | `slave.podAnnotations`                        | Additional annotations for Redis slave pod                                                                                                          | `master.podAnnotations`                                 |
 | `slave.schedulerName`                         | Name of an alternate scheduler                                                                                                                      | `nil`                                                   |
 | `slave.resources`                             | Redis slave CPU/Memory resource requests/limits                                                                                                     | `{}`                                                    |
 | `slave.affinity`                              | Enable node/pod affinity for slaves                                                                                                                 | {}                                                      |
+| `slave.tolerations`                           | Toleration labels for Redis slave pod assignment                                                                  | []                                                      |
 | `slave.spreadConstraints`                     | [Topology Spread Constraints](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) for Redis slave pod              | {}                                                      |
 | `slave.priorityClassName`                     | Redis Slave pod priorityClassName                                                                                                                   | {}                                                      |
 | `sentinel.enabled`                            | Enable sentinel containers                                                                                                                          | `false`                                                 |
@@ -337,7 +346,7 @@ In case the master crashes, the slaves will wait until the master node is respaw
 
 #### Master-Slave with Sentinel
 
-When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain en extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain an extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
 
    - Redis service: Exposes port 6379 for Redis read-only operations and port 26379 for accesing Redis Sentinel.
 
@@ -440,6 +449,100 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/redis
 ```
 
+## Backup and restore
+
+### Backup
+
+To perform a backup you will need to connect to one of the nodes and execute:
+
+```bash
+$ kubectl exec -it my-redis-master-0 bash
+
+$ redis-cli
+127.0.0.1:6379> auth your_current_redis_password
+OK
+127.0.0.1:6379> save
+OK
+```
+
+Then you will need to get the created dump file form the redis node:
+
+```bash
+$ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
+```
+
+### Restore
+
+To restore in a new cluster, you will need to change a parameter in the redis.conf file and then upload the `dump.rdb` to the volume.
+
+Follow the following steps:
+
+- First you will need to set in the `values.yaml` the parameter `appendonly` to `no`, if it is already `no` you can skip this step.
+
+
+```yaml
+configmap: |-
+  # Enable AOF https://redis.io/topics/persistence#append-only-file
+  appendonly no
+  # Disable RDB persistence, AOF persistence already enabled.
+  save ""
+```
+
+- Start the new cluster to create the PVCs.
+
+
+For example, :
+
+```bash
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
+- Now that the PVC were created, stop it and copy the `dump.rdp` on the persisted data by using a helping pod.
+
+```
+$ helm delete new-redis
+
+$ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "redisvolpod"
+    },
+    "spec": {
+        "containers": [{
+            "command": [
+                "tail",
+                "-f",
+                "/dev/null"
+            ],
+            "image": "bitnami/minideb",
+            "name": "mycontainer",
+            "volumeMounts": [{
+                "mountPath": "/mnt",
+                "name": "redisdata"
+            }]
+        }],
+        "restartPolicy": "Never",
+        "volumes": [{
+            "name": "redisdata",
+            "persistentVolumeClaim": {
+                "claimName": "redis-data-new-redis-master-0"
+            }
+        }]
+    }
+}' --image="bitnami/minideb"
+
+$ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+$ kubectl delete pod volpod
+```
+
+- Start again the cluster:
+
+```
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
 ## NetworkPolicy
 
 To enable network policy for Redis, install
@@ -470,6 +573,10 @@ networkPolicy:
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
 incompatible breaking change needing manual actions.
+
+### To 11.0.0
+
+When using sentinel, a new statefulset called `-node` was introduced. This will break upgrading from a previous version where the statefulsets are called master and slave. Hence the PVC will not match the new naming and won't be reused. If you want to keep your data, you will need to perform a backup and then a restore the data in this new version.
 
 ### To 10.0.0
 
@@ -545,6 +652,9 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 ```
 
 ## Notable changes
+
+### 11.0.0
+When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
 The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).

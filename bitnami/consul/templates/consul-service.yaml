@@ -20,11 +20,12 @@ spec:
       protocol: "UDP"
       port: {{ .Values.service.serflanPort }}
     - name: server
-      port: {{.Values.service.serverPort}}
+      port: {{ .Values.service.serverPort }}
     - name: consuldns-tcp
-      port: {{.Values.service.consulDnsPort}}
+      port: {{ .Values.service.consulDnsPort }}
     - name: consuldns-udp
       protocol: "UDP"
-      port: {{.Values.service.consulDnsPort}}
+      port: {{ .Values.service.consulDnsPort }}   
   clusterIP: None
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
   selector: {{- include "consul.matchLabels" . | nindent 4 }}

@@ -44,3 +44,14 @@
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "dokuwiki.secretName" . }} -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
 
 {{- include "dokuwiki.checkRollingTags" . }}
+
+{{- $requiredPasswords := list -}}
+{{- $secretNameDockuwiki := include "dokuwiki.secretName" . -}}
+
+{{- if not .Values.existingSecret -}}
+  {{- $requiredDockuwikiPassword := dict "valueKey" "dokuwikiPassword" "secret" $secretNameDockuwiki "field" "dokuwiki-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredDockuwikiPassword -}}
+{{- end -}}
+
+{{- $requiredDockuwikiPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredDockuwikiPasswordErrors) "context" $) -}}

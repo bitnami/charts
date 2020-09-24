@@ -1,0 +1,15 @@
+{{- if and .Values.operator.enabled .Values.rbac.create .Values.rbac.pspEnabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}-psp
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "kube-prometheus.operator.fullname" . }}-psp
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kube-prometheus.operator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

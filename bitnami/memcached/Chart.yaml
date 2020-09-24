@@ -1,14 +1,15 @@
 apiVersion: v1
 name: memcached
-version: 4.2.21
-appVersion: 1.6.6
+version: 4.2.25
+appVersion: 1.6.7
 description: Chart for Memcached
 keywords:
   - memcached
   - cache
-home: http://memcached.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/memcached
 sources:
   - https://github.com/bitnami/bitnami-docker-memcached
+  - http://memcached.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

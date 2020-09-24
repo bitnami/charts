@@ -44,6 +44,7 @@ spec:
             - -ec
             - |
               git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
+          resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
           volumeMounts:
             - name: htdocs
               mountPath: /app
@@ -59,6 +60,7 @@ spec:
                   cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}
                   sleep {{ .Values.cloneHtdocsFromGit.interval }}
               done
+          resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
           volumeMounts:
             - name: htdocs
               mountPath: /app

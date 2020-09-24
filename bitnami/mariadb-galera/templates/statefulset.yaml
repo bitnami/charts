@@ -242,6 +242,8 @@ spec:
           image: {{ template "mariadb-galera.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           env:
+            - name: MARIADB_METRICS_EXTRA_FLAGS
+              value: {{ default "" (join " " .Values.metrics.extraFlags) | quote }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -255,7 +257,7 @@ spec:
             - sh
             - -c
             - |
-              DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter
+              DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
           ports:
             - name: metrics
               containerPort: 9104

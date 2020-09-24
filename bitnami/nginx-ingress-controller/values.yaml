@@ -15,7 +15,7 @@ name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.34.1-debian-10-r0
+  tag: 0.35.0-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,6 +35,14 @@ image:
 ## String to fully override nginx-ingress-controller.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Custom configuration options for NGINX
 ## ref: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
@@ -370,7 +378,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.1-debian-10-r13
+    tag: 1.19.2-debian-10-r26
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -439,12 +447,14 @@ defaultBackend:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
   livenessProbe:
+    path: /
     failureThreshold: 3
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
   readinessProbe:
+    path: /
     failureThreshold: 6
     initialDelaySeconds: 0
     periodSeconds: 5
@@ -519,6 +529,17 @@ rbac:
   ##
   create: true
 
+## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+##
+topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: failure-domain.beta.kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/instance: ingress-nginx-internal
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -529,6 +550,11 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the metrics-server.fullname template
   # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
 
 ## If true, create & use Pod Security Policy resources
 ## https://kubernetes.io/docs/concepts/policy/pod-security-policy/

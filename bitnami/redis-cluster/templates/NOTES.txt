@@ -1,9 +1,9 @@
+{{- $secretName := include "redis-cluster.secretName" . -}}
 ** Please be patient while the chart is being deployed **
 
 {{ if .Values.usePassword }}
 To get your password run:
-
-    export REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redis-cluster.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "redis-password" "context" $) }}
 {{- end }}
 
 {{- if .Values.cluster.externalAccess.enabled }}
@@ -78,3 +78,10 @@ will be able to connect to redis.
 
 {{- include "redis-cluster.validateValues" . }}
 {{- include "redis-cluster.checkRollingTags" . }}
+
+{{- if and .Values.usePassword (not .Values.existingSecret) -}}
+  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" "redis-password" "context" $ -}}
+  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
+
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) -}}
+{{- end -}}

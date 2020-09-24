@@ -25,8 +25,14 @@ spec:
         {{- if .Values.postgresql.podLabels }}
         {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.postgresql.podAnnotations (and .Values.metrics.enabled .Values.metrics.annotations) }}
+      annotations:
       {{- if .Values.postgresql.podAnnotations }}
-      annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+      {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
+      {{- include "postgresql-ha.tplValue" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
     spec:
 {{- include "postgresql-ha.imagePullSecrets" . | indent 6 }}
@@ -43,8 +49,7 @@ spec:
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.postgresql.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.postgresql.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
@@ -58,9 +63,8 @@ spec:
               mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
               chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-                xargs chown -R {{ .Values.postgresql.securityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+                xargs chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -77,9 +81,8 @@ spec:
                   - /pre-stop.sh
           image: {{ include "postgresql-ha.postgresqlImage" . }}
           imagePullPolicy: {{ .Values.postgresqlImage.pullPolicy | quote }}
-          {{- if .Values.postgresql.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.postgresql.securityContext.runAsUser }}
+          {{- if .Values.postgresql.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           # Auxiliar vars to populate environment variables
           {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
@@ -234,8 +237,7 @@ spec:
           image: {{ include "postgresql-ha.metricsImage" . }}
           imagePullPolicy: {{ .Values.metricsImage.pullPolicy | quote }}
           {{- if .Values.metrics.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.metrics.securityContext.runAsUser }}
+          securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: DATA_SOURCE_URI

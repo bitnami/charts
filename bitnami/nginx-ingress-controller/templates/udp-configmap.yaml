@@ -6,5 +6,11 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
     component: {{ .Values.name }}
+    {{- if .Values.commonLabels }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
 data: {{- include "nginx-ingress.tplValue" (dict "value" .Values.udp "context" $) | nindent 2 }}
 {{- end }}

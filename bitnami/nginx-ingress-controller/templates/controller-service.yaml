@@ -8,8 +8,17 @@ metadata:
     {{- if .Values.service.labels }}
     {{- include "nginx-ingress.tplValue" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
     {{- end }}
-  {{- if .Values.service.annotations }}
-  annotations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.service.annotations }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}

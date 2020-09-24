@@ -19,7 +19,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.5.0-debian-10-r1
+  tag: 2.5.1-debian-10-r22
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,24 +50,23 @@ discourse:
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ''
-
   ## Discourse site name
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   siteName: 'My Site!'
-
   ## User of the application
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   username: user
-
   ## Application password
   ## WARNING: Minimum length of 10 characters
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   # password:
-
+  ## Name of an existing secret containing the password (ignores previous password)
+  ##
+  # existingSecret: my-secret
   ## Admin email
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
@@ -76,7 +75,6 @@ discourse:
   ## Custom command to override image cmd
   ##
   # command: []
-
   ## Custom args for the custom commad:
   # args: []
 
@@ -316,11 +314,11 @@ persistence:
   ## the existingClaim variable
   # existingClaim: your-claim
   ## To use the portal and to ensure you can scale Discourse you need to provide a
-  ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
-  ## We recommend that you install the nfs provisioner and map it to a RWO volume
+  ## ReadWriteMany PVC, if you don't have a provisioner for this type of storage
+  ## we recommend that you install the NFS provisioner and map it to a RWO volume
   ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
   ##
-  persistence.accessMode: ReadWriteMany
+  accessMode: ReadWriteMany
   size: 10Gi
 
 ## Kubernetes configuration
@@ -452,19 +450,21 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   postgresqlUsername: bn_discourse
-
   ## PostgreSQL password
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  ## postgresqlPassword:
-  ##
-
+  # postgresqlPassword:
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
   postgresqlPostgresPassword: 'bitnami'
-
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
@@ -491,9 +491,18 @@ externalDatabase:
   ## Database password
   ##
   password: ''
-  ## Root "postgres" password (used in the installation stage)
+  ## PostgreSQL admin user (used in the installation stage)
+  ##
+  postgresqlPostgresUser: postgres
+  ## PostgreSQL admin password (used in the installation stage)
   ##
   postgresqlPostgresPassword: ''
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Database name
   ##
   database: bitnami_application
@@ -510,16 +519,22 @@ redis:
   ##
   usePassword: true
   ## Redis password (both master and slave)
-  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
-  ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
-  ##
+  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
+  ## It should always be set using the password value or in the existingSecret to avoid issues
+  ## with Discourse.
+  ## The password value is ignored if existingSecret is set
   # password:
-
+  ##
+  ## Name of existing secret object containing the password
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  existingSecretPasswordKey: 'redis-password'
+  ##
   ## Cluster settings
   ##
   cluster:
     enabled: false
-
   ##
   ## Redis Master parameters
   ##
@@ -538,5 +553,12 @@ externalRedis:
   ##
   port: 6379
   ## Redis password for authentication
+  ## Ignored if existingSecret is set
   ##
   password: ''
+  ##
+  ## Name of existing secret object containing the password
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  existingSecretPasswordKey: 'redis-password'

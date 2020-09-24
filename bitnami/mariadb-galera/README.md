@@ -166,6 +166,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `metrics.image.repository`           | MariaDB Prometheus exporter image name                                                                                                                      | `bitnami/mysqld-exporter`                                         |
 | `metrics.image.tag`                  | MariaDB Prometheus exporter image tag                                                                                                                       | `{TAG_NAME}`                                                      |
 | `metrics.image.pullPolicy`           | MariaDB Prometheus exporter image pull policy                                                                                                               | `IfNotPresent`                                                    |
+| `metrics.extraFlags`                 | MariaDB Prometheus exporter additional command line flags                                                                                                   | `[]`                                                              |
 | `metrics.resources`                  | Prometheus exporter resource requests/limits                                                                                                                | `{}`                                                              |
 | `metrics.service.annotations`        | Prometheus exporter svc annotations                                                                                                                         | `{prometheus.io/scrape: "true", prometheus.io/port: "9104"}`      |
 | `metrics.serviceMonitor.enabled`     | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                      | `false`                                                           |
@@ -487,3 +488,14 @@ Consequences:
 To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release. In the link below you can find a guide that explain the whole process:
 
 - [Create And Restore MySQL/MariaDB Backups](https://docs.bitnami.com/general/infrastructure/mariadb/administration/backup-restore-mysql-mariadb/)
+
+## Bitnami Kubernetes Documentation
+
+Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
+
+- [Documentation for MariaDB Galera Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/mariadb-galera/)
+- [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
+- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
+- [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
+- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+

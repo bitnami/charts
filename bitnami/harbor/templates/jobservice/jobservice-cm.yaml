@@ -17,8 +17,8 @@ data:
     port: {{ include "harbor.jobservice.containerPort" . }}
     {{- if .Values.internalTLS.enabled }}
     https_config:
-      cert: "/bitnami/certs/tls.crt"
-      key: "/bitnami/certs/tls.key"
+      cert: "/etc/harbor/ssl/jobservice/tls.crt"
+      key: "/etc/harbor/ssl/jobservice/tls.key"
     {{- end }}
     worker_pool:
       workers: {{ .Values.jobservice.maxJobWorkers }}

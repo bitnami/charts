@@ -91,6 +91,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `service.type`                            | Kubernetes Service type                                                               | `LoadBalancer`                                               |
 | `service.port`                            | Service HTTP port                                                                     | `8080`                                                       |
 | `service.httpsPort`                       | Service HTTPS port                                                                    | `8443`                                                       |
+| `service.advertisedHttpsPort`             | Port used for the administration's urls                                               | `443`                                                        |
 | `service.httpsTargetPort`                 | Service Target HTTPS port                                                             | `https`                                                      |
 | `service.nodePorts.http`                  | Kubernetes http node port                                                             | `""`                                                         |
 | `service.nodePorts.https`                 | Kubernetes https node port                                                            | `""`                                                         |
@@ -107,7 +108,6 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `ejbcaAdminPassword`                      | EJBCA administrator password                                                          | _random 10 character long alphanumeric string_               |
 | `existingSecret`                          | Name of an existing secret containing EJBCA admin password ('ejbca-admin-password' key) | `nil`                                                      |
 | `ejbcaJavaOpts`                           | Options used to launch the WildFly server                                             | `nil`                                                        |
-| `ejbcaHttpsServerHostname`                | Hostname of the server when using HTTPS                                               | `hostname`                                                   |
 | `ejbcaCA.name`                            | Name of the CA EJBCA will instantiate by default                                      | `ManagementCA`                                               |
 | `ejbcaCA.baseDN`                          | Base DomainName of the CA EJBCA will instantiate by default                           | `nil`                                                        |
 | `ejbcaKeystoreExistingSecret`             | Existing Secret containing a Keystore to be imported by EBJCA                         | `nil`                                                        |
@@ -136,6 +136,14 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `containerPorts.https`                    | Port to open for HTTPS traffic in EJBCA                                               | `8443`                                                       |
 | `extraEnvVarsCM`                          | Array to add extra configmaps                                                         | `[]`                                                         |
 | `extraEnvVarsSecret`                      | Array to add extra environment from a Secret                                          | `nil`                                                        |
+
+### Ingress parameters
+
+| Parameter                                 | Description                                                                           | Default                                                      |
+|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `ingress.enabled`                         | Enable ingress controller resource                                                    | `false`                                                      |
+| `ingress.hostname`                        | Default host for the ingress resource                                                 | `ejbca.local`                                                |
+| `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
 
 ### Database parameters
 

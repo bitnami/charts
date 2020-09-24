@@ -89,6 +89,17 @@ Return the correct EJBCA secret.
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for ingress.
+*/}}
+{{- define "ejbca.ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "ejbca.databaseHost" -}}
@@ -106,7 +117,7 @@ Return the MariaDB Port
 {{- if .Values.mariadb.enabled }}
     {{- printf "3306" | quote -}}
 {{- else -}}
-    {{- printf "%d" (.Values.externalDatabase.port | quote ) -}}
+    {{- printf "%s" (.Values.externalDatabase.port | quote ) -}}
 {{- end -}}
 {{- end -}}
 

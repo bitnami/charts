@@ -1,7 +1,7 @@
 apiVersion: v1
 name: tomcat
-version: 6.3.13
-appVersion: 9.0.37
+version: 6.4.0
+appVersion: 9.0.38
 description: Chart for Apache Tomcat
 keywords:
   - tomcat
@@ -10,9 +10,10 @@ keywords:
   - web
   - application server
   - jsp
-home: http://tomcat.apache.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
+  - http://tomcat.apache.org
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
