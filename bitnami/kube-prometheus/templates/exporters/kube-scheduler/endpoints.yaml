@@ -5,7 +5,7 @@ metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
   namespace: {{ .Values.kubeScheduler.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+    app.kubernetes.io/component: kube-scheduler
 subsets:
   - addresses:
       {{- range .Values.kubeScheduler.endpoints }}
