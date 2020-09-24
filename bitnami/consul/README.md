@@ -72,7 +72,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
 | `datacenterName`                     | HashiCorp Consul datacenter name                                                                                                                          | `dc1`                                                   |
 | `domain`                             | HashiCorp Consul domain                                                                                                                                   | `consul`                                                |
-| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters                                                                                                       | `1`                                                  |
+| `raftMultiplier`                     | Multiplier used to scale key Raft timing parameters                                                                                                       | `1`                                                     |
 | `gossipKey`                          | Gossip key for all members                                                                                                                                | `nil`                                                   |
 | `tlsEncryptionSecretName`            | Name of existing secret with TLS encryption data                                                                                                          | `nil`                                                   |
 | `configmap`                          | HashiCorp Consul configuration to be injected as ConfigMap                                                                                                | `nil`                                                   |
@@ -83,9 +83,14 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
 | `securityContext.runAsUser`          | User ID for the container                                                                                                                                 | `1001`                                                  |
 | `resources`                          | Container resource requests and limits                                                                                                                    | `{}`                                                    |
-| `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}` (The value is evaluated as a template)             |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}` (The value is evaluated as a template)             |
-| `tolerations`                        | Tolerations for pod assignment                                                                                                                            | `[]` (The value is evaluated as a template)             |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                    |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                  |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                    |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                    |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                    |
+| `affinity`                           | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                          |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                          |
+| `tolerations`                        | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                          |
 | `podAnnotations`                     | Pod annotations                                                                                                                                           | `{}`                                                    |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                  | 30                                                      |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                            | 10                                                      |
@@ -134,7 +139,7 @@ The following tables lists the configurable parameters of the HashiCorp Consul c
 | `metrics.resources`                  | Exporter resource requests/limit                                                                                                                          | `{}`                                                    |
 | `metrics.podAnnotations`             | Exporter annotations                                                                                                                                      | `{}`                                                    |
 | `metrics.service.type`               | Kubernetes Service type (consul metrics)                                                                                                                  | `ClusterIP`                                             |
-| `metrics.service.annotations`        | Annotations for the services to monitor                                                                                                                  | {}                                                      |
+| `metrics.service.annotations`        | Annotations for the services to monitor                                                                                                                   | {}                                                      |
 | `metrics.service.loadBalancerIP`     | loadBalancerIP if redis metrics service type is `LoadBalancer`                                                                                            | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -185,6 +190,7 @@ This chart provides support for ingress resources. If you have an ingress contro
 To enable ingress integration, please set `ingress.enabled` to `true`
 
 #### Hosts
+
 Most likely you will only want to have one hostname that maps to this HashiCorp Consul installation, however it is possible to have more than one host.  To facilitate this, the `ingress.hosts` object is an array.
 
 For each item, please indicate a `name`, `tls`, `tlsSecret`, and any `annotations` that you may want the ingress controller to know about.
@@ -194,6 +200,7 @@ Indicating TLS will cause HashiCorp Consul to generate HTTPS urls, and HashiCorp
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ### TLS Secrets
+
 This chart will facilitate the creation of TLS secrets for use with the ingress controller, however this is not required. There are three common use cases:
 
 * helm generates / manages certificate secrets
@@ -249,6 +256,12 @@ After creating the secret, you can install the helm chart specyfing the secret n
 
 The chart can optionally start a metrics exporter endpoint on port `9107` for [prometheus](https://prometheus.io). The data exposed by the endpoint is intended to be consumed by a prometheus chart deployed within the cluster and as such the endpoint is not exposed outside the cluster.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
@@ -266,6 +279,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### 7.3.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### 7.0.0
 

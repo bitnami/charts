@@ -57,32 +57,37 @@ The following table lists the configurable parameters of the EJBCA chart and the
 
 ### Common & Pod-specific parameters
 
-| Parameter                                 | Description                                                                           | Default                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                          | EJBCA image registry                                                                  | `docker.io`                                                  |
-| `image.repository`                        | EJBCA image name                                                                      | `bitnami/ejbca`                                              |
-| `image.tag`                               | EJBCA image tag                                                                       | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                        | EJBCA image pull policy                                                               | `IfNotPresent`                                               |
-| `image.pullSecrets`                       | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                            | String to partially override discourse.fullname                                       | `nil`                                                        |
-| `fullnameOverride`                        | String to fully override discourse.fullname                                           | `nil`                                                        |
-| `replicaCount`                            | Number of EJBCA replicas                                                              | `1`                                                          |
-| `extraVolumes`                            | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`   | `[]` (evaluated as a template)                               |
-| `podAnnotations`                          | Additional pod annotations                                                            | `{}`                                                         |
-| `podLabels`                               | Additional pod labels                                                                 | `{}` (evaluated as a template)                               |
-| `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
-| `podSecurityContext.enabled`              | Enable security context for EJBCA pods                                                | `true`                                                       |
-| `podSecurityContext.fsGroup`              | Group ID for the volumes of the pod                                                   | `1001`                                                       |
-| `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
-| `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
-| `sidecars`                                | Attach additional sidecar containers to the pod                                       | `[]` (evaluated as a template)                               |
-| `initContainers`                          | Additional init containers to add to the pods                                         | `[]` (evaluated as a template)                               |
-| `persistence.enabled`                     | Whether to enable persistence based on Persistent Volume Claims                       | `true`                                                       |
-| `persistence.storageClass`                | PVC Storage Class                                                                     | `nil`                                                        |
-| `persistence.existingClaim`               | Name of an existing PVC to reuse                                                      | `nil`                                                        |
-| `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
-| `persistence.size`                        | Size of the PVC to request                                                            | `2Gi`                                                        |
+| Parameter                             | Description                                                                               | Default                                                      |
+|---------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `image.registry`                      | EJBCA image registry                                                                      | `docker.io`                                                  |
+| `image.repository`                    | EJBCA image name                                                                          | `bitnami/ejbca`                                              |
+| `image.tag`                           | EJBCA image tag                                                                           | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                    | EJBCA image pull policy                                                                   | `IfNotPresent`                                               |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                        | String to partially override discourse.fullname                                           | `nil`                                                        |
+| `fullnameOverride`                    | String to fully override discourse.fullname                                               | `nil`                                                        |
+| `replicaCount`                        | Number of EJBCA replicas                                                                  | `1`                                                          |
+| `extraVolumes`                        | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`       | `[]` (evaluated as a template)                               |
+| `podAnnotations`                      | Additional pod annotations                                                                | `{}`                                                         |
+| `podLabels`                           | Additional pod labels                                                                     | `{}` (evaluated as a template)                               |
+| `commonAnnotations`                   | Annotations to be added to all deployed resources                                         | `{}` (evaluated as a template)                               |
+| `podSecurityContext.enabled`          | Enable security context for EJBCA pods                                                    | `true`                                                       |
+| `podSecurityContext.fsGroup`          | Group ID for the volumes of the pod                                                       | `1001`                                                       |
+| `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                         |
+| `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                       |
+| `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
+| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                     | `""`                                                         |
+| `nodeAffinityPreset.values`           | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                         |
+| `affinity`                            | Affinity for pod assignment                                                               | `{}` (evaluated as a template)                               |
+| `nodeSelector`                        | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                         | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                               |
+| `sidecars`                            | Attach additional sidecar containers to the pod                                           | `[]` (evaluated as a template)                               |
+| `initContainers`                      | Additional init containers to add to the pods                                             | `[]` (evaluated as a template)                               |
+| `persistence.enabled`                 | Whether to enable persistence based on Persistent Volume Claims                           | `true`                                                       |
+| `persistence.storageClass`            | PVC Storage Class                                                                         | `nil`                                                        |
+| `persistence.existingClaim`           | Name of an existing PVC to reuse                                                          | `nil`                                                        |
+| `persistence.accessMode`              | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`                                              |
+| `persistence.size`                    | Size of the PVC to request                                                                | `2Gi`                                                        |
 
 ### Service parameters
 
@@ -245,6 +250,12 @@ externalDatabase.port=3306
 ```
 
 Note also that if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
