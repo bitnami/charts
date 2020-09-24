@@ -101,11 +101,11 @@ command:
 ##
 args:
 
-## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+## Common annotations to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
 
-## Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+## Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
 
@@ -430,8 +430,12 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+## Custom Liveness probe
+##
 customLivenessProbe: {}
 
+## Custom Readiness probe
+##
 customReadinessProbe: {}
 
 ## lifecycleHooks for the container to automate configuration before or after startup.

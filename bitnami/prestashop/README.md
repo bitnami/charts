@@ -133,8 +133,8 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | Parameter                        | Description                           | Default            |
 |----------------------------------|---------------------------------------|--------------------|
 | `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                     | `80`               |
-| `service.httpsPort`              | Service HTTPS port                    | `443`              |
+| `service.port`                   | Service HTTP port                     | `8080`             |
+| `service.httpsPort`              | Service HTTPS port                    | `8443`             |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
 | `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
 | `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
