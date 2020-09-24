@@ -562,6 +562,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        labels:
+          app: {{ template "postgresql.name" . }}
+          release: {{ .Release.Name }}
+          heritage: {{ .Release.Service }}
+          component: master        
       {{- with .Values.persistence.annotations }}
         annotations:
         {{- range $key, $value := . }}
