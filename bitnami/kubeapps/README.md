@@ -200,7 +200,7 @@ kubectl delete namespace kubeapps
 
 ### Nginx Ipv6 error
 
-When starting the application, the Nginx server present in the services `kubeapps` and `kubeapps-internal-dashboard` may fail with the following:
+When starting the application with the `--set enableIPv6=true` option, the Nginx server present in the services `kubeapps` and `kubeapps-internal-dashboard` may fail with the following:
 
 ```
 nginx: [emerg] socket() [::]:8080 failed (97: Address family not supported by protocol)

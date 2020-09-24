@@ -42,6 +42,7 @@ spec:
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $ ) | nindent 8 }}
       affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i) ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.tolerations "context" $ ) | nindent 8 }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.dataNode.serviceAccount "context" $) }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}

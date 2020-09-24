@@ -13,6 +13,12 @@ metadata:
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "nginx-ingress.tplValue" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- with .Values.metrics.prometheusRule.rules }}
   groups:

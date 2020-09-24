@@ -1,0 +1,13 @@
+{{- if and .Values.operator.enabled .Values.rbac.create .Values.rbac.pspEnabled }}
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}-psp
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ['extensions']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames:
+      - {{ template "kube-prometheus.operator.fullname" . }}
+{{- end }}

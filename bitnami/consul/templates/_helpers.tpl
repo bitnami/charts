@@ -205,3 +205,16 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Return retry_join endpoint for members to join the cluster
+Usage:
+{{ include "consul.retryjoin.endpoint" . }}
+*/}}
+{{- define "consul.retryjoin.endpoint" -}}
+    {{- $name := include "consul.fullname" . -}}
+    {{- $domain := .Values.clusterDomain -}}
+    {{- $namespace := .Release.Namespace -}}
+
+    {{- printf "%s.%s.svc.%s" $name $namespace $domain -}}
+{{- end -}}

@@ -127,6 +127,16 @@ spec:
             - name: NO_PROXY
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /etc/harbor/ssl/chartmuseum/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /etc/harbor/ssl/chartmuseum/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /etc/harbor/ssl/chartmuseum/ca.crt
+            {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -149,12 +159,12 @@ spec:
               subPath: gcs-key.json
             {{- end }}
             {{- if .Values.internalTLS.enabled }}
-            - name: tls-certs
-              mountPath: /bitnami/certs
+            - name: internal-tls-certs
+              mountPath: /etc/harbor/ssl/chartmuseum
             {{- end }}
             {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
             - name: storage-service-ca
-              mountPath: /etc/pki/tls/certs/ca-bundle.crt
+              mountPath: /harbor_cust_cert/ca-bundle.crt
               subPath: ca.crt
             {{- end }}
             {{- if .Values.chartmuseum.extraVolumeMounts }}
@@ -185,7 +195,7 @@ spec:
             secretName: {{ .Values.persistence.imageChartStorage.caBundleSecretName }}
         {{- end }}
         {{- if .Values.internalTLS.enabled }}
-        - name: tls-certs
+        - name: internal-tls-certs
           secret:
             secretName: {{ include "harbor.chartmuseum.tls.secretName" . }}
         {{- end }}

@@ -511,8 +511,8 @@ kafka: auth.clientProtocol auth.interBrokerProtocol
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
 {{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) (eq .Values.externalAccess.service.type "NodePort") -}}
-kafka: .Values.externalAccess.service.nodePort
-    Number of replicas and nodePort array length must be the same.
+kafka: .Values.externalAccess.service.nodePorts
+    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
 {{- end -}}
 {{- end -}}
 

@@ -88,9 +88,6 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           env:
-            {{- $consulFullName := include "consul.fullname" . }}
-            {{- $consulHeadlessSvcName := include "consul.fullname" . }}
-            {{- $clusterDomain := .Values.clusterDomain }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: CONSUL_NODE_NAME
@@ -98,7 +95,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: CONSUL_RETRY_JOIN
-              value: {{ printf "%s-0.%s.%s.svc.%s" $consulFullName $consulHeadlessSvcName .Release.Namespace $clusterDomain | quote }}
+              value: {{ include "consul.retryjoin.endpoint" . | quote }}
             - name: CONSUL_DISABLE_KEYRING_FILE
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT

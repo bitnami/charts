@@ -67,7 +67,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
-| `internalTLS.enabled`                   | Use TLS in all Harbor containers objects                                                                                                                | `false`                                                 |
+| `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
 | `logLevel`                            | The log level                                                                                                                                             | `debug`                                                 |
 | `forcePassword`                       | Option to ensure all passwords and keys are set by the user                                                                                               | `false`                                                 |
 | `harborAdminPassword`                 | The initial password of Harbor admin. Change it from portal after launching Harbor                                                                        | _random 10 character long alphanumeric string_          |
@@ -548,7 +548,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.signer.tolerations`          | Tolerations for pod assignment                                                                                                                                                                                                                                                                               | `[]`                                                    |
 | `notary.signer.affinity`             | Node/Pod affinities                                                                                                                                                                                                                                                                                          | `{}`                                                    |
 | `notary.signer.podAnnotations`       | Annotations to add to the notary pod                                                                                                                                                                                                                                                                         | `{}`                                                    |
-| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `tls.ca`, `tls.crt` and `tls.key` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
+| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
 | `notary.server.extraEnvVars`         | Array containing extra env vars                                                                                                                                                                                                                                                                              | `nil`                                                   |
 | `notary.server.extraEnvVarsCM`       | ConfigMap containing extra env vars                                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.server.extraEnvVarsSecret`   | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                                                                                                 | `nil`                                                   |
@@ -638,6 +638,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                            |
 | `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                       |
 | `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-a-secure-database-password` |
+| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{"maxConnections": "1024"}`     |
 | `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                          |
 | `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                           |
 | `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `See values.yaml file`           |
@@ -737,6 +738,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + postgresql.replication.enabled: true
 ```
 
+- Internal TLS is enabled by default:
+```diff
+- internalTLS.enabled: false
++ internalTLS.enabled: true
+```
+
 ### Configure the way how to expose Harbor service:
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
@@ -784,7 +791,7 @@ core:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the .extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
 
 ### Configure the external URL:
 
@@ -827,6 +834,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+## 7.0.0
+
+This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
+
+You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
 ## 6.0.0 to 6.0.2
 

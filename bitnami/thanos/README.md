@@ -99,7 +99,9 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `nameOverride`                                       | String to partially override thanos.fullname                                                           | `nil`                                                   |
 | `fullnameOverride`                                   | String to fully override thanos.fullname                                                               | `nil`                                                   |
 | `clusterDomain`                                      | Default Kubernetes cluster domain                                                                      | `cluster.local`                                         |
-| `objstoreConfig`                                     | Objstore configuration                                                                                 | `nil`                                                   |
+| `objstoreConfig`                                     | [Objstore configuration](https://thanos.io/storage.md/#configuration)                                  | `nil`                                                   |
+| `indexCacheConfig`                                   | [Index cache configuration](https://thanos.io/components/store.md/#memcached-index-cache)              | `nil`                                                   |
+| `bucketCacheConfig`                                  | [Bucket cache configuration](https://thanos.io/components/store.md/#caching-bucket)                    | `nil`                                                   |
 | `existingObjstoreSecret`                             | Name of existing secret with Objstore configuration                                                    | `nil`                                                   |
 | `existingObjstoreSecretItems`                        | List of Secret Keys and Paths                                                                          | `[]`                                                    |
 | `existingServiceAccount`                             | Name for the existing service account to be shared between the components                              | `nil`                                                   |
@@ -110,7 +112,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `querier.enabled`                               | Enable/disable Thanos Querier component                                                                | `true`                                                  |
 | `querier.logLevel`                              | Thanos Querier log level                                                                               | `info`                                                  |
-| `querier.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                  | `replica`                                               |
+| `querier.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                  | `[replica]`                                             |
 | `querier.dnsDiscovery.enabled`                  | Enable store APIs discovery via DNS                                                                    | `true`                                                  |
 | `querier.dnsDiscovery.sidecarsService`          | Sidecars service name to discover them using DNS discovery                                             | `nil` (evaluated as a template)                         |
 | `querier.dnsDiscovery.sidecarsNamespace`        | Sidecars namespace to discover them using DNS discovery                                                | `nil` (evaluated as a template)                         |
@@ -275,6 +277,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                          | `false`                                                 |
 | `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                         | `info`                                                  |
 | `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                          | `[]`                                                    |
+| `storegateway.config`                                | Thanos Store Gateway cache configuration                                                               | `nil`                                                   |
+| `storegateway.existingConfigmap`                     | Name of existing ConfigMap with Thanos Store Gateway cache configuration                               | `nil`                                                   |
 | `storegateway.updateStrategyType`                    | Statefulset Update Strategy Type                                                                       | `RollingUpdate`                                         |
 | `storegateway.replicaCount`                          | Number of Thanos Store Gateway replicas to deploy                                                      | `1`                                                     |
 | `storegateway.affinity`                              | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
@@ -376,6 +380,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Volume Permissions parameters
 
+| Parameter                                            | Description                                                                                            | Default                                                 |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
@@ -569,6 +575,22 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 2.4.0
+
+The Ingress API object name for Querier changes from:
+
+```yaml
+{{ include "thanos.fullname" . }}
+```
+
+> **NOTE**: Which in most cases (depending on any set values in `fullnameOverride` or `nameOverride`) resolves to the used Helm release name (`.Release.Name`).
+
+To:
+
+```yaml
+{{ include "thanos.fullname" . }}-querier
+```
 
 ### To 2.0.0
 
