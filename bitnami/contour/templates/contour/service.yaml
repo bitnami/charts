@@ -32,9 +32,9 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
   ports:
-  - name: metrics
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
+    - name: metrics
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
 {{- end }}
 {{- end }}
