@@ -69,10 +69,14 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.resources.requests`                       | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
 | `contour.installCRDs`                              | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)           | `true`                                                  |
 | `contour.customResourceDeletePolicy`               | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                               | `nil`                                                   |
-| `contour.nodeSelector`                             | Node labels for contour pod assignment                                                                 | `{}`                                                    |
-| `contour.tolerations`                              | Tolerations for contour pod assignment                                                                 | `[]`                                                    |
-| `contour.antiAffinityPolicy`                       | Contour anti-affinity policy (`soft`, `hard` or `""`)                                                  | `soft`                                                  |
-| `contour.affinity`                                 | Affinity for contour pod assignment                                                                    | `{}`                                                    |
+| `contour.podAffinityPreset`                        | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`                                                    |
+| `contour.podAntiAffinityPreset`                    | Contour Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `soft`                                                  |
+| `contour.nodeAffinityPreset.type`                  | Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
+| `contour.nodeAffinityPreset.key`                   | Contour Node label key to match Ignored if `affinity` is set.                                          | `""`                                                    |
+| `contour.nodeAffinityPreset.values`                | Contour Node label values to match. Ignored if `affinity` is set.                                      | `[]`                                                    |
+| `contour.affinity`                                 | Affinity for contour pod assignment                                                                    | `{}` (evaluated as a template)                          |
+| `contour.nodeSelector`                             | Node labels for contour pod assignment                                                                 | `{}` (evaluated as a template)                          |
+| `contour.tolerations`                              | Tolerations for contour pod assignment                                                                 | `[]` (evaluated as a template)                          |
 | `contour.podAnnotations`                           | Contour Pod annotations                                                                                | `{}`                                                    |
 | `contour.serviceAccount.create`                    | create a serviceAccount for the contour pod                                                            | `true`                                                  |
 | `contour.serviceAccount.name`                      | use the serviceAccount with the specified name                                                         | `""`                                                    |
@@ -109,9 +113,14 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `envoy.resources.limits`                           | Specify resource limits which the container is not allowed to succeed.                                 | `{}` (does not add resource limits to deployed pods)    |
 | `envoy.resources.requests`                         | Specify resource requests which the container needs to spawn.                                          | `{}` (does not add resource limits to deployed pods)    |
-| `envoy.nodeSelector`                               | Node labels for envoy pod assignment                                                                   | `{}`                                                    |
-| `envoy.tolerations`                                | Tolerations for envoy pod assignment                                                                   | `[]`                                                    |
-| `envoy.affinity`                                   | Affinity for envoy pod assignment                                                                      | `{}`                                                    |
+| `envoy.podAffinityPreset`                          | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                    |
+| `envoy.podAntiAffinityPreset`                      | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`                                                    |
+| `envoy.nodeAffinityPreset.type`                    | Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
+| `envoy.nodeAffinityPreset.key`                     | Envoy Node label key to match Ignored if `affinity` is set.                                            | `""`                                                    |
+| `envoy.nodeAffinityPreset.values`                  | Envoy Node label values to match. Ignored if `affinity` is set.                                        | `[]`                                                    |
+| `envoy.affinity`                                   | Affinity for envoy pod assignment                                                                      | `{}` (evaluated as a template)                          |
+| `envoy.nodeSelector`                               | Node labels for envoy pod assignment                                                                   | `{}` (evaluated as a template)                          |
+| `envoy.tolerations`                                | Tolerations for envoy pod assignment                                                                   | `[]` (evaluated as a template)                          |
 | `envoy.podAnnotations`                             | Envoy Pod annotations                                                                                  | `{}`                                                    |
 | `envoy.podSecurityContext.enabled`                 | Envoy Pod securityContext                                                                              | `false`                                                 |
 | `envoy.containerSecurityContext.enabled`           | Envoy Container securityContext                                                                        | `true`                                                  |
@@ -267,6 +276,12 @@ envoy:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Upgrading
 

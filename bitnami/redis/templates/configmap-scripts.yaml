@@ -279,6 +279,9 @@ data:
     ARGS+=({{ . | quote }})
     {{- end }}
     {{- end }}
+    {{- if .Values.master.preExecCmds }}
+    {{ .Values.master.preExecCmds | nindent 4}}
+    {{- end }}
     {{- if .Values.master.command }}
     exec {{ .Values.master.command }} "${ARGS[@]}"
     {{- else }}
@@ -332,6 +335,9 @@ data:
     {{- range .Values.slave.extraFlags }}
     ARGS+=({{ . | quote }})
     {{- end }}
+    {{- end }}
+    {{- if .Values.slave.preExecCmds }}
+    {{ .Values.slave.preExecCmds | nindent 4}}
     {{- end }}
     {{- if .Values.slave.command }}
     exec {{ .Values.slave.command }} "${ARGS[@]}"

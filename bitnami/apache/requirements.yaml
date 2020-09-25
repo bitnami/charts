@@ -4,7 +4,3 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-  - name: kibana
-    version: 5.x.x
-    repository: https://charts.bitnami.com/bitnami
-    condition: global.kibanaEnabled

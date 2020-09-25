@@ -562,6 +562,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        labels: {{- include "common.labels.standard" . | nindent 10 }}
+          app.kubernetes.io/component: master    
       {{- with .Values.persistence.annotations }}
         annotations:
         {{- range $key, $value := . }}
