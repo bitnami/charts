@@ -136,8 +136,14 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `persistence.size`                      | PVC Storage Request for Ghost volume                                                               | `8Gi`                                                                                         |
 | `persistence.path`                      | Path to mount the volume at, to use other images                                                   | `/bitnami`                                                                                    |
 | `resources`                             | CPU/Memory resource requests/limits                                                                | Memory: `512Mi`, CPU: `300m`                                                                  |
-| `nodeSelector`                          | Node selector for pod assignment                                                                   | `{}`                                                                                          |
-| `affinity`                              | Affinity for pod assignment (evaluated as a template)                                              | `{}`                                                                                          |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                                                          |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                                                                                        |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                                                                                          |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                              | `""`                                                                                          |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                          | `[]`                                                                                          |
+| `affinity`                              | Affinity for pod assignment                                                                        | `{}` (evaluated as a template)                                                                |
+| `nodeSelector`                          | Node labels for pod assignment                                                                     | `{}` (evaluated as a template)                                                                |
+| `tolerations`                           | Tolerations for pod assignment                                                                     | `[]` (evaluated as a template)                                                                |
 | `sidecars`                              | Attach additional containers to all pods (evaluated as a template)                                 | `[]`                                                                                          |
 | `initContainers`                        | Attach additional init containers to all pods (evaluated as a template)                            | `[]`                                                                                          |
 | `extraVolumes`                          | Extra volumes for pods (evaluated as a template). Requires setting `extraVolumeMounts`             | `[]`                                                                                          |
@@ -200,6 +206,12 @@ externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 

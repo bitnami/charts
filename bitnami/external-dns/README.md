@@ -82,7 +82,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `aws.preferCNAME`                      | When using the AWS provider, replaces Alias records with CNAME (options: true, false)                                                                                                                           | `[]`                                                    |
 | `aws.evaluateTargetHealth`             | When using the AWS provider, sets the evaluate target health flag (options: true, false)                                                                                                                        | `[true, false]`                                         |
 | `azure.secretName`                     | When using the Azure provider, set the secret containing the `azure.json` file                                                                                                                                  | `""`                                                    |
-| `azure.cloud`                          | When using the Azure provider, set the Azure Cloud                                                                                                                                                             | `""`                                                    |
+| `azure.cloud`                          | When using the Azure provider, set the Azure Cloud                                                                                                                                                              | `""`                                                    |
 | `azure.resourceGroup`                  | When using the Azure provider, set the Azure Resource Group                                                                                                                                                     | `""`                                                    |
 | `azure.tenantId`                       | When using the Azure provider, set the Azure Tenant ID                                                                                                                                                          | `""`                                                    |
 | `azure.subscriptionId`                 | When using the Azure provider, set the Azure Subscription ID                                                                                                                                                    | `""`                                                    |
@@ -136,7 +136,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `rfc2136.tsigKeyname`                  | When using the rfc2136 provider, specify the tsig keyname to enable security (optional)                                                                                                                         | `"externaldns-key"`                                     |
 | `rfc2136.tsigSecretAlg`                | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                                                          | `"hmac-sha256"`                                         |
 | `rfc2136.tsigAxfr`                     | When using the rfc2136 provider, enable AFXR to enable security (optional)                                                                                                                                      | `true`                                                  |
-| `rfc2136.minTTL`                     | When using the rfc2136 provider, specify minimal TTL (in duration format) for records                                                                                                                                       | `"0s"`                                                  |
+| `rfc2136.minTTL`                     | When using the rfc2136 provider, specify minimal TTL (in duration format) for records                                                                                                                             | `"0s"`                                                  |
 | `pdns.apiUrl`                          | When using the PowerDNS provider, specify the API URL of the server.                                                                                                                                            | `""`                                                    |
 | `pdns.apiPort`                         | When using the PowerDNS provider, specify the API port of the server.                                                                                                                                           | `8081`                                                  |
 | `pdns.apiKey`                          | When using the PowerDNS provider, specify the API key of the server.                                                                                                                                            | `""`                                                    |
@@ -165,9 +165,14 @@ The following table lists the configurable parameters of the external-dns chart 
 | `extraArgs`                            | Extra arguments to be passed to external-dns                                                                                                                                                                    | `{}`                                                    |
 | `extraEnv`                             | Extra environment variables to be passed to external-dns                                                                                                                                                        | `[]`                                                    |
 | `replicas`                             | Desired number of ExternalDNS replicas                                                                                                                                                                          | `1`                                                     |
-| `affinity`                             | Affinity for pod assignment (this value is evaluated as a template)                                                                                                                                             | `{}`                                                    |
-| `nodeSelector`                         | Node labels for pod assignment (this value is evaluated as a template)                                                                                                                                          | `{}`                                                    |
-| `tolerations`                          | Tolerations for pod assignment (this value is evaluated as a template)                                                                                                                                          | `[]`                                                    |
+| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                             | `""`                                                    |
+| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `soft`                                                  |
+| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                       | `""`                                                    |
+| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                                                                                                           | `""`                                                    |
+| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                       | `[]`                                                    |
+| `affinity`                             | Affinity for pod assignment                                                                                                                                                                                     | `{}` (evaluated as a template)                          |
+| `nodeSelector`                         | Node labels for pod assignment                                                                                                                                                                                  | `{}` (evaluated as a template)                          |
+| `tolerations`                          | Tolerations for pod assignment                                                                                                                                                                                  | `[]` (evaluated as a template)                          |
 | `podAnnotations`                       | Additional annotations to apply to the pod.                                                                                                                                                                     | `{}`                                                    |
 | `podLabels`                            | Additional labels to be added to pods                                                                                                                                                                           | `{}`                                                    |
 | `podSecurityContext.fsGroup`           | Group ID for the container                                                                                                                                                                                      | `1001`                                                  |
@@ -188,7 +193,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `rbac.create`                          | Whether to create & use RBAC resources or not                                                                                                                                                                   | `true`                                                  |
 | `rbac.apiVersion`                      | Version of the RBAC API                                                                                                                                                                                         | `v1beta1`                                               |
 | `rbac.pspEnabled`                      | PodSecurityPolicy                                                                                                                                                                                               | `false`                                                 |
-| `rbac.clusterRole`                     | Whether to create Cluster Role. When set to false creates a Role in `namespace`                                                                                                                                                                                              | `true`                                                 |
+| `rbac.clusterRole`                     | Whether to create Cluster Role. When set to false creates a Role in `namespace`                                                                                                                                 | `true`                                                  |
 | `resources`                            | CPU/Memory resource requests/limits.                                                                                                                                                                            | `{}`                                                    |
 | `livenessProbe`                        | Deployment Liveness Probe                                                                                                                                                                                       | See `values.yaml`                                       |
 | `readinessProbe`                       | Deployment Readiness Probe                                                                                                                                                                                      | See `values.yaml`                                       |
@@ -240,6 +245,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -263,9 +274,13 @@ $ helm install my-release \
   bitnami/external-dns
 ```
 
-## Upgrading
+## Notable changes
 
-### To 3.0.0
+### 3.50
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### 3.0.0
 
 - The parameters below are renamed:
   - `rbac.serviceAccountCreate` -> `serviceAccount.create`
@@ -273,7 +288,7 @@ $ helm install my-release \
   - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotations`
 - It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
-### To 2.0.0
+### 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is `my-release`:

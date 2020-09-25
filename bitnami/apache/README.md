@@ -181,9 +181,7 @@ This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, whic
 
 This release allows you to use your custom static applicaton. In order to do so, check [this section](#deploying-your-custom-web-application).
 
-## Upgrading
-
-### To 2.0.0
+### 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is apache:

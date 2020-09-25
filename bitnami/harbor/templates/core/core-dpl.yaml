@@ -44,6 +44,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.core.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAntiAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.core.nodeAffinityPreset.type "key" .Values.core.nodeAffinityPreset.key "values" .Values.core.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.core.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.core.nodeSelector "context" $) | nindent 8 }}
