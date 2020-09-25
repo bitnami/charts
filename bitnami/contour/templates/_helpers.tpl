@@ -34,6 +34,33 @@ Create the name of the contour-certgen service account to use
 {{- end -}}
 
 {{/*
+Whether to enabled contour-certgen or not
+*/}}
+{{- define "contour.contour-certgen.enabled" -}}
+{{- if and (not .Values.tlsExistingSecret) (or (not .Values.contour.tlsExistingSecret) (not .Values.envoy.tlsExistingSecret))  -}}
+    true
+{{- else -}}{{- end -}}
+{{- end -}}
+
+{{/*
+Contour certs secret name
+*/}}
+{{- define "contour.contour.certs-secret.name" -}}
+{{- $existingSecret := default .Values.tlsExistingSecret .Values.contour.tlsExistingSecret -}}
+{{- $name := default "contourcert" $existingSecret -}}
+{{- printf "%s" $name -}}
+{{- end -}}
+
+{{/*
+Envoy certs secret name
+*/}}
+{{- define "contour.envoy.certs-secret.name" -}}
+{{- $existingSecret := default .Values.tlsExistingSecret .Values.envoy.tlsExistingSecret -}}
+{{- $name := default "envoycert" $existingSecret -}}
+{{- printf "%s" $name -}}
+{{- end -}}
+
+{{/*
 Create the name of the settings ConfigMap to use.
 */}}
 {{- define "contour.configMapName" -}}

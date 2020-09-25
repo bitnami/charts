@@ -121,6 +121,10 @@ rbac:
   # create specifies whether to install and use RBAC rules.
   create: true
 
+## Name of the existingSecret to be use in both contour and envoy
+##
+# tlsExistingSecret: certs-secret
+
 contour:
   enabled: true
   image:
@@ -253,6 +257,10 @@ contour:
       # The name of the ServiceAccount to use.  If not set and create is
       # true, a name is generated using the fullname template
       name: ""
+
+  ## Name of the existingSecret to be use in contour deployment. It will override .tlsExistingSecret
+  ##
+  # tlsExistingSecret: contour-certs
 
   ## Contour Service properties
   ##
@@ -407,6 +415,10 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
   ##
   dnsPolicy: ClusterFirst
+
+  ## Name of the existingSecret to be use in envoy deployment
+  ##
+  # tlsExistingSecret: envoy-certs
 
   serviceAccount:
     # Specifies whether a ServiceAccount should be created

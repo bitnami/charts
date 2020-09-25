@@ -1,4 +1,4 @@
-{{- if .Values.contour.enabled }}
+{{- if and .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
 ---
 apiVersion: batch/v1
 kind: Job

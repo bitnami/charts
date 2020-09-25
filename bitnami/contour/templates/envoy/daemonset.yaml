@@ -241,7 +241,7 @@ spec:
         emptyDir: {}
       - name: envoycert
         secret:
-          secretName: envoycert
+          secretName: {{ include "contour.envoy.certs-secret.name" . }}
       {{- if .Values.envoy.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumes "context" $ ) | nindent 6 }}
       {{- end }}

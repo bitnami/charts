@@ -142,7 +142,7 @@ spec:
       volumes:
       - name: contourcert
         secret:
-          secretName: contourcert
+          secretName: {{ include "contour.contour.certs-secret.name" . }}
       - name: contour-config
         configMap:
           name: {{ include "contour.configMapName" . }}
