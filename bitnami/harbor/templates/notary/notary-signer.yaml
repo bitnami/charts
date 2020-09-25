@@ -38,6 +38,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.notary.signer.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAffinityPreset "component" "notary-signer" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAntiAffinityPreset "component" "notary-signer" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notary.signer.nodeAffinityPreset.type "key" .Values.notary.signer.nodeAffinityPreset.key "values" .Values.notary.signer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.notary.signer.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.nodeSelector "context" $) | nindent 8 }}

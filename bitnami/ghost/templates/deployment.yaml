@@ -26,7 +26,11 @@ spec:
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $ ) | nindent 8 }}
       {{- end }}
     spec:
+<<<<<<< HEAD
       {{- include "ghost.imagePullSecrets" . | indent 6 }}
+=======
+      {{- include "ghost.imagePullSecrets" . | nindent 6 }}
+>>>>>>> [bitnami/*] Affinity based on common presets (ii)
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -41,11 +45,18 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+<<<<<<< HEAD
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+=======
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+>>>>>>> [bitnami/*] Affinity based on common presets (ii)
       {{- end }}
       initContainers:
       {{- if not .Values.podSecurityContext.enabled }}

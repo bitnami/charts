@@ -174,9 +174,14 @@ The following table lists the configurable parameters of the external-dns chart 
 | `extraArgs`                            | Extra arguments to be passed to external-dns                                                                                                                                                                    | `{}`                                                    |
 | `extraEnv`                             | Extra environment variables to be passed to external-dns                                                                                                                                                        | `[]`                                                    |
 | `replicas`                             | Desired number of ExternalDNS replicas                                                                                                                                                                          | `1`                                                     |
-| `affinity`                             | Affinity for pod assignment (this value is evaluated as a template)                                                                                                                                             | `{}`                                                    |
-| `nodeSelector`                         | Node labels for pod assignment (this value is evaluated as a template)                                                                                                                                          | `{}`                                                    |
-| `tolerations`                          | Tolerations for pod assignment (this value is evaluated as a template)                                                                                                                                          | `[]`                                                    |
+| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                             | `""`                                                    |
+| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `soft`                                                  |
+| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                       | `""`                                                    |
+| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                                                                                                           | `""`                                                    |
+| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                       | `[]`                                                    |
+| `affinity`                             | Affinity for pod assignment                                                                                                                                                                                     | `{}` (evaluated as a template)                          |
+| `nodeSelector`                         | Node labels for pod assignment                                                                                                                                                                                  | `{}` (evaluated as a template)                          |
+| `tolerations`                          | Tolerations for pod assignment                                                                                                                                                                                  | `[]` (evaluated as a template)                          |
 | `podAnnotations`                       | Additional annotations to apply to the pod.                                                                                                                                                                     | `{}`                                                    |
 | `podLabels`                            | Additional labels to be added to pods                                                                                                                                                                           | `{}`                                                    |
 | `podSecurityContext.fsGroup`           | Group ID for the container                                                                                                                                                                                      | `1001`                                                  |
@@ -250,6 +255,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -308,7 +319,7 @@ Find more information about how to deal with common errors related to Bitnami’
   - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotations`
 - It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
-### To 2.0.0
+### 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is `my-release`:

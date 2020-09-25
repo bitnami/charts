@@ -99,9 +99,14 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe                                                                          | `1`                                                          |
 | `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe                                                                           | `3`                                                          |
 | `podAnnotations`                       | Pod annotations                                                                                                      | `{}`                                                         |
-| `affinity`                             | Map of node/pod affinities                                                                                           | `{}` (The value is evaluated as a template)                  |
-| `nodeSelector`                         | Node labels for pod assignment                                                                                       | `{}` (The value is evaluated as a template)                  |
-| `tolerations`                          | Tolerations for pod assignment                                                                                       | `[]` (The value is evaluated as a template)                  |
+| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                                                         |
+| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                                                       |
+| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                                                         |
+| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                | `""`                                                         |
+| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                                                         |
+| `affinity`                             | Affinity for pod assignment                                                                                          | `{}` (evaluated as a template)                               |
+| `nodeSelector`                         | Node labels for pod assignment                                                                                       | `{}` (evaluated as a template)                               |
+| `tolerations`                          | Tolerations for pod assignment                                                                                       | `[]` (evaluated as a template)                               |
 | `podSecurityContext`                   | Jenkins pods' Security Context                                                                                       | `{ fsGroup: "1001" }`                                        |
 | `containerSecurityContext`             | Jenkins containers' Security Context                                                                                 | `{ runAsUser: "1001" }`                                      |
 
@@ -193,6 +198,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container.
@@ -239,7 +250,7 @@ Consequences:
 
 To upgrade to `5.0.0`, install a new Jenkins chart, and migrate your Jenkins data ensuring the `jenkins` user has the appropiate permissions.
 
-### To 4.0.0
+### 4.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -247,7 +258,7 @@ In 4dfac075aacf74405e31ae5b27df4369e84eb0b0 the `apiVersion` of the deployment r
 
 This major version signifies this change.
 
-### To 1.0.0
+### 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is jenkins:

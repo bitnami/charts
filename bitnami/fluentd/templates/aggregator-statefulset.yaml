@@ -38,6 +38,11 @@ spec:
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAntiAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.aggregator.nodeAffinityPreset.type "key" .Values.aggregator.nodeAffinityPreset.key "values" .Values.aggregator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.aggregator.nodeSelector }}
       nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.nodeSelector "context" $) | nindent 8 }}

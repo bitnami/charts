@@ -37,6 +37,11 @@ spec:
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAntiAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.forwarder.nodeAffinityPreset.type "key" .Values.forwarder.nodeAffinityPreset.key "values" .Values.forwarder.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.forwarder.nodeSelector }}
       nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.nodeSelector "context" $) | nindent 8 }}
