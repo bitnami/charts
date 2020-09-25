@@ -150,7 +150,7 @@ networkPolicy:
   ##
   # allowExternal: true
 
-  ## Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).
+  ## Allow connections from other namespaces. Just set label for namespace and set label for pods (optional).
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
@@ -252,8 +252,12 @@ master:
   ## Redis command arguments
   ##
   ## Can be used to specify command line arguments, for example:
+  ## Note `exec` is prepended to command
   ##
   command: "/run.sh"
+  ## Additional commands to run prior to starting Redis
+  ##
+  preExecCmds: ""
   ## Additional Redis configuration for the master nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -456,8 +460,12 @@ slave:
   ## Redis slave port
   port: 6379
   ## Can be used to specify command line arguments, for example:
+  ## Note `exec` is prepended to command
   ##
   command: "/run.sh"
+  ## Additional commands to run prior to starting Redis
+  ##
+  preExecCmds: ""
   ## Additional Redis configuration for the slave nodes
   ## ref: https://redis.io/topics/config
   ##
