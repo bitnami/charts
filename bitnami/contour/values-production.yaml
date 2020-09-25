@@ -45,8 +45,8 @@ configInline:
   # disable ingressroute permitInsecure field
   disablePermitInsecure: false
   tls:
-    #   minimum TLS version that Contour will negotiate
-    #   minimum-protocol-version: "1.1"
+    # minimum TLS version that Contour will negotiate
+    # minimum-protocol-version: "1.1"
     # Defines the Kubernetes name/namespace matching a secret to use
     # as the fallback certificate when requests which don't match the
     # SNI defined for a vhost.
@@ -57,7 +57,7 @@ configInline:
   ## This needs to be edited by when you deploy to a namespace other than projectcontour
   ##
   leaderelection:
-    #   configmap-name: leader-elect
+    # configmap-name: leader-elect
     configmap-namespace: '{{ .Release.Namespace }}'
   ### Logging options
   # Default setting
@@ -92,8 +92,8 @@ configInline:
   #   - "x_forwarded_for"
   #
   # default-http-versions:
-  # - "HTTP/2"
-  # - "HTTP/1.1"
+  #   - "HTTP/2"
+  #   - "HTTP/1.1"
   #
   # The following shows the default proxy timeout settings.
   # timeouts:
