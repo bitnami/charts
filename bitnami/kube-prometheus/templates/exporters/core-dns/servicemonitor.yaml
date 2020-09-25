@@ -13,7 +13,7 @@ spec:
       app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
   namespaceSelector:
     matchNames:
-      - "kube-system"
+      - {{ .Values.coreDns.namespace }}
   endpoints:
   - port: http-metrics
     {{- if .Values.coreDns.serviceMonitor.interval}}
