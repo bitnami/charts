@@ -1,13 +1,4 @@
 dependencies:
-  - name: mongodb
-    version: ">= 8.2.1"
-    repository: https://charts.bitnami.com/bitnami
-    condition: mongodb.enabled
   - name: postgresql
-    # TODO(andresmgot): Unable to upgrade to 9.X at the moment due to a breaking change
-    # in https://github.com/bitnami/charts/pull/3021, if we need to upgrade, it's necessary
-    # to tell users to execute this before:
-    # kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
-    version: "~ 8.10.11"
+    version: ">= 9.7.0"
     repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled

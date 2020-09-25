@@ -27,26 +27,13 @@ spec:
         app.kubernetes.io/component: contour
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
-      affinity:
-        {{- if eq .Values.contour.antiAffinityPolicy "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels: {{- include "common.labels.matchLabels" . | nindent 18 }}
-                  app.kubernetes.io/component: contour
-              topologyKey: kubernetes.io/hostname
-        {{- else if eq .Values.contour.antiAffinityPolicy "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels: {{- include "common.labels.matchLabels" . | nindent 18 }}
-                  app.kubernetes.io/component: contour
-              topologyKey: kubernetes.io/hostname
-            weight: 100
-        {{- end }}
       {{- if .Values.contour.affinity }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.contour.podAffinityPreset "component" "contour" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.contour.podAntiAffinityPreset "component" "contour" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.contour.nodeAffinityPreset.type "key" .Values.contour.nodeAffinityPreset.key "values" .Values.contour.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.contour.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}

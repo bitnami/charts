@@ -78,7 +78,7 @@ The following table lists the configurable parameters of the Drupal chart and th
 
 | Parameter                            | Description                                                                                                           | Default                                        |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
+| `affinity`                           | Affinity for pod assignment                                                                                           | `{}` (evaluated as a template)                 |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
@@ -99,13 +99,18 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
 | `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (evaluated as a template)                 |
 | `persistence.accessMode`             | PVC Access Mode for Drupal volume                                                                                     | `ReadWriteOnce`                                |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
 | `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |
 | `persistence.hostPath`               | Host mount path for Drupal volume                                                                                     | `nil` (will not mount to a host path)          |
 | `persistence.size`                   | PVC Storage Request for Drupal volume                                                                                 | `8Gi`                                          |
 | `persistence.storageClass`           | PVC Storage Class for Drupal volume                                                                                   | `nil` (uses alpha storage class annotation)    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
 | `podSecurityContext.enabled`         | Enable Drupal pods' Security Context                                                                                  | `true`                                         |
@@ -114,7 +119,7 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `replicaCount`                       | Number of Drupal Pods to run                                                                                          | `1`                                            |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (evaluated as a template)                 |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
 
 ### Traffic Exposure Parameters
@@ -219,6 +224,12 @@ imagePullSecrets:
 ```
 
 1. Install the chart
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
