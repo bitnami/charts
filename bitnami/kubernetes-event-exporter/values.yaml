@@ -78,6 +78,7 @@ podSecurityContext: {}
 
 securityContext:
   capabilities:
+    add: []
     drop:
     - ALL
   readOnlyRootFilesystem: true
