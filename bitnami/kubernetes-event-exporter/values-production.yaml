@@ -16,8 +16,8 @@
 # fullnameOverride:
 
 config:
-  logLevel: debug
-  logFormat: pretty
+  logLevel: error
+  logFormat: json
   receivers:
     - name: "dump"
       file:
