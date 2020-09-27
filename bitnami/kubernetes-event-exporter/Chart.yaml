@@ -1,0 +1,20 @@
+apiVersion: v1
+name: kubernetes-event-exporter
+description: Contour Ingress controller for Kubernetes
+version: 1.0.0
+appVersion: 0.9
+keywords:
+  - alerting
+  - event exporting
+  - events
+  - kubernetes events
+  - monitoring
+  - observability
+home: https://github.com/bitnami/charts/tree/master/bitnami/kubernetes-event-exporter
+sources:
+  - https://github.com/opsgenie/kubernetes-event-exporter
+maintainers:
+  - name: Bitnami
+    email: containers@bitnami.com
+annotations:
+  category: Infrastructure
