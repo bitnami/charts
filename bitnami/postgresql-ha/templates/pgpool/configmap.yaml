@@ -5,6 +5,12 @@ metadata:
   name: {{ printf "%s-configuration" (include "postgresql-ha.pgpool" .) }}
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
+    {{- if .Values.commonLabels }}
+    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- if (.Files.Glob "files/pgpool.conf") }}
   {{- (.Files.Glob "files/pgpool.conf").AsConfig | nindent 2 }}

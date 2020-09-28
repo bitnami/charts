@@ -3,9 +3,15 @@ kind: Service
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
   {{- if .Values.service.annotations }}
-  annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- include "postgresql-ha.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
+  {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+
 spec:
   type: {{ .Values.service.type }}
   {{- if and (not (empty .Values.service.loadBalancerIP)) (eq .Values.service.type "LoadBalancer") }}

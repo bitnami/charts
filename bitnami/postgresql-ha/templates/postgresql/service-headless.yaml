@@ -3,6 +3,12 @@ kind: Service
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}-headless
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None

@@ -4,6 +4,12 @@ apiVersion: {{ template "postgresql-ha.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "postgresql-ha.fullname" . }}
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
     matchLabels: {{ include "postgresql-ha.matchLabels" . | nindent 6 }}

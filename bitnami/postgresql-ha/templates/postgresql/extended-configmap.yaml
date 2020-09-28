@@ -5,6 +5,12 @@ metadata:
   name: {{ printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) }}
   labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    {{- if .Values.commonLabels }}
+    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- with .Files.Glob "files/conf.d/*.conf" }}
   {{- .AsConfig | nindent 2 }}
