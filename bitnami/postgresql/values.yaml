@@ -517,7 +517,7 @@ slave:
   # type:
   # nodePort:
   # clusterIP:
-  
+
   ## Whether to enable PostgreSQL slave replicas data Persistent
   ##
   persistence:
