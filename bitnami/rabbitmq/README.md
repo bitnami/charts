@@ -2,7 +2,7 @@
 
 [RabbitMQ](https://www.rabbitmq.com/) is an open source message broker software that implements the Advanced Message Queuing Protocol (AMQP).
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -73,7 +73,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `image.debug`                             | Set to true if you would like to see extra information on logs                                                       | `false`                                                      |
 | `auth.username`                           | RabbitMQ application username                                                                                        | `user`                                                       |
 | `auth.password`                           | RabbitMQ application password                                                                                        | _random 10 character long alphanumeric string_               |
-| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil`                                                        |
+| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil` (evaluated as a template)                              |
 | `auth.erlangCookie`                       | Erlang cookie                                                                                                        | _random 32 character long alphanumeric string_               |
 | `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie                                                                          | `nil`                                                        |
 | `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                       | `false`                                                      |
@@ -108,9 +108,9 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `extraConfiguration`                      | Extra configuration to be appended to RabbitMQ configuration                                                         | Check `values.yaml` file                                     |
 | `advancedConfiguration`                   | Extra configuration (in classic format)                                                                              | Check `values.yaml` file                                     |
 | `ldap.enabled`                            | Enable LDAP support                                                                                                  | `false`                                                      |
-| `ldap.server`                             | LDAP server                                                                                                          | `""`                                                         |
-| `ldap.port`                               | LDAP port                                                                                                            | `389`                                                        |
-| `ldap.user_dn_pattern`                    | DN used to bind to LDAP                                                                                              | `cn=${username},dc=example,dc=org`                           |
+| `ldap.servers`                            | List of LDAP servers hostnames                                                                                       | `[]`                                                         |
+| `ldap.port`                               | LDAP servers port                                                                                                    | `389`                                                        |
+| `ldap.user_dn_pattern`                    | Pattern used to translate the provided username into a value to be used for the LDAP bind                            | `cn=${username},dc=example,dc=org`                           |
 | `ldap.tls.enabled`                        | Enable TLS for LDAP connections (check advancedConfiguration parameter in values.yml)                                | `false`                                                      |
 
 ### Statefulset parameters
@@ -147,43 +147,43 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 
 ### Exposure parameters
 
-| Parameter                                         | Description                                                                                             | Default                                                 |
-|---------------------------------------------------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                                    | Kubernetes Service type                                                                                 | `ClusterIP`                                             |
-| `service.port`                                    | Amqp port                                                                                               | `5672`                                                  |
-| `service.tlsPort`                                 | Amqp TLS port                                                                                           | `5671`                                                  |
-| `service.nodePort`                                | Node port override for `amqp` port, if serviceType NodePort or LoadBalancer                             | `nil`                                                   |
-| `service.tlsNodePort`                             | Node port override for `amqp-ssl` port, if serviceType NodePort or LoadBalancer                         | `nil`                                                   |
-| `service.distPort`                                | Erlang distribution server port                                                                         | `25672`                                                 |
-| `service.distNodePort`                            | Node port override for `dist` port, if serviceType NodePort                                             | `nil`                                                   |
-| `service.managerPort`                             | RabbitMQ Manager port                                                                                   | `15672`                                                 |
-| `service.managerNodePort`                         | Node port override for `http-stats` port, if serviceType NodePort                                       | `nil`                                                   |
-| `service.metricsPort`                             | RabbitMQ Prometheues metrics port                                                                       | `9419`                                                  |
-| `service.metricsNodePort`                         | Node port override for `metrics` port, if serviceType NodePort                                          | `nil`                                                   |
-| `service.epmdNodePort`                            | Node port override for `epmd` port, if serviceType NodePort                                             | `nil`                                                   |
-| `service.extraPorts`                              | Extra ports to expose in the service                                                                    | `[]`                                                    |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                               | `[]`                                                    |
-| `service.loadBalancerIP`                          | LoadBalancerIP for the service                                                                          | `nil`                                                   |
-| `service.externalIP`                              | ExternalIP for the service                                                                              | `nil`                                                   |
-| `service.labels`                                  | Service labels                                                                                          | `{}` (evaluated as a template)                          |
-| `service.annotations`                             | Service annotations                                                                                     | `{}` (evaluated as a template)                          |
-| `ingress.enabled`                                 | Enable ingress resource for Management console                                                          | `false`                                                 |
-| `ingress.path`                                    | Path for the default host                                                                               | `/`                                                     |
-| `ingress.certManager`                             | Add annotations for cert-manager                                                                        | `false`                                                 |
-| `ingress.hostname`                                | Default host for the ingress resource                                                                   | `rabbitmq.local`                                        |
-| `ingress.annotations`                             | Ingress annotations                                                                                     | `[]`                                                    |
-| `ingress.tls`                                     | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                       | `false`                                                 |
-| `ingress.tls.existingSecret`                      | Existing secret for the Ingress TLS certificate                                                         | `nil`                                                   |
-| `ingress.extraHosts[0].name`                      | Additional hostnames to be covered                                                                      | `nil`                                                   |
-| `ingress.extraHosts[0].path`                      | Additional hostnames to be covered                                                                      | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`                    | TLS configuration for additional hostnames to be covered                                                | `nil`                                                   |
-| `ingress.extraTls[0].secretName`                  | TLS configuration for additional hostnames to be covered                                                | `nil`                                                   |
-| `ingress.secrets[0].name`                         | TLS Secret Name                                                                                         | `nil`                                                   |
-| `ingress.secrets[0].certificate`                  | TLS Secret Certificate                                                                                  | `nil`                                                   |
-| `ingress.secrets[0].key`                          | TLS Secret Key                                                                                          | `nil`                                                   |
-| `networkPolicy.enabled`                           | Enable NetworkPolicy                                                                                    | `false`                                                 |
-| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                              | `true`                                                  |
-| `networkPolicy.additionalRules`                   | Additional NetworkPolicy rules                                                                          | `nil`                                                   |
+| Parameter                                 | Description                                                                                                          | Default                                                      |
+|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `service.type`                            | Kubernetes Service type                                                                                              | `ClusterIP`                                                  |
+| `service.port`                            | Amqp port                                                                                                            | `5672`                                                       |
+| `service.tlsPort`                         | Amqp TLS port                                                                                                        | `5671`                                                       |
+| `service.nodePort`                        | Node port override for `amqp` port, if serviceType NodePort or LoadBalancer                                          | `nil`                                                        |
+| `service.tlsNodePort`                     | Node port override for `amqp-ssl` port, if serviceType NodePort or LoadBalancer                                      | `nil`                                                        |
+| `service.distPort`                        | Erlang distribution server port                                                                                      | `25672`                                                      |
+| `service.distNodePort`                    | Node port override for `dist` port, if serviceType NodePort                                                          | `nil`                                                        |
+| `service.managerPort`                     | RabbitMQ Manager port                                                                                                | `15672`                                                      |
+| `service.managerNodePort`                 | Node port override for `http-stats` port, if serviceType NodePort                                                    | `nil`                                                        |
+| `service.metricsPort`                     | RabbitMQ Prometheues metrics port                                                                                    | `9419`                                                       |
+| `service.metricsNodePort`                 | Node port override for `metrics` port, if serviceType NodePort                                                       | `nil`                                                        |
+| `service.epmdNodePort`                    | Node port override for `epmd` port, if serviceType NodePort                                                          | `nil`                                                        |
+| `service.extraPorts`                      | Extra ports to expose in the service                                                                                 | `[]`                                                         |
+| `service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                            | `[]`                                                         |
+| `service.loadBalancerIP`                  | LoadBalancerIP for the service                                                                                       | `nil`                                                        |
+| `service.externalIP`                      | ExternalIP for the service                                                                                           | `nil`                                                        |
+| `service.labels`                          | Service labels                                                                                                       | `{}` (evaluated as a template)                               |
+| `service.annotations`                     | Service annotations                                                                                                  | `{}` (evaluated as a template)                               |
+| `ingress.enabled`                         | Enable ingress resource for Management console                                                                       | `false`                                                      |
+| `ingress.path`                            | Path for the default host                                                                                            | `/`                                                          |
+| `ingress.certManager`                     | Add annotations for cert-manager                                                                                     | `false`                                                      |
+| `ingress.hostname`                        | Default host for the ingress resource                                                                                | `rabbitmq.local`                                             |
+| `ingress.annotations`                     | Ingress annotations                                                                                                  | `[]`                                                         |
+| `ingress.tls`                             | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                    | `false`                                                      |
+| `ingress.existingSecret`                  | Existing secret for the Ingress TLS certificate                                                                      | `nil`                                                        |
+| `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                                                   | `nil`                                                        |
+| `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                                                   | `nil`                                                        |
+| `ingress.extraTls[0].hosts[0]`            | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                        |
+| `ingress.extraTls[0].secretName`          | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                        |
+| `ingress.secrets[0].name`                 | TLS Secret Name                                                                                                      | `nil`                                                        |
+| `ingress.secrets[0].certificate`          | TLS Secret Certificate                                                                                               | `nil`                                                        |
+| `ingress.secrets[0].key`                  | TLS Secret Key                                                                                                       | `nil`                                                        |
+| `networkPolicy.enabled`                   | Enable NetworkPolicy                                                                                                 | `false`                                                      |
+| `networkPolicy.allowExternal`             | Don't require client label for connections                                                                           | `true`                                                       |
+| `networkPolicy.additionalRules`           | Additional NetworkPolicy rules                                                                                       | `nil`                                                        |
 
 ### Persistence parameters
 
@@ -333,6 +333,13 @@ auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
 
 > Note: please note it's mandatory to indicate the password and erlangCookie that was set the first time the chart was installed to upgrade the chart. Otherwise, new pods won't be able to join the cluster.
 
+When scaling down the solution unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. You need to manually remove them running the `rabbitmqctl forget_cluster_node` command. For instance, if you initially installed RabbitMQ with 3 replicas and then you scaled it down to 2 replicas, run the commands below (assuming that the release name is `rabbitmq` and you're using `hostname` as clustering type):
+
+```console
+$ kubectl exec rabbitmq-0 --container rabbitmq -- rabbitmqctl forget_cluster_node rabbit@rabbitmq-2.rabbitmq-headless.default.svc.cluster.local
+$ kubectl delete pvc data-rabbitmq-2
+```
+
 ### Enabling TLS support
 
 To enable TLS support you must generate the certificates using RabbitMQ [documentation](https://www.rabbitmq.com/ssl.html#automated-certificate-generation). Once you have your certificate, you have two alternatives:
@@ -396,7 +403,7 @@ stringData:
     }
 ```
 
-Then, specify the `management.load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
+Then, specify the `load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
 
 > Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
@@ -417,7 +424,7 @@ loadDefinition:
   enabled: true
   existingSecret: load-definition
 extraConfiguration: |
-  management.load_definitions = /app/load_definition.json
+  load_definitions = /app/load_definition.json
 ```
 
 ### LDAP
@@ -425,16 +432,16 @@ extraConfiguration: |
 LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
 
 - `ldap.enabled`: Enable LDAP support. Defaults to `false`.
-- `ldap.server`: LDAP server host. No defaults.
-- `ldap.port`: LDAP server port. `389`.
-- `ldap.user_dn_pattern`: DN used to bind to LDAP. `cn=${username},dc=example,dc=org`.
+- `ldap.servers`: List of LDAP servers hostnames. No defaults.
+- `ldap.port`: LDAP servers port. `389`.
+- `ldap.user_dn_pattern`: Pattern used to translate the provided username into a value to be used for the LDAP bind. Defaults to `cn=${username},dc=example,dc=org`.
 - `ldap.tls.enabled`: Enable TLS for LDAP connections. Defaults to `false`.
 
 For example:
 
 ```console
-ldap.enabled="true"
-ldap.server="my-ldap-server"
+ldap.enabled=true
+ldap.serverss[0]="my-ldap-server"
 ldap.port="389"
 ldap.user_dn_pattern="cn=${username},dc=example,dc=org"
 ```
@@ -578,3 +585,13 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 ```console
 $ kubectl delete statefulset rabbitmq --cascade=false
 ```
+
+## Bitnami Kubernetes Documentation
+
+Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
+
+- [Documentation for RabbitMQ Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/)
+- [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
+- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
+- [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
+- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)

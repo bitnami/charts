@@ -1,0 +1,30 @@
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.alertmanager.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.alertmanager.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.alertmanager.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "kube-prometheus.alertmanager.fullname" $ }}
+              servicePort: http
+    {{- end }}
+  {{- if .Values.alertmanager.ingress.tls }}
+  tls:
+{{ toYaml .Values.alertmanager.ingress.tls | indent 4 }}
+{{- end }}
+{{- end -}}

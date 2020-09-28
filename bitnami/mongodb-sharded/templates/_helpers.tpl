@@ -38,6 +38,40 @@ Usage:
 {{- end -}}
 
 {{/*
+Returns a ServiceAccount name for specified path or falls back to `common.serviceAccount.name`
+if `common.serviceAccount.create` is set to true. Falls back to Chart's fullname otherwise.
+
+Usage:
+{{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.path.to.serviceAccount "context" $) }}
+*/}}
+{{- define "mongodb-sharded.serviceAccountName" -}}
+{{- if .value.create }}
+    {{- default (include "mongodb-sharded.fullname" .context) .value.name | quote }}
+{{- else if .context.Values.common.serviceAccount.create }}
+    {{- default (include "mongodb-sharded.fullname" .context) .context.Values.common.serviceAccount.name | quote }}
+{{- else -}}
+    {{- default "default" .value.name | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
+Renders a ServiceAccount for specified name.
+Usage:
+{{ include "mongodb-sharded.serviceaccount" (dict "value" .Values.path.to.serviceAccount "context" $) }}
+*/}}
+{{- define "mongodb-sharded.serviceaccount" -}}
+{{- if .value.create -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .value "context" .context) }}
+  labels:
+    {{- include "mongodb-sharded.labels" .context | nindent 4 }}
+---
+{{ end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -122,14 +156,14 @@ Create chart name and version as used by the chart label.
 Get the initialization scripts Secret name.
 */}}
 {{- define "mongodb-sharded.initScriptsSecret" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsSecret "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsSecret "context" $)) -}}
 {{- end -}}
 
 {{/*
 Get the initialization scripts configmap name.
 */}}
 {{- define "mongodb-sharded.initScriptsCM" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.initScriptsCM "context" $)) -}}
+  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsCM "context" $)) -}}
 {{- end -}}
 
 {{/*

@@ -26,7 +26,7 @@ spec:
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.fullname" . }}-bucketweb
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
       {{- if .Values.bucketweb.affinity }}
       affinity: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.affinity "context" $) | nindent 8 }}
       {{- end }}
@@ -61,8 +61,8 @@ spec:
             {{- if .Values.bucketweb.timeout }}
             - --timeout={{ .Values.bucketweb.timeout }}
             {{- end }}
-            {{- range $key, $value := .Values.bucketweb.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.bucketweb.extraFlags }}
+            - {{ . }}
             {{- end }}
           ports:
             - name: http
@@ -79,12 +79,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
-              {{- else }}
-              mountPath: /conf/objstore.yml
-              subPath: objstore.yml
-              {{- end }}
       volumes:
         - name: objstore-config
           secret:

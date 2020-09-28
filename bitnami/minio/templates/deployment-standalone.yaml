@@ -24,6 +24,9 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
 {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
@@ -100,10 +103,13 @@ spec:
             {{- if .Values.prometheusAuthType }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.prometheusAuthType }}
-            {{- end }}              
+            {{- end }}
             {{- if .Values.extraEnv }}
             {{- toYaml .Values.extraEnv | nindent 12 }}
             {{- end }}
+          {{ if .Values.command }}
+          command: {{- toYaml .Values.command |  nindent 12 }} 
+          {{- end }}
           ports:
             - name: minio
               containerPort: 9000

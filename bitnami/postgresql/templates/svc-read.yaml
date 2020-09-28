@@ -10,16 +10,13 @@ kind: Service
 metadata:
   name: {{ template "postgresql.fullname" . }}-read
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
   {{- if .Values.commonAnnotations }}
-  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if $serviceAnnotations }}
-  {{- include "postgresql.tplValue" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ $serviceType }}
@@ -27,7 +24,7 @@ spec:
   loadBalancerIP: {{ $serviceLoadBalancerIP }}
   {{- end }}
   {{- if and (eq $serviceType "LoadBalancer") $serviceLoadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- include "postgresql.tplValue" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if and (eq $serviceType "ClusterIP") $serviceClusterIP }}
   clusterIP: {{ $serviceClusterIP }}
@@ -40,7 +37,6 @@ spec:
       nodePort: {{ $serviceNodePort }}
       {{- end }}
   selector:
-    app: {{ template "postgresql.name" . }}
-    release: {{ .Release.Name | quote }}
+  {{- include "common.labels.matchLabels" . | nindent 4 }}
     role: slave
 {{- end }}

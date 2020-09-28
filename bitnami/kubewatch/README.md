@@ -3,7 +3,7 @@
 [kubewatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes watcher that currently publishes notification to Slack. Run it in your k8s cluster, and you will get event notifications in a slack channel.
 
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -75,8 +75,20 @@ The following table lists the configurable parameters of the kubewatch chart and
 | `mattermost.url`                         | Mattermost URL                                                                                                              | `""`                                                    |
 | `flock.enabled`                          | Enable Flock notifications                                                                                                  | `false`                                                 |
 | `flock.url`                              | Flock URL                                                                                                                   | `""`                                                    |
+| `msteams.enabled`                        | Enable Microsoft Teams notifications                                                                                        | `false`                                                 |
+| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                                                                                 | `""`                                                    |
 | `webhook.enabled`                        | Enable Webhook notifications                                                                                                | `false`                                                 |
 | `webhook.url`                            | Webhook URL                                                                                                                 | `""`                                                    |
+| `smtp.enabled`                           | Enable SMTP (email) notifications                                                                                           | `false`                                                 |
+| `smtp.to`                                | Destination email address (required)                                                                                        | `""`                                                    |
+| `smtp.from`                              | Source email address (required)                                                                                             | `""`                                                    |
+| `smtp.smarthost`                         | SMTP server address (name:port) (required)                                                                                  | `""`                                                    |
+| `smtp.hello`                             | SMTP hello field (optional)                                                                                                 | `""`                                                    |
+| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                                                                                      | `""`                                                    |
+| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                                                                                      | `""`                                                    |
+| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                                                                                | `""`                                                    |
+| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                                                                               | `""`                                                    |
+| `smtp.requireTLS`                        | Force STARTTLS                                                                                                              | `false`                                                 |
 | `tolerations`                            | List of node taints to tolerate (requires Kubernetes >= 1.6)                                                                | `[]`                                                    |
 | `namespaceToWatch`                       | namespace to watch, leave it empty for watching all                                                                         | `""`                                                    |
 | `resourcesToWatch`                       | list of resources which kubewatch should watch and notify slack                                                             | `{pod: true, deployment: true}`                         |

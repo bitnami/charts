@@ -4,8 +4,8 @@
 Credentials:
 
     echo "Username      : {{ .Values.auth.username }}"
-    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
-    echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
+    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
+    echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
 RabbitMQ can be accessed within the cluster on port {{ .Values.service.nodePort }} at {{ include "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clustering.k8s_domain }}
 
@@ -119,3 +119,20 @@ Then, open the obtained URL in a browser.
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "rabbitmq.validateValues" . -}}
+
+{{- $requiredPassword := list -}}
+{{- $secretNameRabbitmq := include "rabbitmq.secretPasswordName" . -}}
+
+{{- if not .Values.auth.existingPasswordSecret -}}
+  {{- $requiredRabbitmqPassword := dict "valueKey" "auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password" -}}
+  {{- $requiredPassword = append $requiredPassword $requiredRabbitmqPassword -}}
+{{- end -}}
+
+{{- if not .Values.auth.existingErlangSecret -}}
+  {{- $requiredErlangPassword := dict "valueKey" "auth.erlangCookie" "secret" $secretNameRabbitmq "field" "rabbitmq-erlang-cookie" -}}
+  {{- $requiredPassword = append $requiredPassword $requiredErlangPassword -}}
+{{- end -}}
+
+{{- $requiredRabbitmqPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRabbitmqPasswordErrors) "context" $) -}}

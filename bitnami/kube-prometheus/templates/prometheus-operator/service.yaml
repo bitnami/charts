@@ -1,0 +1,32 @@
+{{- if .Values.operator.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+  {{- with .Values.operator.service.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.operator.service.type }}
+  {{- if and .Values.operator.service.loadBalancerIP (eq .Values.operator.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.operator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.operator.service.type "LoadBalancer") .Values.operator.service.loadBalancerSourceRanges }}
+  {{- with .Values.operator.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.operator.service.type "ClusterIP") .Values.operator.service.clusterIP }}
+  clusterIP: {{ .Values.operator.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.operator.service.port }}
+      targetPort: http
+      {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.operator.service.nodePort }}
+      {{- end }}
+  selector: {{- include "kube-prometheus.operator.matchLabels" . | nindent 4 }}
+{{- end }}

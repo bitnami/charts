@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.8.0-debian-10-r48
+  tag: 11.9.0-debian-10-r30
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.2-debian-10-r42
+  tag: 4.1.4-debian-10-r7
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r155
+  tag: 0.8.0-debian-10-r221
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -169,6 +169,12 @@ postgresql:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## PostgreSQL containers' resource requests and limits
@@ -219,6 +225,9 @@ postgresql:
   # password:
   # database:
 
+  ## PostgreSQL password using existing secret
+  # existingSecret: secret
+
   ## PostgreSQL admin password (used when `postgresql.username` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   # postgresPassword:
@@ -233,6 +242,10 @@ postgresql:
   ## Configures pg_hba.conf to trust every user
   ##
   pgHbaTrustAll: false
+
+  ## Synchronous replication
+  ##
+  syncReplication: false
 
   ## Repmgr configuration parameters
   ##
@@ -302,6 +315,27 @@ postgresql:
 ## Pgpool parameters
 ##
 pgpool:
+  ## Additional users that will be performing connections to the database using
+  ## pgpool. Use this property in order to create new user/password entries that
+  ## will be appended to the "pgpool_passwd" file
+  ##
+  customUsers: {}
+  ##  Comma or semicolon separeted list of postgres usernames
+  #   usernames: 'user01;user02'
+
+  ##  Comma or semicolon separated list of the associated passwords for the
+  ##  users above
+  #   passwords: 'pass01;pass02'
+
+  ## Alternatively, you can provide the name of a secret containing this information.
+  ## The secret must contain the keys "usernames" and "passwords" respectively.
+  ##
+  customUsersSecret:
+
+  ## Database to perform streaming replication checks
+  ##
+  srCheckDatabase: postgres
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -345,6 +379,12 @@ pgpool:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
@@ -389,6 +429,15 @@ pgpool:
     minAvailable: 1
     # maxUnavailable: 1
 
+  ## strategy used to replace old Pods by new ones
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy: {}
+
+  ## minReadySeconds to avoid killing pods before we are ready
+  ##
+  # minReadySeconds: 0
+
   ## Pgpool configuration parameters
   ##
   adminUsername: admin
@@ -401,7 +450,7 @@ pgpool:
 
   ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  # maxPools:
+  # maxPool:
 
   ## Pgpool configuration
   ## Specify content for pgpool.conf
@@ -437,6 +486,36 @@ pgpool:
   ## Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
+
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## Enable TLS traffic
+    ##
+    enabled: false
+    ##
+    ## Whether to use the server's TLS cipher preferences rather than the client's.
+    ##
+    preferServerCiphers: true
+    ##
+    ## Name of the Secret that contains the certificates
+    ##
+    certificatesSecret: ""
+    ##
+    ## Certificate filename
+    ##
+    certFilename: ""
+    ##
+    ## Certificate Key filename
+    ##
+    certKeyFilename: ""
+    ##
+    ## CA Certificate filename
+    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
+    ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
+    ##
+    certCAFilename:
 
 ## LDAP parameters
 ##

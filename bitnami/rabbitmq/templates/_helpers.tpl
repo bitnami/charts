@@ -64,7 +64,7 @@ Get the password secret.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
     {{- if .Values.auth.existingPasswordSecret -}}
-        {{- printf "%s" .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}
@@ -96,8 +96,8 @@ Get the TLS secret.
 Get the Ingress TLS secret.
 */}}
 {{- define "rabbitmq.ingressSecretTLSName" -}}
-    {{- if .Values.ingress.tls.existingSecret -}}
-        {{- printf "%s" .Values.ingress.tls.existingSecret -}}
+    {{- if .Values.ingress.existingSecret -}}
+        {{- printf "%s" .Values.ingress.existingSecret -}}
     {{- else -}}
         {{- printf "%s-tls" .Values.ingress.hostname -}}
     {{- end -}}
@@ -173,14 +173,15 @@ Validate values of rabbitmq - LDAP support
 */}}
 {{- define "rabbitmq.validateValues.ldap" -}}
 {{- if .Values.ldap.enabled }}
-{{- if not (and .Values.ldap.server .Values.ldap.port .Values.ldap.user_dn_pattern) }}
+{{- $serversListLength := len .Values.ldap.servers }}
+{{- if or (not (gt $serversListLength 0)) (not (and .Values.ldap.port .Values.ldap.user_dn_pattern)) }}
 rabbitmq: LDAP
-    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.server",
+    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers",
     "ldap.port", and "ldap. user_dn_pattern" are mandatory. Please provide them:
 
     $ helm install {{ .Release.Name }} bitnami/rabbitmq \
       --set ldap.enabled=true \
-      --set ldap.server="lmy-ldap-server" \
+      --set ldap.servers[0]="lmy-ldap-server" \
       --set ldap.port="389" \
       --set user_dn_pattern="cn=${username},dc=example,dc=org"
 {{- end -}}

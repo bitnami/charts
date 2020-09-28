@@ -1,7 +1,7 @@
 apiVersion: v1
 name: wildfly
-version: 4.0.0
-appVersion: 20.0.0
+version: 4.4.1
+appVersion: 20.0.1
 description: Chart for Wildfly
 keywords:
   - wildfly
@@ -10,11 +10,14 @@ keywords:
   - web
   - application server
   - jsp
-home: http://wildfly.org
+home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
+  - http://wildfly.org
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
 engine: gotpl
 icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-110x117.png
+annotations:
+  category: ApplicationServer

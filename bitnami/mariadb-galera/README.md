@@ -2,7 +2,7 @@
 
 [MariaDB Galera](https://mariadb.com/kb/en/library/what-is-mariadb-galera-cluster/) is a multi-master database cluster solution for synchronous replication and high availability.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -96,7 +96,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `db.name`                            | Name for new database to create                                                                                                                             | `my_database`                                                     |
 | `db.forcePassword`                   | Force users to specify a password                                                                                                                           | `false`                                                           |
 | `galera.name`                        | Galera cluster name                                                                                                                                         | `galera`                                                          |
-| `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | `0`                                                               |
+| `galera.bootstrap.bootstrapFromNode`    | Node number to bootstrap first                                                                                                                           | nil                                                               |
 | `galera.bootstrap.forceSafeToBootstrap` | Force `safe_to_bootstrap: 1` in `grastate.dat`                                                                                                           | `false`                                                           |
 | `galera.mariabackup.user`            | Galera mariabackup user                                                                                                                                     | `mariabackup`                                                     |
 | `galera.mariabackup.password`        | Galera mariabackup password                                                                                                                                 | _random 10 character alphanumeric string_                         |
@@ -138,6 +138,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                             | `nil`                                                             |
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
+| `persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                     | `{}`                                                              |
 | `podLabels`                          | Additional pod labels                                                                                                                                       | `{}`                                                              |
 | `priorityClassName`                  | Priority Class Name for Statefulset                                                                                                                         | ``                                                                |
 | `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `[]`                                                              |
@@ -165,6 +166,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `metrics.image.repository`           | MariaDB Prometheus exporter image name                                                                                                                      | `bitnami/mysqld-exporter`                                         |
 | `metrics.image.tag`                  | MariaDB Prometheus exporter image tag                                                                                                                       | `{TAG_NAME}`                                                      |
 | `metrics.image.pullPolicy`           | MariaDB Prometheus exporter image pull policy                                                                                                               | `IfNotPresent`                                                    |
+| `metrics.extraFlags`                 | MariaDB Prometheus exporter additional command line flags                                                                                                   | `[]`                                                              |
 | `metrics.resources`                  | Prometheus exporter resource requests/limits                                                                                                                | `{}`                                                              |
 | `metrics.service.annotations`        | Prometheus exporter svc annotations                                                                                                                         | `{prometheus.io/scrape: "true", prometheus.io/port: "9104"}`      |
 | `metrics.serviceMonitor.enabled`     | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                      | `false`                                                           |
@@ -486,3 +488,14 @@ Consequences:
 To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release. In the link below you can find a guide that explain the whole process:
 
 - [Create And Restore MySQL/MariaDB Backups](https://docs.bitnami.com/general/infrastructure/mariadb/administration/backup-restore-mysql-mariadb/)
+
+## Bitnami Kubernetes Documentation
+
+Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
+
+- [Documentation for MariaDB Galera Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/mariadb-galera/)
+- [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
+- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
+- [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
+- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+

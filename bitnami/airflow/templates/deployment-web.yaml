@@ -33,16 +33,19 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "airflow.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
       affinity:
-      {{ toYaml . | nindent 8 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-      {{ toYaml . | nindent 8 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "airflow.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "airflow.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
@@ -226,19 +229,19 @@ spec:
                   key: airflow-fernetKey
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ template "airflow.fullname" . }}
-              {{- if .Values.airflow.baseUrl }}
+            {{- if .Values.airflow.baseUrl }}
             - name: AIRFLOW_BASE_URL
               value: {{ .Values.airflow.baseUrl }}
-              {{- end }}
+            {{- end }}
             - name: AIRFLOW_LOAD_EXAMPLES
               {{- if .Values.airflow.loadExamples }}
               value: "yes"
               {{- else }}
               value: "no"
               {{- end }}
-              {{- if .Values.ldap.enabled }}
             - name: AIRFLOW_LDAP_ENABLE
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
             - name: AIRFLOW_LDAP_URI
               value: {{ .Values.ldap.uri }}
             - name: AIRFLOW_LDAP_SEARCH
@@ -253,14 +256,14 @@ spec:
                   key: bind-password
             - name: AIRFLOW_LDAP_UID_FIELD
               value: {{ .Values.ldap.uidField }}
-              {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+            {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ .Values.ldap.tls.allowSelfSigned }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
-              {{- end }}
+            {{- end }}
             {{- end }}
             {{- if .Values.airflow.extraEnvVars }}
               {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}

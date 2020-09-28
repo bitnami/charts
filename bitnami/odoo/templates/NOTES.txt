@@ -12,7 +12,7 @@
 
 {{- else }}
 
-1. Get the Odoo URL by runningg:
+1. Get the Odoo URL by running:
 
 {{- if contains "NodePort" .Values.service.type }}
 

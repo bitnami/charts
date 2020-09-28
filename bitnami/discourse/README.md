@@ -2,7 +2,7 @@
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -58,36 +58,40 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Common parameters
 
-| Parameter                                 | Description                                                                           | Default                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `replicaCount`                            | Number of Discourse & Sidekiq replicas                                                | `1`                                                          |
-| `image.registry`                          | Discourse image registry                                                              | `docker.io`                                                  |
-| `image.repository`                        | Discourse image name                                                                  | `bitnami/discouse`                                           |
-| `image.tag`                               | Discourse image tag                                                                   | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                        | Discourse image pull policy                                                           | `IfNotPresent`                                               |
-| `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
-| `imagePullSecrets`                        | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                            | String to partially override discourse.fullname                                       | `nil`                                                        |
-| `fullnameOverride`                        | String to fully override discourse.fullname                                           | `nil`                                                        |
-| `extraVolumes`                            | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`   | `[]` (evaluated as a template)                               |
-| `sidecars`                                | Attach additional sidecar containers to the pod                                       | `[]` (evaluated as a template)                               |
-| `initContainers`                          | Additional init containers to add to the pods                                         | `[]` (evaluated as a template)                               |
-| `serviceAccount.create`                   | Whether the service account should be created                                         | `false`                                                      |
-| `serviceAccount.annotations`              | Annotations to add to the service account                                             | `{}`                                                         |
-| `serviceAccount.name`                     | Name to be used for the service account                                               | `""`                                                         |
-| `podSecurityContext`                      | Pod security context specification                                                    | `{}`                                                         |
-| `persistence.enabled`                     | Whether to enable persistence based on Persistent Volume Claims                       | `true`                                                       |
-| `persistence.storageClass`                | PVC Storage Class                                                                     | `nil`                                                        |
-| `persistence.existingClaim`               | Name of an existing PVC to reuse                                                      | `nil`                                                        |
-| `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
-| `persistence.size`                        | Size of the PVC to request                                                            | `10Gi`                                                       |
-| `podAnnotations`                          | Additional pod annotations                                                            | `{}`                                                         |
-| `podLabels`                               | Additional pod labels                                                                 | `{}` (evaluated as a template)                               |
-| `commonLabels`                            | Labels to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
-| `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
-| `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
-| `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
+| Parameter                            | Description                                                                                | Default                                                      |
+|--------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `replicaCount`                       | Number of Discourse & Sidekiq replicas                                                     | `1`                                                          |
+| `image.registry`                     | Discourse image registry                                                                   | `docker.io`                                                  |
+| `image.repository`                   | Discourse image name                                                                       | `bitnami/discouse`                                           |
+| `image.tag`                          | Discourse image tag                                                                        | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                   | Discourse image pull policy                                                                | `IfNotPresent`                                               |
+| `image.debug`                        | Specify if debug logs should be enabled                                                    | `false`                                                      |
+| `imagePullSecrets`                   | Specify docker-registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                       | String to partially override discourse.fullname                                            | `nil`                                                        |
+| `fullnameOverride`                   | String to fully override discourse.fullname                                                | `nil`                                                        |
+| `extraVolumes`                       | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`        | `[]` (evaluated as a template)                               |
+| `sidecars`                           | Attach additional sidecar containers to the pod                                            | `[]` (evaluated as a template)                               |
+| `initContainers`                     | Additional init containers to add to the pods                                              | `[]` (evaluated as a template)                               |
+| `serviceAccount.create`              | Whether the service account should be created                                              | `false`                                                      |
+| `serviceAccount.annotations`         | Annotations to add to the service account                                                  | `{}`                                                         |
+| `serviceAccount.name`                | Name to be used for the service account                                                    | `""`                                                         |
+| `podSecurityContext`                 | Pod security context specification                                                         | `{}`                                                         |
+| `persistence.enabled`                | Whether to enable persistence based on Persistent Volume Claims                            | `true`                                                       |
+| `persistence.storageClass`           | PVC Storage Class                                                                          | `nil`                                                        |
+| `persistence.existingClaim`          | Name of an existing PVC to reuse                                                           | `nil`                                                        |
+| `persistence.accessMode`             | PVC Access Mode (RWO, ROX, RWX)                                                            | `ReadWriteOnce`                                              |
+| `persistence.size`                   | Size of the PVC to request                                                                 | `10Gi`                                                       |
+| `podAnnotations`                     | Additional pod annotations                                                                 | `{}`                                                         |
+| `podLabels`                          | Additional pod labels                                                                      | `{}` (evaluated as a template)                               |
+| `commonLabels`                       | Labels to be added to all deployed resources                                               | `{}` (evaluated as a template)                               |
+| `commonAnnotations`                  | Annotations to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                                         |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                      | `""`                                                         |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                  | `[]`                                                         |
+| `affinity`                           | Affinity for pod assignment                                                                | `{}` (evaluated as a template)                               |
+| `nodeSelector`                       | Node labels for pod assignment.                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                        | Tolerations for pod assignment.                                                            | `[]` (evaluated as a template)                               |
 
 ### Service parameters
 
@@ -110,7 +114,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | `discourse.host`                          | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                                         |
 | `discourse.siteName`                      | Discourse site name                                                                   | `My Site!`                                                   |
 | `discourse.username`                      | Admin user of the application                                                         | `user`                                                       |
-| `discourse.password`                      | Application password (min length of 10 chars)                                         | _random 10 character long alphanumeric string_               |
+| `discourse.password`                      | Application password (min length of 10 chars) - ignored if existingSecret is provided | _random 10 character long alphanumeric string_               |
+| `discourse.existingSecret`                | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
 | `discourse.email`                         | Admin user email of the application                                                   | `user@example.com`                                           |
 | `discourse.command`                       | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                              |
 | `discourse.args`                          | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
@@ -182,20 +187,23 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Database parameters
 
-| Parameter                                 | Description                                                                           | Default                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `postgresql.enabled`                      | Deploy PostgreSQL container(s)                                                        | `true`                                                       |
-| `postgresql.postgresqlUsername`           | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                               |
-| `postgresql.postgresqlPassword`           | Password for the Dicourse user                                                        | _random 10 character long alphanumeric string_               |
-| `postgresql.postgresqlPostgresPassword`   | Password for the admin user ("postgres")                                              | `bitnami`                                                    |
-| `postgresql.postgresqlDatabase`           | Name of the database to create                                                        | `bitnami_application`                                        |
-| `postgresql.persistence.enabled`          | Enable database persistence using PVC                                                 | `true`                                                       |
-| `externalDatabase.host`                   | Host of the external database                                                         | `""`                                                         |
-| `externalDatabase.port`                   | Database port number                                                                  | `5432`                                                       |
-| `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_discourse`                                               |
-| `externalDatabase.password`               | Password for the above username                                                       | `nil`                                                        |
-| `externalDatabase.postgresqlPostgresPassword`| Password for the root "postgres" user (used in the installation stage)             | `nil`                                                        |
-| `externalDatabase.database`               | Name of the existing database                                                         | `bitnami_application`                                        |
+| Parameter                                    | Description                                                                           | Default                                                   |
+|----------------------------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| `postgresql.enabled`                         | Deploy PostgreSQL container(s)                                                        | `true`                                                    |
+| `postgresql.postgresqlUsername`              | PostgreSQL user to create (used by Discourse)                                         | `bn_discourse`                                            |
+| `postgresql.postgresqlPassword`              | Password for the Dicourse user - ignored if existingSecret is provided                | _random 10 character long alphanumeric string_            |
+| `postgresql.postgresqlPostgresPassword`      | Password for the admin user ("postgres") - ignored if existingSecret is provided      | `bitnami`                                                 |
+| `postgresql.existingSecret`                  | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password` | `nil` |
+| `postgresql.postgresqlDatabase`              | Name of the database to create                                                        | `bitnami_application`                                     |
+| `postgresql.persistence.enabled`             | Enable database persistence using PVC                                                 | `true`                                                    |
+| `externalDatabase.host`                      | Host of the external database                                                         | `""`                                                      |
+| `externalDatabase.port`                      | Database port number (when using an external db)                                      | `5432`                                                    |
+| `externalDatabase.user`                      | PostgreSQL username (when using an external db)                                       | `bn_discourse`                                            |
+| `externalDatabase.password`                  | Password for the above username (when using an external db)                           | `""`                                                      |
+| `externalDatabase.postgresqlPostgresUser`    | PostgreSQL admin user, used during the installation stage (when using an external db) | `""`                                                      |
+| `externalDatabase.postgresqlPostgresPassword`| Password for PostgreSQL admin user (when using an external db)                        | `""`                                                      |
+| `externalDatabase.existingSecret`            | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password` | `nil` |
+| `externalDatabase.database`                  | Name of the existing database (when using an external db)                             | `bitnami_application`                                     |
 
 ### Redis parameters
 
@@ -203,12 +211,16 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `redis.enabled`                           | Deploy Redis container(s)                                                             | `true`                                                       |
 | `redis.usePassword`                       | Use password authentication                                                           | `false`                                                      |
-| `redis.password`                          | Password for Redis authentication                                                     | `nil`                                                        |
+| `redis.password`                          | Password for Redis authentication  - ignored if existingSecret is provided            | `nil`                                                        |
+| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
+| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret                    | `redis-password`                                             |
 | `redis.cluster.enabled`                   | Whether to use cluster replication                                                    | `false`                                                      |
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                 | `true`                                                       |
 | `externalRedis.host`                      | Host of the external database                                                         | `""`                                                         |
 | `externalRedis.port`                      | Database port number                                                                  | `6379`                                                       |
-| `externalRedis.password`                  | Password for the above username                                                       | `nil`                                                        |
+| `externalRedis.password`                  | Password for the external Redis                                                       | `nil`                                                        |
+| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
+| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                    | `redis-password`                                             |
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 
@@ -305,6 +317,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + ##
 + persistence.accessMode: ReadWriteMany
 ```
+
 Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
 
 ### Sidecars
@@ -341,6 +354,7 @@ postgresql.enabled=false
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
+externalDatabase.postgresqlPostgresUser=postgres
 externalDatabase.postgresqlPostgresPassword=rootpassword
 externalDatabase.database=mydatabase
 externalDatabase.port=5432
@@ -411,6 +425,12 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 
 Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
@@ -427,10 +447,17 @@ The `image` parameter allows specifying which image will be pulled for the chart
 If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
 ```yaml
 imagePullSecrets:
   - name: SECRET_NAME
 ```
-3. Install the chart
+
+1. Install the chart
+
+## Upgrade
+
+### 0.4.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.

@@ -35,6 +35,11 @@ spec:
 {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "cassandra.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "cassandra.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -126,8 +131,6 @@ spec:
                   name: {{ .Values.tlsEncryptionSecretName }}
                   key: keystore-password
             {{- end }}
-            - name: CASSANDRA_ENDPOINT_SNITCH
-              value: {{ .Values.cluster.endpointSnitch }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
             {{- if .Values.jvm.maxHeapSize }}
@@ -258,8 +261,8 @@ spec:
         {{- end }}
         {{- if .Values.initDBSecret }}
         - name: init-db-secret
-          configMap:
-            name: {{ tpl .Values.initDBSecret $ }}
+          secret:
+            secretName: {{ tpl .Values.initDBSecret $ }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data

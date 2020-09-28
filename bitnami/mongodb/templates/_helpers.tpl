@@ -146,6 +146,16 @@ Get the initialization scripts ConfigMap name.
 {{- end -}}
 
 {{/*
+Return true if the Arbiter should be deployed
+*/}}
+{{- define "mongodb.arbiter.enabled" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the configmap with the MongoDB configuration for the Arbiter
 */}}
 {{- define "mongodb.arbiter.configmapName" -}}
@@ -160,7 +170,7 @@ Return the configmap with the MongoDB configuration for the Arbiter
 Return true if a configmap object should be created for MongoDB Arbiter
 */}}
 {{- define "mongodb.arbiter.createConfigmap" -}}
-{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -224,7 +234,7 @@ Validate values of MongoDB - number of replicas must be the same than LoadBalanc
 {{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength ))  -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength )) -}}
 mongodb: .Values.externalAccess.service.loadBalancerIPs
     Number of replicas and loadBalancerIPs array length must be the same.
 {{- end -}}
@@ -236,7 +246,7 @@ Validate values of MongoDB - number of replicas must be the same than NodePort l
 {{- define "mongodb.validateValues.nodePortListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength ))  -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength )) -}}
 mongodb: .Values.externalAccess.service.nodePorts
     Number of replicas and nodePorts array length must be the same.
 {{- end -}}

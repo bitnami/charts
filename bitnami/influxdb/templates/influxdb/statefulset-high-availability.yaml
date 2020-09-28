@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/component: influxdb
 spec:
   serviceName: {{ include "influxdb.fullname" . }}-headless
+  podManagementPolicy: {{ .Values.influxdb.podManagementPolicy }}
   replicas: {{ .Values.influxdb.replicaCount }}
   updateStrategy:
     type: {{ .Values.influxdb.updateStrategy }}
@@ -269,11 +270,6 @@ spec:
                 path: write-user-password
               {{- end }}
         {{- end }}
-  {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
-        - name: data
-          persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
-  {{- end }}
   {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

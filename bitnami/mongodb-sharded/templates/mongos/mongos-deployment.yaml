@@ -33,6 +33,7 @@ spec:
       {{- if .Values.common.schedulerName }}
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.mongos.serviceAccount "context" $) }}
       nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.nodeSelector "context" $ ) | nindent 8 }}
       affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.affinity "context" $ ) | nindent 8 }}
       tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.tolerations "context" $ ) | nindent 8 }}
@@ -41,6 +42,15 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" . | nindent 6 }}
+      {{- if or (ge (len $.Values.mongos.initContainers) 1) (ge (len $.Values.common.initContainers) 1) }}
+      initContainers:
+        {{- with $.Values.mongos.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+      {{- end }}
       containers:
         - name: mongos
           image: {{ include "mongodb-sharded.image" . }}
@@ -277,7 +287,7 @@ spec:
             name: {{ include "mongodb-sharded.mongos.configCM" . }}
         {{- end }}
         {{- if $.Values.common.initScriptsCM }}
-        - name: custom-init-scripts-configmap
+        - name: custom-init-scripts-cm
           configMap:
             name: {{ include "mongodb-sharded.initScriptsCM" . }}
             defaultMode: 0755

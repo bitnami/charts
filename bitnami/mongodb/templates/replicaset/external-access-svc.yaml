@@ -23,25 +23,19 @@ spec:
   loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
   {{- end }}
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml $root.Values.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: tcp-mongodb
+    - name: {{ $root.Values.service.portName }}
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
       {{- else }}
       nodePort: null
       {{- end }}
-      {{- if or (eq $root.Values.externalAccess.service.type "LoadBalancer") }}
       targetPort: mongodb
-      {{- else if $root.Values.externalAccess.autoDiscovery.enabled }}
-      targetPort: null
-      {{- else }}
-      targetPort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

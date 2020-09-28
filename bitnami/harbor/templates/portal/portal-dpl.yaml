@@ -117,29 +117,29 @@ spec:
           ports:
             - containerPort: {{ include "harbor.portal.containerPort" . }}
               name: http
-          {{- if .Values.portal.extraVolumeMounts }}
           volumeMounts:
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
             {{- if .Values.internalTLS.enabled }}
-            - name: portal-internal-certs
-              mountPath: /bitnami/certs/
+            - name: internal-tls-certs
+              mountPath: /etc/harbor/ssl/portal
             {{- end }}
+          {{- if .Values.portal.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.portal.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.portal.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.portal.extraVolumes }}
       volumes:
         - name: portal-config
           configMap:
             name: {{ include "harbor.portal" . }}
         {{- if .Values.internalTLS.enabled }}
-        - name: portal-internal-certs
+        - name: internal-tls-certs
           secret:
             secretName: {{ include "harbor.portal.tls.secretName" . }}
         {{- end }}
+      {{- if .Values.portal.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

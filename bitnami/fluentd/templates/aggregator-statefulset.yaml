@@ -29,10 +29,9 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.aggregator.securityContext.runAsUser }}
-        fsGroup: {{ .Values.aggregator.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.aggregator.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
@@ -94,6 +93,9 @@ spec:
           {{- if .Values.aggregator.resources }}
           resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.aggregator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{ end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
@@ -108,7 +110,13 @@ spec:
             - name: certs
               mountPath: /opt/bitnami/fluentd/certs
             {{- end }}
+            {{- if .Values.aggregator.extraVolumeMounts }}
+            {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
+        {{- if .Values.aggregator.extraVolumes }}
+          {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: certs
           secret:

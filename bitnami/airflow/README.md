@@ -1,8 +1,8 @@
 # Apache Airflow
 
-[Apache Airflow]() is a platform to programmatically author, schedule and monitor workflows.
+[Apache Airflow](https://airflow.apache.org/) is a platform to programmatically author, schedule and monitor workflows.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm install my-release bitnami/airflow
@@ -113,6 +113,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `airflow.worker.extraEnvVarsSecret`            | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                   | `nil`                                                        |
 | `airflow.worker.command`                       | Override default container command (useful when using custom images)                                                                                                                                                           | `nil`                                                        |
 | `airflow.worker.args`                          | Override default container args (useful when using custom images)                                                                                                                                                              | `nil`                                                        |
+| `airflow.worker.podAnnotations`                | Additional annotations for Airflow worker pods                                                                                                                                                                                 | []                                                       |
 | `airflow.worker.extraVolumeMounts`             | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.                                                                                                                           | `nil`                                                        |
 | `airflow.worker.extraVolumes`                  | Array of extra volumes to be added deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                    | `nil`                                                        |
 | `airflow.auth.forcePassword`                   | Force users to specify a password                                                                                                                                                                                              | `false`                                                      |
@@ -169,9 +170,14 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `ingress.secrets[0].name`                      | TLS Secret Name                                                                                                                                                                                                                | `nil`                                                        |
 | `ingress.secrets[0].certificate`               | TLS Secret Certificate                                                                                                                                                                                                         | `nil`                                                        |
 | `ingress.secrets[0].key`                       | TLS Secret Key                                                                                                                                                                                                                 | `nil`                                                        |
-| `nodeSelector`                                 | Node labels for pod assignment                                                                                                                                                                                                 | `{}`                                                         |
-| `tolerations`                                  | Toleration labels for pod assignment                                                                                                                                                                                           | `[]`                                                         |
-| `affinity`                                     | Map of node/pod affinities                                                                                                                                                                                                     | `{}`                                                         |
+| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                            | `""`                                                         |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `soft`                                                       |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                      | `""`                                                         |
+| `nodeAffinityPreset.key`                       | Node label key to match Ignored if `affinity` is set.                                                                                                                                                                          | `""`                                                         |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                                      | `[]`                                                         |
+| `affinity`                                     | Affinity for pod assignment                                                                                                                                                                                                    | `{}` (evaluated as a template)                               |
+| `nodeSelector`                                 | Node labels for pod assignment                                                                                                                                                                                                 | `{}` (evaluated as a template)                               |
+| `tolerations`                                  | Tolerations for pod assignment                                                                                                                                                                                                 | `[]` (evaluated as a template)                               |
 | `livenessProbe.enabled`                        | would you like a livessProbed to be enabled                                                                                                                                                                                    | `true`                                                       |
 | `livenessProbe.initialDelaySeconds`            | Delay before liveness probe is initiated                                                                                                                                                                                       | 180                                                          |
 | `livenessProbe.periodSeconds`                  | How often to perform the probe                                                                                                                                                                                                 | 20                                                           |
@@ -298,6 +304,8 @@ airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
 airflow.cloneDagFilesFromGit.branch=master
 ```
 
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
+
 ### Loading Plugins
 
 You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
@@ -344,12 +352,24 @@ data:
 
 This is useful if you plan on using [Bitnami's sealed secrets](https://github.com/bitnami-labs/sealed-secrets) to manage your passwords.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
 ## Notable changes
+
+### 6.5.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
 ### 6.0.0
+
 This release adds support for LDAP authentication.
 
 ### 1.0.0
