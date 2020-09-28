@@ -44,18 +44,18 @@ configInline:
   # disable ingressroute permitInsecure field
   disablePermitInsecure: false
   tls:
-  #   minimum TLS version that Contour will negotiate
-  #   minimum-protocol-version: "1.1"
-  # Defines the Kubernetes name/namespace matching a secret to use
-  # as the fallback certificate when requests which don't match the
-  # SNI defined for a vhost.
+    # minimum TLS version that Contour will negotiate
+    # minimum-protocol-version: "1.1"
+    # Defines the Kubernetes name/namespace matching a secret to use
+    # as the fallback certificate when requests which don't match the
+    # SNI defined for a vhost.
     fallback-certificate:
   #   name: fallback-secret-name
   #   namespace: '{{ .Release.Namespace }}'
   # The following config shows the defaults for the leader election.
   ## This needs to be edited by when you deploy to a namespace other than projectcontour
   leaderelection:
-  #   configmap-name: leader-elect
+    # configmap-name: leader-elect
     configmap-namespace: '{{ .Release.Namespace }}'
   ### Logging options
   # Default setting
@@ -90,8 +90,8 @@ configInline:
   #   - "x_forwarded_for"
   #
   # default-http-versions:
-  # - "HTTP/2"
-  # - "HTTP/1.1"
+  #   - "HTTP/2"
+  #   - "HTTP/1.1"
   #
   # The following shows the default proxy timeout settings.
   # timeouts:
@@ -121,6 +121,10 @@ rbac:
   # create specifies whether to install and use RBAC rules.
   create: true
 
+## Name of the existingSecret to be use in both contour and envoy
+##
+# tlsExistingSecret: certs-secret
+
 contour:
   enabled: true
   image:
@@ -149,11 +153,11 @@ contour:
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-      # cpu: 400m
-      # memory: 250Mi
+    # cpu: 400m
+    # memory: 250Mi
     requests: {}
-      # cpu: 100m
-      # memory: 25Mi
+    # cpu: 100m
+    # memory: 25Mi
 
   ## Create Contour CRDs
   installCRDs: true
@@ -167,7 +171,7 @@ contour:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ""
+  podAffinityPreset: ''
 
   ## Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -182,12 +186,12 @@ contour:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
-    type: ""
+    type: ''
     ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ""
+    key: ''
     ## Node label values to match
     ## E.g.
     ## values:
@@ -222,7 +226,7 @@ contour:
     create: true
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
-    name: ""
+    name: ''
 
   livenessProbe:
     enabled: true
@@ -252,12 +256,15 @@ contour:
       create: true
       # The name of the ServiceAccount to use.  If not set and create is
       # true, a name is generated using the fullname template
-      name: ""
+      name: ''
+
+  ## Name of the existingSecret to be use in contour deployment. It will override .tlsExistingSecret
+  ##
+  # tlsExistingSecret: contour-certs
 
   ## Contour Service properties
   ##
   service:
-
     ## Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
@@ -290,11 +297,11 @@ contour:
 
   ## Name of a ConfigMap containing extra env vars
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsConfigMap: ''
 
   ## Name of a Secret containing extra env vars
   ##
-  extraEnvVarsSecret: ""
+  extraEnvVarsSecret: ''
 
 envoy:
   enabled: true
@@ -323,25 +330,24 @@ envoy:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-
     limits: {}
-      # cpu: 400m
-      # memory: 250Mi
+    # cpu: 400m
+    # memory: 250Mi
     requests: {}
-      # cpu: 100m
-      # memory: 25Mi
+    # cpu: 100m
+    # memory: 25Mi
 
   ## Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ""
+  podAffinityPreset: ''
 
   ## Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAntiAffinityPreset: ""
+  podAntiAffinityPreset: ''
 
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -350,12 +356,12 @@ envoy:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
-    type: ""
+    type: ''
     ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ""
+    key: ''
     ## Node label values to match
     ## E.g.
     ## values:
@@ -408,12 +414,16 @@ envoy:
   ##
   dnsPolicy: ClusterFirst
 
+  ## Name of the existingSecret to be use in envoy deployment
+  ##
+  # tlsExistingSecret: envoy-certs
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
-    name: ""
+    name: ''
 
   livenessProbe:
     enabled: true
@@ -463,8 +473,8 @@ envoy:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
-      http: ""
-      https: ""
+      http: ''
+      https: ''
 
     ## Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
@@ -514,11 +524,11 @@ envoy:
 
   ## Name of a ConfigMap containing extra env vars
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsConfigMap: ''
 
   ## Name of a Secret containing extra env vars
   ##
-  extraEnvVarsSecret: ""
+  extraEnvVarsSecret: ''
 
 prometheus:
   # Prometheus Operator service monitors
@@ -526,8 +536,8 @@ prometheus:
     # enable support for Prometheus Operator
     enabled: false
     # Job label for scrape target
-    jobLabel: "app.kubernetes.io/name"
+    jobLabel: 'app.kubernetes.io/name'
     # Scrape interval. If not set, the Prometheus default scrape interval is used.
-    interval: ""
+    interval: ''
     metricRelabelings: []
     relabelings: []

@@ -1,4 +1,4 @@
-{{- if .Values.contour.enabled }}
+{{- if and .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -28,39 +28,38 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
-      - name: contour
-        image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
-        imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
-        command:
-        - contour
-        args:
-        - certgen
-        - --kube
-        - --incluster
-        - --overwrite
-        - --secrets-format=compact
-        - --namespace=$(CONTOUR_NAMESPACE)
-        env:
-        - name: CONTOUR_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        {{- if .Values.contour.extraEnvVars }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
-        envFrom:
-          {{- if .Values.contour.extraEnvVarsConfigMap }}
-          - configMapRef:
-              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+        - name: contour
+          image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+          command:
+            - contour
+          args:
+            - certgen
+            - --kube
+            - --incluster
+            - --overwrite
+            - --secrets-format=compact
+            - --namespace=$(CONTOUR_NAMESPACE)
+          env:
+            - name: CONTOUR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.contour.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.contour.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
           {{- end }}
-          {{- if .Values.contour.extraEnvVarsSecret }}
-          - secretRef:
-              name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
-          {{- end }}
-        {{- end }}
-        resources:
-{{ toYaml .Values.contour.resources | indent 10 }}
+          resources: {{ toYaml .Values.contour.resources | nindent 12 }}
       restartPolicy: Never
       serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
       {{- if .Values.contour.securityContext.enabled }}

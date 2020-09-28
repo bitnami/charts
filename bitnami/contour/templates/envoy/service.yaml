@@ -78,9 +78,9 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   ports:
-  - name: metrics
-    port: 8002
-    protocol: TCP
-    targetPort: 8002
+    - name: metrics
+      port: 8002
+      protocol: TCP
+      targetPort: 8002
 {{- end }}
 {{- end }}

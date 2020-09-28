@@ -6,82 +6,82 @@ metadata:
   name: {{ include "common.names.fullname" .}}-contour
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - create
-  - get
-  - update
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - services
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - gatewayclasses
-  - gateways
-  - httproutes
-  - tcproutes
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses/status
-  verbs:
-  - create
-  - get
-  - update
-- apiGroups:
-  - projectcontour.io
-  resources:
-  - httpproxies
-  - tlscertificatedelegations
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - projectcontour.io
-  resources:
-  - httpproxies/status
-  verbs:
-  - create
-  - get
-  - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - gatewayclasses
+      - gateways
+      - httproutes
+      - tcproutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - httpproxies
+      - tlscertificatedelegations
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - httpproxies/status
+    verbs:
+      - create
+      - get
+      - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
