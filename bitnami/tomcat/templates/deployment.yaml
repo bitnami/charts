@@ -56,6 +56,9 @@ spec:
         - name: tomcat
           image: {{ template "tomcat.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "tomcat.tplValue" ( dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: TOMCAT_USERNAME
               value: {{ .Values.tomcatUsername | quote }}
