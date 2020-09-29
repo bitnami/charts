@@ -133,12 +133,16 @@ airflow:
   ##
   gitSyncInterval: 60
   ## Enable in order to download DAG files from git repository.
-  ##
+  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+  ## digits (0-9), lower case letters (a-z), -, and .
   cloneDagFilesFromGit:
     enabled: false
-    repository:
-    branch:
-    path:
+  #  repositories:
+  #  - repository:
+  #    name:
+  #    branch:
+  #    path:
   clonePluginsFromGit:
     enabled: false
     repository:

@@ -95,9 +95,10 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `airflow.gitSyncContainer.args`                | Override default container args (useful when using custom images)                                                                                                                                                              | `nil`                                                        |
 | `airflow.gitSyncContainer.extraVolumeMounts`   | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.                                                                                                                           | `nil`                                                        |
 | `airflow.cloneDagFilesFromGit.enabled`         | Enable in order to download DAG files from git repository.                                                                                                                                                                     | `false`                                                      |
-| `airflow.cloneDagFilesFromGit.repository`      | Repository where download DAG files from                                                                                                                                                                                       | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.branch`          | Branch from repository to checkout                                                                                                                                                                                             | `nil`                                                        |
-| `airflow.cloneDagFilesFromGit.path`            | Path to a folder in the repository containing DAGs. If not set, all DAGS from the repo are loaded.                                                                                                                             | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.repositories[0].repository` | Repository where download DAG files from                                             | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.repositories[0].name` | An unique identifier for repository, must be unique for each repository                    | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.repositories[0].branch`     | Branch from repository to checkout                                                   | `nil`                                                        |
+| `airflow.cloneDagFilesFromGit.repositories[0].path`       | Path to a folder in the repository containing DAGs. If not set, all DAGS from the repo are loaded.   | `nil`                                                        |
 | `airflow.clonePluginsFromGit.enabled`          | Enable in order to download plugins from git repository.                                                                                                                                                                       | `false`                                                      |
 | `airflow.clonePluginsFromGit.repository`       | Repository where download plugins from                                                                                                                                                                                         | `nil`                                                        |
 | `airflow.clonePluginsFromGit.branch`           | Branch from repository to checkout                                                                                                                                                                                             | `nil`                                                        |
@@ -296,12 +297,13 @@ You can manually create a config map containing all your DAG files and then pass
 
 #### Option 3: Get your DAG files from a git repository
 
-You can store all your DAG files on a GitHub repository and then clone to the Airflow pods with an initContainer. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
+You can store all your DAG files on GitHub repositories and then clone to the Airflow pods with an initContainer. The repositories will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
 ```console
 airflow.cloneDagFilesFromGit.enabled=true
-airflow.cloneDagFilesFromGit.repository=https://github.com/USERNAME/REPOSITORY
-airflow.cloneDagFilesFromGit.branch=master
+airflow.cloneDagFilesFromGit.repositories[0].repository=https://github.com/USERNAME/REPOSITORY
+airflow.cloneDagFilesFromGit.repositories[0].name=REPO-IDENTIFIER
+airflow.cloneDagFilesFromGit.repositories[0].branch=master
 ```
 
 If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY

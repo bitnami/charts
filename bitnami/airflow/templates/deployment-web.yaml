@@ -60,7 +60,9 @@ spec:
             - -ec
             - |
               {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-                git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
+              {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+                git clone {{ .repository }} --branch {{ .branch }} /dags-{{ .name }}
+              {{- end }}
               {{- end }}
               {{- if .Values.airflow.clonePluginsFromGit.enabled }}
                 git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
@@ -71,8 +73,10 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            - name: git-cloned-dag-files
-              mountPath: /dags
+            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+            - name: git-cloned-dag-files-{{ .name }}
+              mountPath: /dags-{{ .name }}
+            {{- end }}
             {{- end }}
             {{- if .Values.airflow.clonePluginsFromGit.enabled }}
             - name: git-cloned-plugins
@@ -108,7 +112,9 @@ spec:
             - |
               while true; do
                   {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-                  cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
+                  {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+                  cd /dags-{{ .name }} && git pull origin {{ .branch }}
+                  {{- end }}
                   {{- end }}
                   {{- if .Values.airflow.clonePluginsFromGit.enabled }}
                   cd /plugins && git pull origin {{ .Values.airflow.clonePluginsFromGit.branch }}
@@ -118,8 +124,10 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            - name: git-cloned-dag-files
-              mountPath: /dags
+            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+            - name: git-cloned-dag-files-{{ .name }}
+              mountPath: /dags-{{ .name }}
+            {{- end }}
             {{- end }}
             {{- if .Values.airflow.clonePluginsFromGit.enabled }}
             - name: git-cloned-plugins
@@ -333,11 +341,13 @@ spec:
               mountPath: /opt/bitnami/airflow/dags/external
             {{- end }}
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            - name: git-cloned-dag-files
-              mountPath: /opt/bitnami/airflow/dags/git
-              {{- if .Values.airflow.cloneDagFilesFromGit.path }}
-              subPath: {{ .Values.airflow.cloneDagFilesFromGit.path }}
+            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+            - name: git-cloned-dag-files-{{ .name }}
+              mountPath: /opt/bitnami/airflow/dags/git-{{ .name }}
+              {{- if .path }}
+              subPath: {{ .path }}
               {{- end }}
+            {{- end }}
             {{- end }}
             {{- if .Values.airflow.clonePluginsFromGit.enabled }}
             - name: git-cloned-plugins
@@ -379,8 +389,10 @@ spec:
             name: {{ .Values.airflow.dagsConfigMap }}
         {{- end }}
         {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-        - name: git-cloned-dag-files
+        {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
+        - name: git-cloned-dag-files-{{ .name }}
           emptyDir: {}
+        {{- end }}
         {{- end }}
         {{- if .Values.airflow.clonePluginsFromGit.enabled }}
         - name: git-cloned-plugins
