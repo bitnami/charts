@@ -69,7 +69,7 @@ spec:
             - |
               {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
               {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-                git clone {{ .repository }} --branch {{ .branch }} /dags-{{ .name }}
+                git clone {{ .repository }} --branch {{ .branch }} /dags-{{ .name | kebabcase }}
               {{- end }}
               {{- end }}
               {{- if .Values.airflow.clonePluginsFromGit.enabled }}
@@ -82,8 +82,8 @@ spec:
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name }}
-              mountPath: /dags-{{ .name }}
+            - name: git-cloned-dag-files-{{ .name | kebabcase }}
+              mountPath: /dags-{{ .name | kebabcase }}
             {{- end }}
             {{- end }}
             {{- if .Values.airflow.clonePluginsFromGit.enabled }}
@@ -121,7 +121,7 @@ spec:
               while true; do
                   {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
                   {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-                  cd /dags-{{ .name }} && git pull origin {{ .branch }}
+                  cd /dags-{{ .name | kebabcase }} && git pull origin {{ .branch }}
                   {{- end }}
                   {{- end }}
                   {{- if .Values.airflow.clonePluginsFromGit.enabled }}
@@ -136,8 +136,8 @@ spec:
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name }}
-              mountPath: /dags-{{ .name }}
+            - name: git-cloned-dag-files-{{ .name | kebabcase }}
+              mountPath: /dags-{{ .name | kebabcase }}
             {{- end }}
             {{- end }}
             {{- if .Values.airflow.clonePluginsFromGit.enabled }}
@@ -303,8 +303,8 @@ spec:
             {{- end }}
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
             {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name }}
-              mountPath: /opt/bitnami/airflow/dags/git-{{ .name }}
+            - name: git-cloned-dag-files-{{ .name | kebabcase }}
+              mountPath: /opt/bitnami/airflow/dags/git-{{ .name | kebabcase }}
               {{- if .path }}
               subPath: {{ .path }}
               {{- end }}
@@ -338,7 +338,7 @@ spec:
       {{- end }}
       {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
       {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-      - name: git-cloned-dag-files-{{ .name }}
+      - name: git-cloned-dag-files-{{ .name | kebabcase }}
         emptyDir: {}
       {{- end }}
       {{- end }}
