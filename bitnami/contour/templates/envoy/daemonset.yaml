@@ -16,6 +16,9 @@ spec:
       app.kubernetes.io/component: envoy
   template:
     metadata:
+      {{- if .Values.envoy.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: envoy
     spec:
