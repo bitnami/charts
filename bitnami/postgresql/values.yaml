@@ -517,10 +517,17 @@ slave:
   # type:
   # nodePort:
   # clusterIP:
+
   ## Whether to enable PostgreSQL slave replicas data Persistent
   ##
   persistence:
     enabled: true
+
+  # Override the resource configuration for slave
+  resources: {}
+  # requests:
+  #   memory: 256Mi
+  #   cpu: 250m
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

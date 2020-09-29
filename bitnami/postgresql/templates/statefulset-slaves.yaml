@@ -1,4 +1,5 @@
 {{- if .Values.replication.enabled }}
+{{- $slaveResources := coalesce .Values.slave.resources .Values.resources -}}
 apiVersion: {{ template "postgresql.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -134,8 +135,8 @@ spec:
         - name: {{ template "postgresql.fullname" . }}
           image: {{ template "postgresql.image" . }}
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if $slaveResources }}
+          resources: {{- toYaml $slaveResources | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
