@@ -369,7 +369,7 @@ initContainers:
     ports:
       - name: portname
         containerPort: 1234
-``
+```
 
 ## Persistence
 
@@ -395,6 +395,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
   - `replicas` is renamed to `replicaCount`.
   - `updateStrategy.type` is renamed to `updateStrategy`.
+  - `configmap` is renamed to `configuration`.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
 - This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
