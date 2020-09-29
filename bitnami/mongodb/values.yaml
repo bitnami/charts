@@ -82,7 +82,7 @@ auth:
   ## Key used for replica set authentication
   ## Ignored when mongodb.architecture=standalone
   ##
-  # replicaSetKey: key
+  replicaSetKey: ""
 
   ## Existing secret with MongoDB credentials
   ## NOTE: When it's set the previous parameters are ignored.
