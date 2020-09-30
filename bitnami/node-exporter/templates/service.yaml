@@ -8,7 +8,7 @@ metadata:
     prometheus.io/scrape: "true"
     {{- end }}
     {{- with .Values.service.annotations }}
-    {{- toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   labels: {{- include "node-exporter.labels" . | nindent 4 }}
     {{- if .Values.service.labels }}
