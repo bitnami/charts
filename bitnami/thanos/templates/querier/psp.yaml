@@ -1,0 +1,49 @@
+{{- if and .Values.querier.enabled .Values.querier.psp.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "thanos.fullname" . }}-querier
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: querier
+spec:
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    ranges:
+    - max: 1001
+      min: 1001
+    rule: MustRunAs
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - secret
+---
+{{- if .Values.querier.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "thanos.fullname" . }}-querier
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - {{ include "thanos.fullname" . }}-querier
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "thanos.fullname" . }}-querier
+roleRef:
+  kind: ClusterRole
+  name: {{ include "thanos.fullname" . }}-querier
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+# Authorize specific service accounts:
+- kind: ServiceAccount
+  name: {{ include "thanos.serviceaccount.name" (dict "component" "querier" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}
