@@ -74,7 +74,7 @@ service:
   ##
   nodePorts:
     cql: ''
-    thriftPort: ''
+    thrift: ''
     metrics: ''
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -204,6 +204,11 @@ dbUser:
 ## and pre-populating data
 ##
 # initDBSecret:
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
 
 ## An array to add extra env vars
 ## For example:
@@ -375,11 +380,6 @@ customLivenessProbe: {}
 ## Custom Rediness probe
 ##
 customReadinessProbe: {}
-
-## Container entrypoint and cmd (useful for using different images)
-##
-entrypoint: '/entrypoint.sh'
-cmd: '/run.sh'
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/

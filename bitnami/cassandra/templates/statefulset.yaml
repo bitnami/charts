@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -62,6 +63,7 @@ spec:
       {{- end }}
       {{- if or (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) (.Values.initContainers) }}
       initContainers:
+        {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "cassandra.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -78,6 +80,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/cassandra
+        {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -85,18 +88,25 @@ spec:
       containers:
         - name: cassandra
           command:
+            {{- if .Values.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+            {{- else }}
             - bash
             - -ec
-            # Node 0 is the password seeder
             - |
+              # Node 0 is the password seeder
               if [[ $HOSTNAME =~ (.*)-0$ ]]; then
-                echo "Setting node as password seeder"
-                export CASSANDRA_PASSWORD_SEEDER=yes
+                  echo "Setting node as password seeder"
+                  export CASSANDRA_PASSWORD_SEEDER=yes
               else
-                # Only node 0 will execute the startup initdb scripts
-                export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
+                  # Only node 0 will execute the startup initdb scripts
+                  export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
-              {{ .Values.entrypoint }} {{ .Values.cmd }}
+              /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
+            {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
@@ -108,10 +118,7 @@ spec:
             - name: CASSANDRA_CLUSTER_NAME
               value: {{ .Values.cluster.name }}
             - name: CASSANDRA_SEEDS
-              {{- $global := . }}
-              {{- $replicas := .Values.cluster.seedCount | int }}
-              {{- $domain := .Values.clusterDomain }}
-              value: "{{- range $i, $e := until $replicas }}{{ include "common.names.fullname" $global }}-{{ $i }}.{{ include "common.names.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.{{ $domain }}{{- if (lt ( add1 $i ) $replicas ) }},{{- end }}{{- end }}"
+              value: {{ (include "cassandra.seeds" .) | quote }}
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -286,7 +293,7 @@ spec:
         {{- if .Values.tlsEncryptionSecretName }}
         - name: encryption-secrets
           secret:
-            secretName: {{ .Values.tlsEncryptionSecretName }}
+            secretName: {{ tpl .Values.tlsEncryptionSecretName $ }}
             items:
               - key: keystore
                 path: keystore

@@ -29,6 +29,21 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the list of Cassandra seed nodes
+*/}}
+{{- define "cassandra.seeds" -}}
+{{- $seeds := list }}
+{{- $fullname := include "common.names.fullname" .  }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $seedCount := .Values.cluster.seedCount | int }}
+{{- range $e, $i := until $seedCount }}
+{{- $seeds = append $seeds (printf "%s-%d.%s-headless.%s.svc.%s" $fullname $i $fullname $releaseNamespace $clusterDomain) }}
+{{- end }}
+{{- join "," $seeds }}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "networkPolicy.apiVersion" -}}

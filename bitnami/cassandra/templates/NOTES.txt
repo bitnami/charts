@@ -8,7 +8,7 @@ Cassandra can be accessed through the following URLs from within the cluster:
   - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
   - Thrift: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.thriftPort }}
 
-To get your password run (new):
+To get your password run:
 
    {{ include "common.utils.secret.getvalue" (dict "secret" $cassandraSecretName "field" $cassandraPasswordKey "context" $) }}
 
