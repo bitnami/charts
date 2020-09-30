@@ -19,9 +19,14 @@ spec:
       app.kubernetes.io/component: contour
   template:
     metadata:
-      {{- if .Values.configInline }}
+      {{- if or .Values.configInline .Values.contour.podAnnotations }}
       annotations:
+        {{- if .Values.contour.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.contour.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.configInline }}
         checksum/config: {{ include (print $.Template.BasePath "/contour/configmap.yaml") . | sha256sum }}
+        {{- end }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour
