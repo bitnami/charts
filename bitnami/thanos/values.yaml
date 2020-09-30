@@ -160,7 +160,7 @@ querier:
   # Create ClusterRole and ClusterRolebing for the Service account
   rbac:
     create: false
-  
+
   # Create PodSecurity Policy
   psp:
     create: false
