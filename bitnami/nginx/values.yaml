@@ -631,7 +631,7 @@ metrics:
     ## Annotations for the Prometheus exporter service
     ##
     annotations:
-      prometheus.io/scrape: true
+      prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
   ## NGINX Prometheus exporter resource requests and limits
