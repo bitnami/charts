@@ -42,36 +42,17 @@ image:
 ##
 # fullnameOverride:
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## Kubernetes Cluster Domain
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+clusterDomain: cluster.local
+
+## Common annotations to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
 
 ## Service parameters
 ##
@@ -93,7 +74,7 @@ service:
   ##
   nodePorts:
     cql: ''
-    thriftPort: ''
+    thrift: ''
     metrics: ''
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -131,23 +112,36 @@ persistence:
   ##
   size: 8Gi
 
-## Cassandra pods' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## Minimum memory for development is 4GB and 2 CPU cores
-## Minimum memory for production is 8GB and 4 CPU cores
-## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 2
-  #   memory: 4Gi
-  requests: {}
-  #   cpu: 2
-  #   memory: 4Gi
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
 ## Secret with keystore, keystore password, truststore, truststore password
 ##
@@ -161,27 +155,16 @@ resources:
 ##
 cluster:
   name: cassandra
-  replicaCount: 3
   seedCount: 2
   numTokens: 256
   datacenter: dc1
   rack: rack1
   enableRPC: true
   endpointSnitch: SimpleSnitch
-  ## Enable the creation of the Pod Disruption Budget
-  ##
-  pdbEnabled: true
-  ## Minimum number of cluster nodes that will be running. Needs pdbEnabled=true
-  ##
-  minAvailable: 2
-  ## Maximum number of cluster nodes that may not be running. Needs pdbEnabled=true
-  ##
-  # maxUnavailable: 1
   ## Encryption values. NOTE: They require tlsEncryptionSecretName
   ##
   internodeEncryption: none
   clientEncryption: false
-  domain: cluster.local
 
 ## JVM Settings
 ##
@@ -222,23 +205,64 @@ dbUser:
 ##
 # initDBSecret:
 
-## Cassandra container's liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+## Command and args for running the container (set to default if not set). Use array form
 ##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 60
-  periodSeconds: 30
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 5
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 60
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 5
+command: []
+args: []
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: FOO
+#    value: BAR
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Number of Cassandra replicas to deploy.
+##
+replicaCount: 3
+
+## updateStrategy for Cassandra statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy: OnDelete
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
+## StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
+
+## Cassandra pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
 ## Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -299,24 +323,63 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## StatefulSet settings
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-statefulset:
-  updateStrategy: OnDelete
-  # rollingUpdatePartition:
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+
+## Cassandra container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
 
-## Container entrypoint and cmd (useful for using different images)
+## Cassandra pods' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## Minimum memory for development is 4GB and 2 CPU cores
+## Minimum memory for production is 8GB and 4 CPU cores
+## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
 ##
-entrypoint: '/entrypoint.sh'
-cmd: '/run.sh'
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 2
+  #   memory: 4Gi
+  requests: {}
+  #   cpu: 2
+  #   memory: 4Gi
+
+## Cassandra container's liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Rediness probe
+##
+customReadinessProbe: {}
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -333,11 +396,23 @@ networkPolicy:
   ##
   # allowExternal: true
 
+## Cassandra Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
 ## Cassandra Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/cassandra-exporter/tags/
 ##
 metrics:
-  enabled: false
+  enabled: true
   image:
     registry: docker.io
     pullPolicy: IfNotPresent
@@ -390,3 +465,7 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
