@@ -44,11 +44,11 @@ image:
 ##
 clusterDomain: cluster.local
 
-## Common annotations to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+## Common annotations to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
 
-## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+## Common labels to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
 
@@ -152,7 +152,7 @@ sidecars: []
 ##
 replicaCount: 3
 
-## updateStrategy for Cassandra statefulset
+## updateStrategy for HashiCorp Consul statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy: RollingUpdate
@@ -302,7 +302,7 @@ persistence:
   size: 8Gi
 
 ## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the podSecurityContext section.
 ##
 volumePermissions:
   enabled: false

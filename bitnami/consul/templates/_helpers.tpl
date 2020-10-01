@@ -17,7 +17,7 @@ Return the proper metrics image name
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "cassandra.volumePermissions.image" -}}
+{{- define "consul.volumePermissions.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
