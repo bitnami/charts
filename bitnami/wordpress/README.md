@@ -178,14 +178,14 @@ The following table lists the configurable parameters of the WordPress chart and
 | Parameter                                 | Description                                                                           | Default                                                      |
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `mariadb.enabled`                         | Deploy MariaDB container(s)                                                           | `true`                                                       |
-| `mariadb.rootUser.password`               | MariaDB admin password                                                                | `nil`                                                        |
-| `mariadb.db.name`                         | Database name to create                                                               | `bitnami_wordpress`                                          |
-| `mariadb.db.user`                         | Database user to create                                                               | `bn_wordpress`                                               |
-| `mariadb.db.password`                     | Password for the database                                                             | _random 10 character long alphanumeric string_               |
-| `mariadb.replication.enabled`             | MariaDB replication enabled                                                           | `false`                                                      |
-| `mariadb.master.persistence.enabled`      | Enable database persistence using PVC                                                 | `true`                                                       |
-| `mariadb.master.persistence.accessModes`  | Database Persistent Volume Access Modes                                               | `[ReadWriteOnce]`                                            |
-| `mariadb.master.persistence.size`         | Database Persistent Volume Size                                                       | `8Gi`                                                        |
+| `mariadb.architecture`                    | MariaDB architecture (`standalone` or `replication`)                                  | `standalone`                                                 |
+| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                  | _random 10 character alphanumeric string_                    |
+| `mariadb.auth.database`                   | Database name to create                                                               | `bitnami_wordpress`                                          |
+| `mariadb.auth.username`                   | Database user to create                                                               | `bn_wordpress`                                               |
+| `mariadb.auth.password`                   | Password for the database                                                             | _random 10 character long alphanumeric string_               |
+| `mariadb.primary.persistence.enabled`     | Enable database persistence using PVC                                                 | `true`                                                       |
+| `mariadb.primary.persistence.accessModes` | Database Persistent Volume Access Modes                                               | `[ReadWriteOnce]`                                            |
+| `mariadb.primary.persistence.size`        | Database Persistent Volume Size                                                       | `8Gi`                                                        |
 | `externalDatabase.host`                   | Host of the external database                                                         | `localhost`                                                  |
 | `externalDatabase.user`                   | Existing username in the external db                                                  | `bn_wordpress`                                               |
 | `externalDatabase.existingSecret`         | Name of the database existing Secret Object                                           | `nil`                                                        |
@@ -222,7 +222,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
-  --set mariadb.mariadbRootPassword=secretpassword \
+  --set mariadb.auth.rootPassword=secretpassword \
     bitnami/wordpress
 ```
 
@@ -294,7 +294,7 @@ Then, you can deploy WordPress chart using the proper parameters:
 
 ```console
 persistence.storageClass=nfs
-mariadb.master.persistence.storageClass=nfs
+mariadb.primary.persistence.storageClass=nfs
 ```
 
 #### Known limitations
@@ -449,6 +449,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 10.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `10.0.0`, it's recommended to install a new WordPress chart, and migrate your WordPress site using backup/restore tools such as [VaultPress](https://vaultpress.com/) or [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/).
+
 ### To 9.0.0
 
 The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
@@ -460,7 +466,7 @@ Consequences:
 - No writing permissions will be granted on `wp-config.php` by default.
 - Backwards compatibility is not guaranteed.
 
-To upgrade to `9.0.0`, install a new WordPress chart, and migrate your WordPress site using backup/restore tools such as [VaultPress](https://vaultpress.com/) or [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/).
+To upgrade to `9.0.0`, it's recommended to install a new WordPress chart, and migrate your WordPress site using backup/restore tools such as [VaultPress](https://vaultpress.com/) or [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/).
 
 ### To 8.0.0
 

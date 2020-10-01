@@ -16,17 +16,17 @@ spec:
       {{- end }}
       env:
         - name: MARIADB_HOST
-          value: {{ template "mariadb.fullname" . }}
+          value: {{ include "wordpress.databaseHost" . | quote }}
         - name: MARIADB_PORT
           value: "3306"
         - name: WORDPRESS_DATABASE_NAME
-          value: {{ default "" .Values.mariadb.db.name | quote }}
+          value: {{ default "" .Values.mariadb.auth.database | quote }}
         - name: WORDPRESS_DATABASE_USER
-          value: {{ default "" .Values.mariadb.db.user | quote }}
+          value: {{ default "" .Values.mariadb.auth.username | quote }}
         - name: WORDPRESS_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "mariadb.fullname" . }}
+              name: {{ include "wordpress.databaseSecretName" . }}
               key: mariadb-password
       command:
         - /bin/bash
