@@ -1,8 +1,8 @@
-# MXNet
+# Apache MXNet (Incubating)
 
-[MXNet](https://mxnet.apache.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. It is built for full integration into Python that enables you to use it with its libraries and main packages.
+[Apache MXNet (Incubating)](https://mxnet.apache.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. It is built for full integration into Python that enables you to use it with its libraries and main packages.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ $ helm install my-release bitnami/mxnet
 
 ## Introduction
 
-This chart bootstraps a [MXNet](https://github.com/bitnami/bitnami-docker-mxnet) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -31,7 +31,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/mxnet
 ```
 
-These commands deploy MXNet on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
+These commands deploy Apache MXNet (Incubating) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
 
 > **Tip**: List all releases using `helm list`
 
@@ -54,9 +54,9 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
-| `image.registry`                     | MXNet image registry                                                                                                                                      | `docker.io`                                             |
-| `image.repository`                   | MXNet image name                                                                                                                                          | `bitnami/MXNet`                                         |
-| `image.tag`                          | MXNet image tag                                                                                                                                           | `{TAG_NAME}`                                            |
+| `image.registry`                     | Apache MXNet (Incubating) image registry                                                                                                                  | `docker.io`                                             |
+| `image.repository`                   | Apache MXNet (Incubating) image name                                                                                                                      | `bitnami/mxnet`                                         |
+| `image.tag`                          | Apache MXNet (Incubating) image tag                                                                                                                       | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                 |
@@ -78,11 +78,11 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `entrypoint.args`                    | Args required by your entrypoint                                                                                                                          | `nil`                                                   |
 | `entrypoint.workDir`                 | Working directory for launching the entrypoint                                                                                                            | `'/app'`                                                |
 | `podManagementPolicy`                | StatefulSet (worker and server nodes) pod management policy                                                                                               | `Parallel`                                              |
-| `mode`                               | Run MXNet in standalone or distributed mode (possible values: `standalone`, `distributed`)                                                                | `standalone`                                            |
+| `mode`                               | Run Apache MXNet (Incubating) in standalone or distributed mode (possible values: `standalone`, `distributed`)                                            | `standalone`                                            |
 | `serverCount`                        | Number of server nodes that will execute your code                                                                                                        | `1`                                                     |
 | `workerCount`                        | Number of worker nodes that will execute your code                                                                                                        | `1`                                                     |
-| `schedulerPort`                      | MXNet scheduler port (only for distributed mode)                                                                                                          | `49875`                                                 |
-| `configMap`                          | Config map that contains the files you want to load in MXNet                                                                                              | `nil`                                                   |
+| `schedulerPort`                      | Apache MXNet (Incubating) scheduler port (only for distributed mode)                                                                                      | `49875`                                                 |
+| `configMap`                          | Config map that contains the files you want to load in Apache MXNet (Incubating)                                                                          | `nil`                                                   |
 | `cloneFilesFromGit.enabled`          | Enable in order to download files from git repository                                                                                                     | `false`                                                 |
 | `cloneFilesFromGit.repository`       | Repository that holds the files                                                                                                                           | `nil`                                                   |
 | `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                                                                                  | `master`                                                |
@@ -129,7 +129,7 @@ $ helm install my-release \
     bitnami/mxnet
 ```
 
-The above command creates 6 pods for MXNet: one scheduler, two servers, and three workers.
+The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, two servers, and three workers.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -151,7 +151,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
-- Run MXNet in distributed mode:
+- Run Apache MXNet (Incubating) in distributed mode:
 ```diff
 - mode: standalone
 + mode: distributed
@@ -171,7 +171,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Loading your files
 
-The MXNet chart supports three different ways to load your files. In order of priority, they are:
+The Apache MXNet (Incubating) chart supports three different ways to load your files. In order of priority, they are:
 
   1. Existing config map
   2. Files under the `files` directory
@@ -195,7 +195,7 @@ In case you want to add a file that includes sensitive information, pass a secre
 
 ### Distributed training example
 
-We will use the gluon example from the [MXNet official repository](https://github.com/apache/incubator-mxnet/tree/master/example/gluon). Launch it with the following values:
+We will use the gluon example from the [Apache MXNet (Incubating) official repository](https://github.com/apache/incubator-mxnet/tree/master/example/gluon). Launch it with the following values:
 
 ```console
 mode=distributed
@@ -250,7 +250,7 @@ You will now see log entries in the scheduler and server nodes.
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MXNet (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Apache MXNet (Incubating) (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -276,7 +276,7 @@ initContainers:
 
 ## Persistence
 
-The [Bitnami MXNet](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
+The [Bitnami Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

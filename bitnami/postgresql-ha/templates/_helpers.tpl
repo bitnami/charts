@@ -618,7 +618,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the LDAP credentials secret.
 */}}
@@ -752,7 +751,7 @@ Compile all warnings into a single message, and call fail.
 {{- $nodeHostname := printf "%s-00.%s.%s.svc.%s:1234" $postgresqlFullname $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
 {{- if gt (len $nodeHostname) 128 -}}
 postgresql-ha: Nodes hostnames
-    PostgreSQL nodes hostnames exceeds the characters limit for Pgpool: 128.
+    PostgreSQL nodes hostnames ({{ $nodeHostname }}) exceeds the characters limit for Pgpool: 128.
     Consider using a shorter release name or namespace.
 {{- end -}}
 {{- end -}}
@@ -802,4 +801,37 @@ PGPASSWORD=$(< $POSTGRES_PASSWORD_FILE)
 {{- else -}}
 PGPASSWORD=$POSTGRES_PASSWORD
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the Pgpool secret containing custom users to be added to
+pool_passwd file.
+*/}}
+{{- define "postgresql-ha.pgpoolCustomUsersSecretName" -}}
+{{- if .Values.pgpool.customUsersSecret -}}
+{{- printf "%s" (tpl .Values.pgpool.customUsersSecret $) -}}
+{{- else -}}
+{{- printf "%s-custom-users" (include "postgresql-ha.pgpool" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.pgpool.tls.certFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.pgpool.tls.certKeyFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "postgresql-ha.pgpool.tlsCACert" -}}
+{{- printf "/opt/bitnami/pgpool/certs/%s" .Values.pgpool.tls.certCAFilename -}}
 {{- end -}}

@@ -1,0 +1,31 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.ingress.enabled }}
+{{- $routePrefix := .Values.prometheus.routePrefix -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "kube-prometheus.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.prometheus.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.prometheus.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.prometheus.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+        - path: {{ default $routePrefix .path }}
+          backend:
+            serviceName: {{ template "kube-prometheus.prometheus.fullname" $ }}
+            servicePort: http
+    {{- end }}
+  {{- if .Values.prometheus.ingress.tls }}
+  tls:
+{{ toYaml .Values.prometheus.ingress.tls | indent 4 }}
+  {{- end }}
+{{- end -}}

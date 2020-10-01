@@ -31,6 +31,11 @@ spec:
 {{- include "consul.imagePullSecrets" . | indent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "consul.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "consul.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -88,9 +93,6 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           env:
-            {{- $consulFullName := include "consul.fullname" . }}
-            {{- $consulHeadlessSvcName := include "consul.fullname" . }}
-            {{- $clusterDomain := .Values.clusterDomain }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: CONSUL_NODE_NAME
@@ -98,7 +100,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: CONSUL_RETRY_JOIN
-              value: {{ printf "%s-0.%s.%s.svc.%s" $consulFullName $consulHeadlessSvcName .Release.Namespace $clusterDomain | quote }}
+              value: {{ include "consul.retryjoin.endpoint" . | quote }}
             - name: CONSUL_DISABLE_KEYRING_FILE
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT

@@ -41,11 +41,17 @@
 2. Login with the following credentials
 
   echo Username: {{ .Values.dokuwikiUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "dokuwiki.fullname" . }} -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "dokuwiki.secretName" . }} -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+{{- include "dokuwiki.checkRollingTags" . }}
 
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- $requiredPasswords := list -}}
+{{- $secretNameDockuwiki := include "dokuwiki.secretName" . -}}
 
-{{- end }}
+{{- if not .Values.existingSecret -}}
+  {{- $requiredDockuwikiPassword := dict "valueKey" "dokuwikiPassword" "secret" $secretNameDockuwiki "field" "dokuwiki-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredDockuwikiPassword -}}
+{{- end -}}
+
+{{- $requiredDockuwikiPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredDockuwikiPasswordErrors) "context" $) -}}

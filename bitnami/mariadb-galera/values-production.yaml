@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.13-debian-10-r23
+  tag: 10.5.5-debian-10-r30
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -182,11 +182,12 @@ galera:
   name: galera
 
   ## Bootstraping options
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   bootstrap:
     ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
     ##
-    bootstrapFromNode: 0
-    ## Force bootstrap
+    bootstrapFromNode:
+    ## Force safe_to_bootstrap in grastate.date file.
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
     forceSafeToBootstrap: false
 
@@ -427,6 +428,11 @@ persistence:
   # Subdirectory of the volume to mount
   # subPath:
   mountPath: /bitnami/mariadb
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -541,7 +547,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r133
+    tag: 0.12.1-debian-10-r216
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -549,6 +555,13 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## MySQL exporter additional command line flags
+  ## Can be used to specify command line flags
+  ## E.g.:
+  ## extraFlags:
+  ##   - --collect.binlog_size
+  ##
+  extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

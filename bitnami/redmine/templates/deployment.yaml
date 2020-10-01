@@ -7,6 +7,7 @@ spec:
   selector:
     matchLabels: {{- include "redmine.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicas }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels: {{- include "redmine.labels" . | nindent 8 }}

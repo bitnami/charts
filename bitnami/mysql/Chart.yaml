@@ -1,7 +1,7 @@
 apiVersion: v1
 name: mysql
-version: 6.14.4
-appVersion: 8.0.20
+version: 6.14.10
+appVersion: 8.0.21
 description: Chart to create a Highly available MySQL cluster
 keywords:
   - mysql
@@ -9,11 +9,14 @@ keywords:
   - sql
   - cluster
   - high availablity
-home: https://mysql.com
+home: https://github.com/bitnami/charts/tree/master/bitnami/mysql
 icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
+  - https://mysql.com
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com
 engine: gotpl
+annotations:
+  category: Database

@@ -2,7 +2,7 @@
 
 [Parse](https://parse.com/) is an open source version of the Parse backend that can be deployed to any infrastructure that can run Node.js.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -133,8 +133,8 @@ The following table lists the configurable parameters of the Parse chart and the
 | `ingress.secrets[0].name`              | TLS Secret Name                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`       | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`               | TLS Secret Key                                                                                                                                            | `nil`                                                   |
-| `mongodb.usePassword`                  | Enable MongoDB password authentication                                                                                                                    | `true`                                                  |
-| `mongodb.password`                     | MongoDB admin password                                                                                                                                    | `nil`                                                   |
+| `mongodb.auth.enabled`                 | Enable MongoDB password authentication                                                                                                                    | `true`                                                  |
+| `mongodb.auth.rootPassword`            | MongoDB admin password                                                                                                                                    | `nil`                                                   |
 | `mongodb.persistence.enabled`          | Enable MongoDB persistence using PVC                                                                                                                      | `true`                                                  |
 | `mongodb.persistence.storageClass`     | PVC Storage Class for MongoDB volume                                                                                                                      | `nil` (uses alpha storage class annotation)             |
 | `mongodb.persistence.accessMode`       | PVC Access Mode for MongoDB volume                                                                                                                        | `ReadWriteOnce`                                         |
@@ -219,6 +219,18 @@ extraEnvVars:
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
 ## Upgrading
+
+### To 12.0.0
+
+MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+
+### To 11.0.0
+
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
 
 ### To 10.0.0
 

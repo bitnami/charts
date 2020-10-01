@@ -1,0 +1,19 @@
+{{- if and (include "mongodb.arbiter.enabled" .) .Values.arbiter.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "mongodb.fullname" . }}-arbiter
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: arbiter
+spec:
+  {{- if .Values.arbiter.pdb.minAvailable }}
+  minAvailable: {{ .Values.arbiter.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.arbiter.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.arbiter.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: arbiter
+{{- end }}
