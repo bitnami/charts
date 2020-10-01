@@ -7,9 +7,9 @@ Tip:
 
 Services:
 
-  echo Master: {{ template "mariadb.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
-{{- if .Values.replication.enabled }}
-  echo Slave:  {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+  echo Primary: {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.primary.service.port }}
+{{- if eq .Values.architecture "replication" }}
+  echo Secondary: {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.secondary.service.port }}
 {{- end }}
 
 Administrator credentials:
@@ -21,17 +21,17 @@ To connect to your database:
 
   1. Run a pod that you can use as a client:
 
-      kubectl run {{ template "mariadb.fullname" . }}-client --rm --tty -i --restart='Never' --image  {{ template "mariadb.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
+      kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --image  {{ template "mariadb.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
 
-  2. To connect to master service (read/write):
+  2. To connect to primary service (read/write):
 
-      mysql -h {{ template "mariadb.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+      mysql -h {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
 
-{{- if .Values.replication.enabled }}
+{{- if eq .Values.architecture "replication" }}
 
-  3. To connect to slave service (read-only):
+  3. To connect to secondary service (read-only):
 
-      mysql -h {{ template "slave.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local -uroot -p {{ .Values.db.name }}
+      mysql -h {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
 {{- end }}
 
 To upgrade this helm chart:
@@ -41,9 +41,22 @@ To upgrade this helm chart:
       ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
       helm upgrade {{ .Release.Name }} bitnami/mariadb --set rootUser.password=$ROOT_PASSWORD
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "mariadb.validateValues" . }}
+{{- if (not .Values.auth.existingSecret) -}}
+  {{- $secretName := include "common.names.fullname" . }}
+  {{- $requiredPasswords := list -}}
+  {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mariadb-root-password" "context" $ -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
+  {{- if and .Values.auth.username .Values.auth.database }}
+    {{- $requiredDBPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mariadb-password" "context" $ -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
+  {{- end -}}
+  {{- if eq .Values.architecture "replication" }}
+      {{- $requiredReplicationPassword := dict "valueKey" "auth.replicationPassword" "secret" $secretName "field" "mariadb-replication-password" "context" $ -}}
+      {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
+  {{- end -}}
+  {{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}
+{{- end -}}

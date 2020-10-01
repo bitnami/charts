@@ -1,21 +1,18 @@
-{{- if and .Values.serviceAccount.create  .Values.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+{{- if (include "mariadb.secondary.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "mariadb.secondary.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - endpoints
-    verbs:
-      - get
-{{- end }}
+data:
+  my.cnf: |-
+{{ .Values.secondary.configuration | indent 4 }}
+{{- end -}}
