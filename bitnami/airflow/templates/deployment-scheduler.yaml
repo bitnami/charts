@@ -292,7 +292,7 @@ spec:
           {{- end }}
           {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
           {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-          - name: git-cloned-dag-files
+            - name: git-cloned-dag-files
               mountPath: /opt/bitnami/airflow/dags/git
               {{- if .Values.airflow.cloneDagFilesFromGit.path }}
               subPath: {{ .Values.airflow.cloneDagFilesFromGit.path }}
