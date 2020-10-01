@@ -62,6 +62,17 @@ spec:
         - name: prometheus-operator
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          env:
+          - name: CONFIG_RELOADER_IMAGE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "kube-prometheus.operator.fullname" . }}
+                key: config-reloader-image
+          - name: PROMETHEUS_CONFIG_RELOADER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "kube-prometheus.operator.fullname" . }}
+                key: prometheus-config-reloader
           args:
             {{- if .Values.operator.kubeletService.enabled }}
             - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "kube-prometheus.fullname" . }}-kubelet
@@ -74,8 +85,8 @@ spec:
             {{- end }}
             - --logtostderr=true
             - --localhost=127.0.0.1
-            - --config-reloader-image={{ template "kube-prometheus.configmapReload.image" . }}
-            - --prometheus-config-reloader={{ template "kube-prometheus.prometheusConfigReloader.image" . }}
+            - --config-reloader-image=$(CONFIG_RELOADER_IMAGE)
+            - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
           {{- if .Values.operator.configReloaderCpu }}
             - --config-reloader-cpu={{ .Values.operator.configReloaderCpu }}
           {{- end }}
