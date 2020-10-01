@@ -201,7 +201,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-    --set dbUser.user=admin,dbUser.password=password\
+    --set dbUser.user=admin,dbUser.password=password \
     bitnami/cassandra
 ```
 
@@ -321,9 +321,17 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Upgrade
+## Upgrading
 
-### 6.0.0
+It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
+
+```bash
+$ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
+```
+
+| Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+
+### To 6.0.0
 
 - Several parameters were renamed or dissapeared in favor of new ones on this major version:
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
@@ -335,13 +343,13 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 Consequences:
 
-- Backwards compatibility is not guaranteed. To upgrade to `6.0.0`, install a new release of the Cassandra chart, and migrate your data by creating a backup of the database, and restoring it on the new release.
+- Backwards compatibility is not guaranteed. To upgrade to `6.0.0`, install a new release of the Cassandra chart, and migrate the data from your previous release. To do so, create an snapshot of the database, and restore it on the new database. Check [this guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for more information.
 
-### 5.4.0
+### To 5.4.0
 
 The `minimumAvailable` option has been renamed to `minAvailable` for consistency with other charts. This is not a breaking change as `minimumAvailable` never worked before because of an error in chart templates.
 
-### 5.0.0
+### To 5.0.0
 
 An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
 
@@ -350,11 +358,11 @@ kubectl delete sts -l release=<RELEASE_NAME>
 helm upgrade <RELEASE_NAME> ...
 ```
 
-### 4.0.0
+### To 4.0.0
 
 This release changes uses Bitnami Cassandra container `3.11.4-debian-9-r188`, based on Bash.
 
-### 2.0.0
+### To 2.0.0
 
 This release make it possible to specify custom initialization scripts in both cql and sh files.
 
