@@ -8,7 +8,7 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami MXNet image version
+## Bitnami Apache MXNet (Incubating) image version
 ## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
 ##
 image:
@@ -113,7 +113,7 @@ entrypoint:
   workDir: /app
   # args:
 
-## MXNet deployment mode. Can be `standalone` or `distributed`
+## Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`
 ##
 mode: standalone
 
@@ -129,7 +129,7 @@ workerCount: 1
 ##
 # existingSecret:
 
-## Name of an existing config map containing all the files you want to load in MXNet
+## Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)
 ##
 # configMap:
 
