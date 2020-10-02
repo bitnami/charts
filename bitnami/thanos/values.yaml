@@ -162,8 +162,7 @@ querier:
     create: false
 
   # Create PodSecurity Policy
-  psp:
-    create: false
+  pspEnabled: false
 
   ## Thanos Querier containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
