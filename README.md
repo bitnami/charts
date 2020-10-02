@@ -18,7 +18,7 @@ $ helm install my-release bitnami/<chart>
 
 All the Bitnami Helm Charts are going to be updated in a major version applying the required changes, being the main one the update of the `apiVersion`. The current version of Bitnami Helm Charts use `apiVersion: v1` (installable by both Helm 2 and 3), charts are going to be updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 
-We will start moving the Helm Charts (and deprecating Helm v2) on November 13th and we plan to have the whole catalog migrated before the 1st of December.
+We will start moving the Bitnami Helm Charts (and deprecating Helm v2) on November 13th and we plan to have the whole catalog migrated before the 1st of December.
 
 In the "Upgrade" section of every Helm Chart README, you will find the upgrade notes and instructions when a major version including those changes appeared.
 
