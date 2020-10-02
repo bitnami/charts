@@ -1,24 +1,32 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "cassandra.fullname" . }}
-  labels: {{- include "cassandra.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "cassandra.matchLabels" . | nindent 6 }}
-  serviceName: {{ include "cassandra.fullname" . }}-headless
-  replicas: {{ .Values.cluster.replicaCount }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  serviceName: {{ include "common.names.fullname" . }}-headless
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
+  replicas: {{ .Values.replicaCount }}
   updateStrategy:
-    type: {{ .Values.statefulset.updateStrategy }}
-    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    type: {{ .Values.updateStrategy }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
     rollingUpdate: null
-    {{- else if .Values.statefulset.rollingUpdatePartition }}
+    {{- else if .Values.rollingUpdatePartition }}
     rollingUpdate:
-      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+      partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
   template:
     metadata:
-      labels: {{- include "cassandra.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
       {{- if .Values.podLabels }}
       {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
@@ -32,9 +40,9 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "cassandra.imagePullSecrets" . | nindent 6 }}
+      {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "cassandra.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
@@ -42,18 +50,20 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "cassandra.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "cassandra.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if or (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) (.Values.initContainers) }}
       initContainers:
+        {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "cassandra.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -61,7 +71,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /bitnami/cassandra
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/cassandra
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -70,38 +80,49 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/cassandra
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: cassandra
           command:
+            {{- if .Values.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+            {{- else }}
             - bash
             - -ec
-            # Node 0 is the password seeder
             - |
+              # Node 0 is the password seeder
               if [[ $HOSTNAME =~ (.*)-0$ ]]; then
-                echo "Setting node as password seeder"
-                export CASSANDRA_PASSWORD_SEEDER=yes
+                  echo "Setting node as password seeder"
+                  export CASSANDRA_PASSWORD_SEEDER=yes
               else
-                # Only node 0 will execute the startup initdb scripts
-                export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
+                  # Only node 0 will execute the startup initdb scripts
+                  export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
-              {{ .Values.entrypoint }} {{ .Values.cmd }}
+              /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
+            {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           image: {{ include "cassandra.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: CASSANDRA_CLUSTER_NAME
               value: {{ .Values.cluster.name }}
             - name: CASSANDRA_SEEDS
-              {{- $global := . }}
-              {{- $replicas := .Values.cluster.seedCount | int }}
-              {{- $domain := .Values.cluster.domain }}
-              value: "{{- range $i, $e := until $replicas }}{{ include "cassandra.fullname" $global }}-{{ $i }}.{{ include "cassandra.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.{{ $domain }}{{- if (lt ( add1 $i ) $replicas ) }},{{- end }}{{- end }}"
+              value: {{ (include "cassandra.seeds" .) | quote }}
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.dbUser.existingSecret }}{{ .Values.dbUser.existingSecret }}{{- else }}{{ include "cassandra.fullname" . }}{{- end }}
+                  name: {{ if .Values.dbUser.existingSecret }}{{ .Values.dbUser.existingSecret }}{{- else }}{{ include "common.names.fullname" . }}{{- end }}
                   key: cassandra-password
             - name: POD_IP
               valueFrom:
@@ -151,25 +172,49 @@ spec:
             - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
               value: {{ .Values.cluster.enableUDF | quote }}
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
-              command: ["/bin/sh", "-c", "nodetool status"]
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool status
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-c", "nodetool status | grep -E \"^UN\\s+${POD_IP}\""]
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool status | grep -E "^UN\\s+${POD_IP}"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.persistence.enabled }}
           lifecycle:
@@ -215,6 +260,9 @@ spec:
             - name: configurations
               mountPath: /bitnami/cassandra/conf
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "cassandra.metrics.image" . }}
@@ -238,11 +286,14 @@ spec:
             initialDelaySeconds: 20
             timeoutSeconds: 45
         {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.tlsEncryptionSecretName }}
         - name: encryption-secrets
           secret:
-            secretName: {{ .Values.tlsEncryptionSecretName }}
+            secretName: {{ tpl .Values.tlsEncryptionSecretName $ }}
             items:
               - key: keystore
                 path: keystore
@@ -264,14 +315,17 @@ spec:
           secret:
             secretName: {{ tpl .Values.initDBSecret $ }}
         {{- end }}
-{{- if not .Values.persistence.enabled }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
-{{- else }}
+  {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "cassandra.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
         {{- end }}
@@ -283,5 +337,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{ include "cassandra.storageClass" . }}
-{{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}

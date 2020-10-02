@@ -278,7 +278,7 @@ spec:
         {{- if or .Values.rootUser.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
         - name: mariadb-credentials
           secret:
-            secretName: {{ template "mariadb.fullname" . }}
+            secretName: {{ template "mariadb.secretName" . }}
             items:
               {{- if .Values.rootUser.injectSecretsAsVolume }}
               - key: mariadb-root-password

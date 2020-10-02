@@ -160,7 +160,7 @@ spec:
               value: {{ .Values.redis.port | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}

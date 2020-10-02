@@ -34,6 +34,10 @@ image:
 ##
 # fullnameOverride:
 
+## Number of Metrics Server replicas to deploy
+##
+replicas: 1
+
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
