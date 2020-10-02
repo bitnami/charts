@@ -272,7 +272,7 @@ postgresql:
   ## Additional PostgreSQL Master Volumes
   ##
   extraVolumes: []
-  
+
   ## Repmgr configuration
   ## Specify content for repmgr.conf
   ## Default: do not create repmgr.conf
