@@ -441,7 +441,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### To 10.0.0
 
-On November 13, 2020, Helm v2 support will formally end, this major version is the result of the required changes applied to the chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support will formally end](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
 **What changes were introduced in this major version?**
 
