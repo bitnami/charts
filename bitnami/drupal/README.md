@@ -146,25 +146,20 @@ The following table lists the configurable parameters of the Drupal chart and th
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_drupal`                               |
-| `mariadb.db.user`                          | Database user to create                  | `bn_drupal`                                    |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_drupal`                                    |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_drupal`                               |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                   | Description                                                              | Default                                        |
+|---------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                  | `bitnami_drupal`                               |
+| `mariadb.auth.username`                     | Database user to create                                                  | `bn_drupal`                                    |
+| `mariadb.auth.password`                     | Password for the database                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas | `nil`                                          |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                        | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                          | `nil`                                          |
 
 ### Metrics parameters
 
@@ -185,7 +180,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set drupalUsername=admin,drupalPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set drupalUsername=admin,drupalPassword=password,mariadb.auth.rootPassword=secretpassword \
     bitnami/drupal
 ```
 
@@ -268,6 +263,46 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupa
 1. Because the container cannot control the host machine’s directory permissions, you must set the Drupal file directory permissions yourself and disable or clear Drupal cache. See Drupal Core’s [INSTALL.txt](http://cgit.drupalcode.org/drupal/tree/core/INSTALL.txt?h=8.3.x#n152) for setting file permissions, and see [Drupal handbook page](https://www.drupal.org/node/2598914) to disable the cache, or [Drush handbook](https://drushcommands.com/drush-8x/cache/cache-rebuild/) to clear cache.
 
 ## Upgrading
+
+### To 9.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `9.0.0`, you have two alternatives:
+
+- Install a new Drupal chart, and migrate your Drupal site using backup/restore tools such as [Drupal Backup and Migrate](https://www.drupal.org/project/backup_migrate).
+- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `drupal`):
+
+Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+
+```console
+export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=drupal,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
+
+```console
+$ helm upgrade drupal bitnami/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
+```
+
+Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade drupal bitnami/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD 
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=drupal,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 8.0.0
 

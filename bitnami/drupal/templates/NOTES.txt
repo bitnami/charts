@@ -5,7 +5,7 @@
 
 1. Get the Drupal URL:
 
-{{- if .Values.ingress.hostname }}
+{{- if .Values.ingress.enabled }}
 
   You should be able to access your new Drupal installation through
 
@@ -43,25 +43,18 @@
   echo Username: {{ .Values.drupalUsername }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
 
-{{- include "drupal.checkRollingTags" . }}
-
-{{- $passwordErrors := list -}}
-{{- $secretName := include "drupal.secretName" . -}}
-
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
-  {{- $requiredDrupalPassword := dict "valueKey" "drupalPassword" "secret" $secretName "field" "drupal-password" "context" $ -}}
-  {{- $requiredDrupalPasswordError := include "common.validations.values.single.empty" $requiredDrupalPassword -}}
-  {{- $passwordErrors =  append $passwordErrors $requiredDrupalPasswordError -}}
+    {{- $secretName := include "drupal.secretName" . -}}
+    {{- $requiredDrupalPassword := dict "valueKey" "drupalPassword" "secret" $secretName "field" "drupal-password" "context" $ -}}
+    {{- $requiredDrupalPasswordError := include "common.validations.values.single.empty" $requiredDrupalPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredDrupalPasswordError -}}
 {{- end -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbSecretName := include "drupal.databaseSecretName" . -}}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" (include "drupal.mariadb.fullname" .) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
-
-{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" -}}
-
-WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
-  {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
-{{- end -}}

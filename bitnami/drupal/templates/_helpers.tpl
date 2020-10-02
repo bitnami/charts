@@ -42,24 +42,68 @@ Return  the proper Storage Class
 {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
 {{- end -}}
 
-{{/*
-Return the appropriate apiVersion for deployment.
-*/}}
-{{- define "drupal.deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
 {{/* Drupal credential secret name */}}
 {{- define "drupal.secretName" -}}
 {{- coalesce .Values.existingSecret (include "drupal.fullname" .) -}}
 {{- end -}}
 
-{{/* Check if there are rolling tags in the images */}}
-{{- define "drupal.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image -}}
-{{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{/*
+Return the MariaDB Hostname
+*/}}
+{{- define "drupal.databaseHost" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- if eq .Values.mariadb.architecture "replication" }}
+        {{- printf "%s-%s" (include "drupal.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- printf "%s" (include "drupal.mariadb.fullname" .) -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Port
+*/}}
+{{- define "drupal.databasePort" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "3306" -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Database Name
+*/}}
+{{- define "drupal.databaseName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" .Values.mariadb.auth.database -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB User
+*/}}
+{{- define "drupal.databaseUser" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" .Values.mariadb.auth.username -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.user -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Secret Name
+*/}}
+{{- define "drupal.databaseSecretName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "drupal.mariadb.fullname" .) -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- end -}}
 {{- end -}}
