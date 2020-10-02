@@ -1,8 +1,8 @@
-{{- if .Values.gossipKey }}
+{{- if (include "consul.createConfigmap" .) }}
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: {{ printf "%s-gossip-key" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -11,7 +11,10 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
 data:
-  gossip-key: {{ .Values.gossipKey | b64enc }}
+  config.json: {{- include "common.tplvalues.render" ( dict "value" .Values.configmap "context" $ ) | nindent 4 }}
+  connection.json: |
+    {
+      "retry_join": ["{{ include "consul.retryjoin.endpoint" . }}"]
+    }
 {{- end }}
