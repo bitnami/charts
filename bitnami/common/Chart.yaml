@@ -1,6 +1,8 @@
 annotations:
   category: Infrastructure
 apiVersion: v1
+# Please make sure that version and appVersion are always the same.
+version: 0.8.0
 appVersion: 0.8.0
 description: A Library Helm Chart for grouping common logic between bitnami charts.
   This chart is not deployable by itself.
@@ -19,4 +21,3 @@ name: common
 sources:
   - https://github.com/bitnami/charts
   - http://www.bitnami.com/
-version: 0.8.0
