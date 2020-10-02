@@ -109,6 +109,7 @@ The following table lists the helpers available in the library which are scoped 
 |--------------------------------|-----------------------------------------------------------------|------------------------------------------------------------------------|
 | `common.utils.fieldToEnvVar`   | Build environment variable name given a field.                  | `dict "field" "my-password"`                                           |
 | `common.utils.secret.getvalue` | Print instructions to get a secret value.                       | `dict "secret" "secret-name" "field" "secret-value-field" "context" $` |
+| `common.utils.getValueFromKey` | Gets a value from `.Values` object given its key path           | `dict "key" "path.to.key" "context" $`                                 |
 
 ### Validations
 

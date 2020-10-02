@@ -18,7 +18,6 @@ Validate value params:
   {{- end -}}
 {{- end -}}
 
-
 {{/*
 Validate a value must not be empty.
 
@@ -31,17 +30,7 @@ Validate value params:
   - field - String - Optional. Name of the field in the secret data, e.g: "mysql-password"
 */}}
 {{- define "common.validations.values.single.empty" -}}
-  {{- $valueKeyArray := splitList "." .valueKey -}}
-  {{- $value := "" -}}
-  {{- $latestObj := $.context.Values -}}
-  {{- range $valueKeyArray -}}
-    {{- if not $latestObj -}}
-      {{- printf "please review the entire path of '%s' exists in values" $.valueKey | fail -}}
-    {{- end -}}
-
-    {{- $value = ( index $latestObj . ) -}}
-    {{- $latestObj = $value -}}
-  {{- end -}}
+  {{- $value := include "common.utils.getValueFromKey" (dict "key" .valueKey "context" .context) }}
 
   {{- if not $value -}}
     {{- $varname := "my-value" -}}
@@ -50,7 +39,6 @@ Validate value params:
       {{- $varname = include "common.utils.fieldToEnvVar" . -}}
       {{- $getCurrentValue = printf " To get the current value:\n\n        %s\n" (include "common.utils.secret.getvalue" .) -}}
     {{- end -}}
-
     {{- printf "\n    '%s' must not be empty, please add '--set %s=$%s' to the command.%s" .valueKey .valueKey $varname $getCurrentValue -}}
   {{- end -}}
 {{- end -}}
@@ -69,8 +57,8 @@ Params:
   {{- $enabled := include "common.mariadb.values.enabled" . -}}
   {{- $architecture := include "common.mariadb.values.architecture" . -}}
   {{- $valueKeyRootPassword := printf "%s.rootPassword" (include "common.mariadb.values.key.auth" .) -}}
-  {{- $valueKeyUsername := printf "%s.username" (include "common.mariadb.values.key.auth" .) . -}}
-  {{- $valueKeyPassword := printf "%s.password" (include "common.mariadb.values.key.auth" .) . -}}
+  {{- $valueKeyUsername := printf "%s.username" (include "common.mariadb.values.key.auth" .) -}}
+  {{- $valueKeyPassword := printf "%s.password" (include "common.mariadb.values.key.auth" .) -}}
   {{- $valueKeyReplicationPassword := printf "%s.replicationPassword" (include "common.mariadb.values.key.auth" .) -}}
 
   {{- if and (not $existingSecret) (eq $enabled "true") -}}
@@ -79,7 +67,7 @@ Params:
     {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mariadb-root-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
 
-    {{- $valueUsername := index $.context.Values $valueKeyUsername }}
+    {{- $valueUsername := include "common.utils.getValueFromKey" (dict "key" $valueKeyUsername "context" .context) }}
     {{- if not (empty $valueUsername) -}}
         {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "mariadb-password" -}}
         {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
@@ -105,9 +93,9 @@ Params:
 */}}
 {{- define "common.mariadb.values.existingSecret" -}}
   {{- if .subchart -}}
-    {{- .context.Values.mariadb.existingSecret | quote }}
+    {{- .context.Values.mariadb.existingSecret | quote -}}
   {{- else -}}
-    {{- .context.Values.existingSecret | quote }}
+    {{- .context.Values.existingSecret | quote -}}
   {{- end -}}
 {{- end -}}
 
@@ -135,9 +123,9 @@ Params:
 */}}
 {{- define "common.mariadb.values.architecture" -}}
   {{- if .subchart -}}
-    {{- .context.Values.mariadb.architecture | quote }}
+    {{- .context.Values.mariadb.architecture -}}
   {{- else -}}
-    {{- .context.Values.architecture | quote }}
+    {{- .context.Values.architecture -}}
   {{- end -}}
 {{- end -}}
 
