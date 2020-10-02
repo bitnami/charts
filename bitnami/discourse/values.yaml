@@ -411,7 +411,7 @@ ingress:
 #    maxSurge: 25%
 #    maxUnavailable: 25%
 updateStrategy: {}
-  
+
 ## Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
