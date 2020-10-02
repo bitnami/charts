@@ -4,7 +4,7 @@ metadata:
   name: {{ template "metrics-server.fullname" . }}
   labels: {{- include "metrics-server.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicas  }}
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels: {{- include "metrics-server.matchLabels" . | nindent 6 }}
   template:
