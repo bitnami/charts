@@ -64,8 +64,15 @@ You can access Apache Prometheus metrics following the steps below:
 
 {{- end }}
 
-{{- include "wordpress.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- $passwordValidationErrors := list -}}
+{{- if not .Values.existingSecret -}}
+    {{- $secretName := include "wordpress.secretName" . -}}
+    {{- $requiredWordPressPassword := dict "valueKey" "wordpressPassword" "secret" $secretName "field" "wordpress-password" "context" $ -}}
+    {{- $requiredWordPressPasswordError := include "common.validations.values.single.empty" $requiredWordPressPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredWordPressPasswordError -}}
+{{- end }}
 {{- if .Values.mariadb.enabled }}
     {{- $mariadbSecretName := include "wordpress.databaseSecretName" . -}}
     {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
