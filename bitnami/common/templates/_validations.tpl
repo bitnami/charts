@@ -56,10 +56,11 @@ Params:
   {{- $existingSecret := include "common.mariadb.values.existingSecret" . -}}
   {{- $enabled := include "common.mariadb.values.enabled" . -}}
   {{- $architecture := include "common.mariadb.values.architecture" . -}}
-  {{- $valueKeyRootPassword := printf "%s.rootPassword" (include "common.mariadb.values.key.auth" .) -}}
-  {{- $valueKeyUsername := printf "%s.username" (include "common.mariadb.values.key.auth" .) -}}
-  {{- $valueKeyPassword := printf "%s.password" (include "common.mariadb.values.key.auth" .) -}}
-  {{- $valueKeyReplicationPassword := printf "%s.replicationPassword" (include "common.mariadb.values.key.auth" .) -}}
+  {{- $authPrefix := include "common.mariadb.values.key.auth" . -}}
+  {{- $valueKeyRootPassword := printf "%s.rootPassword" $authPrefix -}}
+  {{- $valueKeyUsername := printf "%s.username" $authPrefix -}}
+  {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
+  {{- $valueKeyReplicationPassword := printf "%s.replicationPassword" $authPrefix -}}
 
   {{- if and (not $existingSecret) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
