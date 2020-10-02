@@ -40,17 +40,6 @@ Return the proper Docker Image Registry Secret Names
 {{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
-{{/*
-Return the appropriate apiVersion for statefulset.
-*/}}
-{{- define "mariadb.statefulset.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "apps/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
 {{ template "mariadb.initdbScriptsCM" . }}
 {{/*
 Get the initialization scripts ConfigMap name.

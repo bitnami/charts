@@ -1,5 +1,5 @@
 {{- if eq .Values.architecture "replication" }}
-apiVersion: {{ template "mariadb.statefulset.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}

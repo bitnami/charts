@@ -36,27 +36,13 @@ To connect to your database:
 
 To upgrade this helm chart:
 
-  1. Obtain the password as described on the 'Administrator credentials' section and set the 'rootUser.password' parameter as shown below:
+  1. Obtain the password as described on the 'Administrator credentials' section and set the 'auth.rootPassword' parameter as shown below:
 
       ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-      helm upgrade {{ .Release.Name }} bitnami/mariadb --set rootUser.password=$ROOT_PASSWORD
+      helm upgrade {{ .Release.Name }} bitnami/mariadb --set auth.rootPassword=$ROOT_PASSWORD
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "mariadb.validateValues" . }}
-{{- if (not .Values.auth.existingSecret) -}}
-  {{- $secretName := include "common.names.fullname" . }}
-  {{- $requiredPasswords := list -}}
-  {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mariadb-root-password" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-  {{- if and .Values.auth.username .Values.auth.database }}
-    {{- $requiredDBPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mariadb-password" "context" $ -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
-  {{- end -}}
-  {{- if eq .Values.architecture "replication" }}
-      {{- $requiredReplicationPassword := dict "valueKey" "auth.replicationPassword" "secret" $secretName "field" "mariadb-replication-password" "context" $ -}}
-      {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
-  {{- end -}}
-  {{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}
-{{- end -}}
+{{- $passwordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" (include "common.names.fullname" .) "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
