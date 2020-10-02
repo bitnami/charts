@@ -18,7 +18,7 @@ $ helm install my-release bitnami/<chart>
 
 All the Bitnami Helm Charts are going to be updated in a major version applying the required changes, being the main one the update of the `apiVersion`. The current version of Bitnami Helm Charts use `apiVersion: v1` (installable by both Helm 2 and 3), charts are going to be updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 
-In the "Upgrade" section of every chart README, you will find the upgrade notes and instructions when a major version including those changes appeared.
+In the "Upgrade" section of every Helm Chart README, you will find the upgrade notes and instructions when a major version including those changes appeared.
 
 ## Before you begin
 
