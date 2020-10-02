@@ -85,36 +85,20 @@ spec:
             - name: PRESTASHOP_LANGUAGE
               value: {{ .Values.prestashopLanguage | quote }}
             {{- end }}
-            {{- if .Values.mariadb.enabled }}
             - name: MARIADB_HOST
-              value: {{ template "prestashop.mariadb.fullname" . }}
+              value: {{ include "prestashop.databaseHost" . | quote }}
             - name: MARIADB_PORT_NUMBER
-              value: "3306"
+              value: {{ include "prestashop.databasePort" . | quote }}
             - name: PRESTASHOP_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ include "prestashop.databaseName" . | quote }}
             - name: PRESTASHOP_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ include "prestashop.databaseUser" . | quote }}
             - name: PRESTASHOP_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "prestashop.mariadb.fullname" . }}
+                  name: {{ include "prestashop.databaseSecretName" . }}
                   key: mariadb-password
-            {{- else }}
-            - name: MARIADB_HOST
-              value: {{ .Values.externalDatabase.host | quote }}
-            - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            - name: PRESTASHOP_DATABASE_NAME
-              value: {{ .Values.externalDatabase.database | quote }}
-            - name: PRESTASHOP_DATABASE_USER
-              value: {{ .Values.externalDatabase.user | quote }}
-            - name: PRESTASHOP_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-            {{- end }}
-    {{- $port:=.Values.service.port | toString }}
+            {{- $port:=.Values.service.port | toString }}
             - name: PRESTASHOP_HOST
               value: "{{ include "prestashop.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
             - name: PRESTASHOP_USERNAME

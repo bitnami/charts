@@ -62,14 +62,14 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 | Parameter           | Description                                                                  | Default                                                 |
 |---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | PrestaShop image registry                                                        | `docker.io`                                         |
-| `image.repository`  | PrestaShop Image name                                                            | `bitnami/prestashop`                                |
-| `image.tag`         | PrestaShop Image tag                                                             | `{TAG_NAME}`                                        |
-| `image.pullPolicy`  | PrestaShop image pull policy                                                     | `IfNotPresent`                                      |
+| `image.registry`    | PrestaShop image registry                                                    | `docker.io`                                             |
+| `image.repository`  | PrestaShop Image name                                                        | `bitnami/prestashop`                                    |
+| `image.tag`         | PrestaShop Image tag                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | PrestaShop image pull policy                                                 | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override prestashop.fullname template                        | `nil`                                               |
-| `fullnameOverride`  | String to fully override prestashop.fullname template                            | `nil`                                               |
+| `nameOverride`      | String to partially override prestashop.fullname template                    | `nil`                                                   |
+| `fullnameOverride`  | String to fully override prestashop.fullname template                        | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
@@ -152,25 +152,24 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_prestashop`                           |
-| `mariadb.db.user`                          | Database user to create                  | `bn_prestashop`                                |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_prestashop`                                |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_prestashop`                           |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                   | Description                                                              | Default                                        |
+|---------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                  | `bitnami_prestashop`                           |
+| `mariadb.auth.username`                     | Database user to create                                                  | `bn_prestashop`                                |
+| `mariadb.auth.password`                     | Password for the database                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas | `nil`                                          |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                        | `nil` (uses alpha storage class annotation)    |
+| `externalDatabase.user`                     | Existing username in the external db                                     | `bn_prestashop`                                |
+| `externalDatabase.password`                 | Password for the above username                                          | `nil`                                          |
+| `externalDatabase.database`                 | Name of the existing database                                            | `bitnami_prestashop`                           |
+| `externalDatabase.host`                     | Host of the existing database                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                            | `3306`                                         |
 
 ### Metrics parameters
 
@@ -241,14 +240,55 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 One needs to explicitly turn on SSL in the Prestashop administration panel, else a `302` redirect to `http` scheme is returned on any page of the site by default.
 
 To enable SSL on all pages, follow these steps:
-  - Browse to the administration panel and log in.
-  - Click “Shop Parameters” in the left navigation panel.
-  - Set the option “Enable SSL” to “Yes”.
-  - Click the “Save” button.
-  - Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
-  - Click the “Save” button.
+
+- Browse to the administration panel and log in.
+- Click “Shop Parameters” in the left navigation panel.
+- Set the option “Enable SSL” to “Yes”.
+- Click the “Save” button.
+- Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
+- Click the “Save” button.
 
 ## Upgrading
+
+### To 11.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `11.0.0`, you have two alternatives:
+
+- Install a new Prestashop chart, and migrate your Prestashop site using backup/restore using any [Backup and Restore tool from Prestashop marketplace](https://addons.prestashop.com/en/search?search_query=backup&).
+- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `prestashop`):
+
+Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+
+```console
+export PRESTASHOP_PASSWORD=$(kubectl get secret --namespace default prestashop -o jsonpath="{.data.prestashop-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Prestashop replicas to 0:
+
+```console
+$ helm upgrade prestashop bitnami/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
+```
+
+Finally, upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade prestashop bitnami/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD 
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 10.0.0
 
