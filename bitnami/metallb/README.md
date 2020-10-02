@@ -35,6 +35,33 @@ These commands deploy metallb on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list`
 
+## Configuring:
+
+Documentation: https://metallb.universe.tf/configuration/
+
+For helm you need change in ConfigMap namespace (default) and name (metallb), L2 configuration example:
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: default
+  name: metallb
+data:
+  config: |
+      address-pools:
+      - addresses:
+        - 192.168.1.100-192.168.88.110
+        name: default
+        protocol: layer2
+```
+
+Apply config:
+
+```
+kubectl apply -f metallb-configmap.yml
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` helm release:
