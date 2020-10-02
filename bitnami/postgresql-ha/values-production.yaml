@@ -257,6 +257,22 @@ postgresql:
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
 
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+  ## Additional PostgreSQL Master Volume mounts
+  ##
+  extraVolumeMounts: []
+  ## Additional PostgreSQL Master Volumes
+  ##
+  extraVolumes: []
+
   ## Repmgr configuration
   ## Specify content for repmgr.conf
   ## Default: do not create repmgr.conf
