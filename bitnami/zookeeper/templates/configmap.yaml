@@ -3,7 +3,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "zookeeper.fullname" . }}
+  {{- if .Values.namespace }}
+  namespace: {{ .Values.namespace }}
+  {{- else }}
   namespace: {{ .Release.Namespace }}
+  {{- end }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
