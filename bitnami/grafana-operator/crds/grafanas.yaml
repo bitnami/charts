@@ -1,0 +1,140 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: grafanas.integreatly.org
+spec:
+  group: integreatly.org
+  names:
+    kind: Grafana
+    listKind: GrafanaList
+    plural: grafanas
+    singular: grafana
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1alpha1
+  validation:
+    openAPIV3Schema:
+      required: ["spec"]
+      properties:
+        spec:
+          properties:
+            containers:
+              type: array
+              items:
+                type: object
+                description: Additional container to add to the grafana pod
+            secrets:
+              type: array
+              items:
+                type: string
+                description: Secret to be mounted as volume into the grafana deployment
+            configMaps:
+              type: array
+              items:
+                type: string
+                description: Config map to be mounted as volume into the grafana deployment
+            logLevel:
+              type: string
+              description: Log level of the grafana instance, defaults to info
+            adminUser:
+              type: string
+              description: Default admin user name
+            adminPassword:
+              type: string
+              description: Default admin password
+            basicAuth:
+              type: boolean
+              description: Basic auth enabled
+            disableLoginForm:
+              type: boolean
+              description: Disable login form
+            disableSignoutMenu:
+              type: boolean
+              description: Disable signout menu
+            anonymous:
+              type: boolean
+              description: Anonymous auth enabled
+            config:
+              type: object
+              description: Grafana config
+            ingress:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  description: Create an ingress / route
+                path:
+                  type: string
+                  description: Ingress path
+                hostname:
+                  type: string
+                  description: The hostname of the ingress / route
+                annotations:
+                  type: object
+                  description: Additional annotations for the ingress / route
+                labels:
+                  type: object
+                  description: Additional labels for the ingress / route
+                targetPort:
+                  type: string
+                  description: Override port to target in the grafana service
+            service:
+              type: object
+              properties:
+                ports:
+                  type: array
+                  description: Override default ports
+                  items:
+                    type: object
+                    description: A port to add to the grafana service
+                annotations:
+                  type: object
+                  description: Additional annotations for the service
+                labels:
+                  type: object
+                  description: Additional labels for the service
+                type:
+                  type: string
+                  description: Service type (NodePort, ClusterIP or LoadBalancer)
+            deployment:
+              type: object
+              properties:
+                annotations:
+                  type: object
+                  description: Additional annotations for the service
+                labels:
+                  type: object
+                  description: Additional labels for the service
+                nodeSelector: 
+                  type: object
+                  description: Additional labels for the running grafana pods in a labeled node.
+                tolerations:
+                  type: array
+                  description: Additonal labels for running grafana pods in tained nodes.
+                affinity:
+                  type: object
+                  description: Additonal labels for running grafana pods with affinity properties.
+            serviceAccount:
+              type: object
+              properties:
+                annotations:
+                  type: object
+                  description: Additional annotations for the serviceaccount
+                labels:
+                  type: object
+                  description: Additional labels for the serviceaccount
+            client:
+              type: object
+              description: Grafana client settings
+            compat:
+              type: object
+              description: Backwards compatibility switches
+            dashboardLabelSelectors:
+              type: array
+              items:
+                type: object
+                description: Label selector or match expressions
+            jsonnet:
+              type: object
+              description: Jsonnet library configuration

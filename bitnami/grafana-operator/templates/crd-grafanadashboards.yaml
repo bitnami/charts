@@ -1,0 +1,55 @@
+{{- if .Values.installCRDs }}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: grafanadashboards.integreatly.org
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    "helm.sh/hook": crd-install
+    {{- if .Values.customResourceDeletePolicy }}
+    "helm.sh/hook-delete-policy": {{ .Values.customResourceDeletePolicy }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  group: integreatly.org
+  names:
+    kind: GrafanaDashboard
+    listKind: GrafanaDashboardList
+    plural: grafanadashboards
+    singular: grafanadashboard
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1alpha1
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          properties:
+            name:
+              type: string
+            json:
+              type: string
+            jsonnet:
+              description: Jsonnet source. Has access to grafonnet.
+              type: string
+            url:
+              type: string
+              description: URL to dashboard json
+            datasources:
+              type: array
+              items:
+                description: Input datasources to resolve before importing
+                type: object
+            plugins:
+              type: array
+              items:
+                description: Grafana Plugin Object
+                type: object
+{{- end }}
