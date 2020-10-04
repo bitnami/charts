@@ -2,7 +2,7 @@
 
 [RabbitMQ](https://www.rabbitmq.com/) is an open source message broker software that implements the Advanced Message Queuing Protocol (AMQP).
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -73,7 +73,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `image.debug`                             | Set to true if you would like to see extra information on logs                                                       | `false`                                                      |
 | `auth.username`                           | RabbitMQ application username                                                                                        | `user`                                                       |
 | `auth.password`                           | RabbitMQ application password                                                                                        | _random 10 character long alphanumeric string_               |
-| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil`                                                        |
+| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil` (evaluated as a template)                              |
 | `auth.erlangCookie`                       | Erlang cookie                                                                                                        | _random 32 character long alphanumeric string_               |
 | `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie                                                                          | `nil`                                                        |
 | `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                       | `false`                                                      |
@@ -403,7 +403,7 @@ stringData:
     }
 ```
 
-Then, specify the `management.load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
+Then, specify the `load_definitions` property as an `extraConfiguration` pointing to the load definition file path within the container (i.e. `/app/load_definition.json`) and set `loadDefinition.enable` to `true`. Any load definitions specified will be available within in the container at `/app`.
 
 > Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
@@ -424,7 +424,7 @@ loadDefinition:
   enabled: true
   existingSecret: load-definition
 extraConfiguration: |
-  management.load_definitions = /app/load_definition.json
+  load_definitions = /app/load_definition.json
 ```
 
 ### LDAP
@@ -585,3 +585,13 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 ```console
 $ kubectl delete statefulset rabbitmq --cascade=false
 ```
+
+## Bitnami Kubernetes Documentation
+
+Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
+
+- [Documentation for RabbitMQ Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/)
+- [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
+- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
+- [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
+- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)

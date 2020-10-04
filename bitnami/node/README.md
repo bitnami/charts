@@ -2,7 +2,7 @@
 
 [Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -260,6 +260,12 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Upgrading
+
+### To 13.0.0
+
+MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 12.0.0
 

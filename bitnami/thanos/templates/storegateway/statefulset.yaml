@@ -77,6 +77,15 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if .Values.indexCacheConfig }}
+            - --index-cache.config-file=/conf/index-cache.yml
+            {{- end }}
+            {{- if .Values.bucketCacheConfig }}
+            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            {{- end }}
+            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+            - --index-cache.config-file=/conf/cache/config.yml
+            {{- end }}
             {{- range .Values.storegateway.extraFlags }}
             - {{ . }}
             {{- end }}
@@ -98,14 +107,13 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
-              {{- else }}
-              mountPath: /conf/objstore.yml
-              subPath: objstore.yml
-              {{- end }}
             - name: data
               mountPath: /data
+            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+            - name: cache-config
+              mountPath: /conf/cache
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -113,6 +121,11 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+        - name: cache-config
+          configMap:
+            name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

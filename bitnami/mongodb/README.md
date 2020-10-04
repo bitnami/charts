@@ -2,7 +2,7 @@
 
 [MongoDB](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -194,8 +194,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `customLivenessProbe`                     | Override default liveness probe for MongoDB containers                                                     | `nil`                                                   |
 | `customReadinessProbe`                    | Override default readiness probe for MongoDB containers                                                    | `nil`                                                   |
 | `pdb.create`                              | Enable/disable a Pod Disruption Budget creation for MongoDB pod(s)                                         | `false`                                                 |
-| `pdb.minAvailable`                        | Minimum number/percentage of MongoDB pods that should remain scheduled                                     | `nil`                                                   |
-| `pdb.maxUnavailable`                      | Maximum number/percentage of MongoDB pods that may be made unavailable                                     | `1`                                                     |
+| `pdb.minAvailable`                        | Minimum number/percentage of MongoDB pods that should remain scheduled                                     | `1`                                                     |
+| `pdb.maxUnavailable`                      | Maximum number/percentage of MongoDB pods that may be made unavailable                                     | `nil`                                                   |
 | `initContainers`                          | Add additional init containers for the MongoDB pod(s)                                                      | `{}` (evaluated as a template)                          |
 | `sidecars`                                | Add additional sidecar containers for the MongoDB pod(s)                                                   | `{}` (evaluated as a template)                          |
 | `extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for the MongoDB container(s)                      | `{}`                                                    |
@@ -261,6 +261,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `volumePermissions.image.pullSecrets`     | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
 | `volumePermissions.resources.limits`      | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
 | `volumePermissions.resources.requests`    | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| `volumePermissions.securityContext`       | Security context of the init container                                                                               | Check `values.yaml` file                                     |
 
 ### Arbiter parameters
 
@@ -292,8 +293,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `arbiter.customLivenessProbe`             | Override default liveness probe for Arbiter containers                                                     | `nil`                                                        |
 | `arbiter.customReadinessProbe`            | Override default readiness probe for Arbiter containers                                                    | `nil`                                                        |
 | `arbiter.pdb.create`                      | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                         | `false`                                                      |
-| `arbiter.pdb.minAvailable`                | Minimum number/percentage of Arbiter pods that should remain scheduled                                     | `nil`                                                        |
-| `arbiter.pdb.maxUnavailable`              | Maximum number/percentage of Arbiter pods that may be made unavailable                                     | `1`                                                          |
+| `arbiter.pdb.minAvailable`                | Minimum number/percentage of Arbiter pods that should remain scheduled                                     | `1`                                                          |
+| `arbiter.pdb.maxUnavailable`              | Maximum number/percentage of Arbiter pods that may be made unavailable                                     | `nil`                                                        |
 | `arbiter.initContainers`                  | Add additional init containers for the Arbiter pod(s)                                                      | `{}` (evaluated as a template)                               |
 | `arbiter.sidecars`                        | Add additional sidecar containers for the Arbiter pod(s)                                                   | `{}` (evaluated as a template)                               |
 | `arbiter.extraVolumeMounts`               | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)                      | `{}`                                                         |
@@ -309,7 +310,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `metrics.image.tag`                       | MongoDB Prometheus exporter image tag                                                                      | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | MongoDB Prometheus exporter image pull policy                                                              | `Always`                                                     |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.extraFlags`                      | Arbiter additional command line flags                                                                      | `""`                                                         |
+| `metrics.extraFlags`                      | Additional command line flags                                                                      | `""`                                                         |
+| `metrics.extraUri`                        | Additional URI options of the metrics service                                                   | `""`                                                         |
 | `metrics.service.type`                    | Type of the Prometheus metrics service                                                                     | `ClusterIP file`                                             |
 | `metrics.service.port`                    | Port of the Prometheus metrics service                                                                     | `9216`                                                       |
 | `metrics.service.annotations`             | Annotations for Prometheus metrics service                                                                 | Check `values.yaml` file                                     |
@@ -511,6 +513,13 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 9.0.0
+
+MongoDB container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB. Refer to the following guides to upgrade your applications:
+
+- [Standalone](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-standalone/)
+- [Replica Set](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-replica-set/)
 
 ### To 8.0.0
 

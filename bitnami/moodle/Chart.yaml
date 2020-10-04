@@ -1,15 +1,16 @@
 apiVersion: v1
 name: moodle
-version: 8.0.1
-appVersion: 3.9.1
+version: 8.1.6
+appVersion: 3.9.2
 description: Moodle is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
 keywords:
   - moodle
   - learning
   - php
-home: http://www.moodle.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
+  - http://www.moodle.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

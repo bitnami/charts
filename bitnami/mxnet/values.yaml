@@ -8,13 +8,13 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami MXNet image version
+## Bitnami Apache MXNet (Incubating) image version
 ## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/mxnet
-  tag: 1.6.0-debian-10-r143
+  tag: 1.7.0-debian-10-r11
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,7 +38,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.27.0-debian-10-r38
+  tag: 2.28.0-debian-10-r43
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -113,7 +113,7 @@ entrypoint:
   workDir: /app
   # args:
 
-## MXNet deployment mode. Can be `standalone` or `distributed`
+## Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`
 ##
 mode: standalone
 
@@ -129,7 +129,7 @@ workerCount: 1
 ##
 # existingSecret:
 
-## Name of an existing config map containing all the files you want to load in MXNet
+## Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)
 ##
 # configMap:
 

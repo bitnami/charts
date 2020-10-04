@@ -1,0 +1,33 @@
+{{- if and .Values.aggregator.enabled .Values.aggregator.service.ports -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+    app: aggregator
+  {{- if .Values.aggregator.service.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.aggregator.service.type }}
+  {{- if and .Values.aggregator.service.loadBalancerIP (eq .Values.aggregator.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.aggregator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and .Values.aggregator.service.loadBalancerSourceRanges (eq .Values.aggregator.service.type "LoadBalancer") }}
+  loadBalancerSourceRanges:
+  {{- with .Values.aggregator.service.loadBalancerSourceRanges }}
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.aggregator.service.type "ClusterIP") .Values.aggregator.service.clusterIP }}
+  clusterIP: {{ .Values.aggregator.service.clusterIP }}
+  {{- end }}
+  ports:
+  {{- range $key, $value := .Values.aggregator.service.ports }}
+    - name: {{ $key }}
+      {{ toYaml $value | nindent 6 }}
+  {{- end }}
+  selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+{{- end -}}

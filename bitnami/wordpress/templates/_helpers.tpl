@@ -259,13 +259,37 @@ Return the MariaDB User
 {{- end -}}
 
 {{/*
-Return the MariaDB User
+Return the MariaDB Secret Name
 */}}
 {{- define "wordpress.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
     {{- printf "%s" (include "mariadb.fullname" .) -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the WordPress Secret Name
+*/}}
+{{- define "wordpress.secretName" -}}
+{{- if .Values.existingSecret }}
+    {{- printf "%s" .Values.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "wordpress.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "wordpress.smtpSecretName" -}}
+{{- if .Values.smtpExistingSecret }}
+    {{- printf "%s" .Values.smtpExistingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "wordpress.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

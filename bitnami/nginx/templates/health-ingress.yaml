@@ -1,15 +1,21 @@
 {{- if .Values.healthIngress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "nginx.fullname" . }}-health
-  labels: {{- include "nginx.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-health
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     {{- if .Values.healthIngress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- range $key, $value := .Values.healthIngress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.healthIngress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:
@@ -19,19 +25,27 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: "{{ template "nginx.fullname" $ }}"
+              serviceName: {{ template "common.names.fullname" . }}
               servicePort: http
     {{- end }}
-    {{- range .Values.healthIngress.hosts }}
+    {{- range .Values.healthIngress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: "{{ template "nginx.fullname" $ }}"
+              serviceName: {{ template "common.names.fullname" $ }}
               servicePort: http
     {{- end }}
-  {{- if .Values.healthIngress.tls }}
-  tls: {{- toYaml .Values.healthIngress.tls | nindent 4 }}
+  {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls }}
+  tls:
+    {{- if .Values.healthIngress.tls }}
+    - hosts:
+        - {{ .Values.healthIngress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
+    {{- end }}
+    {{- if .Values.healthIngress.extraTls }}
+    {{- toYaml .Values.healthIngress.extraTls | nindent 4 }}
+    {{- end }}
   {{- end }}
 {{- end }}

@@ -12,7 +12,7 @@ For example, the following changes have been introduced:
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
-## TL;DR;
+## TL;DR
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -67,7 +67,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
-| `internalTLS.enabled`                   | Use TLS in all Harbor containers objects                                                                                                                | `false`                                                 |
+| `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
 | `logLevel`                            | The log level                                                                                                                                             | `debug`                                                 |
 | `forcePassword`                       | Option to ensure all passwords and keys are set by the user                                                                                               | `false`                                                 |
 | `harborAdminPassword`                 | The initial password of Harbor admin. Change it from portal after launching Harbor                                                                        | _random 10 character long alphanumeric string_          |
@@ -101,9 +101,9 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `service.ports.http`               | The service port Harbor listens on when serving with HTTP                                                                                                                                                                                                                       | `80`                   |
 | `service.ports.https`              | The service port Harbor listens on when serving with HTTPS                                                                                                                                                                                                                      | `443`                  |
 | `service.ports.notary`             | The service port Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                          | `4443`                 |
-| `service.nodePorts.http`           | The service nodePort Harbor listens on when serving with HTTP                                                                                                                                                                                                                   | `80`                   |
-| `service.nodePorts.https`          | The service nodePort Harbor listens on when serving with HTTPS                                                                                                                                                                                                                  | `443`                  |
-| `service.nodePorts.notaryPort`     | The service nodePort Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                      | `4443`                 |
+| `service.nodePorts.http`           | The service nodePort Harbor listens on when serving with HTTP                                                                                                                                                                                                                   | `nil`                  |
+| `service.nodePorts.https`          | The service nodePort Harbor listens on when serving with HTTPS                                                                                                                                                                                                                  | `nil`                  |
+| `service.nodePorts.notary`         | The service nodePort Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                      | `nil`                  |
 | `service.annotations`              | The annotations attached to the loadBalancer service                                                                                                                                                                                                                            | {}                     |
 | `service.loadBalancerIP`           | Load Balancer IP                                                                                                                                                                                                                                                                | `nil`                  |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                                                                                                                                                                            | `Cluster`              |
@@ -278,7 +278,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `coreImage.pullPolicy`      | Harbor Core image pull policy                                                                                                                                                                                                                                                            | `IfNotPresent`                                          |
 | `coreImage.pullSecrets`     | Specify docker-registry secret names as an array                                                                                                                                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `coreImage.debug`           | Specify if debug logs should be enabled                                                                                                                                                                                                                                                  | `false`                                                 |
-| `core.secretKey`            | The key used for encryption. Must be a string of 16 chars                                                                                                                                                                                                                                | `not-a-secure-key`                                      |
+| `core.secretKey`            | The key used for encryption. Must be a string of 16 chars                                                                                                                                                                                                                                | Random 16 character long alphanumeric string            |
 | `core.uaaSecretName`        | If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.                                                                                                                                                      | ``                                                      |
 | `core.tls.existingSecret`                 | Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated                                                     | `nil`                                                   |
 | `core.csrfKey`              | CSRF key                                                                                                                                                                                                                                                                                 | ``                                                      |
@@ -327,7 +327,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `jobservice.tolerations`          | Tolerations for pod assignment                                                                                                                               | `[]` (The value is evaluated as a template)             |
 | `jobservice.affinity`             | Node/Pod affinities                                                                                                                                          | `{}` (The value is evaluated as a template)             |
 | `jobservice.podAnnotations`       | Annotations to add to the jobservice pod                                                                                                                     | `{}`                                                    |
-| `jobservice.secret`               | Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars. |                                                         |
+| `jobservice.secret`               | Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars. | Random 16 character long alphanumeric string            |
 | `jobservice.livenessProbe`        | Liveness probe configuration for Job Service                                                                                                                 | `Check values.yaml file`                                |
 | `jobservice.readinessProbe`       | Readines probe configuration for Job Service                                                                                                                 | `Check values.yaml file`                                |
 | `jobservice.extraEnvVars`         | Array containing extra env vars                                                                                                                              | `nil`                                                   |
@@ -548,7 +548,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.signer.tolerations`          | Tolerations for pod assignment                                                                                                                                                                                                                                                                               | `[]`                                                    |
 | `notary.signer.affinity`             | Node/Pod affinities                                                                                                                                                                                                                                                                                          | `{}`                                                    |
 | `notary.signer.podAnnotations`       | Annotations to add to the notary pod                                                                                                                                                                                                                                                                         | `{}`                                                    |
-| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `tls.ca`, `tls.crt` and `tls.key` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
+| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
 | `notary.server.extraEnvVars`         | Array containing extra env vars                                                                                                                                                                                                                                                                              | `nil`                                                   |
 | `notary.server.extraEnvVarsCM`       | ConfigMap containing extra env vars                                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.server.extraEnvVarsSecret`   | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                                                                                                 | `nil`                                                   |
@@ -638,6 +638,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                            |
 | `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                       |
 | `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-a-secure-database-password` |
+| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{"maxConnections": "1024"}`     |
 | `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                          |
 | `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                           |
 | `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `See values.yaml file`           |
@@ -737,6 +738,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + postgresql.replication.enabled: true
 ```
 
+- Internal TLS is enabled by default:
+```diff
+- internalTLS.enabled: false
++ internalTLS.enabled: true
+```
+
 ### Configure the way how to expose Harbor service:
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
@@ -784,7 +791,7 @@ core:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the .extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
 
 ### Configure the external URL:
 
@@ -827,6 +834,12 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+## 7.0.0
+
+This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
+
+You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
 ## 6.0.0 to 6.0.2
 

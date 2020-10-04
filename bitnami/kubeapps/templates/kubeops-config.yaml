@@ -1,4 +1,4 @@
-{{- if .Values.featureFlags.additionalClusters -}}
+{{- if gt (len .Values.clusters) 0 -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +9,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  additional-clusters.conf: |-
-{{ .Values.featureFlags.additionalClusters | toPrettyJson | indent 4 }}
+  clusters.conf: |-
+{{ .Values.clusters | toPrettyJson | indent 4 }}
 {{- end -}}

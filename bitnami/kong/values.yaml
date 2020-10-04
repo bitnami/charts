@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.0.5-debian-10-r6
+  tag: 2.1.4-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -89,32 +89,39 @@ kong:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
   ##
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe: |-
-    exec:
-      command:
-        - /bin/bash
-        - -ec
-        - /health/kong-container-health.sh
+  livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe: |-
-    exec:
-      command:
-        - /bin/bash
-        - -ec
-        - /health/kong-container-health.sh
+  readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ##
+  ## Container lifecycle hooks
+  ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+  ##
+  lifecycleHooks: {}
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -137,7 +144,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 0.9.1-debian-10-r26
+    tag: 0.10.0-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -175,25 +182,28 @@ ingressController:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
   ##
   ## Liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
-  livenessProbe: |-
-    httpGet:
-      path: "/healthz"
-      port: http-health
-      scheme: HTTP
+  livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  readinessProbe: |-
-    httpGet:
-      path: "/healthz"
-      port: http-health
-      scheme: HTTP
+  readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -423,6 +433,11 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Pod labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Prometheus metrics
 ##

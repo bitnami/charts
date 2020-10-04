@@ -1,0 +1,25 @@
+{{- if and .Values.kubeScheduler.enabled .Values.kubeScheduler.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+  namespace: {{ .Values.kubeScheduler.namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+spec:
+  clusterIP: None
+  ports:
+    - name: http-metrics
+      port: {{ .Values.kubeScheduler.service.port}}
+      protocol: TCP
+      targetPort: {{ .Values.kubeScheduler.service.targetPort}}
+{{- if .Values.kubeScheduler.endpoints }}{{- else }}
+  selector:
+    {{- if .Values.kubeScheduler.service.selector }}
+{{ toYaml .Values.kubeScheduler.service.selector | indent 4 }}
+    {{- else}}
+    component: kube-scheduler
+    {{- end}}
+{{- end }}
+  type: ClusterIP
+{{- end -}}

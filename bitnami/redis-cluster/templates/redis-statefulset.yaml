@@ -160,7 +160,7 @@ spec:
               value: {{ .Values.redis.port | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}
@@ -293,7 +293,7 @@ spec:
         - name: volume-permissions
           image: {{ include "redis-cluster.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
             runAsUser: 0
           resources:

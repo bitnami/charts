@@ -54,23 +54,24 @@ spec:
           {{- if .Values.frontend.resources }}
           resources: {{- toYaml .Values.frontend.resources | nindent 12 }}
           {{- end }}
-        {{- if .Values.authProxy.enabled }}
+        {{- if and .Values.authProxy.enabled (not .Values.authProxy.external) }}
         - name: auth-proxy
           args:
-            - -provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
-            - -client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
-            - -client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
-            - -cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
-            - -upstream=http://localhost:8080/
-            - -http-address=0.0.0.0:3000
-            - -email-domain={{ .Values.authProxy.emailDomain }}
-            - -pass-basic-auth=false
-            - -pass-access-token=true
-            - -pass-authorization-header=true
-            - -skip-auth-regex=^\/config\.json$
-            - -skip-auth-regex=^\/favicon.*\.png$
-            - -skip-auth-regex=^\/static\/
-            - -skip-auth-regex=^\/$
+            - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
+            - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
+            - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
+            - --cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
+            - --upstream=http://localhost:8080/
+            - --http-address=0.0.0.0:3000
+            - --email-domain={{ .Values.authProxy.emailDomain }}
+            - --pass-basic-auth=false
+            - --pass-access-token=true
+            - --pass-authorization-header=true
+            - --skip-auth-regex=^\/config\.json$
+            - --skip-auth-regex=^\/favicon.*\.png$
+            - --skip-auth-regex=^\/static\/
+            - --skip-auth-regex=^\/$
+            - --scope=openid email groups
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}
@@ -82,6 +83,9 @@ spec:
           {{- if .Values.authProxy.resources }}
           resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
+          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
         {{- end }}
       volumes:
         - name: vhost

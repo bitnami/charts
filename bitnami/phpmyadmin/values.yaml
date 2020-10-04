@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.2-debian-10-r110
+  tag: 5.0.2-debian-10-r159
   ## Specify a imagePullPolicy
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -39,6 +39,10 @@ service:
   port: 80
 
 db:
+  ## If you do not want the user to be able to specify an arbitrary MySQL server
+  ## at login time, set this to false
+  allowArbitraryServer: true
+
   ## Database port
   ##
   port: 3306
@@ -211,7 +215,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r100
+    tag: 0.8.0-debian-10-r154
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -228,3 +232,5 @@ metrics:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+
+mariadb: {}

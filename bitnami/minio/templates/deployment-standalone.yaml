@@ -107,6 +107,9 @@ spec:
             {{- if .Values.extraEnv }}
             {{- toYaml .Values.extraEnv | nindent 12 }}
             {{- end }}
+          {{ if .Values.command }}
+          command: {{- toYaml .Values.command |  nindent 12 }} 
+          {{- end }}
           ports:
             - name: minio
               containerPort: 9000

@@ -97,13 +97,13 @@ spec:
             {{- if .Values.notary.secretName }}
             - name: notary-cert
               mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
-              subPath: ca
+              subPath: notary-signer-ca.crt
             - name: notary-cert
               mountPath: /etc/ssl/notary/cert/notary-signer.crt
-              subPath: crt
+              subPath: notary-signer.crt
             - name: notary-cert
               mountPath: /etc/ssl/notary/cert/notary-signer.key
-              subPath: key
+              subPath: notary-signer.key
             {{- end }}
             {{- if .Values.notary.signer.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.extraVolumeMounts "context" $) | nindent 12 }}

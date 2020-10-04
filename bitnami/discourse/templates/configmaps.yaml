@@ -24,4 +24,6 @@ data:
   POSTGRESQL_ROOT_USER: "postgres"
   {{- if .Values.discourse.skipInstall }}
   DISCOURSE_SKIP_INSTALL: "yes"
+  {{- else }}
+  DISCOURSE_SKIP_INSTALL: "no"
   {{- end }}

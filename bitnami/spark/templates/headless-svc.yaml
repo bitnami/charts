@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "spark.fullname" . }}-headless
-  labels: {{- include "spark.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   type: ClusterIP
   clusterIP: None
-  selector: {{- include "spark.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

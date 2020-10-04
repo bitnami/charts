@@ -22,7 +22,7 @@ data:
     # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
     proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
-  {{- range .Values.featureFlags.additionalClusters }}
+  {{- range .Values.clusters }}
   {{- if .certificateAuthorityData }}
   {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
    {{- end }}
@@ -40,7 +40,12 @@ data:
 
     server {
       listen 8080;
+  {{- if .Values.frontend.largeClientHeaderBuffers }}
+      large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
+  {{- end }}
+  {{- if .Values.enableIPv6 }}
       listen [::]:8080;
+  {{- end}}
       server_name _;
 
       location /healthz {
@@ -49,22 +54,14 @@ data:
         return 200 "healthy\n";
       }
 
-      # The default cluster running on the same cluster as Kubeapps.
-      location ~* /api/clusters/default {
-        rewrite /api/clusters/default/(.*) /$1 break;
-        rewrite /api/clusters/default / break;
-        proxy_pass https://kubernetes.default;
-        include "./server_blocks/k8s-api-proxy.conf";
-      }
-
-      # Ensure each additional cluster can be reached (should only be
+      # Ensure each cluster can be reached (should only be
       # used with an auth-proxy where k8s credentials never leave
-      # the cluster). See additionalClusters option.
-      {{- range .Values.featureFlags.additionalClusters }}
+      # the cluster). See clusters option.
+      {{- range .Values.clusters }}
       location ~* /api/clusters/{{ .name }} {
         rewrite /api/clusters/{{ .name }}/(.*) /$1 break;
         rewrite /api/clusters/{{ .name }} / break;
-        proxy_pass {{ .apiServiceURL }};
+        proxy_pass {{ default "https://kubernetes.default" .apiServiceURL }};
         {{- if .certificateAuthorityData }}
         proxy_ssl_trusted_certificate "./server_blocks/{{ .name }}-ca.pem";
         {{- end }}
