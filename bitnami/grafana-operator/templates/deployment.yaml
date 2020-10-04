@@ -1,49 +1,58 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "grafana-operator.fullname" . }}
-  labels: {{- include "grafana-operator.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector: 
-    matchLabels: {{- include "grafana-operator.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.podAnnotations }}
-      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec: 
-      {{- include "grafana-operator.imagePullSecrets" . | nindent 6 }}
+      {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.grafana.image .Values.grafanaPluginInit.image ) "global" .Values.global) | nindent 6 }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "grafana-operator.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "grafana-operator.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations}}
-      tolerations: {{- include "grafana-operator.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "grafana-operator.serviceAccountName" . }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup }}
-        {{- if .Values.securityContext.supplementalGroups }}
+        runAsUser: {{ .Values.podSecurityContext.runAsUser }}
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.podSecurityContext.runAsNonRoot }}
+        runAsGroup: {{ .Values.podSecurityContext.runAsGroup }}
+        {{- if .Values.podSecurityContext.supplementalGroups }}
         supplementalGroups:
-        {{- with .Values.securityContext.supplementalGroups }}
+        {{- with .Values.podSecurityContext.supplementalGroups }}
           - {{ . }}
         {{- end }}
         {{- end }}
       {{- end }}
       containers:
         - name: grafana-operator
-          image: {{ include "grafana-operator.image" . }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - containerPort: 8080
@@ -52,9 +61,9 @@ spec:
           - grafana-operator
           args:
           - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-          - -grafana-image-tag={{ .Values.grafana.image.tag | quote}}
+          - -grafana-image-tag={{ .Values.grafana.image.tag | trim }}
           - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
-          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | quote}}
+          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | trim }}
           {{- if (and .Values.args.scanAllNamespaces (not .Values.args.scanNamespaces)) }}
           - --scan-all=True
           {{- else if .Values.args.scanNamespaces }}
@@ -103,4 +112,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: {{ include "grafana-operator.fullname" . }}
+              value: {{ include "common.names.fullname" . }}

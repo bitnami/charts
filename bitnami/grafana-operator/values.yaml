@@ -63,12 +63,24 @@ grafana:
     registry: docker.io
     repository: grafana/grafana
     tag: 7.1.1
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
 
 grafanaPluginInit:
   image:
     registry: quay.io
     repository: integreatly/grafana_plugins_init
     tag: 0.0.3
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
 
 rbac:
   # create specifies whether to install and use RBAC rules.
@@ -84,10 +96,11 @@ serviceAccount:
 ## Pod securityContext
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsGroup: 1001
+  runAsNonRoot: true
   fsGroup: 1001
   supplementalGroups: []
 
@@ -103,6 +116,24 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Add labels to all the deployed resources 
+## 
+commonLabels: {}
+
+## Add annotations to all the deployed resources 
+## 
+commonAnnotations: {}
+
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -117,11 +148,6 @@ tolerations: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
 
 prometheus:
   # Prometheus Operator service monitors
@@ -145,6 +171,7 @@ livenessProbe:
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
+
 readinessProbe:
   enabled: true
   failureThreshold: 3

@@ -2,4 +2,4 @@
 
 Watch the Grafana Operator Deployment status using the command:
 
-    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "grafana-operator.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
