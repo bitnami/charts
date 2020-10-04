@@ -110,6 +110,44 @@ controller:
   ##
   podAnnotations: {}
 
+  ## Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
@@ -169,7 +207,7 @@ controller:
     # Prometheus Operator service monitors
     serviceMonitor:
       # enable support for Prometheus Operator
-      enabled: false
+      enabled: true
       # Job label for scrape target
       jobLabel: "app.kubernetes.io/name"
       # Scrape interval. If not set, the Prometheus default scrape interval is used.
@@ -229,6 +267,12 @@ speaker:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
   serviceAccount:
     # Specifies whether a ServiceAccount should be created
     create: true
@@ -302,7 +346,7 @@ speaker:
     # Prometheus Operator service monitors
     serviceMonitor:
       # enable support for Prometheus Operator
-      enabled: false
+      enabled: true
       # Job label for scrape target
       jobLabel: "app.kubernetes.io/name"
       # Scrape interval. If not set, the Prometheus default scrape interval is used.

@@ -31,9 +31,9 @@ If it is missing create it with:
 WARNING: you specified a secretName that isn't managed by
 Helm. The MetalLB speakers will not join without the secret in place.
 
-    kubectl get secrets --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.secretName" .}}|NAME"
+    kubectl get secrets --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.speaker.secretName" .}}|NAME"
 
 If it is missing create it with:
 
-    kubectl create secret {{ include "metallb.secretName" .}} --from-file={{ include "metallb.secretKey" . }}
+    kubectl create secret {{ include "metallb.speaker.secretName" .}} --from-file={{ include "metallb.speaker.secretKey" . }}
 {{- end }}
