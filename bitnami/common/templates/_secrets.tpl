@@ -15,7 +15,7 @@ Params:
 {{- $name := (include "common.names.fullname" .context) -}}
 
 {{- if .defaultNameSuffix -}}
-{{- $name = printf "%s-%s" $name .defaultNameSuffix -}}
+{{- $name = printf "%s-%s" $name .defaultNameSuffix | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- with .existingSecret -}}
