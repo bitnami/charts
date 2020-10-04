@@ -61,7 +61,7 @@ args:
 grafana:
   image:
     registry: docker.io
-    repository: grafana/grafana
+    repository: bitnami/grafana
     tag: 7.1.1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
