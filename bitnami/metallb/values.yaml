@@ -41,21 +41,23 @@ rbac:
   # create specifies whether to install and use RBAC rules.
   create: true
 
-psp:
-  # create specifies whether to install PodSecurityPolicies.
-  create: true
+prometheus:
+  enabled: false
 
-# Prometheus Operator alertmanager alerts
-prometheusRule:
-  enabled: true
+  # Prometheus Operator service monitors
+  serviceMonitor:
+    # enable support for Prometheus Operator
+    enabled: false
+    # Job label for scrape target
+    jobLabel: "app.kubernetes.io/name"
+    # Scrape interval. If not set, the Prometheus default scrape interval is used.
+    interval: ""
+    metricRelabelings: []
+    relabelings: []
 
-## Add labels to all the deployed resources 
-## 
-commonLabels: {} 
-
-## Add annotations to all the deployed resources 
-## 
-commonAnnotations: {}
+  # Prometheus Operator alertmanager alerts
+  prometheusRule:
+    enabled: true
 
 ## Metallb Controller deployment.
 ## ref: https://hub.docker.com/r/metallb/controller/tags
@@ -165,18 +167,6 @@ controller:
     successThreshold: 1
     timeoutSeconds: 1
 
-  prometheus:
-    # Prometheus Operator service monitors
-    serviceMonitor:
-      # enable support for Prometheus Operator
-      enabled: false
-      # Job label for scrape target
-      jobLabel: "app.kubernetes.io/name"
-      # Scrape interval. If not set, the Prometheus default scrape interval is used.
-      interval: ""
-      metricRelabelings: []
-      relabelings: []
-
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/metallb/speaker/tags
 speaker:
@@ -250,7 +240,7 @@ speaker:
 
   ## Defines a secret to use outside of the auto generated
   ## Default: {{ randAlphaNum 256 | b64enc | quote }}
-  ## The auto generated has secretName: {{ "common.names.fullname" }}-memberlist
+  ## The auto generated has secretName: {{ "metallb.fullname" }}-memberlist
   ## and secretKey: secretkey
   ##
   # secretName:
@@ -297,15 +287,3 @@ speaker:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
-  prometheus:
-    # Prometheus Operator service monitors
-    serviceMonitor:
-      # enable support for Prometheus Operator
-      enabled: false
-      # Job label for scrape target
-      jobLabel: "app.kubernetes.io/name"
-      # Scrape interval. If not set, the Prometheus default scrape interval is used.
-      interval: ""
-      metricRelabelings: []
-      relabelings: []
