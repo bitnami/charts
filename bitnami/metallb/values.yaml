@@ -47,7 +47,7 @@ psp:
 
 # Prometheus Operator alertmanager alerts
 prometheusRule:
-  enabled: true
+  enabled: false
 
 ## Add labels to all the deployed resources 
 ## 
@@ -207,7 +207,7 @@ controller:
     # Prometheus Operator service monitors
     serviceMonitor:
       # enable support for Prometheus Operator
-      enabled: true
+      enabled: false
       # Job label for scrape target
       jobLabel: "app.kubernetes.io/name"
       # Scrape interval. If not set, the Prometheus default scrape interval is used.
@@ -346,7 +346,7 @@ speaker:
     # Prometheus Operator service monitors
     serviceMonitor:
       # enable support for Prometheus Operator
-      enabled: true
+      enabled: false
       # Job label for scrape target
       jobLabel: "app.kubernetes.io/name"
       # Scrape interval. If not set, the Prometheus default scrape interval is used.
