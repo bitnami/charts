@@ -42,8 +42,8 @@ rbac:
   create: true
 
 psp:
-  # create specifies whether to install PodSecurityPolicies.
-  create: true
+  # create specifies whether to install Pod Security Policies.
+  create: false
 
 # Prometheus Operator alertmanager alerts
 prometheusRule:
