@@ -126,12 +126,12 @@ podAnnotations: {}
 ##
 podLabels: {}
 
-## Add labels to all the deployed resources 
-## 
+## Add labels to all the deployed resources
+##
 commonLabels: {}
 
-## Add annotations to all the deployed resources 
-## 
+## Add annotations to all the deployed resources
+##
 commonAnnotations: {}
 
 ## Node labels for pod assignment
