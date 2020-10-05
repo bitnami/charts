@@ -414,8 +414,9 @@ ingress:
 #  rollingUpdate:
 #    maxSurge: 25%
 #    maxUnavailable: 25%
-updateStrategy: {}
-  
+updateStrategy:
+  type: RollingUpdate
+
 ## Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
