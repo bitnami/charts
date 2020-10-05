@@ -1,6 +1,11 @@
 {{- if .Values.ingress.enabled -}}
+{{- $apiVersions := .Capabilities.APIVersions -}}
 {{- range .Values.ingress.hosts }}
+{{- if $apiVersions.Has "networking.k8s.io/v1beta1" }}
+apiVersion: networking.k8s.io/v1beta1
+{{- else }}
 apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ template "nats.fullname" $ }}-monitoring
