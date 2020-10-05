@@ -277,7 +277,7 @@ ldap:
 rbac:
   ## Specifies whether RBAC rules should be created
   ##
-  create: true
+  create: false
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -285,7 +285,7 @@ rbac:
 serviceAccount:
   ## Specifies whether a ServiceAccount should be created
   ##
-  create: true
+  create: false
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the airflow.fullname template
   # name:
