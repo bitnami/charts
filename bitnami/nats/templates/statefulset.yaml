@@ -84,6 +84,13 @@ spec:
                 matchLabels:
                   app: "{{ template "nats.name" . }}"
                   release: {{ .Release.Name | quote }}
+          - weight: 2
+            podAffinityTerm:
+              topologyKey: topology.kubernetes.io/zone
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "nats.name" . }}"
+                  release: {{ .Release.Name | quote }}
       {{- end }}
       containers:
       - name: {{ template "nats.name" . }}
