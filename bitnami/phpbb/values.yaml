@@ -8,7 +8,7 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami phpBB! image version
+## Bitnami phpBB image version
 ## ref: https://hub.docker.com/r/bitnami/phpbb/tags/
 ##
 image:
@@ -44,7 +44,7 @@ fullnameOverride:
 ##
 replicaCount: 1
 
-## Skip phpBB! installation wizard. Useful for migrations and restoring from SQL dump
+## Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbSkipInstall: "no"
@@ -279,7 +279,7 @@ service:
   externalTrafficPolicy: Cluster
 
 ## Configure the ingress resource that allows you to access the
-## phpBB! installation. Set up the URL
+## phpBB installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:

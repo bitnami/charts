@@ -15,7 +15,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the proper phpBB! image name
+Return the proper phpBB image name
 */}}
 {{- define "phpbb.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.image "global" .Values.global ) -}}
@@ -49,7 +49,7 @@ Return  the proper Storage Class
 {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
 {{- end -}}
 
-{{/* phpBB! credential secret name */}}
+{{/* phpBB credential secret name */}}
 {{- define "phpbb.secretName" -}}
 {{- coalesce .Values.existingSecret (include "phpbb.fullname" .) -}}
 {{- end -}}
