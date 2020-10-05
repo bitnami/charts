@@ -3,11 +3,7 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ include "zookeeper.fullname" . }}
-  {{- if .Values.namespace }}
-  namespace: {{ .Values.namespace }}
-  {{- else }}
-  namespace: {{ .Release.Namespace }}
-  {{- end }}
+  namespace: {{ template "zookeeper.namespaceOverride" . }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

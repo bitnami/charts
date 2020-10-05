@@ -96,7 +96,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `jvmFlags`                                        | Default JVMFLAGS for the ZooKeeper process                                                                                        | `nil`                                                   |
 | `config`                                          | Configure ZooKeeper with a custom zoo.conf file                                                                                   | `nil`                                                   |
 | `dataLogDir`                                      | Data log directory                                                                                                                | `""`                                                   |
-| `namespace`                                       | Namespace for ZooKeeper resources                                                                                                 | The Release Namespace                                  |
+| `namespaceOverride`                       | Namespace for ZooKeeper resources. Overrides the release namespace.                                                                       | The Release Namespace                                  |
 
 ### Statefulset parameters
 
