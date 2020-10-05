@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "zookeeper.fullname" . }}
-  namespace: {{ template "zookeeper.namespaceOverride" . }}
+  namespace: {{ template "zookeeper.namespace" . }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
@@ -139,7 +139,7 @@ spec:
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $followerPort := int .Values.service.followerPort }}
               {{- $electionPort := int .Values.service.electionPort }}
-              {{- $releaseNamespace := include "zookeeper.namespaceOverride" . }}
+              {{- $releaseNamespace := include "zookeeper.namespace" . }}
               {{- $zookeeperFullname := include "zookeeper.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
               {{- $clusterDomain := .Values.clusterDomain }}

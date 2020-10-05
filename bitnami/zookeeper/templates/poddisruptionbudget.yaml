@@ -4,7 +4,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "zookeeper.fullname" . }}
-  namespace: {{ template "zookeeper.namespaceOverride" . }}
+  namespace: {{ template "zookeeper.namespace" . }}
   labels: {{- include "zookeeper.labels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     {{- if .Values.commonLabels }}

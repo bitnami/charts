@@ -214,7 +214,7 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{/*
 Return ZooKeeper Namespace to use
 */}}
-{{- define "zookeeper.namespaceOverride" -}}
+{{- define "zookeeper.namespace" -}}
     {{- if .Values.namespaceOverride }}
         {{- .Values.namespaceOverride -}}
     {{- else }}

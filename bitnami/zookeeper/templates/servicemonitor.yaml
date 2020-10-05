@@ -34,5 +34,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ template "zookeeper.namespaceOverride" . }}
+      - {{ template "zookeeper.namespace" . }}
 {{- end }}
