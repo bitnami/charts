@@ -250,11 +250,9 @@ spec:
           image: {{ template "redis.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - /bin/sh
-            - -cx
             - |
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-              /bin/chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.slave.persistence.path }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.slave.persistence.path }}
               {{- else }}
               chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.slave.persistence.path }}
               {{- end }}
