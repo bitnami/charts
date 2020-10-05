@@ -51,7 +51,6 @@ spec:
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      
       {{- if or .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -77,7 +76,6 @@ spec:
       {{- if .Values.postgresql.extraInitContainers }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.extraInitContainers "context" $ ) | nindent 8 }}
       {{- end }}
-
       {{- end }}
       containers:
         - name: postgresql
