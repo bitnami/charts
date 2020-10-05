@@ -3,8 +3,11 @@ kind: Service
 metadata:
   name: {{ template "metrics-server.fullname" . }}
   labels: {{- include "metrics-server.labels" . | nindent 4 }}
+  {{- if .Values.service.labels }}
+  {{- include "metrics-server.tplValue" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.service.annotations }}
-  annotations: {{- include "metrics-server.tplValue" (dict "value" .Values.service.annotation "context" $) | nindent 4 }}
+  annotations: {{- include "metrics-server.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
