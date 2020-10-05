@@ -157,14 +157,17 @@ spec:
               value: "true"
             {{- else if .Values.auth.client.secureTransport }}
             - name: ETCD_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/client/cert.pem"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
             - name: ETCD_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/client/key.pem"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
             {{- if .Values.auth.client.enableAuthentication }}
             - name: ETCD_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/ca.crt"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+            {{- else if .Values.auth.client.caFilename }}
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
             {{- end }}
             {{- end }}
             {{- if and .Values.auth.peer.secureTransport .Values.auth.peer.useAutoTLS }}
@@ -172,14 +175,17 @@ spec:
               value: "true"
             {{- else if .Values.auth.peer.secureTransport }}
             - name: ETCD_PEER_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/peer/cert.pem"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certFilename }}"
             - name: ETCD_PEER_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/peer/key.pem"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certKeyFilename }}"
             {{- if .Values.auth.peer.enableAuthentication }}
             - name: ETCD_PEER_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/ca.crt"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
+            {{- else if .Values.auth.peer.caFilename }}
+            - name: ETCD_PEER_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
             {{- end }}
             {{- end }}
           ports:
