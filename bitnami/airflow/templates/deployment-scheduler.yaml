@@ -33,6 +33,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      serviceAccountName: {{ template "airflow.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "airflow.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
