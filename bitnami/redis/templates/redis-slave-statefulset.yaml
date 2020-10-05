@@ -247,7 +247,7 @@ spec:
               containerPort: 9121
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
   {{- end }}
-      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and .Values.slave.persistence.enabled .Values.securityContext.enabled) }}
+      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
         {{- if $needsVolumePermissions }}
