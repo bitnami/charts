@@ -127,6 +127,8 @@ spec:
               value: {{ default "no" .Values.phpbbSkipInstall | quote }}
             - name: PHPBB_USERNAME
               value: {{ default "" .Values.phpbbUsername | quote }}
+            - name: PHPBB_DISABLE_SESSION_VALIDATION
+              value: {{ default "no" .Values.phpbbDisableSessionValidation | quote }}
             - name: PHPBB_PASSWORD
               valueFrom:
                 secretKeyRef:

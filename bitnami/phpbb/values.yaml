@@ -49,6 +49,11 @@ replicaCount: 1
 ##
 phpbbSkipInstall: "no"
 
+## Disable session validation
+## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+##
+phpbbDisableSessionValidation: "yes"
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
