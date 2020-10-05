@@ -190,7 +190,7 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
 {{- define "mariadb-galera.validateValues.rootPassword" -}}
-{{- if and .Values.rootUser.forcePassword (empty .Values.rootUser.password) -}}
+{{- if and .Values.rootUser.forcePassword (empty .Values.rootUser.password) (not .Values.existingSecret) -}}
 mariadb-galera: rootUser.password
     A MariaDB Database Root Password is required ("rootUser.forcePassword=true" is set)
     Please set a password (--set rootUser.password="xxxx")
@@ -199,7 +199,7 @@ mariadb-galera: rootUser.password
 
 {{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
 {{- define "mariadb-galera.validateValues.password" -}}
-{{- if and .Values.db.forcePassword (empty .Values.db.password) -}}
+{{- if and .Values.db.forcePassword (empty .Values.db.password) (not .Values.existingSecret) -}}
 mariadb-galera: db.password
     A MariaDB Database Password is required ("db.forcePassword=true" is set)
     Please set a password (--set db.password="xxxx")
@@ -208,7 +208,7 @@ mariadb-galera: db.password
 
 {{/* Validate values of MariaDB Galera - must provide passwords when forced */}}
 {{- define "mariadb-galera.validateValues.mariadbBackupPassword" -}}
-{{- if and .Values.galera.mariabackup.forcePassword (empty .Values.galera.mariabackup.password) -}}
+{{- if and .Values.galera.mariabackup.forcePassword (empty .Values.galera.mariabackup.password) (not .Values.existingSecret) -}}
 mariadb-galera: galera.mariabackup.password
     A MariaBackup Password is required ("galera.mariabackup.forcePassword=true" is set)
     Please set a password (--set galera.mariabackup.password="xxxx")

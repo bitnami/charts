@@ -52,6 +52,7 @@ spec:
           {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
         {{- end }}
       {{- end }}
+      serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       {{- if .Values.updateJob.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.initContainers "context" $) | nindent 8 }}
       {{- end }}

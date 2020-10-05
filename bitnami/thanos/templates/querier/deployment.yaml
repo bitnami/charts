@@ -57,7 +57,13 @@ spec:
             - --log.level={{ .Values.querier.logLevel }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
+            {{- if kindIs "string" .Values.querier.replicaLabel }}
             - --query.replica-label={{ .Values.querier.replicaLabel }}
+            {{- else }}
+            {{- range .Values.querier.replicaLabel }}
+            - --query.replica-label={{ . }}
+            {{- end }}
+            {{- end }}
             {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - --store.sd-files=/conf/servicediscovery.yml
             {{- end }}
@@ -110,6 +116,7 @@ spec:
       {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - name: sd-config
               mountPath: /conf/servicediscovery.yml
+              subPath: servicediscovery.yml
       {{- end }}
       {{- if .Values.querier.grpcTLS.server.secure }}
             - name: tls-server

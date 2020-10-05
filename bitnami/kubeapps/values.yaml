@@ -8,10 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Enable this feature flag to use Kubeapps with Helm 3 support.
-## If you set it to true, Kubeapps will not work with releases installed with Helm 2.
-useHelm3: false
-
 ## Disable this feature flag to disallow users to discover available namespaces (only the ones they have access).
 ## When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
 allowNamespaceDiscovery: true
@@ -20,17 +16,18 @@ allowNamespaceDiscovery: true
 enableIPv6: false
 
 ## clusters can be configured with a list of clusters that Kubeapps can target for deployments.
-## This is an alpha feature and the semantics are expected to change slightly in future releases.
-## If empty, Kubeapps will target the cluster on which it is installed only.
-## When populated, Kubeapps will currently present the listed clusters in addition to the default
-## cluster on which Kubeapps is installed. In the future a populated list here will be definitive, so that
-## it is possible to configure Kubeapps to target other clusters only (ie. not target the cluster on which
-## Kubeapps is installed), as per https://github.com/kubeapps/kubeapps/issues/1942 .
+## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
+## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
+## the user as potential targets for install or browsing.
+## Note that you can define a single cluster without an apiServiceURL and the chart will assume this is
+## the name you are assigning to the cluster on which Kubeapps is itself installed. Specifying more than
+## one cluster without an apiServiceURL will cause the chart display an error.
 ## The base64-encoded certificateAuthorityData can be obtained from the additional cluster's kube config
-## file, for example:
+## file, for example, to get the ca data for the 0th cluster in your config (adjust the index 0 as necessary):
 ## kubectl --kubeconfig ~/.kube/kind-config-kubeapps-additional config view --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
 #
 # clusters:
+# - name: default
 # - name: second-cluster
 #   apiServiceURL: https://second-cluster:6443
 #   # certificateAuthorityData is required for secure communication with the additional API server.
@@ -38,7 +35,8 @@ enableIPv6: false
 #   # serviceToken is an optional token configured to allow LIST namespaces only on the additional cluster
 #   # so that the UI can present a list of (only) those namespaces to which the user has access.
 #   serviceToken: ...
-clusters: []
+clusters:
+  - name: default
 
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
@@ -129,7 +127,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.2-debian-10-r1
+    tag: 1.19.2-debian-10-r32
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -200,6 +198,10 @@ frontend:
   ## Some K8s distributions such as GKE requires it
   ##
   proxypassAccessTokenAsBearer: false
+  ## Set large_client_header_buffers in nginx config
+  ## Can be required when using OIDC or LDAP due to large cookies
+  #
+  largeClientHeaderBuffers: "4 32k"
 
 ## AppRepository Controller is the controller used to manage the repositories to
 ## sync. Set apprepository.initialRepos to configure the initial set of
@@ -217,7 +219,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.11.2-scratch-r0
+    tag: 2.0.0-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -229,7 +231,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.11.2-scratch-r0
+    tag: 2.0.0-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -297,7 +299,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.14-debian-10-r0
+    tag: 1.18.9-debian-10-r5
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -317,13 +319,12 @@ hooks:
   tolerations: {}
 
 # Kubeops is an interface between the Kubeapps Dashboard and Helm 3/Kubernetes.
-# Set useHelm3 to true to use Kubeops instead of Tiller Proxy.
 kubeops:
   replicaCount: 2
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.11.2-scratch-r0
+    tag: 2.0.0-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -357,87 +358,6 @@ kubeops:
   tolerations: []
   affinity: {}
 
-## Tiller Proxy is a secure REST API on top of Helm's Tiller component used to
-## manage Helm chart releases in the cluster from Kubeapps. Set tillerProxy.host
-## to configure a different Tiller host to use.
-##
-tillerProxy:
-  replicaCount: 2
-
-  ## Bitnami Kubeapps Tiller Proxy image
-  ## ref: https://hub.docker.com/r/bitnami/kubeapps-tiller-proxy/tags/
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.11.2-scratch-r0
-    ## Specify a imagePullPolicy
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-
-  ## Tiller Proxy service parameters
-  ##
-  service:
-    ## HTTP Port
-    ##
-    port: 8080
-  host: tiller-deploy.kube-system:44134
-
-  ## TLS parameters
-  ##
-  tls: {}
-  #  ca:
-  #  cert:
-  #  key:
-  #  verify: false
-
-  ## It's possible to modify the default timeout for install/upgrade/rollback/delete apps
-  ## (Default: 300s)
-  # timeout: 300
-
-  ## Tiller Proxy containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## Default values set based on usage data from running Kubeapps instances
-    ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
-    ##
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Tiller Proxy containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    httpGet:
-      path: /live
-      port: 8080
-    initialDelaySeconds: 60
-    timeoutSeconds: 5
-  readinessProbe:
-    httpGet:
-      path: /ready
-      port: 8080
-    initialDelaySeconds: 0
-    timeoutSeconds: 5
-
-  ## Affinity for Tiller Proxy pods assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-  ## Node labels for Tiller Proxy pods assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## Tolerations for Tiller Proxy pods assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: {}
-
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
 assetsvc:
@@ -448,7 +368,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.11.2-scratch-r0
+    tag: 2.0.0-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -513,7 +433,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.11.2-debian-10-r0
+    tag: 2.0.0-beta.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -566,46 +486,10 @@ dashboard:
   ##
   tolerations: {}
 
-## MongoDB chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
-##
-mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
-  enabled: false
-  ## Kubeapps uses MongoDB as a cache and persistence is not required
-  ##
-  persistence:
-    enabled: false
-    size: 8Gi
-  ## MongoDB credentials are handled by kubeapps to facilitate upgrades
-  ##
-  auth:
-    existingSecret: kubeapps-mongodb
-  ## Pod Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ##
-  securityContext:
-    enabled: false
-  ## MongoDB containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## Default values set based on usage data from running Kubeapps instances
-    ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
-    ##
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 256Mi
-
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
-  ## Whether to deploy a postgresql server to satisfy the applications database requirements.
-  enabled: true
   ## Enable replication for high availability
   replication:
     enabled: true
@@ -652,7 +536,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.2-debian-10-r1
+  tag: 1.19.2-debian-10-r32
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -679,7 +563,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 6.0.0-debian-10-r31
+    tag: 6.1.1-debian-10-r12
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -723,6 +607,3 @@ authProxy:
 ## These are used to switch on in development features or new features which are ready to be released.
 featureFlags:
   invalidateCache: true
-  operators: false
-  # ui is a WIP feature for the migration to Clarity design system.
-  ui: hex

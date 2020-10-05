@@ -25,14 +25,14 @@ spec:
     {{- end }}
   template:
     metadata:
-      {{- with .Values.master.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.master.annotations }}
+      annotations: {{- include "mariadb.tplValue" (dict "value" .Values.master.annotations "context" $) | nindent 8 }}
       {{- end }}
       labels:
         app: {{ template "mariadb.name" . }}
         chart: {{ template "mariadb.chart" . }}
         release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
         component: master
         {{- include "mariadb.podLabels" . | nindent 8 }}
     spec:
@@ -236,7 +236,7 @@ spec:
           env:
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password" .Values.rootUser.injectSecretsFile }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -301,7 +301,7 @@ spec:
         {{- if or .Values.rootUser.injectSecretsAsVolume .Values.db.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
         - name: mariadb-credentials
           secret:
-            secretName: {{ template "mariadb.fullname" . }}
+            secretName: {{ template "mariadb.secretName" . }}
             items:
               {{- if .Values.rootUser.injectSecretsAsVolume }}
               - key: mariadb-root-password
@@ -341,4 +341,7 @@ spec:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
         {{ include "mariadb.master.storageClass" . }}
+        {{- if .Values.master.persistence.selector }}
+        selector: {{- include "mariadb.tplValue" (dict "value" .Values.master.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}

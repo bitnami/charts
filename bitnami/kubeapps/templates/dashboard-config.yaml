@@ -8,6 +8,9 @@ data:
   vhost.conf: |-
     server {
       listen 8080;
+  {{- if .Values.frontend.largeClientHeaderBuffers }}
+      large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
+  {{- end }}
   {{- if .Values.enableIPv6 }}
       listen [::]:8080;
   {{- end}}
@@ -39,16 +42,12 @@ data:
     }
   config.json: |-
     {
-      "kubeappsCluster": "default",
+      "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
       "kubeappsNamespace": "{{ .Release.Namespace }}",
       "appVersion": "{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
       "featureFlags": {{ .Values.featureFlags | toJson }},
-      {{- $sanitizedClusters := list }}
-      {{- range .Values.clusters }}
-        {{- $sanitizedClusters = append $sanitizedClusters .name }}
-      {{- end }}
-      "clusters": {{ $sanitizedClusters | toJson }}
+      "clusters": {{ template "kubeapps.clusterNames" . }}
     }
