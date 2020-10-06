@@ -279,7 +279,7 @@ To upgrade to `9.0.0`, you have two alternatives:
 - Install a new Drupal chart, and migrate your Drupal site using backup/restore tools such as [Drupal Backup and Migrate](https://www.drupal.org/project/backup_migrate).
 - Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `drupal`):
 
-> NOTE: Please create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
