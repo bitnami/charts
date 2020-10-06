@@ -48,74 +48,142 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the OpenCart chart and their default values.
+The following table lists the configurable parameters of the OpenCart chart and their default values per section/component:
 
-| Parameter                           | Description                                                                                           | Default                                                      |
-|-------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`              | Global Docker image registry                                                                          | `nil`                                                        |
-| `global.imagePullSecrets`           | Global Docker registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`               | Global storage class for dynamic provisioning                                                         | `nil`                                                        |
-| `image.registry`                    | OpenCart image registry                                                                               | `docker.io`                                                  |
-| `image.repository`                  | OpenCart Image name                                                                                   | `bitnami/opencart`                                           |
-| `image.tag`                         | OpenCart Image tag                                                                                    | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                  | Image pull policy                                                                                     | `IfNotPresent`                                               |
-| `image.pullSecrets`                 | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                      | String to partially override opencart.fullname template with a string (will prepend the release name) | `nil`                                                        |
-| `fullnameOverride`                  | String to fully override opencart.fullname template with a string                                     | `nil`                                                        |
-| `opencartHost`                      | OpenCart host to create application URLs                                                              | `nil`                                                        |
-| `service.type`                      | Kubernetes Service type                                                                               | `LoadBalancer`                                               |
-| `service.port`                      | Service HTTP port                                                                                     | `80`                                                         |
-| `service.httpsPort`                 | Service HTTPS port                                                                                    | `443`                                                        |
-| `service.externalTrafficPolicy`     | Enable client source IP preservation                                                                  | `Cluster`                                                    |
-| `service.nodePorts.http`            | Kubernetes http node port                                                                             | `""`                                                         |
-| `service.nodePorts.https`           | Kubernetes https node port                                                                            | `""`                                                         |
-| `service.loadBalancerIP`            | `loadBalancerIP` for the OpenCart Service                                                             | `nil`                                                        |
-| `opencartUsername`                  | User of the application                                                                               | `user`                                                       |
-| `opencartPassword`                  | Application password                                                                                  | _random 10 character long alphanumeric string_               |
-| `opencartEmail`                     | Admin email                                                                                           | `user@example.com`                                           |
-| `smtpHost`                          | SMTP host                                                                                             | `nil`                                                        |
-| `smtpPort`                          | SMTP port                                                                                             | `nil`                                                        |
-| `smtpUser`                          | SMTP user                                                                                             | `nil`                                                        |
-| `smtpPassword`                      | SMTP password                                                                                         | `nil`                                                        |
-| `smtpProtocol`                      | SMTP protocol [`ssl`, `tls`]                                                                          | `nil`                                                        |
-| `allowEmptyPassword`                | Allow DB blank passwords                                                                              | `yes`                                                        |
-| `ingress.enabled`                   | Enable ingress controller resource                                                                    | `false`                                                      |
-| `ingress.annotations`               | Ingress annotations                                                                                   | `[]`                                                         |
-| `ingress.certManager`               | Add annotations for cert-manager                                                                      | `false`                                                      |
-| `ingress.hosts[0].name`             | Hostname to your opencart installation                                                                | `opencart.local`                                             |
-| `ingress.hosts[0].path`             | Path within the url structure                                                                         | `/`                                                          |
-| `ingress.hosts[0].tls`              | Utilize TLS backend in ingress                                                                        | `false`                                                      |
-| `ingress.hosts[0].tlsHosts`         | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                  | `nil`                                                        |
-| `ingress.hosts[0].tlsSecret`        | TLS Secret (certificates)                                                                             | `opencart.local-tls-secret`                                  |
-| `ingress.secrets[0].name`           | TLS Secret Name                                                                                       | `nil`                                                        |
-| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                                                                | `nil`                                                        |
-| `ingress.secrets[0].key`            | TLS Secret Key                                                                                        | `nil`                                                        |
-| `externalDatabase.host`             | Host of the external database                                                                         | `nil`                                                        |
-| `externalDatabase.port`             | Port of the external database                                                                         | `3306`                                                       |
-| `externalDatabase.user`             | Existing username in the external db                                                                  | `bn_opencart`                                                |
-| `externalDatabase.password`         | Password for the above username                                                                       | `nil`                                                        |
-| `externalDatabase.database`         | Name of the existing database                                                                         | `bitnami_opencart`                                           |
-| `mariadb.enabled`                   | Whether to use MariaDB chart                                                                          | `true`                                                       |
-| `mariadb.db.name`                   | Database name to create                                                                               | `bitnami_opencart`                                           |
-| `mariadb.db.user`                   | Database user to create                                                                               | `bn_opencart`                                                |
-| `mariadb.db.password`               | Password for the database                                                                             | `nil`                                                        |
-| `mariadb.rootUser.password`         | MariaDB admin password                                                                                | `nil`                                                        |
-| `serviceType`                       | Kubernetes Service type                                                                               | `LoadBalancer`                                               |
-| `persistence.enabled`               | Enable persistence using PVC                                                                          | `true`                                                       |
-| `persistence.opencart.storageClass` | PVC Storage Class for OpenCart volume                                                                 | `nil` (uses alpha storage class annotation)                  |
-| `persistence.opencart.accessMode`   | PVC Access Mode for OpenCart volume                                                                   | `ReadWriteOnce`                                              |
-| `persistence.opencart.size`         | PVC Storage Request for OpenCart volume                                                               | `8Gi`                                                        |
-| `resources`                         | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
-| `podAnnotations`                    | Pod annotations                                                                                       | `{}`                                                         |
-| `affinity`                          | Map of node/pod affinities                                                                            | `{}`                                                         |
-| `metrics.enabled`                   | Start a side-car prometheus exporter                                                                  | `false`                                                      |
-| `metrics.image.registry`            | Apache exporter image registry                                                                        | `docker.io`                                                  |
-| `metrics.image.repository`          | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`                 | Apache exporter image tag                                                                             | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`          | Image pull policy                                                                                     | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`         | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`            | Additional annotations for Metrics exporter pod                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                 | Exporter resource requests/limit                                                                      | {}                                                           |
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+
+### Common parameters
+
+| Parameter           | Description                                                                  | Default                                                 |
+|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | OpenCart image registry                                                      | `docker.io`                                             |
+| `image.repository`  | OpenCart Image name                                                          | `bitnami/opencart`                                      |
+| `image.tag`         | OpenCart Image tag                                                           | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | OpenCart image pull policy                                                   | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
+| `nameOverride`      | String to partially override opencart.fullname template                      | `nil`                                                   |
+| `fullnameOverride`  | String to fully override opencart.fullname template                          | `nil`                                                   |
+| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+
+### OpenCart parameters
+
+| Parameter                            | Description                                                                                                           | Default                                        |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
+| `containerSecurityContext.enabled`   | Enable OpenCart containers' Security Context                                                                          | `true`                                         |
+| `containerSecurityContext.runAsUser` | OpenCart containers' Security Context                                                                                 | `1001`                                         |
+| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
+| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
+| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
+| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                          |
+| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                          |
+| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
+| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
+| `opencartHost`                       | OpenCart host to create application URLs (when ingress, it will be ignored)                                           | `nil`                                          |
+| `opencartUsername`                   | User of the application                                                                                               | `user`                                         |
+| `opencartPassword`                   | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
+| `opencartEmail`                      | Admin email                                                                                                           | `user@example.com`                             |
+| `opencartFirstName`                  | First Name                                                                                                            | `Bitnami`                                      |
+| `opencartLastName`                   | Last Name                                                                                                             | `Name`                                         |
+| `opencartCookieCheckIP`              | Whether to check the cookie's IP address or not                                                                       | `no`                                           |
+| `opencartCountry`                    | Default country of the store                                                                                          | `us`                                           |
+| `opencartLanguage`                   | Default language of the store (iso code)                                                                              | `en`                                           |
+| `opencartSkipInstall`                | Skip OpenCart installation wizard (`no` / `yes`)                                                                      | `no`                                           |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
+| `persistence.accessMode`             | PVC Access Mode for OpenCart volume                                                                                   | `ReadWriteOnce`                                |
+| `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
+| `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |
+| `persistence.hostPath`               | Host mount path for OpenCart volume                                                                                   | `nil` (will not mount to a host path)          |
+| `persistence.size`                   | PVC Storage Request for OpenCart volume                                                                               | `8Gi`                                          |
+| `persistence.storageClass`           | PVC Storage Class for OpenCart volume                                                                                 | `nil` (uses alpha storage class annotation)    |
+| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
+| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
+| `podSecurityContext.enabled`         | Enable OpenCart pods' Security Context                                                                                | `true`                                         |
+| `podSecurityContext.fsGroup`         | OpenCart pods' group ID                                                                                               | `1001`                                         |
+| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
+| `replicaCount`                       | Number of OpenCart Pods to run                                                                                        | `1`                                            |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
+| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
+| `smtpHost`                           | SMTP host                                                                                                             | `nil`                                          |
+| `smtpPort`                           | SMTP port                                                                                                             | `nil` (but opencart internal default is 25)    |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                          |
+| `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
+| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
+| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
+
+### Traffic Exposure Parameters
+
+| Parameter                        | Description                           | Default            |
+|----------------------------------|---------------------------------------|--------------------|
+| `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
+| `service.port`                   | Service HTTP port                     | `8080`             |
+| `service.httpsPort`              | Service HTTPS port                    | `8443`             |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
+| `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
+| `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
+| `ingress.enabled`                | Enable ingress controller resource    | `false`            |
+| `ingress.certManager`            | Add annotations for cert-manager      | `false`            |
+| `ingress.hostname`               | Default host for the ingress resource | `opencart.local`   |
+| `ingress.annotations`            | Ingress annotations                   | `{}`               |
+| `ingress.hosts[0].name`          | Hostname to your OpenCart installation  | `nil`            |
+| `ingress.hosts[0].path`          | Path within the url structure         | `nil`              |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`              |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`              |
+| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`              |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`              |
+| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`              |
+
+### Database parameters
+
+| Parameter                                  | Description                              | Default                                        |
+|--------------------------------------------|------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
+| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
+| `mariadb.db.name`                          | Database name to create                  | `bitnami_opencart`                             |
+| `mariadb.db.user`                          | Database user to create                  | `bn_opencart`                                  |
+| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
+| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
+| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
+| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
+| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
+| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
+| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
+| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db     | `bn_opencart`                                  |
+| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database            | `bitnami_opencart`                             |
+| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+
+### Metrics parameters
+
+| Parameter                   | Description                                      | Default                                                      |
+|-----------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                      |
+| `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`                                                  |
+| `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`         | Exporter resource requests/limit                 | {}                                                           |
 
 The above parameters map to the env variables defined in [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart). For more information please refer to the [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart) image documentation.
 
@@ -167,6 +235,14 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Upgrading
+
+### To 8.0.0
+
+The [Bitnami OpenCart](https://github.com/bitnami/bitnami-docker-opencart) image was updated to support and enable the "non-root" user approach
+
+If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
+
+This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
 ### To 7.0.0
 
