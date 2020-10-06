@@ -11,6 +11,7 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "tomcat.matchLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels: {{- include "tomcat.labels" . | nindent 8 }}

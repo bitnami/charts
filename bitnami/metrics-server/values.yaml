@@ -133,6 +133,12 @@ service:
   ##
   annotations: {}
 
+  ## Provide any additional labels which may be required. This can be used to
+  ## have metrics-server show up in `kubectl cluster-info`
+  ##  kubernetes.io/cluster-service: "true"
+  ##  kubernetes.io/name: "Metrics-server"
+  labels: {}
+
 ## Metric Server containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##

@@ -27,6 +27,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Number of Tomcat replicas
+##
+replicaCount: 1
+
 ## String to partially override tomcat.fullname template (will maintain the release name)
 ##
 # nameOverride:
