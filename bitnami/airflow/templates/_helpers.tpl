@@ -351,7 +351,7 @@ Compile all warnings into a single message, and call fail.
 {{/* Validate values of Airflow - Atleast one repository details must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
 {{- define "airflow.validateValues.cloneDagFilesFromGit.repositories" -}}
 {{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repositories) -}}
-{{- if or (empty .Values.airflow.clonePluginsFromGit.repository) (empty .Values.airflow.clonePluginsFromGit.branch) -}}
+{{- if or (empty .Values.airflow.cloneDagFilesFromGit.repository) (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
 airflow: airflow.cloneDagFilesFromGit.repositories
     At least one repository must be provided when enabling downloading DAG files
     from git repository (--set airflow.cloneDagFilesFromGit.repositories[0].repository="xxx"
