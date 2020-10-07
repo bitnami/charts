@@ -78,9 +78,9 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
-            - name: MARIADB_HOST
+            - name: OPENCART_DATABASE_HOST
               value: {{ include "opencart.databaseHost" . | quote }}
-            - name: MARIADB_PORT_NUMBER
+            - name: OPENCART_DATABASE_PORT_NUMBER
               value: {{ include "opencart.databasePort" . | quote }}
             - name: OPENCART_DATABASE_NAME
               value: {{ include "opencart.databaseName" . | quote }}
