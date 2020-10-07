@@ -322,7 +322,7 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
-Please, take into account those scripts are executed in all the replicas, if you want to do a "one time" action like creating a database, you need to add a condition in your `.sh` script to be executed in one of the nodes, such as
+Take into account those scripts are executed in all the replicas, if you want to do a "one time" action like creating a database, you need to add a condition in your `.sh` script to be executed in one of the nodes, such as
 
 ```yaml
 initdbScripts:
