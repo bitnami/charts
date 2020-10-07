@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
+    release: {{ .Release.Name | quote }}
 data:
 {{- include "common.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
 {{ end }}

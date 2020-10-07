@@ -4,6 +4,7 @@ metadata:
   name: {{ include "mariadb.primary.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    release: {{ .Release.Name }}
     app.kubernetes.io/component: primary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -16,6 +17,7 @@ spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
+      release: {{ .Release.Name }}
   serviceName: {{ include "mariadb.primary.fullname" . }}
   updateStrategy:
     type: {{ .Values.primary.updateStrategy }}
@@ -36,6 +38,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: primary
+        release: {{ .Release.Name }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
@@ -307,6 +310,7 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: primary
+          release: {{ .Release.Name }}
       spec:
         accessModes:
           {{- range .Values.primary.persistence.accessModes }}
