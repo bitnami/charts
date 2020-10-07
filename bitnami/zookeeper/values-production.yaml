@@ -199,6 +199,9 @@ dataLogDir: ""
 ##
 # config:
 
+## Namespace for ZooKeeper resources
+# namespaceOverride:
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
