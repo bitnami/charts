@@ -237,18 +237,19 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | Parameter                                    | Description                                                                                            | Default                                                 |
 |----------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `mariadb.enabled`                            | Enable/disable MariaDB chart installation                                                              | `true`                                                  |
-| `mariadb.replication.enabled`                | MariaDB replication enabled                                                                            | `false`                                                 |
-| `mariadb.db.name`                            | Name for new database to create                                                                        | `dataflow`                                              |
-| `mariadb.db.user`                            | Username of new user to create                                                                         | `dataflow`                                              |
-| `mariadb.db.password`                        | Password for the new user                                                                              | `change-me`_                                            |
+| `mariadb.architecture`                       | MariaDB architecture (`standalone` or `replication`)                                                   | `standalone`                                            |
+| `mariadb.auth.database`                      | Database name to create                                                                                | `dataflow`                                              |
+| `mariadb.auth.username`                      | Username of new user to create                                                                         | `dataflow`                                              |
+| `mariadb.auth.password`                      | Password for the new user                                                                              | `change-me`                                             |
+| `mariadb.auth.rootPassword`                  | Password for the MariaDB `root` user                                                                   | _random 10 character alphanumeric string_               |
 | `mariadb.initdbScripts`                      | Dictionary of initdb scripts                                                                           | Check `values.yaml` file                                |
 | `externalDatabase.host`                      | Host of the external database                                                                          | `localhost`                                             |
 | `externalDatabase.port`                      | External database port number                                                                          | `3306`                                                  |
 | `externalDatabase.password`                  | Password for the above username                                                                        | `""`                                                    |
 | `externalDatabase.existingPasswordSecret`    | Existing secret with database password                                                                 | `""`                                                    |
-| `externalDatabase.dataflow.user`             | Existing username in the external db to be used by Dataflow server                                     | `dataflow`                                              |
+| `externalDatabase.dataflow.username`         | Existing username in the external db to be used by Dataflow server                                     | `dataflow`                                              |
 | `externalDatabase.dataflow.database`         | Name of the existing database to be used by Dataflow server                                            | `dataflow`                                              |
-| `externalDatabase.skipper.user`              | Existing username in the external db to be used by Skipper server                                      | `skipper`                                               |
+| `externalDatabase.skipper.username`          | Existing username in the external db to be used by Skipper server                                      | `skipper`                                               |
 | `externalDatabase.skipper.database`          | Name of the existing database to be used by Skipper server                                             | `skipper`                                               |
 | `externalDatabase.hibernateDialect`          | Hibernate Dialect used by Dataflow/Skipper servers                                                     | `""`                                                    |
 
@@ -324,14 +325,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - Force users to specify a password and mount secrets as volumes instead of using environment variables on MariaDB:
 
 ```diff
-- mariadb.rootUser.forcePassword: false
-- mariadb.rootUser.injectSecretsAsVolume: false
-+ mariadb.rootUser.forcePassword: true
-+ mariadb.rootUser.injectSecretsAsVolume: true
-- mariadb.db.forcePassword: false
-- mariadb.db.injectSecretsAsVolume: false
-+ mariadb.db.forcePassword: true
-+ mariadb.db.injectSecretsAsVolume: true
+- mariadb.auth.forcePassword: false
++ mariadb.auth.forcePassword: true
+- mariadb.auth.usePasswordFiles: false
++ mariadb.auth.usePasswordFiles: true
 ```
 
 ### Features
@@ -456,14 +453,84 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Upgrading
 
-It's necessary to set the `mariadb.rootUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, unless you indicate set this parameter, a random value will be generated. Inspect the MariaDB secret to obtain the root password, then you can upgrade your chart using the command below:
+It's necessary to set the root user parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, unless you indicate set this parameter, a random value will be generated. Inspect the MariaDB secret to obtain the root password, then you can upgrade your chart using the command below:
+
+#### v0.x.x
 
 ```bash
 helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD]
 ```
 
+#### v1.x.x
+
+```bash
+helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD]
+```
+
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+#### v0.x.x
 
 ```bash
 helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+```
+
+#### v1.x.x
+
+```bash
+helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+```
+
+## Notable changes
+
+### v1.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `1.0.0`, you have an alternatives:
+
+- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `dataflow`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+
+```console
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dataflow -o jsonpath="{.items[0].metadata.name}")
+export RABBITMQ_PASSWORD=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)
+export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
+
+```console
+$ helm upgrade dataflow bitnami/spring-cloud-dataflow --version 0.7.4 \
+  --set server.replicaCount=0 \
+  --set skipper.replicaCount=0 \
+  --set mariadb.enabled=false \
+  --set rabbitmq.auth.password=$RABBITMQ_PASSWORD \
+  --set rabbitmq.auth.erlangCookie=$RABBITMQ_ERLANG_COOKIE
+```
+
+Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade dataflow bitnami/spring-cloud-dataflow \
+  --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC \
+  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
+  --set mariadb.auth.password=$MARIADB_PASSWORD \
+  --set rabbitmq.auth.password=$RABBITMQ_PASSWORD \
+  --set rabbitmq.auth.erlangCookie=$RABBITMQ_ERLANG_COOKIE
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=dataflow,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
 ```
