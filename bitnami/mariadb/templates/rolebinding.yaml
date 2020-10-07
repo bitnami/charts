@@ -5,6 +5,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    release: {{ .Release.Name | quote }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
