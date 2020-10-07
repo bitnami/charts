@@ -325,12 +325,6 @@ postgresql:
   ##     command: ['do', 'something']
   ##
   extraInitContainers: []
-  ## Additional PostgreSQL Master Volume mounts
-  ##
-  extraVolumeMounts: []
-  ## Additional PostgreSQL Master Volumes
-  ##
-  extraVolumes: []
 
   ## Repmgr configuration
   ## Specify content for repmgr.conf
