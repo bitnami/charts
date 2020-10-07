@@ -98,4 +98,18 @@ host. To configure OpenCart to use and external database host:
     --set opencartPassword=$APP_PASSWORD,opencartHost=$APP_HOST,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- end }}
 
-{{- include "opencart.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{- $passwordValidationErrors := list -}}
+{{- if not .Values.existingSecret -}}
+    {{- $secretName := include "opencart.secretName" . -}}
+    {{- $requiredOpencartPassword := dict "valueKey" "opencartPassword" "secret" $secretName "field" "opencart-password" "context" $ -}}
+    {{- $requiredOpencartPasswordError := include "common.validations.values.single.empty" $requiredOpencartPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOpencartPasswordError -}}
+{{- end -}}
+
+{{- $mariadbSecretName := include "opencart.databaseSecretName" . -}}
+{{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

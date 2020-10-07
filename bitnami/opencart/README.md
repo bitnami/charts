@@ -95,6 +95,9 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
 | `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
 | `opencartHost`                       | OpenCart host to create application URLs (when ingress, it will be ignored)                                           | `nil`                                          |
 | `opencartUsername`                   | User of the application                                                                                               | `user`                                         |
 | `opencartPassword`                   | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
@@ -112,6 +115,8 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `persistence.hostPath`               | Host mount path for OpenCart volume                                                                                   | `nil` (will not mount to a host path)          |
 | `persistence.size`                   | PVC Storage Request for OpenCart volume                                                                               | `8Gi`                                          |
 | `persistence.storageClass`           | PVC Storage Class for OpenCart volume                                                                                 | `nil` (uses alpha storage class annotation)    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
 | `podSecurityContext.enabled`         | Enable OpenCart pods' Security Context                                                                                | `true`                                         |
@@ -152,25 +157,25 @@ The following table lists the configurable parameters of the OpenCart chart and 
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_opencart`                             |
-| `mariadb.db.user`                          | Database user to create                  | `bn_opencart`                                  |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_opencart`                                  |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_opencart`                             |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                   | Description                                                                              | Default                                        |
+|---------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_opencart`                             |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_opencart`                                  |
+| `mariadb.auth.password`                     | Password for the database                                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                                          |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                                          |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_opencart`                                  |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                                           |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_opencart`                             |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                                         |
 
 ### Metrics parameters
 
@@ -205,7 +210,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set opencartUsername=admin,opencartPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set opencartUsername=admin,opencartPassword=password,mariadb.auth.rootPassword=secretpassword \
     bitnami/opencart
 ```
 
@@ -227,6 +232,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami OpenCart](https://github.com/bitnami/bitnami-docker-opencart) image stores the OpenCart data and configurations at the `/bitnami/opencart` path of the container.
@@ -238,11 +249,40 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### To 8.0.0
 
+**Important:** Under no circumstance should you run `helm upgrade` to `8.0.0` or you may suffer unrecoverable data loss of your site's data.
+
+This release includes several breaking changes which are listed below. To upgrade to `8.0.0`, we recommend to install a new OpenCart chart, and migrate your OpenCart site using the application's [Backup & Restore tool](http://docs.opencart.com/en-gb/tools/backup/).
+
+> NOTE: It is highly recommened to create a backup of your database before migrating your site. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+
+```console
+export OPENCART_PASSWORD=$(kubectl get secret --namespace default opencart -o jsonpath="{.data.opencart-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=opencart,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+#### New volume mount locations
+
+Locations for volume mounts have been changed. Now, OpenCart's persisted volume will contain the following directories:
+
+- `opencart`: Persisted OpenCart files
+- `opencart_storage`: OpenCart storage files
+
+These folders will be mounted to the respective sub-paths in `/bitnami`. Before, the entire volume was mounted to `/bitnami/opencart`.
+
+#### Support for non-root user approach
+
 The [Bitnami OpenCart](https://github.com/bitnami/bitnami-docker-opencart) image was updated to support and enable the "non-root" user approach
 
 If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
+
+#### MariaDB dependency update
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
 ### To 7.0.0
 

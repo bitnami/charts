@@ -40,6 +40,11 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -68,41 +73,25 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
-              value: {{ .Values.allowEmptyPassword | quote }}
+              value: {{ ternary "true" "false" .Values.allowEmptyPassword | quote }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
-            {{- if .Values.mariadb.enabled }}
             - name: MARIADB_HOST
-              value: {{ template "opencart.mariadb.fullname" . }}
+              value: {{ include "opencart.databaseHost" . | quote }}
             - name: MARIADB_PORT_NUMBER
-              value: "3306"
+              value: {{ include "opencart.databasePort" . | quote }}
             - name: OPENCART_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ include "opencart.databaseName" . | quote }}
             - name: OPENCART_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ include "opencart.databaseUser" . | quote }}
             - name: OPENCART_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "opencart.mariadb.fullname" . }}
+                  name: {{ include "opencart.databaseSecretName" . }}
                   key: mariadb-password
-            {{- else }}
-            - name: MARIADB_HOST
-              value: {{ .Values.externalDatabase.host | quote }}
-            - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            - name: OPENCART_DATABASE_NAME
-              value: {{ .Values.externalDatabase.database | quote }}
-            - name: OPENCART_DATABASE_USER
-              value: {{ .Values.externalDatabase.user | quote }}
-            - name: OPENCART_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ include "common.names.fullname" . }}-externaldb"
-                  key: db-password
-            {{- end }}
-    {{- $port:=.Values.service.port | toString }}
+            {{- $port:=.Values.service.port | toString }}
             - name: OPENCART_HOST
               value: "{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
             - name: OPENCART_USERNAME
@@ -196,7 +185,7 @@ spec:
             - name: opencart-data
               mountPath: /bitnami/opencart
               subPath: opencart
-            - name: opencart-storage-data
+            - name: opencart-data
               mountPath: /bitnami/opencart_storage
               subPath: opencart_storage
             {{- if .Values.extraVolumeMounts }}
