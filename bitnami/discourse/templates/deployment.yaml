@@ -16,6 +16,9 @@ spec:
   selector:
     matchLabels: {{- include "discourse.matchLabels" . | nindent 6 }}
       component: discourse
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:

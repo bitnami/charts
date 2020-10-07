@@ -147,6 +147,14 @@ querier:
     fsGroup: 1001
     runAsUser: 1001
 
+  # Create ClusterRole and ClusterRolebing for the Service account
+  rbac:
+    create: false
+  
+  # Create PodSecurity Policy
+  psp:
+    create: false
+  
   ## Thanos Querier containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

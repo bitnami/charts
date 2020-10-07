@@ -2,12 +2,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "consul.fullname" . }}-metrics
+  name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "consul.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
-  {{- if .Values.metrics.service.annotations }}
-  annotations: {{- toYaml .Values.metrics.service.annotations | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -18,5 +27,5 @@ spec:
     - name: http-metrics
       port: 9107
       targetPort: metrics
-  selector: {{- include "consul.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

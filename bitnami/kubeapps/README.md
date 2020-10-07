@@ -79,7 +79,7 @@ Since v1.9.0 (and by default since v2.0), Kubeapps supports to deploy and manage
 
 ### Exposing Externally
 
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. If you explicitly [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) (recommended), then only the configured users trusted by your Identity Provider will be able to reach the Kubernetes API. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
 
 #### LoadBalancer Service
 
@@ -179,17 +179,7 @@ Or:
 Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
 ```
 
-This usually is an indication that Tiller was not installed with enough permissions to create the resources required by Kubeapps. In order to install Kubeapps, tiller will need to be able to install Custom Resource Definitions cluster-wide, as well as manage app repositories in your kubeapps namespace. The easiest way to enable this in a development environment is install Tiller with elevated permissions (e.g. as a cluster-admin). For example:
-
-```bash
-kubectl -n kube-system create sa tiller
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-helm init --service-account tiller
-```
-
-but for a production environment you can assign the specific permissions so that tiller can [manage CRDs on the cluster](https://github.com/kubeapps/kubeapps/blob/master/docs/user/manifests/openshift-tiller-with-crd-rbac.yaml) as well as [create app repositories in your Kubeapps namespace](https://github.com/kubeapps/kubeapps/blob/master/docs/user/manifests/openshift-tiller-with-apprepository-rbac.yaml) (examples are from our in development support for OpenShift).
-
-It is also possible, though less common, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+It is possible, though uncommon, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
 
 ```bash
 kubectl api-versions

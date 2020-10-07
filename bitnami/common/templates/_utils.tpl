@@ -24,3 +24,22 @@ Usage:
 
   {{ join "_" $upperCaseFieldNameSplit }}
 {{- end -}}
+
+{{/*
+Gets a value from .Values given
+Usage:
+{{ include "common.utils.getValueFromKey" (dict "key" "path.to.key" "context" $) }}
+*/}}
+{{- define "common.utils.getValueFromKey" -}}
+{{- $splitKey := splitList "." .key -}}
+{{- $value := "" -}}
+{{- $latestObj := $.context.Values -}}
+{{- range $splitKey -}}
+  {{- if not $latestObj -}}
+    {{- printf "please review the entire path of '%s' exists in values" $.key | fail -}}
+  {{- end -}}
+  {{- $value = ( index $latestObj . ) -}}
+  {{- $latestObj = $value -}}
+{{- end -}}
+{{- printf "%v" (default "" $value) -}} 
+{{- end -}}

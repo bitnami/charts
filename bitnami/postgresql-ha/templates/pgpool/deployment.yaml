@@ -277,11 +277,16 @@ spec:
             {{- end }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: postgresql-password
-              mountPath: /opt/bitnami/pgpool/secrets/
+              subPath: pgpool-password
+              mountPath: /opt/bitnami/pgpool/secrets/pgpool-password
+            - name: postgresql-password
+              subPath: pgpool-sr-check-password
+              mountPath: /opt/bitnami/pgpool/secrets/pgpool-sr-check-password
             {{- end }}
             {{- if .Values.pgpool.usePasswordFile }}
             - name: pgpool-password
-              mountPath: /opt/bitnami/pgpool/secrets/
+              subPath: admin-password
+              mountPath: /opt/bitnami/pgpool/secrets/admin-password
             {{- end }}
             {{- if .Values.pgpool.tls.enabled }}
             - name: pgpool-certificates

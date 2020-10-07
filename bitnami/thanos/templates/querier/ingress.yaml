@@ -68,7 +68,7 @@ spec:
               serviceName: {{ template "thanos.fullname" . }}-querier
               servicePort: grpc
     {{- end }}
-    {{- range .Values.querier.ingress.extraHosts }}
+    {{- range .Values.querier.ingress.grpc.extraHosts }}
     - host: {{ .name }}
       http:
         paths:

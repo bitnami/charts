@@ -18,7 +18,6 @@ Validate value params:
   {{- end -}}
 {{- end -}}
 
-
 {{/*
 Validate a value must not be empty.
 
@@ -31,17 +30,7 @@ Validate value params:
   - field - String - Optional. Name of the field in the secret data, e.g: "mysql-password"
 */}}
 {{- define "common.validations.values.single.empty" -}}
-  {{- $valueKeyArray := splitList "." .valueKey -}}
-  {{- $value := "" -}}
-  {{- $latestObj := $.context.Values -}}
-  {{- range $valueKeyArray -}}
-    {{- if not $latestObj -}}
-      {{- printf "please review the entire path of '%s' exists in values" $.valueKey | fail -}}
-    {{- end -}}
-
-    {{- $value = ( index $latestObj . ) -}}
-    {{- $latestObj = $value -}}
-  {{- end -}}
+  {{- $value := include "common.utils.getValueFromKey" (dict "key" .valueKey "context" .context) }}
 
   {{- if not $value -}}
     {{- $varname := "my-value" -}}
@@ -50,45 +39,115 @@ Validate value params:
       {{- $varname = include "common.utils.fieldToEnvVar" . -}}
       {{- $getCurrentValue = printf " To get the current value:\n\n        %s\n" (include "common.utils.secret.getvalue" .) -}}
     {{- end -}}
-
     {{- printf "\n    '%s' must not be empty, please add '--set %s=$%s' to the command.%s" .valueKey .valueKey $varname $getCurrentValue -}}
   {{- end -}}
 {{- end -}}
 
 {{/*
-Validate a mariadb required password must not be empty.
+Validate MariaDB required passwords are not empty.
 
 Usage:
-{{ include "common.validations.values.mariadb.passwords" (dict "secret" "secretName" "context" $) }}
-
-Validate value params:
-  - secret - String - Required. Name of the secret where mysql values are stored, e.g: "mysql-passwords-secret"
+{{ include "common.validations.values.mariadb.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
+Params:
+  - secret - String - Required. Name of the secret where MariaDB values are stored, e.g: "mysql-passwords-secret"
+  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
-  {{- if and (not .context.Values.mariadb.existingSecret) .context.Values.mariadb.enabled -}}
+  {{- $existingSecret := include "common.mariadb.values.existingSecret" . -}}
+  {{- $enabled := include "common.mariadb.values.enabled" . -}}
+  {{- $architecture := include "common.mariadb.values.architecture" . -}}
+  {{- $authPrefix := include "common.mariadb.values.key.auth" . -}}
+  {{- $valueKeyRootPassword := printf "%s.rootPassword" $authPrefix -}}
+  {{- $valueKeyUsername := printf "%s.username" $authPrefix -}}
+  {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
+  {{- $valueKeyReplicationPassword := printf "%s.replicationPassword" $authPrefix -}}
+
+  {{- if and (not $existingSecret) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
-    {{- if .context.Values.mariadb.secret.requirePasswords -}}
-      {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" .secretName "field" "mariadb-root-password" -}}
-      {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
+    {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mariadb-root-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
 
-      {{- if not (empty .context.Values.mariadb.db.user) -}}
-          {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" .secretName "field" "mariadb-password" -}}
-          {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
-      {{- end -}}
-
-      {{- if .context.Values.mariadb.replication.enabled -}}
-          {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" .secretName "field" "mariadb-replication-password" -}}
-          {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
-      {{- end -}}
-
-      {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+    {{- $valueUsername := include "common.utils.getValueFromKey" (dict "key" $valueKeyUsername "context" .context) }}
+    {{- if not (empty $valueUsername) -}}
+        {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "mariadb-password" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
     {{- end -}}
+
+    {{- if (eq $architecture "replication") -}}
+        {{- $requiredReplicationPassword := dict "valueKey" $valueKeyReplicationPassword "secret" .secret "field" "mariadb-replication-password" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
+    {{- end -}}
+
+    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+
   {{- end -}}
 {{- end -}}
 
 {{/*
-Validate a postgresql required password must not be empty.
+Auxiliar function to get the right value for existingSecret.
+
+Usage:
+{{ include "common.mariadb.values.existingSecret" (dict "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+*/}}
+{{- define "common.mariadb.values.existingSecret" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.mariadb.existingSecret | quote -}}
+  {{- else -}}
+    {{- .context.Values.existingSecret | quote -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for enabled mariadb.
+
+Usage:
+{{ include "common.mariadb.values.enabled" (dict "context" $) }}
+*/}}
+{{- define "common.mariadb.values.enabled" -}}
+  {{- if .subchart -}}
+    {{- printf "%v" .context.Values.mariadb.enabled -}}
+  {{- else -}}
+    {{- printf "%v" (not .context.Values.enabled) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for architecture
+
+Usage:
+{{ include "common.mariadb.values.architecture" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+*/}}
+{{- define "common.mariadb.values.architecture" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.mariadb.architecture -}}
+  {{- else -}}
+    {{- .context.Values.architecture -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for the key auth
+
+Usage:
+{{ include "common.mariadb.values.key.auth" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+*/}}
+{{- define "common.mariadb.values.key.auth" -}}
+  {{- if .subchart -}}
+    mariadb.auth
+  {{- else -}}
+    auth
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Validate PostgreSQL required passwords are not empty.
 
 Usage:
 {{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}

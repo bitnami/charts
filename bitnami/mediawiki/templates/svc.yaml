@@ -32,3 +32,4 @@ spec:
   {{- end }}
   selector:
     app: {{ template "mediawiki.name" . }}
+    release: "{{ .Release.Name }}"
