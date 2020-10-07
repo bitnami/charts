@@ -2,16 +2,16 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}
-  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
     {{- if .Values.postgresql.labels }}
-    {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.labels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
-    {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ include "postgresql-ha.postgresql" . }}-headless
@@ -23,37 +23,37 @@ spec:
     {{- end }}
   podManagementPolicy: Parallel
   selector:
-    matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
   template:
     metadata:
-      labels: {{- include "postgresql-ha.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: postgresql
         {{- if .Values.postgresql.podLabels }}
-        {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if or .Values.postgresql.podAnnotations (and .Values.metrics.enabled .Values.metrics.annotations) }}
       annotations:
       {{- if .Values.postgresql.podAnnotations }}
-      {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
-      {{- include "postgresql-ha.tplValue" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
       {{- end }}
       {{- end }}
     spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.postgresql.affinity }}
-      affinity: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.postgresql.nodeSelector }}
-      nodeSelector: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.postgresql.priorityClassName }}
       priorityClassName: {{ .Values.postgresql.priorityClassName }}
       {{- end }}
       {{- if .Values.postgresql.tolerations }}
-      tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
@@ -86,7 +86,7 @@ spec:
       containers:
         - name: postgresql
           {{- if .Values.postgresql.lifecycleHooks }}
-          lifecycle: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.lifecycleHooks "context" $) | nindent 12 }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.lifecycleHooks "context" $) | nindent 12 }}
           {{- else }}
           lifecycle:
             preStop:
@@ -95,10 +95,10 @@ spec:
                   - /pre-stop.sh
           {{- end }}
           {{- if .Values.postgresql.command }}
-          command: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.postgresql.args }}
-          args: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.args "context" $) | nindent 12 }}
           {{- end }}
           image: {{ include "postgresql-ha.postgresqlImage" . }}
           imagePullPolicy: {{ .Values.postgresqlImage.pullPolicy | quote }}
@@ -195,7 +195,7 @@ spec:
               value: {{ sub (int .Values.postgresql.replicaCount) 1 | quote }}
             {{- end }}
             {{- if .Values.postgresql.extraEnvVars }}
-            {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.postgresql.extraEnvVarsCM }}
@@ -223,7 +223,7 @@ spec:
             successThreshold: {{ .Values.postgresql.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.postgresql.livenessProbe.failureThreshold }}
           {{- else if .Values.postgresql.customLivenessProbe }}
-          livenessProbe: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.postgresql.readinessProbe.enabled }}
           readinessProbe:
@@ -238,7 +238,7 @@ spec:
             successThreshold: {{ .Values.postgresql.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.postgresql.readinessProbe.failureThreshold }}
           {{- else if .Values.postgresql.customReadinessProbe }}
-          readinessProbe: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.postgresql.resources }}
           resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
@@ -270,7 +270,7 @@ spec:
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
             {{- if .Values.postgresql.extraVolumeMounts }}
-            {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -330,11 +330,11 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.postgresql.sidecars }}
-        {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.postgresql.extraVolumes }}
-        {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
         - name: hooks-scripts
           configMap:
@@ -379,7 +379,7 @@ spec:
     - metadata:
         name: data
         {{- if .Values.persistence.annotations }}
-        annotations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
