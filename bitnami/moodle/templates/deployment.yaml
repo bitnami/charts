@@ -74,35 +74,19 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
-          {{- if .Values.mariadb.enabled }}
             - name: MARIADB_HOST
-              value: {{ template "moodle.mariadb.fullname" . }}
+              value: {{ include "moodle.databaseHost" . | quote }}
             - name: MARIADB_PORT_NUMBER
-              value: "3306"
+              value: {{ include "moodle.databasePort" . | quote }}
             - name: MOODLE_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ include "moodle.databaseName" . | quote }}
             - name: MOODLE_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ include "moodle.databaseUser" . | quote }}
             - name: MOODLE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "moodle.mariadb.fullname" . }}
+                  name: {{ include "moodle.databaseSecretName" . }}
                   key: mariadb-password
-          {{- else }}
-            - name: MARIADB_HOST
-              value: {{ .Values.externalDatabase.host | quote }}
-            - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            - name: MOODLE_DATABASE_NAME
-              value: {{ .Values.externalDatabase.database | quote }}
-            - name: MOODLE_DATABASE_USER
-              value: {{ .Values.externalDatabase.user | quote }}
-            - name: MOODLE_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-          {{- end }}
             - name: MOODLE_SKIP_INSTALL
               value: {{ default "no" .Values.moodleSkipInstall | quote }}
             - name: MOODLE_USERNAME
