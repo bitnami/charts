@@ -566,6 +566,7 @@ volumePermissions:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
+    enabled: false
     runAsUser: 0
   ## Init container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
