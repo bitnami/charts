@@ -286,7 +286,7 @@ Obtain the credentials and the name of the PVC used to hold the MariaDB data on 
 export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 --decode)
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=drupal,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=drupal -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
