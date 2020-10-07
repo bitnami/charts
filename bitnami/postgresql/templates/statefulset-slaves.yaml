@@ -1,4 +1,5 @@
 {{- if .Values.replication.enabled }}
+{{- $slaveResources := coalesce .Values.slave.resources .Values.resources -}}
 apiVersion: {{ template "postgresql.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -10,7 +11,7 @@ metadata:
 {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
-  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- with .Values.slave.annotations }}
   {{- toYaml . | nindent 4 }}
@@ -56,8 +57,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "postgresql.fullname" . ) .Values.serviceAccount.name}}
@@ -79,7 +79,7 @@ spec:
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
               chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
               {{- else }}
-              chown {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               {{- end }}
               mkdir -p {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
               chmod 700 {{ .Values.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.persistence.mountPath }}/conf {{- end }}
@@ -87,7 +87,7 @@ spec:
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
                 xargs chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                xargs chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}
+                xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}
               {{- end }}
               {{- end }}
               {{- if and .Values.shmVolume.enabled .Values.shmVolume.chmod.enabled }}
@@ -98,15 +98,14 @@ spec:
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/postgresql/certs/
               {{- else }}
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /opt/bitnami/postgresql/certs/
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /opt/bitnami/postgresql/certs/
               {{- end }}
               chmod 600 {{ template "postgresql.tlsCertKey" . }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext:
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{ if .Values.persistence.enabled }}
@@ -136,12 +135,11 @@ spec:
         - name: {{ template "postgresql.fullname" . }}
           image: {{ template "postgresql.image" . }}
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if $slaveResources }}
+          resources: {{- toYaml $slaveResources | nindent 12 }}
           {{- end }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -214,6 +212,62 @@ spec:
               value: {{ template "postgresql.tlsCRL" . }}
             {{- end }}
             {{- end }}
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: {{ .Values.audit.logHostname | quote }}
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: {{ .Values.audit.logConnections | quote }}
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: {{ .Values.audit.logDisconnections | quote }}
+            {{- if .Values.audit.logLinePrefix }}
+            - name: POSTGRESQL_LOG_LINE_PREFIX
+              value: {{ .Values.audit.logLinePrefix | quote }}
+            {{- end }}
+            {{- if .Values.audit.logTimezone }}
+            - name: POSTGRESQL_LOG_TIMEZONE
+              value: {{ .Values.audit.logTimezone | quote }}
+            {{- end }}
+            {{- if .Values.audit.pgAuditLog }}
+            - name: POSTGRESQL_PGAUDIT_LOG
+              value: {{ .Values.audit.pgAuditLog | quote }}
+            {{- end }}
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: {{ .Values.audit.pgAuditLogCatalog | quote }}
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: {{ .Values.audit.clientMinMessages | quote }}
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: {{ .Values.postgresqlSharedPreloadLibraries | quote }}
+            {{- if .Values.postgresqlMaxConnections }}
+            - name: POSTGRESQL_MAX_CONNECTIONS
+              value: {{ .Values.postgresqlMaxConnections | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlPostgresConnectionLimit }}
+            - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
+              value: {{ .Values.postgresqlPostgresConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlDbUserConnectionLimit }}
+            - name: POSTGRESQL_USERNAME_CONNECTION_LIMIT
+              value: {{ .Values.postgresqlDbUserConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeepalivesInterval }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_INTERVAL
+              value: {{ .Values.postgresqlTcpKeepalivesInterval | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeepalivesIdle }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_IDLE
+              value: {{ .Values.postgresqlTcpKeepalivesIdle | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlStatementTimeout }}
+            - name: POSTGRESQL_STATEMENT_TIMEOUT
+              value: {{ .Values.postgresqlStatementTimeout | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlTcpKeealivesCount }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
+              value: {{ .Values.postgresqlTcpKeealivesCount | quote }}
+            {{- end }}
+            {{- if .Values.postgresqlPghbaRemoveFilters }}
+            - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
+              value: {{ .Values.postgresqlPghbaRemoveFilters | quote }}
+            {{- end }}
           ports:
             - name: tcp-postgresql
               containerPort: {{ template "postgresql.port" . }}
@@ -233,6 +287,8 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "postgresql.tplValue" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -247,6 +303,8 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "postgresql.tplValue" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
@@ -279,7 +337,7 @@ spec:
             {{- toYaml .Values.slave.extraVolumeMounts | nindent 12 }}
             {{- end }}
 {{- if .Values.slave.sidecars }}
-{{- include "postgresql.tplValue" ( dict "value" .Values.slave.sidecars "context" $ ) | nindent 8 }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.slave.sidecars "context" $ ) | nindent 8 }}
 {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}

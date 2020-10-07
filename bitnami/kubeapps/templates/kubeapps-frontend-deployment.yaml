@@ -84,7 +84,7 @@ spec:
           resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if and (gt (len .Values.clusters) 0) (not .Values.authProxy.enabled) }}
+        {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
           {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
         {{- end }}
       volumes:

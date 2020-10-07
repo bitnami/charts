@@ -9,6 +9,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  additional-clusters.conf: |-
+  clusters.conf: |-
 {{ .Values.clusters | toPrettyJson | indent 4 }}
 {{- end -}}

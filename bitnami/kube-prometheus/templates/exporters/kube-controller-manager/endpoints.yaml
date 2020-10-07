@@ -1,0 +1,18 @@
+{{- if and .Values.kubeControllerManager.enabled .Values.kubeControllerManager.endpoints }}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+  namespace: {{ .Values.kubeControllerManager.namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kube-controller-manager
+subsets:
+  - addresses:
+      {{- range .Values.kubeControllerManager.endpoints }}
+      - ip: {{ . }}
+      {{- end }}
+    ports:
+      - name: http-metrics
+        port: {{ .Values.kubeControllerManager.service.port }}
+        protocol: TCP
+{{- end }}

@@ -58,36 +58,41 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Common parameters
 
-| Parameter                                 | Description                                                                           | Default                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `replicaCount`                            | Number of Discourse & Sidekiq replicas                                                | `1`                                                          |
-| `image.registry`                          | Discourse image registry                                                              | `docker.io`                                                  |
-| `image.repository`                        | Discourse image name                                                                  | `bitnami/discouse`                                           |
-| `image.tag`                               | Discourse image tag                                                                   | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                        | Discourse image pull policy                                                           | `IfNotPresent`                                               |
-| `image.debug`                             | Specify if debug logs should be enabled                                               | `false`                                                      |
-| `imagePullSecrets`                        | Specify docker-registry secret names as an array                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                            | String to partially override discourse.fullname                                       | `nil`                                                        |
-| `fullnameOverride`                        | String to fully override discourse.fullname                                           | `nil`                                                        |
-| `extraVolumes`                            | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`   | `[]` (evaluated as a template)                               |
-| `sidecars`                                | Attach additional sidecar containers to the pod                                       | `[]` (evaluated as a template)                               |
-| `initContainers`                          | Additional init containers to add to the pods                                         | `[]` (evaluated as a template)                               |
-| `serviceAccount.create`                   | Whether the service account should be created                                         | `false`                                                      |
-| `serviceAccount.annotations`              | Annotations to add to the service account                                             | `{}`                                                         |
-| `serviceAccount.name`                     | Name to be used for the service account                                               | `""`                                                         |
-| `podSecurityContext`                      | Pod security context specification                                                    | `{}`                                                         |
-| `persistence.enabled`                     | Whether to enable persistence based on Persistent Volume Claims                       | `true`                                                       |
-| `persistence.storageClass`                | PVC Storage Class                                                                     | `nil`                                                        |
-| `persistence.existingClaim`               | Name of an existing PVC to reuse                                                      | `nil`                                                        |
-| `persistence.accessMode`                  | PVC Access Mode (RWO, ROX, RWX)                                                       | `ReadWriteOnce`                                              |
-| `persistence.size`                        | Size of the PVC to request                                                            | `10Gi`                                                       |
-| `podAnnotations`                          | Additional pod annotations                                                            | `{}`                                                         |
-| `podLabels`                               | Additional pod labels                                                                 | `{}` (evaluated as a template)                               |
-| `commonLabels`                            | Labels to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
-| `commonAnnotations`                       | Annotations to be added to all deployed resources                                     | `{}` (evaluated as a template)                               |
-| `nodeSelector`                            | Node labels for pod assignment.                                                       | `{}` (evaluated as a template)                               |
-| `tolerations`                             | Tolerations for pod assignment.                                                       | `[]` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
+| Parameter                            | Description                                                                                | Default                                                      |
+|--------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `replicaCount`                       | Number of Discourse & Sidekiq replicas                                                     | `1`                                                          |
+| `image.registry`                     | Discourse image registry                                                                   | `docker.io`                                                  |
+| `image.repository`                   | Discourse image name                                                                       | `bitnami/discouse`                                           |
+| `image.tag`                          | Discourse image tag                                                                        | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                   | Discourse image pull policy                                                                | `IfNotPresent`                                               |
+| `image.debug`                        | Specify if debug logs should be enabled                                                    | `false`                                                      |
+| `imagePullSecrets`                   | Specify docker-registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                       | String to partially override discourse.fullname                                            | `nil`                                                        |
+| `fullnameOverride`                   | String to fully override discourse.fullname                                                | `nil`                                                        |
+| `extraVolumes`                       | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`        | `[]` (evaluated as a template)                               |
+| `sidecars`                           | Attach additional sidecar containers to the pod                                            | `[]` (evaluated as a template)                               |
+| `initContainers`                     | Additional init containers to add to the pods                                              | `[]` (evaluated as a template)                               |
+| `serviceAccount.create`              | Whether the service account should be created                                              | `false`                                                      |
+| `serviceAccount.annotations`         | Annotations to add to the service account                                                  | `{}`                                                         |
+| `serviceAccount.name`                | Name to be used for the service account                                                    | `""`                                                         |
+| `podSecurityContext`                 | Pod security context specification                                                         | `{}`                                                         |
+| `persistence.enabled`                | Whether to enable persistence based on Persistent Volume Claims                            | `true`                                                       |
+| `persistence.storageClass`           | PVC Storage Class                                                                          | `nil`                                                        |
+| `persistence.existingClaim`          | Name of an existing PVC to reuse                                                           | `nil`                                                        |
+| `persistence.accessMode`             | PVC Access Mode (RWO, ROX, RWX)                                                            | `ReadWriteOnce`                                              |
+| `persistence.size`                   | Size of the PVC to request                                                                 | `10Gi`                                                       |
+| `updateStrategy`                     | Update strategy of deployment                                                              | `{type: "RollingUpdate"}`                                                         |
+| `podAnnotations`                     | Additional pod annotations                                                                 | `{}`                                                         |
+| `podLabels`                          | Additional pod labels                                                                      | `{}` (evaluated as a template)                               |
+| `commonLabels`                       | Labels to be added to all deployed resources                                               | `{}` (evaluated as a template)                               |
+| `commonAnnotations`                  | Annotations to be added to all deployed resources                                          | `{}` (evaluated as a template)                               |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                                         |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                      | `""`                                                         |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                  | `[]`                                                         |
+| `affinity`                           | Affinity for pod assignment                                                                | `{}` (evaluated as a template)                               |
+| `nodeSelector`                       | Node labels for pod assignment.                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                        | Tolerations for pod assignment.                                                            | `[]` (evaluated as a template)                               |
 
 ### Service parameters
 
@@ -313,6 +318,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + ##
 + persistence.accessMode: ReadWriteMany
 ```
+
 Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
 
 ### Sidecars
@@ -420,6 +426,12 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 
 Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tls) for more information.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
@@ -436,10 +448,17 @@ The `image` parameter allows specifying which image will be pulled for the chart
 If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
 ```yaml
 imagePullSecrets:
   - name: SECRET_NAME
 ```
-3. Install the chart
+
+1. Install the chart
+
+## Upgrade
+
+### 0.4.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.

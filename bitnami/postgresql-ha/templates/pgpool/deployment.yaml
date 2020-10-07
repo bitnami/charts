@@ -43,8 +43,7 @@ spec:
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.pgpool.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.pgpool.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.pgpool.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
@@ -59,14 +58,13 @@ spec:
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/pgpool/certs/
               {{- else }}
-              chown -R {{ .Values.pgpool.securityContext.runAsUser }}:{{ .Values.pgpool.securityContext.fsGroup }} /opt/bitnami/pgpool/certs/
+              chown -R {{ .Values.pgpool.containerSecurityContext.runAsUser }}:{{ .Values.pgpool.securityContext.fsGroup }} /opt/bitnami/pgpool/certs/
               {{- end }}
               chmod 600 {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext:
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -85,8 +83,7 @@ spec:
           image: {{ include "postgresql-ha.pgpoolImage" . }}
           imagePullPolicy: {{ .Values.pgpoolImage.pullPolicy | quote }}
           {{- if .Values.pgpool.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.pgpool.securityContext.runAsUser }}
+          securityContext: {{- omit .Values.pgpool.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -117,6 +114,8 @@ spec:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
                   key: repmgr-password
             {{- end }}
+            - name: PGPOOL_SR_CHECK_DATABASE
+              value: {{ .Values.pgpool.srCheckDatabase | quote  }}
             - name: PGPOOL_ENABLE_LOAD_BALANCING
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             - name: PGPOOL_ENABLE_LDAP
@@ -244,11 +243,16 @@ spec:
             {{- end }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: postgresql-password
-              mountPath: /opt/bitnami/pgpool/secrets/
+              subPath: pgpool-password
+              mountPath: /opt/bitnami/pgpool/secrets/pgpool-password
+            - name: postgresql-password
+              subPath: pgpool-sr-check-password
+              mountPath: /opt/bitnami/pgpool/secrets/pgpool-sr-check-password
             {{- end }}
             {{- if .Values.pgpool.usePasswordFile }}
             - name: pgpool-password
-              mountPath: /opt/bitnami/pgpool/secrets/
+              subPath: admin-password
+              mountPath: /opt/bitnami/pgpool/secrets/admin-password
             {{- end }}
             {{- if .Values.pgpool.tls.enabled }}
             - name: pgpool-certificates

@@ -202,3 +202,4 @@ data:
     port: 8080
     {{- end }}
     log_level: {{ .Values.logLevel }}
+    registry_config: "/etc/registry/config.yml"

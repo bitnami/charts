@@ -109,8 +109,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `extraVolumeMounts`                               | Extra volumeMount(s) to add to Kafka containers                                                                                   | `[]`                                                    |
 | `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
 | `auth.interBrokerProtocol`                        | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
-| `auth.saslMechanisms`                             | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                                |
-| `auth.saslInterBrokerMechanism`                   | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                      | `plain`                                                   |
+| `auth.saslMechanisms`                             | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`  |
+| `auth.saslInterBrokerMechanism`                   | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                      | `plain`                                                 |
 | `auth.jksSecret`                                  | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                   | `nil`                                                   |
 | `auth.jksPassword`                                | Password to access the JKS files when they are password-protected                                                                 | `nil`                                                   |
 | `auth.tlsEndpointIdentificationAlgorithm`         | The endpoint identification algorithm to validate server hostname using server certificate                                        | `https`                                                 |
@@ -146,13 +146,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `resources.requests`                              | The requested resources for Kafka containers                                                                                      | `{}`                                                    |
 | `livenessProbe`                                   | Liveness probe configuration for Kafka                                                                                            | `Check values.yaml file`                                |
 | `readinessProbe`                                  | Readiness probe configuration for Kafka                                                                                           | `Check values.yaml file`                                |
-| `customLivenessProbe`                             | Custom Liveness probe configuration for Kafka                                                                                            | `{}`                                |
-| `customReadinessProbe`                            | Custom Readiness probe configuration for Kafka                                                                                           | `{}`                                |
+| `customLivenessProbe`                             | Custom Liveness probe configuration for Kafka                                                                                     | `{}`                                                    |
+| `customReadinessProbe`                            | Custom Readiness probe configuration for Kafka                                                                                    | `{}`                                                    |
 | `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
 | `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
 | `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
-| `command`                                        | Override kafka container command                                                                         | `['/scripts/setup.sh']`  (evaluated as a template) |
-| `args`                                        | Override kafka container arguments                                                                             | `[]` (evaluated as a template) |
+| `command`                                         | Override kafka container command                                                                                                  | `['/scripts/setup.sh']`  (evaluated as a template)      |
+| `args`                                            | Override kafka container arguments                                                                                                | `[]` (evaluated as a template)                          |
 | `sidecars`                                        | Attach additional sidecar containers to the Kafka pod                                                                             | `{}`                                                    |
 
 ### Exposure parameters
@@ -366,6 +366,13 @@ This chart includes a `values-production.yaml` file where you can find some para
 + zookeeper.auth.clientPassword: zookeeperPassword
 + zookeeper.auth.serverUsers: zookeeperUser
 + zookeeper.auth.serverPasswords: zookeeperPassword
+```
+
+- Enable Pod Disruption Budget:
+
+```diff
+- pdb.create: false
++ pdb.create: true
 ```
 
 - Create a separate Kafka metrics exporter:

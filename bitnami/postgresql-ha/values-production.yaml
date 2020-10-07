@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.9.0-debian-10-r18
+  tag: 11.9.0-debian-10-r54
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.3-debian-10-r21
+  tag: 4.1.4-debian-10-r24
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r208
+  tag: 0.8.0-debian-10-r242
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -169,6 +169,12 @@ postgresql:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## PostgreSQL containers' resource requests and limits
@@ -251,6 +257,22 @@ postgresql:
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
 
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+  ## Additional PostgreSQL Master Volume mounts
+  ##
+  extraVolumeMounts: []
+  ## Additional PostgreSQL Master Volumes
+  ##
+  extraVolumes: []
+
   ## Repmgr configuration
   ## Specify content for repmgr.conf
   ## Default: do not create repmgr.conf
@@ -326,6 +348,10 @@ pgpool:
   ##
   customUsersSecret:
 
+  ## Database to perform streaming replication checks
+  ##
+  srCheckDatabase: postgres
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -369,6 +395,12 @@ pgpool:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits

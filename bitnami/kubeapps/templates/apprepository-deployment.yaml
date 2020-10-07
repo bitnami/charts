@@ -45,26 +45,15 @@ spec:
             - --repo-sync-image={{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
-            {{- if .Values.mongodb.enabled }}
-            - --database-secret-name={{ .Values.mongodb.auth.existingSecret }}
-            - --database-secret-key=mongodb-root-password
-            - --database-type=mongodb
-            - --database-url={{ template "kubeapps.mongodb.fullname" . }}
-            - --database-user=root
-            - --database-name=charts
-            {{- end }}
-            {{- if .Values.postgresql.enabled }}
             - --database-secret-name={{ .Values.postgresql.existingSecret }}
             - --database-secret-key=postgresql-password
-            - --database-type=postgresql
             - --database-url={{ template "kubeapps.postgresql.fullname" . }}:5432
             - --database-user=postgres
             - --database-name=assets
-            {{- end }}
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
-            - --repos-per-namespace
+            - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces}}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

@@ -50,7 +50,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
-Return the proper MXNet image name
+Return the proper Apache MXNet (Incubating) image name
 */}}
 {{- define "mxnet.image" -}}
 {{- $registryName := .Values.image.registry -}}
@@ -72,7 +72,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MXNet - number of workers must be greater than 0 */}}
+{{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
 {{- define "mxnet.entrypoint" -}}
 {{- if .Values.entrypoint.file }}
   {{- if (.Values.entrypoint.file | regexFind "[.]py$") }}
@@ -165,7 +165,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MXNet - must provide a valid mode ("distributed" or "standalone") */}}
+{{/* Validate values of Apache MXNet (Incubating) - must provide a valid mode ("distributed" or "standalone") */}}
 {{- define "mxnet.validateValues.mode" -}}
 {{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
 mxnet: mode
@@ -174,7 +174,7 @@ mxnet: mode
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MXNet - number of workers must be greater than 0 */}}
+{{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
 {{- define "mxnet.validateValues.workerCount" -}}
 {{- $replicaCount := int .Values.workerCount }}
 {{- if and (eq .Values.mode "distributed") (lt $replicaCount 1) -}}
@@ -200,7 +200,7 @@ mxnet: workerCount
 {{- end }}
 {{- end }}
 
-{{/* Validate values of MXNet - number of workers must be greater than 0 */}}
+{{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
 {{- define "mxnet.validateValues.serverCount" -}}
 {{- $replicaCount := int .Values.serverCount }}
 {{- if and (eq .Values.mode "distributed") (lt $replicaCount 1) -}}

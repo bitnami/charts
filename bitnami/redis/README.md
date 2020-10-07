@@ -92,10 +92,13 @@ The following table lists the configurable parameters of the Redis chart and the
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                          | `true`                                                  |
 | `networkPolicy.ingressNSMatchLabels`          | Allow connections from other namespaces                                                                                                             | `{}`                                                    |
 | `networkPolicy.ingressNSPodMatchLabels`       | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                                                    |
+| `securityContext.*`                           | Other pod security context to be included as-is in the pod spec                                                                                     | `{}`                                                    |
 | `securityContext.enabled`                     | Enable security context (both redis master and slave pods)                                                                                          | `true`                                                  |
 | `securityContext.fsGroup`                     | Group ID for the container (both redis master and slave pods)                                                                                       | `1001`                                                  |
-| `securityContext.runAsUser`                   | User ID for the container (both redis master and slave pods)                                                                                        | `1001`                                                  |
 | `securityContext.sysctls`                     | Set namespaced sysctls for the container (both redis master and slave pods)                                                                         | `nil`                                                   |
+| `containerSecurityContext.*`                  | Other container security context to be included as-is in the container spec                                                                         | `{}`                                                    |
+| `containerSecurityContext.enabled`            | Enable security context (both redis master and slave containers)                                                                                    | `true`                                                  |
+| `containerSecurityContext.runAsUser`          | User ID for the container (both redis master and slave containers)                                                                                  | `1001`                                                  |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                | `false`                                                 |
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                            | Generated using the fullname template                   |
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                                                 |
@@ -150,7 +153,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `tls.certKeyFilename`                         | Certificate key filename                                                                                                                                                                                              | `nil`                                                   |
 | `tls.certCAFilename`                          | CA Certificate filename                                                                                                                                                                                              |`nil`                                                   |
 | `tls.dhParamsFilename`                        | DH params (in order to support DH based ciphers)                                                                                                                                                                                              |`nil`                                                   |
-| `master.command`                              | Redis master entrypoint string. The command `redis-server` is executed if this is not provided.                                                     | `/run.sh`                                               |
+| `master.command`                              | Redis master entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`                  | `/run.sh`                                               |
+| `master.preExecCmds`                          | Text to inset into the startup script immediately prior to `master.command`. Use this if you need to run other ad-hoc commands as part of startup   | `nil`                                                   |
 | `master.configmap`                            | Additional Redis configuration for the master nodes (this value is evaluated as a template)                                                         | `nil`                                                   |
 | `master.disableCommands`                      | Array of Redis commands to disable (master)                                                                                                         | `["FLUSHDB", "FLUSHALL"]`                               |
 | `master.extraFlags`                           | Redis master additional command line flags                                                                                                          | []                                                      |
@@ -186,6 +190,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `buster`                                                |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `Always`                                                |
 | `volumePermissions.resources       `          | Init container volume-permissions CPU/Memory resource requests/limits                                                                               | {}                                                      |
+| `volumePermissions.securityContext.*`         | Security context of the init container                                                                                                              | `{}`                                                    |
+| `volumePermissions.securityContext.runAsUser` | UserID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                                    | 0                                                       |
 | `slave.service.type`                          | Kubernetes Service type (redis slave)                                                                                                               | `ClusterIP`                                             |
 | `slave.service.nodePort`                      | Kubernetes Service nodePort (redis slave)                                                                                                           | `nil`                                                   |
 | `slave.service.annotations`                   | annotations for redis slave service                                                                                                                 | {}                                                      |
@@ -193,7 +199,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.service.port`                          | Kubernetes Service port (redis slave)                                                                                                               | `6379`                                                  |
 | `slave.service.loadBalancerIP`                | LoadBalancerIP if Redis slave service type is `LoadBalancer`                                                                                        | `nil`                                                   |
 | `slave.service.loadBalancerSourceRanges`      | loadBalancerSourceRanges if Redis slave service type is `LoadBalancer`                                                                              | `nil`                                                   |
-| `slave.command`                               | Redis slave entrypoint array. The docker image's ENTRYPOINT is used if this is not provided.                                                        | `/run.sh`                                               |
+| `slave.command`                               | Redis slave entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`                   | `/run.sh`                                               |
+| `slave.preExecCmds`                           | Text to inset into the startup script immediately prior to `slave.command`. Use this if you need to run other ad-hoc commands as part of startup    | `nil`                                                   |
 | `slave.configmap`                             | Additional Redis configuration for the slave nodes (this value is evaluated as a template)                                                          | `nil`                                                   |
 | `slave.disableCommands`                       | Array of Redis commands to disable (slave)                                                                                                          | `[FLUSHDB, FLUSHALL]`                                   |
 | `slave.extraFlags`                            | Redis slave additional command line flags                                                                                                           | `[]`                                                    |
@@ -449,6 +456,100 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/redis
 ```
 
+## Backup and restore
+
+### Backup
+
+To perform a backup you will need to connect to one of the nodes and execute:
+
+```bash
+$ kubectl exec -it my-redis-master-0 bash
+
+$ redis-cli
+127.0.0.1:6379> auth your_current_redis_password
+OK
+127.0.0.1:6379> save
+OK
+```
+
+Then you will need to get the created dump file form the redis node:
+
+```bash
+$ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
+```
+
+### Restore
+
+To restore in a new cluster, you will need to change a parameter in the redis.conf file and then upload the `dump.rdb` to the volume.
+
+Follow the following steps:
+
+- First you will need to set in the `values.yaml` the parameter `appendonly` to `no`, if it is already `no` you can skip this step.
+
+
+```yaml
+configmap: |-
+  # Enable AOF https://redis.io/topics/persistence#append-only-file
+  appendonly no
+  # Disable RDB persistence, AOF persistence already enabled.
+  save ""
+```
+
+- Start the new cluster to create the PVCs.
+
+
+For example, :
+
+```bash
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
+- Now that the PVC were created, stop it and copy the `dump.rdp` on the persisted data by using a helping pod.
+
+```
+$ helm delete new-redis
+
+$ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "redisvolpod"
+    },
+    "spec": {
+        "containers": [{
+            "command": [
+                "tail",
+                "-f",
+                "/dev/null"
+            ],
+            "image": "bitnami/minideb",
+            "name": "mycontainer",
+            "volumeMounts": [{
+                "mountPath": "/mnt",
+                "name": "redisdata"
+            }]
+        }],
+        "restartPolicy": "Never",
+        "volumes": [{
+            "name": "redisdata",
+            "persistentVolumeClaim": {
+                "claimName": "redis-data-new-redis-master-0"
+            }
+        }]
+    }
+}' --image="bitnami/minideb"
+
+$ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+$ kubectl delete pod volpod
+```
+
+- Start again the cluster:
+
+```
+helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+
 ## NetworkPolicy
 
 To enable network policy for Redis, install
@@ -479,6 +580,10 @@ networkPolicy:
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
 incompatible breaking change needing manual actions.
+
+### To 11.0.0
+
+When using sentinel, a new statefulset called `-node` was introduced. This will break upgrading from a previous version where the statefulsets are called master and slave. Hence the PVC will not match the new naming and won't be reused. If you want to keep your data, you will need to perform a backup and then a restore the data in this new version.
 
 ### To 10.0.0
 
@@ -554,6 +659,9 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 ```
 
 ## Notable changes
+
+### 11.0.0
+When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
 The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).

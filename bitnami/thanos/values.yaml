@@ -84,7 +84,7 @@ querier:
 
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
-  replicaLabel: replica
+  replicaLabel: [replica]
 
   ## Dynamically configure store APIs using DNS discovery
   ##
@@ -156,6 +156,13 @@ querier:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  # Create ClusterRole and ClusterRolebing for the Service account
+  rbac:
+    create: false
+
+  # Create PodSecurity Policy
+  pspEnabled: false
 
   ## Thanos Querier containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

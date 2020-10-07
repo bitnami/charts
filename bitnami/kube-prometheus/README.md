@@ -247,7 +247,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.thanos.objectStorageConfig.secretName`    | Defines the secretName to load.                                                                                     | `nil`                                                                                                                                   |
 | `prometheus.thanos.objectStorageConfig.secretKey`     | Defines the key inside the secret which references the objectStorageConfig for the thanos sideCar                   | `nil`                                                                                                                                   |
 | `prometheus.thanos.service.port`                      | Thanos service port                                                                                                 | `10901`                                                                                                                                 |
-| `prometheus.thanos.service.clusterIP`                 | Specific cluster IP when service type is cluster IP. Use `None` for headless service                                | `nil`                                                                                                                                   |
+| `prometheus.thanos.service.clusterIP`                 | Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.              | `None`                                                                                                                                   |
 | `prometheus.thanos.service.nodePort`                  | Kubernetes Service nodePort                                                                                         | `nil`                                                                                                                                   |
 | `prometheus.thanos.service.loadBalancerIP`            | `loadBalancerIP` if service type is `LoadBalancer`                                                                  | `nil`                                                                                                                                   |
 | `prometheus.thanos.service.loadBalancerSourceRanges`  | Address that are allowed when svc is `LoadBalancer`                                                                 | `[]`                                                                                                                                    |
@@ -328,34 +328,69 @@ The following table lists the configurable parameters of the kube-prometheus cha
 
 ### Exporters
 
-| Parameter                                          | Description                                                                                            | Default       |
-|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
-| `exporters.enabled`                                | Deploy exporters                                                                                       | `true`        |
-| `exporters.node-exporter.enabled`                  | Deploy `node-exporter`                                                                                 | `true`        |
-| `exporters.kube-state-metrics.enabled`             | Deploy `kube-state-metrics`                                                                            | `true`        |
-| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
-| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
-| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`        |
-| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
-| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
-| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
-| `kubeApiServer.enabled`                            | Create a ServiceMonitor to scrape kube-apiserver service                                               | `true`        |
-| `kubeApiServer.serviceMonitor.interval`            | Scrape interval (use by default, falling back to Prometheus' default)                                  | `nil`         |
-| `kubeApiServer.serviceMonitor.metricRelabelings`   | Metric relabeling                                                                                      | `[]`          |
-| `kubeApiServer.serviceMonitor.relabelings`         | Relabel configs                                                                                        | `[]`          |
-| `kubeProxy.enabled`                                | Create a ServiceMonitor to scrape the kube-proxy Service                                               | `true`        |
-| `kubeProxy.endpoints`                              | If your kube-proxy is not deployed as a pod, specify IPs it can be found on                            | `[]`          |
-| `kubeProxy.namespace`                              | Namespace where cube-proxy service is deployed.                                                        | `kube-system` |
-| `kubeProxy.service.enabled`                        | Whether or not to create a Service object for kube-proxy                                               | `true`        |
-| `kubeProxy.service.port`                           | Listening port of the kube-proxy Service object                                                        | `10249`       |
-| `kubeProxy.service.targetPort`                     | Port to target on the kube-proxy Pods. This should be the port that kube-proxy is listening on         | `10249`       |
-| `kubeProxy.service.selector`                       | Service label selector to discover the kube-proxy Pods                                                 | `{}`          |
-| `kubeProxy.serviceMonitor.enabled`                 | Create a ServiceMonitor object                                                                         | `true`        |
-| `kubeProxy.serviceMonitor.interval`                | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`          |
-| `kubeProxy.serviceMonitor.metricRelabelings`       | Metric relabeling                                                                                      | `[]`          |
-| `kubeProxy.serviceMonitor.relabelings`             | Relabel configs                                                                                        | `[]`          |
+| Parameter                                                | Description                                                                                                                      | Default       |
+|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `exporters.enabled`                                      | Deploy exporters                                                                                                                 | `true`        |
+| `exporters.node-exporter.enabled`                        | Deploy `node-exporter`                                                                                                           | `true`        |
+| `exporters.kube-state-metrics.enabled`                   | Deploy `kube-state-metrics`                                                                                                      | `true`        |
+| `kubelet.namespace`                                      | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`                           | `kube-system` |
+| `kubelet.enabled`                                        | Create a ServiceMonitor to scrape kubelet service                                                                                | `true`        |
+| `kubelet.serviceMonitor.https`                           | Enable scraping of the kubelet over HTTPS                                                                                        | `true`        |
+| `kubelet.serviceMonitor.interval`                        | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `nil`         |
+| `kubelet.serviceMonitor.metricRelabelings`               | Metric relabeling                                                                                                                | `[]`          |
+| `kubelet.serviceMonitor.relabelings`                     | Relabel configs                                                                                                                  | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings`       | Metric relabeling for scraping cAdvisor                                                                                          | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`             | Relabel configs for scraping cAdvisor                                                                                            | `[]`          |
+| `kubeApiServer.enabled`                                  | Create a ServiceMonitor to scrape kube-apiserver service                                                                         | `true`        |
+| `kubeApiServer.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `nil`         |
+| `kubeApiServer.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                                                | `[]`          |
+| `kubeApiServer.serviceMonitor.relabelings`               | Relabel configs                                                                                                                  | `[]`          |
+| `kubeControllerManager.enabled`                          | Create a ServiceMonitor to scrape kube-controller-manager service                                                                | `true`        |
+| `kubeControllerManager.endpoints`                        | If your kube controller manager is not deployed as a pod, specify IPs it can be found on                                         | `[]`          |
+| `kubeControllerManager.namespace`                        | Namespace where kube-controller-manager service is deployed.                                                                     | `kube-system` |
+| `kubeControllerManager.service.enabled`                  | Whether or not to create a Service object for kube-controller-manager                                                            | 'true'        |
+| `kubeControllerManager.service.port`                     | Listening port of the kube-controller-manager Service object                                                                     | '10252'       |
+| `kubeControllerManager.service.targetPort`               | Port to target on the kube-controller-manager Pods. This should be the port that kube-controller-manager is exposing metrics on  | '10252'       |
+| `kubeControllerManager.service.selector`                 | Optional PODs Label selector for the service                                                                                     | 'nil'         |
+| `kubeControllerManager.serviceMonitor.interval`          | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `nil`         |
+| `kubeControllerManager.serviceMonitor.https`             | Enable scraping kube-controller-manager over https                                                                               | `false`       |
+| `kubeControllerManager.serviceMonitor.insecureSkipVerify`| Skip TLS certificate validation when scraping                                                                                    | `nil`         |
+| `kubeControllerManager.serviceMonitor.serverName`        | Name of the server to use when validating TLS certificate                                                                        | `nil`         |
+| `kubeControllerManager.serviceMonitor.metricRelabelings` | Metric relabeling                                                                                                                | `[]`          |
+| `kubeControllerManager.serviceMonitor.relabelings`       | Relabel configs                                                                                                                  | `[]`          |
+| `kubeScheduler.enabled`                                  | Create a ServiceMonitor to scrape kube-scheduler service                                                                         | `true`        |
+| `kubeScheduler.endpoints`                                | If your kube scheduler is not deployed as a pod, specify IPs it can be found on                                                  | `[]`          |
+| `kubeScheduler.namespace`                                | Namespace where kube-scheduler service is deployed.                                                                              | `kube-system` |
+| `kubeScheduler.service.enabled`                          | Whether or not to create a Service object for kube-scheduler                                                                     | 'true'        |
+| `kubeScheduler.service.port`                             | Listening port of the kube scheduler Service object                                                                              | '10251'       |
+| `kubeScheduler.service.targetPort`                       | Port to target on the kube scheduler Pods. This should be the port that kube scheduler is exposing metrics on                    | '10251'       |
+| `kubeScheduler.service.selector`                         | Optional PODs Label selector for the service                                                                                     | 'nil'         |
+| `kubeScheduler.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `nil`         |
+| `kubeScheduler.serviceMonitor.https`                     | Enable scraping kube-scheduler over https                                                                                        | `false`       |
+| `kubeScheduler.serviceMonitor.insecureSkipVerify`        | Skip TLS certificate validation when scraping                                                                                    | `nil`         |
+| `kubeScheduler.serviceMonitor.serverName`                | Name of the server to use when validating TLS certificate                                                                        | `nil`         |
+| `kubeScheduler.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                                                | `[]`          |
+| `kubeScheduler.serviceMonitor.relabelings`               | Relabel configs                                                                                                                  | `[]`          |
+| `coreDns.enabled`                                        | Create a ServiceMonitor to scrape coredns service                                                                                | `true`        |
+| `coreDns.namespace`                                      | Namespace where core dns service is deployed.                                                                                    | `kube-system` |
+| `coreDns.service.enabled`                                | Whether or not to create a Service object for coredns                                                                            | 'true'        |
+| `coreDns.service.port`                                   | Listening port of the coredns Service object                                                                                     | '9153'        |
+| `coreDns.service.targetPort`                             | Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on                                  | '9153'        |
+| `coreDns.service.selector`                               | Optional PODs Label selector for the service                                                                                     | 'nil'         |
+| `coreDns.serviceMonitor.interval`                        | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `nil`         |
+| `coreDns.serviceMonitor.metricRelabelings`               | Metric relabeling                                                                                                                | `[]`          |
+| `coreDns.serviceMonitor.relabelings`                     | Relabel configs                                                                                                                  | `[]`          |
+| `kubeProxy.enabled`                                      | Create a ServiceMonitor to scrape the kube-proxy Service                                                                         | `true`        |
+| `kubeProxy.endpoints`                                    | If your kube-proxy is not deployed as a pod, specify IPs it can be found on                                                      | `[]`          |
+| `kubeProxy.namespace`                                    | Namespace where cube-proxy service is deployed.                                                                                  | `kube-system` |
+| `kubeProxy.service.enabled`                              | Whether or not to create a Service object for kube-proxy                                                                         | `true`        |
+| `kubeProxy.service.port`                                 | Listening port of the kube-proxy Service object                                                                                  | `10249`       |
+| `kubeProxy.service.targetPort`                           | Port to target on the kube-proxy Pods. This should be the port that kube-proxy is listening on                                   | `10249`       |
+| `kubeProxy.service.selector`                             | Service label selector to discover the kube-proxy Pods                                                                           | `{}`          |
+| `kubeProxy.serviceMonitor.enabled`                       | Create a ServiceMonitor object                                                                                                   | `true`        |
+| `kubeProxy.serviceMonitor.interval`                      | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `""`          |
+| `kubeProxy.serviceMonitor.metricRelabelings`             | Metric relabeling                                                                                                                | `[]`          |
+| `kubeProxy.serviceMonitor.relabelings`                   | Relabel configs                                                                                                                  | `[]`          |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -458,6 +493,25 @@ prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-co
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
 
+### To 2.1.0
+
+> Note: ignore these instructions if you did not enabled the Thanos sidecar on Prometheus pods.
+
+The Thanos sidecar svc is transformed into a headless service by default so Thanos can discover every available sidecar. You can undo this change by setting the `prometheus.thanos.service.clusterIP` parameter to an emtpy string `""`.
+
+To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
+
+```bash
+$ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
+$ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prometheus
+```
+
+### To 2.0.0
+
+- CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
+  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
+  - Kubernetes 1.16 is required
+  
 ### To 1.0.0
 
 - The chart was renamed to `kube-prometheus` to be more accurate with the actual capabilities of the chart: it does not just deploy the Prometheus operator, it deploys an entire cluster monitoring stack, that includes other components (e.g. NodeExporter or Kube State metrics). Find more information about the reasons behind this decision at [#3490](https://github.com/bitnami/charts/issues/3490).
@@ -465,9 +519,3 @@ $ helm upgrade my-release bitnami/kube-prometheus
 - This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
-
-### To 2.0.0
-
-- CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
-  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
-  - Kubernetes 1.16 is required

@@ -50,11 +50,11 @@ spec:
       tolerations: {{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.postgresql.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.postgresql.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if or .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: init-chmod-data
           image: {{ include "postgresql-ha.volumePermissionsImage" . }}
           imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
@@ -65,15 +65,18 @@ spec:
               mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
               chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-                xargs chown -R {{ .Values.postgresql.securityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+                xargs chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+      {{- end }}
+      {{- if .Values.postgresql.extraInitContainers }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.extraInitContainers "context" $ ) | nindent 8 }}
+      {{- end }}
       {{- end }}
       containers:
         - name: postgresql
@@ -84,9 +87,8 @@ spec:
                   - /pre-stop.sh
           image: {{ include "postgresql-ha.postgresqlImage" . }}
           imagePullPolicy: {{ .Values.postgresqlImage.pullPolicy | quote }}
-          {{- if .Values.postgresql.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.postgresql.securityContext.runAsUser }}
+          {{- if .Values.postgresql.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           # Auxiliar vars to populate environment variables
           {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
@@ -236,13 +238,15 @@ spec:
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
+            {{- if .Values.postgresql.extraVolumeMounts }}
+            {{- toYaml .Values.postgresql.extraVolumeMounts | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "postgresql-ha.metricsImage" . }}
           imagePullPolicy: {{ .Values.metricsImage.pullPolicy | quote }}
           {{- if .Values.metrics.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.metrics.securityContext.runAsUser }}
+          securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: DATA_SOURCE_URI
@@ -323,6 +327,9 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.postgresqlInitdbScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.postgresql.extraVolumes }}
+        {{- toYaml .Values.postgresql.extraVolumes | nindent 8 }}
         {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
