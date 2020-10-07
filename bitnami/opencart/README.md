@@ -82,6 +82,8 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
+| `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
+| `containerPorts.https`               | Sets https port inside NGINX container                                                                                | `8443`                                         |
 | `containerSecurityContext.enabled`   | Enable OpenCart containers' Security Context                                                                          | `true`                                         |
 | `containerSecurityContext.runAsUser` | OpenCart containers' Security Context                                                                                 | `1001`                                         |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
@@ -102,12 +104,7 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `opencartUsername`                   | User of the application                                                                                               | `user`                                         |
 | `opencartPassword`                   | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
 | `opencartEmail`                      | Admin email                                                                                                           | `user@example.com`                             |
-| `opencartFirstName`                  | First Name                                                                                                            | `Bitnami`                                      |
-| `opencartLastName`                   | Last Name                                                                                                             | `Name`                                         |
-| `opencartCookieCheckIP`              | Whether to check the cookie's IP address or not                                                                       | `no`                                           |
-| `opencartCountry`                    | Default country of the store                                                                                          | `us`                                           |
-| `opencartLanguage`                   | Default language of the store (iso code)                                                                              | `en`                                           |
-| `opencartSkipInstall`                | Skip OpenCart installation wizard (`no` / `yes`)                                                                      | `no`                                           |
+| `opencartSkipInstall`                | Skip OpenCart installation wizard                                                                                     | false                                          |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
 | `persistence.accessMode`             | PVC Access Mode for OpenCart volume                                                                                   | `ReadWriteOnce`                                |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
@@ -138,8 +135,8 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | Parameter                        | Description                           | Default            |
 |----------------------------------|---------------------------------------|--------------------|
 | `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                     | `8080`             |
-| `service.httpsPort`              | Service HTTPS port                    | `8443`             |
+| `service.port`                   | Service HTTP port                     | `80`               |
+| `service.httpsPort`              | Service HTTPS port                    | `443`              |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
 | `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
 | `service.nodePorts.https`        | Kubernetes https node port            | `""`               |

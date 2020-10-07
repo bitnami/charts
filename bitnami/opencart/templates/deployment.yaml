@@ -91,6 +91,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "opencart.databaseSecretName" . }}
                   key: mariadb-password
+            - name: OPENCART_SKIP_BOOTSTRAP
+              value: {{ ternary "true" "false" .Values.opencartSkipInstall | quote }}
             {{- $port:=.Values.service.port | toString }}
             - name: OPENCART_HOST
               value: "{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
