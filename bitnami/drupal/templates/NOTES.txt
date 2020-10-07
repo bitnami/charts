@@ -44,6 +44,8 @@
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
     {{- $secretName := include "drupal.secretName" . -}}
