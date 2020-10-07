@@ -270,20 +270,18 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 
 MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `9.0.0`, you have two alternatives:
-
-- Install a new Moodle chart, and migrate your Moodle site using backup/restore tools such as [Moodle Migration Official Guide](https://docs.moodle.org/39/en/Moodle_migration).
-- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `moodle`):
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Moodle data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `moodle`):
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
-Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Moodle data on your current release:
 
 ```console
 export MOODLE_PASSWORD=$(kubectl get secret --namespace default moodle -o jsonpath="{.data.moodle-password}" | base64 --decode)
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default moodle-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default moodle-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-export MARIADB_PVC=$(kubectl get pvc -l release=moodle,app=mariadb,component=master -o jsonpath="{.items[0].metadata.name}")
+export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+export MOODLEDATA_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=moodle -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle replicas to 0:
@@ -295,7 +293,7 @@ $ helm upgrade moodle bitnami/moodle --set moodlePassword=$MOODLE_PASSWORD --set
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
+$ helm upgrade moodle bitnami/moodle --set persistence.existingClaim=MOODLEDATA_PVC --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
