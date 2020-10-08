@@ -25,7 +25,7 @@ When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "opencart.host" -}}
 {{- if .Values.ingress.enabled }}
-{{- $host := (index .Values.ingress.hosts 0).name | default "" -}}
+{{- $host := .Values.ingress.hostname | default "" -}}
 {{- default (include "opencart.serviceIP" .) $host -}}
 {{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}

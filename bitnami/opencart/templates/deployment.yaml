@@ -147,7 +147,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
-              value: {{ ternary "true" "false" .Values.allowEmptyPassword | quote }}
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
@@ -166,7 +166,7 @@ spec:
                   name: {{ include "opencart.databaseSecretName" . }}
                   key: mariadb-password
             - name: OPENCART_SKIP_BOOTSTRAP
-              value: {{ ternary "true" "false" .Values.opencartSkipInstall | quote }}
+              value: {{ ternary "yes" "no" .Values.opencartSkipInstall | quote }}
             {{- $port:=.Values.service.port | toString }}
             - name: OPENCART_HOST
               value: "{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
