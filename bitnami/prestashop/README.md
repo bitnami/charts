@@ -62,14 +62,14 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 | Parameter           | Description                                                                  | Default                                                 |
 |---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | PrestaShop image registry                                                        | `docker.io`                                         |
-| `image.repository`  | PrestaShop Image name                                                            | `bitnami/prestashop`                                |
-| `image.tag`         | PrestaShop Image tag                                                             | `{TAG_NAME}`                                        |
-| `image.pullPolicy`  | PrestaShop image pull policy                                                     | `IfNotPresent`                                      |
+| `image.registry`    | PrestaShop image registry                                                    | `docker.io`                                             |
+| `image.repository`  | PrestaShop Image name                                                        | `bitnami/prestashop`                                    |
+| `image.tag`         | PrestaShop Image tag                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | PrestaShop image pull policy                                                 | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override prestashop.fullname template                        | `nil`                                               |
-| `fullnameOverride`  | String to fully override prestashop.fullname template                            | `nil`                                               |
+| `nameOverride`      | String to partially override prestashop.fullname template                    | `nil`                                                   |
+| `fullnameOverride`  | String to fully override prestashop.fullname template                        | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
@@ -82,6 +82,8 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
+| `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
+| `containerPorts.https`               | Sets https port inside NGINX container                                                                                | `8443`                                         |
 | `containerSecurityContext.enabled`   | Enable PrestaShop containers' Security Context                                                                        | `true`                                         |
 | `containerSecurityContext.runAsUser` | PrestaShop containers' Security Context                                                                               | `1001`                                         |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
@@ -95,6 +97,10 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
 | `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
 | `prestashopHost`                     | PrestaShop host to create application URLs (when ingress, it will be ignored)                                         | `nil`                                          |
 | `prestashopUsername`                 | User of the application                                                                                               | `user@example.com`                             |
 | `prestashopPassword`                 | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
@@ -105,13 +111,14 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `prestashopCountry`                  | Default country of the store                                                                                          | `us`                                           |
 | `prestashopLanguage`                 | Default language of the store (iso code)                                                                              | `en`                                           |
 | `prestashopSkipInstall`              | Skip PrestaShop installation wizard (`no` / `yes`)                                                                    | `no`                                           |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
 | `persistence.accessMode`             | PVC Access Mode for PrestaShop volume                                                                                 | `ReadWriteOnce`                                |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
 | `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |
 | `persistence.hostPath`               | Host mount path for PrestaShop volume                                                                                 | `nil` (will not mount to a host path)          |
 | `persistence.size`                   | PVC Storage Request for PrestaShop volume                                                                             | `8Gi`                                          |
 | `persistence.storageClass`           | PVC Storage Class for PrestaShop volume                                                                               | `nil` (uses alpha storage class annotation)    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
 | `podSecurityContext.enabled`         | Enable PrestaShop pods' Security Context                                                                              | `true`                                         |
@@ -133,8 +140,8 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | Parameter                        | Description                           | Default            |
 |----------------------------------|---------------------------------------|--------------------|
 | `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                     | `8080`             |
-| `service.httpsPort`              | Service HTTPS port                    | `8443`             |
+| `service.port`                   | Service HTTP port                     | `80`               |
+| `service.httpsPort`              | Service HTTPS port                    | `443`              |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
 | `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
 | `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
@@ -152,25 +159,37 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_prestashop`                           |
-| `mariadb.db.user`                          | Database user to create                  | `bn_prestashop`                                |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_prestashop`                                |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_prestashop`                           |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                   | Description                                                                              | Default                                        |
+|---------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_prestashop`                           |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_prestashop`                                |
+| `mariadb.auth.password`                     | Password for the database                                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                                          |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                                          |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_prestashop`                                |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                                           |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_prestashop`                           |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                                         |
+
+### Volume Permissions parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
+| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 
 ### Metrics parameters
 
@@ -184,6 +203,28 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`         | Exporter resource requests/limit                 | {}                                                           |
+
+### Certificate injection parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
+| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
+| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
+| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
+| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
 
 The above parameters map to the env variables defined in [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop). For more information please refer to the [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop) image documentation.
 
@@ -205,7 +246,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set prestashopUsername=admin,prestashopPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set prestashopUsername=admin,prestashopPassword=password,mariadb.auth.rootPassword=secretpassword \
     bitnami/prestashop
 ```
 
@@ -226,6 +267,12 @@ $ helm install my-release -f values.yaml bitnami/prestashop
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -249,6 +296,46 @@ To enable SSL on all pages, follow these steps:
   - Click the “Save” button.
 
 ## Upgrading
+
+### To 11.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `11.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and PrestaShop data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `prestashop`):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and PrestaShop data on your current release:
+
+```console
+export PRESTASHOP_PASSWORD=$(kubectl get secret --namespace default prestashop -o jsonpath="{.data.prestashop-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+export PRESTASHOPDATA_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=prestashop -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling PrestaShop replicas to 0:
+
+```console
+$ helm upgrade prestashop bitnami/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
+```
+
+Finally, upgrade you release to `11.0.0` reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade prestashop bitnami/prestashop --set persistence.existingClaim=PRESTASHOPDATA_PVC --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 10.0.0
 
