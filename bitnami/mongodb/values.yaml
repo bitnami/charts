@@ -199,7 +199,7 @@ extraFlags:
   - "--tlsCertificateKeyFile=/certs/mongodb.pem"
   - "--tlsCAFile=/certs/mongodb-ca-cert"
 
-i
+
 ## Additional environment variables to set
 ## E.g:
 ## extraEnvVars:
