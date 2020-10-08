@@ -43,8 +43,8 @@ fullnameOverride:
 ##
 replicaCount: 1
 
-## Skip Moodle installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## Skip OpenCart installation wizard. Useful for migrations and restoring from SQL dump
+## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
 ##
 opencartSkipInstall: false
 
