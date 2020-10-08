@@ -56,6 +56,80 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "opencart.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/opencart" "/bitnami/opencart_storage"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/opencart" "/bitnami/opencart_storage"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: opencart-data
+              mountPath: /bitnami/opencart
+              subPath: opencart
+            - name: opencart-data
+              mountPath: /bitnami/opencart_storage
+              subPath: opencart_storage
+        {{- end }}
+        {{- if .Values.certificates.customCAs }}
+        - name: certificates
+          image: {{ template "certificates.image" . }}
+          imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+          imagePullSecrets:
+          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
+            - name: {{ . }}
+          {{- end }}
+          command:
+          {{- if .Values.certificates.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
+          {{- else if .Values.certificates.customCertificate.certificateSecret }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          {{- else }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+            && openssl req -new -x509 -days 3650 -nodes -sha256
+              -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+              -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
+              -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+          {{- end }}
+          {{- if .Values.certificates.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
+          {{- end }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
+          envFrom:
+            {{- if .Values.certificates.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.certificates.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            - name: etc-ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: false
+            - name: etc-ssl-private
+              mountPath: /etc/ssl/private
+              readOnly: false
+            - name: custom-ca-certificates
+              mountPath: /usr/local/share/ca-certificates
+              readOnly: true
+        {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ template "opencart.image" . }}
@@ -197,7 +271,7 @@ spec:
         - name: metrics
           image: {{ template "opencart.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command:  [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
           ports:
             - name: metrics
               containerPort: 9117

@@ -34,6 +34,13 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- end -}}
 
 {{/*
+Return the proper certificate image name
+*/}}
+{{- define "certificates.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.certificates.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper OpenCart image name
 */}}
 {{- define "opencart.image" -}}
@@ -48,10 +55,17 @@ Return the proper image name (for the metrics image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "opencart.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "opencart.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
