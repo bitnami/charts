@@ -39,6 +39,11 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -156,9 +161,9 @@ spec:
                   name: {{ include "moodle.databaseSecretName" . }}
                   key: mariadb-password
             - name: MOODLE_SKIP_BOOTSTRAP
-            value: {{ ternary "yes" "no" .Values.moodleSkipInstall | quote }}
+              value: {{ ternary "yes" "no" .Values.moodleSkipInstall | quote }}
             - name: MOODLE_USERNAME
-              value: {{ default "" .Values.moodleUsername | quote }}
+              value: {{ .Values.moodleUsername | quote }}
             - name: MOODLE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -236,7 +241,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: moodle-data
@@ -249,9 +254,6 @@ spec:
           image: {{ template "moodle.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
-          env:
-            - name: APACHE_HTTP_PORT_NUMBER
-              value: {{ .Values.containerPorts.http | quote }}
           ports:
             - name: metrics
               containerPort: 9117
@@ -267,19 +269,19 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
-          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: moodle-data
-            {{- if .Values.persistence.enabled }}
-            persistentVolumeClaim:
-              claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" . ) }}
-            {{- else }}
-            emptyDir: {}
-            {{- end }}
-          {{- if .Values.extraVolumes }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-moodle" (include "common.names.fullname" .)) }}
+          {{- else }}
+          emptyDir: {}
           {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
