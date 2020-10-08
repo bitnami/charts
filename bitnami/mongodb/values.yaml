@@ -342,7 +342,6 @@ customReadinessProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-#initContainers: {}
 initContainers:
   - name: generate-client
     image: nginx:1.19.1
@@ -444,9 +443,6 @@ extraVolumes:
       - key: mongodb-ca-key
         path: mongodb-ca-key
         mode: 511
-
-#extraVolumeMounts: []
-#extraVolumes: []
 
 ## MongoDB Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
