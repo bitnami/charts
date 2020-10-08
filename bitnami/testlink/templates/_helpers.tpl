@@ -115,9 +115,3 @@ Return the MariaDB Secret Name
     {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
 {{- end -}}
-
-{{/* Check if there are rolling tags in the images */}}
-{{- define "testlink.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image -}}
-{{- include "common.warnings.rollingTag" .Values.metrics.image -}}
-{{- end -}}
