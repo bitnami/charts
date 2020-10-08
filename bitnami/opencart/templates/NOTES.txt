@@ -10,12 +10,12 @@ host. To configure OpenCart with the URL of your service:
 
 1. Get the OpenCart URL by running:
 
-  {{- if contains "NodePort" .Values.service.type }}
+  {{- if eq .Values.service.type "NodePort" }}
 
   export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
-  {{- else if contains "LoadBalancer" .Values.service.type }}
+  {{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
@@ -76,9 +76,9 @@ host. To configure OpenCart to use and external database host:
 
 1. Complete your OpenCart deployment by running:
 
-{{- if contains "NodePort" .Values.service.type }}
+{{- if eq .Values.service.type "NodePort" }}
   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
@@ -97,7 +97,8 @@ host. To configure OpenCart to use and external database host:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
     {{- $secretName := include "opencart.secretName" . -}}
