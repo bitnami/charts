@@ -90,6 +90,7 @@ auth:
   # existingSecret: name-of-existing-secret
 
 tls:
+ ##Enable TLS Authentication
   enabled: true
 
 ## Name of the replica set

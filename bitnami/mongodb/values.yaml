@@ -89,6 +89,11 @@ auth:
   ##
   # existingSecret: name-of-existing-secret
 
+
+tls:
+ ## Enable TLS authentication 
+  enabled: true
+
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
 ##
@@ -188,7 +193,12 @@ initdbScripts: {}
 ## extraFlags:
 ##  - "--wiredTigerCacheSizeGB=2"
 ##
-extraFlags: []
+##extraFlags: []
+extraFlags:
+  - "--tlsMode=requireTLS"
+  - "--tlsCertificateKeyFile=/certs/mongodb.pem"
+  - "--tlsCAFile=/certs/mongodb-ca-cert"
+
 
 ## Additional environment variables to set
 ## E.g:
@@ -196,7 +206,10 @@ extraFlags: []
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars: []
+#extraEnvVars: []
+extraEnvVars:
+  - name: MONGODB_CLIENT_EXTRA_FLAGS
+    value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
 
 ## ConfigMap with extra environment variables
 ##
@@ -331,7 +344,68 @@ customReadinessProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+#initContainers: {}
+initContainers:
+  - name: generate-client
+    image: nginx:1.19.1
+    imagePullPolicy: "Always"
+    env:
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+    volumeMounts:
+    - name: certs-volume
+      mountPath: /certs/CAs
+    - name: certs
+      mountPath: /certs
+    command:
+      - sh
+      - "-c"
+      - |
+        /bin/bash <<'EOF'
+
+        my_hostname=$(hostname)
+        svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+
+        cp /certs/CAs/* /certs/
+
+        cat >/certs/openssl.cnf <<EOL
+        [req]
+        req_extensions = v3_req
+        distinguished_name = req_distinguished_name
+        [req_distinguished_name]
+        [ v3_req ]
+        basicConstraints = CA:FALSE
+        keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+        subjectAltName = @alt_names
+        [alt_names]
+        DNS.1 = $svc
+        DNS.2 = $my_hostname
+        DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+        DNS.4 = localhost
+        DNS.5 = 127.0.0.1
+        EOL
+
+        export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+      
+        #Create the client/server cert
+        openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+  
+        #Signing the server cert with the CA cert and key
+        openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+
+        rm /certs/mongo.csr
+
+        #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+        cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+
+        cd /certs/
+        shopt -s extglob
+        rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+
+        EOF
+
 
 ## Add sidecars to the MongoDB pods.
 ## Example:
@@ -354,8 +428,29 @@ sidecars: {}
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
-extraVolumeMounts: []
-extraVolumes: []
+#
+#
+#
+extraVolumeMounts:
+  - name: certs
+    mountPath: /certs
+
+extraVolumes:
+  - name: certs
+    emptyDir: {}
+  - name: certs-volume
+    secret:
+      secretName: ca-clients
+      items:
+      - key: mongodb-ca-cert
+        path: mongodb-ca-cert
+        mode: 511
+      - key: mongodb-ca-key
+        path: mongodb-ca-key
+        mode: 511
+
+#extraVolumeMounts: []
+#extraVolumes: []
 
 ## MongoDB Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -533,7 +628,7 @@ externalAccess:
 arbiter:
   ## Enable deploying the MongoDB Arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
-  enabled: true
+  enabled: false
 
   ## MongoDB configuration file for the Arbiter. For documentation of all options, see:
   ##   http://docs.mongodb.org/manual/reference/configuration-options/
@@ -748,7 +843,7 @@ rbac:
 ## values from the securityContext section of the component
 ##
 volumePermissions:
-  enabled: false
+  enabled: true
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##
