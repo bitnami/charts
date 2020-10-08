@@ -6,14 +6,20 @@ metadata:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
-  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "postgresql-ha.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
   endpoints:
     - port: metrics
@@ -24,10 +30,10 @@ spec:
       scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- include "postgresql-ha.tplValue" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
   namespaceSelector:
     matchNames:
