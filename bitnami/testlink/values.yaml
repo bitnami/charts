@@ -239,9 +239,13 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
+  ## clusterIP:
+  ## Control hosts connecting to "LoadBalancer" only
+  ## loadBalancerSourceRanges:
+  ##   - 0.0.0.0/0
   ## loadBalancerIP for the TestLink Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ## loadBalancerIP
+  ## loadBalancerIP:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
