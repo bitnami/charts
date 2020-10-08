@@ -322,6 +322,22 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
+Take into account those scripts are executed in all the replicas, if you want to do a "one time" action like creating a database, you need to add a condition in your `.sh` script to be executed in one of the nodes, such as
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+     #!/bin/sh
+     if [[ $(hostname) == *-0  ]]; then
+       echo "First node"
+       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+     else
+       echo "No first node"
+     fi
+```
+
+As the above conditions can't be set using `.sql` files, this extension only should contain instructions executed in all the replicas.
+
 ## Extra Init Containers
 
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.

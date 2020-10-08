@@ -38,6 +38,7 @@ sources:
   # - crd
   - service
   - ingress
+  # - contour-httpproxy
 
 ## DNS provider where the DNS records will be created. Available providers are:
 ## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, infoblox, rfc2136, transip
@@ -452,6 +453,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+
+  ## Provide any additional labels which may be required. This can be used to
+  ## have external-dns show up in `kubectl cluster-info`
+  ##  kubernetes.io/cluster-service: "true"
+  ##  kubernetes.io/name: "external-dns"
+  labels: {}
 
 ## ServiceAccount parameters
 ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
