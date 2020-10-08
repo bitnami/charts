@@ -1,18 +1,9 @@
 dependencies:
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-<<<<<<< HEAD
-  version: 7.10.2
-- name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 0.6.2
-digest: sha256:1fe0358570272b7a3036cfcd7201e26ab954e2920f21a48f6fa5661cbd9c70b3
-generated: "2020-09-21T15:14:06.10113747Z"
-=======
   version: 8.0.2
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 0.8.1
 digest: sha256:95d3e10b5d55c7573284dc63386192e50256904a61668e7c75c4c066718ee735
 generated: "2020-10-07T10:45:57.889889+02:00"
->>>>>>> 252a9216f... New major moodle
