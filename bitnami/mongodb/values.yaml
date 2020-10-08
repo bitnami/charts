@@ -91,7 +91,7 @@ auth:
 
 
 tls:
- ## Enable TLS authentication 
+ ## Enable TLS authentication
   enabled: true
 
 ## Name of the replica set
@@ -199,7 +199,7 @@ extraFlags:
   - "--tlsCertificateKeyFile=/certs/mongodb.pem"
   - "--tlsCAFile=/certs/mongodb-ca-cert"
 
-
+i
 ## Additional environment variables to set
 ## E.g:
 ## extraEnvVars:
@@ -388,10 +388,8 @@ initContainers:
         EOL
 
         export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
-      
         #Create the client/server cert
         openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
-  
         #Signing the server cert with the CA cert and key
         openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
 
