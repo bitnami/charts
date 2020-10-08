@@ -132,8 +132,6 @@ spec:
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT
               value: {{ default 3 .Values.replicas | quote }}
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: {{ .Values.replicas | quote }}
             - name: CONSUL_RAFT_MULTIPLIER
               value: {{ .Values.raftMultiplier | quote }}
             - name: CONSUL_DOMAIN
