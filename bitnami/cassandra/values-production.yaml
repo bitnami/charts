@@ -73,9 +73,9 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    cql: ''
-    thrift: ''
-    metrics: ''
+    cql: ""
+    thrift: ""
+    metrics: ""
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -248,7 +248,7 @@ replicaCount: 3
 ## updateStrategy for Cassandra statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-updateStrategy: OnDelete
+updateStrategy: RollingUpdate
 
 ## Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -293,6 +293,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -442,8 +443,8 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '8080'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
