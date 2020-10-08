@@ -1,4 +1,3 @@
-{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 *******************************************************************
 *** PLEASE BE PATIENT: Drupal may take a few minutes to install ***
@@ -12,57 +11,37 @@
 
   http://{{- .Values.ingress.hostname }}/
 
-{{- else if eq .Values.service.type "LoadBalancer" }}
+{{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "drupal.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "drupal.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "Drupal URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
-{{- else if eq .Values.service.type "ClusterIP" }}
+{{- else if contains "ClusterIP"  .Values.service.type }}
 
   echo "Drupal URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "drupal.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- end }}
 
-{{- if eq .Values.service.type "NodePort" }}
+{{- if contains "NodePort" .Values.service.type }}
 
   Or running:
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "drupal.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Drupal URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
 
-2. Get your Drupal login credentials by running:
+2. Login with the following credentials
 
   echo Username: {{ .Values.drupalUsername }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
-
-{{- else -}}
-
-########################################################################################
-### ERROR: You did not provide an external database host in your 'helm install' call ###
-########################################################################################
-
-This deployment will be incomplete until you configure Drupal with a resolvable database
-host. To configure Drupal to use and external database host:
-
-1. Complete your Drupal deployment by running:
-
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
-
-  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
-
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set drupalPassword=$APP_PASSWORD,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
-
-{{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
@@ -80,3 +59,4 @@ host. To configure Drupal to use and external database host:
 {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+
