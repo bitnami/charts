@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "moodle.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,8 +35,7 @@ spec:
     spec:
       {{- include "moodle.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -51,8 +50,78 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "moodle.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/moodle"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/moodle"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: moodle-data
+              mountPath: /bitnami/moodle
+        {{- end }}
+        {{- if .Values.certificates.customCAs }}
+        - name: certificates
+          image: {{ template "certificates.image" . }}
+          imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+          imagePullSecrets:
+          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
+            - name: {{ . }}
+          {{- end }}
+          command:
+          {{- if .Values.certificates.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
+          {{- else if .Values.certificates.customCertificate.certificateSecret }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          {{- else }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+            && openssl req -new -x509 -days 3650 -nodes -sha256
+              -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+              -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
+              -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+          {{- end }}
+          {{- if .Values.certificates.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
+          {{- end }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
+          envFrom:
+            {{- if .Values.certificates.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.certificates.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            - name: etc-ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: false
+            - name: etc-ssl-private
+              mountPath: /etc/ssl/private
+              readOnly: false
+            - name: custom-ca-certificates
+              mountPath: /usr/local/share/ca-certificates
+              readOnly: true
+        {{- end }}
       containers:
-        - name: moodle
+        - name: {{ include "common.names.fullname" . }}
           image: {{ template "moodle.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
@@ -62,21 +131,20 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
-              value: {{ .Values.allowEmptyPassword | quote }}
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
-            - name: MARIADB_HOST
+            - name: MOODLE_DATABASE_HOST
               value: {{ include "moodle.databaseHost" . | quote }}
-            - name: MARIADB_PORT_NUMBER
+            - name: MOODLE_DATABASE_PORT_NUMBER
               value: {{ include "moodle.databasePort" . | quote }}
             - name: MOODLE_DATABASE_NAME
               value: {{ include "moodle.databaseName" . | quote }}
@@ -87,30 +155,40 @@ spec:
                 secretKeyRef:
                   name: {{ include "moodle.databaseSecretName" . }}
                   key: mariadb-password
-            - name: MOODLE_SKIP_INSTALL
-              value: {{ default "no" .Values.moodleSkipInstall | quote }}
+            - name: MOODLE_SKIP_BOOTSTRAP
+            value: {{ ternary "yes" "no" .Values.moodleSkipInstall | quote }}
             - name: MOODLE_USERNAME
               value: {{ default "" .Values.moodleUsername | quote }}
             - name: MOODLE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "moodle.fullname" . }}
+                  name: {{ include "common.names.fullname" . }}
                   key: moodle-password
             - name: MOODLE_EMAIL
-              value: {{ default "" .Values.moodleEmail | quote }}
+              value: {{ .Values.moodleEmail | quote }}
+            {{- if .Values.smtpHost }}
             - name: SMTP_HOST
-              value: {{ default "" .Values.smtpHost | quote }}
+              value: {{ .Values.smtpHost | quote }}
+            {{- end }}
+            {{- if .Values.smtpPort }}
             - name: SMTP_PORT
-              value: {{ default "" .Values.smtpPort | quote }}
+              value: {{ .Values.smtpPort | quote }}
+            {{- end }}
+            {{- if .Values.smtpUser }}
             - name: SMTP_USER
-              value: {{ default "" .Values.smtpUser | quote }}
+              value: {{ .Values.smtpUser | quote }}
+            {{- end }}
+            {{- if .Values.smtpPassword }}
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "moodle.fullname" . }}
+                  name: {{ include "common.names.fullname" . }}
                   key: smtp-password
+            {{- end }}
+            {{- if .Values.smtpProtocol }}
             - name: SMTP_PROTOCOL
-              value: {{ default "" .Values.smtpProtocol | quote }}
+              value: {{ .Values.smtpProtocol | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -134,7 +212,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /login/index.php
+              path: {{ .Values.livenessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -147,7 +225,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /login/index.php
+              path: {{ .Values.readinessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -162,7 +240,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: moodle-data
-              mountPath: /bitnami
+              mountPath: /bitnami/moodle
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -170,8 +248,7 @@ spec:
         - name: metrics
           image: {{ template "moodle.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter']
-          args: ['--scrape_uri', 'http://status.localhost:$(APACHE_HTTP_PORT_NUMBER)/server-status/?auto']
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
           env:
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
@@ -197,12 +274,12 @@ spec:
         {{- end }}
       volumes:
         - name: moodle-data
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "moodle.fullname" . ) }}
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
+            {{- if .Values.persistence.enabled }}
+            persistentVolumeClaim:
+              claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" . ) }}
+            {{- else }}
+            emptyDir: {}
+            {{- end }}
           {{- if .Values.extraVolumes }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
           {{- end }}

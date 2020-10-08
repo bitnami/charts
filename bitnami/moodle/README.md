@@ -79,9 +79,11 @@ The following table lists the configurable parameters of the Moodle chart and th
 | Parameter                                   | Description                                                                                                           | Default                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `affinity`                                  | Map of node/pod affinities                                                                                            | `{}`                                                         |
-| `allowEmptyPassword`                        | Allow DB blank passwords                                                                                              | `yes`                                                        |
+| `allowEmptyPassword`                        | Allow DB blank passwords                                                                                              | true                                                         |
 | `args`                                      | Override default container args (useful when using custom images)                                                     | `nil`                                                        |
 | `command`                                   | Override default container command (useful when using custom images)                                                  | `nil`                                                        |
+| `containerPorts.http`                       | Sets http port inside Moodle container                                                                                | `8080`                                                       |
+| `containerPorts.https`                      | Sets https port inside Moodle container                                                                               | `8443`                                                       |
 | `containerSecurityContext.enabled`          | Enable Moodle containers' Security Context                                                                            | `true`                                                       |
 | `containerSecurityContext.runAsUser`        | Moodle containers' Security Context                                                                                   | `1001`                                                       |
 | `customLivenessProbe`                       | Override default liveness probe                                                                                       | `nil`                                                        |
@@ -95,7 +97,7 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                        |
 | `lifecycleHooks`                            | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                                           |
 | `livenessProbe`                             | Liveness probe configuration                                                                                          | `Check values.yaml file`                                     |
-| `moodleSkipInstall`                         | Skip moodle installation wizard (`no` / `yes`)                                                                        | `no`                                                         |
+| `moodleSkipInstall`                         | Skip moodle installation wizard (true / false)                                                                        | `false`                                                      |
 | `moodleUsername`                            | User of the application                                                                                               | `user`                                                       |
 | `moodlePassword`                            | Application password                                                                                                  | _random 10 character alphanumeric string_                    |
 | `moodleEmail`                               | Admin email                                                                                                           | `user@example.com`                                           |
@@ -154,18 +156,29 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `mariadb.auth.database`                     | Database name to create                                                                                               | `bitnami_moodle`                                             |
 | `mariadb.auth.username`                     | Database user to create                                                                                               | `bn_moodle`                                                  |
 | `mariadb.auth.password`                     | Password for the database                                                                                             | _random 10 character long alphanumeric string_               |
-| `mariadb.replication.enabled`               | MariaDB replication enabled                                                                                           | `false`                                                      |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                 | `true`                                                       |
 | `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                              | `nil`                                                        |
 | `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes                                                                               | `[ReadWriteOnce]`                                            |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                       | `8Gi`                                                        |
 | `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                       | `nil` (uses alpha storage class annotation)                  |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                                                    | `nil` (will not mount to a host path)                        |
-| `externalDatabase.user`                     | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
+| `externalDatabase.username`                 | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
 | `externalDatabase.password`                 | Password for the above username                                                                                       | `nil`                                                        |
 | `externalDatabase.database`                 | Name of the existing database                                                                                         | `bitnami_moodle`                                             |
 | `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |
 | `externalDatabase.port`                     | Port of the existing database                                                                                         | `3306`                                                       |
+
+### Volume Permissions parameters
+
+| Parameter                                   | Description                                                                                                                                               | Default                                                      |
+|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`          | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository`        | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`               | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
+| `volumePermissions.image.pullSecrets`       | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.image.pullPolicy`        | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`               | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
 
 ### Metrics parameters
 
@@ -179,6 +192,29 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `metrics.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                    | Additional annotations for Metrics exporter pod                                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                         | Exporter resource requests/limit                                                                                      | `{}`                                                         |
+
+### Certificate injection parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                             | `""`                                                         |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                          | `""`                                                         |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                          | `""`                                                         |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                           | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                           | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                     | `/etc/ssl/certs/chain.pem`                                   |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                           | `[]`                                                         |
+| `certificates.image.registry`                        | Container sidecar registry                                                                                   | `docker.io`                                                  |
+| `certificates.image.repository`                      | Container sidecar image                                                                                      | `bitnami/minideb`                                            |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                  | `buster`                                                     |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                          | `IfNotPresent`                                               |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                         | `image.pullSecrets`                                          |
+| `certificates.args`                                  | Override default container args (useful when using custom images)                                            | `nil`                                                        |
+| `certificates.command`                               | Override default container command (useful when using custom images)                                         | `nil`                                                        |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                     | `[]`                                                         |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                          | `nil`                                                        |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                 | `nil`                                                        |
+
 
 The above parameters map to the env variables defined in [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle) image documentation.
 
@@ -280,8 +316,7 @@ Obtain the credentials and the names of the PVCs used to hold both the MariaDB a
 export MOODLE_PASSWORD=$(kubectl get secret --namespace default moodle -o jsonpath="{.data.moodle-password}" | base64 --decode)
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default moodle-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default moodle-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
-export MOODLEDATA_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=moodle -o jsonpath="{.items[0].metadata.name}")
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=moodle -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle replicas to 0:
@@ -293,7 +328,7 @@ $ helm upgrade moodle bitnami/moodle --set moodlePassword=$MOODLE_PASSWORD --set
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set persistence.existingClaim=MOODLEDATA_PVC --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
+$ helm upgrade moodle bitnami/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
