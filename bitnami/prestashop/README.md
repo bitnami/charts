@@ -110,7 +110,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `prestashopCookieCheckIP`            | Whether to check the cookie's IP address or not                                                                       | `no`                                           |
 | `prestashopCountry`                  | Default country of the store                                                                                          | `us`                                           |
 | `prestashopLanguage`                 | Default language of the store (iso code)                                                                              | `en`                                           |
-| `prestashopSkipInstall`              | Skip PrestaShop installation wizard (`no` / `yes`)                                                                    | `no`                                           |
+| `prestashopSkipInstall`              | Skip PrestaShop installation wizard (`no` / `yes`)                                                                    | `false`                                        |
 | `persistence.accessMode`             | PVC Access Mode for PrestaShop volume                                                                                 | `ReadWriteOnce`                                |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
 | `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |

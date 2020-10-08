@@ -306,7 +306,7 @@ spec:
         - name: prestashop-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-prestashop" (include "prestashop.fullname" .)) }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-prestashop" (include "common.names.fullname" .)) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
