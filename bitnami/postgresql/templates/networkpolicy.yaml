@@ -30,7 +30,9 @@ spec:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
               role: slave
       {{- end }}
+    {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes
     - ports:
         - port: 9187
+    {{- end }}
 {{- end }}
