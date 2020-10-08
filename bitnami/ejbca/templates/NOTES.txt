@@ -57,6 +57,6 @@ To access your EJBCA site from outside the cluster follow the steps below:
 
 {{- $mariadbSecretName := include "ejbca.databaseSecretName" . -}}
 {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- $passwordErrors = append $passwordErrors $mariadbPasswordValidationErrors -}}
 
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
