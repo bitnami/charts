@@ -100,14 +100,22 @@ Return the appropriate apiVersion for ingress.
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "ejbca.mariadb.fullname" -}}
+{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "ejbca.databaseHost" -}}
 {{- if .Values.mariadb.enabled }}
     {{- if eq .Values.mariadb.architecture "replication" }}
-        {{- printf "%s-%s" (include "drupal.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+        {{- printf "%s-%s" (include "ejbca.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-        {{- printf "%s" (include "drupal.mariadb.fullname" .) -}}
+        {{- printf "%s" (include "ejbca.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.host -}}
