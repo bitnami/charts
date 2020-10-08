@@ -193,7 +193,6 @@ initdbScripts: {}
 ## extraFlags:
 ##  - "--wiredTigerCacheSizeGB=2"
 ##
-##extraFlags: []
 extraFlags:
   - "--tlsMode=requireTLS"
   - "--tlsCertificateKeyFile=/certs/mongodb.pem"
@@ -206,7 +205,6 @@ extraFlags:
 ##   - name: FOO
 ##     value: BAR
 ##
-#extraEnvVars: []
 extraEnvVars:
   - name: MONGODB_CLIENT_EXTRA_FLAGS
     value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
