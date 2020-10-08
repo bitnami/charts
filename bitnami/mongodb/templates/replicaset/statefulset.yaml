@@ -221,8 +221,14 @@ spec:
           livenessProbe:
             exec:
               command:
-                - pgrep
-                - mongod
+                - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
+                - --eval
+                - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -236,6 +242,11 @@ spec:
             exec:
               command:
                 - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
