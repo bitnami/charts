@@ -13,6 +13,13 @@ Return the proper proxy image name
 {{- end -}}
 
 {{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "wavefront.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.collector.image .Values.proxy.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "wavefront.collector.serviceAccountName" -}}
