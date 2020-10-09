@@ -335,12 +335,13 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 One needs to explicitly turn on SSL in the Prestashop administration panel, else a `302` redirect to `http` scheme is returned on any page of the site by default.
 
 To enable SSL on all pages, follow these steps:
-  - Browse to the administration panel and log in.
-  - Click “Shop Parameters” in the left navigation panel.
-  - Set the option “Enable SSL” to “Yes”.
-  - Click the “Save” button.
-  - Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
-  - Click the “Save” button.
+
+- Browse to the administration panel and log in.
+- Click “Shop Parameters” in the left navigation panel.
+- Set the option “Enable SSL” to “Yes”.
+- Click the “Save” button.
+- Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
+- Click the “Save” button.
 
 ## Upgrading
 
@@ -348,30 +349,30 @@ To enable SSL on all pages, follow these steps:
 
 MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `11.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and PrestaShop data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `prestashop`):
+To upgrade to `11.0.0`, you have two alternatives:
 
-> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+- Install a new Prestashop chart, and migrate your Prestashop site using backup/restore using any [Backup and Restore tool from Prestashop marketplace](https://addons.prestashop.com/en/search?search_query=backup&).
+- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `prestashop`):
 
-Obtain the credentials and the names of the PVCs used to hold both the MariaDB and PrestaShop data on your current release:
+Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
 export PRESTASHOP_PASSWORD=$(kubectl get secret --namespace default prestashop -o jsonpath="{.data.prestashop-password}" | base64 --decode)
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default prestashop-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
-export PRESTASHOPDATA_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,app.kubernetes.io/name=prestashop -o jsonpath="{.items[0].metadata.name}")
 ```
 
-Upgrade your release (maintaining the version) disabling MariaDB and scaling PrestaShop replicas to 0:
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Prestashop replicas to 0:
 
 ```console
-$ helm upgrade prestashop bitnami/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
+$ helm upgrade prestashop bitnami/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
 ```
 
-Finally, upgrade you release to `11.0.0` reusing the existing PVC, and enabling back MariaDB:
+Finally, upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade prestashop bitnami/prestashop --set persistence.existingClaim=PRESTASHOPDATA_PVC --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
+$ helm upgrade prestashop bitnami/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
