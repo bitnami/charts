@@ -487,9 +487,7 @@ helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.auth.rootPas
 
 MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `1.0.0`, you have an alternatives:
-
-- Reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `dataflow`):
+To upgrade to `1.0.0`, you will need to reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `dataflow`):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
