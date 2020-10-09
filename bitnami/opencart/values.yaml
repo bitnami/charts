@@ -522,7 +522,7 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
 
-# Add custom certificates and certificate authorities to redmine container
+# Add custom certificates and certificate authorities to OpenCart container
 certificates:
   customCertificate:
     certificateSecret: ""
