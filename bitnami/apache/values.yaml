@@ -264,6 +264,14 @@ metrics:
     #   cpu: 100m
     #   memory: 128Mi
 
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
+
 ## Service paramaters
 ##
 service:
