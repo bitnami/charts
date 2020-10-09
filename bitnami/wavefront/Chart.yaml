@@ -2,7 +2,7 @@ apiVersion: v1
 name: wavefront
 description: Chart for Wavefront Collector for Kubernetes
 appVersion: 1.2.4
-version: 0.1.1
+version: 0.1.2
 keywords:
   - metric
   - monitoring
