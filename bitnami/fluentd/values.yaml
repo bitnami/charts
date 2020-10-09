@@ -249,6 +249,29 @@ forwarder:
     create: true
     pspEnabled: false
 
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+
+  ## Add sidecars to the pod
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
   # extraVolumes:
@@ -458,6 +481,29 @@ aggregator:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 10Gi
+
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+
+  ## Add sidecars to the pod
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
 
   ## Extra volumes to mount
   ## Example Use Case: mount an emptyDir into /tmp to support running with readOnlyRootFileSystem

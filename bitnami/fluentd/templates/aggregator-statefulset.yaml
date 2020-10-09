@@ -42,6 +42,10 @@ spec:
       {{- if .Values.aggregator.tolerations }}
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.aggregator.extraInitContainers }}
+      initContainers:
+      {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.extraInitContainers "context" $ ) | nindent 8 }}
+      {{- end }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
@@ -113,6 +117,9 @@ spec:
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
             {{- end }}
+{{- if .Values.aggregator.sidecars }}
+{{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
+{{- end }}
       volumes:
         {{- if .Values.aggregator.extraVolumes }}
           {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
