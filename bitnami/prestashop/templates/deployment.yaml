@@ -100,8 +100,8 @@ spec:
             else apt-get update && apt-get install -y ca-certificates openssl; fi
             && openssl req -new -x509 -days 3650 -nodes -sha256
               -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
-              -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
-              -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+              -out {{ .Values.certificates.customCertificate.certificateLocation }}
+              -keyout {{ .Values.certificates.customCertificate.keyLocation }} -extensions v3_req
           {{- end }}
           {{- if .Values.certificates.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
