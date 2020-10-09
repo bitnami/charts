@@ -4,5 +4,5 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
   - name: common
-    version: 0.x.x
+    version: 0.7.x
     repository: https://charts.bitnami.com/bitnami
