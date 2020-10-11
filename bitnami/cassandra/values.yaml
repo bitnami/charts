@@ -194,6 +194,9 @@ dbUser:
   forcePassword: false
   # password:
   # existingSecret:
+  #  name: mySecret
+  #  keyMapping:
+  #    cassandra-password: myKey
 
 ## ConfigMap with cql scripts. Useful for creating a keyspace
 ## and pre-populating data
