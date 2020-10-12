@@ -4,8 +4,7 @@ kind: DaemonSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
   {{- if .Values.forwarder.annotations }}
-  annotations:
-    {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
   {{- end }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
