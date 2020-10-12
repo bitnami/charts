@@ -90,7 +90,7 @@ auth:
   # existingSecret: name-of-existing-secret
 
 tls:
- ##Enable or disable MongoDB TLS Support 
+ ## Enable or disable MongoDB TLS Support 
   enabled: false
 
 ## Name of the replica set
@@ -193,8 +193,8 @@ initdbScripts: {}
 ##  - "--wiredTigerCacheSizeGB=2"
 ##
 extraFlags: []
-#Uncomment for TLS server side flags to be appended to the mongod daemon.
-#extraFlags:
+## Uncomment for TLS server side flags to be appended to the mongod daemon.
+## extraFlags:
 #  - "--tlsMode=requireTLS"
 #  - "--tlsCertificateKeyFile=/certs/mongodb.pem"
 #  - "--tlsCAFile=/certs/mongodb-ca-cert"
@@ -206,8 +206,8 @@ extraFlags: []
 ##     value: BAR
 ##
 extraEnvVars: []
-#Uncomment for TLS flags to be appended to the mongo command used to connect to the (local or remote) mongod daemon.
-#extraEnvVars: 
+## Uncomment for TLS flags to be appended to the mongo command used to connect to the (local or remote) mongod daemon.
+## extraEnvVars: 
 #  - name: MONGODB_CLIENT_EXTRA_FLAGS
 #    value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
 
@@ -347,8 +347,8 @@ customReadinessProbe: {}
 ##
 initContainers: {}
 
-#Uncomment in order to generate the MongoDB server/client PEM certs with the appropriate volumes and volume mounts. 
-#initContainers:
+## Uncomment in order to generate the MongoDB server/client PEM certs with the appropriate volumes and volume mounts. 
+## initContainers:
 #  - name: generate-client
 #    image: nginx:1.19.1
 #    imagePullPolicy: "Always"
@@ -435,11 +435,11 @@ sidecars: {}
 extraVolumeMounts: []
 extraVolumes: []
 
-#Uncomment to create the volumes and volume mount for the TLS certs
-#extraVolumeMounts:
+## Uncomment to create the volumes and volume mount for the TLS certs
+## extraVolumeMounts:
 #  - name: certs
 #    mountPath: /certs
-#extraVolumes:
+## extraVolumes:
 #  - name: certs
 #    emptyDir: {}
 #  - name: certs-volume
