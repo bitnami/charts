@@ -91,8 +91,8 @@ auth:
 
 
 tls:
- ## Enable TLS authentication
-  enabled: true
+ ##Enable or disable MongoDB TLS Support
+  enabled: false
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
@@ -193,10 +193,12 @@ initdbScripts: {}
 ## extraFlags:
 ##  - "--wiredTigerCacheSizeGB=2"
 ##
-extraFlags:
-  - "--tlsMode=requireTLS"
-  - "--tlsCertificateKeyFile=/certs/mongodb.pem"
-  - "--tlsCAFile=/certs/mongodb-ca-cert"
+extraFlags: []
+#Uncomment for TLS server side flags to be appended to the mongod daemon.
+#extraFlags:
+#  - "--tlsMode=requireTLS"
+#  - "--tlsCertificateKeyFile=/certs/mongodb.pem"
+#  - "--tlsCAFile=/certs/mongodb-ca-cert"
 
 
 ## Additional environment variables to set
@@ -205,9 +207,11 @@ extraFlags:
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars:
-  - name: MONGODB_CLIENT_EXTRA_FLAGS
-    value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+extraEnvVars: []
+#Uncomment for TLS flags to be appended to the mongo command used to connect to the (local or remote) mongod daemon.
+#extraEnvVars:
+#  - name: MONGODB_CLIENT_EXTRA_FLAGS
+#    value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
 
 ## ConfigMap with extra environment variables
 ##
@@ -228,7 +232,7 @@ labels: {}
 ## Number of MongoDB replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 2
+replicaCount: 4
 
 ## StrategyType for MongoDB statefulset
 ## It can be set to RollingUpdate or Recreate by default.
@@ -342,64 +346,67 @@ customReadinessProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers:
-  - name: generate-client
-    image: nginx:1.19.1
-    imagePullPolicy: "Always"
-    env:
-      - name: MY_POD_NAMESPACE
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.namespace
-    volumeMounts:
-    - name: certs-volume
-      mountPath: /certs/CAs
-    - name: certs
-      mountPath: /certs
-    command:
-      - sh
-      - "-c"
-      - |
-        /bin/bash <<'EOF'
-
-        my_hostname=$(hostname)
-        svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
-
-        cp /certs/CAs/* /certs/
-
-        cat >/certs/openssl.cnf <<EOL
-        [req]
-        req_extensions = v3_req
-        distinguished_name = req_distinguished_name
-        [req_distinguished_name]
-        [ v3_req ]
-        basicConstraints = CA:FALSE
-        keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-        subjectAltName = @alt_names
-        [alt_names]
-        DNS.1 = $svc
-        DNS.2 = $my_hostname
-        DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
-        DNS.4 = localhost
-        DNS.5 = 127.0.0.1
-        EOL
-
-        export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
-        #Create the client/server cert
-        openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
-        #Signing the server cert with the CA cert and key
-        openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
-
-        rm /certs/mongo.csr
-
-        #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
-        cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
-
-        cd /certs/
-        shopt -s extglob
-        rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
-
-        EOF
+#
+initContainers: {}
+#Uncomment in order to generate the MongoDB server/client PEM certs with the appropriate volumes and volume mounts.
+#initContainers:
+#  - name: generate-client
+#    image: nginx:1.19.1
+#    imagePullPolicy: "Always"
+#    env:
+#      - name: MY_POD_NAMESPACE
+#        valueFrom:
+#          fieldRef:
+#            fieldPath: metadata.namespace
+#    volumeMounts:
+#    - name: certs-volume
+#      mountPath: /certs/CAs
+#    - name: certs
+#      mountPath: /certs
+#    command:
+#      - sh
+#      - "-c"
+#      - |
+#        /bin/bash <<'EOF'
+#
+#        my_hostname=$(hostname)
+#        svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+#
+#        cp /certs/CAs/* /certs/
+#
+#        cat >/certs/openssl.cnf <<EOL
+#        [req]
+#        req_extensions = v3_req
+#        distinguished_name = req_distinguished_name
+#        [req_distinguished_name]
+#        [ v3_req ]
+#        basicConstraints = CA:FALSE
+#        keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+#        subjectAltName = @alt_names
+#        [alt_names]
+#        DNS.1 = $svc
+#        DNS.2 = $my_hostname
+#        DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+#        DNS.4 = localhost
+#        DNS.5 = 127.0.0.1
+#        EOL
+#
+#        export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+#        #Create the client/server cert
+#        openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+#        #Signing the server cert with the CA cert and key
+#        openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+#
+#        rm /certs/mongo.csr
+#
+#        #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+#        cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+#
+#        cd /certs/
+#        shopt -s extglob
+#        rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+#
+#        EOF
 
 
 ## Add sidecars to the MongoDB pods.
@@ -426,29 +433,32 @@ sidecars: {}
 #
 #
 #
-extraVolumeMounts:
-  - name: certs
-    mountPath: /certs
-
-extraVolumes:
-  - name: certs
-    emptyDir: {}
-  - name: certs-volume
-    secret:
-      secretName: ca-clients
-      items:
-      - key: mongodb-ca-cert
-        path: mongodb-ca-cert
-        mode: 511
-      - key: mongodb-ca-key
-        path: mongodb-ca-key
-        mode: 511
+extraVolumeMounts: []
+extraVolumes: []
+#Uncomment to create the volumes and volume mount for the TLS certs
+#extraVolumeMounts:
+#  - name: certs
+#    mountPath: /certs
+#
+#extraVolumes:
+#  - name: certs
+#    emptyDir: {}
+#  - name: certs-volume
+#    secret:
+#      secretName: ca-clients
+#      items:
+#      - key: mongodb-ca-cert
+#        path: mongodb-ca-cert
+#        mode: 511
+#      - key: mongodb-ca-key
+#        path: mongodb-ca-key
+#        mode: 511
 
 ## MongoDB Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
-  create: false
+  create: true
   ## Min number of pods that must still be available after the eviction
   ##
   minAvailable: 1
@@ -835,7 +845,7 @@ rbac:
 ## values from the securityContext section of the component
 ##
 volumePermissions:
-  enabled: true
+  enabled: false
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##
