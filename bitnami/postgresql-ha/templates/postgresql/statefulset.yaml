@@ -176,7 +176,7 @@ spec:
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: REPMGR_PASSWORD_FILE
-              value: "/opt/bitnami/repmgr/secrets/repmgr-password"
+              value: "/opt/bitnami/postgresql/secrets/repmgr-password"
             {{- else }}
             - name: REPMGR_PASSWORD
               valueFrom:

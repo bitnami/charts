@@ -288,8 +288,10 @@ spec:
                 path: mariadb-root-password
               - key: mariadb-password
                 path: mariadb-password
+              {{- if eq .Values.architecture "replication" }}
               - key: mariadb-replication-password
                 path: mariadb-replication-password
+              {{- end }}
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumes "context" $) | nindent 8 }}

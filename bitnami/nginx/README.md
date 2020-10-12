@@ -79,7 +79,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `image.debug`                           | Set to true if you would like to see extra information on logs                           | `false`                                                 |
 | `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
 | `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `extraEnvVars`                          | Extra environment variables to be set on NGINX containers                                | `{}`                                                    |
+| `extraEnvVars`                          | Extra environment variables to be set on NGINX containers                                | `[]`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
 
