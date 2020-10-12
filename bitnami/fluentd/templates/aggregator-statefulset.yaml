@@ -42,9 +42,9 @@ spec:
       {{- if .Values.aggregator.tolerations }}
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.aggregator.extraInitContainers }}
+      {{- if .Values.aggregator.initContainers }}
       initContainers:
-      {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.extraInitContainers "context" $ ) | nindent 8 }}
+      {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd

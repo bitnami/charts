@@ -256,9 +256,9 @@ forwarder:
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
-  initContainers:
+  initContainers: []
 
-  ## Add sidecars to the pod
+  ## Add sidecars to forwarder pods
   ##
   ## For example:
   ## sidecars:
@@ -481,17 +481,17 @@ aggregator:
     accessMode: ReadWriteOnce
     size: 10Gi
 
-  ## Extra init containers
+  ## Add init containers to aggregator pods
   ## Example
   ##
-  ## extraInitContainers:
+  ## initContainers:
   ##   - name: do-something
   ##     image: busybox
   ##     command: ['do', 'something']
   ##
-  extraInitContainers: []
+  initContainers: []
 
-  ## Add sidecars to the pod
+  ## Add sidecars to aggregator pods
   ##
   ## For example:
   ## sidecars:
