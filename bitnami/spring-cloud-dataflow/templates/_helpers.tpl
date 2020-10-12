@@ -209,7 +209,7 @@ Return the Data Flow Database Name
 */}}
 {{- define "scdf.database.server.name" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "dataflow" -}}
+    {{- printf "%s" .Values.mariadb.auth.database -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.dataflow.database -}}
 {{- end -}}
@@ -220,9 +220,9 @@ Return the Data Flow Database User
 */}}
 {{- define "scdf.database.server.user" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "dataflow" -}}
+    {{- printf "%s" .Values.mariadb.auth.username -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.dataflow.user -}}
+    {{- printf "%s" .Values.externalDatabase.dataflow.username -}}
 {{- end -}}
 {{- end -}}
 
@@ -244,7 +244,7 @@ Return the Skipper Database User
 {{- if .Values.mariadb.enabled }}
     {{- printf "skipper" -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.skipper.user -}}
+    {{- printf "%s" .Values.externalDatabase.skipper.username -}}
 {{- end -}}
 {{- end -}}
 

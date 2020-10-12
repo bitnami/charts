@@ -114,6 +114,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `service.nodePorts.https`        | Kubernetes https node port                                                                  | `""`                                                         |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation                                                        | `Cluster`                                                    |
 | `service.loadBalancerIP`         | LoadBalancer service IP address                                                             | `""`                                                         |
+| `extraVolumes`                   | Array to add extra volumes                                                                  | `[]` (evaluated as a template)                               |
+| `extraVolumeMounts`              | Array to add extra mount                                                                    | `[]` (evaluated as a template)                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

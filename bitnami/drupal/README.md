@@ -82,6 +82,8 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `allowEmptyPassword`                        | Allow DB blank passwords                                                                                              | `yes`                                                        |
 | `args`                                      | Override default container args (useful when using custom images)                                                     | `nil`                                                        |
 | `command`                                   | Override default container command (useful when using custom images)                                                  | `nil`                                                        |
+| `containerPorts.http`                       | Sets http port inside Drupal container                                                                                | `8080`                                                       |
+| `containerPorts.https`                      | Sets https port inside Drupal container                                                                               | `8443`                                                       |
 | `containerSecurityContext.enabled`          | Enable Drupal containers' Security Context                                                                            | `true`                                                       |
 | `containerSecurityContext.runAsUser`        | Drupal containers' Security Context                                                                                   | `1001`                                                       |
 | `customLivenessProbe`                       | Override default liveness probe                                                                                       | `nil`                                                        |
@@ -90,6 +92,7 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `drupalPassword`                            | Application password                                                                                                  | _random 10 character long alphanumeric string_               |
 | `drupalProfile`                             | Drupal installation profile                                                                                           | `standard`                                                   |
 | `drupalUsername`                            | User of the application                                                                                               | `user`                                                       |
+| `drupalSkipInstall`                         | Skip Drupal installation wizard                                                                                       | `false`                                                      |
 | `existingSecret`                            | Name of a secret with the application password                                                                        | `nil`                                                        |
 | `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `nil`                                                        |
 | `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                                        |
@@ -119,6 +122,11 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `replicaCount`                              | Number of Drupal Pods to run                                                                                          | `1`                                                          |
 | `resources`                                 | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                        |
+| `smtpHost`                                  | SMTP host                                                                                                             | `nil`                                                        |
+| `smtpPort`                                  | SMTP port                                                                                                             | `nil` (but prestashop internal default is 25)                |
+| `smtpProtocol`                              | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                                        |
+| `smtpUser`                                  | SMTP user                                                                                                             | `nil`                                                        |
+| `smtpPassword`                              | SMTP password                                                                                                         | `nil`                                                        |
 | `tolerations`                               | Tolerations for pod assignment                                                                                        | `[]` (evaluated as a template)                               |
 | `updateStrategy`                            | Deployment update strategy                                                                                            | `nil`                                                        |
 
@@ -166,6 +174,18 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |
 | `externalDatabase.port`                     | Port of the existing database                                                                                         | `3306`                                                       |
 
+### Volume Permissions parameters
+
+| Parameter                                   | Description                                                                                                                                               | Default                                                      |
+|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`          | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository`        | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`               | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
+| `volumePermissions.image.pullSecrets`       | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.image.pullPolicy`        | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`               | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+
 ### Metrics parameters
 
 | Parameter                                   | Description                                                                                                           | Default                                                      |
@@ -178,6 +198,28 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `metrics.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                    | Additional annotations for Metrics exporter pod                                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                         | Exporter resource requests/limit                                                                                      | {}                                                           |
+
+### Certificate injection parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                             | `""`                                                         |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                          | `""`                                                         |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                          | `""`                                                         |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                           | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                           | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                     | `/etc/ssl/certs/chain.pem`                                   |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                           | `[]`                                                         |
+| `certificates.image.registry`                        | Container sidecar registry                                                                                   | `docker.io`                                                  |
+| `certificates.image.repository`                      | Container sidecar image                                                                                      | `bitnami/minideb`                                            |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                  | `buster`                                                     |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                          | `IfNotPresent`                                               |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                         | `image.pullSecrets`                                          |
+| `certificates.args`                                  | Override default container args (useful when using custom images)                                            | `nil`                                                        |
+| `certificates.command`                               | Override default container command (useful when using custom images)                                         | `nil`                                                        |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                     | `[]`                                                         |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                          | `nil`                                                        |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                 | `nil`                                                        |
 
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
 
@@ -233,7 +275,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data at the `/bitnami/drupal` path of the container.
+The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data and configurations at the `/bitnami/drupal` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -265,7 +307,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupa
     ```
 
     This will mount the `drupal-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-1. Because the container cannot control the host machine’s directory permissions, you must set the Drupal file directory permissions yourself and disable or clear Drupal cache. See Drupal Core’s [INSTALL.txt](http://cgit.drupalcode.org/drupal/tree/core/INSTALL.txt?h=8.3.x#n152) for setting file permissions, and see [Drupal handbook page](https://www.drupal.org/node/2598914) to disable the cache, or [Drush handbook](https://drushcommands.com/drush-8x/cache/cache-rebuild/) to clear cache.
+1. Because the container cannot control the host machine's directory permissions, you must set the Drupal file directory permissions yourself and disable or clear Drupal cache. See Drupal Core’s [INSTALL.txt](http://cgit.drupalcode.org/drupal/tree/core/INSTALL.txt?h=8.3.x#n152) for setting file permissions, and see [Drupal handbook page](https://www.drupal.org/node/2598914) to disable the cache, or [Drush handbook](https://drushcommands.com/drush-8x/cache/cache-rebuild/) to clear cache.
 
 ## Upgrading
 
