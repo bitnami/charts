@@ -483,6 +483,13 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+## 5.0.0
+This release uses parallel deployment for the postgresql statefullset. This should fix the issues related to not being able to restart the cluster under some contions where the master node is not longer node `-0`.
+This version is next major version to v3.x.y
+
+## 4.0.x
+Due to an error handling the version numbers these versions are actually part of the 3.x versions and not a new major version.
+
 ## 3.0.0
 
 A new major version of repmgr (5.1.0) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
