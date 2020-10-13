@@ -771,6 +771,7 @@ mariadb:
 ## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
+
   ## Database server host and port
   ##
   host: localhost
@@ -784,11 +785,21 @@ externalDatabase:
   ## Data Flow user and database
   ##
   dataflow:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: dataflow
     username: dataflow
   ## Skipper and database
   ##
   skipper:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: skipper
     username: skipper
   ## Hibernate Dialect
