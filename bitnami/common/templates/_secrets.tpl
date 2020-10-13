@@ -19,7 +19,11 @@ Params:
 {{- end -}}
 
 {{- with .existingSecret -}}
+{{- if not (typeIs "string" .) -}}
 {{- $name = .name -}}
+{{- else -}}
+{{- $name = . -}}
+{{- end -}}
 {{- end -}}
 
 {{- printf "%s" $name -}}
@@ -40,9 +44,11 @@ Params:
 {{- $key := .key -}}
 
 {{- if .existingSecret -}}
-  {{- if .existingSecret.keyMapping -}}
-    {{- $key = index .existingSecret.keyMapping $.key -}}
-  {{- end -}}
+  {{- if not (typeIs "string" .existingSecret) -}}
+    {{- if .existingSecret.keyMapping -}}
+      {{- $key = index .existingSecret.keyMapping $.key -}}
+    {{- end -}}
+  {{- end }}
 {{- end -}}
 
 {{- printf "%s" $key -}}
