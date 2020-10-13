@@ -43,6 +43,9 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:

@@ -53,6 +53,9 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
