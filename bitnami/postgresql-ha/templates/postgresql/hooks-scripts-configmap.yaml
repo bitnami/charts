@@ -53,8 +53,7 @@ data:
     fi
 
     # Load PostgreSQL & repmgr environment variables
-    eval "$(repmgr_env)"
-    eval "$(postgresql_env)"
+    . /opt/bitnami/scripts/postgresql-env.sh
 
     postgresql_enable_nss_wrapper
 
