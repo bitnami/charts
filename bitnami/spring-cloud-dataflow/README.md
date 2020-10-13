@@ -70,6 +70,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `deployer.volumeMounts`                      | Streaming applications extra volume mounts                                                             | `{}`                                                    |
 | `deployer.volumes`                           | Streaming applications extra volumes                                                                   | `{}`                                                    |
 | `deployer.environmentVariables`              | Streaming applications environment variables                                                           | `""`                                                    |
+| `deployer.podSecurityContext`                | Streaming applications Security Context.                                                               | `{runAsUser: 1001}`                                     |
 
 ### Dataflow Server parameters
 

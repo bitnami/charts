@@ -610,6 +610,11 @@ deployer:
   ## List of environment variables to set for any deployed app container. Multiple values are comma separated.
   ##
   environmentVariables: ''
+  ## Streams containers' Security Context. This security context will be use in every deployed stream.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  podSecurityContext:
+    runAsUser: 1001
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
