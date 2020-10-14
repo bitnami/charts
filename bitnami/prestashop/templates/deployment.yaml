@@ -161,6 +161,7 @@ spec:
             - name: PRESTASHOP_LANGUAGE
               value: {{ .Values.prestashopLanguage | quote }}
             {{- end }}
+            {{- if .Values.mariadb.enabled }}
             - name: PRESTASHOP_DATABASE_HOST
               value: {{ include "prestashop.databaseHost" . | quote }}
             - name: PRESTASHOP_DATABASE_PORT_NUMBER
@@ -174,6 +175,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "prestashop.databaseSecretName" . }}
                   key: mariadb-password
+            {{- else }}
+            - name: PRESTASHOP_DATABASE_HOST
+              value: {{ include "prestashop.databaseHost" . | quote }}
+            - name: PRESTASHOP_DATABASE_PORT_NUMBER
+              value: {{ include "prestashop.databasePort" . | quote }}
+            - name: PRESTASHOP_DATABASE_NAME
+              value: {{ include "prestashop.databaseName" . | quote }}
+            - name: PRESTASHOP_DATABASE_USER
+              value: {{ include "prestashop.databaseUser" . | quote }}
+            - name: PRESTASHOP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+            {{- end }}
             - name: PRESTASHOP_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.prestashopSkipInstall | quote }}
             {{- $port:=.Values.service.port | toString }}
