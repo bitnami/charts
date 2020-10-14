@@ -1,7 +1,7 @@
 apiVersion: v2
 name: grafana-operator
 description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
-version: 1.0.1
+version: 1.0.2
 appVersion: 3.6.0
 
 keywords:
