@@ -97,8 +97,8 @@ spec:
               value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.skipper.jdwp.port }}"
             {{- end }}
             {{- range $key, $value := .Values.skipper.extraEnvVars }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
+            - name: {{ $value.name }}
+              value: "{{ $value.value }}"
             {{- end }}
           {{- if or .Values.skipper.extraEnvVarsCM .Values.skipper.extraEnvVarsSecret }}
           envFrom:
