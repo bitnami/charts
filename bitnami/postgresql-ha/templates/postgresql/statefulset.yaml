@@ -21,6 +21,7 @@ spec:
     {{- if (eq "Recreate" .Values.postgresql.updateStrategyType) }}
     rollingUpdate: null
     {{- end }}
+  podManagementPolicy: Parallel
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
@@ -176,7 +177,7 @@ spec:
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: REPMGR_PASSWORD_FILE
-              value: "/opt/bitnami/repmgr/secrets/repmgr-password"
+              value: "/opt/bitnami/postgresql/secrets/repmgr-password"
             {{- else }}
             - name: REPMGR_PASSWORD
               valueFrom:

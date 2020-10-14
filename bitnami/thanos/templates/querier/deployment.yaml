@@ -86,9 +86,15 @@ spec:
             {{- end }}
             {{- if .Values.querier.grpcTLS.client.secure }}
             - --grpc-client-tls-secure
+            {{- if .Values.querier.grpcTLS.client.cert }}
             - --grpc-client-tls-cert=/tls/client/cert.pem
+            {{- end }}
+            {{- if .Values.querier.grpcTLS.client.key }}
             - --grpc-client-tls-key=/tls/client/key.pem
+            {{- end }}
+            {{- if .Values.querier.grpcTLS.client.ca }}
             - --grpc-client-tls-ca=/tls/client/ca.pem
+            {{- end }}
             {{- if .Values.querier.grpcTLS.client.servername }}
             - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
             {{- end }}

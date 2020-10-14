@@ -47,6 +47,9 @@ spec:
       {{- if .Values.forwarder.securityContext.enabled }}
       securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.forwarder.initContainers }}
+      initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
+      {{- end }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
@@ -117,6 +120,9 @@ spec:
             {{- if .Values.forwarder.extraVolumeMounts }}
             {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.forwarder.sidecars }}
+        {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.forwarder.extraVolumes }}
             {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
