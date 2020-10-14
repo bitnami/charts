@@ -186,6 +186,59 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.ingress.grpc.secrets[0].certificate`   | TLS Secret Certificate (GRPC)                                                                          | `nil`                                                   |
 | `querier.ingress.grpc.secrets[0].key`           | TLS Secret Key (GRPC)                                                                                  | `nil`                                                   |
 
+### Thanos Query Frontend parameters
+
+| Parameter                                       | Description                                                                                            | Default                                                 |
+|-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `queryFrontend.enabled`                         | Enable/disable Thanos Query Frontend component                                                         | `true`                                                  |
+| `queryFrontend.logLevel`                        | Thanos Query Frontend log level                                                                        | `info`                                                  |
+| `queryFrontend.extraFlags`                      | Extra Flags to passed to Thanos Query Frontend                                                         | `[]`                                                    |
+| `queryFrontend.config`                          | Thanos Query Frontend cache configuration                                                              | `nil`                                                   |
+| `queryFrontend.existingConfigmap`               | Name of existing ConfigMap with Thanos Query Frontend cache configuration                              | `nil`                                                   |
+| `queryFrontend.replicaCount`                    | Number of Thanos Query Frontend replicas to deploy                                                     | `1`                                                     |
+| `queryFrontend.strategyType`                    | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
+| `queryFrontend.affinity`                        | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
+| `queryFrontend.nodeSelector`                    | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
+| `queryFrontend.tolerations`                     | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `queryFrontend.priorityClassName`               | Controller priorityClassName                                                                           | `nil`                                                   |
+| `queryFrontend.securityContext.enabled`         | Enable security context for Thanos Query Frontend pods                                                 | `true`                                                  |
+| `queryFrontend.securityContext.fsGroup`         | Group ID for the Thanos Query Frontend filesystem                                                      | `1001`                                                  |
+| `queryFrontend.securityContext.runAsUser`       | User ID for the Thanos queryFrontend container                                                         | `1001`                                                  |
+| `queryFrontend.resources.limits`                | The resources limits for the Thanos Query Frontend container                                           | `{}`                                                    |
+| `queryFrontend.resources.requests`              | The requested resources for the Thanos Query Frontend container                                        | `{}`                                                    |
+| `queryFrontend.podAnnotations`                  | Annotations for Thanos Query Frontend pods                                                             | `{}`                                                    |
+| `queryFrontend.livenessProbe`                   | Liveness probe configuration for Thanos Query Frontend                                                 | `Check values.yaml file`                                |
+| `queryFrontend.readinessProbe`                  | Readiness probe configuration for Thanos Query Frontend                                                | `Check values.yaml file`                                |
+| `queryFrontend.service.type`                    | Kubernetes service type                                                                                | `ClusterIP`                                             |
+| `queryFrontend.service.clusterIP`               | Thanos Query Frontend  service clusterIP IP                                                            | `None`                                                  |
+| `queryFrontend.service.http.port`               | Service HTTP port                                                                                      | `9090`                                                  |
+| `queryFrontend.service.http.nodePort`           | Service HTTP node port                                                                                 | `nil`                                                   |
+| `queryFrontend.service.loadBalancerIP`          | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
+| `queryFrontend.service.loadBalancerSourceRanges`| Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
+| `queryFrontend.service.annotations`             | Annotations for Thanos Query Frontend service                                                          | `{}`                                                    |
+| `queryFrontend.serviceAccount.annotations`      | Annotations for Thanos Query Frontend Service Account                                                  | `{}`                                                    |
+| `queryFrontend.rbac.create`                     | Create RBAC                                                                                            | `false`                                                 |
+| `queryFrontend.pspEnabled`                      | Create PodSecurityPolicy                                                                               | `false`                                                 |
+| `queryFrontend.autoscaling.enabled`             | Enable autoscaling for Thanos Query Frontend                                                           | `false`                                                 |
+| `queryFrontend.autoscaling.minReplicas`         | Minimum number of Thanos Query Frontend replicas                                                       | `nil`                                                   |
+| `queryFrontend.autoscaling.maxReplicas`         | Maximum number of Thanos Query Frontend replicas                                                       | `nil`                                                   |
+| `queryFrontend.autoscaling.targetCPU`           | Target CPU utilization percentage                                                                      | `nil`                                                   |
+| `queryFrontend.autoscaling.targetMemory`        | Target Memory utilization percentage                                                                   | `nil`                                                   |
+| `queryFrontend.pdb.create`                      | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
+| `queryFrontend.pdb.minAvailable`                | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
+| `queryFrontend.pdb.maxUnavailable`              | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
+| `queryFrontend.ingress.enabled`                 | Enable ingress controller resource                                                                     | `false`                                                 |
+| `queryFrontend.ingress.certManager`             | Add annotations for cert-manager                                                                       | `false`                                                 |
+| `queryFrontend.ingress.hostname`                | Default host for the ingress resource                                                                  | `thanos.local`                                          |
+| `queryFrontend.ingress.annotations`             | Ingress annotations                                                                                    | `[]`                                                    |
+| `queryFrontend.ingress.extraHosts[0].name`      | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `queryFrontend.ingress.extraHosts[0].path`      | Additional hostnames to be covered                                                                     | `nil`                                                   |
+| `queryFrontend.ingress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `queryFrontend.ingress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
+| `queryFrontend.ingress.secrets[0].name`         | TLS Secret Name                                                                                        | `nil`                                                   |
+| `queryFrontend.ingress.secrets[0].certificate`  | TLS Secret Certificate                                                                                 | `nil`                                                   |
+| `queryFrontend.ingress.secrets[0].key`          | TLS Secret Key                                                                                         | `nil`                                                   |
+
 ### Thanos Bucket Web parameters
 
 | Parameter                                            | Description                                                                                            | Default                                                 |
