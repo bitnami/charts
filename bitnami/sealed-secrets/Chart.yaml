@@ -1,0 +1,22 @@
+apiVersion: v1
+name: sealed-secrets
+description: A Helm chart for Sealed Secrets
+version: 1.10.3
+appVersion: 0.12.4
+keywords:
+  - "secrets"
+home: https://github.com/bitnami/charts/tree/master/bitnami/sealed-secrets
+sources:
+  - https://github.com/bitnami-labs/sealed-secrets
+home: https://github.com/bitnami-labs/sealed-secrets
+maintainers:
+  - name: stefanprodan
+    email: stefan.prodan@gmail.com
+  - name: olib963
+    email: olib963@gmail.com
+  - name: onedr0p
+    email: devin.kray@gmail.com
+  - name: Bitnami
+    email: containers@bitnami.com
+annotations:
+  category: Infrastructure
