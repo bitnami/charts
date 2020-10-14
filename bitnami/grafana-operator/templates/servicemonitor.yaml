@@ -12,7 +12,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  type: None
+  clusterIP: None
+  type: ClusterIP
   ports:
     - port: 8080
       targetPort: metrics
