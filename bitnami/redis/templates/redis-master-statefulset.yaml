@@ -9,9 +9,9 @@ metadata:
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    {{- if .Values.master.statefulset.labels -}}
-    {{- toYaml .Values.master.statefulset.labels | nindent 4 }}
-    {{- end -}}
+  {{- if .Values.master.statefulset.labels }}
+  {{- toYaml .Values.master.statefulset.labels | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
