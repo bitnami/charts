@@ -38,7 +38,7 @@ updateStrategy:
 image:
   registry: quay.io
   repository: integreatly/grafana-operator
-  tag: v3.5.0
+  tag: v3.6.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -57,20 +57,11 @@ args:
   scanAllNamespaces: false
   scanNamespaces: []
 
-
-## Create Grafana Operator CRDs
-installCRDs: true
-
-## Grafana Operator CRD deletion policy
-## ref: https://v3.helm.sh/docs/topics/charts_hooks/
-##
-# customResourceDeletePolicy: before-hook-creation
-
 grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.1.1
+    tag: 7.2.1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

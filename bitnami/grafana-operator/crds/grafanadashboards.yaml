@@ -38,3 +38,6 @@ spec:
               items:
                 description: Grafana Plugin Object
                 type: object
+            customFolderName:
+              description: Folder name that this dashboard will be assigned to.
+              type: string

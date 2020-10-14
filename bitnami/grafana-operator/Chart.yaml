@@ -1,8 +1,8 @@
-apiVersion: v1
+apiVersion: v2
 name: grafana-operator
 description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
-version: 0.1.0
-appVersion: 3.5.0
+version: 1.0.0
+appVersion: 3.6.0
 
 keywords:
   - grafana
@@ -22,3 +22,10 @@ maintainers:
 
 annotations:
   category: Analytics
+
+dependencies:
+  - name: common
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
