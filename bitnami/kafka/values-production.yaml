@@ -54,6 +54,7 @@ commonAnnotations: {}
 
 ## Kafka Configuration
 ## Specify content for server.properties
+## NOTE: This will override any KAFKA_CFG_ environment variables (including those set by the chart)
 ## The server.properties is auto-generated based on other parameters when this paremeter is not specified
 ##
 ## Example:
@@ -85,7 +86,7 @@ commonAnnotations: {}
 # config:
 
 ## ConfigMap with Kafka Configuration
-## NOTE: This will override config
+## NOTE: This will override config AND any KAFKA_CFG_ environment variables.
 ##
 # existingConfigmap:
 

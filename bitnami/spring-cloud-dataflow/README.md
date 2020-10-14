@@ -244,12 +244,16 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `mariadb.auth.password`                      | Password for the new user                                                                              | `change-me`                                             |
 | `mariadb.auth.rootPassword`                  | Password for the MariaDB `root` user                                                                   | _random 10 character alphanumeric string_               |
 | `mariadb.initdbScripts`                      | Dictionary of initdb scripts                                                                           | Check `values.yaml` file                                |
+| `externalDatabase.driver`                    | The fully qualified name of the JDBC Driver class                                                      | `""`                                                    |
+| `externalDatabase.scheme`                    | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL          | `""`                                                    |
 | `externalDatabase.host`                      | Host of the external database                                                                          | `localhost`                                             |
 | `externalDatabase.port`                      | External database port number                                                                          | `3306`                                                  |
 | `externalDatabase.password`                  | Password for the above username                                                                        | `""`                                                    |
 | `externalDatabase.existingPasswordSecret`    | Existing secret with database password                                                                 | `""`                                                    |
+| `externalDatabase.dataflow.url`              | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.    | `""`                                                    |
 | `externalDatabase.dataflow.username`         | Existing username in the external db to be used by Dataflow server                                     | `dataflow`                                              |
 | `externalDatabase.dataflow.database`         | Name of the existing database to be used by Dataflow server                                            | `dataflow`                                              |
+| `externalDatabase.skipper.url`               | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.            | `""`                                                    |
 | `externalDatabase.skipper.username`          | Existing username in the external db to be used by Skipper server                                      | `skipper`                                               |
 | `externalDatabase.skipper.database`          | Name of the existing database to be used by Skipper server                                             | `skipper`                                               |
 | `externalDatabase.hibernateDialect`          | Hibernate Dialect used by Dataflow/Skipper servers                                                     | `""`                                                    |
@@ -376,6 +380,7 @@ Sometimes you may want to have Spring Cloud components connect to an external da
 
 ```console
 mariadb.enabled=false
+externalDatabase.scheme=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.port=3306
 externalDatabase.password=mypassword
@@ -385,7 +390,21 @@ externalDatabase.dataflow.user=myskipperuser
 externalDatabase.dataflow.database=myskipperdatabase
 ```
 
-Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+NOTE: When using the indidual propertes (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
+
+To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precendence over the individual attributes. As an example of configuring an external MS SQL Server database:
+
+```console
+mariadb.enabled=false
+externalDatabase.password=mypassword
+externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
+externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
+externalDatabase.skipper.user=myskipperuser
+externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
+```
+
+NOTE: If you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
 
 ### Adding extra flags
 

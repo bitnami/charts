@@ -150,6 +150,28 @@ Return true if a configmap object should be created for Spring Cloud Skipper
 {{- end -}}
 
 {{/*
+Return the database URL used by the dataflow server
+*/}}
+{{- define "scdf.database.dataflow.url" -}}
+  {{- if .Values.externalDatabase.dataflow.url }}
+    {{- printf "%s" .Values.externalDatabase.dataflow.url -}}
+  {{- else -}}
+    {{- printf "jdbc:%s://%s:%s/%s%s" (include "scdf.database.scheme" .) (include "scdf.database.host" .) (include "scdf.database.port" .) (include "scdf.database.server.name" .) (include "scdf.database.jdbc.parameters" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the database URL used by skipper
+*/}}
+{{- define "scdf.database.skipper.url" -}}
+  {{- if .Values.externalDatabase.skipper.url }}
+    {{- printf "%s" .Values.externalDatabase.skipper.url -}}
+  {{- else -}}
+    {{- printf "jdbc:%s://%s:%s/%s%s" (include "scdf.database.scheme" .) (include "scdf.database.host" .) (include "scdf.database.port" .) (include "scdf.database.skipper.name" .) (include "scdf.database.jdbc.parameters" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Return the database Hostname
 */}}
 {{- define "scdf.database.host" -}}
