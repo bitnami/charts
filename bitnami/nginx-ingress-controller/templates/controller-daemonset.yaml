@@ -26,10 +26,7 @@ spec:
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations:
-        {{- range $key, $value := .Values.podAnnotations }}
-        {{ $key }}: {{ include "nginx-ingress.tplValue" (dict "value" $value "context" $) | quote }}
-        {{- end }}
+      annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
         component: {{ .Values.name }}

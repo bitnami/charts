@@ -10,10 +10,7 @@ metadata:
     {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations:
-    {{- range $key, $value := .Values.commonAnnotations }}
-    {{ $key }}: {{ include "nginx-ingress.tplValue" (dict "value" $value "context" $) | quote }}
-    {{- end }}
+  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
   selector:
@@ -26,10 +23,7 @@ spec:
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations:
-        {{- range $key, $value := .Values.podAnnotations }}
-        {{ $key }}: {{ include "nginx-ingress.tplValue" (dict "value" $value "context" $) | quote }}
-        {{- end }}
+      annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.podAnnotations "context" $) | trim | nindent 8 }}
       {{- end }}
       labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
         component: {{ .Values.name }}
