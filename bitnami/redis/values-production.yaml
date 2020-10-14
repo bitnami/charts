@@ -415,7 +415,7 @@ master:
 
   ## Redis Master pod priorityClassName
   ##
-  priorityClassName: {}
+  priorityClassName: ''
 
   ## An array to add extra env vars
   ## For example:
@@ -562,7 +562,7 @@ slave:
   podAnnotations: {}
 
   ## Redis slave pod priorityClassName
-  # priorityClassName: {}
+  # priorityClassName: ''
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -710,7 +710,7 @@ metrics:
     rules: []
 
   ## Metrics exporter pod priorityClassName
-  # priorityClassName: {}
+  # priorityClassName: ''
   service:
     type: ClusterIP
     ## Use serviceLoadBalancerIP to request a specific static IP,
