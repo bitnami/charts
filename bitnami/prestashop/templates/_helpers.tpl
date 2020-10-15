@@ -142,3 +142,14 @@ Return the MariaDB Secret Name
     {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the database password key
+*/}}
+{{- define "prestashop.databasePasswordKey" -}}
+{{- if .Values.mariadb.enabled -}}
+mariadb-password
+{{- else -}}
+db-password
+{{- end -}}
+{{- end -}}

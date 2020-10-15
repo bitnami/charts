@@ -173,7 +173,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "prestashop.databaseSecretName" . }}
-                  key: mariadb-password
+                  key: {{ include "prestashop.databasePasswordKey" . }}
             - name: PRESTASHOP_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.prestashopSkipInstall | quote }}
             {{- $port:=.Values.service.port | toString }}
