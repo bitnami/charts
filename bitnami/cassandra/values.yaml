@@ -193,7 +193,19 @@ dbUser:
   user: cassandra
   forcePassword: false
   # password:
+
+  ## Use an existing secrets which already stores your password data.
+  ## for backwards compatibility, existingSecret can be a simple string,
+  ## referencing the secret by name.
   # existingSecret:
+  #   ## Name of the existing secret
+  #   ##
+  #   name: mySecret
+  #   ## Key mapping where <key> is the value which the deployment is expecting and
+  #   ## <value> is the name of the key in the existing secret.
+  #   ##
+  #   keyMapping:
+  #     cassandra-password: myCassandraPasswordKey
 
 ## ConfigMap with cql scripts. Useful for creating a keyspace
 ## and pre-populating data

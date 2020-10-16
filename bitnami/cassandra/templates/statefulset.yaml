@@ -122,8 +122,8 @@ spec:
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.dbUser.existingSecret }}{{ .Values.dbUser.existingSecret }}{{- else }}{{ include "common.names.fullname" . }}{{- end }}
-                  key: cassandra-password
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "cassandra-password") }}
             - name: POD_IP
               valueFrom:
                 fieldRef:
