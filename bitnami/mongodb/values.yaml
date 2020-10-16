@@ -630,7 +630,7 @@ externalAccess:
 arbiter:
   ## Enable deploying the MongoDB Arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
-  enabled: false
+  enabled: true
 
   ## MongoDB configuration file for the Arbiter. For documentation of all options, see:
   ##   http://docs.mongodb.org/manual/reference/configuration-options/

@@ -58,7 +58,7 @@ moodleUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
-moodlePassword: ""
+moodlePassword: password
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
@@ -227,7 +227,7 @@ containerPorts:
 ## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
 ##
 service:
-  type: LoadBalancer
+  type: NodePort
   # HTTP Port
   port: 80
   # HTTPS Port
@@ -522,22 +522,22 @@ metrics:
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:
-  customCertificate:
-    certificateSecret: ""
-    chainSecret: {}
-    # name: secret-name
-    # key: secret-key
+  customCertificate: 
+    certificateSecret: my-secret 
+    chainSecret: 
+      name: my-cert-chain
+      key: ip-10-114-23-236.evoforge.org.pem
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
-  customCAs: []
+  customCAs: 
   ## Override container command
-  ##
+  #- secret: my-ca-1
+
   command:
   ## Override container args
-  ##
   args:
-  # - secret: custom-CA
+  # - secret: my-ca-1
   # - secret: more-custom-CAs
   ## An array to add extra env vars
   ##
