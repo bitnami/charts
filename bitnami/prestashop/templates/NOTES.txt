@@ -24,7 +24,7 @@ host. To configure PrestaShop with the URL of your service:
   export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "prestashop.secretName" . }} -o jsonpath="{.data.prestashop-password}" | base64 --decode)
   export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "prestashop.databaseSecretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
   {{- end }}
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "prestashop.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "prestashop.databaseSecretName" . }} -o jsonpath="{.data.{{- include "prestashop.databasePasswordKey" . -}}}" | base64 --decode)
 
 2. Complete your PrestaShop deployment by running:
 
