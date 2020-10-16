@@ -53,7 +53,7 @@ spec:
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --http-address=0.0.0.0:10902
-            - --query-frontend.downstream-url=http://{{ include "thanos.fullname" . }}-querier:9090
+            - --query-frontend.downstream-url=http://{{ include "thanos.fullname" . }}-querier:{{ .Values.querier.service.http.port }}
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
             - --query-range.response-cache-config-file=/conf/cache/config.yml
             {{- end }}
