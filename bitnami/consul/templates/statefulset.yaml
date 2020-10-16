@@ -235,7 +235,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/consul_exporter
-            - --consul.server={{ include "common.names.fullname" . }}:{{ .Values.service.port }}
+            - --consul.server=127.0.0.1:{{ .Values.containerPorts.http }}
           ports:
             - name: metrics
               containerPort: 9107
