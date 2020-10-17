@@ -4,8 +4,7 @@ metadata:
   name: {{ template "redis.fullname" . }}-headless
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "redis.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "redis.labels" . | nindent 4 }}
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}

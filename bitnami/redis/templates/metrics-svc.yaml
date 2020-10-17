@@ -5,13 +5,12 @@ metadata:
   name: {{ template "redis.fullname" . }}-metrics
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "redis.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "metrics"
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    app.kubernetes.io/name: {{ include "redis.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: "metrics"
     {{- if .Values.metrics.service.labels -}}
     {{- toYaml .Values.metrics.service.labels | nindent 4 }}
     {{- end -}}

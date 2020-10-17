@@ -4,6 +4,7 @@ metadata:
   name: {{ template "redis.fullname" . }}-scripts
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "redis.labels" . | nindent 4 }}
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     heritage: {{ .Release.Service }}

@@ -419,3 +419,16 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "redis.labels" -}}
+app.kubernetes.io/name: {{ include "redis.name" . }}
+helm.sh/chart: {{ include "redis.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
