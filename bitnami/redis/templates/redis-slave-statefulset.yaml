@@ -5,6 +5,8 @@ metadata:
   name: {{ template "redis.fullname" . }}-slave
   namespace: {{ .Release.Namespace }}
   labels:
+    app.kubernetes.io/name: {{ include "redis.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
