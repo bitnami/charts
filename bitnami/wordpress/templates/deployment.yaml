@@ -19,6 +19,9 @@ spec:
   template:
     metadata:
       labels: {{- include "wordpress.labels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "wordpress.tplValue" ( dict "value" .Values.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}

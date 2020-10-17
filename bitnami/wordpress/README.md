@@ -117,6 +117,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nodeSelector`                            | Node labels for pod assignment                                                        | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                        | `[]` (evaluated as a template)                               |
 | `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
+| `podLabels`                               | Pod labels                                                                            | `{}` (evaluated as a template)                               |
 | `podAnnotations`                          | Pod annotations                                                                       | `{}` (evaluated as a template)                               |
 | `healthcheckHttps`                        | Use https for liveliness and readiness                                                | `false`                                                      |
 | `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
