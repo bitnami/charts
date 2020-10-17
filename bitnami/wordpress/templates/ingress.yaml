@@ -23,7 +23,7 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
-          - path: /
+          - path: {{ .Values.ingress.path }}
             backend:
               serviceName: {{ template "wordpress.fullname" . }}
               servicePort: http
