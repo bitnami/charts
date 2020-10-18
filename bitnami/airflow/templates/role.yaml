@@ -9,8 +9,7 @@ metadata:
     {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations:
-    {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 rules:
   - apiGroups:
@@ -19,10 +18,13 @@ rules:
       - pods
       - pods/log
       - pods/exec
-      - services
-      - endpoints
       - configmaps
       - secrets
     verbs:
-      - '*'
+      - get
+      - list
+      - watch
+      - create
+      - delete
 {{- end -}}
+
