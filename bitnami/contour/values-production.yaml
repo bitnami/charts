@@ -62,7 +62,7 @@ configInline:
   ## This sets the service name that will be inspected for address details to be applied to Ingress objects.
   # As by default the envoy services name deployed by this helm chart is 'contour-envoy', this configuration is needed
   # in order to ensure, that the ingress status is automatically updated by contour.
-  envoy-service-name: contour-envoy
+  envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
   ### Logging options
   # Default setting
   accesslog-format: envoy
