@@ -39,6 +39,12 @@ rules:
       - list
       - watch
   - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - list
+  - apiGroups:
       - networking.k8s.io
     resources:
       - gatewayclasses
@@ -61,6 +67,22 @@ rules:
       - networking.k8s.io
     resources:
       - ingresses/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - extensionservices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - extensionservices/status
     verbs:
       - create
       - get

@@ -127,7 +127,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | Parameter                   | Description                       | Default         |
 |-----------------------------|-----------------------------------|-----------------|
 | `persistence.enabled`       | Enable persistence                | `true`          |
-| `presistence.storageClass`  | Storage class to use with the PVC | `nil`           |
+| `persistence.storageClass`  | Storage class to use with the PVC | `nil`           |
 | `persistence.accessMode`    | Access mode to the PV             | `ReadWriteOnce` |
 | `persistence.size`          | Size for the PV                   | `10Gi`          |
 
@@ -138,6 +138,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `serviceAccount.create`      | Enable creation of ServiceAccount for Grafana pods | `true`                                          |
 | `serviceAccount.name`        | Name of the created serviceAccount                 | Generated using the `grafana.fullname` template |
 | `serviceAccount.annotations` | ServiceAccount Annotations                         | `{}`                                            |
+
 ### Exposure parameters
 
 | Parameter                           | Description                                                                                                                                                                                                                           | Default             |
