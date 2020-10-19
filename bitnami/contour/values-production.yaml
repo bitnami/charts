@@ -59,8 +59,8 @@ configInline:
   leaderelection:
     # configmap-name: leader-elect
     configmap-namespace: '{{ .Release.Namespace }}'
-  ## The expression used here is the same as in templates/envoy/service.yaml and ensures that Contour is using the configured 
-  # envoy service name so it can automatically update the ingress.status field. 
+  ## The expression used here is the same as in templates/envoy/service.yaml and ensures that Contour is using the configured
+  # envoy service name so it can automatically update the ingress.status field.
   envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
   ### Logging options
   # Default setting
