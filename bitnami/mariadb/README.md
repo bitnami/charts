@@ -319,6 +319,22 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
+Take into account those scripts are treated differently depending on the extension. While the `.sh` scripts are executed in all the nodes; the `.sql` and `.sql.gz` scripts are only executed in the primary nodes. The reason behind this differentiation is that the `.sh` scripts allow adding conditions to determine what is the node running the script, while these conditions can't be set using `.sql` nor `sql.gz` files. This way it is possible to cover different use cases depending on their needs.
+
+If using a `.sh` script you want to do a "one-time" action like creating a database, you need to add a condition in your `.sh` script to be executed only in one of the nodes, such as
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+     #!/bin/sh
+     if [[ $(hostname) == *primary* ]]; then
+       echo "Primary node"
+       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+     else
+       echo "No primary node"
+     fi
+```
+
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
