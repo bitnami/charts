@@ -334,6 +334,17 @@ Get the secret name
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "airflow.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "airflow.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "airflow.validateValues" -}}
