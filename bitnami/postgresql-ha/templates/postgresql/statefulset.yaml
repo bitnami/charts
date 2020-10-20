@@ -146,6 +146,62 @@ spec:
             - name: POSTGRES_DB
               value: {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- end }}
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: {{ .Values.postgresql.audit.logHostname | quote }}
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: {{ .Values.postgresql.audit.logConnections | quote }}
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: {{ .Values.postgresql.audit.logDisconnections | quote }}
+            {{- if .Values.postgresql.audit.logLinePrefix }}
+            - name: POSTGRESQL_LOG_LINE_PREFIX
+              value: {{ .Values.postgresql.audit.logLinePrefix | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.audit.logTimezone }}
+            - name: POSTGRESQL_LOG_TIMEZONE
+              value: {{ .Values.postgresql.audit.logTimezone | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.audit.pgAuditLog }}
+            - name: POSTGRESQL_PGAUDIT_LOG
+              value: {{ .Values.postgresql.audit.pgAuditLog | quote }}
+            {{- end }}
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: {{ .Values.postgresql.audit.pgAuditLogCatalog | quote }}
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: {{ .Values.postgresql.audit.clientMinMessages | quote }}
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: {{ .Values.postgresql.sharedPreloadLibraries | quote }}
+            {{- if .Values.postgresql.maxConnections }}
+            - name: POSTGRESQL_MAX_CONNECTIONS
+              value: {{ .Values.postgresql.maxConnections | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.postgresConnectionLimit }}
+            - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
+              value: {{ .Values.postgresql.postgresConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.dbUserConnectionLimit }}
+            - name: POSTGRESQL_USERNAME_CONNECTION_LIMIT
+              value: {{ .Values.postgresql.dbUserConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeepalivesInterval }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_INTERVAL
+              value: {{ .Values.postgresql.tcpKeepalivesInterval | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeepalivesIdle }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_IDLE
+              value: {{ .Values.postgresql.tcpKeepalivesIdle | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeealivesCount }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
+              value: {{ .Values.postgresql.tcpKeealivesCount | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.statementTimeout }}
+            - name: POSTGRESQL_STATEMENT_TIMEOUT
+              value: {{ .Values.postgresql.statementTimeout | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.pghbaRemoveFilters }}
+            - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
+              value: {{ .Values.postgresql.pghbaRemoveFilters | quote }}
+            {{- end }}
             # Repmgr configuration
             - name: MY_POD_NAME
               valueFrom:
