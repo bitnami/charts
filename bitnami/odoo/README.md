@@ -55,6 +55,11 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `global.imageRegistry`                | Global Docker image registry                                                                      | `nil`                                                   |
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                                                   | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                 | Global storage class for dynamic provisioning                                                     | `nil`                                                   |
+
+### Common & Pod-specific parameters
+
+| Parameter                             | Description                                                                                       | Default                                                 |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `image.registry`                      | Odoo image registry                                                                               | `docker.io`                                             |
 | `image.repository`                    | Odoo Image name                                                                                   | `bitnami/odoo`                                          |
 | `image.tag`                           | Odoo Image tag                                                                                    | `{TAG_NAME}`                                            |
@@ -62,6 +67,29 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                  | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                        | String to partially override odoo.fullname template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`                    | String to fully override odoo.fullname template with a string                                     | `nil`                                                   |
+| `commonAnnotations`                   | Annotations to be added to all deployed resources                                                 | `{}` (evaluated as a template)                          |
+| `commonLabels`                        | Labels to be added to all deployed resources                                                      | `{}` (evaluated as a template)                          |
+| `persistence.enabled`                 | Enable persistence using PVC                                                                      | `true`                                                  |
+| `persistence.existingClaim`           | Enable persistence using an existing PVC                                                          | `nil`                                                   |
+| `persistence.storageClass`            | PVC Storage Class                                                                                 | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`              | PVC Access Mode                                                                                   | `ReadWriteOnce`                                         |
+| `persistence.size`                    | PVC Storage Request                                                                               | `8Gi`                                                   |
+| `affinity`                            | Map of node/pod affinities                                                                        | `{}`                                                    |
+
+### Service parameters
+
+| Parameter                             | Description                                                                                       | Default                                                 |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `service.type`                        | Kubernetes Service type                                                                           | `LoadBalancer`                                          |
+| `service.port`                        | Service HTTP port                                                                                 | `80`                                                    |
+| `service.loadBalancer`                | Kubernetes LoadBalancerIP to request                                                              | `nil`                                                   |
+| `service.externalTrafficPolicy`       | Enable client source IP preservation                                                              | `Cluster`                                               |
+| `service.nodePort`                    | Kubernetes http node port                                                                         | `""`                                                    |
+
+### Odoo parameters
+
+| Parameter                             | Description                                                                                       | Default                                                 |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `odooUsername`                        | User of the application                                                                           | `user@example.com`                                      |
 | `odooPassword`                        | Admin account password                                                                            | _random 10 character long alphanumeric string_          |
 | `odooEmail`                           | Admin account email                                                                               | `user@example.com`                                      |
@@ -70,38 +98,7 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `smtpUser`                            | SMTP user                                                                                         | `nil`                                                   |
 | `smtpPassword`                        | SMTP password                                                                                     | `nil`                                                   |
 | `smtpProtocol`                        | SMTP protocol [`ssl`, `tls`]                                                                      | `nil`                                                   |
-| `service.type`                        | Kubernetes Service type                                                                           | `LoadBalancer`                                          |
-| `service.port`                        | Service HTTP port                                                                                 | `80`                                                    |
-| `service.loadBalancer`                | Kubernetes LoadBalancerIP to request                                                              | `nil`                                                   |
-| `service.externalTrafficPolicy`       | Enable client source IP preservation                                                              | `Cluster`                                               |
-| `service.nodePort`                    | Kubernetes http node port                                                                         | `""`                                                    |
-| `externalDatabase.host`               | Host of the external database                                                                     | `localhost`                                             |
-| `externalDatabase.user`               | Existing username in the external db                                                              | `postgres`                                              |
-| `externalDatabase.password`           | Password for the above username                                                                   | `nil`                                                   |
-| `externalDatabase.database`           | Name of the existing database                                                                     | `bitnami_odoo`                                          |
-| `externalDatabase.port`               | Database port number                                                                              | `5432`                                                  |
-| `ingress.enabled`                     | Enable ingress controller resource                                                                | `false`                                                 |
-| `ingress.certManager`                 | Add annotations for cert-manager                                                                  | `false`                                                 |
-| `ingress.annotations`                 | Annotations for the ingress                                                                       | `[]`                                                    |
-| `ingress.hosts[0].name`               | Hostname to your Odoo installation                                                                | `odoo.local`                                            |
-| `ingress.hosts[0].path`               | Path within the url structure                                                                     | `/`                                                     |
-| `ingress.hosts[0].tls`                | Utilize TLS backend in ingress                                                                    | `false`                                                 |
-| `ingress.hosts[0].tlsSecret`          | TLS Secret (certificates)                                                                         | `odoo.local-tls-secret`                                 |
-| `ingress.secrets[0].name`             | TLS Secret Name                                                                                   | `nil`                                                   |
-| `ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                            | `nil`                                                   |
-| `ingress.secrets[0].key`              | TLS Secret Key                                                                                    | `nil`                                                   |
 | `resources`                           | CPU/Memory resource requests/limits                                                               | Memory: `512Mi`, CPU: `300m`                            |
-| `persistence.enabled`                 | Enable persistence using PVC                                                                      | `true`                                                  |
-| `persistence.existingClaim`           | Enable persistence using an existing PVC                                                          | `nil`                                                   |
-| `persistence.storageClass`            | PVC Storage Class                                                                                 | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`              | PVC Access Mode                                                                                   | `ReadWriteOnce`                                         |
-| `persistence.size`                    | PVC Storage Request                                                                               | `8Gi`                                                   |
-| `postgresql.enabled`                  | Deploy PostgreSQL container(s)                                                                    | `true`                                                  |
-| `postgresql.postgresqlPassword`       | PostgreSQL password                                                                               | `nil`                                                   |
-| `postgresql.persistence.enabled`      | Enable PostgreSQL persistence using PVC                                                           | `true`                                                  |
-| `postgresql.persistence.storageClass` | PVC Storage Class for PostgreSQL volume                                                           | `nil` (uses alpha storage class annotation)             |
-| `postgresql.persistence.accessMode`   | PVC Access Mode for PostgreSQL volume                                                             | `ReadWriteOnce`                                         |
-| `postgresql.persistence.size`         | PVC Storage Request for PostgreSQL volume                                                         | `8Gi`                                                   |
 | `livenessProbe.enabled`               | Enable/disable the liveness probe                                                                 | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                          | 300                                                     |
 | `livenessProbe.periodSeconds`         | How often to perform the probe                                                                    | 30                                                      |
@@ -114,7 +111,37 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                          | 5                                                       |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed                                              | 6                                                       |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes to be considered successful                                         | 1                                                       |
-| `affinity`                            | Map of node/pod affinities                                                                        | `{}`                                                    |
+
+### Ingress parameters
+
+| Parameter                             | Description                                                                                       | Default                                                 |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `ingress.enabled`                     | Enable ingress controller resource                                                                | `false`                                                 |
+| `ingress.certManager`                 | Add annotations for cert-manager                                                                  | `false`                                                 |
+| `ingress.annotations`                 | Annotations for the ingress                                                                       | `[]` (evaluated as a template)                          |
+| `ingress.hosts[0].name`               | Hostname to your Odoo installation                                                                | `odoo.local`                                            |
+| `ingress.hosts[0].path`               | Path within the url structure                                                                     | `/`                                                     |
+| `ingress.hosts[0].tls`                | Utilize TLS backend in ingress                                                                    | `false`                                                 |
+| `ingress.hosts[0].tlsSecret`          | TLS Secret (certificates)                                                                         | `odoo.local-tls-secret`                                 |
+| `ingress.secrets[0].name`             | TLS Secret Name                                                                                   | `nil`                                                   |
+| `ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                            | `nil`                                                   |
+| `ingress.secrets[0].key`              | TLS Secret Key                                                                                    | `nil`                                                   |
+
+### Database parameters
+
+| Parameter                             | Description                                                                                       | Default                                                 |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `postgresql.enabled`                  | Deploy PostgreSQL container(s)                                                                    | `true`                                                  |
+| `postgresql.postgresqlPassword`       | PostgreSQL password                                                                               | `nil`                                                   |
+| `postgresql.persistence.enabled`      | Enable PostgreSQL persistence using PVC                                                           | `true`                                                  |
+| `postgresql.persistence.storageClass` | PVC Storage Class for PostgreSQL volume                                                           | `nil` (uses alpha storage class annotation)             |
+| `postgresql.persistence.accessMode`   | PVC Access Mode for PostgreSQL volume                                                             | `ReadWriteOnce`                                         |
+| `postgresql.persistence.size`         | PVC Storage Request for PostgreSQL volume                                                         | `8Gi`                                                   |
+| `externalDatabase.host`               | Host of the external database                                                                     | `localhost`                                             |
+| `externalDatabase.user`               | Existing username in the external db                                                              | `postgres`                                              |
+| `externalDatabase.password`           | Password for the above username                                                                   | `nil`                                                   |
+| `externalDatabase.database`           | Name of the existing database                                                                     | `bitnami_odoo`                                          |
+| `externalDatabase.port`               | Database port number                                                                              | `5432`                                                  |
 
 The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.
 

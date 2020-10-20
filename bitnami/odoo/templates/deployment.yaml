@@ -1,23 +1,27 @@
-apiVersion: {{ template "odoo.deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "odoo.fullname" . }}
-  labels:
-    app: {{ template "odoo.name" . }}
-    chart: {{ template "odoo.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "odoo.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ template "odoo.name" . }}
-        chart: {{ template "odoo.chart" . }}
-        release: {{ .Release.Name | quote }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
 {{- include "odoo.imagePullSecrets" . | indent 6 }}
       containers:
