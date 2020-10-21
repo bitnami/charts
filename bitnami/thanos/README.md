@@ -71,7 +71,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          └──────────────┘
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator)).
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami Minio chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -495,7 +495,7 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
-You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami Prometheus Operator chart](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator) following the steps below:
+You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
 
 > Note: in this example we will use MinIO (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -512,7 +512,7 @@ objstoreConfig: |-
     insecure: true
 querier:
   dnsDiscovery:
-    sidecarsService: prometheus-operator-prometheus-thanos
+    sidecarsService: kube-prometheus-prometheus-thanos
     sidecarsNamespace: monitoring
 bucketweb:
   enabled: true
@@ -523,13 +523,13 @@ storegateway:
 ruler:
   enabled: true
   alertmanagers:
-    - http://prometheus-operator-alertmanager.monitoring.svc.cluster.local:9093
+    - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
   config: |-
     groups:
       - name: "metamonitoring"
         rules:
           - alert: "PrometheusDown"
-            expr: absent(up{prometheus="monitoring/prometheus-operator"})
+            expr: absent(up{prometheus="monitoring/kube-prometheus"})
 metrics:
   enabled: true
   serviceMonitor:
@@ -549,10 +549,10 @@ For Helm 3:
 
 ```bash
 kubectl create namespace monitoring
-helm install prometheus-operator \
+helm install kube-prometheus \
     --set prometheus.thanos.create=true \
     --namespace monitoring \
-    bitnami/prometheus-operator
+    bitnami/kube-prometheus
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
