@@ -17,7 +17,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
-  serviceName: {{ include "common.names.fullname" . }}-headless
+  serviceName: {{ include "common.names.fullname" . }}-worker-headless
   replicas: {{ .Values.airflow.worker.replicas }}
   updateStrategy:
     type: {{ .Values.updateStrategy | quote }}

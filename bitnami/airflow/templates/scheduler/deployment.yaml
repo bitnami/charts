@@ -198,6 +198,9 @@ spec:
             - secretRef:
                 name: {{ .Values.airflow.scheduler.extraEnvVarsSecret }}
             {{- end }}
+          ports:
+            - name: task-logs
+              containerPort: {{ .Values.airflow.worker.port }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
           {{- end }}

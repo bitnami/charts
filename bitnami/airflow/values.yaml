@@ -367,15 +367,15 @@ ldap:
   # Enable LDAP authentication
   enabled: false
   # Server URI, eg. ldap://ldap_server:389
-  uri: "ldap://ldap_server:389"
+  uri: 'ldap://ldap_server:389'
   # Base of the search, eg. ou=example,o=org
-  base: "ou=example,o=org"
+  base: 'ou=example,o=org'
   # Bind DN
-  binddn: "cn=user,ou=example,o=org"
+  binddn: 'cn=user,ou=example,o=org'
   # Bind Password
-  bindpw: ""
+  bindpw: ''
   # Field used for uid
-  uidField: "uid"
+  uidField: 'uid'
   # SSL/TLS parameters for LDAP
   tls:
     # Enabled TLS/SSL for LDAP, you must include the CA file.
@@ -386,11 +386,11 @@ ldap:
     ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
     ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
     ##
-    CAcertificateSecret: ""
+    CAcertificateSecret: ''
     ## LDAP CA cert filename
     ## eg. ca.pem
     ##
-    CAcertificateFilename: ""
+    CAcertificateFilename: ''
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -423,6 +423,14 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicies:
+  ## Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: false
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -506,7 +514,7 @@ ingress:
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ""
+podAffinityPreset: ''
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -521,12 +529,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ""
+  type: ''
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ""
+  key: ''
   ## Node label values to match
   ## E.g.
   ## values:
@@ -582,7 +590,7 @@ postgresql:
   postgresqlDatabase: bitnami_airflow
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
-  existingSecret: ""
+  existingSecret: ''
 
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
@@ -594,10 +602,10 @@ externalDatabase:
   user: bn_airflow
   ## Database password
   ##
-  password: ""
+  password: ''
   ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
   ##
-  existingSecret: ""
+  existingSecret: ''
   ## Database name
   ##
   database: bitnami_airflow
@@ -618,7 +626,7 @@ redis:
     enabled: false
   ## In case of redis.enabled = true, allow the usage of existing secrets for redis
   ##
-  existingSecret: ""
+  existingSecret: ''
   # password: ""
 
 externalRedis:
@@ -631,10 +639,10 @@ externalRedis:
   port: 6379
   ## Redis password
   ##
-  password: ""
+  password: ''
   ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
   ##
-  existingSecret: ""
+  existingSecret: ''
   ## Redis username
   ## Most Redis implementnations do not require a username to authenticate
   ## and it should be enough with the password
@@ -672,5 +680,5 @@ metrics:
   podLabels: {}
 
   podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9112"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9112'

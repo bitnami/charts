@@ -1,7 +1,8 @@
-apiVersion: v1
+{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "SequentialExecutor")) }}
 kind: Service
+apiVersion: v1
 metadata:
-  name: {{ include "common.names.fullname" . }}-worker-headless
+  name: {{ include "common.names.fullname" . }}-scheduler-headless
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -10,11 +11,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: ClusterIP
   clusterIP: None
   ports:
-    - name: worker
+    - name: task-logs
       port: {{ .Values.airflow.worker.port }}
-      targetPort: worker
+      targetPort: task-logs
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: worker
+    app.kubernetes.io/component: scheduler
+{{- end }}
