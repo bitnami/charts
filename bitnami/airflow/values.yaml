@@ -124,6 +124,8 @@ updateStrategy: RollingUpdate
 ##
 rollingUpdatePartition:
 
+executor: 'CeleryExecutor'
+
 ## Airflow Components configuration
 ##
 airflow:
