@@ -1,6 +1,6 @@
 apiVersion: v1
 name: nginx-ingress-controller
-version: 5.6.13
+version: 5.6.14
 appVersion: 0.40.2
 description: Chart for the nginx Ingress controller
 keywords:

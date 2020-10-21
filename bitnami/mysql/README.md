@@ -236,6 +236,22 @@ The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allow
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
+Take into account those scripts are treated differently depending on the extension. While the `.sh` scripts are executed in all the nodes; the `.sql` and `.sql.gz` scripts are only executed in the primary nodes. The reason behind this differentiation is that the `.sh` scripts allow adding conditions to determine what is the node running the script, while these conditions can't be set using `.sql` nor `sql.gz` files. This way it is possible to cover different use cases depending on their needs.
+
+If using a `.sh` script you want to do a "one-time" action like creating a database, you need to add a condition in your `.sh` script to be executed only in one of the nodes, such as
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+     #!/bin/sh
+     if [[ $(hostname) == *master* ]]; then
+       echo "Master node"
+       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+     else
+       echo "No master node"
+     fi
+```
+
 ## Persistence
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.

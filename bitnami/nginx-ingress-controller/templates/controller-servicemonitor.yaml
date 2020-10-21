@@ -22,7 +22,7 @@ metadata:
 spec:
   endpoints:
     - port: metrics
-      interval: 30s
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: true
       {{- end }}
