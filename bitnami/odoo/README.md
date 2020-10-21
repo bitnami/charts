@@ -228,6 +228,12 @@ sidecars:
 
 Similarly, you can add extra init containers using the `initContainers` parameter.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image stores the Odoo data and configurations at the `/bitnami/odoo` path of the container.
@@ -236,6 +242,80 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Upgrading
+
+### To 15.0.0
+
+This major version includes two main changes:
+
+* Major change in the PostgreSQL subchart labeling. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) for more information.
+* Re-labeling so as to follow Helm label best practices (see [PR 3021](https://github.com/bitnami/charts/pull/3021))
+* Adaptation to use common Bitnami chart standards. The following common elements have been included: extra volumes, extra volume mounts, common annotations and labels, pod annotations and labels, pod and container security contexts, affinity settings, node selectors, tolerations, init and sidecar containers, support for existing secrets, custom commands and arguments, extra env variables and custom liveness/readiness probes.
+
+As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the PostgreSQL and Odoo data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `odoo`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+* Old version is up and running
+
+  ```console
+  $ helm ls
+  NAME	NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART       	APP VERSION
+  odoo 	default  	1       	2020-10-21 13:11:29.028263 +0200 CEST	deployed	odoo-14.0.21	13.0.20201010
+
+  $ kubectl get pods
+  NAME                       READY   STATUS    RESTARTS   AGE
+  odoo-odoo-984f954b9-tk8t8   1/1     Running   0          16m
+  odoo-postgresql-0           1/1     Running   0          16m
+  ```
+
+* Export both database and Odoo credentials in order to provide them in the update
+
+  ```console
+  $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+
+  $ export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo-odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+  ```
+
+* The upgrade to the latest (`15.X.X`) version is going to fail
+
+  ```console
+  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  Error: UPGRADE FAILED: cannot patch "odoo-odoo" with kind Deployment: Deployment.apps "odoo-odoo" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/instance":"odoo", "app.kubernetes.io/name":"odoo"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
+  ```
+
+* Delete both the statefulset and recplicaset (PostgreSQL and Odoo respectively). Notice the option `--cascade=false` for the former.
+
+  ```console
+  $ kubectl delete deployment.apps/odoo-odoo
+  deployment.apps "odoo-odoo" deleted
+
+  $ kubectl delete statefulset.apps/odoo-postgresql --cascade=false
+  statefulset.apps "odoo-postgresql" deleted
+  ```
+
+* Now the upgrade works
+
+  ```console
+  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  $ helm ls
+  NAME	NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART      	APP VERSION
+  odoo 	default  	3       	2020-10-21 13:35:27.255118 +0200 CEST	deployed	odoo-15.0.0	13.0.20201010
+  ```
+
+* You can kill the existing PostgreSQL pod and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod odoo-postgresql-0
+  pod "odoo-postgresql-0" deleted
+
+  $ kubectl get pods
+  NAME                        READY   STATUS    RESTARTS   AGE
+  odoo-odoo-854b9cd5fb-282md   1/1     Running   0          9m12s
+  odoo-postgresql-0            1/1     Running   0          7m19s
+  ```
+
+Please, note that without the --cascade=false both objects (statefulset and pod) are going to be removed and both objects will be deployed again with the helm upgrade command
+
 
 ### To 12.0.0
 
