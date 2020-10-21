@@ -13,18 +13,18 @@ host. To configure Airflow with the URL of your service:
 
 1. Get the Airflow URL indicated on the Ingress Rule and associate it to your cluster external IP:
 
-   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   export AIRFLOW_HOST=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
-   echo "Airflow URL: http://$AIRFLOW_HOST/"
-   echo "$CLUSTER_IP  $AIRFLOW_HOST" | sudo tee -a /etc/hosts
+  export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+  export AIRFLOW_HOST=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
+  echo "Airflow URL: http://$AIRFLOW_HOST/"
+  echo "$CLUSTER_IP  $AIRFLOW_HOST" | sudo tee -a /etc/hosts
 
 {{- else }}
 1. Get the Airflow URL by running:
 
   {{- if eq "NodePort" .Values.service.type }}
 
-   export AIRFLOW_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   export AIRFLOW_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export AIRFLOW_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export AIRFLOW_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
 
   {{- else if eq "ClusterIP" .Values.service.type }}
 
@@ -39,12 +39,12 @@ host. To configure Airflow with the URL of your service:
   export AIRFLOW_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   export AIRFLOW_PORT=80
   {{- end }}
+{{- end }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-fernetKey" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
 
-{{- end }}
 2. Complete your Airflow deployment by running:
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
