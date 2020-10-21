@@ -36,16 +36,9 @@ spec:
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      tolerations:
-        - effect: NoSchedule
-          key: node.alpha.kubernetes.io/role
-          operator: Exists
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/master
-          operator: Exists
-        {{- if .Values.%%MAIN_OBJECT_BLOCK%%.tolerations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.tolerations "context" .) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.tolerations "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName }}
       priorityClassName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName | quote }}
       {{- end }}
