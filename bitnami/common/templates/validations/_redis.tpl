@@ -6,8 +6,8 @@ Validate Redis required passwords are not empty.
 Usage:
 {{ include "common.validations.values.redis.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
 Params:
-  - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "redis-passwords-secret"
-  - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
+  - secret - String - Required. Name of the secret where redis values are stored, e.g: "redis-passwords-secret"
+  - subchart - Boolean - Optional. Whether redis is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.redis.passwords" -}}
   {{- $existingSecret := include "common.redis.values.existingSecret" . -}}
@@ -68,5 +68,5 @@ Params:
   - subchart - Boolean - Optional. Whether redis is used as subchart or not. Default: false
 */}}
 {{- define "common.redis.values.keys.prefix" -}}
-  {{- if .subchart -}} redis. {{- else -}}{{- end -}}
+  {{- if .subchart -}}redis.{{- else -}}{{- end -}}
 {{- end -}}
