@@ -7,41 +7,10 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "airflow.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "airflow.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "airflow.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "airflow.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}
 
 {{/*
@@ -55,7 +24,7 @@ Full path to CA Cert file
 Fully qualified app name for LDAP
 */}}
 {{- define "airflow.ldap" -}}
-{{- printf "%s-ldap" (include "airflow.fullname" .) -}}
+{{- printf "%s-ldap" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*
@@ -91,183 +60,48 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Common labels
-*/}}
-{{- define "airflow.labels" -}}
-app.kubernetes.io/name: {{ template "airflow.name" . }}
-helm.sh/chart: {{ template "airflow.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow Scheduler image name
 */}}
 {{- define "airflow.schedulerImage" -}}
-{{- $registryName := .Values.schedulerImage.registry -}}
-{{- $repositoryName := .Values.schedulerImage.repository -}}
-{{- $tag := .Values.schedulerImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.schedulerImage "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow Worker image name
 */}}
 {{- define "airflow.workerImage" -}}
-{{- $registryName := .Values.workerImage.registry -}}
-{{- $repositoryName := .Values.workerImage.repository -}}
-{{- $tag := .Values.workerImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.workerImage "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper git image name
 */}}
 {{- define "git.image" -}}
-{{- $registryName := .Values.git.registry -}}
-{{- $repositoryName := .Values.git.repository -}}
-{{- $tag := .Values.git.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.git "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow Metrics image name
 */}}
 {{- define "airflow.metrics.image" -}}
-{{- $registryName := .Values.metrics.image.registry -}}
-{{- $repositoryName := .Values.metrics.image.repository -}}
-{{- $tag := .Values.metrics.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.git.pullSecrets .Values.metrics.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.schedulerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.workerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.git.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.schedulerImage.pullSecrets .Values.workerImage.pullSecrets .Values.git.pullSecrets .Values.metrics.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.schedulerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.workerImage.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.git.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.schedulerImage .Values.workerImage .Values.git .Values.metrics.image) "global" .Values.global) -}}
 {{- end -}}
 
+{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -276,6 +110,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
 Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -289,7 +124,7 @@ Get the Redis credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.existingSecret) -}}
-    {{/* Create a template for the redis secret
+    {{/* Create a include for the redis secret
     We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
     */}}
     {{- $name := default "redis" .Values.redis.nameOverride -}}
@@ -329,7 +164,7 @@ Get the secret name
 {{- if .Values.airflow.auth.existingSecret -}}
 {{- printf "%s" .Values.airflow.auth.existingSecret -}}
 {{- else -}}
-{{- printf "%s" (include "airflow.fullname" .) -}}
+{{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -338,10 +173,103 @@ Create the name of the service account to use
 */}}
 {{- define "airflow.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "airflow.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure database values
+*/}}
+{{- define "airflow.database.host" -}}
+{{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure database values
+*/}}
+{{- define "airflow.database.user" -}}
+{{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure database values
+*/}}
+{{- define "airflow.database.name" -}}
+{{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure database values
+*/}}
+{{- define "airflow.database.port" -}}
+{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure database values
+*/}}
+{{- define "airflow.configure.database" -}}
+- name: AIRFLOW_DATABASE_NAME
+  value: {{ include "airflow.database.name" . }}
+- name: AIRFLOW_DATABASE_USERNAME
+  value: {{ include "airflow.database.user" . }}
+- name: AIRFLOW_DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.postgresql.secretName" . }}
+      key: postgresql-password
+- name: AIRFLOW_DATABASE_HOST
+  value: {{ include "airflow.database.host" . }}
+- name: AIRFLOW_DATABASE_PORT_NUMBER
+  value: {{ include "airflow.database.port" . }}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure redis values
+*/}}
+{{- define "airflow.configure.redis" -}}
+- name: REDIS_HOST
+  value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
+- name: REDIS_PORT_NUMBER
+  value: {{ ternary "6379" .Values.externalRedis.port .Values.redis.enabled | quote }}
+{{- if and (not .Values.redis.enabled) .Values.externalRedis.username }}
+- name: REDIS_USER
+  value: {{ .Values.externalRedis.username | quote }}
+{{- end }}
+- name: REDIS_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.redis.secretName" . }}
+      key: redis-password
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure airflow common values
+*/}}
+{{- define "airflow.configure.airflow.common" -}}
+- name: AIRFLOW_EXECUTOR
+  value: "CeleryExecutor"
+- name: AIRFLOW_FERNET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.secretName" . }}
+      key: airflow-fernetKey
+- name: AIRFLOW_WEBSERVER_HOST
+  value: {{ include "common.names.fullname" . }}
+- name: AIRFLOW_WEBSERVER_PORT_NUMBER
+  value: {{ .Values.service.port | quote }}
+- name: AIRFLOW_LOAD_EXAMPLES
+  value: {{ ternary "yes" "no" .Values.airflow.loadExamples | quote }}
+{{- if .Values.image.debug }}
+- name: BASH_DEBUG
+  value: "1"
+- name: NAMI_DEBUG
+  value: "1"
+- name: NAMI_LOG_LEVEL
+  value: "trace8"
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -413,20 +341,9 @@ airflow: airflow.clonePluginsFromGit.branch
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "airflow.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.schedulerImage.repository) (not (.Values.schedulerImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.schedulerImage.repository }}:{{ .Values.schedulerImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.workerImage.repository) (not (.Values.workerImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.workerImage.repository }}:{{ .Values.workerImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.git.repository) (not (.Values.git.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.git.repository }}:{{ .Values.git.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.schedulerImage }}
+{{- include "common.warnings.rollingTag" .Values.workerImage }}
+{{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- end -}}

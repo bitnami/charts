@@ -2,19 +2,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "airflow.fullname" . }}-configuration
-  labels:
+  name: {{ include "common.names.fullname" . }}-configuration
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    helm.sh/chart: {{ include "airflow.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 data:
   airflow.cfg: |-
-{{ .Values.config | indent 4 }}
+    {{ .Values.config | indent 4 }}
 {{- end -}}

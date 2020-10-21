@@ -2,69 +2,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "airflow.fullname" . }}-exporter
-  labels:
+  name: {{ include "common.names.fullname" . }}-exporter
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    helm.sh/chart: {{ include "airflow.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: metrics
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "airflow.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
   template:
     metadata:
       annotations: {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
-      labels:
-        app.kubernetes.io/name: {{ include "airflow.name" . }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
-        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-    {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       containers:
-        - image: {{ template "airflow.metrics.image" . }}
+        - image: {{ include "airflow.metrics.image" . | quote }}
           name: airflow-exporter
           env:
             - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
               value: "postgres"
             - name: AIRFLOW_PROMETHEUS_DATABASE_HOST
-              {{- if .Values.postgresql.enabled }}
-              value: {{ template "airflow.postgresql.fullname" . }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.host | quote }}
-              {{- end }}
+              value: {{ include "airflow.database.host" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_PORT
-              {{- if .Values.postgresql.enabled }}
-              value: "5432"
-              {{- else }}
-              value: {{ .Values.externalDatabase.port | quote }}
-              {{- end }}
+              value: {{ include "airflow.database.port" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_USER
-              {{- if .Values.postgresql.enabled }}
-              value: {{ .Values.postgresql.postgresqlUsername }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.user | quote }}
-              {{- end }}
+              value: {{ include "airflow.database.user" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "airflow.postgresql.secretName" . }}
+                  name: {{ include "airflow.postgresql.secretName" . }}
                   key: postgresql-password
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
-              {{- if .Values.postgresql.enabled }}
-              value: {{ .Values.postgresql.postgresqlDatabase }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.database | quote }}
-              {{- end }}
+              value: {{ include "airflow.database.name" . }}
           ports:
             - name: metrics
               containerPort: 9112

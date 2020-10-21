@@ -1,7 +1,7 @@
 dependencies:
   - name: common
     version: 0.x.x
-    repository: https://charts.bitnami.com/bitnami
+    repository: file://../common
     tags:
       - bitnami-common
   - name: postgresql

@@ -1,47 +1,35 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "airflow.fullname" . }}-web
-  labels:
-    {{- if .Values.commonLabels }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    helm.sh/chart: {{ include "airflow.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "common.names.fullname" . }}-web
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "airflow.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ default 1 .Values.replicaCount }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "airflow.name" . }}
-        helm.sh/chart: {{ include "airflow.chart" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: web
     {{- if .Values.podAnnotations }}
-      annotations:
-      {{ toYaml .Values.podAnnotations | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | trim | nindent 8 }}
     {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "airflow.serviceAccountName" . }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.affinity }}
-      affinity: {{- include "airflow.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "web" "context" $) | nindent 10 }}
@@ -49,10 +37,10 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "airflow.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "airflow.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
       initContainers:
@@ -60,7 +48,7 @@ spec:
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           {{- if .Values.airflow.gitCloneContainer.command }}
-          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -79,7 +67,7 @@ spec:
               {{- end }}
           {{- end }}
           {{- if .Values.airflow.gitCloneContainer.args }}
-          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.args "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
@@ -97,10 +85,10 @@ spec:
               mountPath: /plugins
             {{- end }}
             {{- if .Values.airflow.gitCloneContainer.extraVolumeMounts }}
-            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.airflow.gitCloneContainer.extraEnvVars }}
-          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitCloneContainer.extraEnvVars "context" $) | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.airflow.gitCloneContainer.extraEnvVarsCM .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
           envFrom:
@@ -115,10 +103,10 @@ spec:
           {{- end }}
       containers:
         - name: git-repo-syncer
-          image: "{{ template "git.image" . }}"
+          image: "{{ include "git.image" . }}"
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           {{- if .Values.airflow.gitSyncContainer.command }}
-          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -155,10 +143,10 @@ spec:
               mountPath: /plugins
             {{- end }}
             {{- if .Values.airflow.gitSyncContainer.extraVolumeMounts }}
-            {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.airflow.gitSyncContainer.extraEnvVars }}
-          env: {{- include "airflow.tplValue" (dict "value" .Values.airflow.gitSyncContainer.extraEnvVars "context" $) | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.airflow.gitSyncContainer.extraEnvVarsCM .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
           envFrom:
@@ -175,99 +163,29 @@ spec:
       containers:
       {{- end }}
         - name: airflow-web
-          image: {{ template "airflow.image" . }}
+          image: {{ include "airflow.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.airflow.web.command }}
-          command: {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.airflow.web.args }}
-          args: {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.image.debug }}
-            - name: BASH_DEBUG
-              value: "1"
-            - name: NAMI_DEBUG
-              value: "1"
-            - name: NAMI_LOG_LEVEL
-              value: "trace8"
-            {{- end }}
-            - name: AIRFLOW_DATABASE_NAME
-              {{- if .Values.postgresql.enabled }}
-              value: {{ .Values.postgresql.postgresqlDatabase }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.database | quote }}
-              {{- end }}
-            - name: AIRFLOW_DATABASE_USERNAME
-              {{- if .Values.postgresql.enabled }}
-              value: {{ .Values.postgresql.postgresqlUsername }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.user | quote }}
-              {{- end }}
-            - name: AIRFLOW_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "airflow.postgresql.secretName" . }}
-                  key: postgresql-password
-            - name: AIRFLOW_DATABASE_HOST
-              {{- if .Values.postgresql.enabled }}
-              value: {{ template "airflow.postgresql.fullname" . }}
-              {{- else }}
-              value: {{ .Values.externalDatabase.host | quote }}
-              {{- end }}
-            - name: AIRFLOW_DATABASE_PORT_NUMBER
-              {{- if .Values.postgresql.enabled }}
-              value: "5432"
-              {{- else }}
-              value: {{ .Values.externalDatabase.port | quote }}
-              {{- end }}
-            - name: REDIS_HOST
-              {{- if .Values.redis.enabled }}
-              value: {{ template "airflow.redis.fullname" . }}
-              {{- else }}
-              value: {{ .Values.externalRedis.host | quote }}
-              {{- end }}
-            - name: REDIS_PORT_NUMBER
-              {{- if .Values.redis.enabled }}
-              value: "6379"
-              {{- else }}
-              value: {{ .Values.externalRedis.port | quote }}
-              {{- end }}
-            {{- if and (not .Values.redis.enabled) .Values.externalRedis.username }}
-            - name: REDIS_USER
-              value: {{ .Values.externalRedis.username | quote }}
-            {{- end }}
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "airflow.redis.secretName" . }}
-                  key: redis-password
-            - name: AIRFLOW_EXECUTOR
-              value: "CeleryExecutor"
+            {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.airflow.auth.username }}
             - name: AIRFLOW_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
+                  name: {{ include "airflow.secretName" . }}
                   key: airflow-password
-            - name: AIRFLOW_FERNET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ if .Values.airflow.auth.existingSecret }}{{ .Values.airflow.auth.existingSecret }}{{ else }}{{ template "airflow.fullname" . }}{{ end }}
-                  key: airflow-fernetKey
-            - name: AIRFLOW_WEBSERVER_HOST
-              value: {{ template "airflow.fullname" . }}
             {{- if .Values.airflow.baseUrl }}
             - name: AIRFLOW_BASE_URL
               value: {{ .Values.airflow.baseUrl }}
             {{- end }}
-            - name: AIRFLOW_LOAD_EXAMPLES
-              {{- if .Values.airflow.loadExamples }}
-              value: "yes"
-              {{- else }}
-              value: "no"
-              {{- end }}
             - name: AIRFLOW_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
@@ -298,7 +216,7 @@ spec:
               {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
             {{- end }}
             {{- if .Values.airflow.web.extraEnvVars }}
-              {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.extraEnvVars "context" $) | nindent 12 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.airflow.extraEnvVarsCM }}
@@ -400,7 +318,7 @@ spec:
               readOnly: true
             {{- end }}
           {{- if .Values.airflow.web.extraVolumeMounts }}
-            {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.airflow.web.resources }}
           resources: {{- toYaml .Values.airflow.web.resources | nindent 12 }}
@@ -409,7 +327,7 @@ spec:
         {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
           configMap:
-            name: {{ template "airflow.fullname" . }}-dag-files
+            name: {{ include "common.names.fullname" . }}-dag-files
         {{- end }}
         {{- if .Values.airflow.dagsConfigMap }}
         - name: external-dag-files
@@ -447,5 +365,5 @@ spec:
             defaultMode: 256
         {{- end }}
       {{- if .Values.airflow.web.extraVolumes }}
-      {{- include "airflow.tplValue" (dict "value" .Values.airflow.web.extraVolumes "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

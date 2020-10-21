@@ -1,17 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "airflow.fullname" . }}-headless
-  labels:
+  name: {{ include "common.names.fullname" . }}-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    helm.sh/chart: {{ include "airflow.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
@@ -20,7 +16,5 @@ spec:
     - name: worker
       port: 8793
       targetPort: worker
-  selector:
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: worker
