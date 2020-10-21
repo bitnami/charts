@@ -16,6 +16,10 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
