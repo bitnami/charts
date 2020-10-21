@@ -56,7 +56,7 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                                                   | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                 | Global storage class for dynamic provisioning                                                     | `nil`                                                   |
 
-### Common & Pod-specific parameters
+### Deployment & common parameters
 
 | Parameter                             | Description                                                                                       | Default                                                 |
 |---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -69,12 +69,27 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `fullnameOverride`                    | String to fully override odoo.fullname template with a string                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to be added to all deployed resources                                                 | `{}` (evaluated as a template)                          |
 | `commonLabels`                        | Labels to be added to all deployed resources                                                      | `{}` (evaluated as a template)                          |
+| `extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for odoo container                       | `[]`                                                    |
+| `extraVolumes`                        | Optionally specify extra list of additional volumes for odoo container                            | `[]`                                                    |
 | `persistence.enabled`                 | Enable persistence using PVC                                                                      | `true`                                                  |
 | `persistence.existingClaim`           | Enable persistence using an existing PVC                                                          | `nil`                                                   |
 | `persistence.storageClass`            | PVC Storage Class                                                                                 | `nil` (uses alpha storage class annotation)             |
 | `persistence.accessMode`              | PVC Access Mode                                                                                   | `ReadWriteOnce`                                         |
 | `persistence.size`                    | PVC Storage Request                                                                               | `8Gi`                                                   |
-| `affinity`                            | Map of node/pod affinities                                                                        | `{}`                                                    |
+| `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                                                    |
+| `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `soft`                                                  |
+| `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`                                                    |
+| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                             | `""`                                                    |
+| `nodeAffinityPreset.values`           | Node label values to match. Ignored if `affinity` is set.                                         | `[]`                                                    |
+| `affinity`                            | Affinity for pod assignment                                                                       | `{}` (evaluated as a template)                          |
+| `nodeSelector`                        | Node labels for pod assignment                                                                    | `{}` (evaluated as a template)                          |
+| `tolerations`                         | Tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                          |
+| `podSecurityContext.enabled`          | Enable security context for Odoo pods                                                             | `true`                                                  |
+| `podSecurityContext.fsGroup`          | Group ID for the volumes of the pod                                                               | `1001`                                                  |
+| `containerSecurityContext.enabled`    | Odoo Container securityContext                                                                    | `false`                                                 |
+| `containerSecurityContext.runAsUser`  | User ID for the Odoo container                                                                    | `1001`                                                  |
+| `initContainers`                      | Add additional init containers to the Odoo pods                                                   | `{}` (evaluated as a template)                          |
+| `sidecars`                            | Add additional sidecar containers to the Odoo pods                                                | `{}` (evaluated as a template)                          |
 
 ### Service parameters
 
@@ -111,6 +126,13 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `readinessProbe.timeoutSeconds`       | When the probe times out                                                                          | 5                                                       |
 | `readinessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed                                              | 6                                                       |
 | `readinessProbe.successThreshold`     | Minimum consecutive successes to be considered successful                                         | 1                                                       |
+| `customLivenessProbe`                 | Override default liveness probe                                                                   | `nil`                                                   |
+| `customReadinessProbe`                | Override default readiness probe                                                                  | `nil`                                                   |
+| `command`                             | Custom command to override image cmd                                                              | `nil` (evaluated as a template)                         |
+| `args`                                | Custom args for the custom commad                                                                 | `nil` (evaluated as a template)                         |
+| `extraEnvVars`                        | An array to add extra env vars                                                                    | `[]` (evaluated as a template)                          |
+| `extraEnvVarsCM`                      | Array to add extra configmaps                                                                     | `[]`                                                    |
+| `extraEnvVarsSecret`                  | Array to add extra environment from a Secret                                                      | `nil`                                                   |
 
 ### Ingress parameters
 
@@ -188,6 +210,22 @@ externalDatabase.port=3306
 ```
 
 Note also if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Odoo, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
 
 ## Persistence
 
