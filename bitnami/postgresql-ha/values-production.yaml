@@ -183,9 +183,9 @@ postgresql:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser:
-      1001
-      ## Custom Liveness probe
+    runAsUser: 1001
+
+  ## Custom Liveness probe
   ##
   customLivenessProbe: {}
 
@@ -652,7 +652,7 @@ pgpool:
   ## Log level for clients
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  clientMinMessages: notice
+  clientMinMessages: error
 
   ## The number of preforked Pgpool-II server processes. It is also the concurrent
   ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
