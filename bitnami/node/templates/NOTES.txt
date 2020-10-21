@@ -22,4 +22,5 @@
 
 {{- end }}
 
-{{ include "node.checkRollingTags" . }}
+{{- include "node.checkRollingTags" . }}
+{{- include "node.validateValues" . }}

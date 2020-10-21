@@ -11,7 +11,7 @@ metadata:
   {{- if or .Values.commonAnnotations .Values.service.annotations }}
   annotations:
     {{- if .Values.service.annotations }}
-    {{- include "zookeeper.tplValue" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}\
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.service.annotations "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

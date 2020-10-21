@@ -790,17 +790,6 @@ Return the proper Storage Class for trivy
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for deployment.
-*/}}
-{{- define "deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Set the http prefix if the externalURl dont have it
 */}}
 {{- define "harbor.externalUrl" -}}

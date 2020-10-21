@@ -122,6 +122,9 @@ spec:
               mountPath: /opt/bitnami/apache/conf/httpd.conf
               subPath: httpd.conf
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "apache.metrics.image" . }}
@@ -161,3 +164,7 @@ spec:
           configMap:
             name: {{ include "apache.httpdConfConfigMap" . }}
         {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+

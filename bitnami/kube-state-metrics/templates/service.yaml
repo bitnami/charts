@@ -12,7 +12,7 @@ metadata:
     {{- end }}
   labels: {{- include "kube-state-metrics.labels" . | nindent 4 }}
     {{- if .Values.service.labels }}
-    {{- toYaml .Values.service.labels | indent 4 }}
+    {{- toYaml .Values.service.labels | nindent 4 }}
     {{- end }}
 spec:
   type: {{ .Values.service.type }}

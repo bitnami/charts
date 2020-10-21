@@ -8,7 +8,7 @@ spec:
   privileged: false
   volumes:
     - 'secret'
-  hostNetwork: false
+  hostNetwork: {{ .Values.hostNetwork }}
   hostIPC: false
   hostPID: false
   runAsUser:

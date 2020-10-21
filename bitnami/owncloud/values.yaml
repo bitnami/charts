@@ -247,6 +247,8 @@ podAnnotations: {}
 ##
 affinity: {}
 
+extraEnvVars: []
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:

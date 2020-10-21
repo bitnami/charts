@@ -26,14 +26,14 @@ spec:
   {{- range .Values.ingress.hosts }}
     {{- if .tls }}
     - hosts:
-    {{- if .tlsHosts }}
-    {{- range $host := .tlsHosts }}
-      - {{ $host }}
-    {{- end }}
-    {{- else }}
-      - {{ .name }}
-    {{- end }}
-      secretName: {{ .tlsSecret }}
+      {{- if .tlsHosts }}
+      {{- range $host := .tlsHosts }}
+        - {{ $host }}
+      {{- end }}
+      {{- else }}
+        - {{ .name }}
+      {{- end }}
+      secretName: {{ default (printf "%s-tls" .name) .tlsSecret }}
     {{- end }}
   {{- end }}
 {{- end }}

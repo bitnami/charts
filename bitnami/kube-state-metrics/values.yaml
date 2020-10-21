@@ -142,8 +142,8 @@ service:
   ##
   labels: {}
 
-# Expose the service to the host network
-hostNetwork: true
+# Enable hostNetwork mode
+hostNetwork: false
 
 ## Priority class assigned to the Pods
 ##
