@@ -229,12 +229,14 @@ ingress:
   #   key:
   #   certificate:
 
+##
 ## MongoDB chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
+  ## Whether to deploy a MongoDB server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
+  ##
   install: true
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
@@ -244,12 +246,18 @@ mongodb:
     database: test_db
     password: secret_password
 
-## Provision an external database (Only if mongodb.install is false)
-## You can:
+##
+## External Database Configuration
+##
+## Provision an external database
+## You have two alternatives:
 ##    1) Pass an already existing Secret with your database credentials
 ##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
 ##
 externaldb:
+  ## Enables or disables external database
+  ##
+  enabled: false
   ## Set to true if your external database has ssl enabled
   ##
   ssl: false

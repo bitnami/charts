@@ -94,22 +94,21 @@ spec:
               value: {{ .Values.mongodb.auth.database | quote }}
             - name: DATABASE_CONNECTION_OPTIONS
               value: ""
-            {{- else }}
+            {{- else if .Values.externaldb.enabled }}
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
                   key: host
-            {{- if not .Values.externaldb.broker.serviceInstanceName }}
             - name: DATABASE_NAME
+              {{- if not .Values.externaldb.broker.serviceInstanceName }}
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
                   key: database
-            {{- else }}
-            - name: DATABASE_NAME
+              {{- else }}
               value: ""
-            {{- end }}
+              {{- end }}
             - name: DATABASE_PORT
               valueFrom:
                 secretKeyRef:
@@ -125,13 +124,12 @@ spec:
                 secretKeyRef:
                   name: {{ template "node.secretName" . }}
                   key: password
-            {{- if .Values.externaldb.ssl }}
             - name: DATABASE_CONNECTION_OPTIONS
+              {{- if .Values.externaldb.ssl }}
               value: "ssl=true"
-            {{- else }}
-            - name: DATABASE_CONNECTION_OPTIONS
+              {{- else }}
               value: ""
-            {{- end }}
+              {{- end }}
             {{- end }}
             - name: DATA_FOLDER
               value: "/app"
