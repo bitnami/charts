@@ -612,6 +612,10 @@ externalDatabase:
 ##
 redis:
   enabled: true
+  ## Cluster settings
+  ##
+  cluster:
+    enabled: false
   ## In case of redis.enabled = true, allow the usage of existing secrets for redis
   ##
   existingSecret: ""
