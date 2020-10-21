@@ -49,3 +49,21 @@ Return  the proper Storage Class
 {{- define "odoo.storageClass" -}}
 {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
+
+{{/*
+Return the PostgreSQL Secret Name
+*/}}
+{{- define "odoo.databaseSecretName" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Odoo credential secret name
+*/}}
+{{- define "odoo.secretName" -}}
+{{- coalesce .Values.existingSecret (include "odoo.fullname" .) -}}
+{{- end -}}

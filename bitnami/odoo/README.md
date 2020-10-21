@@ -113,6 +113,7 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `smtpUser`                            | SMTP user                                                                                         | `nil`                                                   |
 | `smtpPassword`                        | SMTP password                                                                                     | `nil`                                                   |
 | `smtpProtocol`                        | SMTP protocol [`ssl`, `tls`]                                                                      | `nil`                                                   |
+| `existingSecret`                      | Name of a secret with the application password                                                    | `nil`                                                   |
 | `resources`                           | CPU/Memory resource requests/limits                                                               | Memory: `512Mi`, CPU: `300m`                            |
 | `livenessProbe.enabled`               | Enable/disable the liveness probe                                                                 | `true`                                                  |
 | `livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                          | 300                                                     |

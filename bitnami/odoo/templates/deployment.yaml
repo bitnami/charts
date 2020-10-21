@@ -69,14 +69,14 @@ spec:
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ ternary (include "odoo.postgresql.fullname" .) (printf "%s-%s" .Release.Name "externaldb") .Values.postgresql.enabled | quote }}
+                  name: {{ include "odoo.databaseSecretName" . }}
                   key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
             - name: ODOO_EMAIL
               value: {{ .Values.odooEmail | quote }}
             - name: ODOO_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "odoo.fullname" . }}
+                  name: {{ template "odoo.secretName" . }}
                   key: odoo-password
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
@@ -94,7 +94,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "odoo.fullname" . }}
+                  name: {{ template "odoo.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
