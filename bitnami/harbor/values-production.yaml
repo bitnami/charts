@@ -359,6 +359,11 @@ volumePermissions:
 internalTLS:
   enabled: true
 
+## The custom ca bundle secret, the secret must contain key named "ca.crt"
+## which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components
+##
+# caBundleSecretName: ""
+
 ## Service parameters
 ##
 service:
