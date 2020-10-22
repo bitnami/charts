@@ -77,8 +77,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                           | `IfNotPresent`                                          |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                  | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                                     | Set to true if you would like to see extra information on logs                                                                    | `false`                                                 |
-| `config`                                          | Configuration file for Kafka. Auto-generated based on other parameters when not specified                                         | `nil`                                                   |
-| `existingConfigmap`                               | Name of existing ConfigMap with Kafka configuration                                                                               | `nil`                                                   |
+| `config`                                          | Configuration file for Kafka. Auto-generated based on other parameters when not specified (see [below](#setting-custom-parameters)) | `nil`                                                   |
+| `existingConfigmap`                               | Name of existing ConfigMap with Kafka configuration (see [below](#setting-custom-parameters))                                     | `nil`                                                   |
 | `log4j`                                           | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                  | `nil`                                                   |
 | `existingLog4jConfigMap`                          | The name of an existing ConfigMap containing a log4j.properties file.                                                             | `nil`                                                   |
 | `heapOpts`                                        | Kafka's Java Heap size                                                                                                            | `-Xmx1024m -Xms1024m`                                   |
@@ -104,7 +104,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `socketRequestMaxBytes`                           | The maximum size of a request that the socket server will accept (protection against OOM)                                         | `_104857600`                                            |
 | `socketSendBufferBytes`                           | The send buffer (SO_SNDBUF) used by the socket server                                                                             | `102400`                                                |
 | `zookeeperConnectionTimeoutMs`                    | Timeout in ms for connecting to Zookeeper                                                                                         | `6000`                                                  |
-| `extraEnvVars`                                    | Extra environment variables to add to kafka pods                                                                                  | `[]`                                                    |
+| `extraEnvVars`                                    | Extra environment variables to add to kafka pods (see [below](#setting-custom-parameters))                                        | `[]`                                                    |
 | `extraVolumes`                                    | Extra volume(s) to add to Kafka statefulset                                                                                       | `[]`                                                    |
 | `extraVolumeMounts`                               | Extra volumeMount(s) to add to Kafka containers                                                                                   | `[]`                                                    |
 | `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`     | `plaintext`                                             |
@@ -400,6 +400,9 @@ To horizontally scale this chart once it has been deployed, you can upgrade the 
 ### Setting custom parameters
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`. In order to pass custom environment variables use the `extraEnvVars` property.
+
+Using `extraEnvVars` with `KAFKA_CFG_` is the preferred and simplest way to add custom Kafka parameters not otherwise specified in this chart. Alternatively, you can provide a *full* Kafka configuration using `config` or `existingConfigmap`.
+Setting either `config` or `existingConfigmap` will cause the chart to disregard `KAFKA_CFG_` settings, which are used by many other Kafka-related chart values described above, as well as dynamically generated parameters such as `zookeeper.connect`. This can cause unexpected behavior.
 
 ### Listeners configuration
 

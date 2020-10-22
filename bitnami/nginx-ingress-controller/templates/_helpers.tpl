@@ -202,3 +202,14 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "nginx-ingress.annotations" ( dict "annotations" .Values.path.to.the.annotations "context" $) }}
+*/}}
+{{- define "nginx-ingress.annotations" -}}
+{{- range $key, $value := .annotations }}
+{{ $key }}: {{ include "nginx-ingress.tplValue" (dict "value" $value "context" $.context) | quote }}
+{{- end }}
+{{- end -}}

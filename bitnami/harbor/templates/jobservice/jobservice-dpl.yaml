@@ -1,4 +1,4 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.jobservice" . }}
@@ -178,6 +178,9 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/jobservice
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.jobservice.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -195,6 +198,9 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- end }}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:

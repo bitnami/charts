@@ -1,5 +1,5 @@
 {{- if .Values.chartmuseum.enabled }}
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.chartmuseum" . }}
@@ -166,6 +166,9 @@ spec:
             - name: storage-service-ca
               mountPath: /harbor_cust_cert/ca-bundle.crt
               subPath: ca.crt
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- end }}
             {{- if .Values.chartmuseum.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumeMounts "context" $) | nindent 12 }}
@@ -193,6 +196,9 @@ spec:
         - name: storage-service-ca
           secret:
             secretName: {{ .Values.persistence.imageChartStorage.caBundleSecretName }}
+        {{- end }}
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
         {{- end }}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
