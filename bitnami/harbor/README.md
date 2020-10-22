@@ -65,6 +65,8 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 | Parameter                             | Description                                                                                                                                               | Default                                                 |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `caBundleSecretName`                  | The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components. | `nil` |
+
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
 | `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
@@ -834,6 +836,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+## 8.0.0
+
+Redis dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
 
 ## 7.0.0
 

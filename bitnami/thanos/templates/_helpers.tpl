@@ -218,6 +218,27 @@ Return the Thanos storegateway configuration configmap.
 {{- end -}}
 
 {{/*
+Return the Thanos Query Frontend configuration configmap.
+*/}}
+{{- define "thanos.queryFrontend.configmapName" -}}
+{{- if .Values.queryFrontend.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.queryFrontend.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-query-frontend-configmap" (include "thanos.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "thanos.queryFrontend.createConfigmap" -}}
+{{- if and .Values.queryFrontend.config (not .Values.queryFrontend.existingConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.storegateway.createConfigmap" -}}

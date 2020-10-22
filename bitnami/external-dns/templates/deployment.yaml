@@ -12,7 +12,7 @@ spec:
       labels: {{ include "external-dns.labels" . | nindent 8 }}
       annotations:
         {{- if or .Values.podAnnotations .Values.metrics.enabled }}
-        {{ include "external-dns.podAnnotations" . | nindent 8 }}
+        {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}

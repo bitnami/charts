@@ -3,6 +3,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
+  {{- if .Values.aggregator.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+  {{- end }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
@@ -41,6 +44,10 @@ spec:
       {{- end }}
       {{- if .Values.aggregator.tolerations }}
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.aggregator.initContainers }}
+      initContainers:
+      {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd
@@ -113,6 +120,9 @@ spec:
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.aggregator.sidecars }}
+        {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.aggregator.extraVolumes }}
           {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}

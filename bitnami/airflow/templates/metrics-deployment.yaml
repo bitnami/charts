@@ -4,11 +4,17 @@ kind: Deployment
 metadata:
   name: {{ template "airflow.fullname" . }}-exporter
   labels:
+    {{- if .Values.commonLabels }}
+    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     helm.sh/chart: {{ include "airflow.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: metrics
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:

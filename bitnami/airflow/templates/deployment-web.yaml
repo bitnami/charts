@@ -3,11 +3,17 @@ kind: Deployment
 metadata:
   name: {{ template "airflow.fullname" . }}-web
   labels:
+    {{- if .Values.commonLabels }}
+    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     helm.sh/chart: {{ include "airflow.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: web
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
@@ -33,6 +39,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      serviceAccountName: {{ template "airflow.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "airflow.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}

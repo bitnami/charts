@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                      | `nil`                                                   |
 | `ingress.secrets[0].key`                | TLS Secret Key                                                              | `nil`                                                   |
 | `mongodb.install`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.install=true`)   | `false`                                                 |
 | `externaldb.secretName`                 | Secret containing existing database credentials                             | `nil`                                                   |
 | `externaldb.type`                       | Type of database that defines the database secret mapping                   | `osba`                                                  |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                     | `nil`                                                   |
@@ -188,6 +189,7 @@ ingress:
 
   ```console
   mongodb.install=false
+  externaldb.enabled=true
   externaldb.secretName=my-database-secret
   ```
 
@@ -230,6 +232,7 @@ ingress:
 
     ```command
     mongodb.install=false
+    externaldb.enabled=true
     externaldb.broker.serviceInstanceName=azure-mongodb-instance
     externaldb.ssl=true
     ```

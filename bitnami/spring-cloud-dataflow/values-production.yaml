@@ -610,6 +610,11 @@ deployer:
   ## List of environment variables to set for any deployed app container. Multiple values are comma separated.
   ##
   environmentVariables: ''
+  ## Streams containers' Security Context. This security context will be use in every deployed stream.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  podSecurityContext:
+    runAsUser: 1001
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
@@ -765,6 +770,7 @@ mariadb:
 ## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
+
   ## Database server host and port
   ##
   host: localhost
@@ -778,11 +784,21 @@ externalDatabase:
   ## Data Flow user and database
   ##
   dataflow:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: dataflow
     user: dataflow
   ## Skipper and database
   ##
   skipper:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: skipper
     user: skipper
   ## Hibernate Dialect

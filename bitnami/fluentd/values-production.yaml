@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.3-debian-10-r0
+  tag: 1.11.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -221,6 +221,11 @@ forwarder:
   ##
   affinity: {}
 
+  ## Annotations for the forwarder
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations: {}
+
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -248,6 +253,28 @@ forwarder:
   rbac:
     create: true
     pspEnabled: true
+
+  ## Add init containers to forwarder pods
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
+
+  ## Add sidecars to forwarder pods
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
 
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
@@ -425,6 +452,11 @@ aggregator:
   ##
   affinity: {}
 
+  ## Annotations for the aggregator
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations: {}
+
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -458,6 +490,29 @@ aggregator:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 10Gi
+
+  ## Add init containers to aggregator pods
+  ## Example
+  ##
+  ## initContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  initContainers: []
+
+  ## Add sidecars to aggregator pods
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
 
   ## Extra volumes to mount
   ## Example Use Case: mount an emptyDir into /tmp to support running with readOnlyRootFileSystem

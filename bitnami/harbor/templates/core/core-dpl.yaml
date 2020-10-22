@@ -1,4 +1,4 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
@@ -168,6 +168,9 @@ spec:
             {{- end }}
             - name: psc
               mountPath: /etc/core/token
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.core.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -190,6 +193,9 @@ spec:
             items:
               - key: secretKey
                 path: key
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- end }}
         - name: token-service-private-key
           secret:
             {{- if .Values.core.secretName }}
