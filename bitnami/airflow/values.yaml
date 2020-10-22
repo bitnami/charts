@@ -83,21 +83,6 @@ workerImage:
   ##
   debug: false
 
-## Bitnami git image version
-## ref: https://hub.docker.com/r/bitnami/git/tags/
-##
-git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.29.2-debian-10-r20
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #   - myRegistryKeySecretName
-
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -138,70 +123,6 @@ airflow:
   ## Airflow generic configuration
   ##
   loadExamples: false
-
-  ## Interval to pull the git repository containing the plugins and/or DAG files
-  ##
-  gitSyncInterval: 60
-  ## Enable in order to download DAG files from git repository.
-  ##
-  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
-  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
-  ## digits (0-9), lower case letters (a-z), -, and .
-  cloneDagFilesFromGit:
-    enabled: false
-  #  repositories:
-  #  - repository:
-  #    name:
-  #    branch:
-  #    path:
-  clonePluginsFromGit:
-    enabled: false
-    repository:
-    branch:
-    path:
-
-  ## Properties of the Git Clone Init Container
-  ##
-  gitCloneContainer:
-    ## Override cmd
-    ##
-    command:
-    ## Override args
-    ##
-    args:
-    ## Add extra volume mounts
-    ##
-    extraVolumeMounts:
-    ## Add extra environment variables
-    ##
-    extraEnvVars:
-    ## ConfigMap with extra environment variables
-    ##
-    extraEnvVarsCM:
-    ## Secret with extra environment variables
-    ##
-    extraEnvVarsSecret:
-
-  gitSyncContainer:
-    ## Override cmd
-    ##
-    command:
-    ## Override args
-    ##
-    args:
-    ## Add extra volume mounts
-    ##
-    extraVolumeMounts:
-    ## Add extra environment variables
-    ##
-    extraEnvVars:
-    ## ConfigMap with extra environment variables
-    ##
-    extraEnvVarsCM:
-    ## Secret with extra environment variables
-    ##
-    extraEnvVarsSecret:
-
   ## URL used to access to airflow web ui
   ##
   baseUrl:
@@ -362,6 +283,98 @@ airflow:
     ## Use existing secret (ignores previous password and fernetKey)
     ##
     existingSecret:
+
+## Configure git to pull dags and plugins
+##
+git:
+  ## Bitnami git image version
+  ## ref: https://hub.docker.com/r/bitnami/git/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.29.0-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+  ## digits (0-9), lower case letters (a-z), -, and .
+  ##
+  ##   - repository: https://github.com/myuser/myrepo
+  ##     branch: main
+  ##     name: my-dags
+  ##     path: /
+  ##
+  dags:
+    ## Enable in order to download DAG files from git repositories.
+    ##
+    enabled: false
+    repositories:
+      - repository:
+        branch:
+        name:
+        path:
+  plugins:
+    ## Enable in order to download Plugins files from git repositories.
+    ##
+    enabled: false
+    repositories:
+      - repository:
+        branch:
+        name:
+        path:
+  ## Properties for the clone init container
+  ##
+  clone:
+    ## Override cmd
+    ##
+    command:
+    ## Override args
+    ##
+    args:
+    ## Add extra volume mounts
+    ##
+    extraVolumeMounts:
+    ## Add extra environment variables
+    ##
+    extraEnvVars:
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+  sync:
+    ## Interval in seconds to pull the git repository containing the plugins and/or DAG files
+    ##
+    interval: 60
+    ## Override cmd
+    ##
+    command:
+    ## Override args
+    ##
+    args:
+    ## Add extra volume mounts
+    ##
+    extraVolumeMounts:
+    ## Add extra environment variables
+    ##
+    extraEnvVars:
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
 
 ## LDAP configuration
 ##

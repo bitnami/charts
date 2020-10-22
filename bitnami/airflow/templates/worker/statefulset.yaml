@@ -29,7 +29,9 @@ spec:
     {{- end }}
   template:
     metadata:
+    {{- if .Values.airflow.worker.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.podAnnotations "context" $) | nindent 8 }}
+    {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: worker
     spec:
@@ -52,129 +54,8 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or .Values.airflow.cloneDagFilesFromGit.enabled .Values.airflow.clonePluginsFromGit.enabled }}
-      initContainers:
-        - name: git-clone-repository
-          image: {{ include "git.image" . }}
-          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-          {{- if .Values.airflow.gitCloneContainer.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - /bin/bash
-            - -ec
-            - |
-              {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-              {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-                git clone {{ .Values.airflow.cloneDagFilesFromGit.repository }} --branch {{ .Values.airflow.cloneDagFilesFromGit.branch }} /dags
-              {{- end }}
-              {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-                git clone {{ .repository }} --branch {{ .branch }} /dags-{{ .name | kebabcase }}
-              {{- end }}
-              {{- end }}
-              {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-                git clone {{ .Values.airflow.clonePluginsFromGit.repository }} --branch {{ .Values.airflow.clonePluginsFromGit.branch }} /plugins
-              {{- end }}
-          {{- end }}
-          {{- if .Values.airflow.gitCloneContainer.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.args "context" $) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-            - name: git-cloned-dag-files
-              mountPath: /dags
-            {{- end }}
-            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name | kebabcase }}
-              mountPath: /dags-{{ .name | kebabcase }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-            - name: git-cloned-plugins
-              mountPath: /plugins
-            {{- end }}
-            {{- if .Values.airflow.gitCloneContainer.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-          {{- if .Values.airflow.gitCloneContainer.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitCloneContainer.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if or .Values.airflow.gitCloneContainer.extraEnvVarsCM .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
-          envFrom:
-            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsCM }}
-            {{- end }}
-            {{- if .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ .Values.airflow.gitCloneContainer.extraEnvVarsSecret }}
-            {{- end }}
-          {{- end }}
-      containers:
-        - name: git-repo-syncer
-          image: "{{ include "git.image" . }}"
-          imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
-          {{- if .Values.airflow.gitSyncContainer.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - /bin/bash
-            - -ec
-            - |
-              while true; do
-                  {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-                  {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-                  cd /dags && git pull origin {{ .Values.airflow.cloneDagFilesFromGit.branch }}
-                  {{- end }}
-                  {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-                  cd /dags-{{ .name | kebabcase }} && git pull origin {{ .branch }}
-                  {{- end }}
-                  {{- end }}
-                  {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-                  cd /plugins && git pull origin {{ .Values.airflow.clonePluginsFromGit.branch }}
-                  {{- end }}
-                  sleep {{ default "60" .Values.airflow.gitSyncInterval }}
-              done
-          {{- end }}
-          {{- if .Values.airflow.gitSyncContainer.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.args "context" $) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-            - name: git-cloned-dag-files
-              mountPath: /dags
-            {{- end }}
-            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name | kebabcase }}
-              mountPath: /dags-{{ .name | kebabcase }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-            - name: git-cloned-plugins
-              mountPath: /plugins
-            {{- end }}
-            {{- if .Values.airflow.gitSyncContainer.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-          {{- if .Values.airflow.gitSyncContainer.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.gitSyncContainer.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if or .Values.airflow.gitSyncContainer.extraEnvVarsCM .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
-          envFrom:
-            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsCM }}
-            {{- end }}
-            {{- if .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ .Values.airflow.gitSyncContainer.extraEnvVarsSecret }}
-            {{- end }}
-          {{- end }}
-      {{- else }}
-      containers:
-      {{- end }}
+      initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
         - name: airflow-worker
           image: {{ include "airflow.workerImage" . }}
           imagePullPolicy: {{ .Values.workerImage.pullPolicy | quote }}
@@ -238,75 +119,40 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
-            {{- if .Files.Glob "files/dags/*.py" }}
+          {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
-            {{- end }}
-            {{- if .Values.airflow.dagsConfigMap }}
+          {{- end }}
+          {{- if .Values.airflow.dagsConfigMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
-            {{- end }}
-            {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-            {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-            - name: git-cloned-dag-files
-              mountPath: /opt/bitnami/airflow/dags/git
-              {{- if .Values.airflow.cloneDagFilesFromGit.path }}
-              subPath: {{ .Values.airflow.cloneDagFilesFromGit.path }}
-              {{- end }}
-            {{- end }}
-            {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-            - name: git-cloned-dag-files-{{ .name | kebabcase }}
-              mountPath: /opt/bitnami/airflow/dags/git-{{ .name | kebabcase }}
-              {{- if .path }}
-              subPath: {{ .path }}
-              {{- end }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-            - name: git-cloned-plugins
-              mountPath: /opt/bitnami/airflow/plugins
-              {{- if .Values.airflow.clonePluginsFromGit.path }}
-              subPath: {{ .Values.airflow.clonePluginsFromGit.path }}
-              {{- end }}
-            {{- end }}
-            {{- if .Values.airflow.configurationConfigMap }}
+          {{- end }}
+          {{- if .Values.airflow.configurationConfigMap }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
-            {{- end }}
+          {{- end }}
+            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
           {{- if .Values.airflow.worker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
-      - name: local-dag-files
-        configMap:
-          name: {{ include "common.names.fullname" . }}-dag-files
+        - name: local-dag-files
+          configMap:
+            name: {{ include "common.names.fullname" . }}-dag-files
       {{- end }}
       {{- if .Values.airflow.dagsConfigMap }}
-      - name: external-dag-files
-        configMap:
-          name: {{ .Values.airflow.dagsConfigMap }}
-      {{- end }}
-      {{- if .Values.airflow.cloneDagFilesFromGit.enabled }}
-      {{- if and .Values.airflow.cloneDagFilesFromGit.repository .Values.airflow.cloneDagFilesFromGit.branch }}
-      - name: git-cloned-dag-files
-        emptyDir: {}
-      {{- end }}
-      {{- range .Values.airflow.cloneDagFilesFromGit.repositories }}
-      - name: git-cloned-dag-files-{{ .name | kebabcase }}
-        emptyDir: {}
-      {{- end }}
-      {{- end }}
-      {{- if .Values.airflow.clonePluginsFromGit.enabled }}
-      - name: git-cloned-plugins
-        emptyDir: {}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
       {{- if .Values.airflow.configurationConfigMap }}
-      - name: custom-configuration-file
-        configMap:
-          name: {{ .Values.airflow.configurationConfigMap }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ .Values.airflow.configurationConfigMap }}
       {{- end }}
+        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
       {{- if .Values.airflow.worker.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumes "context" $) | nindent 6 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
