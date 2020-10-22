@@ -523,21 +523,21 @@ metrics:
 # Add custom certificates and certificate authorities to redmine container
 certificates:
   customCertificate: 
-    certificateSecret: my-secret 
-    chainSecret: 
-      name: my-cert-chain
-      key: ip-10-114-23-236.evoforge.org.pem
+    certificateSecret: 
+    chainSecret: {}
+    # name: secret-name 
+    # key: secret-key
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
-  customCAs: 
+  customCAs: []
   ## Override container command
-  #- secret: my-ca-1
-
+  ##
   command:
   ## Override container args
+  ##
   args:
-  # - secret: my-ca-1
+  # - secret: custom-CA
   # - secret: more-custom-CAs
   ## An array to add extra env vars
   ##
