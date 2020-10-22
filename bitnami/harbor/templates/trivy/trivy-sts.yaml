@@ -122,6 +122,9 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/trivy
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.trivy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -165,6 +168,9 @@ spec:
         - name: internal-tls-certs
           secret:
             secretName: {{ include "harbor.trivy.tls.secretName" . }}
+      {{- end }}
+      {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
       {{- end }}
       {{- if not .Values.persistence.enabled }}
         - name: data

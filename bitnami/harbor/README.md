@@ -65,6 +65,8 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 | Parameter                             | Description                                                                                                                                               | Default                                                 |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `caBundleSecretName`                  | The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components. | `nil` |
+
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
 | `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
