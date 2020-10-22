@@ -40,7 +40,7 @@ sources:
   - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, hetzner, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, hetzner, infoblox, linode, rfc2136, transip
 ##
 provider: aws
 
@@ -282,6 +282,17 @@ hetzner:
   ## Use an existing secret. Mutually exclusive with `hetzner.token`
   secretName: ""
   secretKey: "hetzner_token"
+
+## Linode configuration to be set via arguments/env. variables
+##
+linode:
+  ## `LINODE_TOKEN` to set in the environment
+  ##
+  apiToken: ""
+  ## Use an existing secret with key "linode_api_token" defined.
+  ## This ignores linode.apiToken
+  ##
+  # secretName:
 
 ## OVH configuration to be set via arguments/env. variables
 ##

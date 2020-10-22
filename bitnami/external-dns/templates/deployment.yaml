@@ -357,6 +357,16 @@ spec:
                   key: hetzner_token
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "linode" }}
+            # Linode environment variables
+            {{- if or (.Values.linode.apiToken) (.Values.linode.secretName) }}
+            - name: LINODE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: linode_api_token
+            {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
             {{- if .Values.ovh.consumerKey }}

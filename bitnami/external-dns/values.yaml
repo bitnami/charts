@@ -41,7 +41,7 @@ sources:
   # - contour-httpproxy
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip
 ##
 provider: aws
 
@@ -302,6 +302,17 @@ infoblox:
   wapiVersion: ""
   wapiConnectionPoolSize: ""
   wapiHttpTimeout: ""
+
+## Linode configuration to be set via arguments/env. variables
+##
+linode:
+  ## `LINODE_TOKEN` to set in the environment
+  ##
+  apiToken: ""
+  ## Use an existing secret with key "linode_api_token" defined.
+  ## This ignores linode.apiToken
+  ##
+  # secretName:
 
 ## OVH configuration to be set via arguments/env. variables
 ##
