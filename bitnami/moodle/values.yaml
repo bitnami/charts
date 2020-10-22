@@ -522,10 +522,10 @@ metrics:
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:
-  customCertificate: 
-    certificateSecret: 
+  customCertificate:
+    certificateSecret:
     chainSecret: {}
-    # name: secret-name 
+    # name: secret-name
     # key: secret-key
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
