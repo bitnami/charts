@@ -334,12 +334,23 @@ Get the secret name
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "airflow.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "airflow.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "airflow.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.repository" .) -}}
-{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.branch" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.repositories" .) -}}
+{{- $messages := append $messages (include "airflow.validateValues.cloneDagFilesFromGit.repository_details" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -348,20 +359,38 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.repository" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
-{{- define "airflow.validateValues.cloneDagFilesFromGit.repository" -}}
-{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repository) -}}
-airflow: airflow.cloneDagFilesFromGit.repository
+{{/* Validate values of Airflow - Atleast one repository details must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.repositories" -}}
+{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.repositories) -}}
+{{- if or (empty .Values.airflow.cloneDagFilesFromGit.repository) (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
+airflow: airflow.cloneDagFilesFromGit.repositories
+    At least one repository must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.repositories[0].repository="xxx"
+    --set airflow.cloneDagFilesFromGit.repositories[0].name="xxx"
+    --set airflow.cloneDagFilesFromGit.repositories[0].branch="name")
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.repositories.repository", "airflow.cloneDagFilesFromGit.repositories.name", "airflow.cloneDagFilesFromGit.repositories.branch" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
+{{- define "airflow.validateValues.cloneDagFilesFromGit.repository_details" -}}
+{{- if .Values.airflow.cloneDagFilesFromGit.enabled -}}
+{{- range $index, $repository_detail := .Values.airflow.cloneDagFilesFromGit.repositories }}
+{{- if empty $repository_detail.repository -}}
+airflow: airflow.cloneDagFilesFromGit.repositories[$index].repository
     The repository must be provided when enabling downloading DAG files
-    from git repository (--set airflow.cloneDagFilesFromGit.repository="xxx")
+    from git repository (--set airflow.cloneDagFilesFromGit.repositories[$index].repository="xxx")
 {{- end -}}
+{{- if empty $repository_detail.name -}}
+airflow: airflow.cloneDagFilesFromGit.repositories[$index].name
+    The name must be provided when enabling downloading DAG files
+    from git repository (--set airflow.cloneDagFilesFromGit.repositories[$index].name="xxx")
 {{- end -}}
-{{/* Validate values of Airflow - "airflow.cloneDagFilesFromGit.branch" must be provided when "airflow.cloneDagFilesFromGit.enabled" is "true" */}}
-{{- define "airflow.validateValues.cloneDagFilesFromGit.branch" -}}
-{{- if and .Values.airflow.cloneDagFilesFromGit.enabled (empty .Values.airflow.cloneDagFilesFromGit.branch) -}}
-airflow: airflow.cloneDagFilesFromGit.branch
+{{- if empty $repository_detail.branch -}}
+airflow: airflow.cloneDagFilesFromGit.repositories[$index].branch
     The branch must be provided when enabling downloading DAG files
-    from git repository (--set airflow.cloneDagFilesFromGit.branch="xxx")
+    from git repository (--set airflow.cloneDagFilesFromGit.repositories[$index].branch="xxx")
+{{- end -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- range .Values.ingress.hosts }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
   name: {{ template "nats.fullname" $ }}-monitoring

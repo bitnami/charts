@@ -48,13 +48,13 @@ spec:
           command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/kibana"]
           securityContext:
             runAsUser: 0
-          resources: {{ toYaml .Values.volumePermissions.resources | nindent 10 }}
+          resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
           - name: kibana-data
             mountPath: /bitnami/kibana
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "kibana.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- include "kibana.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 10 }}
         {{- end }}
       {{- end }}
       containers:

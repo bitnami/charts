@@ -3,6 +3,9 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
+  {{- if .Values.forwarder.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
+  {{- end }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
@@ -43,6 +46,9 @@ spec:
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
       securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.forwarder.initContainers }}
+      initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd
@@ -114,6 +120,9 @@ spec:
             {{- if .Values.forwarder.extraVolumeMounts }}
             {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.forwarder.sidecars }}
+        {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.forwarder.extraVolumes }}
             {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}

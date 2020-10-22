@@ -53,7 +53,7 @@ spec:
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
-            - --repos-per-namespace
+            - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces}}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

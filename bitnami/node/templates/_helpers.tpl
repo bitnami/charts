@@ -248,3 +248,28 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "node.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "node.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Node - Database */}}
+{{- define "node.validateValues.database" -}}
+{{- if and .Values.mongodb.install .Values.externaldb.enabled -}}
+node: Database
+    You can only use one database.
+    Please choose installing a MongoDB chart (--set mongodb.install=true) or
+    using an external database (--set externaldb.enabled=true)
+{{- end -}}
+{{- end -}}

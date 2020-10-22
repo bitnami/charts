@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 1.10.12-debian-10-r11
+  tag: 1.10.12-debian-10-r41
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ image:
 schedulerImage:
   registry: docker.io
   repository: bitnami/airflow-scheduler
-  tag: 1.10.12-debian-10-r23
+  tag: 1.10.12-debian-10-r57
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -64,7 +64,7 @@ schedulerImage:
 workerImage:
   registry: docker.io
   repository: bitnami/airflow-worker
-  tag: 1.10.12-debian-10-r20
+  tag: 1.10.12-debian-10-r47
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -89,7 +89,7 @@ workerImage:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.28.0-debian-10-r42
+  tag: 2.29.0-debian-10-r0
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -105,6 +105,14 @@ nameOverride:
 ## String to fully override airflow.fullname template
 ##
 fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -134,11 +142,16 @@ airflow:
   gitSyncInterval: 60
   ## Enable in order to download DAG files from git repository.
   ##
+  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+  ## digits (0-9), lower case letters (a-z), -, and .
   cloneDagFilesFromGit:
     enabled: false
-    repository:
-    branch:
-    path:
+  #  repositories:
+  #  - repository:
+  #    name:
+  #    branch:
+  #    path:
   clonePluginsFromGit:
     enabled: false
     repository:
@@ -379,6 +392,30 @@ ldap:
     ##
     CAcertificateFilename: ""
 
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: false
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the airflow.fullname template
+  # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -608,7 +645,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r220
+    tag: 0.20180711.0-debian-10-r248
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

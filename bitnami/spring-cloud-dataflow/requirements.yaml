@@ -5,7 +5,7 @@ dependencies:
     tags:
       - bitnami-common
   - name: mariadb
-    version: 7.x.x
+    version: 8.x.x
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
     tags:

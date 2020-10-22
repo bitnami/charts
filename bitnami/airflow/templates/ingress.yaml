@@ -4,11 +4,17 @@ kind: Ingress
 metadata:
   name: {{ template "airflow.fullname" . }}
   labels:
+    {{- if .Values.commonLabels }}
+    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/name: {{ include "airflow.name" . }}
     helm.sh/chart: {{ include "airflow.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}

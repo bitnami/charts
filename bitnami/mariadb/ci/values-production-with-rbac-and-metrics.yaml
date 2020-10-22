@@ -1,0 +1,33 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+architecture: replication
+auth:
+  usePasswordFiles: true
+
+primary:
+  extraEnvVars:
+    - name: TEST
+      value: "3"
+  extraEnvVarsSecret: example-secret
+  extraEnvVarsCM: example-cm
+  podDisruptionBudget:
+    create: true
+
+secondary:
+  replicaCount: 2
+  extraEnvVars:
+    - name: TEST
+      value: "2"
+  extraEnvVarsSecret: example-secret-2
+  extraEnvVarsCM: example-cm-2
+  podDisruptionBudget:
+    create: true
+
+serviceAccount:
+  create: true
+  name: mariadb-service-account
+rbac:
+  create: true
+
+metrics:
+  enabled: true

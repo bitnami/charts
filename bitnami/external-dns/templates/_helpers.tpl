@@ -51,10 +51,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/* podAnnotations */}}
 {{- define "external-dns.podAnnotations" -}}
 {{- if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations }}
 {{- end }}
 {{- if .Values.metrics.podAnnotations }}
-{{- toYaml .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations }}
 {{- end }}
 {{- end -}}
 
@@ -284,7 +284,7 @@ Validate values of External DNS:
 */}}
 {{- define "external-dns.validateValues.aws" -}}
 {{- if and (eq .Values.provider "aws") .Values.aws.assumeRoleArn -}}
-{{- if not (regexMatch "^arn:(aws|aws-us-gov):iam::.*$" .Values.aws.assumeRoleArn) -}}
+{{- if not (regexMatch "^arn:(aws|aws-us-gov|aws-cn):iam::.*$" .Values.aws.assumeRoleArn) -}}
 external-dns: aws.assumeRoleArn
     The AWS Role to assume must follow ARN format: `arn:aws:iam::123455567:role/external-dns`
     Ref: https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
