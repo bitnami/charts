@@ -63,7 +63,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.git.image "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
