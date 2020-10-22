@@ -28,6 +28,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.caBundleVolume" -}}
+- name: ca-bundle-certs
+  secret:
+    secretName: {{ .Values.caBundleSecretName }}
+{{- end -}}
+
+{{- define "harbor.caBundleVolumeMount" -}}
+- name: ca-bundle-certs
+  mountPath: /harbor_cust_cert/custom-ca.crt
+  subPath: ca.crt
+{{- end -}}
+
 {{/* Scheme for all components except notary because it only support http mode */}}
 {{- define "harbor.component.scheme" -}}
   {{- if .Values.internalTLS.enabled -}}
