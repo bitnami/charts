@@ -24,6 +24,10 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Number of nodes
+##
+replicaCount: 1
+
 ## %%MAIN_CONTAINER/POD_DESCRIPTION%%
 ##
 %%MAIN_OBJECT_BLOCK%%:
