@@ -272,6 +272,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+{{- if .Values.persistence.volumes }}
+{{ tpl (toYaml .Values.persistence.volumes | indent 6) . }}
+{{- end }}
         {{- if .Values.auth.tls.enabled }}
         - name: certs
           secret:
@@ -302,6 +305,7 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
+  {{- if not (contains "data" (quote .Values.persistence.volumes)) }}
   {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
@@ -326,4 +330,5 @@ spec:
         {{- if .Values.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end -}}
+  {{- end }}
   {{- end }}
