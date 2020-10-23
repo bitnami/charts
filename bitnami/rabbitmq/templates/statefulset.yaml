@@ -272,9 +272,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-{{- if .Values.persistence.volumes }}
-{{ tpl (toYaml .Values.persistence.volumes | nindent 6) . }}
-{{- end }}
+        {{- if .Values.persistence.volumes }}
+        {{ toYaml .Values.persistence.volumes | nindent 8 . }}
+        {{- end }}
         {{- if .Values.auth.tls.enabled }}
         - name: certs
           secret:
