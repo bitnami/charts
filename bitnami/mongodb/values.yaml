@@ -91,7 +91,7 @@ auth:
 
 tls:
  ## Enable or disable MongoDB TLS Support
-  enabled: false
+  enabled: true
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
@@ -194,7 +194,6 @@ initdbScripts: {}
 ##
 extraFlags: []
 
-
 ## Additional environment variables to set
 ## E.g:
 ## extraEnvVars:
@@ -222,7 +221,7 @@ labels: {}
 ## Number of MongoDB replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 4
+replicaCount: 2
 
 ## StrategyType for MongoDB statefulset
 ## It can be set to RollingUpdate or Recreate by default.
@@ -336,9 +335,8 @@ customReadinessProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-#
+##
 initContainers: {}
-
 
 ## Add sidecars to the MongoDB pods.
 ## Example:
@@ -361,9 +359,6 @@ sidecars: {}
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
-#
-#
-#
 extraVolumeMounts: []
 extraVolumes: []
 
@@ -371,7 +366,7 @@ extraVolumes: []
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
-  create: true
+  create: false
   ## Min number of pods that must still be available after the eviction
   ##
   minAvailable: 1
@@ -758,7 +753,7 @@ rbac:
 ## values from the securityContext section of the component
 ##
 volumePermissions:
-  enabled: true
+  enabled: false
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##
