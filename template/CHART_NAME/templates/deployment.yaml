@@ -129,7 +129,6 @@ spec:
           volumeMounts:
             - name: foo
               mountPath: bar
-              readOnly: true
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
