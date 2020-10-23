@@ -273,7 +273,7 @@ spec:
         {{- end }}
       volumes:
         {{- if .Values.persistence.volumes }}
-        {{ toYaml .Values.persistence.volumes | nindent 8 . }}
+        {{ toYaml .Values.persistence.volumes | nindent 8}}
         {{- end }}
         {{- if .Values.auth.tls.enabled }}
         - name: certs
