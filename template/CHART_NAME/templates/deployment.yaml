@@ -78,6 +78,9 @@ spec:
           env:
             - name: foo
               value: bar
+            {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraEnvVarsCM }}
             - configMapRef:
@@ -90,10 +93,20 @@ spec:
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.resources }}
           resources: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - commands
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - commands
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
