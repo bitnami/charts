@@ -80,7 +80,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `revision`                              | Revision to checkout                                                        | `master`                                                |
 | `replicas`                              | Number of replicas for the application                                      | `1`                                                     |
 | `applicationPort`                       | Port where the application will be running                                  | `3000`                                                  |
-| `extraEnv`                              | Any extra environment variables to be pass to the pods                      | `{}`                                                    |
+| `extraEnv`                              | Any extra environment variables to be pass to the pods                      | `[]`                                                    |
 | `affinity`                              | Map of node/pod affinities                                                  | `{}` (The value is evaluated as a template)             |
 | `nodeSelector`                          | Node labels for pod assignment                                              | `{}` (The value is evaluated as a template)             |
 | `tolerations`                           | Tolerations for pod assignment                                              | `[]` (The value is evaluated as a template)             |
