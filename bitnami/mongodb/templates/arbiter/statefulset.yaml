@@ -60,8 +60,8 @@ spec:
         {{- end }}
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
         - name: generate-client
-          image: bitnami/nginx:1.19.3
-          imagePullPolicy: "Always"
+          image: {{ include "mongodb.tls.image" . }}
+          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
           env:
             - name: MY_POD_NAMESPACE
               valueFrom:
