@@ -61,11 +61,8 @@ spec:
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          command:
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.command }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.command "context" $) | nindent 12 }}
-          {{- else }}
-            %%CONTAINER_COMMAND%%
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.args "context" $) | nindent 12 }}
