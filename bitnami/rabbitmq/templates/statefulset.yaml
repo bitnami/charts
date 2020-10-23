@@ -273,7 +273,7 @@ spec:
         {{- end }}
       volumes:
 {{- if .Values.persistence.volumes }}
-{{ tpl (toYaml .Values.persistence.volumes | indent 6) . }}
+{{ tpl (toYaml .Values.persistence.volumes | nindent 6) . }}
 {{- end }}
         {{- if .Values.auth.tls.enabled }}
         - name: certs
