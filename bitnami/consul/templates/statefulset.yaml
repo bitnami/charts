@@ -131,7 +131,7 @@ spec:
             - name: CONSUL_DISABLE_KEYRING_FILE
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT
-              value: {{ default 3 .Values.replicas | quote }}
+              value: {{ default 3 .Values.replicaCount | quote }}
             - name: CONSUL_RAFT_MULTIPLIER
               value: {{ .Values.raftMultiplier | quote }}
             - name: CONSUL_DOMAIN
