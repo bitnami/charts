@@ -5,5 +5,8 @@ dependencies:
 - name: cassandra
   repository: https://charts.bitnami.com/bitnami
   version: 5.6.7
-digest: sha256:59edb19078fb43fd0caa5dc4951c48fa40fb09d3bfea19c0f6556070b6f9d875
-generated: "2020-09-24T00:29:07.539774133Z"
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.9.0
+digest: sha256:a9f7cc97b07b9400dcecfe961f4330193c27b818a876ecdf0478747be63981e6
+generated: "2020-10-22T22:10:49.045717+02:00"

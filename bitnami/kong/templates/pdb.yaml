@@ -4,7 +4,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "kong.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   {{- if .Values.pdb.minAvailable }}
   minAvailable: {{ .Values.pdb.minAvailable }}
@@ -14,5 +14,5 @@ spec:
   {{- end  }}
   selector:
     matchLabels:
-      {{- include "kong.matchLabels" . | nindent 6 }}
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

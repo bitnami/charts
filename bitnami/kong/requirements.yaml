@@ -7,4 +7,6 @@ dependencies:
     condition: cassandra.enabled
     version: 5.x.x
     repository: https://charts.bitnami.com/bitnami
-
+  - name: common
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami

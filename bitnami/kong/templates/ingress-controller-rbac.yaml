@@ -4,7 +4,7 @@ kind: Role
 metadata:
   name: {{ include "kong.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""
@@ -42,7 +42,7 @@ kind: RoleBinding
 metadata:
   name: {{ template "kong.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -55,7 +55,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   name: {{ template "kong.fullname" . }}
 rules:
   - apiGroups:
@@ -131,7 +131,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: {{ template "kong.fullname" . }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -146,6 +146,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ template "kong.fullname" . }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 {{- end }}
 {{- end }}

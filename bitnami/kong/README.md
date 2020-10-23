@@ -391,7 +391,7 @@ extraDeploy: |-
     metadata:
       name: {{ include "kong.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "kong.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
     config:
       header_name: my-request-id
     plugin: correlation-id

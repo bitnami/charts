@@ -3,53 +3,21 @@
 Expand the name of the chart.
 */}}
 {{- define "kong.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.name" . -}}
 {{- end -}}
 
 {{/*
 Return the proper kong image name
 */}}
 {{- define "kong.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper kong image name
 */}}
 {{- define "kong.ingress-controller.image" -}}
-{{- $registryName := .Values.ingressController.image.registry -}}
-{{- $repositoryName := .Values.ingressController.image.repository -}}
-{{- $tag := .Values.ingressController.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.ingressController.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -57,37 +25,10 @@ Return the proper kong migration image name
 */}}
 {{- define "kong.migration.image" -}}
 {{- if .Values.migration.image -}}
-{{- $registryName := .Values.migration.image.registry -}}
-{{- $repositoryName := .Values.migration.image.repository -}}
-{{- $tag := .Values.migration.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.migration.image "global" .Values.global) }}
 {{- else -}}
 {{- template "kong.image" . -}}
 {{- end -}}
-{{- end -}}
-
-
-{{/*
-Common labels
-*/}}
-{{- define "kong.labels" -}}
-app.kubernetes.io/name: {{ include "kong.name" . }}
-helm.sh/chart: {{ include "kong.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
@@ -107,36 +48,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "kong.matchLabels" -}}
-app.kubernetes.io/name: {{ include "kong.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "kong.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
+{{- include "common.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "kong.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.chart" . -}}
 {{- end -}}
 
 {{/*
@@ -238,35 +162,7 @@ Get PostgreSQL secret
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kong.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.ingressController.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if (or .Values.image.pullSecrets .Values.ingressController.image.pullSecrets)}}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.ingressController.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -342,17 +238,4 @@ PostgreSQL instance. Only one of postgresql.enabled (deploy sub-chart) and postg
 CONFLICT: You specified to deploy the Cassandra sub-chart and also specified external
 Cassandra hosts. Only one of cassandra.enabled (deploy sub-chart) and cassandra.external.hosts can be set
 {{- end }}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "kong.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "kong.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}

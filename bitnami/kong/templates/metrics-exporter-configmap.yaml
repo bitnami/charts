@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "kong.fullname" . }}-metrics-exporter
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
   exporter.conf: |-
     # Prometheus metrics

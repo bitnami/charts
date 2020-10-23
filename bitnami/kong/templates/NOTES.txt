@@ -64,18 +64,24 @@
 
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- if .Values.ingressController.enabled }}
+{{- include "common.warnings.rollingTag" .Values.ingressController.image }}
 {{- end }}
+
+{{- $passwordValidationErrors := list -}}
 
 If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
 {{- if eq .Values.database "postgresql" }}
+{{- $dbSecretName := include "kong.postgresql.secretName" . -}}
+{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode
 {{- else }}
+  {{- $dbSecretName := include "kong.cassandra.secretName" . -}}
+  {{- $dbPasswordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 --decode
 {{- end }}
@@ -86,3 +92,4 @@ WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type
 {{- end }}
 
 {{ include "kong.validateValues" . }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
