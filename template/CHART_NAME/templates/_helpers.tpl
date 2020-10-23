@@ -6,10 +6,17 @@ Return the proper %%MAIN_OBJECT_BLOCK%% image name
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "%%TEMPLATE_NAME%%.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "%%TEMPLATE_NAME%%.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.%%MAIN_OBJECT_BLOCK%%.image .Values.%%SECONDARY_OBJECT_BLOCK%%.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.%%MAIN_OBJECT_BLOCK%%.image .Values.%%SECONDARY_OBJECT_BLOCK%%.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
