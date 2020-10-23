@@ -35,6 +35,11 @@ spec:
       {{- include "%%TEMPLATE_NAME%%.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.type "key" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.key "values" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector "context" $) | nindent 8 }}
