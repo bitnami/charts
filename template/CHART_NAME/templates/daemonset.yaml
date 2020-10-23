@@ -86,18 +86,25 @@ spec:
           resources: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
-          livenessProbe: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - commands
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            %%httpGet || command || etc%%
+            initialDelaySeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.failureThreshold }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
-          readinessProbe: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - commands
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            %%httpGet || command || etc%%
+            initialDelaySeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.failureThreshold }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

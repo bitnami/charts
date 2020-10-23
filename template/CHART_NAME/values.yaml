@@ -48,6 +48,25 @@ replicaCount: 1
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  livenessProbe:
+    enabled: true
+    path: "/path"
+    initialDelaySeconds: foo
+    periodSeconds: bar
+    timeoutSeconds: foo
+    failureThreshold: bar
+    successThreshold: foo
+  readinessProbe:
+    enabled: true
+    path: "/path"
+    initialDelaySeconds: foo
+    periodSeconds: bar
+    timeoutSeconds: foo
+    failureThreshold: bar
+    successThreshold: foo
+
   %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
   ## ConfigMap with %%MAIN_CONTAINER_NAME%% Configuration
