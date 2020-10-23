@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "redis.fullname" . }}-master
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -350,4 +350,3 @@ spec:
     {{- end }}
     {{- end }}
 {{- end }}
-
