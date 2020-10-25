@@ -1,11 +1,3 @@
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "kong.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
-
 {{/*
 Return the proper kong image name
 */}}
@@ -45,22 +37,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "kong.cassandra.fullname" -}}
 {{- printf "%s-%s" .Release.Name "cassandra" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "kong.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "kong.chart" -}}
-{{- include "common.names.chart" . -}}
 {{- end -}}
 
 {{/*
@@ -141,7 +117,7 @@ Get Cassandra secret
 {{- else if .Values.cassandra.enabled }}
   {{- template "kong.cassandra.fullname" . -}}
 {{- else -}}
-  {{- printf "%s-external-secret" ( include "kong.fullname" . ) -}}
+  {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
 
@@ -154,7 +130,7 @@ Get PostgreSQL secret
 {{- else if .Values.postgresql.enabled }}
   {{- template "kong.postgresql.fullname" . -}}
 {{- else -}}
-  {{- printf "%s-external-secret" ( include "kong.fullname" . ) -}}
+  {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
 
@@ -181,7 +157,7 @@ Get proper service account
 {{- if .Values.ingressController.rbac.existingServiceAccount -}}
 {{ .Values.ingressController.rbac.existingServiceAccount }}
 {{- else -}}
-{{- include "kong.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 

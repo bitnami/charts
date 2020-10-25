@@ -389,7 +389,7 @@ extraDeploy: |-
   - apiVersion: configuration.konghq.com/v1
     kind: KongPlugin
     metadata:
-      name: {{ include "kong.fullname" . }}-plugin-correlation
+      name: {{ include "common.names.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
       labels: {{- include "common.labels.standard" . | nindent 6 }}
     config:

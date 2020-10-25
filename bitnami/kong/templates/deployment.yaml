@@ -1,10 +1,16 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "kong.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -44,6 +50,11 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -233,7 +244,7 @@ spec:
             - name: CONTROLLER_KONG_ADMIN_URL
               value: http://127.0.0.1:8001
             - name: CONTROLLER_PUBLISH_SERVICE
-              value: {{ printf "%s/%s" .Release.Namespace (include "kong.fullname" .) | quote }}
+              value: {{ printf "%s/%s" .Release.Namespace (include "common.names.fullname" .) | quote }}
             - name: CONTROLLER_INGRESS_CLASS
               value: {{ .Values.ingressController.ingressClass }}
             - name: CONTROLLER_ELECTION_ID
@@ -308,16 +319,16 @@ spec:
       volumes:
         - name: health
           configMap:
-            name: {{ template "kong.fullname" . }}-scripts
+            name: {{ template "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- if .Values.metrics.enabled }}
         - name: metrics-init-scripts
           configMap:
-            name: {{ template "kong.fullname" . }}-metrics-scripts
+            name: {{ template "common.names.fullname" . }}-metrics-scripts
             defaultMode: 0755
         - name: metrics-server-block
           configMap:
-            name: {{ template "kong.fullname" . }}-metrics-exporter
+            name: {{ template "common.names.fullname" . }}-metrics-exporter
         {{- end }}
         {{- if .Values.kong.initScriptsCM }}
         - name: custom-init-scripts-cm
