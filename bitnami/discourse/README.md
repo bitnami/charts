@@ -499,7 +499,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
 
   > NOTE: You will need to export Redis credentials as well if your setup makes use of them.
 
-3. Scale down the Discourse deployment and delete the PostgreSQL replicaset. Notice the option `--cascade=false` in the latter.
+3. Scale down the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter.
 
   ```console
   $ kubectl scale --replicas 0 deployment.apps/discourse-discourse

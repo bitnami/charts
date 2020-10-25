@@ -1,9 +1,3 @@
-{{/*
-Expand the name of the chart
-*/}}
-{{- define "discourse.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
 
 {{/*
 Create a default fully qualified app name
@@ -22,27 +16,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "discourse.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label
-*/}}
-{{- define "discourse.chart" -}}
-{{- include "common.names.chart" . -}}
-{{- end -}}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "discourse.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "discourse.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -62,7 +40,7 @@ Return the Discourse secret name
 {{- if .Values.discourse.existingSecret }}
     {{- printf "%s" .Values.discourse.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-discourse" (include "discourse.fullname" .) -}}
+    {{- printf "%s-discourse" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -167,7 +145,7 @@ Return the Postgresql secret name
 {{- else if .Values.externalDatabase.existingSecret }}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-database" (include "discourse.fullname" .) -}}
+    {{- printf "%s-database" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -215,7 +193,7 @@ Return the Redis secret name
 {{- else if .Values.externalRedis.existingSecret }}
     {{- printf "%s" .Values.externalRedis.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-redis" (include "discourse.fullname" .) -}}
+    {{- printf "%s-redis" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

@@ -2,7 +2,7 @@
 apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ template "discourse.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -38,7 +38,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "discourse.fullname" . }}
+              serviceName: {{ template "common.names.fullname" . }}
               servicePort: http
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
@@ -47,7 +47,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "discourse.fullname" $ }}
+              serviceName: {{ template "common.names.fullname" $ }}
               servicePort: http
     {{- end }}
 {{- end }}

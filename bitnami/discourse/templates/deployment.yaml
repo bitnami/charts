@@ -2,7 +2,7 @@
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "discourse.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     component: discourse
     {{- if .Values.commonLabels }}
@@ -102,7 +102,7 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "discourse.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
             {{- if .Values.discourse.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.discourse.extraEnvVarsCM }}
@@ -188,7 +188,7 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "discourse.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
             {{- if .Values.sidekiq.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.sidekiq.extraEnvVarsCM }}
@@ -238,7 +238,7 @@ spec:
         - name: discourse-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "discourse.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{ end }}
