@@ -1,0 +1,21 @@
+apiVersion: v1
+name: %%CHART_NAME%%
+description: %%DESCRIPTION%%
+appVersion: %%UPSTREAM_PROJECT_VERSION%%
+version: 0.1.0
+keywords:
+  - %%UPSTREAM_PROJECT_KEYWORD%%
+  - %%UPSTREAM_PROJECT_KEYWORD%%
+  - ...
+home: %%UPSTREAM_PROJECT_URL%%
+sources:
+  - https://github.com/bitnami/bitnami-docker-%%IMAGE_NAME%%
+  - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
+  - ...
+maintainers:
+  - name: Bitnami
+    email: containers@bitnami.com
+engine: gotpl
+icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
+annotations:
+  category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
