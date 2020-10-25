@@ -1,11 +1,11 @@
 dependencies:
   - name: postgresql
     condition: postgresql.enabled
-    version: 8.x.x
+    version: 9.x.x
     repository: https://charts.bitnami.com/bitnami
   - name: cassandra
     condition: cassandra.enabled
-    version: 5.x.x
+    version: 6.x.x
     repository: https://charts.bitnami.com/bitnami
   - name: common
     version: 0.x.x
