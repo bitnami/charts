@@ -69,7 +69,7 @@
 {{- include "common.warnings.rollingTag" .Values.ingressController.image }}
 {{- end }}
 
-{{- $passwordValidationErrors := list -}}
+{{- $passwordValidationErrors := list }}
 
 If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
 {{- if eq .Values.database "postgresql" }}
