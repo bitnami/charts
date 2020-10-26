@@ -170,6 +170,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                       | `nil`                                                   |
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
+| `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`
+             |                                                     
+| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`
+             | 
+| `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`
+             | 
+| `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`
+             | 
 
 ### MongoDB statefulset parameters
 
@@ -508,7 +516,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 ## Enabling SSL/TLS
 
-This container supports enabling SSL/TLS between nodes in the cluster, as well as between mongo clients and nodes, by setting the MONGODB_EXTRA_FLAGS and MONGODB_CLIENT_EXTRA_FLAGS environment variables, together with thecorrect MONGODB_ADVERTISED_HOSTNAME.
+This container supports enabling SSL/TLS between nodes in the cluster, as well as between mongo clients and nodes, by setting the MONGODB_EXTRA_FLAGS and MONGODB_CLIENT_EXTRA_FLAGS environment variables, together with the correct MONGODB_ADVERTISED_HOSTNAME.
 To enable full TLS encryption set tls.enabled to true
 
 ### Generating the self-signed cert via pre install helm hooks
@@ -524,7 +532,7 @@ Note: You will be generating self signed certs for the MongoDB deployment. With 
 
 ### Starting the cluster
 
-After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). The client should now be able to connect to the TLS enabled cluster with the provided certs. 
+After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). This value can be changed via the MONGODB_EXTRA_FLAGS field using the tlsMode. The client should now be able to connect to the TLS enabled cluster with the provided certs. 
 
 ## Upgrading
 

@@ -91,9 +91,9 @@ auth:
 
 tls:
  ## Enable or disable MongoDB TLS Support 
-  enabled: true
+  enabled: false
  ##
- ## Bitnami Nginix image
+ ## Bitnami Nginx image
  ##
   image:
     registry: docker.io
@@ -809,7 +809,7 @@ volumePermissions:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
   ## Bitnami MongoDB Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
   ##
