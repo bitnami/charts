@@ -44,7 +44,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Ghost chart and their default values.
+The following table lists the configurable parameters of the Kubernetes Event Exporter chart and their default values.
 
 | Parameter                               | Description                                                                                        | Default                                                    |
 |-----------------------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------------|
