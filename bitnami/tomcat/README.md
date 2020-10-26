@@ -99,6 +99,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                      | `false`                                                 |
 | `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                           | `tomcat.local-tls`                                      |
+| `extraEnvVars`                       | Extra environment variables to be set on tomcat container                                           | `[]`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
