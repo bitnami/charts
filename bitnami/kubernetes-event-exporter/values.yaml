@@ -73,17 +73,19 @@ podAnnotations: {}
 
 ## SecurityContext holds pod-level security attributes and common container settings.
 ##
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
-securityContext:
+containerSecurityContext:
+  enabled: true
   capabilities:
     add: []
     drop:
     - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 1000
+  runAsUser: 1001
 
 ## Container resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
