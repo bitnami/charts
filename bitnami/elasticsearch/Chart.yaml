@@ -1,7 +1,7 @@
 apiVersion: v1
 name: elasticsearch
-version: 12.8.0
-appVersion: 7.9.2
+version: 12.8.1
+appVersion: 7.9.3
 description: A highly scalable open-source full-text search and analytics engine
 keywords:
   - elasticsearch
