@@ -1009,6 +1009,11 @@ storegateway:
   ##
   updateStrategyType: RollingUpdate
 
+  ## Statefulset Pod management policy: OrderedReady (default) or Parallel.
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -1222,6 +1227,11 @@ ruler:
   ## StrategyType, can be set to RollingUpdate or OnDelete by default.
   ##
   updateStrategyType: RollingUpdate
+
+  ## Statefulset Pod management policy: OrderedReady (default) or Parallel.
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
 
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

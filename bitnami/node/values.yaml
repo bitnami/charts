@@ -103,7 +103,7 @@ applicationPort: 3000
 
 ## Define custom environment variables to pass to the image here
 ##
-extraEnv: {}
+extraEnv: []
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

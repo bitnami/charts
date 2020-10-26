@@ -2,7 +2,7 @@ apiVersion: v1
 appVersion: 0.42.1
 description: kube-prometheus collects Kubernetes manifests to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.
 name: kube-prometheus
-version: 2.2.1
+version: 2.2.2
 keywords:
   - prometheus
   - alertmanager

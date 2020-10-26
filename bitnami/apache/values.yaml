@@ -272,6 +272,10 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
+## An array to add extra env vars
+##
+extraEnvVars: []
+
 ## Service paramaters
 ##
 service:

@@ -101,7 +101,7 @@ The following table lists the configurable parameters of the HashiCorp Consul ch
 
 | Parameter                                 | Description                                                                                                          | Default                                                      |
 |-------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `replicaCount`                            | Number of HashiCorp Consul replicas                                                                                  | `1`                                                          |
+| `replicaCount`                            | Number of HashiCorp Consul replicas                                                                                  | `3`                                                          |
 | `updateStrategy`                          | Update strategy type for the statefulset                                                                             | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                                            | `nil`                                                        |
 | `priorityClassName`                       | HashiCorp Consul priorityClassName                                                                                   | `nil`                                                        |
