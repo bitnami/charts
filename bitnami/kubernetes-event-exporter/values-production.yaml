@@ -15,6 +15,14 @@
 ##
 # fullnameOverride:
 
+## Common annotations to add to all resources. Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all resources. Evaluated as a template
+##
+commonLabels: {}
+
 config:
   logLevel: error
   logFormat: json
