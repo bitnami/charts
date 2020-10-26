@@ -1,6 +1,6 @@
-# kubernetes-event-exporter
+# Kubernetes Event Exporter
 
-[kubernetes-event-exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
+[Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
 
 ## TL;DR
 
@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kubernetes-event-exporter
 
 ## Introduction
 
-This chart bootstraps a [kubernetes-event-exporter](https://github.com/opsgenie/kubernetes-event-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 
 ## Prerequisites
@@ -28,7 +28,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/kubernetes-event-exporter
 ```
 
-These commands deploy kubernetes-event-exporter on the Kubernetes cluster in the default configuration. The [Parameters](##parameters) section lists the parameters that can be configured during installation.
+These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](##parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list` or `helm ls --all-namespaces`
 
