@@ -384,7 +384,7 @@ extraContainers:
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
+To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it. You will notice that in these cases it is needed to start the nodes in `Parallel` by setting `podManagementPolicy`.
 
 #### Checking `safe_to_boostrap`
 
@@ -450,10 +450,10 @@ In this case you will need the node number `N` and run:
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
---set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
---set galera.bootstrap.bootstrapFromNode=N
+--set galera.bootstrap.bootstrapFromNode=N \
+--set podManagementPolicy=Parallel
 ```
 
 #### All the nodes with `safe_to_bootstrap: 0`
@@ -462,11 +462,11 @@ In this case the cluster was not stopped cleanly and you need to pick one to for
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
---set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY
 --set galera.bootstrap.bootstrapFromNode=3 \
---set galera.bootstrap.forceSafeToBootstrap=true
+--set galera.bootstrap.forceSafeToBootstrap=true \
+--set podManagementPolicy=Parallel
 ```
 
 ## Persistence
