@@ -523,6 +523,31 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
+## 5.2.0
+
+A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
 ## 5.0.0
 
 This release uses parallel deployment for the postgresql statefullset. This should fix the issues related to not being able to restart the cluster under some contions where the master node is not longer node `-0`.
