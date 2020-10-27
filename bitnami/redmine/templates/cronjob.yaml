@@ -3,7 +3,8 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ template "redmine.mailReceiver.fullname" . }}
-  labels: {{- include "redmine.mailReceiver.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  app.kubernetes.io/component: mail-receiver
 spec:
   schedule: "{{ .Values.mailReceiver.schedule }}"
   suspend: {{ .Values.mailReceiver.suspend }}
@@ -12,12 +13,13 @@ spec:
     spec:
       template:
         metadata:
-          labels: {{- include "redmine.mailReceiver.labels" . | nindent 12 }}
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
+          app.kubernetes.io/component: mail-receiver
         spec:
           volumes:
             - name: mail-receiver
               configMap:
-                name: {{ template "redmine.fullname" . }}
+                name: {{ template "common.names.fullname" . }}
                 defaultMode: 0744
           restartPolicy: Never
           containers:
