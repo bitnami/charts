@@ -54,7 +54,7 @@ host. To configure SuiteCRM with the URL of your service:
 {{- else }}
 
 {{- $port:=.Values.service.port | toString }}
-  echo "SuiteCRM URL: http://{{ include "host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "SuiteCRM URL: http://{{ include "host" . }}{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- end }}
 

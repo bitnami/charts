@@ -147,9 +147,9 @@ mariadb:
 service:
   type: LoadBalancer
   # HTTP Port
-  port: 80
+  port: 8080
   # HTTPS Port
-  httpsPort: 443
+  httpsPort: 8443
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -259,6 +259,18 @@ podAnnotations: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+## SecurityContext configuration for the pods
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## SecurityContext configuration for the container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
 ## Prometheus Exporter / Metrics
 ##

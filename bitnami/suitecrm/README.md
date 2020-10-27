@@ -96,8 +96,8 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `mariadb.db.password`            | Password for the database                                                                             | `nil`                                                        |
 | `mariadb.rootUser.password`      | MariaDB admin password                                                                                | `nil`                                                        |
 | `service.type`                   | Kubernetes Service type                                                                               | `LoadBalancer`                                               |
-| `service.port`                   | Service HTTP port                                                                                     | `80`                                                         |
-| `service.httpsPort`              | Service HTTPS port                                                                                    | `443`                                                        |
+| `service.port`                   | Service HTTP port                                                                                     | `8080`                                                       |
+| `service.httpsPort`              | Service HTTPS port                                                                                    | `8443`                                                       |
 | `service.nodePorts.http`         | Kubernetes http node port                                                                             | `""`                                                         |
 | `service.nodePorts.https`        | Kubernetes https node port                                                                            | `""`                                                         |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation                                                                  | `Cluster`                                                    |
@@ -110,6 +110,10 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `resources`                      | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                 | Pod annotations                                                                                       | `{}`                                                         |
 | `affinity`                       | Map of node/pod affinities                                                                            | `{}`                                                         |
+| `podSecurityContext.enabled`     | Enable securityContext on for DokuWiki deployment                                                     | `true`                                                       |
+| `podSecurityContext.fsGroup`     | Group to configure permissions for volumes                                                            | `1001`                                                       |
+| `containerSecurityContext.enabled`   | Enable securityContext on for DokuWiki deployment                                                 | `true`                                                       |
+| `containerSecurityContext.runAsUser` | User for the securityContext                                                                      | `1001`                                                       |
 | `metrics.enabled`                | Start a side-car prometheus exporter                                                                  | `false`                                                      |
 | `metrics.image.registry`         | Apache exporter image registry                                                                        | `docker.io`                                                  |
 | `metrics.image.repository`       | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                    |
@@ -173,6 +177,14 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image was updated to support and enable the "non-root" user approach
+
+If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
+
+This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
 ### 8.0.0
 
