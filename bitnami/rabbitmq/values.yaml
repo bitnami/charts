@@ -489,7 +489,7 @@ persistence:
   size: 8Gi
 
   volumes:
-  #  - name: nothing
+  #  - name: volume_name
   #    emptyDir: {}
 
 ## Pod Disruption Budget configuration
