@@ -1,35 +1,33 @@
 {{- if include "host" . -}}
-apiVersion: {{ template "suitecrm.deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "suitecrm.fullname" . }}
-  labels:
-    app: {{ template "suitecrm.name" . }}
-    chart: "{{ template "suitecrm.chart" . }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  name: {{ include "suitecrm.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "suitecrm.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ template "suitecrm.name" . }}
-        release: "{{ .Release.Name }}"
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+    {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.podAnnotations }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
     spec:
-{{- include "suitecrm.imagePullSecrets" . | indent 6 }}
+      {{- include "suitecrm.imagePullSecrets" . | nindent 6 }}
       hostAliases:
       - ip: "127.0.0.1"
         hostnames:
@@ -39,8 +37,8 @@ spec:
          fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       containers:
-      - name: {{ template "suitecrm.fullname" . }}
-        image: {{ template "suitecrm.image" . }}
+      - name: {{ include "suitecrm.fullname" . }}
+        image: {{ include "suitecrm.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.containerSecurityContext.enabled }}
         securityContext:
@@ -129,14 +127,14 @@ spec:
               value: {{ include "host" . | quote }}
           initialDelaySeconds: 60
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
         volumeMounts:
         - name: suitecrm-data
           mountPath: /bitnami/suitecrm
           subPath: suitecrm
-{{- if .Values.metrics.enabled }}
+      {{- if .Values.metrics.enabled }}
       - name: metrics
-        image: {{ template "suitecrm.metrics.image" . }}
+        image: {{ include "suitecrm.metrics.image" . }}
         imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
         command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
         ports:
@@ -155,8 +153,8 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
-{{ toYaml .Values.metrics.resources | indent 12 }}
-{{- end }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
+      {{- end }}
       volumes:
       - name: suitecrm-data
       {{- if .Values.persistence.enabled }}
@@ -165,8 +163,12 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
       affinity:
-{{ toYaml . | indent 8 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
 {{- end -}}

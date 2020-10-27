@@ -52,6 +52,8 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 
 | Parameter                        | Description                                                                                           | Default                                                      |
 |----------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `commonAnnotations`              | Annotations to be added to all deployed resources                                                     | `{}` (evaluated as a template)                               |
+| `commonLabels`                   | Labels to be added to all deployed resources                                                          | `{}` (evaluated as a template)                               |
 | `global.imageRegistry`           | Global Docker image registry                                                                          | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
 | `global.storageClass`            | Global storage class for dynamic provisioning                                                         | `nil`                                                        |
@@ -109,6 +111,11 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `persistence.size`               | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                        |
 | `resources`                      | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                 | Pod annotations                                                                                       | `{}`                                                         |
+| `podAffinityPreset`              | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                                         |
+| `podAntiAffinityPreset`          | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                                                       |
+| `nodeAffinityPreset.type`        | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                         |
+| `nodeAffinityPreset.key`         | Node label key to match Ignored if `affinity` is set.                                                 | `""`                                                         |
+| `nodeAffinityPreset.values`      | Node label values to match. Ignored if `affinity` is set.                                             | `[]`                                                         |
 | `affinity`                       | Map of node/pod affinities                                                                            | `{}`                                                         |
 | `podSecurityContext.enabled`     | Enable securityContext on for DokuWiki deployment                                                     | `true`                                                       |
 | `podSecurityContext.fsGroup`     | Group to configure permissions for volumes                                                            | `1001`                                                       |
