@@ -546,7 +546,7 @@ $ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
 
 ## 5.0.0
 
