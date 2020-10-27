@@ -1,29 +1,29 @@
-apiVersion: {{ template "redmine.deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "redmine.fullname" . }}
-  labels: {{- include "redmine.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   selector:
-    matchLabels: {{- include "redmine.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicas }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "redmine.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "redmine.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
 {{- include "redmine.imagePullSecrets" . | indent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "redmine.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "redmine.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "redmine.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redmine.serviceAccountName" . }}
       {{- with .Values.securityContext }}
@@ -32,7 +32,7 @@ spec:
       initContainers:
       {{- include "certificates.initContainer" . | indent 8 }}
       containers:
-        - name: {{ template "redmine.fullname" . }}
+        - name: {{ template "common.names.fullname" . }}
           image: {{ template "redmine.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.resources }}
@@ -160,7 +160,7 @@ spec:
         - name: redmine-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "redmine.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
