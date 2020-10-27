@@ -364,6 +364,14 @@ ingress:
   ##   path: /
   ##
 
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
