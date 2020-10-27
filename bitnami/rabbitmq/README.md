@@ -195,6 +195,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `persistence.accessMode`                  | PVC Access Mode for RabbitMQ data volume                                                                             | `ReadWriteOnce`                                              |
 | `persistence.size`                        | PVC Storage Request for RabbitMQ data volume                                                                         | `8Gi`                                                        |
 | `persistence.selector`                    | Selector to match an existing Persistent Volume                                                                      | `{}`(evaluated as a template)                                |
+| `persistence.volumes`                     | Additional volumes without creating PVC                                                                             | `{}`(evaluated as a template)                                |
 
 ### RBAC parameters
 
