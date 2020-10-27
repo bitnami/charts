@@ -4,7 +4,13 @@ kind: CronJob
 metadata:
   name: {{ template "redmine.mailReceiver.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-  app.kubernetes.io/component: mail-receiver
+    app.kubernetes.io/component: mail-receiver
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   schedule: "{{ .Values.mailReceiver.schedule }}"
   suspend: {{ .Values.mailReceiver.suspend }}
@@ -14,7 +20,13 @@ spec:
       template:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}
-          app.kubernetes.io/component: mail-receiver
+            app.kubernetes.io/component: mail-receiver
+            {{- if .Values.mailReceiver.podLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.mailReceiver.podLabels "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.mailReceiver.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.mailReceiver.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
         spec:
           volumes:
             - name: mail-receiver
