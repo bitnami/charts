@@ -208,7 +208,7 @@ service:
   type: ClusterIP
   ## Set loadBalancerIP if needed and type is LoadBalancer
   ##
-  # loadBalancerIP: 
+  # loadBalancerIP:
   port: 2181
   followerPort: 2888
   electionPort: 3888
