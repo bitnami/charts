@@ -200,7 +200,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file which contains modifications suited for production environments. Use this file in production environments instead of the default `values.yaml` file. Refer to the [chart documentation for examples](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/production-configuration/) of these modifications.
+This chart includes a `values-production.yaml` file which contains modifications suited for production environments. Use this file in production environments instead of the default `values.yaml` file. Refer to the [chart documentation for examples](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/use-production-configuration/) of these modifications.
 
 ### Change MySQL version
 
