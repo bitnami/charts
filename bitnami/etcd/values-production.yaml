@@ -198,9 +198,15 @@ service:
   ## etcd client port
   ##
   port: 2379
+  ## etcd client port name override
+  ##
+  clientPortNameOverride: "client"
   ## etcd peer port
   ##
   peerPort: 2380
+  ## etcd peer port name override
+  ##
+  peerPortNameOverride: "peer"
   ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
