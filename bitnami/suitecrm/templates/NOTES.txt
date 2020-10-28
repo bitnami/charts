@@ -3,7 +3,7 @@
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 {{- $mariadbSecretName := include "suitecrm.mariadb.fullname" . -}}
 
-{{- if empty (include "host" .) -}}
+{{- if empty (include "suitecrm.host" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
 ###############################################################################
@@ -56,7 +56,7 @@ host. To configure SuiteCRM with the URL of your service:
 {{- else }}
 
 {{- $port:=.Values.service.port | toString }}
-  echo "SuiteCRM URL: http://{{ include "host" . }}{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "SuiteCRM URL: http://{{ include "suitecrm.host" . }}{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- end }}
 

@@ -147,9 +147,9 @@ mariadb:
 service:
   type: LoadBalancer
   # HTTP Port
-  port: 8080
+  port: 80
   # HTTPS Port
-  httpsPort: 8443
+  httpsPort: 443
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##

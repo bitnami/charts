@@ -33,7 +33,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
 */}}
-{{- define "serviceIP" -}}
+{{- define "suitecrm.serviceIP" -}}
 {{- if eq .Values.service.type "ClusterIP" -}}
 127.0.0.1
 {{- else -}}
@@ -45,9 +45,9 @@ Note, returns 127.0.0.1 if using ClusterIP.
 Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
-{{- define "host" -}}
+{{- define "suitecrm.host" -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
-{{- default (include "serviceIP" .) $host -}}
+{{- default (include "suitecrm.serviceIP" .) $host -}}
 {{- end -}}
 
 {{/*
