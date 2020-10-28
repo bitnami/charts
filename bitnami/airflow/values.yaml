@@ -169,8 +169,20 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
-    podAnnotations:
-    ## Enable HorizontalPodAutoscaler
+
+    ## Add annotations to the worker pods
+    ##
+    podAnnotations: {}
+
+    ## Enable PodDisruptionBudget for worker pods
+    ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+    ##
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+      # maxUnavailable: 1
+
+    ## Enable HorizontalPodAutoscaler for worker pods
     ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
     ##
     autoscaling:
@@ -224,6 +236,14 @@ airflow:
       #    memory: 256Mi
       #    cpu: 250m
 
+    ## Enable PodDisruptionBudget for scheduler pods
+    ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+    ##
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+      # maxUnavailable: 1
+
   ## Airflow scheduler specific configuration
   #
   scheduler:
@@ -259,6 +279,14 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
+
+    ## Enable PodDisruptionBudget for scheduler pods
+    ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+    ##
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+      # maxUnavailable: 1
 
   ## Common parameters to all Airflow containers: the parameters from the configuration file can be overwritten by using environment variables with this format:
   ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
