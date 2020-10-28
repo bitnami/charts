@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 1.10.10-debian-10-r71
+  tag: 1.10.12-debian-10-r41
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ image:
 schedulerImage:
   registry: docker.io
   repository: bitnami/airflow-scheduler
-  tag: 1.10.10-debian-10-r76
+  tag: 1.10.12-debian-10-r57
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -64,7 +64,7 @@ schedulerImage:
 workerImage:
   registry: docker.io
   repository: bitnami/airflow-worker
-  tag: 1.10.10-debian-10-r79
+  tag: 1.10.12-debian-10-r47
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -89,7 +89,7 @@ workerImage:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.27.0-debian-10-r27
+  tag: 2.29.0-debian-10-r0
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -105,6 +105,14 @@ nameOverride:
 ## String to fully override airflow.fullname template
 ##
 fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -134,11 +142,16 @@ airflow:
   gitSyncInterval: 60
   ## Enable in order to download DAG files from git repository.
   ##
+  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+  ## digits (0-9), lower case letters (a-z), -, and .
   cloneDagFilesFromGit:
     enabled: false
-    repository:
-    branch:
-    path:
+  #  repositories:
+  #  - repository:
+  #    name:
+  #    branch:
+  #    path:
   clonePluginsFromGit:
     enabled: false
     repository:
@@ -233,6 +246,7 @@ airflow:
       requests: {}
       #    memory: 256Mi
       #    cpu: 250m
+    podAnnotations:
 
   ## Airflow web specific configuration
   #
@@ -378,6 +392,30 @@ ldap:
     ##
     CAcertificateFilename: ""
 
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: false
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the airflow.fullname template
+  # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -464,6 +502,45 @@ ingress:
   #   key:
   #   certificate:
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -473,11 +550,6 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -573,7 +645,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r153
+    tag: 0.20180711.0-debian-10-r248
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

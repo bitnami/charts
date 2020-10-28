@@ -16,11 +16,35 @@ data:
               kubernetes:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
+                    {{- if .Values.deployer.environmentVariables }}
+                    environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
+                    {{- end }}
                     {{- if .Values.deployer.resources.limits }}
                     limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
                     requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.nodeSelector }}
+                    nodeSelector: {{ .Values.deployer.nodeSelector }}
+                    {{- end }}
+                    {{- if .Values.deployer.tolerations }}
+                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumeMounts }}
+                    volumeMounts: {{- toYaml .Values.deployer.volumeMounts | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumes }}
+                    volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
                     {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
@@ -56,6 +80,10 @@ data:
                         port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
+          {{- if .Values.server.configuration.grafanaInfo }}
+          grafana-info:
+            url: {{ .Values.server.configuration.grafanaInfo }}
+          {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -64,15 +92,14 @@ data:
             dialect: {{ $hibernateDialect }}
       {{- end }}
       datasource:
-        {{- $databaseScheme := include "scdf.database.scheme" .  }}
-        {{- $databaseHost := include "scdf.database.host" .  }}
-        {{- $databasePort := include "scdf.database.port" .  }}
-        {{- $databaseName := include "scdf.database.server.name" .  }}
-        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
+        url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
+        {{ if .Values.externalDatabase.existingPasswordSecret }}
+        password: ${datasource-password}
+        {{- else -}}
         password: ${mariadb-password}
+        {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
 {{ end }}

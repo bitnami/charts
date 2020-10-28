@@ -100,7 +100,7 @@ spec:
             add: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 12 }}
       {{- end }}
       nodeSelector:
-      {{- if .Values.controller.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.speaker.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
         "kubernetes.io/os": linux
       {{- if .Values.speaker.affinity }}

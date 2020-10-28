@@ -20,6 +20,20 @@
 {{- end }}
 {{- end }}
 
+{{- if and .Values.sentinel.enabled (not .Values.cluster.enabled)}}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Using redis sentinel without a cluster is not supported. A single pod with
+    standalone redis has been deployed.
+
+    To deploy redis sentinel, please use the values "cluster.enabled=true" and
+    "sentinel.enabled=true".
+
+-------------------------------------------------------------------------------
+{{- end }}
+
 {{- if .Values.cluster.enabled }}
 {{- if .Values.sentinel.enabled }}
 Redis can be accessed via port {{ .Values.sentinel.service.redisPort }} on the following DNS name from within your cluster:

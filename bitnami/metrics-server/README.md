@@ -2,7 +2,7 @@
 
 [Metrics Server](https://github.com/kubernetes-incubator/metrics-server) is a cluster-wide aggregator of resource usage data. Metrics Server collects metrics from the Summary API, exposed by Kubelet on each node.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -56,8 +56,10 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `image.tag`               | Metrics Server image tag                                                                                                        | `{TAG_NAME}`                                            |
 | `image.pullPolicy`        | Metrics Server image pull policy                                                                                                | `IfNotPresent`                                          |
 | `nameOverride`            | String to partially override metrics-server.fullname template with a string (will prepend the release name)                     | `nil`                                                   |
+| `replicas`                | Number of metrics-server nodes to deploy                                                                                        | `1`                                                     |
 | `fullnameOverride`        | String to fully override metrics-server.fullname template with a string                                                         | `nil`                                                   |
 | `securePort`              | Port where metrics-server will be running                                                                                       | `8443`                                                  |
+| `hostNetwork`             | Enable hostNetwork mode                                                                                                         | `false`                                                 |
 | `extraArgs`               | Extra arguments to pass to metrics-server on start up                                                                           | {}                                                      |
 | `rbac.create`             | Enable RBAC authentication                                                                                                      | `true`                                                  |
 | `serviceAccount.create`   | Specifies whether a ServiceAccount should be created                                                                            | `true`                                                  |
@@ -71,6 +73,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `service.type`            | Kubernetes Service type                                                                                                         | `ClusterIP`                                             |
 | `service.port`            | Kubernetes Service port                                                                                                         | `443`                                                   |
 | `service.annotations`     | Annotations for the Service                                                                                                     | {}                                                      |
+| `service.labels`          | Labels for the Service                                                                                                     | {}                                                      |
 | `service.loadBalancerIP`  | LoadBalancer IP if Service type is `LoadBalancer`                                                                               | `nil`                                                   |
 | `service.nodePort`        | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                        | `nil`                                                   |
 | `resources`               | The [resources] to allocate for the container                                                                                   | `{}`                                                    |

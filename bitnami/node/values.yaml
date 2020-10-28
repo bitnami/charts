@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.21.0-debian-10-r28
+  tag: 10.22.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,7 +72,7 @@ volumePermissions:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.27.0-debian-10-r32
+  tag: 2.28.0-debian-10-r63
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -103,7 +103,7 @@ applicationPort: 3000
 
 ## Define custom environment variables to pass to the image here
 ##
-extraEnv: {}
+extraEnv: []
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -229,12 +229,14 @@ ingress:
   #   key:
   #   certificate:
 
+##
 ## MongoDB chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
+  ## Whether to deploy a MongoDB server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
+  ##
   install: true
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
@@ -244,12 +246,18 @@ mongodb:
     database: test_db
     password: secret_password
 
-## Provision an external database (Only if mongodb.install is false)
-## You can:
+##
+## External Database Configuration
+##
+## Provision an external database
+## You have two alternatives:
 ##    1) Pass an already existing Secret with your database credentials
 ##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
 ##
 externaldb:
+  ## Enables or disables external database
+  ##
+  enabled: false
   ## Set to true if your external database has ssl enabled
   ##
   ssl: false

@@ -7,59 +7,38 @@
 - Browse and deploy [Helm](https://github.com/helm/helm) charts from chart repositories
 - Inspect, upgrade and delete Helm-based applications installed in the cluster
 - Add custom and private chart repositories (supports [ChartMuseum](https://github.com/helm/chartmuseum) and [JFrog Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Chart+Repositories))
-- Browse and provision external services from the [Service Catalog](https://github.com/kubernetes-incubator/service-catalog) and available Service Brokers
-- Connect Helm-based applications to external services with Service Catalog Bindings
+- Browse and deploy [Kubernetes Operators](https://operatorhub.io/).
 - Secure authentication to Kubeapps using an [OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md)
 - Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md)
 
-## TL;DR;
-
-For Helm 2:
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
-```
-
-For Helm 3:
+## TL;DR
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
+helm install kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
 ## Introduction
 
 This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MongoDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mongodb) or the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
+It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
 
 ## Prerequisites
 
-- Kubernetes 1.8+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
-- Helm 2.14.0+
+- Kubernetes 1.15+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
+- Helm 3.0.2+
 - Administrative access to the cluster to create Custom Resource Definitions (CRDs)
 
 ## Installing the Chart
 
 To install the chart with the release name `kubeapps`:
 
-For Helm 2:
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
-```
-
-> **IMPORTANT** This assumes an insecure Helm 2 installation, which is not recommended in production. See [the documentation to learn how to secure Helm 2 and Kubeapps in production](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
-
-For Helm 3:
-
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps bitnami/kubeapps --set useHelm3=true
+helm install kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -94,31 +73,13 @@ helm install kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapp
 
 By default, Kubeapps will track the [community Helm charts](https://github.com/helm/charts) and the [Kubernetes Service Catalog charts](https://github.com/kubernetes-incubator/service-catalog). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
 
-### Configuring the database to use
-
-Kubeapps supports two database types: MongoDB or PostgreSQL. By default MongoDB is installed. If you want to enable PostgreSQL instead set the following values when installing the application: `mongodb.enabled=false` and `postresql.enabled=true`.
-
-> **Note**: Changing the database type when upgrading is not supported.
-
 ### Enabling Operators
 
-Since v1.9.0, Kubeapps supports to deploy and manage Operators within its dashboard. To enable this feature, set the flag `featureFlags.operators=true`. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
-
-### [Only for Helm 2] Configuring connection to a custom namespace Tiller instance
-
-By default, Kubeapps connects to the Tiller Service in the `kube-system` namespace, the default install location for Helm.
-
-If your instance of Tiller is running in a different namespace or you want to have different instances of Kubeapps connected to different Tiller instances, you can achieve it by setting the `tillerProxy.host` parameter. For example, you can set `tillerProxy.host=tiller-deploy.my-custom-namespace:44134`
-
-### [Only for Helm 2] Configuring connection to a secure Tiller instance
-
-In production, we strongly recommend setting up a [secure installation of Tiller](https://docs.helm.sh/using_helm/#using-ssl-between-helm-and-tiller), the Helm server side component.
-
-Learn more about how to secure your Kubeapps installation [here](https://github.com/kubeapps/kubeapps/blob/master/docs/user/securing-kubeapps.md).
+Since v1.9.0 (and by default since v2.0), Kubeapps supports to deploy and manage Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
 
 ### Exposing Externally
 
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. If you explicitly [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) (recommended), then only the configured users trusted by your Identity Provider will be able to reach the Kubernetes API. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
 
 #### LoadBalancer Service
 
@@ -176,11 +137,7 @@ If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-
 To uninstall/delete the `kubeapps` deployment:
 
 ```bash
-# For Helm 2
-helm delete --purge kubeapps
-
-# For Helm 3
-helm uninstall kubeapps
+helm uninstall -n kubeapps kubeapps
 
 # Optional: Only if there are no more instances of Kubeapps
 kubectl delete crd apprepositories.kubeapps.com
@@ -198,6 +155,16 @@ kubectl delete namespace kubeapps
 
 ## Troubleshooting
 
+### Nginx Ipv6 error
+
+When starting the application with the `--set enableIPv6=true` option, the Nginx server present in the services `kubeapps` and `kubeapps-internal-dashboard` may fail with the following:
+
+```
+nginx: [emerg] socket() [::]:8080 failed (97: Address family not supported by protocol)
+```
+
+This usually means that your cluster is not compatible with IPv6. To disable it, install kubeapps with the flag: `--set enableIPv6=false`.
+
 ### Forbidden error while installing the Chart
 
 If during installation you run into an error similar to:
@@ -212,17 +179,7 @@ Or:
 Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
 ```
 
-This usually is an indication that Tiller was not installed with enough permissions to create the resources required by Kubeapps. In order to install Kubeapps, tiller will need to be able to install Custom Resource Definitions cluster-wide, as well as manage app repositories in your kubeapps namespace. The easiest way to enable this in a development environment is install Tiller with elevated permissions (e.g. as a cluster-admin). For example:
-
-```bash
-kubectl -n kube-system create sa tiller
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-helm init --service-account tiller
-```
-
-but for a production environment you can assign the specific permissions so that tiller can [manage CRDs on the cluster](https://github.com/kubeapps/kubeapps/blob/master/docs/user/manifests/openshift-tiller-with-crd-rbac.yaml) as well as [create app repositories in your Kubeapps namespace](https://github.com/kubeapps/kubeapps/blob/master/docs/user/manifests/openshift-tiller-with-apprepository-rbac.yaml) (examples are from our in development support for OpenShift).
-
-It is also possible, though less common, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+It is possible, though uncommon, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
 
 ```bash
 kubectl api-versions
@@ -240,10 +197,12 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 > Note: This steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
 
+> Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-2-0).
+
 1.  (Optional) Backup your personal repositories (if you have any):
 
 ```bash
-kubectl get apprepository --namespace kubeapps -o yaml <repo name> > <repo name>.yaml
+kubectl get apprepository -A -o yaml > <repo name>.yaml
 ```
 
 2.  Delete Kubeapps:
@@ -282,3 +241,21 @@ kubectl apply -f <repo name>.yaml
 ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/kubeapps/kubeapps/issues/new).
+
+### Upgrading to 2.0
+
+Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
+
+ - Helm 2 is no longer supported. If you are still using some Helm 2 charts, [migrate them with the available tools](https://helm.sh/docs/topics/v2_v3_migration/). Note that some charts (but not all of them) may require to be migrated to the [new Chart specification (v2)](https://helm.sh/docs/topics/charts/#the-apiversion-field). If you are facing any issue managing this migration and Kubeapps, please open a new issue!
+ - MongoDB is not longer supported. Since 2.0, the only database supported is PostgreSQL.
+ - PosgreSQL chart dependency has been upgraded to a new major version.
+
+Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:
+
+> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that's not the case, adapt the command accordingly.
+
+```bash
+kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+```
+
+After that you should be able to upgrade Kubeapps as always and the database will be repopulated.

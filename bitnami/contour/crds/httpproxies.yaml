@@ -36,7 +36,7 @@ spec:
     status: {}
   validation:
     openAPIV3Schema:
-      description: HTTPProxy is an Ingress CRD specification
+      description: HTTPProxy is an Ingress CRD specification.
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -55,17 +55,21 @@ spec:
           properties:
             includes:
               description: Includes allow for specific routing configuration to be
-                appended to another HTTPProxy in another namespace.
+                included from another HTTPProxy, possibly in another namespace.
               items:
                 description: Include describes a set of policies that can be applied
                   to an HTTPProxy in a namespace.
                 properties:
                   conditions:
-                    description: Conditions are a set of routing properties that is
-                      applied to an HTTPProxy in a namespace.
+                    description: 'Conditions are a set of rules that are applied to
+                      included HTTPProxies. In effect, they are added onto the Conditions
+                      of included HTTPProxy Route structs. When applied, they are
+                      merged using AND, with one exception: There can be only one
+                      Prefix MatchCondition per Conditions slice. More than one Prefix,
+                      or contradictory Conditions, will make the include invalid.'
                     items:
-                      description: Condition are policies that are applied on top
-                        of HTTPProxies. One of Prefix or Header must be provided.
+                      description: MatchCondition are a general holder for matching
+                        rules for HTTPProxies. One of Prefix or Header must be provided.
                       properties:
                         header:
                           description: Header specifies the header condition to match.
@@ -123,11 +127,14 @@ spec:
                 description: Route contains the set of routes for a virtual host.
                 properties:
                   conditions:
-                    description: Conditions are a set of routing properties that is
-                      applied to an HTTPProxy in a namespace.
+                    description: 'Conditions are a set of rules that are applied to
+                      a Route. When applied, they are merged using AND, with one exception:
+                      There can be only one Prefix MatchCondition per Conditions slice.
+                      More than one Prefix, or contradictory Conditions, will make
+                      the route invalid.'
                     items:
-                      description: Condition are policies that are applied on top
-                        of HTTPProxies. One of Prefix or Header must be provided.
+                      description: MatchCondition are a general holder for matching
+                        rules for HTTPProxies. One of Prefix or Header must be provided.
                       properties:
                         header:
                           description: Header specifies the header condition to match.
@@ -231,8 +238,8 @@ spec:
                             prefix:
                               description: "Prefix specifies the URL path prefix to
                                 be replaced. \n If Prefix is specified, it must exactly
-                                match the Condition prefix that is rendered by the
-                                chain of including HTTPProxies and only that path
+                                match the MatchCondition prefix that is rendered by
+                                the chain of including HTTPProxies and only that path
                                 prefix will be replaced by Replacement. This allows
                                 HTTPProxies that are included through multiple roots
                                 to only replace specific path prefixes, leaving others
@@ -335,6 +342,42 @@ spec:
                         description: PerTryTimeout specifies the timeout per retry
                           attempt. Ignored if NumRetries is not supplied.
                         type: string
+                      retriableStatusCodes:
+                        description: "RetriableStatusCodes specifies the HTTP status
+                          codes that should be retried. \n This field is only respected
+                          when you include `retriable-status-codes` in the `RetryOn`
+                          field."
+                        items:
+                          format: int32
+                          type: integer
+                        type: array
+                      retryOn:
+                        description: "RetryOn specifies the conditions on which to
+                          retry a request. \n Supported [HTTP conditions](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on):
+                          \n - `5xx` - `gateway-error` - `reset` - `connect-failure`
+                          - `retriable-4xx` - `refused-stream` - `retriable-status-codes`
+                          - `retriable-headers` \n Supported [gRPC conditions](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on):
+                          \n - `cancelled` - `deadline-exceeded` - `internal` - `resource-exhausted`
+                          - `unavailable`"
+                        items:
+                          description: RetryOn is a string type alias with validation
+                            to ensure that the value is valid.
+                          enum:
+                          - 5xx
+                          - gateway-error
+                          - reset
+                          - connect-failure
+                          - retriable-4xx
+                          - refused-stream
+                          - retriable-status-codes
+                          - retriable-headers
+                          - cancelled
+                          - deadline-exceeded
+                          - internal
+                          - resource-exhausted
+                          - unavailable
+                          type: string
+                        type: array
                     type: object
                   services:
                     description: Services are the services to proxy traffic.
@@ -354,6 +397,9 @@ spec:
                         port:
                           description: Port (defined as Integer) to proxy traffic
                             to since a service can have multiple defined.
+                          exclusiveMaximum: true
+                          maximum: 65536
+                          minimum: 1
                           type: integer
                         protocol:
                           description: Protocol may be used to specify (or override)
@@ -468,12 +514,14 @@ spec:
                         description: Timeout after which, if there are no active requests
                           for this route, the connection between Envoy and the backend
                           or Envoy and the external client will be closed. If not
-                          specified, there is no per-route idle timeout.
+                          specified, there is no per-route idle timeout, though a
+                          connection manager-wide stream_idle_timeout default of 5m
+                          still applies.
                         type: string
                       response:
                         description: Timeout for receiving a response from the server
                           after processing a request from client. If not supplied,
-                          the timeout duration is undefined.
+                          Envoy's default value of 15s applies.
                         type: string
                     type: object
                 required:
@@ -564,6 +612,9 @@ spec:
                       port:
                         description: Port (defined as Integer) to proxy traffic to
                           since a service can have multiple defined.
+                        exclusiveMaximum: true
+                        maximum: 65536
+                        minimum: 1
                         type: integer
                       protocol:
                         description: Protocol may be used to specify (or override)
@@ -669,24 +720,22 @@ spec:
                     - name
                     - port
                     type: object
-                  minItems: 1
                   type: array
-              required:
-              - services
               type: object
             virtualhost:
               description: Virtualhost appears at most once. If it is present, the
-                object is considered to be a "root".
+                object is considered to be a "root" HTTPProxy.
               properties:
                 fqdn:
                   description: The fully qualified domain name of the root of the
                     ingress tree all leaves of the DAG rooted at this object relate
-                    to the fqdn
+                    to the fqdn.
                   type: string
                 tls:
                   description: If present describes tls properties. The SNI names
                     that will be matched on are described in fqdn, the tls.secretName
-                    secret must contain a matching certificate
+                    secret must contain a certificate that itself contains a name
+                    that matches the FQDN.
                   properties:
                     clientValidation:
                       description: "ClientValidation defines how to verify the client
@@ -714,12 +763,15 @@ spec:
                       description: Minimum TLS version this vhost should negotiate
                       type: string
                     passthrough:
-                      description: If Passthrough is set to true, the SecretName will
-                        be ignored and the encrypted handshake will be passed through
-                        to the backing cluster.
+                      description: Passthrough defines whether the encrypted TLS handshake
+                        will be passed through to the backing cluster. Either Passthrough
+                        or SecretName must be specified, but not both.
                       type: boolean
                     secretName:
-                      description: required, the name of a secret in the current namespace
+                      description: SecretName is the name of a TLS secret in the current
+                        namespace. Either SecretName or Passthrough must be specified,
+                        but not both. If specified, the named secret must contain
+                        a matching certificate for the virtual host's FQDN.
                       type: string
                   type: object
               required:
@@ -727,8 +779,205 @@ spec:
               type: object
           type: object
         status:
-          description: Status reports the current state of the HTTPProxy.
+          description: Status is a container for computed information about the HTTPProxy.
           properties:
+            conditions:
+              description: "Conditions contains information about the current status
+                of the HTTPProxy, in an upstream-friendly container. \n Contour will
+                update a single condition, `Valid`, that is in normal-true polarity.
+                That is, when `currentStatus` is `valid`, the `Valid` condition will
+                be `status: true`, and vice versa. \n Contour will leave untouched
+                any other Conditions set in this block, in case some other controller
+                wants to add a Condition. \n If you are another controller owner and
+                wish to add a condition, you *should* namespace your condition with
+                a label, like `controller.domain.com/ConditionName`."
+              items:
+                description: "DetailedCondition is an extension of the normal Kubernetes
+                  conditions, with two extra fields to hold sub-conditions, which
+                  provide more detailed reasons for the state (True or False) of the
+                  condition. \n `errors` holds information about sub-conditions which
+                  are fatal to that condition and render its state False. \n `warnings`
+                  holds information about sub-conditions which are not fatal to that
+                  condition and do not force the state to be False. \n Remember that
+                  Conditions have a type, a status, and a reason. \n The type is the
+                  type of the condition, the most important one in this CRD set is
+                  `Valid`. \n In the case of `Valid`, `status: true` means that the
+                  object is has been ingested into Contour with no errors. `warnings`
+                  may still be present, and will be indicated in the Reason field.
+                  \n `Valid`, `status: false` means that the object has had one or
+                  more fatal errors during processing into Contour.  The details of
+                  the errors will be present under the `errors` field. \n There should
+                  never be subconditions under `errors` when `status` is `true`."
+                properties:
+                  errors:
+                    description: "Errors contains a slice of relevant error subconditions
+                      for this object. \n Subconditions are expected to appear when
+                      relevant (when there is a error), and disappear when not relevant.
+                      An empty slice here indicates no errors."
+                    items:
+                      description: "SubCondition is a Condition-like type intended
+                        for use as a subcondition inside a DetailedCondition. \n It
+                        contains a subset of the Condition fields. \n It is intended
+                        for warnings and errors, so `type` names should use abnormal-true
+                        polarity, that is, they should be of the form \"ErrorPresent:
+                        true\". \n The expected lifecycle for these errors is that
+                        they should only be present when the error or warning is,
+                        and should be removed when they are not relevant."
+                      properties:
+                        message:
+                          description: "Message is a human readable message indicating
+                            details about the transition. \n This may be an empty
+                            string."
+                          maxLength: 32768
+                          type: string
+                        reason:
+                          description: "Reason contains a programmatic identifier
+                            indicating the reason for the condition's last transition.
+                            Producers of specific condition types may define expected
+                            values and meanings for this field, and whether the values
+                            are considered a guaranteed API. \n The value should be
+                            a CamelCase string. \n This field may not be empty."
+                          maxLength: 1024
+                          minLength: 1
+                          pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                          type: string
+                        status:
+                          description: Status of the condition, one of True, False,
+                            Unknown.
+                          enum:
+                          - "True"
+                          - "False"
+                          - Unknown
+                          type: string
+                        type:
+                          description: "Type of condition in `CamelCase` or in `foo.example.com/CamelCase`.
+                            \n This must be in abnormal-true polarity, that is, `ErrorFound`
+                            or `controller.io/ErrorFound`. \n The regex it matches
+                            is (dns1123SubdomainFmt/)?(qualifiedNameFmt)"
+                          maxLength: 316
+                          pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                          type: string
+                      required:
+                      - message
+                      - reason
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  lastTransitionTime:
+                    description: "lastTransitionTime is the last time the condition
+                      transitioned from one status to another. \n This should be when
+                      the underlying condition changed.  If that is not known, then
+                      using the time when the API field changed is acceptable."
+                    format: date-time
+                    type: string
+                  message:
+                    description: "message is a human readable message indicating details
+                      about the transition. \n This may be an empty string."
+                    maxLength: 32768
+                    type: string
+                  observedGeneration:
+                    description: "observedGeneration represents the .metadata.generation
+                      that the condition was set based upon. \n For instance, if .metadata.generation
+                      is currently 12, but the .status.conditions[x].observedGeneration
+                      is 9, the condition is out of date with respect to the current
+                      state of the instance."
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  reason:
+                    description: "Reason contains a programmatic identifier indicating
+                      the reason for the condition's last transition. \n Producers
+                      of specific condition types may define expected values and meanings
+                      for this field, and whether the values are considered a guaranteed
+                      API. \n The value should be a CamelCase string. \n This field
+                      may not be empty."
+                    maxLength: 1024
+                    minLength: 1
+                    pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                    type: string
+                  status:
+                    description: status of the condition, one of True, False, Unknown.
+                    enum:
+                    - "True"
+                    - "False"
+                    - Unknown
+                    type: string
+                  type:
+                    description: "Type of condition in CamelCase or in foo.example.com/CamelCase.
+                      \n Many .condition.type values are consistent across resources
+                      like Available, but because arbitrary conditions can be useful
+                      (see .node.status.conditions), the ability to deconflict is
+                      important. \n The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)"
+                    maxLength: 316
+                    pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                    type: string
+                  warnings:
+                    description: "Warnings contains a slice of relevant warning subconditions
+                      for this object. \n Subconditions are expected to appear when
+                      relevant (when there is a warning), and disappear when not relevant.
+                      An empty slice here indicates no warnings."
+                    items:
+                      description: "SubCondition is a Condition-like type intended
+                        for use as a subcondition inside a DetailedCondition. \n It
+                        contains a subset of the Condition fields. \n It is intended
+                        for warnings and errors, so `type` names should use abnormal-true
+                        polarity, that is, they should be of the form \"ErrorPresent:
+                        true\". \n The expected lifecycle for these errors is that
+                        they should only be present when the error or warning is,
+                        and should be removed when they are not relevant."
+                      properties:
+                        message:
+                          description: "Message is a human readable message indicating
+                            details about the transition. \n This may be an empty
+                            string."
+                          maxLength: 32768
+                          type: string
+                        reason:
+                          description: "Reason contains a programmatic identifier
+                            indicating the reason for the condition's last transition.
+                            Producers of specific condition types may define expected
+                            values and meanings for this field, and whether the values
+                            are considered a guaranteed API. \n The value should be
+                            a CamelCase string. \n This field may not be empty."
+                          maxLength: 1024
+                          minLength: 1
+                          pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                          type: string
+                        status:
+                          description: Status of the condition, one of True, False,
+                            Unknown.
+                          enum:
+                          - "True"
+                          - "False"
+                          - Unknown
+                          type: string
+                        type:
+                          description: "Type of condition in `CamelCase` or in `foo.example.com/CamelCase`.
+                            \n This must be in abnormal-true polarity, that is, `ErrorFound`
+                            or `controller.io/ErrorFound`. \n The regex it matches
+                            is (dns1123SubdomainFmt/)?(qualifiedNameFmt)"
+                          maxLength: 316
+                          pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                          type: string
+                      required:
+                      - message
+                      - reason
+                      - status
+                      - type
+                      type: object
+                    type: array
+                required:
+                - lastTransitionTime
+                - message
+                - reason
+                - status
+                - type
+                type: object
+              type: array
+              x-kubernetes-list-map-keys:
+              - type
+              x-kubernetes-list-type: map
             currentStatus:
               type: string
             description:

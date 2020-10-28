@@ -64,7 +64,7 @@ Get the password secret.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
     {{- if .Values.auth.existingPasswordSecret -}}
-        {{- printf "%s" .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}

@@ -1,16 +1,17 @@
 apiVersion: v1
 name: redis-cluster
-version: 3.1.5
-appVersion: 6.0.5
+version: 3.2.9
+appVersion: 6.0.8
 description: Open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 keywords:
   - redis
   - keyvalue
   - database
-home: http://redis.io/
+home: https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster
 icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
+  - http://redis.io/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

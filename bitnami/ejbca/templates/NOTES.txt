@@ -1,3 +1,6 @@
+{{- $databaseSecretName := include "ejbca.databaseSecretName" . -}}
+{{- $secretName := include "ejbca.secretName" . -}}
+
 ** Please be patient while the chart is being deployed **
 
 To access your EJBCA site from outside the cluster follow the steps below:
@@ -14,7 +17,6 @@ To access your EJBCA site from outside the cluster follow the steps below:
    echo "EJBCA Admin URL: https://$NODE_IP:$NODE_PORT/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$NODE_IP:$NODE_PORT/ejbca/enrol/keystore.jsp"
 
-
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
@@ -24,7 +26,6 @@ To access your EJBCA site from outside the cluster follow the steps below:
    echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
    echo "EJBCA Admin URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
-
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
@@ -38,10 +39,24 @@ To access your EJBCA site from outside the cluster follow the steps below:
 2. Open a browser and access EJBCA using the obtained URL.
 
 3. In order to be able to log in to the Admin Portal, you first need to enrol and import the generated certificate in your Browser:
-  export EJBCA_ADMIN_USERNAME={{ .Values.ejbcaAdminUsername }}
-  export EJBCA_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ejbca.secretName" . }} -o jsonpath="{.data.ejbca-admin-password}" | base64 --decode)
-  echo Username: $EJBCA_ADMIN_USERNAME
-  echo Password: $EJBCA_ADMIN_PASSWORD
+   export EJBCA_ADMIN_USERNAME={{ .Values.ejbcaAdminUsername }}
+   {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "ejbca-admin-password" "context" $) }}
+   echo Username: $EJBCA_ADMIN_USERNAME
+   echo Password: $EJBCA_ADMIN_PASSWORD
 
 4. You can access the DB using the following password:
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default {{ include "ejbca.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+   {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
+
+{{- $passwordErrors := list -}}
+
+{{- if not .Values.existingSecret -}}
+  {{- $requiredEJBCAPassword := dict "valueKey" "ejbcaAdminPassword" "secret" $secretName "field" "ejbca-admin-password" "context" $ -}}
+  {{- $requiredEJBCAPasswordError := include "common.validations.values.single.empty" $requiredEJBCAPassword -}}
+  {{- $passwordErrors =  append $passwordErrors $requiredEJBCAPasswordError -}}
+{{- end -}}
+
+{{- $mariadbSecretName := include "ejbca.databaseSecretName" . -}}
+{{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $mariadbPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

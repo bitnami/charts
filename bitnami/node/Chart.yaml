@@ -1,16 +1,17 @@
 apiVersion: v1
 name: node
-version: 12.0.1
-appVersion: 10.21.0
+version: 13.1.1
+appVersion: 10.22.1
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
   - node
   - javascript
   - nodejs
   - git
-home: http://nodejs.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
+  - http://nodejs.org/
 maintainers:
   - name: Bitnami
     email: containers@bitnami.com

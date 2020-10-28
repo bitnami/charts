@@ -3,7 +3,7 @@ apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "redis.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -26,15 +26,15 @@ spec:
   runAsUser:
     rule: 'MustRunAs'
     ranges:
-      - min: {{ .Values.securityContext.runAsUser }}
-        max: {{ .Values.securityContext.runAsUser }}
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
   seLinux:
     rule: 'RunAsAny'
   supplementalGroups:
     rule: 'MustRunAs'
     ranges:
-      - min: {{ .Values.securityContext.runAsUser }}
-        max: {{ .Values.securityContext.runAsUser }}
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
   volumes:
     - 'configMap'
     - 'secret'

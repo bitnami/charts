@@ -212,13 +212,12 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
-Return podAnnotations
+Return ZooKeeper Namespace to use
 */}}
-{{- define "zookeeper.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations | nindent 0 }}
-{{- end }}
-{{- if .Values.metrics.podAnnotations }}
-{{- include "zookeeper.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 0 }}
-{{- end }}
+{{- define "zookeeper.namespace" -}}
+    {{- if .Values.namespaceOverride }}
+        {{- .Values.namespaceOverride -}}
+    {{- else }}
+        {{- .Release.Namespace -}}
+    {{- end }}
 {{- end -}}

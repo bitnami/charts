@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.9.20-debian-10-r0
+  tag: 3.9.22-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -262,7 +262,7 @@ ingress:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: drupal.local
+  hostname: joomla.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -327,7 +327,7 @@ persistence:
   ##
   # existingClaim:
 
-  ## If defined, the drupal-data volume will mount to the specified hostPath.
+  ## If defined, the joomla-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
@@ -409,7 +409,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r100
+    tag: 0.8.0-debian-10-r181
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,0 +1,20 @@
+{{- if (include "consul.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  config.json: {{- include "common.tplvalues.render" ( dict "value" .Values.configmap "context" $ ) | nindent 4 }}
+  connection.json: |
+    {
+      "retry_join": ["{{ include "consul.retryjoin.endpoint" . }}"]
+    }
+{{- end }}

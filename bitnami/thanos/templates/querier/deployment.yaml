@@ -57,7 +57,13 @@ spec:
             - --log.level={{ .Values.querier.logLevel }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
+            {{- if kindIs "string" .Values.querier.replicaLabel }}
             - --query.replica-label={{ .Values.querier.replicaLabel }}
+            {{- else }}
+            {{- range .Values.querier.replicaLabel }}
+            - --query.replica-label={{ . }}
+            {{- end }}
+            {{- end }}
             {{- if or (include "thanos.querier.createSDConfigmap" .) .Values.querier.existingSDConfigmap }}
             - --store.sd-files=/conf/servicediscovery.yml
             {{- end }}
@@ -80,15 +86,21 @@ spec:
             {{- end }}
             {{- if .Values.querier.grpcTLS.client.secure }}
             - --grpc-client-tls-secure
+            {{- if .Values.querier.grpcTLS.client.cert }}
             - --grpc-client-tls-cert=/tls/client/cert.pem
+            {{- end }}
+            {{- if .Values.querier.grpcTLS.client.key }}
             - --grpc-client-tls-key=/tls/client/key.pem
+            {{- end }}
+            {{- if .Values.querier.grpcTLS.client.ca }}
             - --grpc-client-tls-ca=/tls/client/ca.pem
+            {{- end }}
             {{- if .Values.querier.grpcTLS.client.servername }}
             - --grpc-client-server-name={{.Values.querier.grpcTLS.client.servername}}
             {{- end }}
             {{- end }}
-            {{- range $key, $value := .Values.querier.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- range .Values.querier.extraFlags }}
+            - {{ . }}
             {{- end }}
           ports:
             - name: http

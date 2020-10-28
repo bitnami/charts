@@ -5,7 +5,7 @@
 ---------------------------------------------------------------------------------------------
  WARNING
 
-    By specifying "rbac.create=false" and "serviceAccount.create=false" it's 
+    By specifying "rbac.create=false" and "serviceAccount.create=false" it's
     likely your pods enter into a "Init:CrashLoopBackOff" status if your
     K8s cluster has RBAC enabled.
 
@@ -64,6 +64,43 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 2. Open a browser and access the Data Flow dashboard using the obtained URL.
 
 {{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.server.composedTaskRunner.image }}
 {{- include "common.warnings.rollingTag" .Values.skipper.image }}
 {{- include "common.warnings.rollingTag" .Values.waitForBackends.image }}
 {{- include "scdf.validateValues" . }}
+
+{{- $passwordErrors := list -}}
+{{- $secretNameMariadb := include "scdf.mariadb.fullname" . -}}
+{{- $secretNameExternalDb := printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
+{{- $secretNameRabbitmq := include "scdf.rabbitmq.fullname" . -}}
+{{- $secretNameExternalRabbitmq := printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+
+{{/* Mysql required password */}}
+{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $secretNameMariadb "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+
+{{/* Rabbitmq required password */}}
+{{- $requiredRabbitmqPassword := dict "valueKey" "rabbitmq.auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password" -}}
+{{- $requiredErlangPassword := dict "valueKey" "rabbitmq.auth.erlangCookie" "secret" $secretNameRabbitmq "field" "rabbitmq-erlang-cookie" -}}
+{{- $requiredRabbitmqPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRabbitmqPassword $requiredErlangPassword) "context" $) -}}
+{{- $passwordErrors =  append $passwordErrors $requiredRabbitmqPasswordErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+
+{{- if .Release.IsUpgrade -}}
+  {{- $passwordWarnings := list -}}
+
+  {{- if not .Values.mariadb.enabled -}}
+    {{- $requiredExternalDbPassword := dict "valueKey" "externalDatabase.password" "secret" $secretNameExternalDb "field" "mariadb-password" -}}
+    {{- $passwordWarnings =  append $passwordWarnings $requiredExternalDbPassword -}}
+  {{- end -}}
+  {{- if and (.Values.externalRabbitmq.enabled) (not .Values.rabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret) -}}
+    {{- $requiredExternalRabbitmqPassword := dict "valueKey" "externalRabbitmq.password" "secret" $secretNameExternalRabbitmq "field" "rabbitmq-password" -}}
+    {{- $passwordWarnings =  append $passwordWarnings $requiredExternalRabbitmqPassword -}}
+  {{- end -}}
+
+  {{- if not (empty $passwordWarnings) -}}
+WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
+    {{- include "common.validations.values.multiple.empty" (dict "required" $passwordWarnings "context" $) -}}
+  {{- end -}}
+{{- end -}}

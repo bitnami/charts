@@ -1,0 +1,18 @@
+{{- if and .Values.kubeProxy.enabled .Values.kubeProxy.endpoints }}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-proxy
+  namespace: {{ .Values.kubeProxy.namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kube-proxy
+subsets:
+  - addresses:
+      {{- range .Values.kubeProxy.endpoints }}
+      - ip: {{ . }}
+      {{- end }}
+    ports:
+      - name: http-metrics
+        port: {{ .Values.kubeProxy.service.port }}
+        protocol: TCP
+{{- end }}

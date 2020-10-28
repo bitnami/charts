@@ -2,7 +2,7 @@
 
 [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -109,7 +109,7 @@ The following table lists the configurable parameters of the kube-state-metrics 
 | `service.loadBalancerSourceRanges`           | Address that are allowed when svc is `LoadBalancer`                                                           | `[]`                                                       |
 | `service.annotations`                        | Additional annotations for kube-state-metrics service                                                         | `{}`                                                       |
 | `service.labels`                             | Additional labels for kube-state-metrics service                                                              | `{}`                                                       |
-| `hostNetwork`                                | Expose the service to the host network                                                                        | `true`                                                     |
+| `hostNetwork`                                | Enable hostNetwork mode                                                                                       | `false`                                                    |
 | `priorityClassName`                          | Priority class assigned to the Pods                                                                           | `nil`                                                      |
 | `resources`                                  | Resource requests/limit                                                                                       | `{}`                                                       |
 | `replicaCount`                               | Desired number of controller pods                                                                             | `1`                                                        |

@@ -15,7 +15,7 @@ name: controller
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.33.0-debian-10-r0
+  tag: 0.40.2-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,6 +35,14 @@ image:
 ## String to fully override nginx-ingress-controller.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Custom configuration options for NGINX
 ## ref: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
@@ -65,7 +73,7 @@ dnsPolicy: ClusterFirst
 ## Required only if defaultBackend.enabled = false
 ## Must be <namespace>/<service_name>
 ##
-defaultBackendService: ""
+defaultBackendService: ''
 
 ## Election ID to use for status update
 ##
@@ -88,7 +96,7 @@ publishService:
   ## Allows overriding of the publish service to bind to
   ## Must be <namespace>/<service_name>
   ##
-  pathOverride: ""
+  pathOverride: ''
 
 ## Limit the scope of the controller
 ## Defaults to `.Release.Namespace`
@@ -99,21 +107,21 @@ scope:
 ## Allows customization of the configmap / nginx-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-configMapNamespace: ""
+configMapNamespace: ''
 
 ## Allows customization of the tcp-services-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-tcpConfigMapNamespace: ""
+tcpConfigMapNamespace: ''
 
 ## Allows customization of the udp-services-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-udpConfigMapNamespace: ""
+udpConfigMapNamespace: ''
 
 ## License key used to download Geolite2 database
 ##
-maxmindLicenseKey: ""
+maxmindLicenseKey: ''
 
 ## Additional command line arguments to pass to nginx-ingress-controller
 ## E.g. to specify the default SSL certificate you can use
@@ -226,7 +234,7 @@ lifecycle: {}
 ## priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
-priorityClassName: ""
+priorityClassName: ''
 
 ## Rollback limit
 ##
@@ -297,12 +305,11 @@ extraVolumes: []
 ##     command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
 extraInitContainers: []
 
-
 ## Override NGINX template
 ##
 customTemplate:
-  configMapName: ""
-  configMapKey: ""
+  configMapName: ''
+  configMapKey: ''
 
 ## Service parameters
 ##
@@ -319,8 +326,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    http: ""
-    https: ""
+    http: ''
+    https: ''
     tcp: {}
     udp: {}
 
@@ -354,7 +361,7 @@ service:
   ## Set external traffic policy to: "Local" to preserve source IP on providers supporting it
   ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
   ##
-  externalTrafficPolicy: ""
+  externalTrafficPolicy: ''
   healthCheckNodePort: 0
 
 ## Default 404 backend
@@ -370,7 +377,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.0-debian-10-r0
+    tag: 1.19.3-debian-10-r13
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -439,12 +446,14 @@ defaultBackend:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
   livenessProbe:
+    path: /
     failureThreshold: 3
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
   readinessProbe:
+    path: /
     failureThreshold: 6
     initialDelaySeconds: 0
     periodSeconds: 5
@@ -478,8 +487,8 @@ metrics:
     ## Annotations for the Prometheus exporter service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.port }}'
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -488,17 +497,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    # interval: 10s
-
+    interval: 30s
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -508,7 +514,7 @@ metrics:
   prometheusRule:
     enabled: false
     additionalLabels: {}
-    namespace: ""
+    namespace: ''
     rules: []
 
 ## Role Based Access
@@ -518,6 +524,19 @@ rbac:
   ## Specifies whether RBAC rules should be created
   ##
   create: true
+
+## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+##
+## topologySpreadConstraints:
+##   - maxSkew: 1
+##     topologyKey: failure-domain.beta.kubernetes.io/zone
+##     whenUnsatisfiable: DoNotSchedule
+##     labelSelector:
+##       matchLabels:
+##         app.kubernetes.io/instance: ingress-nginx-internal
+##
+topologySpreadConstraints: []
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -529,6 +548,11 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the metrics-server.fullname template
   # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
 
 ## If true, create & use Pod Security Policy resources
 ## https://kubernetes.io/docs/concepts/policy/pod-security-policy/

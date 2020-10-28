@@ -1,5 +1,5 @@
 {{- if not .Values.ingress.enabled }}
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
