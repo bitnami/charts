@@ -377,6 +377,10 @@ This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMoun
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Notable changes
 
 ### 6.5.0

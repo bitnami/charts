@@ -457,6 +457,10 @@ imagePullSecrets:
 
 1. Install the chart
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 ### 1.0.0

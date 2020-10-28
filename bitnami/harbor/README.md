@@ -833,6 +833,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
@@ -851,12 +855,13 @@ You can find more information about the changes in the PostgreSQL subchart and a
 
 Due to an issue with Trivy volumeClaimTemplates, the upgrade needs to be done in two steps:
 
-  - Upgrade the chart to 6.0.2 with `trivy.enabled=false`
+- Upgrade the chart to 6.0.2 with `trivy.enabled=false`
 
 ```console
 $ helm upgrade bitnami/chart --version 6.0.2 --set trivy.enabled=false <REST OF THE UPGRADE PARAMETERS>
 ```
-  - Execute a new upgrade setting `trivy.enabled=true`
+
+- Execute a new upgrade setting `trivy.enabled=true`
 
 ```console
 $ helm upgrade bitnami/chart --set trivy.enabled=true <REST OF THE UPGRADE PARAMETERS>
@@ -868,8 +873,8 @@ The chart was changed to adapt to the common Bitnami chart standards. Now it inc
 
 No issues are expected between upgrades but please double check the updated parameter list as some of them could have been renamed. Please pay special attention to the following changes:
 
-  - `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
-  - `secretKey` has been moved to `core.secretKey`.
+- `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
+- `secretKey` has been moved to `core.secretKey`.
 
 ## 4.0.0
 
