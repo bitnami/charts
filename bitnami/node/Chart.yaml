@@ -1,7 +1,7 @@
 apiVersion: v1
 name: node
-version: 13.1.1
-appVersion: 10.22.1
+version: 13.1.2
+appVersion: 10.23.0
 description: Event-driven I/O server-side JavaScript environment based on V8
 keywords:
   - node

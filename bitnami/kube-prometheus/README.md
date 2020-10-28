@@ -487,6 +487,10 @@ prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
 ```
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 ```bash

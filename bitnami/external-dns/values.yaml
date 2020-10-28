@@ -277,6 +277,8 @@ infoblox:
   view: ""
   ## Optional keys
   ##
+  ## Existing secret name, when in place wapiUsername and wapiPassword are not required
+  ## secretName: ""
   domainFilter: ""
   noSslVerify: false
   wapiPort: ""

@@ -488,6 +488,10 @@ persistence:
   ##
   size: 8Gi
 
+  volumes:
+  #  - name: volume_name
+  #    emptyDir: {}
+
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##

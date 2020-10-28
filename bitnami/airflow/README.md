@@ -369,9 +369,17 @@ This chart allows you to set your custom affinity using the `affinity` paremeter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Install extra python packages
+
+This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMounts` in all 3 airflow components (web, scheduler, worker). Mounting a requirements.txt using these options to `/bitnami/python/requirements.txt` will execute `pip install -r /bitnami/python/requirements.txt` on container start. [Reference](https://github.com/bitnami/bitnami-docker-airflow/blob/cafc8eab1efddb5efda5a00cc861ef10f35f1d49/1/debian-10/rootfs/run.sh#L14)
+
 ## Persistence
 
 The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 

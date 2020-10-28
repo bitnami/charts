@@ -372,7 +372,7 @@ spec:
             - name: EXTERNAL_DNS_INFOBLOX_HTTP_REQUEST_TIMEOUT
               value: "{{ .Values.infoblox.wapiHttpTimeout }}"
             {{- end }}
-            {{- if and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword }}
+            {{- if or (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (.Values.infoblox.secretName) }}
             - name: EXTERNAL_DNS_INFOBLOX_WAPI_USERNAME
               valueFrom:
                 secretKeyRef:
