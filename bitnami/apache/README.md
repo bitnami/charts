@@ -152,7 +152,7 @@ The Apache chart allows you to deploy a custom web application using one of the 
 - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
 - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
 
-Learn more about this in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/apache/get-started/deploy-custom-application/).
+Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/apache/get-started/deploy-custom-application/) for more information.
 
 ### Setting Pod's affinity
 
