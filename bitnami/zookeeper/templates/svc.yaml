@@ -19,7 +19,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if and (.Values.service.loadBalancerIP) (eq $.Values.service.type "LoadBalancer") }}
+  {{- if and (.Values.service.loadBalancerIP) (eq .Values.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
