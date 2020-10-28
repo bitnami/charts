@@ -15,12 +15,12 @@ spec:
     - name: {{ .Values.service.clientPortNameOverride }}
     {{- end }}
       port: {{ .Values.service.port  }}
-      targetPort: {{ .Values.service.clientPortNameOverride }}
+      targetPort: client
     {{- if .Values.auth.peer.secureTransport }}
     - name: {{ .Values.service.peerPortNameOverride }}-ssl
     {{- else}}
     - name: {{ .Values.service.peerPortNameOverride }}
     {{- end }}
       port: {{ .Values.service.peerPort  }}
-      targetPort: {{ .Values.service.peerPortNameOverride }}
+      targetPort: peer
   selector: {{- include "etcd.matchLabels" . | nindent 4 }}
