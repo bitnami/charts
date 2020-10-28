@@ -1,5 +1,5 @@
 {{- if .Values.replication.enabled }}
-{{- $slaveResources := coalesce .Values.slave.resources .Values.resources -}}
+{{- $readReplicasResources := coalesce .Values.readReplicas.resources .Values.resources -}}
 apiVersion: {{ template "postgresql.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -135,8 +135,8 @@ spec:
         - name: {{ template "postgresql.fullname" . }}
           image: {{ template "postgresql.image" . }}
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-          {{- if $slaveResources }}
-          resources: {{- toYaml $slaveResources | nindent 12 }}
+          {{- if $readReplicasResources }}
+          resources: {{- toYaml $readReplicasResources | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -368,7 +368,7 @@ spec:
             medium: Memory
             sizeLimit: 1Gi
         {{- end }}
-        {{- if or (not .Values.persistence.enabled) (not .Values.slave.persistence.enabled) }}
+        {{- if or (not .Values.persistence.enabled) (not .Values.readReplicas.persistence.enabled) }}
         - name: data
           emptyDir: {}
         {{- end }}
@@ -380,7 +380,7 @@ spec:
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
     rollingUpdate: null
     {{- end }}
-{{- if and .Values.persistence.enabled .Values.slave.persistence.enabled }}
+{{- if and .Values.persistence.enabled .Values.readReplicas.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data

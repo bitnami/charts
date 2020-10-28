@@ -200,14 +200,14 @@ extraEnv: []
 ##
 # postgresqlExtendedConf:
 
-## Configure current cluster's master server to be the standby server in other cluster.
+## Configure current cluster's primary server to be the standby server in other cluster.
 ## This will allow cross cluster replication and provide cross cluster high availability.
 ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.
 ##
-masterAsStandBy:
+primaryAsStandBy:
   enabled: false
-  #  masterHost:
-  #  masterPort:
+  #  primaryHost:
+  #  primaryPort:
 
 ## PostgreSQL client authentication configuration
 ## Specify content for pg_hba.conf
@@ -512,12 +512,12 @@ readReplicas:
   # type:
   # nodePort:
   # clusterIP:
-  ## Whether to enable PostgreSQL slave replicas data Persistent
+  ## Whether to enable PostgreSQL readReplicas replicas data Persistent
   ##
   persistence:
     enabled: true
 
-  # Override the resource configuration for slave
+  # Override the resource configuration for readReplicas
   resources: {}
   # requests:
   #   memory: 256Mi

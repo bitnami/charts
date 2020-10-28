@@ -167,15 +167,15 @@ spec:
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
             {{- end }}
-            {{- if .Values.masterAsStandBy.enabled }}
+            {{- if .Values.primaryAsStandBy.enabled }}
             - name: POSTGRES_MASTER_HOST
-              value: {{ .Values.masterAsStandBy.masterHost }}
+              value: {{ .Values.primaryAsStandBy.primaryHost }}
             - name: POSTGRES_MASTER_PORT_NUMBER
-              value: {{ .Values.masterAsStandBy.masterPort | quote }}
+              value: {{ .Values.primaryAsStandBy.primaryPort | quote }}
             {{- end }}
-            {{- if or .Values.replication.enabled .Values.masterAsStandBy.enabled }}
+            {{- if or .Values.replication.enabled .Values.primaryAsStandBy.enabled }}
             - name: POSTGRES_REPLICATION_MODE
-            {{- if .Values.masterAsStandBy.enabled }}
+            {{- if .Values.primaryAsStandBy.enabled }}
               value: "slave"
             {{- else }}
               value: "master"
