@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "common.names.fullname" . }}-scheduler
+  name: {{ include "common.names.fullname" . }}-worker
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: scheduler
+    app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
