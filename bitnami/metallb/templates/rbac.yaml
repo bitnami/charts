@@ -1,4 +1,4 @@
-{{- if .Values.rbac.create and (.Values.controller.rbac.create or .Values.speaker.rbac.create ) -}}
+{{- if and .Values.rbac.create (or .Values.controller.rbac.create .Values.speaker.rbac.create ) -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
