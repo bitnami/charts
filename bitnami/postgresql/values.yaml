@@ -488,10 +488,16 @@ slave:
   podLabels: {}
   podAnnotations: {}
   priorityClassName: ''
-  extraInitContainers: |
-    # - name: do-something
-    #   image: busybox
-    #   command: ['do', 'something']
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+
   ## Additional PostgreSQL Slave Volume mounts
   ##
   extraVolumeMounts: []

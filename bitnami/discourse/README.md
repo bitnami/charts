@@ -261,8 +261,8 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 ```console
 $ helm install my-release bitnami/discourse
 ...
-export APP_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
-export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default my-release-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default my-release-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 ...
 ```
 
@@ -277,7 +277,7 @@ my-release-redis-master-0               1/1     Running   0          5m11s
 
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 ```console
-$ helm upgrade my-release --set replicaCount=2,discourse.password=$APP_PASSWORD,postgresql.postgresqlPassword=$APP_DATABASE_PASSWORD,discourse.skipInstall=true bitnami/discourse
+$ helm upgrade my-release --set replicaCount=2,discourse.password=$DISCOURSE_PASSWORD,postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD,discourse.skipInstall=true bitnami/discourse
 ```
 
 Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
@@ -457,7 +457,83 @@ imagePullSecrets:
 
 1. Install the chart
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
+
+### 1.0.0
+
+This new major version includes the following changes:
+
+* PostgreSQL dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) for more information.
+* Redis dependency version was bumped to a new major version `11.X.X`, which includes breaking changes regarding sentinel. Discourse does not use this type of setup, so no issues are expected to happen in this case. Check [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for more information.
+* Some non-breaking changes so as to use the `bitnami/common` library chart.
+
+As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `1.0.0` there are two alternatives:
+
+* Install a new Discourse chart, and migrate your Discourse site using the [built-in backup/restore feature](https://meta.discourse.org/t/create-download-and-restore-a-backup-of-your-discourse-database/122710).
+
+* Reuse the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below.
+
+> NOTE: Please, make sure to create or have a backup of your database before running any of those actions.
+
+1. Old version is up and running
+
+  ```console
+  $ helm ls
+  NAME	    NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART          	APP VERSION
+  discourse 	default  	2       	2020-10-22 12:10:16.454369 +0200 CEST	deployed	discourse-0.5.1	2.5.3
+
+  $ kubectl get pods
+  NAME                                   READY   STATUS    RESTARTS   AGE
+  discourse-discourse-7554ddb864-d55ls   2/2     Running   0          3s
+  discourse-postgresql-0                 1/1     Running   0          16s
+  discourse-redis-master-0               1/1     Running   0          16s
+  ```
+
+2. Export both PostgreSQL and Discourse credentials in order to provide them in the update
+
+  ```console
+  $ export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse-discourse-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+
+  $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  ```
+
+  > NOTE: You will need to export Redis credentials as well if your setup makes use of them.
+
+3. Scale down the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter.
+
+  ```console
+  $ kubectl scale --replicas 0 deployment.apps/discourse-discourse
+  deployment.apps/discourse-discourse scaled
+
+  $ kubectl delete statefulset.apps/discourse-postgresql --cascade=false
+  statefulset.apps "discourse-postgresql" deleted
+  ```
+
+4. Now the upgrade works
+
+  ```console
+  $ helm upgrade discourse bitnami/discourse --set discourse.password=$DISCOURSE_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD --set skipInstall=true
+  $ helm ls
+  NAME	      NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART      	APP VERSION
+  discourse 	default  	3       	2020-10-22 13:03:33.876084 +0200 CEST	deployed	discourse-1.0.0	2.5.3
+  ```
+
+5. You can kill the existing PostgreSQL pod and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod discourse-postgresql-0
+  pod "discourse-postgresql-0" deleted
+
+  $ kubectl get pods
+  NAME                                   READY   STATUS    RESTARTS   AGE
+  discourse-discourse-58fff99578-2xbjq   2/2     Running   3          5m4s
+  discourse-postgresql-0                 1/1     Running   0          3m42s
+  discourse-redis-master-0               1/1     Running   0          4m58s
+  ```
 
 ### 0.4.0
 
