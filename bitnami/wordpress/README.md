@@ -269,13 +269,13 @@ Sometimes, you may want to have WordPress use an external database rather than u
 
 The Bitnami WordPress chart supports external databases through its `externalDatabase.*` parameters. When using these parameters, it is important to disable installation of the bundled MariaDB database using the `mariadb.enabled=false` parameter.
 
-Refer to the [documentation on using an external database with WordPress](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/use-existing-database/) and the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
+Refer to the [documentation on using an external database with WordPress](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/use-existing-database/) and the [guide on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
 
 ### Ingress
 
 This chart supports Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), is installed in the cluster, that Ingress controller can be used to serve WordPress. To enable Ingress integration, set the `ingress.enabled` parameter to `true`.
 
-The chart also supports using multiple host names and TLS secrets with Ingress. For more information, refer to the [documentation on configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/configure-use-ingress/) and the [tutorial on integrating WordPress with TLS and Let's Encrypt](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/).
+The chart also supports using multiple host names and TLS secrets with Ingress. For more information, refer to the [documentation on configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/configure-use-ingress/) and the [guide on integrating WordPress with TLS and Let's Encrypt](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/).
 
 ### Disabling `.htaccess`
 
@@ -292,7 +292,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ## Upgrading
 
-Information on upgrading WordPress is available in the [tutorial on performing rolling upgrades with WordPress](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/#perform-rolling-upgrades).
+Information on upgrading WordPress is available in the [guide on performing rolling upgrades with WordPress](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/#perform-rolling-upgrades).
 
 ### To 9.0.0
 
