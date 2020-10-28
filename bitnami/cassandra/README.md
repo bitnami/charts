@@ -163,6 +163,7 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `persistence.annotations`                 | Persistent Volume Claim annotations Annotations                                                                      | `{}` (evaluated as a template)                               |
 | `persistence.accessMode`                  | PVC Access Mode for Cassandra data volume                                                                            | `[ReadWriteOnce]`                                            |
 | `persistence.size`                        | PVC Storage Request for Cassandra data volume                                                                        | `8Gi`                                                        |
+| `persistence.mountPath`                   | The path the volume will be mounted at                                                                               | `/bitnami/cassandra`                                         |
 
 ### Volume Permissions parameters
 

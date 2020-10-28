@@ -73,13 +73,13 @@ spec:
             - |
               {{- if .Values.persistence.enabled }}
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-              chown `id -u`:`id -G | cut -d " " -f2` /bitnami/cassandra
+              chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
               {{- else }}
-              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/cassandra
+              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               {{- end }}
-              mkdir -p /bitnami/cassandra/data
-              chmod 700 /bitnami/cassandra/data
-              find /bitnami/cassandra -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              mkdir -p {{ .Values.persistence.mountPath }}/data
+              chmod 700 {{ .Values.persistence.mountPath }}/data
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
                 xargs chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
@@ -96,7 +96,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/cassandra
+              mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -260,10 +260,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/cassandra
+              mountPath: {{ .Values.persistence.mountPath }}
             {{- if .Values.tlsEncryptionSecretName }}
             - name: encryption-secrets
-              mountPath: /bitnami/cassandra/secrets
+              mountPath: {{ .Values.persistence.mountPath }}/secrets
             {{- end }}
             {{- if .Values.initDBConfigMap }}
             - name: init-db-cm
@@ -275,7 +275,7 @@ spec:
             {{- end }}
             {{ if .Values.existingConfiguration }}
             - name: configurations
-              mountPath: /bitnami/cassandra/conf
+              mountPath: {{ .Values.persistence.mountPath }}/conf
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
