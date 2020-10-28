@@ -294,7 +294,7 @@ ingress:
 
 ## Persistence
 
-The [Bitnami Container Image for Moodle(TM)](https://github.com/bitnami/bitnami-docker-moodle) image stores the Moodle(TM) data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
+The [Bitnami Container Image for Moodle(TM)](https://github.com/bitnami/bitnami-docker-moodle) stores the Moodle(TM) data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, vpshere, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
