@@ -1,4 +1,4 @@
-{{ if .Values.rbac.create }}
+{{- if .Values.rbac.create and .Values.speaker.rbac.create -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

@@ -1,4 +1,4 @@
-{{- if .Values.psp.create -}}
+{{- if .Values.psp.create and .Values.speaker.psp.create -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:

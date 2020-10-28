@@ -37,10 +37,15 @@ configInline: {}
 ##
 # fullnameOverride:
 
+## RBAC creation for controller and speaker
+##
 rbac:
-  # create specifies whether to install and use RBAC rules.
+  ## create specifies whether to install and use RBAC rules.
+  ## 
   create: true
 
+## PSP creation for controller and speaker
+##
 psp:
   # create specifies whether to install Pod Security Policies.
   create: false
@@ -58,7 +63,7 @@ commonLabels: {}
 commonAnnotations: {}
 
 ## Metallb Controller deployment.
-## ref: https://hub.docker.com/r/metallb/controller/tags
+## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
 controller:
   image:
     registry: docker.io
@@ -76,6 +81,24 @@ controller:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## If global .Values.rbac.create is disabled no rbac is created.
+  ## This value is then meaningless
+  ## Defines if the controller rbac should be created.
+  ##
+  rbac:
+    ## create specifies whether to install and use RBAC rules.
+    ## 
+    create: true
+
+  ## If global .Values.psp.create is disabled no psp is created.
+  ## This value is then meaningless
+  ## Defines if the controller psp should be created.
+  ##
+  psp:
+    ## create specifies whether to install Pod Security Policies.
+    ##
+    create: true
+
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -91,17 +114,17 @@ controller:
     #   memory: 25Mi
     #   cpu: 25m
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
   ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
 
@@ -122,13 +145,13 @@ controller:
   podAffinityPreset: ""
 
   ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
 
   ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
@@ -157,7 +180,7 @@ controller:
 
 
   ## Pod securityContext
-  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
@@ -171,12 +194,12 @@ controller:
       - ALL
 
   ## Configure the revisionHistoryLimit of the Controller deployment
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
   ##
   revisionHistoryLimit: 3
 
   ## Configure the grace time period for sig term
-  ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
   ##
   terminationGracePeriodSeconds: 0
 
@@ -186,7 +209,7 @@ controller:
     metrics: 7472
 
   ## Liveness and readiness probe values
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
     enabled: true
@@ -204,19 +227,23 @@ controller:
     timeoutSeconds: 1
 
   prometheus:
-    # Prometheus Operator service monitors
+    ## Prometheus Operator service monitors
+    ##
     serviceMonitor:
-      # enable support for Prometheus Operator
+      ## enable support for Prometheus Operator
+      ##
       enabled: false
-      # Job label for scrape target
+      ## Job label for scrape target
+      ##
       jobLabel: "app.kubernetes.io/name"
-      # Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ##
       interval: ""
       metricRelabelings: []
       relabelings: []
 
 ## Metallb Speaker daemonset.
-## ref: https://hub.docker.com/r/metallb/speaker/tags
+## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 speaker:
   image:
     registry: docker.io
@@ -234,6 +261,24 @@ speaker:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## If global .Values.rbac.create is disabled no rbac is created.
+  ## This value is then meaningless
+  ## Defines if the speaker rbac should be created.
+  ##
+  rbac:
+    ## create specifies whether to install and use RBAC rules.
+    ## 
+    create: true
+
+  ## If global .Values.psp.create is disabled no psp is created.
+  ## This value is then meaningless
+  ## Defines if the speaker psp should be created.
+  ##
+  psp:
+    ## create specifies whether to install Pod Security Policies.
+    ##
+    create: true
+
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -249,17 +294,17 @@ speaker:
     #   memory: 25Mi
     #   cpu: 25m
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
   ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
 
@@ -284,7 +329,7 @@ speaker:
   ##
   daemonset:
     ## Configure the grace time period for sig term
-    ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+    ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
     ##
     terminationGracePeriodSeconds: 2
     ## HTTP Metrics Endpoint
@@ -301,7 +346,7 @@ speaker:
   # secretKey:
 
   ## Pod securityContext
-  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
@@ -325,7 +370,7 @@ speaker:
   extraEnvVars: []
 
   ## Liveness and readiness probe values
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
     enabled: true
@@ -343,13 +388,17 @@ speaker:
     timeoutSeconds: 1
 
   prometheus:
-    # Prometheus Operator service monitors
+    ## Prometheus Operator service monitors
+    ##
     serviceMonitor:
-      # enable support for Prometheus Operator
+      ## enable support for Prometheus Operator
+      ##
       enabled: false
-      # Job label for scrape target
+      ## Job label for scrape target
+      ##
       jobLabel: "app.kubernetes.io/name"
-      # Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ##
       interval: ""
       metricRelabelings: []
       relabelings: []

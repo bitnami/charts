@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: metallb
 description: The Metal LB for Kubernetes
 version: 1.0.0
@@ -24,3 +24,8 @@ maintainers:
     email: containers@bitnami.com
 annotations:
   category: Infrastructure
+
+dependencies:
+  - name: common
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami

@@ -1,4 +1,4 @@
-{{ if .Values.rbac.create }}
+{{- if .Values.rbac.create and (.Values.controller.rbac.create or .Values.speaker.rbac.create ) -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -33,10 +33,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 subjects:
+{{- if .Values.controller.rbac.create }}
 - kind: ServiceAccount
   name: {{ include "metallb.controllerServiceAccountName" . }}
+{{- end }}
+{{- if .Values.speaker.rbac.create }}
 - kind: ServiceAccount
   name: {{ include "metallb.speakerServiceAccountName" . }}
+{{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
