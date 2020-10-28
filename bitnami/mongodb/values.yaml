@@ -91,15 +91,15 @@ auth:
 
 tls:
  ## Enable or disable MongoDB TLS Support
-  enabled: true
+  enabled: false
  ##
- ## Bitnami Nginix image
+ ## Bitnami Nginx image
  ##
   image:
     registry: docker.io
     repository: bitnami/nginx
     tag: 1.19.3
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
