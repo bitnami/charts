@@ -281,7 +281,7 @@ The chart also supports using multiple host names and TLS secrets with Ingress. 
 
 For performance and security reasons, it is a good practice to configure Apache with `AllowOverride None`. Instead of using `.htaccess` files, Apache will load the same directives at boot time. These directives are located in `/opt/bitnami/wordpress/wordpress-htaccess.conf`. By default, the container image includes all of the default `.htaccess` files in WordPress (together with the default plugins). To enable this feature, install the chart with the value `allowOverrideNone=yes`
 
-For more complex requirements involving `.htaccess` files, refer to the [documentation on working with `.htaccess` files](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/disable-htaccess/).
+For more complex requirements involving `.htaccess` files, refer to the [documentation on working with `.htaccess` files](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/understand-htaccess/).
 
 ## Persistence
 
