@@ -200,72 +200,27 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Production configuration
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Force users to specify a password:
-```diff
-- root.forcePassword: false
-+ root.forcePassword: true
-
-- db.forcePassword: false
-+ db.forcePassword: true
-
-- replication.forcePassword: false
-+ replication.forcePassword: true
-```
-
-- Desired number of slave replicas:
-```diff
-- slave.replicas: 1
-+ slave.replicas: 2
-```
-
-- Start a side-car prometheus exporter:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
+This chart includes a `values-production.yaml` file which contains modifications suited for production environments. Use this file in production environments instead of the default `values.yaml` file. Refer to the [chart documentation for examples](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/production-configuration/) of these modifications.
 
 ### Change MySQL version
 
 To modify the MySQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mysql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
-### Initialize a fresh instance
+### Customize a new MySQL instance
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
-Take into account those scripts are treated differently depending on the extension. While the `.sh` scripts are executed in all the nodes; the `.sql` and `.sql.gz` scripts are only executed in the primary nodes. The reason behind this differentiation is that the `.sh` scripts allow adding conditions to determine what is the node running the script, while these conditions can't be set using `.sql` nor `sql.gz` files. This way it is possible to cover different use cases depending on their needs.
-
-If using a `.sh` script you want to do a "one-time" action like creating a database, you need to add a condition in your `.sh` script to be executed only in one of the nodes, such as
-
-```yaml
-initdbScripts:
-  my_init_script.sh: |
-     #!/bin/sh
-     if [[ $(hostname) == *master* ]]; then
-       echo "Master node"
-       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
-     else
-       echo "No master node"
-     fi
-```
+Refer to the [chart documentation for more information and a usage example](http://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/customize-new-instance/).
 
 ## Persistence
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+[Learn more about chart persistence](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/chart-persistence/).
 
 ## Upgrading
 
