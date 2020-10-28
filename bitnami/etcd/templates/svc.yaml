@@ -15,7 +15,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - name: client
+    - name: {{ .Values.service.clientPortNameOverride }}
       port: {{ .Values.service.port  }}
       targetPort: client
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientPort)) }}
@@ -23,7 +23,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: peer
+    - name: {{ .Values.service.peerPortNameOverride }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.peerPort)) }}
