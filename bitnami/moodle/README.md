@@ -1,6 +1,6 @@
-# Moodle
+# Moodle(TM) LMS
 
-[Moodle](https://www.moodle.org) is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
+[Moodle](https://www.moodle.org)(TM) LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
 
 ## TL;DR
 
@@ -11,9 +11,9 @@ $ helm install my-release bitnami/moodle
 
 ## Introduction
 
-This chart bootstraps a [Moodle](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Moodle](https://github.com/bitnami/bitnami-docker-moodle)(TM) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle application.
+It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle(TM) application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -32,7 +32,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/moodle
 ```
 
-The command deploys Moodle on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Moodle(TM) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Moodle chart and their default values per section/component:
+The following table lists the configurable parameters of the Moodle(TM) chart and their default values per section/component:
 
 ### Global parameters
 
@@ -74,7 +74,7 @@ The following table lists the configurable parameters of the Moodle chart and th
 | `commonAnnotations`                         | Annotations to add to all deployed objects                                                                            | `[]`                                                         |
 | `extraDeploy`                               | Array of extra objects to deploy with the release (evaluated as a template).                                          | `nil`                                                        |
 
-### Moodle parameters
+### Moodle(TM) parameters
 
 | Parameter                                   | Description                                                                                                           | Default                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
@@ -226,7 +226,7 @@ $ helm install my-release \
     bitnami/moodle
 ```
 
-The above command sets the Moodle administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Moodle(TM) administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -294,11 +294,11 @@ ingress:
 
 ## Persistence
 
-The [Bitnami Moodle](https://github.com/bitnami/bitnami-docker-moodle) image stores the Moodle data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
+The [Bitnami Container Image for Moodle(TM)](https://github.com/bitnami/bitnami-docker-moodle) image stores the Moodle(TM) data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, vpshere, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/) and update as required. By default, it's set to delete, and when Moodle is uninstalled, data is also removed.
+You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/) and update as required. By default, it's set to delete, and when Moodle(TM) is uninstalled, data is also removed.
 
 ## Troubleshooting
 
@@ -310,7 +310,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Moodle data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `moodle`):
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Moodle(TM) data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `moodle`):
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
@@ -323,7 +323,7 @@ export MARIADB_PASSWORD=$(kubectl get secret --namespace default moodle-mariadb 
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=moodle -o jsonpath="{.items[0].metadata.name}")
 ```
 
-Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle replicas to 0:
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle(TM) replicas to 0:
 
 ```console
 $ helm upgrade moodle bitnami/moodle --set moodlePassword=$MOODLE_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
@@ -347,9 +347,9 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 8.0.0
 
-The [Bitnami Moodle](https://github.com/bitnami/bitnami-docker-moodle) image was updated to support "non-root" user approach, however, **it is not enabled by default**. The container still runs as the `root` user and the Apache daemon is started as the `daemon` user, due to running Cron as a service, which requires running as root.
+The [Bitnami Container Image for Moodle(TM)](https://github.com/bitnami/bitnami-docker-moodle) was updated to support "non-root" user approach, however, **it is not enabled by default**. The container still runs as the `root` user and the Apache daemon is started as the `daemon` user, due to running Cron as a service, which requires running as root.
 
-If you want to run with a non-root user, you need to set `podSecurityContext.enabled=true` and `containerSecurity.context.enabled=true`. In addition to that, you will also need to change the default Apache HTTP ports to run as a non-privileged user by setting `containerPorts.http` and `containerPorts.https` to a non-privileged port number (higher than 1024, i.e. 8080 and 8443, respectively). Note that, when running as a non-root user, Cron will not supported and therefore scheduled tasks will not be enabled for Moodle.
+If you want to run with a non-root user, you need to set `podSecurityContext.enabled=true` and `containerSecurity.context.enabled=true`. In addition to that, you will also need to change the default Apache HTTP ports to run as a non-privileged user by setting `containerPorts.http` and `containerPorts.https` to a non-privileged port number (higher than 1024, i.e. 8080 and 8443, respectively). Note that, when running as a non-root user, Cron will not supported and therefore scheduled tasks will not be enabled for Moodle(TM).
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
