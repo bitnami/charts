@@ -18,151 +18,151 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-    {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
       {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.podAnnotations }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-    {{- end }}
+      {{- end }}
     spec:
       {{- include "suitecrm.imagePullSecrets" . | nindent 6 }}
       hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
+        - ip: "127.0.0.1"
+          hostnames:
+          - "status.localhost"
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
          fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       containers:
-      - name: {{ include "suitecrm.fullname" . }}
-        image: {{ include "suitecrm.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        {{- if .Values.containerSecurityContext.enabled }}
-        securityContext:
-          runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
-        {{- end }}
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword | quote }}
-        - name: SUITECRM_VALIDATE_USER_IP
-          value: {{ .Values.suitecrmValidateUserIP | quote }}
-        {{- if .Values.mariadb.enabled }}
-        - name: MARIADB_HOST
-          value: {{ template "suitecrm.mariadb.fullname" . }}
-        - name: MARIADB_PORT_NUMBER
-          value: "3306"
-        - name: SUITECRM_DATABASE_NAME
-          value: {{ .Values.mariadb.db.name | quote }}
-        - name: SUITECRM_DATABASE_USER
-          value: {{ .Values.mariadb.db.user | quote }}
-        - name: SUITECRM_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "suitecrm.mariadb.fullname" . }}
-              key: mariadb-password
-        {{- else }}
-        - name: MARIADB_HOST
-          value: {{ .Values.externalDatabase.host | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ .Values.externalDatabase.port | quote }}
-        - name: SUITECRM_DATABASE_NAME
-          value: {{ .Values.externalDatabase.database | quote }}
-        - name: SUITECRM_DATABASE_USER
-          value: {{ .Values.externalDatabase.user | quote }}
-        - name: SUITECRM_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
-        {{- end }}
-        - name: SUITECRM_HOST
-{{- $port:=.Values.service.port | toString }}
-          value: "{{ include "host" . }}:{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}"
-        - name: SUITECRM_USERNAME
-          value: {{ .Values.suitecrmUsername | quote }}
-        - name: SUITECRM_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "suitecrm.fullname" . }}
-              key: suitecrm-password
-        - name: SUITECRM_EMAIL
-          value: {{ .Values.suitecrmEmail | quote }}
-        - name: SUITECRM_LAST_NAME
-          value: {{ .Values.suitecrmLastName | quote }}
-        - name: SUITECRM_SMTP_HOST
-          value: {{ .Values.suitecrmSmtpHost | quote }}
-        - name: SUITECRM_SMTP_PORT
-          value: {{ .Values.suitecrmSmtpPort | quote }}
-        - name: SUITECRM_SMTP_USER
-          value: {{ .Values.suitecrmSmtpUser | quote }}
-        - name: SUITECRM_SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "suitecrm.fullname" . }}
-              key: suitecrm-smtp-password
-        - name: SUITECRM_SMTP_PROTOCOL
-          value: {{ .Values.suitecrmSmtpProtocol | quote }}
-        ports:
-        - name: http
-          containerPort: 8080
-        - name: https
-          containerPort: 8443
-        livenessProbe:
-          httpGet:
-            path: /index.php
-            port: http
-            httpHeaders:
-            - name: Host
-              value: {{ include "host" . | quote }}
-          initialDelaySeconds: 300
-        readinessProbe:
-          httpGet:
-            path: /index.php
-            port: http
-            httpHeaders:
-            - name: Host
-              value: {{ include "host" . | quote }}
-          initialDelaySeconds: 60
-        resources:
-          {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
-        volumeMounts:
-        - name: suitecrm-data
-          mountPath: /bitnami/suitecrm
-          subPath: suitecrm
-      {{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ include "suitecrm.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
-        ports:
+        - name: {{ include "suitecrm.fullname" . }}
+          image: {{ include "suitecrm.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ .Values.allowEmptyPassword | quote }}
+            - name: SUITECRM_VALIDATE_USER_IP
+              value: {{ .Values.suitecrmValidateUserIP | quote }}
+            {{- if .Values.mariadb.enabled }}
+            - name: MARIADB_HOST
+              value: {{ template "suitecrm.mariadb.fullname" . }}
+            - name: MARIADB_PORT_NUMBER
+              value: "3306"
+            - name: SUITECRM_DATABASE_NAME
+              value: {{ .Values.mariadb.db.name | quote }}
+            - name: SUITECRM_DATABASE_USER
+              value: {{ .Values.mariadb.db.user | quote }}
+            - name: SUITECRM_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "suitecrm.mariadb.fullname" . }}
+                  key: mariadb-password
+            {{- else }}
+            - name: MARIADB_HOST
+              value: {{ .Values.externalDatabase.host | quote }}
+            - name: MARIADB_PORT_NUMBER
+              value: {{ .Values.externalDatabase.port | quote }}
+            - name: SUITECRM_DATABASE_NAME
+              value: {{ .Values.externalDatabase.database | quote }}
+            - name: SUITECRM_DATABASE_USER
+              value: {{ .Values.externalDatabase.user | quote }}
+            - name: SUITECRM_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+            {{- end }}
+            - name: SUITECRM_HOST
+              {{- $port:=.Values.service.port | toString }}
+              value: "{{ include "host" . }}:{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}"
+            - name: SUITECRM_USERNAME
+              value: {{ .Values.suitecrmUsername | quote }}
+            - name: SUITECRM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "suitecrm.fullname" . }}
+                  key: suitecrm-password
+            - name: SUITECRM_EMAIL
+              value: {{ .Values.suitecrmEmail | quote }}
+            - name: SUITECRM_LAST_NAME
+              value: {{ .Values.suitecrmLastName | quote }}
+            - name: SUITECRM_SMTP_HOST
+              value: {{ .Values.suitecrmSmtpHost | quote }}
+            - name: SUITECRM_SMTP_PORT
+              value: {{ .Values.suitecrmSmtpPort | quote }}
+            - name: SUITECRM_SMTP_USER
+              value: {{ .Values.suitecrmSmtpUser | quote }}
+            - name: SUITECRM_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "suitecrm.fullname" . }}
+                  key: suitecrm-smtp-password
+            - name: SUITECRM_SMTP_PROTOCOL
+              value: {{ .Values.suitecrmSmtpProtocol | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          livenessProbe:
+            httpGet:
+              path: /index.php
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "host" . | quote }}
+            initialDelaySeconds: 300
+          readinessProbe:
+            httpGet:
+              path: /index.php
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "host" . | quote }}
+            initialDelaySeconds: 60
+          resources:
+            {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
+          volumeMounts:
+            - name: suitecrm-data
+              mountPath: /bitnami/suitecrm
+              subPath: suitecrm
+        {{- if .Values.metrics.enabled }}
         - name: metrics
-          containerPort: 9117
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-          {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
+          image: {{ include "suitecrm.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
+          ports:
+            - name: metrics
+              containerPort: 9117
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
       {{- end }}
       volumes:
-      - name: suitecrm-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "suitecrm.fullname" . }}-suitecrm{{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
+        - name: suitecrm-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "suitecrm.fullname" . }}-suitecrm{{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
