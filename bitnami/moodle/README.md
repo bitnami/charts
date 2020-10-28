@@ -1,4 +1,4 @@
-# Moodle(TM) LMS
+# Moodle<sup>(TM)</sup> LMS
 
 [Moodle](https://www.moodle.org)(TM) LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
 
