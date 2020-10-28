@@ -1,5 +1,5 @@
-{{- if include "host" . -}}
-apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+{{- if include "suitecrm.host" . -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "suitecrm.fullname" . }}
@@ -31,10 +31,10 @@ spec:
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:
-          - "status.localhost"
+            - "status.localhost"
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-         fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       containers:
         - name: {{ include "suitecrm.fullname" . }}
@@ -51,7 +51,7 @@ spec:
               value: {{ .Values.suitecrmValidateUserIP | quote }}
             {{- if .Values.mariadb.enabled }}
             - name: MARIADB_HOST
-              value: {{ template "suitecrm.mariadb.fullname" . }}
+              value: {{ include "suitecrm.mariadb.fullname" . }}
             - name: MARIADB_PORT_NUMBER
               value: "3306"
             - name: SUITECRM_DATABASE_NAME
@@ -61,7 +61,7 @@ spec:
             - name: SUITECRM_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "suitecrm.mariadb.fullname" . }}
+                  name: {{ include "suitecrm.mariadb.fullname" . }}
                   key: mariadb-password
             {{- else }}
             - name: MARIADB_HOST
@@ -79,14 +79,13 @@ spec:
                   key: db-password
             {{- end }}
             - name: SUITECRM_HOST
-              {{- $port:=.Values.service.port | toString }}
-              value: "{{ include "host" . }}:{{- if ne $port "8080" }}:{{ .Values.service.port }}{{ end }}"
+              value: "{{ include "suitecrm.host" . }}:{{ default "8080" .Values.service.port }}"
             - name: SUITECRM_USERNAME
               value: {{ .Values.suitecrmUsername | quote }}
             - name: SUITECRM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "suitecrm.fullname" . }}
+                  name: {{ include "suitecrm.fullname" . }}
                   key: suitecrm-password
             - name: SUITECRM_EMAIL
               value: {{ .Values.suitecrmEmail | quote }}
@@ -101,7 +100,7 @@ spec:
             - name: SUITECRM_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "suitecrm.fullname" . }}
+                  name: {{ include "suitecrm.fullname" . }}
                   key: suitecrm-smtp-password
             - name: SUITECRM_SMTP_PROTOCOL
               value: {{ .Values.suitecrmSmtpProtocol | quote }}
@@ -116,7 +115,7 @@ spec:
               port: http
               httpHeaders:
                 - name: Host
-                  value: {{ include "host" . | quote }}
+                  value: {{ include "suitecrm.host" . | quote }}
             initialDelaySeconds: 300
           readinessProbe:
             httpGet:
@@ -124,10 +123,11 @@ spec:
               port: http
               httpHeaders:
                 - name: Host
-                  value: {{ include "host" . | quote }}
+                  value: {{ include "suitecrm.host" . | quote }}
             initialDelaySeconds: 60
-          resources:
-            {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
+          {{- end }}
           volumeMounts:
             - name: suitecrm-data
               mountPath: /bitnami/suitecrm
@@ -159,7 +159,7 @@ spec:
         - name: suitecrm-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "suitecrm.fullname" . }}-suitecrm{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "suitecrm.fullname" . }}-suitecrm{{- end }}
         {{- else }}
           emptyDir: {}
         {{- end }}
