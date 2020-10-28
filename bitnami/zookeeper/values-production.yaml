@@ -207,7 +207,8 @@ dataLogDir: ""
 ##
 service:
   type: ClusterIP
-  ## Set loadBalancerIP if needed and type is LoadBalancer
+  ## loadBalancerIP for the Zookeper Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   # loadBalancerIP:
   port: 2181
