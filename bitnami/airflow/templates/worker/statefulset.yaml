@@ -1,3 +1,4 @@
+{{- if eq .Values.executor "CeleryExecutor" }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -29,9 +30,11 @@ spec:
     {{- end }}
   template:
     metadata:
-    {{- if .Values.airflow.worker.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.podAnnotations "context" $) | nindent 8 }}
-    {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+      {{- if .Values.airflow.worker.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: worker
     spec:
@@ -127,7 +130,7 @@ spec:
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
-          {{- if .Values.airflow.configurationConfigMap }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
@@ -147,12 +150,13 @@ spec:
           configMap:
             name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
-      {{- if .Values.airflow.configurationConfigMap }}
+      {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file
           configMap:
-            name: {{ .Values.airflow.configurationConfigMap }}
+            name: {{ include "airflow.configMapName"  . }}
       {{- end }}
         {{- include "airflow.git.volumes" . | trim | nindent 8 }}
       {{- if .Values.airflow.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
+{{- end }}

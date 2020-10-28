@@ -15,16 +15,25 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - pods
-      - pods/log
-      - pods/exec
-      - configmaps
-      - secrets
+      - "pods"
     verbs:
-      - get
-      - list
-      - watch
-      - create
-      - delete
+      - "create"
+      - "list"
+      - "get"
+      - "watch"
+      - "delete"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/log"
+    verbs:
+      - "get"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/exec"
+    verbs:
+      - "create"
+      - "get"
 {{- end -}}
 

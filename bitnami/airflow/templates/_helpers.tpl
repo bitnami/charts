@@ -162,10 +162,30 @@ Get the secret name
 */}}
 {{- define "airflow.secretName" -}}
 {{- if .Values.airflow.auth.existingSecret -}}
-{{- printf "%s" .Values.airflow.auth.existingSecret -}}
+  {{- printf "%s" .Values.airflow.auth.existingSecret -}}
 {{- else -}}
-{{- printf "%s" (include "common.names.fullname" .) -}}
+  {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Get the configmap name
+*/}}
+{{- define "airflow.configMapName" -}}
+{{- if .Values.airflow.configurationConfigMap -}}
+  {{- printf "%s" .Values.airflow.configurationConfigMap -}}
+{{- else -}}
+  {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Should use config from the configmap
+*/}}
+{{- define "airflow.shouldUseConfigFromConfigMap" -}}
+{{- if or .Values.config .Values.airflow.configurationConfigMap -}}
+  true
+{{- else -}}{{- end -}}
 {{- end -}}
 
 {{/*
@@ -250,7 +270,7 @@ Add environmnet variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
 - name: AIRFLOW_EXECUTOR
-  value: "CeleryExecutor"
+  value: {{ .Values.executor }}
 - name: AIRFLOW_FERNET_KEY
   valueFrom:
     secretKeyRef:
@@ -269,6 +289,32 @@ Add environmnet variables to configure airflow common values
   value: "1"
 - name: NAMI_LOG_LEVEL
   value: "trace8"
+{{- end }}
+{{- end -}}
+
+{{/*
+Add environmnet variables to configure airflow kubernetes executor
+*/}}
+{{- define "airflow.configure.airflow.kubernetesExecutor" -}}
+{{- if eq .Values.executor "KubernetesExecutor" }}
+- name: AIRFLOW__KUBERNETES__NAMESPACE
+  value: {{ .Release.Namespace }}
+- name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
+  value: {{ printf "%s/%s" .Values.workerImage.registry .Values.workerImage.repository }}
+- name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
+  value: {{ .Values.workerImage.tag }}
+- name: AIRFLOW__KUBERNETES__IMAGE_PULL_POLICY
+  value: {{ .Values.workerImage.pullPolicy }}
+- name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
+  value: "True"
+- name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
+  value: "True"
+- name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS_ON_FAILURE
+  value: "False"
+- name: AIRFLOW__KUBERNETES__WORKER_SERVICE_ACCOUNT_NAME
+  value: {{ include "airflow.serviceAccountName" . }}
+- name: AIRFLOW__KUBERNETES__POD_TEMPLATE_FILE
+  value: "/opt/bitnami/airflow/pod_template.yaml"
 {{- end }}
 {{- end -}}
 

@@ -1,14 +1,15 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the name that will identify the repository internaly and it will be used to create folders or
+volume names
 */}}
 {{- define "airflow.git.repository.name" -}}
-  {{- $defaultName := regexFind "/.*$" .repository | replace "//" "" | replace "/" "-" -}}
+  {{- $defaultName := regexFind "/.*$" .repository | replace "//" "" | replace "/" "-" | replace "." "-" -}}
   {{- .name | default $defaultName | kebabcase -}}
 {{- end -}}
 
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the volume mounts that will be used by git containers (clone and sync)
 */}}
 {{- define "airflow.git.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
@@ -26,7 +27,7 @@ Returns the init container that will clone repositories from a given list of git
 {{- end -}}
 
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the volume mounts that will be used by the main container
 */}}
 {{- define "airflow.git.maincontainer.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
@@ -50,7 +51,7 @@ Returns the init container that will clone repositories from a given list of git
 {{- end -}}
 
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the volumes that will be attached to the workload resources (deployment, statefulset, etc)
 */}}
 {{- define "airflow.git.volumes" -}}
 {{- if .Values.git.dags.enabled }}
@@ -68,7 +69,7 @@ Returns the init container that will clone repositories from a given list of git
 {{- end }}
 
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the init container that will clone repositories files from a given list of git repositories
 */}}
 {{- define "airflow.git.containers.clone" -}}
 {{- if or .Values.git.dags.enabled .Values.git.plugins.enabled }}
@@ -88,7 +89,7 @@ Returns the init container that will clone repositories from a given list of git
       {{- end }}
     {{- end }}
     {{- if .Values.git.plugins.enabled }}
-      {{- range .Values.git.dags.repositories }}
+      {{- range .Values.git.plugins.repositories }}
         git clone {{ .repository }} --branch {{ .branch }} /plugins-{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
@@ -119,7 +120,7 @@ Returns the init container that will clone repositories from a given list of git
 {{- end -}}
 
 {{/*
-Returns the init container that will clone repositories from a given list of git repositories
+Returns the a container that will pull and sync repositories files from a given list of git repositories
 */}}
 {{- define "airflow.git.containers.sync" -}}
 {{- if or .Values.git.dags.enabled .Values.git.plugins.enabled }}

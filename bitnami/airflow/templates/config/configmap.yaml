@@ -1,4 +1,5 @@
-{{- if .Values.config }}
+{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
+{{ if or .Values.config $kube }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,6 +12,155 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 data:
+{{- if .Values.config }}
   airflow.cfg: |-
     {{ .Values.config | indent 4 }}
-{{- end -}}
+{{- end }}
+{{- if $kube }}
+  pod_template.yaml: |-
+  {{- if .Values.podTemplate }}
+    {{ .Values.podTemplate | nindent 4 }}
+  {{- else }}
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: k8s-executor-pod
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+    spec:
+      initContainers:
+        - name: k8s-executor-init-config
+          image: {{ include "airflow.workerImage" . }}
+          imagePullPolicy: {{ .Values.workerImage.pullPolicy }}
+          command:
+            - "/bin/bash"
+            - "-ce"
+            - |
+                . /opt/bitnami/base/helpers
+
+                nami_initialize airflow-worker
+                cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
+
+          env:
+            {{- include "airflow.configure.airflow.common" . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
+            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            {{- if .Values.airflow.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.airflow.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsSecret }}
+            {{- end }}
+          volumeMounts:
+            - name: k8s-executor-config
+              mountPath: /opt/bitnami/airflow/k8s-executor-config
+      containers:
+        - name: airflow-worker
+          image: {{ include "airflow.workerImage" . }}
+          imagePullPolicy: {{ .Values.workerImage.pullPolicy }}
+          env:
+            - name: AIRFLOW__CORE__EXECUTOR
+              value: LocalExecutor
+            {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
+            {{- if .Values.airflow.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.airflow.worker.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+          {{- if .Values.airflow.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.extraEnvVarsCM }}
+          {{- end }}
+          {{- if .Values.airflow.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.extraEnvVarsSecret }}
+          {{- end }}
+          {{- if .Values.airflow.worker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsCM }}
+          {{- end }}
+          {{- if .Values.airflow.worker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.airflow.worker.extraEnvVarsSecret }}
+          {{- end }}
+          ports:
+            - name: worker
+              containerPort: {{ .Values.airflow.worker.port }}
+          volumeMounts:
+          {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+          {{- end }}
+          {{- if .Values.airflow.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+          {{- end }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- else }}
+            - name: k8s-executor-config
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- end }}
+            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+          {{- if .Values.airflow.worker.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: Never
+      {{- if .Values.securityContext.enabled }}
+      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      volumes:
+        - name: k8s-executor-config
+          emptyDir: {}
+      {{- if .Files.Glob "files/dags/*.py" }}
+        - name: local-dag-files
+          configMap:
+            name: {{ include "common.names.fullname" . }}-dag-files
+      {{- end }}
+      {{- if .Values.airflow.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.airflow.dagsConfigMap }}
+      {{- end }}
+      {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+      {{- end }}
+        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
+      {{- if .Values.airflow.worker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.airflow.worker.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

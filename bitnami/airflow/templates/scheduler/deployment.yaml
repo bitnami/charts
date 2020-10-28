@@ -1,3 +1,4 @@
+{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -19,9 +20,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: scheduler
-    {{- if .Values.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | trim | nindent 8 }}
-    {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+      {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
@@ -57,6 +60,7 @@ spec:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
+            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
             {{- if .Values.airflow.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.airflow.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -98,10 +102,15 @@ spec:
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
-          {{- if .Values.airflow.configurationConfigMap }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
+          {{- end }}
+          {{- if $kube }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/pod_template.yaml
+              subPath: pod_template.yaml
           {{- end }}
             {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
           {{- if .Values.airflow.scheduler.extraVolumeMounts }}
@@ -121,10 +130,10 @@ spec:
           configMap:
             name: {{ .Values.airflow.dagsConfigMap }}
       {{- end }}
-      {{- if .Values.airflow.configurationConfigMap }}
+      {{- if or (include "airflow.shouldUseConfigFromConfigMap" .) $kube }}
         - name: custom-configuration-file
           configMap:
-            name: {{ .Values.airflow.configurationConfigMap }}
+            name: {{ include "airflow.configMapName"  . }}
       {{- end }}
         {{- include "airflow.git.volumes" . | trim | nindent 8 }}
       {{- if .Values.airflow.scheduler.extraVolumes }}
