@@ -41,7 +41,7 @@ configInline: {}
 ##
 rbac:
   ## create specifies whether to install and use RBAC rules.
-  ## 
+  ##
   create: true
 
 ## PSP creation for controller and speaker
@@ -87,7 +87,7 @@ controller:
   ##
   rbac:
     ## create specifies whether to install and use RBAC rules.
-    ## 
+    ##
     create: true
 
   ## If global .Values.psp.create is disabled no psp is created.
@@ -267,7 +267,7 @@ speaker:
   ##
   rbac:
     ## create specifies whether to install and use RBAC rules.
-    ## 
+    ##
     create: true
 
   ## If global .Values.psp.create is disabled no psp is created.
