@@ -76,15 +76,37 @@ redmineLanguage: en
 # smtpPassword:
 # smtpTls:
 
-## Use an existing secret with keys "redmine-password", "smtp-password" and "external-db-password" defined.
-## This ignores redminePassword, smtpPassword and externalDatabase.password
+## Use an existing secret with keys "redmine-password" and "smtp-password".
+## This ignores both redminePassword and smtpPassword properties.
 # existingSecret:
 
-## Environment variables, to pass to the entry point
+## An array to add extra env vars
+## For example:
 ##
-# extraVars:
-#   - name: NAMI_DEBUG
-#     value: --log-level trace
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Command and args for running the Redmine container (set to default if not set). Use array form
+##
+command: []
+args: []
 
 ## Define a disruption budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
@@ -99,6 +121,18 @@ podDisruptionBudget:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 ##
 replicas: 1
+
+## SecurityContext configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
 ## Redmine containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -149,8 +183,56 @@ podAnnotations: {}
 ##
 podLabels: {}
 
+## lifecycleHooks for the Redmine container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
+## Redmine pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -174,6 +256,7 @@ livenessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 3
+
 readinessProbe:
   enabled: true
   initialDelaySeconds: 5
@@ -181,6 +264,38 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
+
+## Custom Liveness probes for Redmine
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes Redmine
+##
+customReadinessProbe: {}
+
+## Add init containers to the Redmine pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the Redmine pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -219,30 +334,29 @@ mariadb:
   replication:
     enabled: false
 
-  ## Use existing secret (ignores root, db and replication passwords)
+  ## Use existing secret (ignores root, auth and replication passwords)
   ##
   # existingSecret:
 
   ## Create a database and a database user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
   ##
-  db:
-    name: bitnami_redmine
-    user: bn_redmine
+  auth:
+    database: bitnami_redmine
+    username: bn_redmine
     ## If the password is not specified, mariadb will generate a random password
     ##
     # password:
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
+    ## MariaDB admin password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    # rootPassword:
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
-  master:
+  primary:
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -272,6 +386,10 @@ postgresql:
   ##
   ## If the password is not specified, postgresql will generate a random password
   # postgresqlPassword:
+
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ##
+  existingSecret: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -312,6 +430,11 @@ externalDatabase:
 
   ## Database port number (use 5432 when using PostgreSQL)
   port: 3306
+
+  ## Use existing secret containing the database password
+  ## Must contain the key "postgresql-password" in case that databaseType=postgresql
+  ## Must contain the key "mariadb-password" in case that databaseType=mariadb
+  # existingSecret:
 
 ## Kubernetes configuration
 ##   minikube: NodePort
@@ -433,6 +556,11 @@ mailReceiver:
   ##
   podLabels: {}
 
+  ## Redmine pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
   ## Protocol to use to get emails from configured server.
   ## Supported values are "IMAP" or "POP3"
   mailProtocol: IMAP
@@ -508,6 +636,120 @@ mailReceiver:
   ## Defines a list of attributes which can be overrided by received email body
   ## "all" means that all attributes can be overrided
   allowOverride: ""
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Command and args for running the Redmine container (set to default if not set). Use array form
+  ##
+  command: ["bash"]
+  args: ["-c", "/cj/receive.sh"]
+
+  ## SecurityContext configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Add init containers to the Redmine pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the Redmine pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:

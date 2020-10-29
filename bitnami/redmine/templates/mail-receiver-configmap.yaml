@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mail-receiver
     {{- if .Values.commonLabels }}
