@@ -16,6 +16,7 @@ spec:
       {{- end }}
     spec:
       {{- include "ghost.imagePullSecrets" . | indent 6 }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
