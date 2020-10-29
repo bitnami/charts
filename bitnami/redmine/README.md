@@ -390,6 +390,75 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### 15.0.0
+
+This new major version includes the following changes:
+
+* PostgreSQL dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) for more information.
+* MariaDB dependency version was bumped to a new major version `8.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+* Inclusion of the`bitnami/common` library chart, standardizations and adaptation of labels to follow helm's standards.
+* `securityContext.*` is deprecated in favor of `podSecurityContext`, `containerSecurityContext`, `mailReceiver.podSecurityContext`, and `mailReceiver.containerSecurityContext`.
+
+As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `15.0.0` there are two alternatives:
+
+* Install a new Redmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore).
+
+* Reuse the PVC used to hold the PostgreSQL/MariaDB data on your previous release. To do so, follow the instructions below.
+
+> NOTE: The instructions suppose your DatabaseType is MariaDB. The process is analogous for PostgreSQL instances.
+> WARNING: Please, make sure to create or have a backup of your database before running any of those actions.
+
+1. Old version is up and running
+
+  ```console
+  $ kubectl get pods
+  NAME                              READY   STATUS    RESTARTS   AGE
+  example-mariadb-0                 1/1     Running   0          40s
+  example-redmine-9f8c7b54d-trns2   1/1     Running   0          72s
+  ```
+
+2. Export both MariaDB and Redmine credentials in order to provide them in the update
+
+  ```console
+  $ export REDMINE_PASSWORD=$(kubectl get secret --namespace default example-redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+
+  $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+
+  $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  ```
+
+3. Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
+
+  ```console
+  $ kubectl delete deployment.apps/example-redmine
+  deployment.apps "example-redmine" deleted
+
+  $ kubectl delete statefulset.apps/example-mariadb --cascade=false
+  statefulset.apps "example-mariadb" deleted
+  ```
+
+4. Now the upgrade works
+
+  ```console
+  $ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD
+
+  $ helm ls
+  NAME   	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART         	APP VERSION
+  example	default  	1       	2020-10-29 20:33:17.776769 +0100 CET	deployed	redmine-15.0.0	4.1.1
+  ```
+
+5. You should kill the existing MariaDB pod now and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod example-mariadb-0
+  pod "example-mariadb-0" deleted
+
+  $ kubectl get pods
+  NAME                               READY   STATUS    RESTARTS   AGE
+  example-mariadb-0                  1/1     Running   0          19s
+  example-redmine-766c69d549-4zlgh   1/1     Running   2          2m26s
+  ```
+
 ### 14.0.0
 
 - Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
