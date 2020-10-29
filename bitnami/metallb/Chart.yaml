@@ -2,7 +2,7 @@ apiVersion: v2
 name: metallb
 description: The Metal LB for Kubernetes
 version: 1.0.0
-appVersion: 0.9.3
+appVersion: 0.9.4
 keywords:
   - "load-balancer"
   - "balancer"

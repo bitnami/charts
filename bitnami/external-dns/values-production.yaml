@@ -283,6 +283,8 @@ infoblox:
   gridHost: ""
   ## Optional keys
   ##
+  ## Existing secret name, when in place wapiUsername and wapiPassword are not required
+  ## secretName: ""
   domainFilter: ""
   noSslVerify: false
   wapiPort: ""
@@ -452,6 +454,11 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+  ## Provide any additional labels which may be required. This can be used to
+  ## have external-dns show up in `kubectl cluster-info`
+  ##  kubernetes.io/cluster-service: "true"
+  ##  kubernetes.io/name: "external-dns"
+  labels: {}
 
 ## ServiceAccount parameters
 ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

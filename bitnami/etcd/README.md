@@ -83,10 +83,16 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `auth.client.useAutoTLS`                        | Switch to automatically create the TLS certificates                                                                                                       | `false`                                                     |
 | `auth.client.enableAuthentication`              | Switch to enable host authentication using TLS certificates. Requires existing secret.                                                                    | `secret`                                                    |
 | `auth.client.existingSecret`                    | Name of the existing secret containing cert files for client communication.                                                                               | `nil`                                                       |
+| `auth.client.certFilename`                      | Name of the file containing the client certificate.                                                                                                       | `cert.pem`                                                  |
+| `auth.client.certKeyFilename`                   | Name of the file containing the client certificate private key.                                                                                           | `key.pem`                                                   |
+| `auth.client.caFilename`                        | Name of the file containing the client CA certificate. If not specified and `enableAuthentication` or `rbac.enabled` is true, the default is is `ca.crt`. | `""`                                                        |
 | `auth.peer.secureTransport`                     | Switch to encrypt peer communication using TLS certificates                                                                                               | `false`                                                     |
 | `auth.peer.useAutoTLS`                          | Switch to automatically create the TLS certificates                                                                                                       | `false`                                                     |
 | `auth.peer.enableAuthentication`                | Switch to enable host authentication using TLS certificates. Requires existing secret.                                                                    | `false`                                                     |
 | `auth.peer.existingSecret`                      | Name of the existing secret containing cert files for peer communication.                                                                                 | `nil`                                                       |
+| `auth.peer.certFilename`                        | Name of the file containing the peer certificate.                                                                                                         | `cert.pem`                                                  |
+| `auth.peer.certKeyFilename`                     | Name of the file containing the peer certificate private key.                                                                                             | `key.pem`                                                   |
+| `auth.peer.caFilename`                          | Name of the file containing the peer CA certificate. If not specified and `enableAuthentication` or `rbac.enabled` is true, the default is is `ca.crt`.   | `""`                                                        |
 | `securityContext.enabled`                       | Enable security context                                                                                                                                   | `true`                                                      |
 | `securityContext.fsGroup`                       | Group ID for the container                                                                                                                                | `1001`                                                      |
 | `securityContext.runAsUser`                     | User ID for the container                                                                                                                                 | `1001`                                                      |
@@ -131,8 +137,12 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                                                     |
 | `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                                                                  | `nil`                                                       |
 | `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)                   |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion scraping                                                                                        | `[]`                                                        |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before ingestion                                                                                                       | `[]`                                                        |
+| `metrics.serviceMonitor.scheme`                 | HTTP scheme to use for scraping                                                                                                                           | `""` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)                   |
 | `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                                                                       | `nil`                                                       |
+| `metrics.serviceMonitor.tlsConfig`              | TLS configuration used for scrape endpoints used by Prometheus                                                                                            | `nil`                                                       |
 | `startFromSnapshot.enabled`                     | Initialize new cluster recovering an existing snapshot                                                                                                    | `false`                                                     |
 | `startFromSnapshot.existingClaim`               | PVC containing the existing snapshot                                                                                                                      | `nil`                                                       |
 | `startFromSnapshot.snapshotFilename`            | Snapshot filename                                                                                                                                         | `nil`                                                       |
@@ -300,14 +310,15 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
 
-### 4.4.14
-
-In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
-
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.4.14
+
+In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
 
 ### To 3.0.0
 

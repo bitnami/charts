@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.3.7-debian-10-r118
+  tag: 0.3.7-debian-10-r144
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -132,6 +132,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+
+  ## Provide any additional labels which may be required. This can be used to
+  ## have metrics-server show up in `kubectl cluster-info`
+  ##  kubernetes.io/cluster-service: "true"
+  ##  kubernetes.io/name: "Metrics-server"
+  labels: {}
 
 ## Metric Server containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

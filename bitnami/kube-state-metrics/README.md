@@ -109,7 +109,7 @@ The following table lists the configurable parameters of the kube-state-metrics 
 | `service.loadBalancerSourceRanges`           | Address that are allowed when svc is `LoadBalancer`                                                           | `[]`                                                       |
 | `service.annotations`                        | Additional annotations for kube-state-metrics service                                                         | `{}`                                                       |
 | `service.labels`                             | Additional labels for kube-state-metrics service                                                              | `{}`                                                       |
-| `hostNetwork`                                | Expose the service to the host network                                                                        | `true`                                                     |
+| `hostNetwork`                                | Enable hostNetwork mode                                                                                       | `false`                                                    |
 | `priorityClassName`                          | Priority class assigned to the Pods                                                                           | `nil`                                                      |
 | `resources`                                  | Resource requests/limit                                                                                       | `{}`                                                       |
 | `replicaCount`                               | Desired number of controller pods                                                                             | `1`                                                        |
@@ -173,6 +173,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 -   replicaCount: 1
 +   replicaCount: 2
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

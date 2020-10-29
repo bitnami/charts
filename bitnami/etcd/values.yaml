@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.4.13-debian-10-r22
+  tag: 3.4.13-debian-10-r49
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -134,6 +134,16 @@ auth:
     ## Name of the existing secret containing cert files for client communication.
     ##
     # existingSecret: name-of-existing-secret
+    ## Name of the file containing the client certificate.
+    ##
+    certFilename: cert.pem
+    ## Name of the file containing the client certificate private key.
+    ##
+    certKeyFilename: key.pem
+    ## Name of the file containing the client CA certificate.
+    ## If not specified and `enableAuthentication: true` or `rbac.enabled: true`, the default is is `ca.crt`.
+    ##
+    caFilename: ""
 
   peer:
     ## Switch to encrypt peer communication using TLS certificates
@@ -148,6 +158,16 @@ auth:
     ## Name of the existing secret containing cert files for peer communication.
     ##
     # existingSecret: name-of-existing-secret
+    ## Name of the file containing the peer certificate.
+    ##
+    certFilename: cert.pem
+    ## Name of the file containing the peer certificate private key.
+    ##
+    certKeyFilename: key.pem
+    ## Name of the file containing the peer CA certificate.
+    ## If not specified and `enableAuthentication: true` or `rbac.enabled: true`, the default is is `ca.crt`.
+    ##
+    caFilename: ""
 
 ## Kubernetes Security Context
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -316,6 +336,20 @@ metrics:
     ##
     # interval: 10s
 
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    ##
+    # metricRelabelings: []
+
+    ## RelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    ##
+    # relabelings: []
+
+    ## HTTP scheme to use for scraping.
+    ##
+    # scheme: ""
+
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -326,6 +360,13 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+    ## TLS configuration for the endpoints to be scraped.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
+    # tlsConfig:
+    #  ca:
+    #    secret:
+    #      name: existingSecretName
 
 ## Start a new etcd cluster recovering the data from an existing snaptshot before
 ## initializing the members

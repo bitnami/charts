@@ -101,7 +101,7 @@ The following table lists the configurable parameters of the HashiCorp Consul ch
 
 | Parameter                                 | Description                                                                                                          | Default                                                      |
 |-------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `replicaCount`                            | Number of HashiCorp Consul replicas                                                                                  | `1`                                                          |
+| `replicaCount`                            | Number of HashiCorp Consul replicas                                                                                  | `3`                                                          |
 | `updateStrategy`                          | Update strategy type for the statefulset                                                                             | `RollingUpdate`                                              |
 | `rollingUpdatePartition`                  | Partition update strategy                                                                                            | `nil`                                                        |
 | `priorityClassName`                       | HashiCorp Consul priorityClassName                                                                                   | `nil`                                                        |
@@ -386,6 +386,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

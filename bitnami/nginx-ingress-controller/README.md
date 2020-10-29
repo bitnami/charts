@@ -133,6 +133,7 @@ The following tables lists the configurable parameters of the nginx-ingress-cont
 | `metrics.serviceMonitor.enabled`           | Set this to `true` to create ServiceMonitor for Prometheus operator                                                                                                                                                                                                                                                                                  | `false`                                                 |
 | `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                                                                                                                                                                                                                | `{}`                                                    |
 | `metrics.serviceMonitor.namespace`         | namespace where servicemonitor resource should be created                                                                                                                                                                                                                                                                                            | `the same namespace as nginx ingress`                   |
+| `metrics.serviceMonitor.interval`          | scrape interval                                                                                                                                                                                                                                                                                                                                      | `30s`                                                   |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels.                                                                                                                                                                                                                                                                            | `false`                                                 |
 | `metrics.serviceMonitor.metricRelabelings` | metricRelabelings which should be applied to the ServiceMonitor.                                                                                                                                                                                                                                                                                     | `[]`                                                    |
 | `metrics.prometheusRule.enabled`           | Set this to `true` to create prometheusRules for Prometheus operator                                                                                                                                                                                                                                                                                 | `false`                                                 |
@@ -221,6 +222,11 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Notable changes
 
 ### 5.3.0

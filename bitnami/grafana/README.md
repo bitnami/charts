@@ -127,7 +127,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | Parameter                   | Description                       | Default         |
 |-----------------------------|-----------------------------------|-----------------|
 | `persistence.enabled`       | Enable persistence                | `true`          |
-| `presistence.storageClass`  | Storage class to use with the PVC | `nil`           |
+| `persistence.storageClass`  | Storage class to use with the PVC | `nil`           |
 | `persistence.accessMode`    | Access mode to the PV             | `ReadWriteOnce` |
 | `persistence.size`          | Size for the PV                   | `10Gi`          |
 
@@ -138,6 +138,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `serviceAccount.create`      | Enable creation of ServiceAccount for Grafana pods | `true`                                          |
 | `serviceAccount.name`        | Name of the created serviceAccount                 | Generated using the `grafana.fullname` template |
 | `serviceAccount.annotations` | ServiceAccount Annotations                         | `{}`                                            |
+
 ### Exposure parameters
 
 | Parameter                           | Description                                                                                                                                                                                                                           | Default             |
@@ -372,6 +373,10 @@ The [Bitnami Grafana](https://github.com/bitnami/bitnami-docker-grafana) image s
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

@@ -73,6 +73,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `service.type`            | Kubernetes Service type                                                                                                         | `ClusterIP`                                             |
 | `service.port`            | Kubernetes Service port                                                                                                         | `443`                                                   |
 | `service.annotations`     | Annotations for the Service                                                                                                     | {}                                                      |
+| `service.labels`          | Labels for the Service                                                                                                     | {}                                                      |
 | `service.loadBalancerIP`  | LoadBalancer IP if Service type is `LoadBalancer`                                                                               | `nil`                                                   |
 | `service.nodePort`        | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                        | `nil`                                                   |
 | `resources`               | The [resources] to allocate for the container                                                                                   | `{}`                                                    |
@@ -105,6 +106,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Enable security for Metrics Server. Configuring RBAC
 
 In order to enable Role-based access control for Metrics Servier you can use the following parameter: `rbac.create=true`
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

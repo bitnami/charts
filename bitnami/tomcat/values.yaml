@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 9.0.38-debian-10-r12
+  tag: 9.0.39-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -26,6 +26,10 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## Number of Tomcat replicas
+##
+replicaCount: 1
 
 ## String to partially override tomcat.fullname template (will maintain the release name)
 ##

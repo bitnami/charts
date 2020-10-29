@@ -117,6 +117,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nodeSelector`                            | Node labels for pod assignment                                                        | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                        | `[]` (evaluated as a template)                               |
 | `affinity`                                | Affinity for pod assignment                                                           | `{}` (evaluated as a template)                               |
+| `podLabels`                               | Pod labels                                                                            | `{}` (evaluated as a template)                               |
 | `podAnnotations`                          | Pod annotations                                                                       | `{}` (evaluated as a template)                               |
 | `healthcheckHttps`                        | Use https for liveliness and readiness                                                | `false`                                                      |
 | `livenessProbe.enabled`                   | Enable/disable livenessProbe                                                          | `true`                                                       |
@@ -160,6 +161,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `ingress.enabled`                         | Enable ingress controller resource                                                    | `false`                                                      |
 | `ingress.certManager`                     | Add annotations for cert-manager                                                      | `false`                                                      |
 | `ingress.hostname`                        | Default host for the ingress resource                                                 | `wordpress.local`                                            |
+| `ingress.path`                            | Default path for the ingress resource                                                 | `/`                                                          |
 | `ingress.tls`                             | Create TLS Secret                                                                     | `false`                                                      |
 | `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
 | `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
@@ -439,6 +441,10 @@ The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

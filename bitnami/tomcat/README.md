@@ -59,6 +59,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `image.tag`                          | Tomcat Image tag                                                                                    | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Tomcat image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                    | `[]` (does not add image pull secrets to deployed pods) |
+| `replicaCount`                       | Specify number of Tomcat replicas                                                                   | `1`                                                     |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory                         | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                    | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                        | `bitnami/minideb`                                       |
@@ -146,13 +147,15 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
 
 ### 5.0.0
 
 This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.
-
-## Upgrading
 
 ### To 2.1.0
 

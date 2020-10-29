@@ -79,7 +79,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `image.debug`                           | Set to true if you would like to see extra information on logs                           | `false`                                                 |
 | `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
 | `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `extraEnvVars`                          | Extra environment variables to be set on NGINX containers                                | `{}`                                                    |
+| `extraEnvVars`                          | Extra environment variables to be set on NGINX containers                                | `[]`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
 
@@ -320,6 +320,10 @@ Most likely you will only want to have one hostname that maps to this NGINX inst
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

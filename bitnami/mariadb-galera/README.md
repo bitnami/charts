@@ -322,6 +322,22 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
+Take into account those scripts are treated differently depending on the extension. While the `.sh` scripts are executed in all the nodes; the `.sql` and `.sql.gz` scripts are only executed in the bootstrap node. The reason behind this differentiation is that the `.sh` scripts allow adding conditions to determine what is the node running the script, while these conditions can't be set using `.sql` nor `sql.gz` files. This way it is possible to cover different use cases depending on their needs.
+
+If using a `.sh` script you want to do a "one-time" action like creating a database, you need to add a condition in your `.sh` script to be executed only in one of the nodes, such as
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+     #!/bin/sh
+     if [[ $(hostname) == *-0  ]]; then
+       echo "First node"
+       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+     else
+       echo "No first node"
+     fi
+```
+
 ## Extra Init Containers
 
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.
@@ -368,7 +384,7 @@ extraContainers:
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it.
+To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it. You will notice that in these cases it is needed to start the nodes in `Parallel` by setting `podManagementPolicy`.
 
 #### Checking `safe_to_boostrap`
 
@@ -434,10 +450,10 @@ In this case you will need the node number `N` and run:
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
---set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
---set galera.bootstrap.bootstrapFromNode=N
+--set galera.bootstrap.bootstrapFromNode=N \
+--set podManagementPolicy=Parallel
 ```
 
 #### All the nodes with `safe_to_bootstrap: 0`
@@ -446,11 +462,11 @@ In this case the cluster was not stopped cleanly and you need to pick one to for
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
---set image.pullPolicy=Always \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY
 --set galera.bootstrap.bootstrapFromNode=3 \
---set galera.bootstrap.forceSafeToBootstrap=true
+--set galera.bootstrap.forceSafeToBootstrap=true \
+--set podManagementPolicy=Parallel
 ```
 
 ## Persistence
@@ -458,6 +474,10 @@ helm install my-release bitnami/mariadb-galera \
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
 The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

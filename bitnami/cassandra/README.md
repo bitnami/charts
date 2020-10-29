@@ -92,7 +92,7 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `cluster.enableUDF`           | Enable CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS                                                                                                       | `false`                                                 |
 | `cluster.internodeEncryption` | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                             | `none`                                                  |
 | `cluster.clientEncryption`    | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                        | `false`                                                 |
-| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra optinos (JVM_EXTRA_OPTS)                                                                                | `nil`                                                   |
+| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options (JVM_EXTRA_OPTS)                                                                                | `nil`                                                   |
 | `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                        | `nil`                                                   |
 | `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                             | `nil`                                                   |
 | `command`                     | Override default container command (useful when using custom images)                                                                                 | `[]`                                                    |
@@ -320,6 +320,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

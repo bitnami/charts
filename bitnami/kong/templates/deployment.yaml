@@ -319,6 +319,18 @@ spec:
           configMap:
             name: {{ template "kong.fullname" . }}-metrics-exporter
         {{- end }}
+        {{- if .Values.kong.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ .Values.kong.initScriptsCM }}
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.kong.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ .Values.kong.initScriptsSecret }}
+            defaultMode: 0755
+        {{- end }}
       {{- if .Values.extraVolumes }}
       {{- include "kong.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

@@ -131,9 +131,7 @@ spec:
             - name: CONSUL_DISABLE_KEYRING_FILE
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT
-              value: {{ default 3 .Values.replicas | quote }}
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: {{ .Values.replicas | quote }}
+              value: {{ default 3 .Values.replicaCount | quote }}
             - name: CONSUL_RAFT_MULTIPLIER
               value: {{ .Values.raftMultiplier | quote }}
             - name: CONSUL_DOMAIN
@@ -237,7 +235,7 @@ spec:
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command:
             - /bin/consul_exporter
-            - --consul.server={{ include "common.names.fullname" . }}:{{ .Values.service.port }}
+            - --consul.server={{ printf "%s-headless" (include "common.names.fullname" .) }}:{{ .Values.containerPorts.http }}
           ports:
             - name: metrics
               containerPort: 9107

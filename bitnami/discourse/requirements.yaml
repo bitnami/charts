@@ -6,9 +6,9 @@ dependencies:
       - bitnami-common
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 8.X.X
+    version: 9.X.X
     condition: postgresql.enabled
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 10.X.X
+    version: 11.X.X
     condition: redis.enabled

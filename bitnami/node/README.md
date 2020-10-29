@@ -80,7 +80,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `revision`                              | Revision to checkout                                                        | `master`                                                |
 | `replicas`                              | Number of replicas for the application                                      | `1`                                                     |
 | `applicationPort`                       | Port where the application will be running                                  | `3000`                                                  |
-| `extraEnv`                              | Any extra environment variables to be pass to the pods                      | `{}`                                                    |
+| `extraEnv`                              | Any extra environment variables to be pass to the pods                      | `[]`                                                    |
 | `affinity`                              | Map of node/pod affinities                                                  | `{}` (The value is evaluated as a template)             |
 | `nodeSelector`                          | Node labels for pod assignment                                              | `{}` (The value is evaluated as a template)             |
 | `tolerations`                           | Tolerations for pod assignment                                              | `[]` (The value is evaluated as a template)             |
@@ -108,6 +108,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                      | `nil`                                                   |
 | `ingress.secrets[0].key`                | TLS Secret Key                                                              | `nil`                                                   |
 | `mongodb.install`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.install=true`)   | `false`                                                 |
 | `externaldb.secretName`                 | Secret containing existing database credentials                             | `nil`                                                   |
 | `externaldb.type`                       | Type of database that defines the database secret mapping                   | `osba`                                                  |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                     | `nil`                                                   |
@@ -188,6 +189,7 @@ ingress:
 
   ```console
   mongodb.install=false
+  externaldb.enabled=true
   externaldb.secretName=my-database-secret
   ```
 
@@ -230,6 +232,7 @@ ingress:
 
     ```command
     mongodb.install=false
+    externaldb.enabled=true
     externaldb.broker.serviceInstanceName=azure-mongodb-instance
     externaldb.ssl=true
     ```
@@ -258,6 +261,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

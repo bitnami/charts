@@ -100,6 +100,7 @@ The following table lists the configurable parameters of the ownCloud chart and 
 | `resources`                          | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                     | Pod annotations                                                                                       | `{}`                                                         |
 | `affinity`                           | Map of node/pod affinities                                                                            | `{}`                                                         |
+| `extraEnvVars`                       | Pass extra environment variables to the image                                                         | `[]`                                                         |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                                                                  | `false`                                                      |
 | `metrics.image.registry`             | Apache exporter image registry                                                                        | `docker.io`                                                  |
 | `metrics.image.repository`           | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                    |
@@ -187,6 +188,11 @@ certificates:
 ```bash
 kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 ### 7.0.0

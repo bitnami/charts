@@ -210,3 +210,14 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return ZooKeeper Namespace to use
+*/}}
+{{- define "zookeeper.namespace" -}}
+    {{- if .Values.namespaceOverride }}
+        {{- .Values.namespaceOverride -}}
+    {{- else }}
+        {{- .Release.Namespace -}}
+    {{- end }}
+{{- end -}}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.9-debian-10-r0
+  tag: 3.8.9-debian-10-r20
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -487,6 +487,10 @@ persistence:
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well.
   ##
   size: 8Gi
+
+  volumes:
+  #  - name: volume_name
+  #    emptyDir: {}
 
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/

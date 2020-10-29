@@ -611,6 +611,11 @@ deployer:
   ## RabbitMQ/Kafka envs. Multiple values are comma separated.
   ##
   environmentVariables: ''
+  ## Streams containers' Security Context. This security context will be use in every deployed stream.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  podSecurityContext:
+    runAsUser: 1001
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
@@ -726,23 +731,28 @@ metrics:
 ##
 mariadb:
   enabled: true
-  ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
-  ## master statefulset would be created
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  replication:
-    enabled: false
+  architecture: standalone
   ## Custom user/db credentials
   ##
-  db:
-    ## MariaDB username and password
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    user: dataflow
+    rootPassword: ''
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: dataflow
     password: change-me
     ## Database to create
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
     ##
-    name: dataflow
+    database: dataflow
+    forcePassword: false
+    usePasswordFiles: false
   ## initdb scripts: specify dictionary of scripts to be run at first boot
   ## We can only create one database on MariaDB using parameters. However, when streaming
   ## is enabled we need a second database for Skipper.
@@ -761,6 +771,7 @@ mariadb:
 ## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
+
   ## Database server host and port
   ##
   host: localhost
@@ -774,13 +785,23 @@ externalDatabase:
   ## Data Flow user and database
   ##
   dataflow:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: dataflow
-    user: dataflow
+    username: dataflow
   ## Skipper and database
   ##
   skipper:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: skipper
-    user: skipper
+    username: skipper
   ## Hibernate Dialect
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##

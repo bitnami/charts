@@ -65,6 +65,9 @@ spec:
             - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: initcontainer-script
               mountPath: /scripts/sysctl.sh
@@ -81,7 +84,7 @@ spec:
               chown -R {{ .Values.data.securityContext.runAsUser }}:{{ .Values.data.securityContext.fsGroup }} //bitnami/elasticsearch/data
           securityContext:
             runAsUser: 0
-          {{- if .Values.volumePermissions.resource }}
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:

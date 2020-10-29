@@ -296,12 +296,13 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                 | `bitnami/minideb`                                                                       |
 | `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `buster`                                                                                |
 | `sysctlImage.pullPolicy`                          | Kernel settings modifier image pull policy                                                                                                                | `Always`                                                                                |
+| `sysctlImage.resources`                           | Init container resource requests/limit                                                                                                                    | `requests: {}, limits: {}`                                                                                   |
 | `volumePermissions.enabled`                       | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                                                 |
 | `volumePermissions.image.registry`                | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                                             |
 | `volumePermissions.image.repository`              | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                                                       |
 | `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `buster`                                                                                |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                                                |
-| `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                                                   |
+| `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `requests: {}, limits: {}`                                                                                   |
 
 ### Kibana Parameters
 
@@ -583,6 +584,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 

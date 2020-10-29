@@ -1,7 +1,7 @@
-apiVersion: {{ template "drupal.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "drupal.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,8 +35,7 @@ spec:
     spec:
       {{- include "drupal.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -56,12 +55,79 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
-      {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "drupal.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/drupal"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/drupal"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: drupal-data
+              mountPath: /bitnami/drupal
+        {{- end }}
+        {{- if .Values.certificates.customCAs }}
+        - name: certificates
+          image: {{ template "certificates.image" . }}
+          imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+          imagePullSecrets:
+          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
+            - name: {{ . }}
+          {{- end }}
+          command:
+          {{- if .Values.certificates.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
+          {{- else if .Values.certificates.customCertificate.certificateSecret }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          {{- else }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+            && openssl req -new -x509 -days 3650 -nodes -sha256
+              -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+              -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
+              -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+          {{- end }}
+          {{- if .Values.certificates.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
+          {{- end }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
+          envFrom:
+            {{- if .Values.certificates.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.certificates.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            - name: etc-ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: false
+            - name: etc-ssl-private
+              mountPath: /etc/ssl/private
+              readOnly: false
+            - name: custom-ca-certificates
+              mountPath: /usr/local/share/ca-certificates
+              readOnly: true
+        {{- end }}
       containers:
-        - name: drupal
-          image: {{ include "drupal.image" . }}
+        - name: {{ include "common.names.fullname" . }}
+          image: {{ template "drupal.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -70,63 +136,65 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
-              value: {{ .Values.allowEmptyPassword | quote }}
-            - name: MARIADB_HOST
-            {{- if .Values.mariadb.enabled }}
-              value: {{ template "drupal.mariadb.fullname" . }}
-            {{- else }}
-              value: {{ default "" .Values.externalDatabase.host | quote }}
-            {{- end }}
-            - name: MARIADB_PORT_NUMBER
-            {{- if .Values.mariadb.enabled }}
-              value: "3306"
-            {{- else }}
-              value: {{ default "" .Values.externalDatabase.port | quote }}
-            {{- end }}
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: DRUPAL_DATABASE_HOST
+              value: {{ include "drupal.databaseHost" . | quote }}
+            - name: DRUPAL_DATABASE_PORT_NUMBER
+              value: {{ include "drupal.databasePort" . | quote }}
             - name: DRUPAL_DATABASE_NAME
-            {{- if .Values.mariadb.enabled }}
-              value: {{ default "" .Values.mariadb.db.name | quote }}
-            {{- else }}
-              value: {{ default "" .Values.externalDatabase.database | quote }}
-            {{- end }}
+              value: {{ include "drupal.databaseName" . | quote }}
             - name: DRUPAL_DATABASE_USER
-            {{- if .Values.mariadb.enabled }}
-              value: {{ default "" .Values.mariadb.db.user | quote }}
-            {{- else }}
-              value: {{ default "" .Values.externalDatabase.user | quote }}
-            {{- end }}
+              value: {{ include "drupal.databaseUser" . | quote }}
             - name: DRUPAL_DATABASE_PASSWORD
-            {{- if .Values.mariadb.enabled }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "drupal.mariadb.fullname" . }}
-                  key: mariadb-password
-            {{- else }}
-              value: {{ default "" .Values.externalDatabase.password | quote }}
-            {{- end }}
-            {{- if .Values.drupalProfile }}
+                  name: {{ include "drupal.databaseSecretName" . }}
+                  key: {{ include "drupal.databasePasswordKey" . | quote }}
+            - name: DRUPAL_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.drupalSkipInstall | quote }}
             - name: DRUPAL_PROFILE
               value: {{ .Values.drupalProfile | quote }}
-            {{- end }}
-            {{- if .Values.drupalUsername }}
             - name: DRUPAL_USERNAME
               value: {{ .Values.drupalUsername | quote }}
-            {{- end }}
             - name: DRUPAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "drupal.secretName" . }}
+                  name: {{ include "common.names.fullname" . }}
                   key: drupal-password
-            {{- if .Values.drupalEmail }}
             - name: DRUPAL_EMAIL
               value: {{ .Values.drupalEmail | quote }}
+            {{- if .Values.smtpHost }}
+            - name: SMTP_HOST
+              value: {{ .Values.smtpHost | quote }}
+            {{- end }}
+            {{- if .Values.smtpPort }}
+            - name: SMTP_PORT
+              value: {{ .Values.smtpPort | quote }}
+            {{- end }}
+            {{- if .Values.smtpUser }}
+            - name: SMTP_USER
+              value: {{ .Values.smtpUser | quote }}
+            {{- end }}
+            {{- if .Values.smtpPassword }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.names.fullname" . }}
+                  key: smtp-password
+            {{- end }}
+            {{- if .Values.smtpProtocol }}
+            - name: SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -145,13 +213,13 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPorts.http }}
             - name: https
-              containerPort: 8443
+              containerPort: {{ .Values.containerPorts.https }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /user/login
+              path: {{ .Values.livenessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -164,7 +232,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /user/login
+              path: {{ .Values.readinessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -179,7 +247,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: drupal-data
-              mountPath: '/bitnami/drupal'
+              mountPath: /bitnami/drupal
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -187,7 +255,7 @@ spec:
         - name: metrics
           image: {{ template "drupal.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
           ports:
             - name: metrics
               containerPort: 9117
@@ -203,21 +271,19 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
-          {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 10 }}
-          {{- end }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: drupal-data
-        {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-drupal" (include "drupal.fullname" .)) }}
-        {{- else }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-drupal" (include "common.names.fullname" .)) }}
+          {{- else }}
           emptyDir: {}
-        {{- end }}
+          {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
