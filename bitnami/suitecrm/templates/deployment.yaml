@@ -50,23 +50,23 @@ spec:
             - name: SUITECRM_VALIDATE_USER_IP
               value: {{ .Values.suitecrmValidateUserIP | quote }}
             {{- if .Values.mariadb.enabled }}
-            - name: MARIADB_HOST
+            - name: SUITECRM_DATABASE_HOST
               value: {{ include "suitecrm.mariadb.fullname" . }}
-            - name: MARIADB_PORT_NUMBER
-              value: "3306"
+            - name: SUITECRM_DATABASE_PORT_NUMBER
+              value: {{ .Values.mariadb.port | quote }}
             - name: SUITECRM_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ .Values.mariadb.auth.database | quote }}
             - name: SUITECRM_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ .Values.mariadb.auth.username | quote }}
             - name: SUITECRM_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "suitecrm.mariadb.fullname" . }}
                   key: mariadb-password
             {{- else }}
-            - name: MARIADB_HOST
+            - name: SUITECRM_DATABASE_HOST
               value: {{ .Values.externalDatabase.host | quote }}
-            - name: MARIADB_PORT_NUMBER
+            - name: SUITECRM_DATABASE_PORT_NUMBER
               value: {{ .Values.externalDatabase.port | quote }}
             - name: SUITECRM_DATABASE_NAME
               value: {{ .Values.externalDatabase.database | quote }}
@@ -78,8 +78,8 @@ spec:
                   name: {{ printf "%s-%s" .Release.Name "externaldb" }}
                   key: db-password
             {{- end }}
-            - name: SUITECRM_HOST
-              value: "{{ include "suitecrm.host" . }}:{{ default "8080" .Values.service.port }}"
+            - name: SUITECRM_SITE_URL
+              value: "http://{{ include "suitecrm.host" . }}"
             - name: SUITECRM_USERNAME
               value: {{ .Values.suitecrmUsername | quote }}
             - name: SUITECRM_PASSWORD
@@ -89,11 +89,13 @@ spec:
                   key: suitecrm-password
             - name: SUITECRM_EMAIL
               value: {{ .Values.suitecrmEmail | quote }}
-            - name: SUITECRM_LAST_NAME
-              value: {{ .Values.suitecrmLastName | quote }}
+            - name: SUITECRM_SMTP_NOTIFY_NAME
+              value: {{ .Values.suitecrmNotifyName | quote }}
+            - name: SUITECRM_SMTP_NOTIFY_ADDRESS
+              value: {{ .Values.suitecrmNotifyAddress | quote }}
             - name: SUITECRM_SMTP_HOST
               value: {{ .Values.suitecrmSmtpHost | quote }}
-            - name: SUITECRM_SMTP_PORT
+            - name: SUITECRM_SMTP_PORT_NUMBER
               value: {{ .Values.suitecrmSmtpPort | quote }}
             - name: SUITECRM_SMTP_USER
               value: {{ .Values.suitecrmSmtpUser | quote }}
