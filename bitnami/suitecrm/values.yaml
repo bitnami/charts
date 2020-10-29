@@ -61,14 +61,9 @@ suitecrmUsername: user
 ##
 suitecrmEmail: user@example.com
 
-## Lastname
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
-##
-suitecrmLastName: Name
-
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
-allowEmptyPassword: "yes"
+allowEmptyPassword: "no"
 
 ##
 ## External database configuration
@@ -98,39 +93,43 @@ externalDatabase:
 # suitecrmSmtpUser:
 # suitecrmSmtpPassword:
 # suitecrmSmtpProtocol:
+# suitecrmNotifyAddress: user@example.com
+# suitecrmNotifyName: UserName
 
-##
 ## MariaDB chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_suitecrm
-    user: bn_suitecrm
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  port: 3306
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    # password:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_suitecrm
+    username: bn_suitecrm
+    password: ""
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -140,12 +139,19 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   # HTTP Port
   port: 80
   # HTTPS Port
