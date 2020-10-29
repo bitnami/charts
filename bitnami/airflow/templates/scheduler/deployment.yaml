@@ -25,6 +25,7 @@ spec:
       {{- end }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+        checksum/configmapdags: {{ include (print $.Template.BasePath "/config/configmap-dags.yaml") . | sha256sum }}
       {{- if .Values.scheduler.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

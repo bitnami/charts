@@ -94,7 +94,7 @@ data:
           image: {{ include "airflow.workerImage" . }}
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
         {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
           env:
             - name: AIRFLOW__CORE__EXECUTOR
