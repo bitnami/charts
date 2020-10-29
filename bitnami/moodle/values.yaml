@@ -232,6 +232,9 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
+  ## Metrics Port
+  ##
+  metricsPort: 9117
   ## clusterIP: ""
   ## Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
