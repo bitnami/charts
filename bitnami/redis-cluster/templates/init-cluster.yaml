@@ -152,7 +152,7 @@ spec:
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.tls.enabled }}
+          {{- if or .Values.tls.enabled .Values.initJob.extraVolumeMounts }}
           volumeMounts:
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
