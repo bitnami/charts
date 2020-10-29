@@ -170,14 +170,10 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                       | `nil`                                                   |
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
-| `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`
-             |                                                     
+| `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io` 
 | `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`
-             | 
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`
-             | 
 | `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`
-             | 
 
 ### MongoDB statefulset parameters
 
