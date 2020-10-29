@@ -54,7 +54,7 @@ Return the name of the Secret used to store the passwords
 {{- if .Values.existingSecret -}}
 {{ .Values.existingSecret }}
 {{- else -}}
-{{ template "common.names.fullname" . }}
+{{ include "common.names.fullname" . }}
 {{- end -}}
 {{- end -}}
 
@@ -78,4 +78,87 @@ Return the proper Redmine mail Receiver image name
 */}}
 {{- define "redmine.mailReceiver.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.mailReceiver.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return whether to use the external DB or the built-in subcharts
+*/}}
+{{- define "redmine.useExternalDB" -}}
+{{- if or (and (eq .Values.databaseType "mariadb") (not .Values.mariadb.enabled)) (and (eq .Values.databaseType "postgresql") (not .Values.postgresql.enabled)) -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return whether to create an external secret containing the
+credentials for the external database or not
+*/}}
+{{- define "redmine.createExternalDBSecret" -}}
+{{- if and (include "redmine.useExternalDB" .) (not .Values.externalDatabase.existingSecret) -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database host for Redmine
+*/}}
+{{- define "redmine.database.host" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
+{{- else }}
+    {{- .Values.externalDatabase.host | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database name for Redmine
+*/}}
+{{- define "redmine.database.name" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- .Values.mariadb.auth.database | quote }}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- .Values.postgresql.postgresqlDatabase | quote }}
+{{- else }}
+    {{- .Values.externalDatabase.name | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database username for Redmine
+*/}}
+{{- define "redmine.database.username" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- .Values.mariadb.auth.username | quote }}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- .Values.postgresql.postgresqlUsername | quote }}
+{{- else }}
+    {{- .Values.externalDatabase.user | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the name of the database secret with its credentials
+*/}}
+{{- define "redmine.database.secretName" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- if .Values.mariadb.existingSecret -}}
+        {{- printf "%s" .Values.mariadb.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
+    {{- end -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- if .Values.postgresql.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+    {{- end -}}
+{{- end -}}
 {{- end -}}

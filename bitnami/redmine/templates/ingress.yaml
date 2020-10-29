@@ -2,11 +2,11 @@
 apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: redmine
     {{- if .Values.commonLabels }}
-    {{- include "ejbca.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
     {{- if .Values.ingress.certManager }}
@@ -16,7 +16,7 @@ metadata:
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
-    {{- include "ejbca.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:
@@ -26,7 +26,7 @@ spec:
         paths:
         - path: /
           backend:
-            serviceName: "{{ template "common.names.fullname" . }}"
+            serviceName: "{{ include "common.names.fullname" . }}"
             servicePort: http-redmine
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
