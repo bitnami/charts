@@ -162,6 +162,7 @@ spec:
             {{- if .Values.redis.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.redis.extraEnvVarsCM .Values.redis.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}
             - configMapRef:
@@ -171,6 +172,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redis.port }}
@@ -267,6 +269,7 @@ spec:
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis-cluster.tlsCert" . }}
             {{- end }}
+          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
@@ -277,6 +280,7 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+          {{- end }}
           ports:
             - name: http-metrics
               containerPort: 9121
@@ -373,8 +377,8 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{- include "redis-cluster.storageClass" . | nindent 8 }}
-        selector:
         {{- if .Values.persistence.matchLabels }}
+        selector:
           matchLabels:
           {{- toYaml .Values.persistence.matchLabels | nindent 12 }}
         {{- end -}}
