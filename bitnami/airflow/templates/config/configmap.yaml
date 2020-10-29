@@ -35,6 +35,7 @@ data:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
         - name: k8s-executor-init-config
           image: {{ include "airflow.workerImage" . }}

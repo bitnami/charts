@@ -177,6 +177,10 @@ web:
   ##         containerPort: 1234
   ##
   initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
 
 ## Scheculer component related properties
 ##
@@ -280,6 +284,10 @@ scheduler:
   ##         containerPort: 1234
   ##
   initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
 
 ## Worker component related properties
 ##
@@ -432,6 +440,10 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
 
 ## Add labels to all the deployed resources
 ##
