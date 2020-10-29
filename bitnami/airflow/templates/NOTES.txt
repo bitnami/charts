@@ -1,7 +1,7 @@
 {{- $airflowSecretName := include "airflow.secretName" . -}}
 {{- $postgresqlSecretName := include "airflow.postgresql.secretName" . -}}
 {{- $redisSecretName := include "airflow.redis.secretName" . -}}
-{{- if not .Values.airflow.baseUrl -}}
+{{- if not .Values.web.baseUrl -}}
 ###############################################################################
 ### ERROR: You did not provide an external URL in your 'helm install' call ###
 ###############################################################################
@@ -49,9 +49,9 @@ host. To configure Airflow with the URL of your service:
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set service.type={{ .Values.service.type }} \
-    --set airflow.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
-    --set airflow.auth.password=$AIRFLOW_PASSWORD \
-    --set airflow.auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
+    --set auth.password=$AIRFLOW_PASSWORD \
+    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set redis.password=$REDIS_PASSWORD
 
@@ -61,7 +61,7 @@ host. To configure Airflow with the URL of your service:
 
 {{- if .Values.ingress.enabled }}
 
-  echo URL  : {{ .Values.airflow.baseUrl }}
+  echo URL  : {{ .Values.web.baseUrl }}
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
@@ -76,12 +76,12 @@ host. To configure Airflow with the URL of your service:
 
 {{- else }}
 
-  echo URL  : {{ .Values.airflow.baseUrl }}
+  echo URL  : {{ .Values.web.baseUrl }}
 {{- end }}
 
 2. Get your Airflow login credentials by running:
   {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
-  echo User:    {{ .Values.airflow.auth.username }}
+  echo User:     {{ .Values.auth.username }}
   echo Password: $AIRFLOW_PASSWORD
 
 {{- end  }}
@@ -90,12 +90,12 @@ host. To configure Airflow with the URL of your service:
 {{ include "airflow.checkRollingTags" . }}
 
 {{- $passwordValidationErrors := list -}}
-{{- if not .Values.airflow.auth.existingSecret -}}
-    {{- $requiredAirflowPassword := dict "valueKey" "airflow.auth.password" "secret" $airflowSecretName "field" "airflow-password" "context" $ -}}
+{{- if not .Values.auth.existingSecret -}}
+    {{- $requiredAirflowPassword := dict "valueKey" "auth.password" "secret" $airflowSecretName "field" "airflow-password" "context" $ -}}
     {{- $requiredAirflowPasswordError := include "common.validations.values.single.empty" $requiredAirflowPassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredAirflowPasswordError -}}
 
-    {{- $requiredFernetKeyPassword := dict "valueKey" "airflow.auth.fernetKey" "secret" $airflowSecretName "field" "airflow-fernetKey" "context" $ -}}
+    {{- $requiredFernetKeyPassword := dict "valueKey" "auth.fernetKey" "secret" $airflowSecretName "field" "airflow-fernetKey" "context" $ -}}
     {{- $requiredFernetKeyPasswordError := include "common.validations.values.single.empty" $requiredFernetKeyPassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredFernetKeyPasswordError -}}
 {{- end -}}

@@ -1,4 +1,4 @@
-{{- if and .Values.airflow.web.podDisruptionBudget.enabled (eq .Values.executor "CeleryExecutor") }}
+{{- if and .Values.web.podDisruptionBudget.enabled (eq .Values.executor "CeleryExecutor") }}
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:
@@ -12,5 +12,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
-  {{- include "common.tplvalues.render" (dict "value" (omit .Values.airflow.web.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
+  {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
 {{- end }}

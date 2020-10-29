@@ -1,4 +1,4 @@
-{{- if and .Values.airflow.scheduler.podDisruptionBudget.enabled }}
+{{- if and .Values.scheduler.podDisruptionBudget.enabled }}
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:
@@ -12,5 +12,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: scheduler
-  {{- include "common.tplvalues.render" (dict "value" (omit .Values.airflow.scheduler.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
+  {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
 {{- end }}

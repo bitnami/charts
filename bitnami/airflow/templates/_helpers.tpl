@@ -63,21 +63,21 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.web.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow Scheduler image name
 */}}
 {{- define "airflow.schedulerImage" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.schedulerImage "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.scheduler.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Airflow Worker image name
 */}}
 {{- define "airflow.workerImage" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.workerImage "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.worker.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -98,7 +98,7 @@ Return the proper Airflow Metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.schedulerImage .Values.workerImage .Values.git .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.web.image .Values.scheduler.image .Values.worker.image .Values.git .Values.metrics.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -161,8 +161,8 @@ Get the Postgresql credentials secret.
 Get the secret name
 */}}
 {{- define "airflow.secretName" -}}
-{{- if .Values.airflow.auth.existingSecret -}}
-  {{- printf "%s" .Values.airflow.auth.existingSecret -}}
+{{- if .Values.auth.existingSecret -}}
+  {{- printf "%s" .Values.auth.existingSecret -}}
 {{- else -}}
   {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -172,8 +172,8 @@ Get the secret name
 Get the configmap name
 */}}
 {{- define "airflow.configMapName" -}}
-{{- if .Values.airflow.configurationConfigMap -}}
-  {{- printf "%s" .Values.airflow.configurationConfigMap -}}
+{{- if .Values.configurationConfigMap -}}
+  {{- printf "%s" .Values.configurationConfigMap -}}
 {{- else -}}
   {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -183,7 +183,7 @@ Get the configmap name
 Should use config from the configmap
 */}}
 {{- define "airflow.shouldUseConfigFromConfigMap" -}}
-{{- if or .Values.config .Values.airflow.configurationConfigMap -}}
+{{- if or .Values.config .Values.configurationConfigMap -}}
   true
 {{- else -}}{{- end -}}
 {{- end -}}
@@ -281,8 +281,8 @@ Add environmnet variables to configure airflow common values
 - name: AIRFLOW_WEBSERVER_PORT_NUMBER
   value: {{ .Values.service.port | quote }}
 - name: AIRFLOW_LOAD_EXAMPLES
-  value: {{ ternary "yes" "no" .Values.airflow.loadExamples | quote }}
-{{- if .Values.image.debug }}
+  value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
+{{- if .Values.web.image.debug }}
 - name: BASH_DEBUG
   value: "1"
 - name: NAMI_DEBUG
@@ -300,11 +300,11 @@ Add environmnet variables to configure airflow kubernetes executor
 - name: AIRFLOW__KUBERNETES__NAMESPACE
   value: {{ .Release.Namespace }}
 - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
-  value: {{ printf "%s/%s" .Values.workerImage.registry .Values.workerImage.repository }}
+  value: {{ printf "%s/%s" .Values.worker.image.registry .Values.worker.image.repository }}
 - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
-  value: {{ .Values.workerImage.tag }}
+  value: {{ .Values.worker.image.tag }}
 - name: AIRFLOW__KUBERNETES__IMAGE_PULL_POLICY
-  value: {{ .Values.workerImage.pullPolicy }}
+  value: {{ .Values.worker.image.pullPolicy }}
 - name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
   value: "True"
 - name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
@@ -395,9 +395,9 @@ airflow: git.plugins.repositories[$index].branch
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "airflow.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.schedulerImage }}
-{{- include "common.warnings.rollingTag" .Values.workerImage }}
+{{- include "common.warnings.rollingTag" .Values.web.image }}
+{{- include "common.warnings.rollingTag" .Values.scheduler.image }}
+{{- include "common.warnings.rollingTag" .Values.worker.image }}
 {{- include "common.warnings.rollingTag" .Values.git.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- end -}}

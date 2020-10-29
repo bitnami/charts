@@ -14,20 +14,23 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
-  replicas: {{ default 1 .Values.replicaCount }}
+  replicas: {{ default 1 .Values.web.replicaCount }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: web
+      {{- if .Values.web.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
+      {{- end }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
-      {{- if .Values.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- if .Values.web.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.affinity }}
@@ -45,15 +48,24 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.web.initContainer }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainer "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainer }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainer "context" $) | trim | nindent 8 }}
+      {{- end }}
       containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
         - name: airflow-web
           image: {{ include "airflow.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.airflow.web.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.command "context" $) | nindent 12 }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.airflow.web.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.args "context" $) | nindent 12 }}
+          {{- if .Values.web.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.web.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
@@ -61,15 +73,15 @@ spec:
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
             - name: AIRFLOW_USERNAME
-              value: {{ .Values.airflow.auth.username }}
+              value: {{ .Values.auth.username }}
             - name: AIRFLOW_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.secretName" . }}
                   key: airflow-password
-            {{- if .Values.airflow.baseUrl }}
+            {{- if .Values.web.baseUrl }}
             - name: AIRFLOW_BASE_URL
-              value: {{ .Values.airflow.baseUrl }}
+              value: {{ .Values.web.baseUrl }}
             {{- end }}
             - name: AIRFLOW_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
@@ -97,35 +109,35 @@ spec:
               value: {{ include "airflow.ldapCAFilename" . | quote }}
             {{- end }}
             {{- end }}
-            {{- if .Values.airflow.extraEnvVars }}
-              {{- toYaml .Values.airflow.extraEnvVars | nindent 12 }}
+            {{- if .Values.extraEnvVars }}
+              {{- toYaml .Values.extraEnvVars | nindent 12 }}
             {{- end }}
-            {{- if .Values.airflow.web.extraEnvVars }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.web.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
-            {{- if .Values.airflow.extraEnvVarsCM }}
+            {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.airflow.extraEnvVarsCM }}
+                name: {{ .Values.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.airflow.extraEnvVarsSecret }}
+            {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.airflow.extraEnvVarsSecret }}
+                name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
-            {{- if .Values.airflow.web.extraEnvVarsCM }}
+            {{- if .Values.web.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.airflow.web.extraEnvVarsCM }}
+                name: {{ .Values.web.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.airflow.web.extraEnvVarsSecret }}
+            {{- if .Values.web.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.airflow.web.extraEnvVarsSecret }}
+                name: {{ .Values.web.extraEnvVarsSecret }}
             {{- end }}
           ports:
             - name: http
               containerPort: 8080
-        {{- if .Values.livenessProbe.enabled }}
+        {{- if .Values.web.livenessProbe.enabled }}
           livenessProbe:
-          {{- if .Values.airflow.baseUrl }}
+          {{- if .Values.web.baseUrl }}
             tcpSocket:
               port: http
           {{- else }}
@@ -133,15 +145,14 @@ spec:
               path: /health
               port: http
           {{- end }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            {{ omit .Values.web.livenessProbe "enabled" | toYaml | nindent 12 }}
+        {{- else if .Values.web.customLivenessProbe }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | trim | nindent 12 }}
         {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
+        {{- if .Values.web.readinessProbe.enabled }}
           readinessProbe:
-          {{- if .Values.airflow.baseUrl }}
+          {{- if .Values.web.baseUrl }}
             tcpSocket:
               port: http
           {{- else }}
@@ -149,18 +160,17 @@ spec:
               path: /health
               port: http
           {{- end }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
+        {{- else if .Values.web.customRedinessProbe }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customRedinessProbe "context" $) | trim | nindent 12 }}
         {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.airflow.dagsConfigMap }}
+          {{- if .Values.dagsConfigMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -169,7 +179,7 @@ spec:
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
           {{- end }}
-          {{- if .Values.airflow.webserverConfigMap }}
+          {{- if .Values.web.configMap }}
             - name: custom-webserver-configuration-file
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: webserver_config.py
@@ -180,32 +190,38 @@ spec:
               readOnly: true
           {{- end }}
             {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
-          {{- if .Values.airflow.web.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.web.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.airflow.web.resources }}
-          resources: {{- toYaml .Values.airflow.web.resources | nindent 12 }}
+          {{- if .Values.web.resources }}
+          resources: {{- toYaml .Values.web.resources | nindent 12 }}
           {{- end }}
+      {{- if .Values.web.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
       volumes:
       {{- if .Files.Glob "files/dags/*.py" }}
         - name: local-dag-files
           configMap:
             name: {{ include "common.names.fullname" . }}-dag-files
       {{- end }}
-      {{- if .Values.airflow.dagsConfigMap }}
+      {{- if .Values.dagsConfigMap }}
         - name: external-dag-files
           configMap:
-            name: {{ .Values.airflow.dagsConfigMap }}
+            name: {{ .Values.dagsConfigMap }}
       {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file
           configMap:
             name: {{ include "airflow.configMapName"  . }}
       {{- end }}
-      {{- if .Values.airflow.webserverConfigMap }}
+      {{- if .Values.web.configMap }}
         - name: custom-webserver-configuration-file
           configMap:
-            name: {{ .Values.airflow.webserverConfigMap }}
+            name: {{ .Values.web.configMap }}
       {{- end }}
       {{- if .Values.ldap.tls.enabled }}
         - name: airflow-ldap-ca-certificate
@@ -214,6 +230,6 @@ spec:
             defaultMode: 256
       {{- end }}
         {{- include "airflow.git.volumes" . | trim | nindent 8 }}
-      {{- if .Values.airflow.web.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.airflow.web.extraVolumes "context" $) | nindent 8 }}
+      {{- if .Values.web.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

@@ -14,7 +14,7 @@ spec:
   clusterIP: None
   ports:
     - name: task-logs
-      port: {{ .Values.airflow.worker.port }}
+      port: {{ .Values.worker.port }}
       targetPort: task-logs
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: scheduler

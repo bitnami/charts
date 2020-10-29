@@ -1,5 +1,5 @@
 {{- if .Values.metrics.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-exporter
@@ -18,14 +18,23 @@ spec:
       app.kubernetes.io/component: metrics
   template:
     metadata:
-      annotations: {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+      {{- if .Values.metrics.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       containers:
         - image: {{ include "airflow.metrics.image" . | quote }}
           name: airflow-exporter
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
               value: "postgres"
