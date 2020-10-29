@@ -391,6 +391,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
 There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `adminUser.pwd`, `user.pwd`, `readUser.pwd` and `writeUser.pwd` parameters when upgrading the chart:

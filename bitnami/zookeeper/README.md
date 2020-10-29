@@ -127,6 +127,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | Parameter                                         | Description                                                                                                                       | Default                                                 |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                                                           | `ClusterIP`                                             |
+| `service.loadBalancerIP`                          | Use with service.type `LoadBalancer` to assign static IP to Load Balancer instance                                                | `""`                                                    |
 | `service.port`                                    | ZooKeeper port                                                                                                                    | `2181`                                                  |
 | `service.followerPort`                            | ZooKeeper follower port                                                                                                           | `2888`                                                  |
 | `service.electionPort`                            | ZooKeeper election port                                                                                                           | `3888`                                                  |
@@ -262,6 +263,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 You can use a dedicated device for logs (instead of using the data directory) to help avoiding competition between logging and snaphots. To do so, set the `dataLogDir` parameter with the path to be used for writing transaction logs. Alternatively, set this parameter with an empty string an it result in the log being written to the data directory (Zookeeper's default behavior).
 
 When using a dedicated device for logs, you can use a PVC to persist the logs. To do so, set `persistence.enabled` to `true`. See the [Persistence Parameters](#persistence-parameters) section for more information.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

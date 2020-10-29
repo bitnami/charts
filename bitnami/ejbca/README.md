@@ -281,7 +281,12 @@ If you configure the `image` value to one in a private registry, you will need t
 imagePullSecrets:
   - name: SECRET_NAME
 ```
+
 3. Install the chart
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
