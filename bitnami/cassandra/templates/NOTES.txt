@@ -64,11 +64,7 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "cassandra.validateValues" . }}
-{{- if (not .Values.dbUser.existingSecret) -}}
-  {{- $secretName := include "common.names.fullname" . }}
-  {{- $requiredPasswords := list -}}
-  {{- $requiredDBPassword := dict "valueKey" "dbUser.password" "secret" $secretName "field" "cassandra-password" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
-  {{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}
-{{- end -}}
+
+{{- $secretName := include "common.names.fullname" . }}
+{{- $passwordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $secretName "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}

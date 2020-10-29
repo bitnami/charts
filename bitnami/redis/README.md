@@ -417,8 +417,10 @@ tls.certCAFilename="ca.pem"
 The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 
 ### Host Kernel Settings
+
 Redis may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 To do so, you can set up a privileged initContainer with the `sysctlImage` config values, for example:
+
 ```
 sysctlImage:
   enabled: true
@@ -487,7 +489,6 @@ Follow the following steps:
 
 - First you will need to set in the `values.yaml` the parameter `appendonly` to `no`, if it is already `no` you can skip this step.
 
-
 ```yaml
 configmap: |-
   # Enable AOF https://redis.io/topics/persistence#append-only-file
@@ -497,7 +498,6 @@ configmap: |-
 ```
 
 - Start the new cluster to create the PVCs.
-
 
 For example, :
 
@@ -577,6 +577,10 @@ networkPolicy:
     redis-client: true
 ```
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading an existing Release to a new major version
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
@@ -589,8 +593,9 @@ When using sentinel, a new statefulset called `-node` was introduced. This will 
 ### To 10.0.0
 
 For releases with `usePassword: true`, the value `sentinel.usePassword` controls whether the password authentication also applies to the sentinel port. This defaults to `true` for a secure configuration, however it is possible to disable to account for the following cases:
-* Using a version of redis-sentinel prior to `5.0.1` where the authentication feature was introduced.
-* Where redis clients need to be updated to support sentinel authentication.
+
+- Using a version of redis-sentinel prior to `5.0.1` where the authentication feature was introduced.
+- Where redis clients need to be updated to support sentinel authentication.
 
 If using a master/slave topology, or with `usePassword: false`, no action is required.
 
@@ -602,13 +607,13 @@ For releases with `metrics.enabled: true` the default tag for the exporter image
 
 This version causes a change in the Redis Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
 
-  - Recommended: Create a clone of the Redis Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
+- Recommended: Create a clone of the Redis Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
    ```
    helm install my-release bitnami/redis --set persistence.existingClaim=<NEW PVC>
    ```
 
-  - Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
+- Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
    ```
    helm delete --purge <RELEASE>
@@ -619,8 +624,8 @@ Previous versions of the chart were not using persistence in the slaves, so this
 
 Some values have changed as well:
 
-   - `master.port` and `slave.port` have been changed to `redisPort` (same value for both master and slaves)
-   - `master.securityContext` and `slave.securityContext` have been changed to `securityContext`(same values for both master and slaves)
+- `master.port` and `slave.port` have been changed to `redisPort` (same value for both master and slaves)
+- `master.securityContext` and `slave.securityContext` have been changed to `securityContext`(same values for both master and slaves)
 
 By default, the upgrade will not change the cluster topology. In case you want to use Redis Sentinel, you must explicitly set `sentinel.enabled` to `true`.
 
@@ -635,6 +640,7 @@ and `redis-cli` binaries. If `redis-server` is not the default image ENTRYPOINT,
 must be specified.
 
 #### Breaking changes
+
 - `master.args` and `slave.args` are removed. Use `master.command` or `slave.command` instead in order to override the image entrypoint, or `master.extraFlags` to pass additional flags to `redis-server`.
 - `disableCommands` is now interpreted as an array of strings instead of a string of comma separated values.
 - `master.persistence.path` now defaults to `/data`.
@@ -650,10 +656,13 @@ It also fixes https://github.com/helm/charts/issues/7726 where a deployment `ext
 Finally, it fixes https://github.com/helm/charts/issues/7803 by removing mutable labels in `spec.VolumeClaimTemplate.metadata.labels` so that it is upgradable.
 
 In order to upgrade, delete the Redis StatefulSet before upgrading:
+
 ```bash
-$ kubectl delete statefulsets.apps --cascade=false my-release-redis-master
+kubectl delete statefulsets.apps --cascade=false my-release-redis-master
 ```
+
 And edit the Redis slave (and metrics if enabled) deployment:
+
 ```bash
 kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
@@ -662,12 +671,15 @@ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remo
 ## Notable changes
 
 ### 11.0.0
+
 When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
 ### 9.0.0
+
 The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
 
 ### 7.0.0
+
 In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
 
 This version also allows enabling Redis Sentinel containers inside of the Redis Pods (feature disabled by default). In case the master crashes, a new Redis node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).

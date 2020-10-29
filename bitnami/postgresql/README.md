@@ -508,6 +508,10 @@ postgresqlDataDir=/data/pgdata
 persistence.mountPath=/data/
 ```
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresqlPassword` and `replication.password` parameters when upgrading the chart:
@@ -527,11 +531,13 @@ In this version the chart was adapted to follow the Helm label best practices, s
 As a workaround, you can delete the existing statefulset (using the `--cascade=false` flag pods are not deleted) before upgrade the chart. For example, this can be a valid workflow:
 
 - Deploy an old version (8.X.X)
+
 ```console
 $ helm install postgresql bitnami/postgresql --version 8.10.14
 ```
 
 - Old version is up and running
+
 ```console
 $ helm ls
 NAME      	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART             	APP VERSION
@@ -543,19 +549,22 @@ postgresql-postgresql-0   1/1     Running   0          76s
 ```
 
 - The upgrade to the latest one (9.X.X) is going to fail
+
 ```console
 $ helm upgrade postgresql bitnami/postgresql
 Error: UPGRADE FAILED: cannot patch "postgresql-postgresql" with kind StatefulSet: StatefulSet.apps "postgresql-postgresql" is invalid: spec: Forbidden: updates to statefulset spec for fields other than 'replicas', 'template', and 'updateStrategy' are forbidden
 ```
 
 - Delete the statefulset
+
 ```console
 $ kubectl delete statefulsets.apps --cascade=false postgresql-postgresql
 statefulset.apps "postgresql-postgresql" deleted
 ```
 
 - Now the upgrade works
-```cosnole
+  
+```console
 $ helm upgrade postgresql bitnami/postgresql
 $ helm ls
 NAME      	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART           	APP VERSION
@@ -563,6 +572,7 @@ postgresql	default  	3       	2020-08-04 13:42:08.020385884 +0000 UTC	deployed	p
 ```
 
 - We can kill the existing pod and the new statefulset is going to create a new one:
+
 ```console
 $ kubectl delete pod postgresql-postgresql-0
 pod "postgresql-postgresql-0" deleted
@@ -658,7 +668,7 @@ It also fixes an issue with `postgresql.master.fullname` helper template not obe
 
 In order to upgrade from the `0.X.X` branch to `1.X.X`, you should follow the below steps:
 
- - Obtain the service name (`SERVICE_NAME`) and password (`OLD_PASSWORD`) of the existing postgresql chart. You can find the instructions to obtain the password in the NOTES.txt, the service name can be obtained by running
+- Obtain the service name (`SERVICE_NAME`) and password (`OLD_PASSWORD`) of the existing postgresql chart. You can find the instructions to obtain the password in the NOTES.txt, the service name can be obtained by running
 
 ```console
 $ kubectl get svc

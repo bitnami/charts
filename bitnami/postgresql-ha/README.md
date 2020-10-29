@@ -509,6 +509,10 @@ This way, the credentials will be available in all of the subcharts.
 The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
@@ -522,6 +526,31 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+## 5.2.0
+
+A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
 
 ## 5.0.0
 
