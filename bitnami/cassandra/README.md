@@ -163,19 +163,22 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `persistence.annotations`                 | Persistent Volume Claim annotations Annotations                                                                      | `{}` (evaluated as a template)                               |
 | `persistence.accessMode`                  | PVC Access Mode for Cassandra data volume                                                                            | `[ReadWriteOnce]`                                            |
 | `persistence.size`                        | PVC Storage Request for Cassandra data volume                                                                        | `8Gi`                                                        |
+| `persistence.mountPath`                   | The path the volume will be mounted at                                                                               | `/bitnami/cassandra`                                         |
 
 ### Volume Permissions parameters
 
-| Parameter                                 | Description                                                                                                          | Default                                                      |
-|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`               | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
-| `volumePermissions.image.registry`        | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
-| `volumePermissions.image.repository`      | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`             | Init container volume-permissions image tag                                                                          | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`      | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
-| `volumePermissions.image.pullSecrets`     | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.resources.limits`      | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
-| `volumePermissions.resources.requests`    | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| Parameter                                     | Description                                                                                                          | Default                                                      |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                         |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                          |
 
 ### Metrics parameters
 
