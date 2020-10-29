@@ -1,6 +1,8 @@
 # Moodle<sup>TM</sup> LMS
 
-[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
+[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. Bitnami does not provide commercial license of any of these products. This listing has an open source license. Moodle<sup>TM</sup> LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
 ## TL;DR
 
