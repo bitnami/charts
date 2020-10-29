@@ -89,6 +89,18 @@ auth:
   ##
   # existingSecret: name-of-existing-secret
 
+tls:
+ ## Enable or disable MongoDB TLS Support
+  enabled: false
+ ##
+ ## Bitnami Nginx image
+ ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.19.3
+    pullPolicy: IfNotPresent
+
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
 ##

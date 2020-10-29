@@ -63,7 +63,7 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -92,6 +92,58 @@ spec:
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.persistence.mountPath }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: generate-tls-certs
+          image: {{ include "mongodb.tls.image" . }}
+          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          env:
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+          - name: certs-volume
+            mountPath: /certs/CAs
+          - name: certs
+            mountPath: /certs
+          command:
+            - sh
+            - "-c"
+            - |
+              /bin/bash <<'EOF'
+              my_hostname=$(hostname)
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+              cp /certs/CAs/* /certs/
+              cat >/certs/openssl.cnf <<EOL
+              [req]
+              req_extensions = v3_req
+              distinguished_name = req_distinguished_name
+              [req_distinguished_name]
+              [ v3_req ]
+              basicConstraints = CA:FALSE
+              keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+              subjectAltName = @alt_names
+              [alt_names]
+              DNS.1 = $svc
+              DNS.2 = $my_hostname
+              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+              DNS.4 = localhost
+              DNS.5 = 127.0.0.1
+              EOL
+
+              export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+              #Create the client/server cert
+              openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+              #Signing the server cert with the CA cert and key
+              openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+              rm /certs/mongo.csr
+              #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+              cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+              cd /certs/
+              shopt -s extglob
+              rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              EOF
         {{- end }}
       {{- end }}
       containers:
@@ -142,9 +194,17 @@ spec:
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- end }}
             {{- if .Values.extraFlags }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ .Values.extraFlags | join " " | quote }}
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: MONGODB_CLIENT_EXTRA_FLAGS
+              value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -167,8 +227,14 @@ spec:
           livenessProbe:
             exec:
               command:
-                - pgrep
-                - mongod
+                - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
+                - --eval
+                - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -182,6 +248,11 @@ spec:
             exec:
               command:
                 - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
@@ -207,6 +278,10 @@ spec:
             - name: config
               mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
               subPath: mongodb.conf
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: certs
+              mountPath: /certs
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
@@ -281,6 +356,20 @@ spec:
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: certs
+          emptyDir: {}
+        - name: certs-volume
+          secret:
+            secretName: ca-clients
+            items:
+            - key: mongodb-ca-cert
+              path: mongodb-ca-cert
+              mode: 511
+            - key: mongodb-ca-key
+              path: mongodb-ca-key
+              mode: 511
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
