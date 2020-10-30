@@ -1,5 +1,5 @@
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
-kind: ClusterRole
+kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "keycloak.fullname" . }}
@@ -12,15 +12,12 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-rules:
-  {{- if .Values.rbac.rules }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
-  {{- end }}
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-    verbs:
-      - get
-      - list
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "keycloak.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "keycloak.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end }}

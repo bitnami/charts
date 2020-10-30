@@ -129,16 +129,12 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
-            {{- if .Values.auth.tls.enabled }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
-            {{- end }}
-            {{- if .Values.metrics.enabled }}
             - name: http-management
               containerPort: 9990
               protocol: TCP
-            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

@@ -142,8 +142,8 @@ cache:
 ##
 ## Example:
 ## configuration: |-
-##    foo: bar   
-##    baz: 
+##    foo: bar
+##    baz:
 ##
 # configuration:
 
@@ -226,7 +226,7 @@ livenessProbe:
 readinessProbe:
   enabled: true
   initialDelaySeconds: 30
-  periodSeconds: 1
+  periodSeconds: 10
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
@@ -529,7 +529,7 @@ autoscaling:
 ##
 metrics:
   ## Enable Keycloak statistics
-  ## ref: https://github.com/bitnami/bitnami-docker-keycloak#enabling-statistics 
+  ## ref: https://github.com/bitnami/bitnami-docker-keycloak#enabling-statistics
   ##
   enabled: false
 
