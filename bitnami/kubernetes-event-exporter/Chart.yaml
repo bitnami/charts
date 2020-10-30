@@ -2,7 +2,7 @@ apiVersion: v1
 name: kubernetes-event-exporter
 description: This tool allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
 version: 1.0.0
-appVersion: 0.9
+appVersion: v0.9
 keywords:
   - alerting
   - event exporting
