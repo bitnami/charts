@@ -50,8 +50,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the SuiteCRM chart and their default values.
 
-| Parameter                        | Description                                                                                           | Default                                                      |
-|----------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| Parameter                                   | Description                                                                                           | Default                                                      |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `commonAnnotations`                         | Annotations to be added to all deployed resources                                                     | `{}` (evaluated as a template)                                                    |
 | `commonLabels`                              | Labels to be added to all deployed resources                                                          | `{}` (evaluated as a template)                                                    |
 | `global.imageRegistry`                      | Global Docker image registry                                                                          | `nil`                                                        |
@@ -134,6 +134,7 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `podSecurityContext.fsGroup`                | Group to configure permissions for volumes                                                            | `1001`                                                       |
 | `containerSecurityContext.enabled`          | Enable securityContext on for DokuWiki deployment                                                     | `true`                                                       |
 | `containerSecurityContext.runAsUser`        | User for the securityContext                                                                          | `1001`                                                       |
+| `extraDeploy`                               | Array of extra objects to deploy with the release 	                                                  | `[]` (evaluated as a template)                               |
 | `metrics.enabled`                           | Start a side-car prometheus exporter                                                                  | `false`                                                      |
 | `metrics.image.registry`                    | Apache exporter image registry                                                                        | `docker.io`                                                  |
 | `metrics.image.repository`                  | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                                    |
