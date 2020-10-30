@@ -174,6 +174,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 +   replicaCount: 2
 ```
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 ```bash

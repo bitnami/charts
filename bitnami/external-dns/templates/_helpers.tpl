@@ -130,7 +130,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) -}}
+{{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
     {{- true -}}
@@ -164,6 +164,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.google.serviceAccountSecret }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
+{{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
+{{- .Values.infoblox.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -310,10 +312,11 @@ Validate values of External DNS:
 - must provide a WAPI password when provider is "infoblox"
 */}}
 {{- define "external-dns.validateValues.infoblox.wapiPassword" -}}
-{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.wapiPassword) -}}
+{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
 external-dns: infoblox.wapiPassword
     You must provide a WAPI password when provider="infoblox".
     Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
+    or you can provide an existing secret name via infoblox.secretName
 {{- end -}}
 {{- end -}}
 
