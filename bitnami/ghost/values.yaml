@@ -326,7 +326,8 @@ podAnnotations: {}
 
 ## Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-priorityClassName: ""
+##
+# priorityClassName: ""
 
 ## Add sidecars to the pod
 ## For example:
