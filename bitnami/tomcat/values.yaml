@@ -249,3 +249,21 @@ ingress:
 ##     value: BAR
 ##
 extraEnvVars: []
+
+## Liveness and Readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+##
+livenessProbe:
+  path: "/"
+  port: http
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  failureThreshold: 6
+  timeoutSeconds: 5
+readinessProbe:
+  path: "/"
+  port: http
+  initialDelaySeconds: 30
+  periodSeconds: 51
+  failureThreshold: 3
+  timeoutSeconds: 3
