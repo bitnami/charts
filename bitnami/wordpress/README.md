@@ -166,6 +166,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
 | `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
 | `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                    | `nil`                                                        |
+| `ingress.extraPaths`                      | Additional arbitrary path/backend objects                                             | `nil`                                                        |
 | `ingress.extraTls[0].hosts[0]`            | TLS configuration for additional hostnames to be covered                              | `nil`                                                        |
 | `ingress.extraTls[0].secretName`          | TLS configuration for additional hostnames to be covered                              | `nil`                                                        |
 | `ingress.secrets[0].name`                 | TLS Secret Name                                                                       | `nil`                                                        |
@@ -441,6 +442,10 @@ The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) ima
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

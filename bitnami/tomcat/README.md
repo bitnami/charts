@@ -99,6 +99,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                      | `false`                                                 |
 | `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                           | `tomcat.local-tls`                                      |
+| `extraEnvVars`                       | Extra environment variables to be set on tomcat container                                           | `[]`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -147,13 +148,15 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
 
 ### 5.0.0
 
 This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.
-
-## Upgrading
 
 ### To 2.1.0
 

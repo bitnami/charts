@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "kong.fullname" . }}-prometheus
+  name: {{ template "common.names.fullname" . }}-prometheus
   namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups: [""]

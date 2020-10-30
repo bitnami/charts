@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}

@@ -89,6 +89,18 @@ auth:
   ##
   # existingSecret: name-of-existing-secret
 
+tls:
+ ## Enable or disable MongoDB TLS Support 
+  enabled: false
+ ##
+ ## Bitnami Nginx image
+ ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.19.3
+    pullPolicy: IfNotPresent
+
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
 ##
@@ -119,7 +131,7 @@ disableSystemLog: false
 ## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
-## configuration:
+## configuration: |-
 ##   # where and how to store data.
 ##   storage:
 ##     dbPath: /bitnami/mongodb/data/db

@@ -209,6 +209,10 @@ The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image s
 
  Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Notable changes
 
 ### 14.0.0
@@ -218,6 +222,7 @@ This version updates the docker image to `2.3.5-debian-10-r57` version. That ver
 ### 13.0.0
 
 Several changes were introduced that can break backwards compatibilty:
+
 - This version includes a new major version of the ElasticSearch chart bundled as dependency. You can find the release notes of the new ElasticSearch major version in [this section](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#1200) of the ES README.
 - Labels are adapted to follow the Helm charts best practices.
 

@@ -241,3 +241,11 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       ##
       tlsSecret: tomcat.local-tls
+
+## Additional environment variables to set
+## E.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvVars: []

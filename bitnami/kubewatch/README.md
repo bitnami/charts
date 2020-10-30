@@ -131,6 +131,10 @@ The API token can be found on the edit page (it starts with `xoxb-`).
 
 Invite the Bot to your channel by typing `/join @name_of_your_bot` in the Slack message area.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 ### To 1.0.0

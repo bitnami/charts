@@ -513,7 +513,7 @@ Note that this will not disable transparent huge tables.
 
 ## Helm Upgrade
 
- By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
 ## Persistence
 
@@ -544,6 +544,10 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 

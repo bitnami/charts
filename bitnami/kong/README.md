@@ -60,6 +60,8 @@ The following tables list the configurable parameters of the kong chart and thei
 |-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | `nameOverride`                                  | String to partially override kong.fullname template with a string (will prepend the release name)                                                     | `nil`                                                                                                       |
 | `fullnameOverride`                              | String to fully override kong.fullname template with a string                                                                                         | `nil`                                                                                                       |
+| `commonLabels`                                  | Labels to add to all deployed objects                                                                                                                 | `nil`                                                                                                       |
+| `commonAnnotations`                             | Annotations to add to all deployed objects                                                                                                            | `[]`                                                                                                        |
 | `clusterDomain`                                 | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                                                                             |
 
 ### Deployment Parameters
@@ -80,6 +82,11 @@ The following tables list the configurable parameters of the kong chart and thei
 | `nodeSelector`                                  | Node labels for pod assignment                                                                                                                        | `{}`                                                                                                        |
 | `tolerations`                                   | Tolerations for pod assignment                                                                                                                        | `[]`                                                                                                        |
 | `affinity`                                      | Affinity for pod assignment                                                                                                                           | `{}`                                                                                                        |
+| `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                   | `""`                                                                                                        |
+| `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                              | `soft`                                                                                                      |
+| `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                             | `""`                                                                                                        |
+| `nodeAffinityPreset.key`                        | Node label key to match Ignored if `affinity` is set.                                                                                                 | `""`                                                                                                        |
+| `nodeAffinityPreset.values`                     | Node label values to match. Ignored if `affinity` is set.                                                                                             | `[]`                                                                                                        |
 | `podAnnotations`                                | Pod annotations                                                                                                                                       | `{}`                                                                                                        |
 | `podLabels`                                     | Pod labels                                                                                                                                       | `{}`                                                                                                        |
 | `sidecars`                                      | Attach additional containers to the pod (evaluated as a template)                                                                                     | `nil`                                                                                                       |
@@ -389,13 +396,23 @@ extraDeploy: |-
   - apiVersion: configuration.konghq.com/v1
     kind: KongPlugin
     metadata:
-      name: {{ include "kong.fullname" . }}-plugin-correlation
+      name: {{ include "common.names.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "kong.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
     config:
       header_name: my-request-id
     plugin: correlation-id
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrade
 
@@ -410,3 +427,13 @@ $ helm upgrade my-release bitnami/kong \
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 2.0.0
+
+PostgreSQL and Cassandra dependencies versions were bumped to new major versions, `9.x.x` and `6.x.x` respectively. Both of these include breaking changes and hence backwards compatibility is no longer guaranteed.
+
+In order to properly migrate your data to this new version:
+
+* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900).
+
+* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-600).

@@ -124,6 +124,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `infoblox.wapiUsername`                | When using the Infoblox provider, specify the Infoblox WAPI username                                                                                                                                            | `"admin"`                                               |
 | `infoblox.wapiPassword`                | When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)                                                                                                          | `""`                                                    |
 | `infoblox.domainFilter`                | When using the Infoblox provider, specify the domain (optional)                                                                                                                                                 | `""`                                                    |
+| `infoblox.secretName`                  | When using the Infoblox provider, specify a name of existing Secret with wapiUsername and wapiPassword (optional)                                                                                              | `""`                                                    |
 | `infoblox.noSslVerify`                 | When using the Infoblox provider, disable SSL verification (optional)                                                                                                                                           | `false`                                                 |
 | `infoblox.wapiPort`                    | When using the Infoblox provider, specify the Infoblox WAPI port (optional)                                                                                                                                     | `""`                                                    |
 | `infoblox.wapiVersion`                 | When using the Infoblox provider, specify the Infoblox WAPI version (optional)                                                                                                                                  | `""`                                                    |
@@ -263,6 +264,10 @@ $ helm install my-release \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
   bitnami/external-dns
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

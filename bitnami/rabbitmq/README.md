@@ -195,6 +195,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `persistence.accessMode`                  | PVC Access Mode for RabbitMQ data volume                                                                             | `ReadWriteOnce`                                              |
 | `persistence.size`                        | PVC Storage Request for RabbitMQ data volume                                                                         | `8Gi`                                                        |
 | `persistence.selector`                    | Selector to match an existing Persistent Volume                                                                      | `{}`(evaluated as a template)                                |
+| `persistence.volumes`                     | Additional volumes without creating PVC                                                                             | `{}`(evaluated as a template)                                |
 
 ### RBAC parameters
 
@@ -526,6 +527,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an `initContainer` to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this `initContainer` by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

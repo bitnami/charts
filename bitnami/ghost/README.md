@@ -146,6 +146,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `extraEnvVarsConfigMap`                 | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)              | `nil`                                                                                         |
 | `extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all pods (evaluated as a template)                 | `nil`                                                                                         |
 | `podAnnotations`                        | Additional pod annotations to be added to all pods (evaluated as a template)                       | `{}`                                                                                          |
+| `priorityClassName`                     | Define the priority class name to use for the ghost pods here.                                 | `""`                                                                                          |
 
 The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
@@ -207,6 +208,10 @@ The [Bitnami Ghost](https://github.com/bitnami/bitnami-docker-ghost) image store
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

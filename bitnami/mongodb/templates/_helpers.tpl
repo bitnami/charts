@@ -44,6 +44,13 @@ Return the proper image name (for the init container auto-discovery image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the TLS Certs image)
+*/}}
+{{- define "mongodb.tls.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb.imagePullSecrets" -}}
