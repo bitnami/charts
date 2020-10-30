@@ -152,6 +152,21 @@ cache:
 ##
 # existingConfigmap:
 
+## initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## ref: https://github.com/bitnami/bitnami-docker-keycloak#initializing-a-new-instance
+## Example:
+## initdbScripts:
+##   my_init_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+initdbScripts: {}
+
+## Existing ConfigMap with custom init scripts
+##
+# initdbScriptsConfigMap:
+
 ## Command and args for running the container (set to default if not set). Use array form
 ##
 command: []

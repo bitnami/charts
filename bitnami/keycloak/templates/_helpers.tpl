@@ -118,11 +118,22 @@ Return the Database user
 Return the Database encrypted password
 */}}
 {{- define "keycloak.databaseEncryptedPassword" -}}
-  {{- if .Values.postgresql.enabled }}
-      {{- .Values.postgresql.postgresqlPassword | b64enc | quote -}}
-  {{- else -}}
-      {{- .Values.externalDatabase.password | b64enc | quote -}}
-  {{- end -}}
+{{- if .Values.postgresql.enabled }}
+    {{- .Values.postgresql.postgresqlPassword | b64enc | quote -}}
+{{- else -}}
+    {{- .Values.externalDatabase.password | b64enc | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Keycloak initdb scripts configmap
+*/}}
+{{- define "keycloak.initdbScriptsCM" -}}
+{{- if .Values.initdbScriptsConfigMap -}}
+    {{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- else -}}
+    {{- printf "%s-init-scripts" (include "keycloak.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

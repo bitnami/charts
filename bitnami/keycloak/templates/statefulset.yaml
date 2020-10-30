@@ -172,6 +172,10 @@ spec:
               mountPath: /certs
               readOnly: true
             {{- end }}
+            {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -189,6 +193,11 @@ spec:
           secret:
             secretName: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
             defaultMode: 256
+        {{- end }}
+        {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ include "keycloak.initdbScriptsCM" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

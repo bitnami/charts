@@ -97,6 +97,8 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `cache.authOwnersCount`                 | Number of nodes that will replicate cached authentication data                           | `1`                                                     |
 | `configuration`                         | Keycloak Configuration. Auto-generated based on other parameters when not specified      | `nil`                                                   |
 | `existingConfigmap`                     | Name of existing ConfigMap with Keycloak configuration                                   | `nil`                                                   |
+| `initdbScripts`                         | Dictionary of initdb scripts                                                             | `{}` (evaluated as a template)                          |
+| `initdbScriptsConfigMap`                | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                      | `nil`                                                   |
 | `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
 | `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
 | `extraEnvVars`                          | Extra environment variables to be set on Keycloak container                              | `{}`                                                    |
@@ -296,6 +298,14 @@ initContainers:
       - name: portname
         containerPort: 1234
 ```
+
+### Initialize a fresh instance
+
+The [Bitnami Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify custom scripts using the `initdbScripts` parameter as dict.
+
+In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+
+The allowed extensions is `.sh`.
 
 ### Deploying extra resources
 
