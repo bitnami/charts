@@ -29,6 +29,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/* Database secret name */}}
+{{- define "suitecrm.databaseSecretName" }}
+{{- if .Values.mariadb.enabled }}
+{{- printf "%s" (include "suitecrm.mariadb.fullname" .) -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
@@ -73,6 +82,13 @@ Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "suitecrm.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "suitecrm.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
