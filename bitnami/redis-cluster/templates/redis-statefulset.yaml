@@ -387,7 +387,7 @@ spec:
           matchExpressions:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
-        {{-end }}
+        {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}
