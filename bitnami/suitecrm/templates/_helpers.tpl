@@ -46,8 +46,12 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "suitecrm.host" -}}
+{{- if .Values.suitecrmHost -}}
+{{- print .Values.suitecrmHost -}}
+{{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
 {{- default (include "suitecrm.serviceIP" .) $host -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
