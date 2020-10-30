@@ -313,6 +313,10 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
