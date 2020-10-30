@@ -80,6 +80,13 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `persistence.accessMode`                    | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                              |
 | `persistence.size`                          | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                        |
 | `resources`                                 | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                                       |
+| `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `nil`                                                        |
+| `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                                        |
+| `extraEnvVars`                              | Extra environment variables                                                                                           | `nil`                                                        |
+| `extraVolumeMounts`                         | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                        |
+| `extraVolumes`                              | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                        |
+| `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                        |
+| `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                        |
 
 ### MariaDB parameters
 
