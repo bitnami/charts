@@ -175,5 +175,4 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
       {{- end }}
-
 {{- end }}
