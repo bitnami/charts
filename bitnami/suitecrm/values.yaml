@@ -35,6 +35,8 @@ image:
 ##
 # fullnameOverride:
 
+replicaCount: 1
+
 ## SuiteCRM host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
@@ -153,9 +155,9 @@ mariadb:
 service:
   type: ClusterIP
   # HTTP Port
-  port: 80
+  port: 8080
   # HTTPS Port
-  httpsPort: 443
+  httpsPort: 8443
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##

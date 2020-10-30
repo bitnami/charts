@@ -31,3 +31,4 @@ spec:
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  publishNotReadyAddresses: true
