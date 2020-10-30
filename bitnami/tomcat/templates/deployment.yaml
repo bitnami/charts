@@ -70,6 +70,9 @@ spec:
                   key: tomcat-password
             - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
               value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+          {{-  if .Values.extraEnvVars }}
+            {{- include "tomcat.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
