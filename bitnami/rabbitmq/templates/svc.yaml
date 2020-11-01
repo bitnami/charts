@@ -26,7 +26,7 @@ spec:
   ports:
     - name: amqp
       port: {{ .Values.service.port }}
-      targetPort: amqp
+      targetPort: {{ .Values.service.port }}
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
       {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
@@ -35,7 +35,7 @@ spec:
     {{- if .Values.auth.tls.enabled }}
     - name: amqp-ssl
       port: {{ .Values.service.tlsPort }}
-      targetPort: amqp-ssl
+      targetPort: {{ .Values.service.tlsPort }}
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
       {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.tlsNodePort)) }}
@@ -44,7 +44,7 @@ spec:
     {{- end }}
     - name: epmd
       port: 4369
-      targetPort: epmd
+      targetPort: 4369
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.epmdNodePort))) }}
@@ -52,7 +52,7 @@ spec:
       {{- end }}
     - name: dist
       port: {{ .Values.service.distPort }}
-      targetPort: dist
+      targetPort: {{ .Values.service.distPort }}
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
@@ -60,7 +60,7 @@ spec:
       {{- end }}
     - name: http-stats
       port: {{ .Values.service.managerPort }}
-      targetPort: stats
+      targetPort: {{ .Values.service.managerPort }}
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.managerNodePort))) }}
@@ -69,7 +69,7 @@ spec:
     {{- if .Values.metrics.enabled }}
     - name: metrics
       port: {{ .Values.service.metricsPort }}
-      targetPort: metrics
+      targetPort: {{ .Values.service.metricsPort }}
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.metricsNodePort))) }}
