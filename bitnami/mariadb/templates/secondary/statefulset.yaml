@@ -37,6 +37,9 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: secondary
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
