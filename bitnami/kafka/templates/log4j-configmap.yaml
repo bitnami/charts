@@ -12,5 +12,5 @@ metadata:
   {{- end }}
 data:
   log4j.properties: |-
-    {{ .Values.log4j | nindent 4 }}
+{{ tpl .Values.log4j $ | indent 4 }}
 {{- end -}}
