@@ -266,6 +266,8 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis-cluster.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
