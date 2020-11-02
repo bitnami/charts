@@ -100,12 +100,14 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                           | `tomcat.local-tls`                                      |
 | `extraEnvVars`                       | Extra environment variables to be set on tomcat container                                           | `[]`                                                    |
+| `livenessProbe.enabled`              | Enable liveness probe	                                                                             | `true`                                                  |
 | `livenessProbe.path`                 | HTTP Path to access on the HTTP server to check for liveness                                        | `/`                                                     |
 | `livenessProbe.port`                 | Name or number of the port to access on the container                                               | `http`                                                  |
 | `livenessProbe.initialDelaySeconds`  | Number of seconds after the container has started before probes are initiated                       | `120`                                                   |
 | `livenessProbe.periodSeconds`        | How often (in seconds) to perform the probe                                                         | `10`                                                    |
 | `livenessProbe.failureThreshold`     | Number of times probe can fail before giving up                                                     | `6`                                                     |
 | `livenessProbe.timeoutSeconds`       | Number of seconds after which the probe times out                                                   | `5`                                                     |
+| `readinessProbe.enabled`             | Enable readiness probe	                                                                             | `true`                                                  |
 | `readinessProbe.path`                | HTTP Path to access on the HTTP server to check for readiness                                       | `/`                                                     |
 | `readinessProbe.port`                | Name or number of the port to access on the container                                               | `http`                                                  |
 | `readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before probes are initiated                       | `30`                                                    |

@@ -254,6 +254,7 @@ extraEnvVars: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 ##
 livenessProbe:
+  enabled: true
   path: "/"
   port: http
   initialDelaySeconds: 120
@@ -261,6 +262,7 @@ livenessProbe:
   failureThreshold: 6
   timeoutSeconds: 5
 readinessProbe:
+  enabled: true
   path: "/"
   port: http
   initialDelaySeconds: 30
