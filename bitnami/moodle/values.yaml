@@ -232,9 +232,6 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
-  ## Metrics Port
-  ##
-  metricsPort: 9117
   ## clusterIP: ""
   ## Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
@@ -513,6 +510,22 @@ metrics:
     ##
     pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Prometheus Exporter service configuration
+  ##
+  service:
+    type: LoadBalancer
+    port: 9117
+    ## Annotations for Prometheus Exporter pods. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    ##
+    ## Use serviceLoadBalancerIP to request a specific static IP,
+    ## otherwise leave blank
+    # loadBalancerIP:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -521,7 +534,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
+    prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:
