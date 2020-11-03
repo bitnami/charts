@@ -39,7 +39,7 @@ spec:
               serviceName: {{ template "keycloak.fullname" . }}
               servicePort: http
     {{- end }}
-  {{- if or .Values.ingress.tls .Values.ingress.extraTls .Values.ingress.hosts }}
+  {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:
     {{- if .Values.ingress.tls }}
     - hosts:
