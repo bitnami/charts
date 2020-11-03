@@ -9,6 +9,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.metrics.ingress.annotations .Values.commonAnnotations .Values.ingress.certManager }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -19,6 +20,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   rules:
     {{- if .Values.ingress.hostname }}

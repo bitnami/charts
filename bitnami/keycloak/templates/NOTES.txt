@@ -28,7 +28,7 @@ To access Keycloak from outside the cluster execute the following commands:
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+        You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
 
     export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
