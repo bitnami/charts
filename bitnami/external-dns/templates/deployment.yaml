@@ -121,6 +121,9 @@ spec:
             {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS arguments
+            {{- if .Values.aws.apiRetries }}
+            - --aws-api-retries={{ .Values.aws.apiRetries }}
+            {{- end }}
             {{- if .Values.aws.zoneType }}
             - --aws-zone-type={{ .Values.aws.zoneType }}
             {{- end }}
