@@ -30,7 +30,7 @@ data:
           export REDIS_REPLICATION_MODE="master"
         else
           if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
+            sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
           else
             sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
           fi
@@ -68,7 +68,7 @@ data:
       fi
 
       if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       else
         sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
@@ -195,7 +195,7 @@ data:
           export REDIS_REPLICATION_MODE="master"
         else
           if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} info"
+            sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} info"
           else
             sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
           fi
@@ -211,7 +211,7 @@ data:
       sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-node-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}"
     else
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       else
         sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
