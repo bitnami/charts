@@ -41,14 +41,4 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-      {{- if .Values.metrics.enabled }}
-    - name: metrics
-      port: {{ .Values.service.metricsPort }}
-      targetPort: metrics
-      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics))) }}
-      nodePort: {{ .Values.service.nodePorts.metrics }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
