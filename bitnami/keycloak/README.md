@@ -81,7 +81,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.createAdminUser`                  | Create administrator user on boot                                                        | `true`                                                  |
 | `auth.adminUser`                        | Keycloak administrator name                                                              | `user`                                                  |
 | `auth.adminPassword`                    | Keycloak administrator password for the new user                                         | _random 10 character long alphanumeric string_          |
-| `auth.managementUser`                   | Wildfly management user                                                                  | `user`                                                  |
+| `auth.managementUser`                   | Wildfly management user                                                                  | `manager`                                               |
 | `auth.managementPassword`               | Wildfly management password                                                              | _random 10 character long alphanumeric string_          |
 | `auth.tls.enabled`                      | Enable TLS encryption                                                                    | `false`                                                 |
 | `auth.tls.jksSecret`                    | Existing secret containing the truststore and one keystore per Keycloak replica          | `nil`                                                   |
@@ -90,7 +90,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `bindAddress`                           | Keycloak bind address                                                                    | `0.0.0.0`                                               |
 | `proxyAddressForwarding`                | Enable Proxy Address Forwarding                                                          | `false`                                                 |
 | `serviceDiscovery.enabled`              | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                 | `false`                                                 |
-| `serviceDiscovery.protocol`             | Sets the protocol that Keycloak nodes would use to discover new peers                    | `nil`                                                   |
+| `serviceDiscovery.protocol`             | Sets the protocol that Keycloak nodes would use to discover new peers                    | `kubernetes.KUBE_PING`                                  |
 | `serviceDiscovery.properties`           | Properties for the discovery protocol set in `serviceDiscovery.protocol` parameter       | `[]`                                                    |
 | `serviceDiscovery.transportStack`       | Transport stack for the discovery protocol set in `serviceDiscovery.protocol` parameter  | `tcp`                                                   |
 | `cache.ownersCount`                     | Number of nodes that will replicate cached data                                          | `1`                                                     |
@@ -125,7 +125,8 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
 | `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                  |
 | `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                                    |
-| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                      | `""`                                                    |
+| `nodeAffinityPreset.key`              | Node label key to match. Ignored if `affinity` is set.                                     | `""`                                                    |
+| `nodeAffinityPreset.values`           | Node label values to match. Ignored if `affinity` is set.                                  | `[]`                                                    |
 | `affinity`                            | Affinity for pod assignment                                                                | `{}` (evaluated as a template)                          |
 | `nodeSelector`                        | Node labels for pod assignment                                                             | `{}` (evaluated as a template)                          |
 | `tolerations`                         | Tolerations for pod assignment                                                             | `[]` (evaluated as a template)                          |
@@ -185,8 +186,8 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
 | `autoscaling.enabled`                   | Enable autoscaling for Keycloak                                     | `false`                                                 |
-| `autoscaling.minReplicas`               | Minimum number of Keycloak replicas                                 | `nil`                                                   |
-| `autoscaling.maxReplicas`               | Maximum number of Keycloak replicas                                 | `nil`                                                   |
+| `autoscaling.minReplicas`               | Minimum number of Keycloak replicas                                 | `1`                                                     |
+| `autoscaling.maxReplicas`               | Maximum number of Keycloak replicas                                 | `11`                                                    |
 | `autoscaling.targetCPU`                 | Target CPU utilization percentage                                   | `nil`                                                   |
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                | `nil`                                                   |
 
@@ -198,7 +199,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `metrics.service.port`                    | Service HTTP managemenet port                                                                                        | `9990`                                                       |
 | `metrics.service.annotations`             | Annotations for enabling prometheus to access the metrics endpoints                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                         | `false`                                                      |
-| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                                             | `monitoring`                                                 |
+| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                                             | `nil`                                                        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                                          | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                                                  | `nil`                                                        |
 | `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                                            | `nil`                                                        |
@@ -309,7 +310,7 @@ The allowed extensions is `.sh`.
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
 ### Setting Pod's affinity
 
