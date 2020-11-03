@@ -241,3 +241,31 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       ##
       tlsSecret: tomcat.local-tls
+
+## Additional environment variables to set
+## E.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvVars: []
+
+## Liveness and Readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+##
+livenessProbe:
+  enabled: true
+  path: "/"
+  port: http
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  failureThreshold: 6
+  timeoutSeconds: 5
+readinessProbe:
+  enabled: true
+  path: "/"
+  port: http
+  initialDelaySeconds: 30
+  periodSeconds: 51
+  failureThreshold: 3
+  timeoutSeconds: 3
