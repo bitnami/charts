@@ -166,6 +166,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `ingress.annotations`                     | Ingress annotations                                                                   | `[]` (evaluated as a template)                               |
 | `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                    | `nil`                                                        |
 | `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                    | `nil`                                                        |
+| `ingress.extraPaths`                      | Additional arbitrary path/backend objects                                             | `nil`                                                        |
 | `ingress.extraTls[0].hosts[0]`            | TLS configuration for additional hostnames to be covered                              | `nil`                                                        |
 | `ingress.extraTls[0].secretName`          | TLS configuration for additional hostnames to be covered                              | `nil`                                                        |
 | `ingress.secrets[0].name`                 | TLS Secret Name                                                                       | `nil`                                                        |

@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "minio.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "minio.labels" . | nindent 4 }}
 {{- range $key, $value := .Values.ingress.labels }}
     {{ $key }}: {{ $value }}

@@ -131,7 +131,7 @@ disableSystemLog: false
 ## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
-## configuration:
+## configuration: |-
 ##   # where and how to store data.
 ##   storage:
 ##     dbPath: /bitnami/mongodb/data/db
