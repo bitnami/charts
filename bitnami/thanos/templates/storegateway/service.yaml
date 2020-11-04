@@ -44,6 +44,7 @@ spec:
   selector:
     {{- if .Values.storegateway.service.labelSelectorsOverride }}
     {{- include "thanos.tplValue" (dict "value" .Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
     {{- else }}
     {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
