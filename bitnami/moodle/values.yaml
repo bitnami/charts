@@ -146,7 +146,7 @@ externalDatabase:
 
   ## Database user
   ##
-  username: bn_moodle
+  user: bn_moodle
 
   ## Database password
   ##

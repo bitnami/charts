@@ -1,6 +1,8 @@
 # Moodle<sup>TM</sup> LMS
 
-[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
+[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. Bitnami does not provide commercial license of any of these products. This listing has an open source license. Moodle<sup>TM</sup> LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
 ## TL;DR
 
@@ -162,7 +164,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                       | `8Gi`                                                        |
 | `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                       | `nil` (uses alpha storage class annotation)                  |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                                                    | `nil` (will not mount to a host path)                        |
-| `externalDatabase.username`                 | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
 | `externalDatabase.password`                 | Password for the above username                                                                                       | `nil`                                                        |
 | `externalDatabase.database`                 | Name of the existing database                                                                                         | `bitnami_moodle`                                             |
 | `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |

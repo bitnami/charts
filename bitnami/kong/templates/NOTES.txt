@@ -17,37 +17,37 @@
 
     Access the Kong proxy by using the following commands
 
-    export PROXY_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "kong.fullname" . }})
+    export PROXY_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     echo http://$NODE_IP:$PROXY_NODE_PORT
 
     {{- if .Values.service.exposeAdmin }}
 
     Access the Kong admin by using the following commands
 
-    export ADMIN_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[2].nodePort}" services {{ include "kong.fullname" . }})
+    export ADMIN_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[2].nodePort}" services {{ include "common.names.fullname" . }})
     echo http://$NODE_IP:$ADMIN_NODE_PORT
 
     {{- end }}
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "kong.fullname" . }}'
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "kong.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo http://$SERVICE_IP:{{ .Values.service.proxyHttpPort }}
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     Access the Kong proxy by using the following commands
 
     echo "Browse to http://127.0.0.1:8000"
-    kubectl port-forward svc/{{ include "kong.fullname" . }} 8080:{{ .Values.service.proxyHttpPort }} &
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.proxyHttpPort }} &
 
     Access the Kong admin by using the following commands
 
     echo "Browse to http://127.0.0.1:8001"
     {{- if .Values.service.exposeAdmin }}
-    kubectl port-forward svc/{{ include "kong.fullname" . }} 8001:{{ .Values.service.adminHttpPort }} &
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8001:{{ .Values.service.adminHttpPort }} &
     {{- else }}
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name:{{ include "kong.name" . }},app.kubernetes.io/instance:{{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name:{{ include "common.names.name" . }},app.kubernetes.io/instance:{{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
 
     kubectl port-forward pod/$POD_NAME 8001:8001 &
     {{- end }}
@@ -64,18 +64,24 @@
 
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- if .Values.ingressController.enabled }}
+{{- include "common.warnings.rollingTag" .Values.ingressController.image }}
 {{- end }}
+
+{{- $passwordValidationErrors := list }}
 
 If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
 {{- if eq .Values.database "postgresql" }}
+{{- $dbSecretName := include "kong.postgresql.secretName" . -}}
+{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode
 {{- else }}
+  {{- $dbSecretName := include "kong.cassandra.secretName" . -}}
+  {{- $dbPasswordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 --decode
 {{- end }}
@@ -86,3 +92,4 @@ WARNING: You made the Kong admin {{ if contains "ClusterIP" .Values.service.type
 {{- end }}
 
 {{ include "kong.validateValues" . }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

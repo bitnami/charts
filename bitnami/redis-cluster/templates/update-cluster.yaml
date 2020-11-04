@@ -176,6 +176,7 @@ spec:
             {{- if .Values.updateJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.updateJob.extraEnvVarsCM .Values.updateJob.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.updateJob.extraEnvVarsCM }}
             - configMapRef:
@@ -185,6 +186,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
           {{- end }}
@@ -200,6 +202,7 @@ spec:
             {{- end }}
           {{- end }}
       restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
@@ -208,5 +211,6 @@ spec:
       {{- end }}
       {{- if .Values.updateJob.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
       {{- end }}
 {{- end }}

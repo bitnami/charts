@@ -146,6 +146,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `extraEnvVarsConfigMap`                 | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)              | `nil`                                                                                         |
 | `extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all pods (evaluated as a template)                 | `nil`                                                                                         |
 | `podAnnotations`                        | Additional pod annotations to be added to all pods (evaluated as a template)                       | `{}`                                                                                          |
+| `priorityClassName`                     | Define the priority class name to use for the ghost pods here.                                 | `""`                                                                                          |
 
 The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
