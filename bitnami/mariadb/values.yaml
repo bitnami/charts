@@ -763,8 +763,8 @@ metrics:
   ## - --collect.heartbeat.table
   ##
   extraArgs:
-    master: []
-    slave: []
+    primary: []
+    secondary: []
 
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
