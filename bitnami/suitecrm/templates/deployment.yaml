@@ -103,8 +103,8 @@ spec:
                   name: {{ include "suitecrm.databaseSecretName" . }}
                   key: db-password
             {{- end }}
-            - name: SUITECRM_SITE_URL
-              value: "http://{{ include "suitecrm.host" . }}"
+            - name: SUITECRM_HOST
+              value: {{ include "suitecrm.host" . }}
             - name: SUITECRM_USERNAME
               value: {{ .Values.suitecrmUsername | quote }}
             - name: SUITECRM_PASSWORD
