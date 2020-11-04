@@ -45,7 +45,7 @@ replicaCount: 1
 ## SuiteCRM validate user IP
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-suitecrmValidateUserIP: "false"
+suitecrmValidateUserIP: false
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
