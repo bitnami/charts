@@ -26,7 +26,7 @@ data:
     HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
     export REDIS_REPLICATION_MODE="slave"
-    if getent hosts "$HEADLESS_SERVICE" > /dev/null; then
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
       if [[ ! -f /data/redisboot.lock ]]; then
         export REDIS_REPLICATION_MODE="master"
       else
@@ -197,7 +197,7 @@ data:
     fi
 
     export REDIS_REPLICATION_MODE="slave"
-    if getent hosts "$HEADLESS_SERVICE" > /dev/null; then
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
       if [[ ! -f /data/sentinelboot.lock ]]; then
         export REDIS_REPLICATION_MODE="master"
       else
