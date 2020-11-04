@@ -266,7 +266,7 @@ ldap:
   search_attr: ""
   search_filter: ""
   scheme: ""
-  tls: false
+  tls: {}
 
 ## Audit settings
 ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
