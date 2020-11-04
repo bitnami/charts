@@ -113,7 +113,7 @@ aws:
   assumeRoleArn: ""
   ## Maximum number of retries for AWS API calls before giving up.
   ##
-  apiRetries: 10
+  apiRetries: 3
   ## Maximum number of changes that will be applied in each batch
   ##
   batchChangeSize: 1000
