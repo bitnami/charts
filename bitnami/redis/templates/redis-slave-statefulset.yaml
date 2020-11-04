@@ -225,6 +225,8 @@ spec:
                   key: {{ template "redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: REDIS_ADDR
+              value: rediss://localhost:{{ .Values.redisPort }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
