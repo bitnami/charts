@@ -233,6 +233,9 @@ resources:
 ##
 livenessProbe:
   enabled: true
+  httpGet:
+    path: /auth/
+    port: http
   initialDelaySeconds: 300
   periodSeconds: 1
   timeoutSeconds: 5
@@ -240,6 +243,9 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
+  httpGet:
+    path: /auth/realms/master
+    port: http
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 1
