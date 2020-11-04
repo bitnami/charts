@@ -34,7 +34,7 @@ auth:
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not forced, a random password will be generated.
   ##
-  forcePassword: false
+  forcePassword: true
   ## Specify username to acccess web UI
   ##
   username: user
@@ -83,7 +83,7 @@ web:
   replicaCount: 1
   ## URL used to access to airflow web ui
   ##
-  baseUrl:
+  baseUrl: http://airflow.local
   ## Name of an existing config map containing the Airflow webserver config file
   ##
   configMap:
@@ -102,6 +102,9 @@ web:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:
@@ -226,6 +229,9 @@ scheduler:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:
@@ -321,6 +327,9 @@ worker:
   ## Number of worker replicas
   ##
   replicaCount: 3
+  ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
+  ##
+  podTemplate:
   ## podManagementPolicy to manage scaling operation of worker pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -340,6 +349,9 @@ worker:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:

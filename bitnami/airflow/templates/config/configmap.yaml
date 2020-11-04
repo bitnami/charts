@@ -18,8 +18,8 @@ data:
 {{- end }}
 {{- if $kube }}
   pod_template.yaml: |-
-  {{- if .Values.podTemplate }}
-    {{ .Values.podTemplate | nindent 4 }}
+  {{- if .Values.worker.podTemplate }}
+    {{ .Values.worker.podTemplate | nindent 4 }}
   {{- else }}
     apiVersion: v1
     kind: Pod

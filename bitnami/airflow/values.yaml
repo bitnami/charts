@@ -102,6 +102,9 @@ web:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:
@@ -226,6 +229,9 @@ scheduler:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:
@@ -321,6 +327,9 @@ worker:
   ## Number of worker replicas
   ##
   replicaCount: 1
+  ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
+  ##
+  podTemplate:
   ## podManagementPolicy to manage scaling operation of worker pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -340,6 +349,9 @@ worker:
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
   ## Add extra environment variables
   ##
   extraEnvVars:
