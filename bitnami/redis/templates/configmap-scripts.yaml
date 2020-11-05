@@ -160,7 +160,7 @@ data:
         replace_in_file "/opt/bitnami/redis-sentinel/etc/sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
     }
     sentinel_conf_add() {
-        (echo; echo "$@") >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
+        echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
     }
     is_boolean_yes() {
         local -r bool="${1:-}"
