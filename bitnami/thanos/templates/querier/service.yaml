@@ -41,7 +41,6 @@ spec:
   selector: 
     {{- if .Values.querier.service.labelSelectorsOverride }}
     {{- include "thanos.tplValue" (dict "value" .Values.querier.service.labelSelectorsOverride "context" $) | nindent 4 }}
-    app.kubernetes.io/component: querier
     {{- else }}
     {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: querier

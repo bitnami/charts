@@ -31,7 +31,6 @@ spec:
   selector:
     {{- if .Values.compactor.service.labelSelectorsOverride }}
     {{- include "thanos.tplValue" (dict "value" .Values.compactor.service.labelSelectorsOverride "context" $) | nindent 4 }}
-    app.kubernetes.io/component: compactor
     {{- else }}
     {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: compactor
