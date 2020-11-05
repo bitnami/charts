@@ -44,7 +44,6 @@ spec:
   selector:
     {{- if .Values.ruler.service.labelSelectorsOverride }}
     {{- include "thanos.tplValue" (dict "value" .Values.ruler.service.labelSelectorsOverride "context" $) | nindent 4 }}
-    app.kubernetes.io/component: ruler
     {{- else }}
     {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
