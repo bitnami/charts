@@ -123,6 +123,7 @@ The above parameters map to the env variables defined in [bitnami/phabricator](h
 | `service.nodePorts.http`         | Kubernetes http node port                                                                                | `""`                                                         |
 | `service.nodePorts.https`        | Kubernetes https node port                                                                               | `""`                                                         |
 | `service.nodePorts.ssh`          | Kubernetes ssh node port                                                                                 | `""`                                                         |
+| `service.annotations`            | Service annotations                                                                                      | `[]`                                                         |
 | `ingress.enabled`                | Enable ingress rules resource                                                                            | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                                                                         | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                                                                      | `[]`                                                         |

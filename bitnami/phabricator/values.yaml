@@ -138,6 +138,9 @@ service:
     http: ""
     https: ""
     ssh: ""
+  ## In case you want to use an Azure internal load balancer add the annotation that is described
+  ## here: https://docs.microsoft.com/en-us/azure/aks/internal-lb
+  annotations: {}
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
