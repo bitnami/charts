@@ -256,6 +256,9 @@ querier:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
 
   ## Autoscaling parameters
   ##
@@ -520,6 +523,9 @@ queryFrontend:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
 
   ## Autoscaling parameters
   ##
@@ -732,6 +738,9 @@ bucketweb:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
 
   ## Bucket Web Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -933,6 +942,9 @@ compactor:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
 
   ## Persistence paramaters
   ##
@@ -1111,6 +1123,9 @@ storegateway:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
     ## Create additional Headless service
     ##
     additionalHeadless: false
@@ -1330,6 +1345,9 @@ ruler:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
     ## Create additional Headless service
     ##
     additionalHeadless: false
