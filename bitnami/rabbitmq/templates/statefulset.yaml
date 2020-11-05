@@ -153,11 +153,16 @@ spec:
                   key: rabbitmq-erlang-cookie
             - name: RABBITMQ_USERNAME
               value: {{ .Values.auth.username | quote }}
+            {{- if .Values.loadDefinition.enabled }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "yes"
+            {{- else }}
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
+            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
