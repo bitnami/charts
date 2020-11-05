@@ -337,6 +337,10 @@ querier:
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
     ##
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+
     secrets: []
     # - name: thanos.local-tls
     #   key:
@@ -810,6 +814,10 @@ bucketweb:
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
     ##
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+
     secrets: []
     # - name: thanos-bucketweb.local-tls
     #   key:
