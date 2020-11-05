@@ -74,19 +74,14 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `suitecrmSmtpProtocol`                      | SMTP protocol [`ssl`, `tls`]                                                                          | `nil`                                                        |
 | `suitecrmValidateUserIP`                    | Whether to validate the user IP address or not                                                        | `no`                                                         |
 | `allowEmptyPassword`                        | Allow DB blank passwords                                                                              | `yes`                                                        |
-| `persistence.enabled`                       | Enable persistence using PVC                                                                          | `true`                                                       |
-| `persistence.storageClass`                  | PVC Storage Class for SuiteCRM volume                                                                 | `nil` (uses alpha storage class annotation)                                                  |
-| `persistence.existingClaim`                 | An Existing PVC name for SuiteCRM volume                                                              | `nil` (uses alpha storage class annotation)                                                  |
-| `persistence.accessMode`                    | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                              |
-| `persistence.size`                          | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                        |
 | `resources`                                 | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                                       |
-| `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `nil`                                                        |
-| `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                                        |
-| `extraEnvVars`                              | Extra environment variables                                                                                           | `nil`                                                        |
-| `extraVolumeMounts`                         | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                        |
-| `extraVolumes`                              | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                        |
-| `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                        |
-| `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                        |
+| `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `[]`                                                        |
+| `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `[]`                                                        |
+| `extraEnvVars`                              | Extra environment variables                                                                                           | `[]`                                                        |
+| `extraVolumeMounts`                         | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                                                        |
+| `extraVolumes`                              | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                                                        |
+| `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                                                        |
+| `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                                                        |
 
 ### MariaDB parameters
 
@@ -95,8 +90,8 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                      | `true`                                                       |
 | `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                  | `standalone`                                                 |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                  | _random 10 character alphanumeric string_                                                      |
-| `mariadb.auth.database`                     | Database name to create                                                                               | `bitnami_prestashop`                                         |
-| `mariadb.auth.username`                     | Database user to create                                                                               | `bn_prestashop`                                              |
+| `mariadb.auth.database`                     | Database name to create                                                                               | `bitnami_suitecrm`                                         |
+| `mariadb.auth.username`                     | Database user to create                                                                               | `bn_suitecrm`                                              |
 | `mariadb.auth.password`                     | Password for the database                                                                             | _random 10 character long alphanumeric string_                                                      |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                 | `true`                                                       |
 | `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                              | `nil`                                                        |
@@ -104,11 +99,28 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                       | `8Gi`                                                        |
 | `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)              | `nil`                                                        |
 | `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                       | `nil`                                                        |
-| `externalDatabase.user`                     | Existing username in the external db                                                                  | `bn_prestashop`                                              |
+| `externalDatabase.user`                     | Existing username in the external db                                                                  | `bn_suitecrm`                                              |
 | `externalDatabase.password`                 | Password for the above username                                                                       | `""`                                                         |
-| `externalDatabase.database`                 | Name of the existing database                                                                         | `bitnami_prestashop`                                         |
+| `externalDatabase.database`                 | Name of the existing database                                                                         | `bitnami_suitecrm`                                         |
 | `externalDatabase.host`                     | Host of the existing database                                                                         | `nil`                                                        |
 | `externalDatabase.port`                     | Port of the existing database                                                                         | `3306`                                                       |
+
+### Persistence parameters
+
+| Parameter                                   | Description    | Default                                                                                |
+|---------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `persistence.enabled`                       | Enable persistence using PVC                                                                          | `true`                                                         |
+| `persistence.storageClass`                  | PVC Storage Class for SuiteCRM volume                                                                 | `nil` (uses alpha storage class annotation)                                |
+| `persistence.existingClaim`                 | An Existing PVC name for SuiteCRM volume                                                              | `nil` (uses alpha storage class annotation)                                |
+| `persistence.accessMode`                    | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                                |
+| `persistence.size`                          | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                          |
+| `volumePermissions.enabled`                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) |                                          `false`                                                      |
+| `volumePermissions.image.registry`          | Init container volume-permissions image registry                                                      | `docker.io`                                                    |
+| `volumePermissions.image.repository`        | Init container volume-permissions image name                                                          | `bitnami/minideb`                                                       |
+| `volumePermissions.image.tag`               | Init container volume-permissions image tag                                                           | `buster`                                                       |
+| `volumePermissions.image.pullSecrets`       | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)                       |
+| `volumePermissions.image.pullPolicy`        | Init container volume-permissions image pull policy                                                   | `Always`                                                       |
+| `volumePermissions.resources`               | Init container resource requests/limit                                                                | `nil`                                                          |
 
 ### Exposure parameters
 
@@ -167,9 +179,9 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `nodeAffinityPreset.key`                    | Node label key to match Ignored if `affinity` is set.                                                 | `""`                                                         |
 | `nodeAffinityPreset.values`                 | Node label values to match. Ignored if `affinity` is set.                                             | `[]`                                                         |
 | `affinity`                                  | Map of node/pod affinities                                                                            | `{}`                                                         |
-| `podSecurityContext.enabled`                | Enable securityContext on for DokuWiki deployment                                                     | `true`                                                       |
+| `podSecurityContext.enabled`                | Enable securityContext on for SuiteCRM deployment                                                     | `true`                                                       |
 | `podSecurityContext.fsGroup`                | Group to configure permissions for volumes                                                            | `1001`                                                       |
-| `containerSecurityContext.enabled`          | Enable securityContext on for DokuWiki deployment                                                     | `true`                                                       |
+| `containerSecurityContext.enabled`          | Enable securityContext on for SuiteCRM deployment                                                     | `true`                                                       |
 | `containerSecurityContext.runAsUser`        | User for the securityContext                                                                          | `1001`                                                       |
 | `extraDeploy`                               | Array of extra objects to deploy with the release 	                                                  | `[]` (evaluated as a template)                               |
 
