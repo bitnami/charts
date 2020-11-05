@@ -296,6 +296,13 @@ ovh:
   applicationKey: ""
   applicationSecret: ""
 
+## Scaleway configuration to be set via arguments/env. variables
+##
+scaleway:
+  scwAccessKey: ""
+  scwSecretKey: ""
+  scwDefaultOrganizationId: ""
+
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:
