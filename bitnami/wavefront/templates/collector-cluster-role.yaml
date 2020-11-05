@@ -38,7 +38,7 @@ rules:
       - create
       - list
       - watch
-{{- if .Values.podSecurityPolicy.enabled }}
+{{- if .Values.podSecurityPolicy.create }}
   - apiGroups:
       - policy
     resourceNames:
