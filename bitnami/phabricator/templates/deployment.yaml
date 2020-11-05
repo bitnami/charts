@@ -50,6 +50,8 @@ spec:
             {{- end }}
             - name: PHABRICATOR_USERNAME
               value: {{ default "" .Values.phabricatorUsername | quote }}
+            - name: PHABRICATOR_ENABLE_GIT_SSH_REPOSITORY
+              value: "yes"
             - name: PHABRICATOR_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -95,6 +97,8 @@ spec:
               containerPort: 80
             - name: https
               containerPort: 443
+            - name: ssh
+              containerPort: 22
           livenessProbe:
             httpGet:
               path: /auth/

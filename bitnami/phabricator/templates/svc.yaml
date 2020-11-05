@@ -24,4 +24,10 @@ spec:
       {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
+    - name: ssh
+      port: {{ .Values.service.sshPort }}
+      targetPort: ssh
+      {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.ssh)) }}
+      nodePort: {{ .Values.service.nodePorts.ssh }}
+      {{- end }}
   selector: {{- include "phabricator.matchLabels" . | nindent 4 }}
