@@ -25,13 +25,13 @@ You have 4 alternatives:
   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 
-{{- else if contains "NodePort" .Values.service.type }}
+{{- else if eq .Values.service.type "NodePort" }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Redmine URL: http://$NODE_IP:$NODE_PORT/"
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
@@ -42,7 +42,7 @@ You have 4 alternatives:
 {{- $port:=.Values.service.port | toString }}
   echo "Redmine URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
-{{- else if contains "ClusterIP" .Values.service.type }}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Redmine URL: http://127.0.0.1:{{ .Values.service.port }}/"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 3000:{{ .Values.service.port }}

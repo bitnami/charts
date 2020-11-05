@@ -26,7 +26,7 @@ Return the proper Redmine image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redmine.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.mailReceiver.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -161,4 +161,11 @@ Return the name of the database secret with its credentials
         {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "redmine.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}

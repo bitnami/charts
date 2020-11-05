@@ -251,6 +251,7 @@ tolerations: []
 ##
 livenessProbe:
   enabled: true
+  path: /
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
@@ -259,6 +260,7 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
+  path: /
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 1
@@ -315,7 +317,8 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   size: 8Gi
 
 ## Database type. Allowed values: "mariadb" and "postgresql"
@@ -417,13 +420,13 @@ postgresql:
 ## b) postgresql.enabled is set to false and databaseType=postgresql
 externalDatabase:
   ## Database host
-  host: localhost
+  host: ""
 
   ## Database name
-  name: database
+  name: bitnami_redmine
 
   ## Database User
-  user: user
+  user: bn_redmine
 
   ## Database Password
   password: ""
@@ -436,6 +439,11 @@ externalDatabase:
   ## Must contain the key "mariadb-password" in case that databaseType=mariadb
   # existingSecret:
 
+## Container ports
+##
+containerPorts:
+  http: 3000
+
 ## Kubernetes configuration
 ##   minikube: NodePort
 ##   ingress: ClusterIP
@@ -445,6 +453,9 @@ service:
   type: LoadBalancer
   # HTTP Port
   port: 80
+  ## clusterIP: ""
+  ## loadBalancerIP for the Redmine Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## loadBalancerIP:
   ## Control hosts connecting to "LoadBalancer" only
   loadBalancerSourceRanges:
@@ -458,6 +469,11 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  sessionAffinity: "None"
 
 ## Configure the ingress resource that allows you to access the
 ## Redmine installation. Set up the URL
@@ -750,6 +766,39 @@ mailReceiver:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    ##   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:
