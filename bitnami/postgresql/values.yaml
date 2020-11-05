@@ -332,7 +332,7 @@ ldap:
   search_attr: ''
   search_filter: ''
   scheme: ''
-  tls: false
+  tls: {}
 
 ## PostgreSQL service configuration
 ##
