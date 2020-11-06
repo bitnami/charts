@@ -835,7 +835,7 @@ metrics:
   ##
   extraUri: ""
 
-  ## Set this when tls.enabled=true to enable TLS on the metrics 
+  ## Set this when tls.enabled=true to enable TLS on the metrics
   # extraUri: ?tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert
 
   ## Metrics exporter container resource requests and limits
