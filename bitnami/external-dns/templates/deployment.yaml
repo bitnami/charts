@@ -365,6 +365,30 @@ spec:
                   key: ovh_application_secret
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "scaleway" }}
+            # Scaleway environment variables
+            {{- if .Values.scaleway.scwAccessKey }}
+            - name: SCW_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_access_key
+            {{- end }}
+            {{- if .Values.scaleway.scwSecretKey }}
+            - name: SCW_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_secret_key
+            {{- end }}
+            {{- if .Values.scaleway.scwDefaultOrganizationId }}
+            - name: SCW_DEFAULT_ORGANIZATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_default_organization_id
+            {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
             {{- if .Values.infoblox.wapiConnectionPoolSize }}

@@ -276,6 +276,13 @@ ovh:
   applicationKey: ""
   applicationSecret: ""
 
+## Scaleway configuration to be set via arguments/env. variables
+##
+scaleway:
+  scwAccessKey: ""
+  scwSecretKey: ""
+  scwDefaultOrganizationId: ""
+
 ## Infoblox configuration to be set via arguments/env. variables
 ##
 infoblox:
