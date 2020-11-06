@@ -581,6 +581,11 @@ proxy:
   #       search  : "[&\\$!@]"
   #       replace : "_"
 
+## Specifies whether PodSecurityPolicy resources should be created
+##
+podSecurityPolicy:
+  create: false
+
 ## Specifies whether RBAC resources should be created
 ##
 rbac:

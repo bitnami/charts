@@ -112,6 +112,9 @@ aws:
   ## AWS Role to assume
   ##
   assumeRoleArn: ""
+  ## Maximum number of retries for AWS API calls before giving up.
+  ##
+  apiRetries: 3
   ## Maximum number of changes that will be applied in each batch
   ##
   batchChangeSize: 1000
@@ -292,6 +295,13 @@ ovh:
   consumerKey: ""
   applicationKey: ""
   applicationSecret: ""
+
+## Scaleway configuration to be set via arguments/env. variables
+##
+scaleway:
+  scwAccessKey: ""
+  scwSecretKey: ""
+  scwDefaultOrganizationId: ""
 
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
