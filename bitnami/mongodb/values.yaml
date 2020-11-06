@@ -131,7 +131,7 @@ disableSystemLog: false
 ## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
-## configuration:
+## configuration: |-
 ##   # where and how to store data.
 ##   storage:
 ##     dbPath: /bitnami/mongodb/data/db
@@ -832,8 +832,11 @@ metrics:
 
   ## String with additional URI options to the metrics exporter
   ## ref: https://docs.mongodb.com/manual/reference/connection-string
-  ##
+  ## 
   extraUri: ""
+
+  ## Set this when tls.enabled=true to enable TLS on the metrics 
+  #extraUri: ?tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert
 
   ## Metrics exporter container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

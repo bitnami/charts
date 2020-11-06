@@ -23,6 +23,9 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
+          {{- end }}
           - path: {{ .Values.ingress.path }}
             backend:
               serviceName: {{ template "wordpress.fullname" . }}

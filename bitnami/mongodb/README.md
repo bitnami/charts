@@ -170,10 +170,11 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                       | `nil`                                                   |
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
-| `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io` 
-| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`
-| `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`
-| `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`
+| `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |         
+| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                                  | 
+| `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
+| `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`                                                |
+
 
 ### MongoDB statefulset parameters
 
@@ -516,18 +517,18 @@ To enable full TLS encryption set tls.enabled to true
 
 ### Generating the self-signed cert via pre install helm hooks
 
-The secrets-ca.yaml utilizes the helm "pre-install" hook to ensure that the certs will only be generated on chart install. The genCA function will create a new self-signed x509 certificate authority, the genSignedCert function creates an object with a pair of items in it — the Cert and Key which we base64 encode and use in a yaml like object. With the genSignedCert function, we pass the CN, an empty IP list (the nil part), the validity and the CA created previously. 
+The secrets-ca.yaml utilizes the helm "pre-install" hook to ensure that the certs will only be generated on chart install. The genCA function will create a new self-signed x509 certificate authority, the genSignedCert function creates an object with a pair of items in it — the Cert and Key which we base64 encode and use in a yaml like object. With the genSignedCert function, we pass the CN, an empty IP list (the nil part), the validity and the CA created previously.
 To hold the signed certificate created above, we can use a kubernetes Secret object and the initContainer sets up the rest.
 Using Helm’s hook annotations ensures that the certs will only be generated on chart install. This will prevent overriding the certs anytime we upgrade the chart’s released instance.
 
 ### Accessing the cluster
 
-To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. 
-Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster. 
+To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset.
+Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster
 
-After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). This value can be changed via the MONGODB_EXTRA_FLAGS field using the tlsMode. The client should now be able to connect to the TLS enabled cluster with the provided certs. 
+After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). This value can be changed via the MONGODB_EXTRA_FLAGS field using the tlsMode. The client should now be able to connect to the TLS enabled cluster with the provided certs.
 
 ## Troubleshooting
 
