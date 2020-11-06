@@ -76,11 +76,10 @@ data:
       exit 1
     fi
 {{- if .Values.sentinel.enabled }}
-  ping_sentinel.sh: |-
+  get_sentinel_master_host.sh: |-
     #!/bin/bash
 {{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
+    REDIS_PASSWORD=$(cat $REDIS_PASSWORD_FILE)
 {{- end }}
 {{- if .Values.usePassword }}
     no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
@@ -103,12 +102,80 @@ data:
 {{- else }}
         -p $REDIS_SENTINEL_PORT \
 {{- end }}
+        sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}
+    )
+    echo $response | awk '{print $1}'
+  ping_sentinel_local.sh: |-
+    #!/bin/bash
+{{- if .Values.usePasswordFile }}
+    REDIS_PASSWORD=$(cat $REDIS_PASSWORD_FILE)
+{{- end }}
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
+{{- end }}
+     response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+{{- if .Values.usePassword }}
+        -a $REDIS_PASSWORD $no_auth_warning \
+{{- end }}
+        -h localhost \
+{{- if .Values.tls.enabled }}
+        -p $REDIS_SENTINEL_TLS_PORT_NUMBER \
+        --tls \
+        --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
+{{- else }}
+        -p {{ .Values.sentinel.port }} \
+{{- end }}
         ping
     )
     if [ "$response" != "PONG" ]; then
       echo "$response"
       exit 1
     fi
+  ping_sentinel_master.sh: |-
+    #!/bin/bash
+    script_dir="$(dirname "$0")"
+    REDIS_MASTER_HOST=$($script_dir/get_sentinel_master_host.sh $1)
+{{- if .Values.usePasswordFile }}
+    REDIS_PASSWORD=$(cat $REDIS_PASSWORD_FILE)
+{{- end }}
+{{- if .Values.usePassword }}
+    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
+{{- end }}
+     response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+{{- if .Values.usePassword }}
+        -a $REDIS_PASSWORD $no_auth_warning \
+{{- end }}
+{{- if .Values.tls.enabled }}
+        --tls \
+        --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
+{{- end }}
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_SENTINEL_PORT \
+        ping
+    )
+
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_sentinel_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_sentinel_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_sentinel_master.sh" $1 || exit_status=$?
+    exit $exit_status
   parse_sentinels.awk: |-
     /ip/ {FOUND_IP=1}
     /port/ {FOUND_PORT=1}

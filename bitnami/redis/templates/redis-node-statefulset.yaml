@@ -140,11 +140,7 @@ spec:
               command:
                 - sh
                 - -c
-                {{- if .Values.sentinel.enabled }}
                 - /health/ping_liveness_local.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
-                {{- else }}
-                - /health/ping_liveness_local_and_master.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
-                {{- end }}
           {{- else if .Values.slave.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.slave.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -159,11 +155,7 @@ spec:
               command:
                 - sh
                 - -c
-                {{- if .Values.sentinel.enabled }}
                 - /health/ping_readiness_local.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
-                {{- else }}
-                - /health/ping_readiness_local_and_master.sh {{ .Values.slave.livenessProbe.timeoutSeconds }}
-                {{- end }}
           {{- else if .Values.slave.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.slave.customReadinessProbe | nindent 12 }}
           {{- end }}
@@ -188,7 +180,6 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
-        {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel
           image: {{ template "sentinel.image" . }}
           imagePullPolicy: {{ .Values.sentinel.image.pullPolicy | quote }}
@@ -200,6 +191,10 @@ spec:
             - -c
             - /opt/bitnami/scripts/start-scripts/start-sentinel.sh
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             {{- if .Values.usePassword }}
             {{- if .Values.usePasswordFile }}
             - name: REDIS_PASSWORD_FILE
@@ -250,7 +245,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+                - /health/ping_sentinel_local.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.sentinel.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -265,7 +260,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+                - /health/ping_sentinel_local.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
@@ -291,7 +286,6 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
-          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
