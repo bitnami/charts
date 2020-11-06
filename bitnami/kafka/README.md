@@ -194,6 +194,11 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `persistence.accessMode`                          | PVC Access Mode for Kafka data volume                                                                                             | `ReadWriteOnce`                                         |
 | `persistence.size`                                | PVC Storage Request for Kafka data volume                                                                                         | `8Gi`                                                   |
 | `persistence.annotations`                         | Annotations for the PVC                                                                                                           | `{}`(evaluated as a template)                           |
+| `logPersistence.enabled`                          | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected                                            | `true`                                                  |
+| `logPersistence.existingClaim`                    | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                 | `nil`                                                   |
+| `logPersistence.accessMode`                       | PVC Access Mode for Kafka logs volume                                                                                             | `ReadWriteOnce`                                         |
+| `logPersistence.size`                             | PVC Storage Request for Kafka logs volume                                                                                         | `8Gi`                                                   |
+| `logPersistence.annotations`                      | Annotations for the PVC                                                                                                           | `{}`(evaluated as a template)                           |
 
 ### RBAC parameters
 
