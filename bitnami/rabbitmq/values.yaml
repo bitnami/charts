@@ -563,7 +563,7 @@ service:
   distPort: 25672
 
   ## Dist service port name
-  ## 
+  ##
   distPortName: dist
 
   ## Node port (Manager)
