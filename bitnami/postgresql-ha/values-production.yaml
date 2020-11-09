@@ -137,6 +137,10 @@ postgresql:
   ##
   podLabels: {}
 
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 2
@@ -478,6 +482,10 @@ pgpool:
   ## Labels to add to the pods. Evaluated as template
   ##
   podLabels: {}
+
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
   ## Number of replicas to deploy
   ##
