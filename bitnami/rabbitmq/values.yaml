@@ -536,9 +536,17 @@ service:
   ##
   port: 5672
 
+  ## Amqp service port name
+  ##
+  portName: amqp
+
   ## Amqp Tls port
   ##
   tlsPort: 5671
+
+  ## Amqp Tls service port name
+  ##
+  tlsPortName: amqp-ssl
 
   ## Node port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -554,6 +562,10 @@ service:
   ##
   distPort: 25672
 
+  ## Dist service port name
+  ##
+  distPortName: dist
+
   ## Node port (Manager)
   ##
   # distNodePort: 30676
@@ -563,6 +575,10 @@ service:
   ##
   managerPort: 15672
 
+  ## RabbitMQ Manager service port name
+  ##
+  managerPortName: http-stats
+
   ## Node port (Manager)
   ##
   # managerNodePort: 30673
@@ -571,6 +587,10 @@ service:
   ##
   metricsPort: 9419
 
+  ## RabbitMQ Prometheues metrics service port name
+  ##
+  metricsPortName: metrics
+
   ## Node port for metrics
   ##
   # metricsNodePort: 30674
@@ -578,6 +598,10 @@ service:
   ## Node port for EPMD Discovery
   ##
   # epmdNodePort: 30675
+
+  ## Service port name for EPMD Discovery
+  ##
+  epmdPortName: epmd
 
   ## Extra ports to expose
   ## E.g.:
