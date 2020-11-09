@@ -131,6 +131,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.externalAccess.service.loadBalancerIPs }}
+              {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
+              IP.{{ $key }} = {{ $val | quote }}
+              {{- end }}
+              {{- end }}
               EOL
 
               export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
