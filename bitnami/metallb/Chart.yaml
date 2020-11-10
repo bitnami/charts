@@ -1,26 +1,26 @@
-apiVersion: v1
-name: metallb
-description: The Metal LB for Kubernetes
-version: 0.1.30
+annotations:
+  category: Infrastructure
+apiVersion: v2
 appVersion: 0.9.5
-keywords:
-  - "load-balancer"
-  - "balancer"
-  - "lb"
-  - "bgp"
-  - "arp"
-  - "vrrp"
-  - "vip"
+description: The Metal LB for Kubernetes
 home: https://github.com/bitnami/charts/tree/master/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
+keywords:
+  - load-balancer
+  - balancer
+  - lb
+  - bgp
+  - arp
+  - vrrp
+  - vip
+maintainers:
+  - email: cellebyte@gmail.com
+    name: cellebyte
+  - email: containers@bitnami.com
+    name: Bitnami
+name: metallb
 sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-maintainers:
-  - name: cellebyte
-    email: cellebyte@gmail.com
-  - name: Bitnami
-    email: containers@bitnami.com
-annotations:
-  category: Infrastructure
+version: 1.0.0
