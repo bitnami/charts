@@ -247,6 +247,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 16.0.0
+
+In this version the application version itself was bumped to the new major, odoo 14, and the database schemas where changed. Please refer to the [upstream upgrade process documentation](https://www.odoo.com/documentation/14.0/webservices/upgrade.html) in order to upgrade from the previous version.
+
 ### To 15.0.0
 
 This major version includes two main changes:
