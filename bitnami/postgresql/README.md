@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -512,7 +512,7 @@ persistence.mountPath=/data/
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Upgrade
+## Upgrading
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresqlPassword` and `replication.password` parameters when upgrading the chart:
 
@@ -524,7 +524,30 @@ $ helm upgrade my-release stable/postgresql \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPLICATION_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
-## 9.0.0
+### To 10.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 9.0.0
 
 In this version the chart was adapted to follow the Helm label best practices, see [PR 3021](https://github.com/bitnami/charts/pull/3021). That means the backward compatibility is not guarantee when upgrading the chart to this major version.
 
@@ -563,7 +586,7 @@ statefulset.apps "postgresql-postgresql" deleted
 ```
 
 - Now the upgrade works
-  
+
 ```console
 $ helm upgrade postgresql bitnami/postgresql
 $ helm ls
@@ -584,17 +607,17 @@ postgresql-postgresql-0   1/1     Running   0          19s
 
 Please, note that without the `--cascade=false` both objects (statefulset and pod) are going to be removed and both objects will be deployed again with the `helm upgrade` command
 
-## 8.0.0
+### To 8.0.0
 
 Prefixes the port names with their protocols to comply with Istio conventions.
 
 If you depend on the port names in your setup, make sure to update them to reflect this change.
 
-## 7.1.0
+### To 7.1.0
 
 Adds support for LDAP configuration.
 
-## 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -602,7 +625,7 @@ In https://github.com/helm/charts/pull/17281 the `apiVersion` of the statefulset
 
 This major version bump signifies this change.
 
-## 6.5.7
+### To 6.5.7
 
 In this version, the chart will use PostgreSQL with the Postgis extension included. The version used with Postgresql version 10, 11 and 12 is Postgis 2.5. It has been compiled with the following dependencies:
 
@@ -612,7 +635,7 @@ In this version, the chart will use PostgreSQL with the Postgis extension includ
 - geos
 - proj
 
-## 5.0.0
+### To 5.0.0
 
 In this version, the **chart is using PostgreSQL 11 instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
 
@@ -643,7 +666,7 @@ INFO  ==> ** Starting PostgreSQL **
 
 In this case, you should migrate the data from the old chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. Basically, create a database dump in the old chart, move and restore it in the new one.
 
-### 4.0.0
+### To 4.0.0
 
 This chart will use by default the Bitnami PostgreSQL container starting from version `10.7.0-r68`. This version moves the initialization logic from node.js to bash. This new version of the chart requires setting the `POSTGRES_PASSWORD` in the slaves as well, in order to properly configure the `pg_hba.conf` file. Users from previous versions of the chart are advised to upgrade immediately.
 
@@ -653,7 +676,7 @@ IMPORTANT: If you do not want to upgrade the chart version then make sure you us
 The POSTGRESQL_PASSWORD environment variable is empty or not set. Set the environment variable ALLOW_EMPTY_PASSWORD=yes to allow the container to be started with blank passwords. This is recommended only for development
 ```
 
-### 3.0.0
+### To 3.0.0
 
 This releases make it possible to specify different nodeSelector, affinity and tolerations for master and slave pods.
 It also fixes an issue with `postgresql.master.fullname` helper template not obeying fullnameOverride.
@@ -664,7 +687,7 @@ It also fixes an issue with `postgresql.master.fullname` helper template not obe
 - `tolerations` has been renamed to `master.tolerations` and `slave.tolerations`.
 - `nodeSelector` has been renamed to `master.nodeSelector` and `slave.nodeSelector`.
 
-### 2.0.0
+### To 2.0.0
 
 In order to upgrade from the `0.X.X` branch to `1.X.X`, you should follow the below steps:
 
