@@ -534,6 +534,21 @@ As an alternative, this chart supports using an `initContainer` to change the ow
 
 You can enable this `initContainer` by setting `volumePermissions.enabled` to `true`.
 
+### Configure the default user/vhost
+
+If you want to create default user/vhost and set the default permission. you can use `extraConfiguration`:
+
+```yaml
+auth:
+  username: default-user
+extraConfiguration: |-
+  default_vhost = default-vhost
+  default_permissions.configure = .*
+  default_permissions.read = .*
+  default_permissions.write = .*
+```
+
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
