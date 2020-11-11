@@ -1,6 +1,6 @@
 # kiam
 
-[kiam](https://www.kiam.org) is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
+[kiam](https://github.com/uswitch/kiam) is a Kubernetes agent that allows to associate IAM roles to pods.
 
 ## TL;DR
 
