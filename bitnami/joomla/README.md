@@ -78,7 +78,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 
 | Parameter                            | Description                                                                                                           | Default                                     |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                        |
+| `affinity`                           | Affinity for pod assignment                                                                                           | `{}` (evaluated as a template)              |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                       |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                       |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                       |
@@ -99,6 +99,9 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `joomlaUsername`                     | User of the application                                                                                               | `user`                                      |
 | `joomlaPassword`                     | Application password                                                                                                  | _random 10 character alphanumeric string_   |
 | `joomlaEmail`                        | Admin email                                                                                                           | `user@example.com`                          |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                        |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                        |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                        |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template) |
 | `persistence.accessMode`             | PVC Access Mode for Joomla! volume                                                                                    | `ReadWriteOnce`                             |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                      |
@@ -106,6 +109,8 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `persistence.hostPath`               | Host mount path for Joomla! volume                                                                                    | `nil` (will not mount to a host path)       |
 | `persistence.size`                   | PVC Storage Request for Joomla! volume                                                                                | `8Gi`                                       |
 | `persistence.storageClass`           | PVC Storage Class for Joomla! volume                                                                                  | `nil` (uses alpha storage class annotation) |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                        |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                      |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                        |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                       |
 | `podSecurityContext.enabled`         | Enable Joomla! pods' Security Context                                                                                 | `true`                                      |
@@ -146,25 +151,25 @@ The following table lists the configurable parameters of the Joomla! chart and t
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_joomla`                               |
-| `mariadb.db.user`                          | Database user to create                  | `bn_joomla`                                    |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_joomla`                                    |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_joomla`                               |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                  | Description                                           | Default                                        |
+|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                    | Database name to create                               | `bitnami_ghost`                                |
+| `mariadb.auth.username`                    | Database user to create                               | `bn_ghost`                                     |
+| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
+| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.master.persistence.size`          | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.master.persistence.storageClass`  | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                  | `bn_joomla`                                    |
+| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                         | `bitnami_joomla`                               |
+| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
 
 ### Metrics parameters
 

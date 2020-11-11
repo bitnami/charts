@@ -61,22 +61,25 @@ host. To configure Joomla! to use and external database host:
 
 {{- include "joomla.checkRollingTags" . }}
 
-{{- $passwordErrors := list -}}
+{{- $passwordValidationErrors := list -}}
 {{- $secretName := include "joomla.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
   {{- $requiredJoomlaPassword := dict "valueKey" "joomlaPassword" "secret" $secretName "field" "joomla-password" "context" $ -}}
   {{- $requiredJoomlaPasswordError := include "common.validations.values.single.empty" $requiredJoomlaPassword -}}
-  {{- $passwordErrors =  append $passwordErrors $requiredJoomlaPasswordError -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredJoomlaPasswordError -}}
 {{- end -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" (include "joomla.mariadb.fullname" .) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+{{- $databaseSecretName := include "joomla.databaseSecretName" . -}}
+
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
 
 {{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $databaseSecretName := printf "%s-%s" .Release.Name "externaldb" -}}
   {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "db-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
