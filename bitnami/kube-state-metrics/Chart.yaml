@@ -1,20 +1,20 @@
-apiVersion: v1
+annotations:
+  category: Analytics
+apiVersion: v2
 appVersion: 1.9.7
 description: kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
-name: kube-state-metrics
-version: 0.5.6
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics
+icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
 keywords:
   - prometheus
   - kube-state-metrics
   - monitoring
-home: https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics
-icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: kube-state-metrics
 sources:
   - https://github.com/bitnami/bitnami-docker-kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Analytics
+version: 1.0.0
