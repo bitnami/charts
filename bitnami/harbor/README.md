@@ -26,7 +26,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -847,21 +847,44 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Upgrade
+## Upgrading
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
 
-## 8.0.0
+### To 9.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 8.0.0
 
 Redis dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
 
-## 7.0.0
+### To 7.0.0
 
 This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
 
 You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
-## 6.0.0 to 6.0.2
+### From 6.0.0 to 6.0.2
 
 Due to an issue with Trivy volumeClaimTemplates, the upgrade needs to be done in two steps:
 
@@ -877,7 +900,7 @@ $ helm upgrade bitnami/chart --version 6.0.2 --set trivy.enabled=false <REST OF 
 $ helm upgrade bitnami/chart --set trivy.enabled=true <REST OF THE UPGRADE PARAMETERS>
 ```
 
-## 6.0.0
+### To 6.0.0
 
 The chart was changed to adapt to the common Bitnami chart standards. Now it includes common elements such as sidecar and init container support, custom commands, custom liveness/readiness probes, extra environment variables support, extra pod annotations and labels, among others. In addition, it adds a new Trivy deployment for image scanning.
 
@@ -886,14 +909,14 @@ No issues are expected between upgrades but please double check the updated para
 - `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
 - `secretKey` has been moved to `core.secretKey`.
 
-## 4.0.0
+### To 4.0.0
 
 PostgreSQL and Redis dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
 
 - [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/README.md#upgrade)
 - [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
 
-## 3.0.0
+### To 3.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -901,7 +924,7 @@ In c085d396a0515be7217d65e92f4fbd474840908b the `apiVersion` of the deployment r
 
 This major version signifies this change.
 
-## 2.0.0
+### To 2.0.0
 
 In this version, two major changes were performed:
 
