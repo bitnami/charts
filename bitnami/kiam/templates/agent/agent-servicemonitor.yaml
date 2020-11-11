@@ -1,0 +1,41 @@
+{{- if and .Values.agent.enabled .Values.agent.metrics.enabled .Values.agent.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "common.names.fullname" . }}-agent
+  {{- if .Values.agent.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.agent.metrics.serviceMonitor.namespace }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: agent
+    {{- range $key, $value := .Values.agent.metrics.serviceMonitor.selector }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: agent
+  endpoints:
+    - port: metrics
+      {{- if .Values.agent.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.agent.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.agent.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}
