@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: kiam
 description: kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
 dependencies:
