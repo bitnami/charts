@@ -622,7 +622,7 @@ persistence:
 ## Log Persistence paramaters
 ##
 logPersistence:
-  enabled: true
+  enabled: false
   ## A manually managed Persistent Volume and Claim
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
