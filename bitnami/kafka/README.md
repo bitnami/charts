@@ -527,8 +527,8 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=NodePort
-externalAccess.serivce.nodePorts[0]='node-port-1'
-externalAccess.serivce.nodePorts[1]='node-port-2'
+externalAccess.service.nodePorts[0]='node-port-1'
+externalAccess.service.nodePorts[1]='node-port-2'
 ```
 
 Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
