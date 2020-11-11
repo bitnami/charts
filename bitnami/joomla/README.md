@@ -115,6 +115,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                       |
 | `podSecurityContext.enabled`         | Enable Joomla! pods' Security Context                                                                                 | `true`                                      |
 | `podSecurityContext.fsGroup`         | Joomla! pods' group ID                                                                                                | `1001`                                      |
+| `priorityClassName`                  | Define the priority class name to use for the joomla pods here.                                                       | `""`                                        |
 | `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                    |
 | `replicaCount`                       | Number of Joomla! Pods to run                                                                                         | `1`                                         |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                |
