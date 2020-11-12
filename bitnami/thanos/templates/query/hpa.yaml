@@ -1,0 +1,28 @@
+{{- if and .Values.query.enabled .Values.query.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "thanos.fullname" . }}-query
+  minReplicas: {{ .Values.query.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.query.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.query.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.query.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.query.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.query.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}    

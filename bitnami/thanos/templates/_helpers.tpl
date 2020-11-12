@@ -165,21 +165,21 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
-Return the Thanos Querier Service Discovery configuration configmap.
+Return the Thanos Query Service Discovery configuration configmap.
 */}}
-{{- define "thanos.querier.SDConfigmapName" -}}
-{{- if .Values.querier.existingSDConfigmap -}}
-    {{- printf "%s" (tpl .Values.querier.existingSDConfigmap $) -}}
+{{- define "thanos.query.SDConfigmapName" -}}
+{{- if .Values.query.existingSDConfigmap -}}
+    {{- printf "%s" (tpl .Values.query.existingSDConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-querier-sd-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-query-sd-configmap" (include "thanos.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return true if a configmap object should be created
 */}}
-{{- define "thanos.querier.createSDConfigmap" -}}
-{{- if and .Values.querier.sdConfig (not .Values.querier.existingSDConfigmap) }}
+{{- define "thanos.query.createSDConfigmap" -}}
+{{- if and .Values.query.sdConfig (not .Values.query.existingSDConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

@@ -1,0 +1,45 @@
+{{- if .Values.query.ingress.grpc.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "thanos.fullname" . }}-grpc
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.query.ingress.grpc.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.query.ingress.grpc.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.query.ingress.grpc.hostname }}
+    - host: {{ .Values.query.ingress.grpc.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ template "thanos.fullname" . }}-query
+              servicePort: grpc
+    {{- end }}
+    {{- range .Values.query.ingress.grpc.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "thanos.fullname" $ }}-query
+              servicePort: grpc
+    {{- end }}
+  {{- if or .Values.query.ingress.grpc.tls .Values.query.ingress.grpc.extraTls .Values.query.ingress.grpc.hosts }}
+  tls:
+    {{- if .Values.query.ingress.grpc.tls }}
+    - hosts:
+        - {{ .Values.query.ingress.grpc.hostname }}
+      secretName: {{ printf "%s-tls" .Values.query.ingress.grpc.hostname }}
+    {{- end }}
+    {{- if .Values.query.ingress.grpc.extraTls }}
+    {{- toYaml .Values.query.ingress.grpc.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

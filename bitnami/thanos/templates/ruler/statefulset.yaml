@@ -81,8 +81,8 @@ spec:
             {{- range .Values.ruler.alertmanagers }}
             - --alertmanagers.url={{ . }}
             {{- end }}
-            {{- if and .Values.querier.enabled .Values.ruler.dnsDiscovery.enabled }}
-            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-querier.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- if and .Values.query.enabled .Values.ruler.dnsDiscovery.enabled }}
+            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"

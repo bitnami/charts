@@ -1,0 +1,48 @@
+{{- if .Values.query.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+  {{- if .Values.query.service.annotations }}
+  annotations: {{- include "thanos.tplValue" (dict "value" .Values.query.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.query.service.type }}
+  {{- if and .Values.query.service.clusterIP (eq .Values.query.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.query.service.clusterIP }}
+  {{- end }}
+  {{- if and .Values.query.service.loadBalancerIP (eq .Values.query.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.query.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.query.service.type "LoadBalancer") .Values.query.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.query.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.query.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) .Values.query.service.http.nodePort) }}
+      nodePort: {{ .Values.query.service.http.nodePort }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.query.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if (and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) .Values.query.service.grpc.nodePort) }}
+      nodePort: {{ .Values.query.service.grpc.nodePort }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: 
+    {{- if .Values.query.service.labelSelectorsOverride }}
+    {{- include "thanos.tplValue" (dict "value" .Values.query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "thanos.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}
