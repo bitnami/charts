@@ -227,7 +227,7 @@ spec:
         - name: phpbb-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "phpbb.fullname" . ) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" . ) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

@@ -62,15 +62,15 @@ host. To configure phpBB to use and external database host:
 {{- include "phpbb.checkRollingTags" . }}
 
 {{- $passwordValidationErrors := list -}}
-{{- $secretName := include "joomla.secretName" . -}}
+{{- $secretName := include "phpbb.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
-  {{- $requiredJoomlaPassword := dict "valueKey" "joomlaPassword" "secret" $secretName "field" "joomla-password" "context" $ -}}
-  {{- $requiredJoomlaPasswordError := include "common.validations.values.single.empty" $requiredJoomlaPassword -}}
-  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredJoomlaPasswordError -}}
+  {{- $requiredphpBBPassword := dict "valueKey" "phpbbPassword" "secret" $secretName "field" "phpbb-password" "context" $ -}}
+  {{- $requiredphpBBPasswordError := include "common.validations.values.single.empty" $requiredphpBBPassword -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredphpBBPasswordError -}}
 {{- end -}}
 
-{{- $databaseSecretName := include "joomla.databaseSecretName" . -}}
+{{- $databaseSecretName := include "phpbb.databaseSecretName" . -}}
 
 {{- if .Values.mariadb.enabled }}
     {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}

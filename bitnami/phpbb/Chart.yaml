@@ -1,15 +1,15 @@
 annotations:
   category: Forum
-apiVersion: v1
+apiVersion: v2
 appVersion: 3.3.2
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 8.x.x
+  version: 9.x.x
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 0.x.x
+  version: 1.x.x
 description: Community forum that supports the notion of users and groups, file attachments,
   full-text search, notifications and more.
 engine: gotpl

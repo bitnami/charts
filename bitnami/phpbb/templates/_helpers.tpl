@@ -43,7 +43,7 @@ Return  the proper Storage Class
 
 {{/* phpBB credential secret name */}}
 {{- define "phpbb.secretName" -}}
-{{- coalesce .Values.existingSecret (include "phpbb.fullname" .) -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}

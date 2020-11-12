@@ -32,11 +32,11 @@ image:
   ##
   debug: false
 
-## String to partially override phpbb.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
 
-## String to fully override phpbb.fullname template
+## String to fully override common.names.fullname template
 ##
 fullnameOverride:
 
@@ -57,7 +57,7 @@ phpbbDisableSessionValidation: "yes"
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
-phpbbUser: user
+phpbbUsername: user
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
@@ -173,6 +173,11 @@ volumePermissions:
 ## External database configuration
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   ##
   host: ""
@@ -270,6 +275,10 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
+  ## loadBalancerIP for the phpBB Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  ## loadBalancerIP:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -457,7 +466,7 @@ customLivenessProbe: {}
 
 customReadinessProbe: {}
 
-## Phpbb pods' priority.
+## phpBB pods' priority.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 # priorityClassName: ""
