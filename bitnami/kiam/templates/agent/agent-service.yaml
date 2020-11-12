@@ -1,0 +1,49 @@
+{{- if .Values.agent.enabled }}
+{{- if .Values.agent.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: agent
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-agent-metrics
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.agent.service.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.service.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.agent.metrics.enabled .Values.agent.metrics.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.agent.service.type }}
+  {{- if and .Values.agent.service.clusterIP (eq .Values.agent.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.agent.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.agent.service.type "LoadBalancer") (eq .Values.agent.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.agent.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.agent.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.agent.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.agent.service.type "LoadBalancer") (not (empty .Values.agent.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.agent.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: metrics
+      port: {{ .Values.agent.metrics.port }}
+      targetPort: metrics
+      protocol: TCP
+      {{- if (and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.agent.service.nodePorts.metrics }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: agent
+{{- end }}
+{{- end }}
