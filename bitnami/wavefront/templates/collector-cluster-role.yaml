@@ -38,7 +38,22 @@ rules:
       - create
       - list
       - watch
-
+{{- if .Values.podSecurityPolicy.create }}
+  - apiGroups:
+      - policy
+    resourceNames:
+      - {{ template "common.names.fullname" . }}
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - create
+{{- end }}
 {{- if .Values.collector.kubernetesState }}
   - apiGroups:
       - apps
