@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 3.11.8
+appVersion: 3.11.9
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: cassandra
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
   - http://cassandra.apache.org
-version: 7.0.0
+version: 7.0.1
