@@ -157,8 +157,8 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
 | `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
 | `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                    | Database name to create                               | `bitnami_ghost`                                |
-| `mariadb.auth.username`                    | Database user to create                               | `bn_ghost`                                     |
+| `mariadb.auth.database`                    | Database name to create                               | `bitnami_joomla`                                |
+| `mariadb.auth.username`                    | Database user to create                               | `bn_joomla`                                     |
 | `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
 | `mariadb.master.persistence.enabled`       | Enable database persistence using PVC                 | `true`                                         |
 | `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
@@ -171,6 +171,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `externalDatabase.database`                | Name of the existing database                         | `bitnami_joomla`                               |
 | `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
 | `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
 
 ### Metrics parameters
 
@@ -307,7 +308,7 @@ $ helm upgrade joomla . --set mariadb.primary.persistence.existingClaim=$MARIADB
 You should see the lines below in MariaDB container logs:
 
 ```console
-$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=joomla,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
 ...
 mariadb 12:13:24.98 INFO  ==> Using persisted data
 mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
