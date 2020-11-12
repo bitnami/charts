@@ -275,6 +275,45 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 9.0.0
+
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Joomla data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `joomla`):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Joomla data on your current release:
+
+```console
+export JOOMLA_PASSWORD=$(kubectl get secret --namespace default joomla -o jsonpath="{.data.joomla-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=joomla -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Joomla replicas to 0:
+
+```console
+$ helm upgrade joomla bitnami/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
+```
+
+Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade joomla . --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=moodle,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
+
 ### To 8.0.0
 
 The [Bitnami Joomla!](https://github.com/bitnami/bitnami-docker-joomla) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
