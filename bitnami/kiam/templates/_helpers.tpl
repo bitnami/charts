@@ -47,7 +47,7 @@ Generate certificates for kiam agent and server
 {{- end -}}
 
 {{- define "kiam.server.gen-certs" -}}
-{{- $altNames := list (printf "%s-server" (include "common.names.fullname" .)) (printf "%s-server:443" (include "common.names.fullname" .)) "127.0.0.1:8443" -}}
+{{- $altNames := list (printf "%s-server" (include "common.names.fullname" .)) (printf "%s-server:%d" (include "common.names.fullname" .) .Values.server.service.port ) (printf "127.0.0.1:%d" .Values.server.containerPort) -}}
 {{- $ca := .ca | default (genCA "kiam-ca" 365) -}}
 {{- $_ := set . "ca" $ca -}}
 {{- $cert := genSignedCert "Kiam Server" (list "127.0.0.1") $altNames 365 $ca -}}
@@ -87,5 +87,13 @@ kiam: nothing-deployed
     You did not deploy neither the server nor the agents. Please set at least one of the following values
         server.enabled=true
         agent.enabled=true
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kiam - resource type */}}
+{{- define "kiam.validateValues.resourceType" -}}
+{{- if and (not (eq .Values.server.resourceType "daemonset")) (not (eq .Values.server.resourceType "deployment")) -}}
+kiam: server-resource-type
+    Server resource type {{ .Values.server.resourceType }} is not valid, only "daemonset" and "deployment" are allowed
 {{- end -}}
 {{- end -}}

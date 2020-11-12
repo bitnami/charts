@@ -85,8 +85,8 @@ The following tables lists the configurable parameters of the kiam chart and the
 |---------------------------------------------|---------------------------------------------------------------------------------------------|------------------------------------------|
 | `server.enabled`                            | Deploy the kiam server                                                                      | `true`                                   |
 | `server.containerPort`                      | HTTPS port to expose at container level                                                     | `8443`                                   |
-| `server.useDeployment`                      | Deploy the kiam server as Deployment (if `false` deploy as daemon set) Context              | `false`                                  |
-| `server.replicaCount`                       | Number of replicas to deploy (when `server.useDeployment` is true)                          | `1`                                      |
+| `server.resourceType`                       | Specify how to deploy the server (allowed values: `daemonset` and `deployment`)             | `daemonset`                              |
+| `server.replicaCount`                       | Number of replicas to deploy (when `server.resourceType` is `daemonset`)                    | `1`                                      |
 | `server.logJsonOutput`                      | Use JSON format for logs                                                                    | `true`                                   |
 | `server.extraArgs`                          | Extra arguments to add to the default kiam command                                          | `[]`                                     |
 | `server.command`                            | Override kiam default command                                                               | `[]`                                     |
@@ -96,6 +96,9 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.tlsFiles.ca`                        | Base64-encoded CA to use with the container                                                 | `nil`                                    |
 | `server.tlsFiles.cert`                      | Base64-encoded certificate to use with the container                                        | `nil`                                    |
 | `server.tlsFiles.key`                       | Base64-encoded key to use with the container                                                | `nil`                                    |
+| `server.tlsCerts.certFileName`              | Name of the certificate filename                                                            | `cert.pem`                               |
+| `server.tlsCerts.keyFileName`               | Name of the certificate filename                                                            | `key.pem`                                |
+| `server.tlsCerts.caFileName`                | Name of the certificate filename                                                            | `ca.pem`                                 |
 | `server.gatewayTimeoutCreation`             | Timeout when creating the kiam gateway                                                      | `1s`                                     |
 | `server.podSecurityPolicy.create`           | Create a PodSecurityPolicy resources                                                        | `true`                                   |
 | `server.podSecurityPolicy.allowedHostPaths` | Extra host paths to allow in the PodSecurityPolicy                                          | `[]`                                     |
@@ -111,9 +114,6 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.assumeRoleArn`                      | IAM role for the server to assume                                                           | `nil`                                    |
 | `server.sessionDuration`                    | Session duration for STS tokens                                                             | `15m`                                    |
 | `server.useHostNetwork`                     | Use host networking (ports will be directly exposed in the host)                            | `false`                                  |
-| `server.tlsCerts.certFileName`              | Name of the certificate filename                                                            | `cert.pem`                               |
-| `server.tlsCerts.keyFileName`               | Name of the certificate filename                                                            | `key.pem`                                |
-| `server.tlsCerts.caFileName`                | Name of the certificate filename                                                            | `ca.pem`                                 |
 | `server.resources.limits`                   | The resources limits for the kiam container                                                 | `{}`                                     |
 | `server.resources.requests`                 | The requested resources for the kiam container                                              | `{}`                                     |
 | `server.lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup.                                  | `{}` (evaluated as a template)           |
@@ -145,7 +145,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 |---------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------------|
 | `agent.enabled`                             | Deploy the kiam agent                                                                      | `true`                                   |
 | `agent.containerPort`                       | HTTPS port to expose at container level                                                    | `8443`                                   |
-| `agent.allowRouteRegexp`                    | Regexp with the allowed paths for agents to redirect                                       | `nil`                                    |
+| `agent.allowRouteRegExp`                    | Regexp with the allowed paths for agents to redirect                                       | `nil`                                    |
 | `agent.iptables`                            | Have the agent modify the host iptables rules                                              | `false`                                  |
 | `agent.iptablesRemoveOnShutdown`            | Remove iptables rules when shutting down the agent node                                    | `false`                                  |
 | `agent.hostInterface`                       | Interface for agents for redirecting requests                                              | `cali+`                                  |
@@ -153,7 +153,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.keepaliveParams.time`                | Keepalive time                                                                             | `nil`                                    |
 | `agent.keepaliveParams.timeout`             | Keepalive timeout                                                                          | `nil`                                    |
 | `agent.keepaliveParams.permitWithoutStream` | Permit keepalive without stream                                                            | `nil`                                    |
-| `agent.deepProbe`                           | Use the probes using the `/health` endpoint                                                | `false`                                  |
+| `agent.enableDeepProbe`                     | Use the probes using the `/health` endpoint                                                | `false`                                  |
 | `agent.extraArgs`                           | Extra arguments to add to the default kiam command                                         | `[]`                                     |
 | `agent.command`                             | Override kiam default command                                                              | `[]`                                     |
 | `agent.args`                                | Override kiam default args                                                                 | `[]`                                     |
@@ -162,6 +162,9 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.tlsFiles.ca`                         | Base64-encoded CA to use with the container                                                | `nil`                                    |
 | `agent.tlsFiles.cert`                       | Base64-encoded certificate to use with the container                                       | `nil`                                    |
 | `agent.tlsFiles.key`                        | Base64-encoded key to use with the container                                               | `nil`                                    |
+| `agent.tlsCerts.certFileName`               | Name of the certificate filename                                                           | `cert.pem`                               |
+| `agent.tlsCerts.keyFileName`                | Name of the certificate filename                                                           | `key.pem`                                |
+| `agent.tlsCerts.caFileName`                 | Name of the certificate filename                                                           | `ca.pem`                                 |
 | `agent.gatewayTimeoutCreation`              | Timeout when creating the kiam gateway                                                     | `1s`                                     |
 | `agent.podSecurityPolicy.create`            | Create a PodSecurityPolicy resources                                                       | `false`                                  |
 | `agent.podSecurityPolicy.allowedHostPaths`  | Extra host paths to allow in the PodSecurityPolicy                                         | `[]`                                     |
@@ -173,9 +176,6 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.containerSecurityContext`            | Container security podSecurityContext                                                      | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `agent.podSecurityContext`                  | Pod security context                                                                       | `{}`                                     |
 | `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `false`                                  |
-| `agent.tlsCerts.certFileName`               | Name of the certificate filename                                                           | `cert.pem`                               |
-| `agent.tlsCerts.keyFileName`                | Name of the certificate filename                                                           | `key.pem`                                |
-| `agent.tlsCerts.caFileName`                 | Name of the certificate filename                                                           | `ca.pem`                                 |
 | `agent.resources.limits`                    | The resources limits for the kiam container                                                | `{}`                                     |
 | `agent.resources.requests`                  | The requested resources for the kiam container                                             | `{}`                                     |
 | `agent.lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)           |
@@ -262,7 +262,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set server.useDeployment=true bitnami/kiam
+helm install my-release --set server.resourceType=deployment bitnami/kiam
 ```
 
 The above command sets the server nodes to be deployed as Deployment objects.
@@ -282,8 +282,6 @@ $ helm install my-release -f values.yaml bitnami/kiam
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-Note also that if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
 
 ### Adding extra environment variables
 
@@ -346,7 +344,7 @@ This chart will facilitate the creation of TLS secrets for use with kiam. There 
 
 By default the first use case will be applied. In second case, it's needed a certificate and a key. We would expect them to look like this:
 
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+- The certificate files should look like (there can be more than one certificate if there is a certificate chain)
 
     ```console
     -----BEGIN CERTIFICATE-----

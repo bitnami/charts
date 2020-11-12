@@ -97,8 +97,8 @@ spec:
             - --prometheus-listen-addr=0.0.0.0:{{ .Values.agent.metrics.port }}
             - --prometheus-sync-interval={{ .Values.agent.metrics.syncInterval }}
             {{- end }}
-            {{- if .Values.agent.allowRouteRegexp }}
-            - --allow-route-regexp={{ .Values.agent.allowRouteRegexp }}
+            {{- if .Values.agent.allowRouteRegExp }}
+            - --allow-route-regexp={{ .Values.agent.allowRouteRegExp }}
             {{- end }}
             - --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }}
             {{- if .Values.agent.keepaliveParams.time }}
@@ -147,7 +147,7 @@ spec:
           {{- if .Values.agent.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              {{- if .Values.agent.deepProbe }}
+              {{- if .Values.agent.enableDeepProbe }}
               path: /health?deep=1
               {{- else }}
               path: /ping
@@ -164,7 +164,7 @@ spec:
           {{- if .Values.agent.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              {{- if .Values.agent.deepProbe }}
+              {{- if .Values.agent.enableDeepProbe }}
               path: /health?deep=1
               {{- else }}
               path: /ping

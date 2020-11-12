@@ -89,7 +89,7 @@ server:
   containerPort: 8443
   ## Use a deployment instead of a daemonset
   ##
-  useDeployment: false
+  resourceType: daemonset
 
   ## Number of nodes
   ##
@@ -441,7 +441,7 @@ agent:
 
   ## agent permits only request paths matching this reg-ex
   ##
-  allowRouteRegexp:
+  allowRouteRegExp:
 
   ## Host networking settings
   ##
@@ -474,7 +474,7 @@ agent:
   ## able to communicate with servers, which may happen on
   ## certificate change
   ##
-  deepProbe: false
+  enableDeepProbe: false
 
   ## Pod DNS policy
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods-dns-policy
