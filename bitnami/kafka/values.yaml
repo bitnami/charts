@@ -619,7 +619,7 @@ persistence:
   ##
   annotations: {}
 
-## Log Persistence paramaters
+## Log Persistence parameters
 ##
 logPersistence:
   enabled: false
