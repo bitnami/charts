@@ -2,7 +2,7 @@
 
 In order to associate your pods with AWS IAM roles, follow the steps below:
 
-* Annotate your namespace with `iam.amazonaws.com/permitted` with the allowed role ARNs:
+* Annotate your namespace with the allowed role ARNs via `iam.amazonaws.com/permitted`:
 
     kubectl edit namespace my-namespace
 
@@ -12,7 +12,7 @@ In order to associate your pods with AWS IAM roles, follow the steps below:
       annotations:
         iam.amazonaws.com/permitted: "<Role ARN or Regex matching role ARN(s)>"
 
-* Annotate your pods with `iam.amazonaws.com/role` with the desired role.
+* Annotate your pods with the desired role via `iam.amazonaws.com/role`:
 
     kubectl edit pod my-pod
 
