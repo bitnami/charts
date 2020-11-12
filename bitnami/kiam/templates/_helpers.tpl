@@ -63,6 +63,7 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kiam.validateValues.ports" .) -}}
 {{- $messages := append $messages (include "kiam.validateValues.nodeploy" .) -}}
+{{- $messages := append $messages (include "kiam.validateValues.resourceType" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
