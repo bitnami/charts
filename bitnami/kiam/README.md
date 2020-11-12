@@ -354,7 +354,7 @@ By default the first use case will be applied. In second case, it's needed a cer
     -----END CERTIFICATE-----
     ```
 
-- keys should look like:
+- The keys should look like this:
 
     ```console
     -----BEGIN RSA PRIVATE KEY-----
