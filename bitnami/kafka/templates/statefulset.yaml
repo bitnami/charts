@@ -430,7 +430,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.logPersistence.existingClaim .) }}
 {{- end }}
-  {{- if or (and .Values.persistence.enabled  (not .Values.persistence.existingClaim)) (and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim)) }}
+  {{- if or (and .Values.persistence.enabled (not .Values.persistence.existingClaim)) (and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
   {{- end }}
 {{- if and .Values.persistence.enabled  (not .Values.persistence.existingClaim) }}
