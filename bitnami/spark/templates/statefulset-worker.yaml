@@ -14,7 +14,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: worker
-        {{- if .Values.master.extraPodLabels }}
+        {{- if .Values.worker.extraPodLabels }}
           {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraPodLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.worker.podAnnotations }}
