@@ -433,7 +433,7 @@ spec:
   {{- if or (and .Values.persistence.enabled (not .Values.persistence.existingClaim)) (and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
   {{- end }}
-{{- if and .Values.persistence.enabled  (not .Values.persistence.existingClaim) }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
     - metadata:
         name: data
         {{- if .Values.persistence.annotations }}
