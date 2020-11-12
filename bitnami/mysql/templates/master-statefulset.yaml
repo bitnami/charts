@@ -275,6 +275,12 @@ spec:
           component: master
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
+        {{- with .Values.master.persistence.annotations }}
+        annotations:
+          {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.master.persistence.accessModes }}

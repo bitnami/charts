@@ -251,6 +251,12 @@ spec:
           component: slave
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
+        {{- with .Values.slave.persistence.annotations }}
+        annotations:
+          {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}
