@@ -367,7 +367,7 @@ spec:
               {{- else }}
               /bin/mongodb_exporter --mongodb.uri mongodb://localhost:27017/admin{{ .Values.metrics.extraUri }} {{ .Values.metrics.extraFlags }}
               {{- end }}
-              {{- end }} 
+              {{- end }}
           env:
           {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
@@ -376,11 +376,11 @@ spec:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
           {{- end }}
-          volumeMounts: 
+          volumeMounts:
           {{- if .Values.tls.enabled }}
           - name: certs
             mountPath: /certs
-          {{- end }} 
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9216

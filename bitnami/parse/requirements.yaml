@@ -1,4 +1,0 @@
-dependencies:
-  - name: mongodb
-    version: 9.x.x
-    repository: https://charts.bitnami.com/bitnami
