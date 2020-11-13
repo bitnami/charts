@@ -41,7 +41,10 @@ Expand the name of the chart.
 Common labels
 */}}
 {{- define "tomcat.labels" -}}
-{{ include "common.labels.standard" . }}
+app: {{ include "tomcat.name" . }}
+chart: {{ include "tomcat.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
 {{- if .Values.labels }}
 {{ toYaml .Values.labels }}
 {{- end }}
@@ -51,7 +54,8 @@ Common labels
 Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 */}}
 {{- define "tomcat.matchLabels" -}}
-{{ include "common.labels.matchLabels" . }}
+app: {{ include "tomcat.name" . }}
+release: {{ .Release.Name }}
 {{- if .Values.matchLabels }}
 {{ toYaml .Values.matchLabels }}
 {{- end }}
