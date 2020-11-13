@@ -158,7 +158,7 @@ serviceAccount:
   # name:
   ## Add annotations to service account
   # annotations:
-  #   iam.gke.io/gcp-service-account: "external-dns@project.iam.gserviceaccount.com"
+  #   iam.gke.io/gcp-service-account: "sa@project.iam.gserviceaccount.com"
 
 ## Master nodes parameters
 ##
