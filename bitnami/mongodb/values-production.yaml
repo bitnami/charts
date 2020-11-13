@@ -90,7 +90,7 @@ auth:
   # existingSecret: name-of-existing-secret
 
 tls:
- ## Enable or disable MongoDB TLS Support 
+ ## Enable or disable MongoDB TLS Support
   enabled: false
  ##
  ## Bitnami Nginx image
@@ -913,8 +913,20 @@ metrics:
     ## Specify the namespace where Prometheus Operator is running
     ##
     # namespace: monitoring
+
     ## Define individual alerting rules as required
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    ##
+    ## This is an example of a rule, you should add the below code block under the "rules" param, removing the brackets
+    ## - name: example
+    ##   rules:
+    ##   - alert: HighRequestLatency
+    ##     expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    ##     for: 10m
+    ##     labels:
+    ##       severity: page
+    ##     annotations:
+    ##       summary: High request latency
     ##
     rules: {}
