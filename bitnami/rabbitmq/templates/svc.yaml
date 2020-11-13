@@ -33,7 +33,7 @@ spec:
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
     {{- if .Values.auth.tls.enabled }}
-    - name: {{ .Values.service.TlsPortName }}
+    - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
       targetPort: amqp-ssl
       {{- if (eq .Values.service.type "ClusterIP") }}
