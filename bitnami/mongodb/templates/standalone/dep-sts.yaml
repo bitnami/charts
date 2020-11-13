@@ -298,15 +298,7 @@ spec:
             - -ec
           args:
             - |
-              {{- if and .Values.tls.enabled .Values.auth.enabled }}
-              /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin?tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
-              {{- else }}
-              {{- if .Values.auth.enabled }}
-              /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
-              {{- else }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://localhost:27017/admin{{ .Values.metrics.extraUri }} {{ .Values.metrics.extraFlags }}
-              {{- end }}
-              {{- end }} 
+              /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           env:
           {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
@@ -329,15 +321,9 @@ spec:
               command:
                 - sh
                 - -c
-              {{- if .Values.tls.enabled }}
                 - >-
-                  /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin?tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
+                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
                   --test
-              {{- else }}
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
-                  --test
-              {{- end }}
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
@@ -350,15 +336,9 @@ spec:
               command:
                 - sh
                 - -c
-              {{- if .Values.tls.enabled }}
                 - >-
-                  /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin?tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
+                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
                   --test
-              {{- else }}
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin{{ .Values.metrics.extraUri }}" {{ .Values.metrics.extraFlags }}
-                  --test
-              {{- end }}
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
