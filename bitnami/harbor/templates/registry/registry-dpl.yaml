@@ -77,6 +77,9 @@ spec:
       {{- if .Values.registry.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.registry.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.registry.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.registry.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: registry
           image: {{ include "harbor.registryImage" . }}

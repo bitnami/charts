@@ -54,6 +54,9 @@ spec:
       {{- if .Values.clair.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.clair.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.clair.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clair.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: clair
           image: {{ include "harbor.clairImage" . }}

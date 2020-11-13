@@ -97,7 +97,11 @@ spec:
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
                   [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
                   slave+=("--cluster-master-id $masterID")
                   echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as slave of ${masterID}"
                 else
@@ -130,7 +134,11 @@ spec:
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( new_node_index % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
                   [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
                   slave+=("--cluster-master-id $masterID")
                   echo "Adding Node $new_node_index ${new_node_ip} as slave of ${masterID}"
                 else
