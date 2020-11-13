@@ -256,6 +256,10 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  sessionAffinity: "None"
 
 ## Configure the ingress resource that allows you to access the
 ## OpenCart installation. Set up the URL
@@ -315,11 +319,6 @@ ingress:
   # - name: opencart.local-tls
   #   key:
   #   certificate:
-
-## Control where client requests go, to the same pod or round-robin
-## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
-sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
