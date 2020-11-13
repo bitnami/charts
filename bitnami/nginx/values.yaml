@@ -476,7 +476,7 @@ ldapDaemon:
 #     ports:
 #       - name: portname
 #         containerPort: 1234
-
+sidecars:
 ## Ingress paramaters
 ##
 ingress:
