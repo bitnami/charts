@@ -269,3 +269,11 @@ readinessProbe:
   periodSeconds: 51
   failureThreshold: 3
   timeoutSeconds: 3
+
+## Additional labels to apply to all resources
+labels: {}
+#   foo: bar
+
+## Additional labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+matchLabels: {}
+#   foo: bar
