@@ -9,13 +9,13 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 0.x.x
+    version: 1.x.x
   - name: mariadb
     condition: mariadb.enabled
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ghost-database
-    version: 8.x.x
+    version: 9.x.x
 description: A simple, powerful publishing platform that allows you to share your stories with the world
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/ghost
