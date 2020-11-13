@@ -118,26 +118,26 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 
 ### Database parameters
 
-| Parameter                                  | Description                                           | Default                                        |
-|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
-| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
-| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                    | Database name to create                               | `bitnami_orangehrm`                            |
-| `mariadb.auth.username`                    | Database user to create                               | `bn_orangehrm`                                 |
-| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC                 | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size                       | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC              | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db                  | `bn_orangehrm`                                 |
-| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database                         | `bitnami_orangehrm`                            |
-| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
-| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
+| Parameter                                  | Description                                                               | Default                                            |
+|--------------------------------------------|---------------------------------------------------------------------------|----------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                                          | `true`                                             |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)                      | `standalone`                                       |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                                      | _random 10 character alphanumeric string_          |
+| `mariadb.auth.database`                    | Database name to create                                                   | `bitnami_orangehrm`                                |
+| `mariadb.auth.username`                    | Database user to create                                                   | `bn_orangehrm`                                     |
+| `mariadb.auth.password`                    | Password for the database                                                 | _random 10 character long alphanumeric string_     |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                                     | `true`                                             |
+| `mariadb.primary.persistence.existingClaim`| Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas  | `nil`                                              |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes                                   | `[ReadWriteOnce]`                                  |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                                           | `8Gi`                                              |
+| `mariadb.primary.persistence.storageClass` | MariaDB primary persistent volume storage Class                           | `nil` (uses alpha storage class annotation)        |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                                        | `nil` (will not mount to a host path)              |
+| `externalDatabase.user`                    | Existing username in the external db                                      | `bn_orangehrm`                                     |
+| `externalDatabase.password`                | Password for the above username                                           | `nil`                                              |
+| `externalDatabase.database`                | Name of the existing database                                             | `bitnami_orangehrm`                                |
+| `externalDatabase.host`                    | Host of the existing database                                             | `nil`                                              |
+| `externalDatabase.port`                    | Port of the existing database                                             | `3306`                                             |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object                               | `nil`                                              |
 
 ### Metrics parameters
 
