@@ -78,6 +78,9 @@ spec:
       {{- if .Values.jobservice.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.jobservice.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: jobservice
           image: {{ include "harbor.jobserviceImage" . }}

@@ -694,6 +694,10 @@ nginx:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -826,6 +830,10 @@ portal:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -967,6 +975,10 @@ core:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1120,6 +1132,10 @@ jobservice:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1360,6 +1376,10 @@ registry:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1513,6 +1533,10 @@ chartmuseum:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1763,6 +1787,10 @@ clair:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1898,6 +1926,10 @@ trivy:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -2000,6 +2032,10 @@ notary:
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
+
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
 
     ## lifecycleHooks for the container to automate configuration before or after startup.
     ##
@@ -2134,6 +2170,10 @@ notary:
     ## Extra volumes to add to the deployment
     ##
     extraVolumes: []
+
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
 
     ## Extra init containers to add to the deployment
     ##

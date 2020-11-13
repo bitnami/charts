@@ -510,6 +510,27 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination. You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Using Prometheus rules
+
+You can use custom Prometheus rules for Prometheus operator by using the `prometheusRule` parameter, see below a basic configuration example:
+
+```yaml
+metrics:
+  enabled: true
+  prometheusRule:
+    enabled: true
+    rules:
+    - name: rule1
+      rules:
+      - alert: HighRequestLatency
+        expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: High request latency
+```
+
 ## Enabling SSL/TLS
 
 This container supports enabling SSL/TLS between nodes in the cluster, as well as between mongo clients and nodes, by setting the MONGODB_EXTRA_FLAGS and MONGODB_CLIENT_EXTRA_FLAGS environment variables, together with the correct MONGODB_ADVERTISED_HOSTNAME.
