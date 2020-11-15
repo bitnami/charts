@@ -1,6 +1,6 @@
 {{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
 {{- $ghostSecretName := (include "common.names.fullname" .) -}}
-{{- $mariadbSecretName := (include "ghost.mariadb.fullname" .) -}}
+{{- $databaseSecretName := include "ghost.databaseSecretName" . -}}
 {{- if empty (include "ghost.host" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
@@ -26,9 +26,9 @@ host. To configure Ghost with the URL of your service:
 
   {{ include "common.utils.secret.getvalue" (dict "secret" $ghostSecretName "field" $ghostPasswordKey "context" $) }}
   {{- if .Values.mariadb.auth.rootPassword }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $mariadbSecretName "field" "mariadb-root-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-root-password" "context" $) }}
   {{- end }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $mariadbSecretName "field" "mariadb-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
 
 2. Complete your Ghost deployment by running:
 
@@ -72,8 +72,14 @@ host. To configure Ghost with the URL of your service:
 {{- end -}}
 
 {{- if .Values.mariadb.enabled }}
-    {{- $mariadbSecretName := include "ghost.databaseSecretName" . -}}
-    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+
+{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade .Values.externalDatabase.password -}}
+  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "mariadb-password" -}}
+
+WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
+  {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
+{{- end -}}

@@ -120,6 +120,9 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `ghostPassword`                             | Application password                                                                                                  | Randomly generated                                           |
 | `ghostEmail`                                | Admin email                                                                                                           | `user@example.com`                                           |
 | `ghostBlogTitle`                            | Ghost Blog name                                                                                                       | `User's Blog`                                                |
+| `nodeAffinityPreset.type`                   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                                         |
+| `nodeAffinityPreset.key`                    | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                                         |
+| `nodeAffinityPreset.values`                 | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                                         |
 | `nodeSelector`                              | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)                  |
 | `persistence.accessMode`                    | PVC Access Mode for Ghost volume                                                                                      | `ReadWriteOnce`                                              |
 | `persistence.enabled`                       | Enable persistence using PVC                                                                                          | `true`                                                       |
@@ -128,6 +131,8 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `persistence.size`                          | PVC Storage Request for Ghost volume                                                                                  | `8Gi`                                                        |
 | `persistence.storageClass`                  | PVC Storage Class for Ghost volume                                                                                    | `nil` (uses alpha storage class annotation)                  |
 | `podAnnotations`                            | Pod annotations                                                                                                       | `{}`                                                         |
+| `podAffinityPreset`                         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                                         |
+| `podAntiAffinityPreset`                     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                                       |
 | `podLabels`                                 | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                        |
 | `podSecurityContext.enabled`                | Enable Ghost pods' Security Context                                                                                   | `true`                                                       |
 | `podSecurityContext.fsGroup`                | Ghost pods' group ID                                                                                                  | `1001`                                                       |
@@ -185,6 +190,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                                                    | `nil` (will not mount to a host path)                        |
 | `externalDatabase.user`                     | Existing username in the external db                                                                                  | `bn_ghost`                                                   |
 | `externalDatabase.password`                 | Password for the above username                                                                                       | `nil`                                                        |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key                            | `nil`                                                        |
 | `externalDatabase.database`                 | Name of the existing database                                                                                         | `bitnami_ghost`                                              |
 | `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |
 | `externalDatabase.port`                     | Port of the existing database                                                                                         | `3306`                                                       |
@@ -310,7 +316,7 @@ To upgrade to `11.0.0`, it should be done reusing the PVCs used to hold both the
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-  export GHOST_HOST=$(kubectl get svc --namespace default ghost --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+$ export GHOST_HOST=$(kubectl get svc --namespace default ghost --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
 $ export GHOST_PASSWORD=$(kubectl get secret --namespace default ghost -o jsonpath="{.data.ghost-password}" | base64 --decode)
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
@@ -325,22 +331,16 @@ Delete the Ghost deployment and delete the MariaDB statefulset. Notice the optio
   $ kubectl delete statefulsets.apps ghost-mariadb --cascade=false
   ```
 
-Finally, upgrade you release to 8.0.0 reusing the existing PVC, and enabling back MariaDB:
+Upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
 $ helm upgrade ghost bitnami/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
 ```
 
-Finally, upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
-
-```console
-$ helm upgrade ghost bitnami/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD
-```
-
 You will need to kill the existing MariaDB pod now as the new statefulset is going to create a new one:
 
 ```console
-$ kubectl delete pod example-mariadb-0
+$ kubectl delete pod ghost-mariadb-0
 ```
 
 You should see the lines below in MariaDB container logs:
