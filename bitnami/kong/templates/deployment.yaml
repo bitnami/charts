@@ -342,6 +342,6 @@ spec:
             secretName: {{ .Values.kong.initScriptsSecret }}
             defaultMode: 0755
         {{- end }}
-      {{- if .Values.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
-      {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
