@@ -10,5 +10,5 @@ metadata:
     {{- end }}
 spec:
   groups:
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.rules "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.rules "context" $) | nindent 2 }}
 {{- end }}

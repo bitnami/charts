@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "metallb.fullname" . }}:controller
+  name: {{ include "metallb.fullname" . }}-controller
   labels: {{- include "metallb.labels" . | nindent 4 }}
 rules:
   - apiGroups:
@@ -40,7 +40,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "metallb.fullname" . }}:speaker
+  name: {{ include "metallb.fullname" . }}-speaker
   labels: {{- include "metallb.labels" . | nindent 4 }}
 rules:
   - apiGroups:
@@ -101,7 +101,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "metallb.fullname" . }}:controller
+  name: {{ include "metallb.fullname" . }}-controller
   labels: {{- include "metallb.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
@@ -110,12 +110,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "metallb.fullname" . }}:controller
+  name: {{ include "metallb.fullname" . }}-controller
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "metallb.fullname" . }}:speaker
+  name: {{ include "metallb.fullname" . }}-speaker
   labels: {{- include "metallb.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
@@ -124,7 +124,7 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "metallb.fullname" . }}:speaker
+  name: {{ include "metallb.fullname" . }}-speaker
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

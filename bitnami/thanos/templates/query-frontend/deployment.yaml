@@ -19,8 +19,11 @@ spec:
     metadata:
       labels: {{- include "thanos.labels" . | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-      {{- if .Values.queryFrontend.podAnnotations }}
+      {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
+        {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
+        checksum/query-frontend-configuration: {{ include (print $.Template.BasePath "/query-frontend/configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.queryFrontend.podAnnotations }}
         {{- include "thanos.tplValue" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
