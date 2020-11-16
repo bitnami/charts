@@ -585,9 +585,8 @@ initContainers: {}
 ##     chmod -w bitnami/wordpress/wp-config.php
 ##   .htaccess: |
 ##     RewriteEngine On
-##     RewriteBase / 
+##     RewriteBase /
 ##     ...
 ##
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
 customPostInitScripts:
-
