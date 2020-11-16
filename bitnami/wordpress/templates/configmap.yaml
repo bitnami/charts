@@ -1,0 +1,8 @@
+{{- if .Values.customPostInitScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "wordpress.fullname" . }}-custominit-configmap
+data:
+{{ toYaml .Values.customPostInitScripts | indent 2}}
+{{- end }}
