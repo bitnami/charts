@@ -576,7 +576,7 @@ initContainers: {}
 ##
 ## The logic of the post-init.d user scripts is that all is all files with extensions .sh, .sql or .php are executed for one time only, at the very first initialization of the pod as the very last step of entrypoint.sh.
 ## Example:
-## customInitScriptsCM:
+## customPostInitScripts:
 ##   enable-multisite.sh: |
 ##     #!/bin/bash
 ##     chmod +w /bitnami/wordpress/wp-config.php
