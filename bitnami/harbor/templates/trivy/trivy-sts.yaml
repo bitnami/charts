@@ -79,6 +79,9 @@ spec:
       {{- if .Values.trivy.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.trivy.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: trivy
           image: {{ include "harbor.trivyImage" . }}

@@ -9,10 +9,26 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: client
+    {{- if .Values.auth.client.clientPortNameOverride }}
+    {{- if .Values.auth.client.secureTransport }}
+    - name: {{ .Values.service.clientPortNameOverride }}-ssl
+    {{- else}}
+    - name: {{ .Values.service.clientPortNameOverride }}
+    {{- end }}
+    {{- else}}
+    - name: "client"
+    {{- end }}
       port: {{ .Values.service.port  }}
       targetPort: client
-    - name: peer
+    {{- if .Values.auth.client.peerPortNameOverride }}
+    {{- if .Values.auth.peer.secureTransport }}
+    - name: {{ .Values.service.peerPortNameOverride }}-ssl
+    {{- else}}
+    - name: {{ .Values.service.peerPortNameOverride }}
+    {{- end }}
+    {{- else}}
+    - name: "peer"
+    {{- end }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
   selector: {{- include "etcd.matchLabels" . | nindent 4 }}
