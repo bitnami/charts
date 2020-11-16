@@ -45,8 +45,8 @@ app: {{ include "tomcat.name" . }}
 chart: {{ include "tomcat.chart" . }}
 release: {{ .Release.Name }}
 heritage: {{ .Release.Service }}
-{{- if .Values.labels }}
-{{ toYaml .Values.labels }}
+{{- if .Values.commonLabels }}
+{{ toYaml .Values.commonLabels }}
 {{- end }}
 {{- end -}}
 
@@ -56,9 +56,6 @@ Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 {{- define "tomcat.matchLabels" -}}
 app: {{ include "tomcat.name" . }}
 release: {{ .Release.Name }}
-{{- if .Values.matchLabels }}
-{{ toYaml .Values.matchLabels }}
-{{- end }}
 {{- end -}}
 
 {{/*
