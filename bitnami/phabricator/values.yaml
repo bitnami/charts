@@ -71,6 +71,12 @@ phabricatorFirstName: First Name
 ##
 phabricatorLastName: Last Name
 
+## SSH
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
+## Instead of yes/no use true/false
+##
+phabricatorGitSSH: false
+
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator/#smtp-configuration
 ##

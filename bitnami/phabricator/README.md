@@ -81,6 +81,7 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `phabricatorEmail`               | Admin email                                                                                              | `user@example.com`                                           |
 | `phabricatorFirstName`           | First name                                                                                               | `First Name`                                                 |
 | `phabricatorLastName`            | Last name                                                                                                | `Last Name`                                                  |
+| `phabricatorGitSSH`              | Enabled SSH to access Git repositories                                                                   | `false`                                                      |
 | `smtpHost`                       | SMTP host                                                                                                | `nil`                                                        |
 | `smtpPort`                       | SMTP port                                                                                                | `nil`                                                        |
 | `smtpUser`                       | SMTP user                                                                                                | `nil`                                                        |
