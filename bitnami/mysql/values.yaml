@@ -156,6 +156,9 @@ serviceAccount:
   create: true
   ## Specify the name of the service account created/used
   # name:
+  ## Add annotations to service account
+  # annotations:
+  #   iam.gke.io/gcp-service-account: "sa@project.iam.gserviceaccount.com"
 
 ## Master nodes parameters
 ##
