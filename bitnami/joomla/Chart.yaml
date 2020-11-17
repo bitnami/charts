@@ -6,10 +6,10 @@ dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 8.x.x
+  version: 9.x.x
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 0.x.x
+  version: 1.x.x
 description: PHP content management system (CMS) for publishing web content
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/joomla
