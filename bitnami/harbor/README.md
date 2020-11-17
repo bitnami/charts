@@ -861,6 +861,8 @@ Find more information about how to deal with common errors related to Bitnami’
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- This chart depends on the **Redis 12** chart instead of the **Redis 11**. More information about the changes introduced [here](https://github.com/bitnami/charts/pull/4263).
+- This chart depends on the **PostgreSQL 10** instead od **PostgreSQL 9**. More information about the changes introduced [here](https://github.com/bitnami/charts/pull/4385).
 
 **Considerations when upgrading to this version**
 
