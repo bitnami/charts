@@ -548,8 +548,6 @@ $ helm upgrade my-release stable/postgresql \
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
-#### Breaking changes
-
 ## To 9.0.0
 
 In this version the chart was adapted to follow the Helm label best practices, see [PR 3021](https://github.com/bitnami/charts/pull/3021). That means the backward compatibility is not guarantee when upgrading the chart to this major version.
