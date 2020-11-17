@@ -43,35 +43,19 @@ spec:
           value: {{ .Values.allowEmptyPassword | quote }}
         - name: SUITECRM_VALIDATE_USER_IP
           value: {{ .Values.suitecrmValidateUserIP | quote }}
-        {{- if .Values.mariadb.enabled }}
         - name: MARIADB_HOST
-          value: {{ template "suitecrm.mariadb.fullname" . }}
+          value: {{ include "suitecrm.databaseHost" . | quote }}
         - name: MARIADB_PORT_NUMBER
-          value: "3306"
+          value: {{ include "suitecrm.databasePort" . | quote }}
         - name: SUITECRM_DATABASE_NAME
-          value: {{ .Values.mariadb.db.name | quote }}
+          value: {{ include "suitecrm.databaseName" . | quote }}
         - name: SUITECRM_DATABASE_USER
-          value: {{ .Values.mariadb.db.user | quote }}
+          value: {{ include "suitecrm.databaseUser" . | quote }}
         - name: SUITECRM_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "suitecrm.mariadb.fullname" . }}
+              name: {{ include "suitecrm.databaseSecretName" . }}
               key: mariadb-password
-        {{- else }}
-        - name: MARIADB_HOST
-          value: {{ .Values.externalDatabase.host | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ .Values.externalDatabase.port | quote }}
-        - name: SUITECRM_DATABASE_NAME
-          value: {{ .Values.externalDatabase.database | quote }}
-        - name: SUITECRM_DATABASE_USER
-          value: {{ .Values.externalDatabase.user | quote }}
-        - name: SUITECRM_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
-        {{- end }}
         - name: SUITECRM_HOST
 {{- $port:=.Values.service.port | toString }}
           value: "{{ include "host" . }}:{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
