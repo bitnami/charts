@@ -80,7 +80,7 @@ host. To configure Joomla! to use and external database host:
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
 {{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "db-password" -}}
+  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "mariadb-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
   {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}

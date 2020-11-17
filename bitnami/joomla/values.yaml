@@ -238,7 +238,7 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
-  ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+  ## loadBalancerIP for the Joomla Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   ## loadBalancerIP:

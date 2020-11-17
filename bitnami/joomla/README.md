@@ -160,12 +160,12 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `mariadb.auth.database`                    | Database name to create                               | `bitnami_joomla`                                |
 | `mariadb.auth.username`                    | Database user to create                               | `bn_joomla`                                     |
 | `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC                 | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size                       | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC              | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
 | `externalDatabase.user`                    | Existing username in the external db                  | `bn_joomla`                                    |
 | `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
 | `externalDatabase.database`                | Name of the existing database                         | `bitnami_joomla`                               |
@@ -334,7 +334,7 @@ $ helm upgrade joomla bitnami/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade joomla . --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
+$ helm upgrade joomla bitnami/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
