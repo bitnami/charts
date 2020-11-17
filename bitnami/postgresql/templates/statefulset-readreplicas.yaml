@@ -1,38 +1,38 @@
 {{- if .Values.replication.enabled }}
-{{- $slaveResources := coalesce .Values.slave.resources .Values.resources -}}
+{{- $readReplicasResources := coalesce .Values.readReplicas.resources .Values.resources -}}
 apiVersion: {{ template "postgresql.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: "{{ template "postgresql.fullname" . }}-slave"
+  name: "{{ template "postgresql.fullname" . }}-read"
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
-{{- with .Values.slave.labels }}
+{{- with .Values.readReplicas.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  {{- with .Values.slave.annotations }}
+  {{- with .Values.readReplicas.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ template "postgresql.fullname" . }}-headless
-  replicas: {{ .Values.replication.slaveReplicas }}
+  replicas: {{ .Values.replication.readReplicas }}
   selector:
     matchLabels:
     {{- include "common.labels.matchLabels" . | nindent 6 }}
-      role: slave
+      role: read
   template:
     metadata:
       name: {{ template "postgresql.fullname" . }}
       labels:
       {{- include "common.labels.standard" . | nindent 8 }}
-        role: slave
-{{- with .Values.slave.podLabels }}
+        role: read
+{{- with .Values.readReplicas.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
-{{- with .Values.slave.podAnnotations }}
+{{- with .Values.readReplicas.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -41,17 +41,17 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
 {{- include "postgresql.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.slave.nodeSelector }}
+      {{- if .Values.readReplicas.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.slave.nodeSelector | indent 8 }}
+{{ toYaml .Values.readReplicas.nodeSelector | indent 8 }}
       {{- end }}
-      {{- if .Values.slave.affinity }}
+      {{- if .Values.readReplicas.affinity }}
       affinity:
-{{ toYaml .Values.slave.affinity | indent 8 }}
+{{ toYaml .Values.readReplicas.affinity | indent 8 }}
       {{- end }}
-      {{- if .Values.slave.tolerations }}
+      {{- if .Values.readReplicas.tolerations }}
       tolerations:
-{{ toYaml .Values.slave.tolerations | indent 8 }}
+{{ toYaml .Values.readReplicas.tolerations | indent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -62,7 +62,7 @@ spec:
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "postgresql.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
-      {{- if or .Values.slave.extraInitContainers (and .Values.volumePermissions.enabled (or .Values.persistence.enabled (and .Values.shmVolume.enabled .Values.shmVolume.chmod.enabled))) }}
+      {{- if or .Values.readReplicas.extraInitContainers (and .Values.volumePermissions.enabled (or .Values.persistence.enabled (and .Values.shmVolume.enabled .Values.shmVolume.chmod.enabled))) }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled (or .Values.persistence.enabled (and .Values.shmVolume.enabled .Values.shmVolume.chmod.enabled) .Values.tls.enabled) }}
         - name: init-chmod-data
@@ -124,19 +124,19 @@ spec:
               mountPath: /opt/bitnami/postgresql/certs
             {{- end }}
       {{- end }}
-      {{- if .Values.slave.extraInitContainers }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraInitContainers "context" $ ) | nindent 8 }}
+      {{- if .Values.readReplicas.extraInitContainers }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraInitContainers "context" $ ) | nindent 8 }}
       {{- end }}
       {{- end }}
-      {{- if .Values.slave.priorityClassName }}
-      priorityClassName: {{ .Values.slave.priorityClassName }}
+      {{- if .Values.readReplicas.priorityClassName }}
+      priorityClassName: {{ .Values.readReplicas.priorityClassName }}
       {{- end }}
       containers:
         - name: {{ template "postgresql.fullname" . }}
           image: {{ template "postgresql.image" . }}
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-          {{- if $slaveResources }}
-          resources: {{- toYaml $slaveResources | nindent 12 }}
+          {{- if $readReplicasResources }}
+          resources: {{- toYaml $readReplicasResources | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -333,11 +333,11 @@ spec:
               mountPath: /opt/bitnami/postgresql/certs
               readOnly: true
             {{- end }}
-            {{- if .Values.slave.extraVolumeMounts }}
-            {{- toYaml .Values.slave.extraVolumeMounts | nindent 12 }}
+            {{- if .Values.readReplicas.extraVolumeMounts }}
+            {{- toYaml .Values.readReplicas.extraVolumeMounts | nindent 12 }}
             {{- end }}
-{{- if .Values.slave.sidecars }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.slave.sidecars "context" $ ) | nindent 8 }}
+{{- if .Values.readReplicas.sidecars }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.sidecars "context" $ ) | nindent 8 }}
 {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}
@@ -368,19 +368,19 @@ spec:
             medium: Memory
             sizeLimit: 1Gi
         {{- end }}
-        {{- if or (not .Values.persistence.enabled) (not .Values.slave.persistence.enabled) }}
+        {{- if or (not .Values.persistence.enabled) (not .Values.readReplicas.persistence.enabled) }}
         - name: data
           emptyDir: {}
         {{- end }}
-        {{- if .Values.slave.extraVolumes }}
-        {{- toYaml .Values.slave.extraVolumes | nindent 8 }}
+        {{- if .Values.readReplicas.extraVolumes }}
+        {{- toYaml .Values.readReplicas.extraVolumes | nindent 8 }}
         {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
     rollingUpdate: null
     {{- end }}
-{{- if and .Values.persistence.enabled .Values.slave.persistence.enabled }}
+{{- if and .Values.persistence.enabled .Values.readReplicas.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data
