@@ -116,6 +116,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                     | `nil`                                                   |
 | `extraVolumes`                          | Array to add extra volumes                                                               | `[]` (evaluated as a template)                          |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                 | `[]` (evaluated as a template)                          |
+| `sidecars`                              | Attach additional containers to nginx pods                                               | `nil`
 
 ### Custom NGINX application parameters
 

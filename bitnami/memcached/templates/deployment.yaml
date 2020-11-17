@@ -31,6 +31,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "memcached.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -44,13 +47,17 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.memcachedUsername }}
             - name: MEMCACHED_USERNAME
-              value: {{ default "" .Values.memcachedUsername | quote }}
+              value: {{ .Values.memcachedUsername | quote }}
+            {{- end }}
+            {{- if .Values.memcachedPassword }}
             - name: MEMCACHED_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "memcached.fullname" . }}
                   key: memcached-password
+            {{- end }}
             {{- if .Values.extraEnv }}
             {{- toYaml .Values.extraEnv | nindent 12 }}
             {{- end }}

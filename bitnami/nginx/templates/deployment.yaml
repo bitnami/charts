@@ -239,6 +239,9 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- with .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       volumes:
         - name: nginx-server-block-paths
           configMap:
