@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -184,6 +184,29 @@ The following table lists the configurable parameters of the SuiteCRM chart and 
 | `containerSecurityContext.enabled`          | Enable securityContext on for SuiteCRM deployment                                                     | `true`                                                       |
 | `containerSecurityContext.runAsUser`        | User for the securityContext                                                                          | `1001`                                                       |
 | `extraDeploy`                               | Array of extra objects to deploy with the release 	                                                  | `[]` (evaluated as a template)                               |
+
+### Database parameters
+
+| Parameter                                  | Description                                           | Default                                        |
+|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                    | Database name to create                               | `bitnami_suitecrm`                             |
+| `mariadb.auth.username`                    | Database user to create                               | `bn_suitecrm`                                  |
+| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                  | `bn_suitecrm`                                  |
+| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                         | `bitnami_suitecrm`                             |
+| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 

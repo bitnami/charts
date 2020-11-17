@@ -71,6 +71,11 @@ allowEmptyPassword: "no"
 ## External database configuration
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   host:
 
