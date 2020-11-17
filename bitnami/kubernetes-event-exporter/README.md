@@ -77,7 +77,7 @@ The following table lists the configurable parameters of the Kubernetes Event Ex
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `nil` (does not add image pull secrets to deployed pods) |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                                              |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter`                      |
-| `image.tag`                                       | Container image tag                                                                       | `0.9.0-scratch-r1`                                       |
+| `image.tag`                                       | Container image tag                                                                       | `0.9.0-debian-10-r0`                                     |
 | `initContainers`                                  | Attach additional init containers to pods                                                 | `[]` (evaluated as a template)                           |
 | `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                                     |
 | `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                     |
