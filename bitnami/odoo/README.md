@@ -257,6 +257,7 @@ Find more information about how to deal with common errors related to Bitnami’
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced
 
 **Considerations when upgrading to this version**
 
