@@ -12,10 +12,9 @@ spec:
   template:
     metadata:
       labels: {{- include "kube-prometheus.operator.labels" . | nindent 8 }}
-      annotations:
-{{- if .Values.operator.podAnnotations }}
-{{ toYaml .Values.operator.podAnnotations | indent 8 }}
-{{- end }}
+      {{- if .Values.operator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ template "kube-prometheus.operator.serviceAccountName" . }}
       {{- if .Values.operator.schedulerName }}
@@ -63,16 +62,16 @@ spec:
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           env:
-          - name: CONFIG_RELOADER_IMAGE
-            valueFrom:
-              configMapKeyRef:
-                name: {{ template "kube-prometheus.operator.fullname" . }}
-                key: config-reloader-image
-          - name: PROMETHEUS_CONFIG_RELOADER
-            valueFrom:
-              configMapKeyRef:
-                name: {{ template "kube-prometheus.operator.fullname" . }}
-                key: prometheus-config-reloader
+            - name: CONFIG_RELOADER_IMAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "kube-prometheus.operator.fullname" . }}
+                  key: config-reloader-image
+            - name: PROMETHEUS_CONFIG_RELOADER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "kube-prometheus.operator.fullname" . }}
+                  key: prometheus-config-reloader
           args:
             {{- if .Values.operator.kubeletService.enabled }}
             - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "kube-prometheus.fullname" . }}-kubelet
@@ -107,7 +106,9 @@ spec:
               path: /metrics
               port: http
 {{ toYaml .Values.operator.readinessProbe | indent 12 }}
+          {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
