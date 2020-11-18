@@ -78,6 +78,11 @@ master:
   ##
   podAnnotations: {}
 
+  ## Labes to add to the statefulset
+  ##
+  ##
+  extraPodLabels: {}
+
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -185,6 +190,11 @@ worker:
   ##
   ##
   podAnnotations: {}
+
+  ## Labes to add to the statefulset
+  ##
+  ##
+  extraPodLabels: {}
 
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/

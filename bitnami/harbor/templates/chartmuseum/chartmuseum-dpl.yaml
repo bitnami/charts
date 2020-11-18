@@ -56,6 +56,9 @@ spec:
       {{- if .Values.chartmuseum.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.chartmuseum.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: chartmuseum
           image: {{ include "harbor.chartMuseumImage" . }}
