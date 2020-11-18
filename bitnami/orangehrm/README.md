@@ -252,13 +252,19 @@ Delete the OrangeHRM deployment and delete the MariaDB statefulset. Notice the o
   $ kubectl delete statefulsets.apps orangehrm-mariadb --cascade=false
   ```
 
-Finally, upgrade you release to 8.0.0 reusing the existing PVC, and enabling back MariaDB:
+Now the upgrade works:
 
 ```console
 $ helm upgrade orangehrm bitnami/orangehrm --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set orangehrmPassword=$ORANGEHRM_PASSWORD
 ```
 
-You should see the lines below in MariaDB container logs:
+You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod osclass-mariadb-0
+  ```
+
+Finally, you should see the lines below in MariaDB container logs:
 
 ```console
 $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=orangehrm,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
