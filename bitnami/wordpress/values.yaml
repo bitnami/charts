@@ -589,4 +589,4 @@ initContainers: {}
 ##     ...
 ##
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
-customPostInitScripts:
+customPostInitScripts: {}
