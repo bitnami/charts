@@ -17,7 +17,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -550,8 +550,14 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### 7.0.0
 
-This version introduces many **major changes** as well as some new features. Due to the big refactor that the `values.yaml` has been suffered, backward compatibility is not guaranteed.
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*.
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts.
 - Several parameters were renamed or dissapeared in favor of new ones on this major version:
   - The image objects have been moved to its corresponding component object, e.g: `workerImage.*` now is located at `worker.image.*`.
   - The prefix *airflow* has been removed. Therefore, parameters prefixed with `airflow` are now at root level, e.g. `airflow.loadExamples` now is `loadExamples` or `airflow.worker.resources` now is `worker.resources`.
@@ -571,7 +577,11 @@ This version introduces many **major changes** as well as some new features. Due
   - Worker scaling functionality has been added, see more in the [Scaling worker pods](#scalingworkerpods).
   - Pod disruption budget has been added.
 
-As backwards compatibility is not guaranteed. To upgrade to `7.0.0`, you can try to follow the following steps.
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+- If you want to upgrade to this version from a previous one installed with Helm v3, you can try to follow the following steps:
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
@@ -583,7 +593,7 @@ $ helm install airflow bitnami/airflow \
     --set airflow.baseUrl=http://127.0.0.1:8080
 ```
 
-#### Export secrets and required values to update
+##### Export secrets and required values to update
 
 ```console
 $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
@@ -592,7 +602,7 @@ $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-po
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 ```
 
-#### Delete statefulsets
+##### Delete statefulsets
 
 Once the new version change fields in the statefulset that will make the upgrade action to fail you will need to remove them
 
@@ -603,7 +613,7 @@ $ kubectl delete statefulsets.apps --cascade=false airflow-postgresql
 $ kubectl delete statefulsets.apps --cascade=false airflow-worker
 ```
 
-#### Upgrade the chart release
+##### Upgrade the chart release
 
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `airflow.loadExamples` -> `loadExamples` or `airflow.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
 
@@ -618,11 +628,17 @@ $ helm upgrade airflow bitnami/airflow \
     --set redis.cluster.enabled=true
 ```
 
-#### Force new statefulset to create a new pod for postgresql
+##### Force new statefulset to create a new pod for postgresql
 
 ```console
 $ kubectl delete pod airflow-postgresql-0
 ```
+
+#### Useful links
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### 6.5.0
 
