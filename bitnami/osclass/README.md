@@ -231,7 +231,7 @@ export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=osclass -o jsonpath="{.items[0].metadata.name}")
 ```
 
-Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
+Delete the Osclass deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
 
 ```console
   $ kubectl delete deployments.apps osclass
