@@ -6,13 +6,15 @@ metadata:
   annotations:
     "helm.sh/hook": test-success
 spec:
+  {{- if .Values.podSecurityContext.enabled }}
+  securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   containers:
     - name: {{ .Release.Name }}-credentials-test
       image: {{ template "wordpress.image" . }}
       imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- if .Values.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       env:
         - name: MARIADB_HOST
