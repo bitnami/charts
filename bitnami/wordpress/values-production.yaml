@@ -576,3 +576,23 @@ sidecars: {}
 ##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-content. Should work with extraVolumeMounts and extraVolumes']
 ##
 initContainers: {}
+
+## Make use of custom post-init.d user scripts functionality inside the bitnami/wordpress image
+## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
+##
+## The logic of the post-init.d user scripts is that all is all files with extensions .sh, .sql or .php are executed for one time only, at the very first initialization of the pod as the very last step of entrypoint.sh.
+## Example:
+## customPostInitScripts:
+##   enable-multisite.sh: |
+##     #!/bin/bash
+##     chmod +w /bitnami/wordpress/wp-config.php
+##     wp core multisite-install --url=example.com --title="Welcome to the WordPress Multisite" --admin_user="doesntmatternotreallyused" --admin_password="doesntmatternotreallyused" --admin_email="user@example.com"
+##     cat /docker-entrypoint-init.d/.htaccess > /bitnami/wordpress/.htaccess
+##     chmod -w bitnami/wordpress/wp-config.php
+##   .htaccess: |
+##     RewriteEngine On
+##     RewriteBase /
+##     ...
+##
+## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
+customPostInitScripts: {}
