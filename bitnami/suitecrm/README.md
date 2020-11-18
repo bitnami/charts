@@ -237,7 +237,7 @@ export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariad
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
 ```
 
-Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
+Delete the SuiteCRM deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
 
 ```console
   $ kubectl delete deployments.apps suitecrm
