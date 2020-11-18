@@ -576,6 +576,7 @@ sidecars: {}
 ##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-content. Should work with extraVolumeMounts and extraVolumes']
 ##
 initContainers: {}
+
 ## Make use of custom post-init.d user scripts functionality inside the bitnami/wordpress image
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ##
