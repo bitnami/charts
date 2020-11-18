@@ -120,8 +120,6 @@ mariadb:
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
   architecture: standalone
-  image:
-    debug: true
 
   ## MariaDB Authentication parameters
   ##
