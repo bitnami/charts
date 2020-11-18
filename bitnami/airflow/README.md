@@ -571,7 +571,7 @@ This version introduces many **major changes** as well as some new features. Due
   - Worker scaling functionality has been added, see more in the [Scaling worker pods](#scalingworkerpods).
   - Pod disruption budget has been added.
 
-As backwards compatibility is not guaranteed. To upgrade to `7.0.0`, you can try to follow the next steps.
+As backwards compatibility is not guaranteed. To upgrade to `7.0.0`, you can try to follow the following steps.
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
