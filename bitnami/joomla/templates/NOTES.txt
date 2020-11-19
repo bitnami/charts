@@ -18,23 +18,23 @@
     {{- end }}
   {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "joomla.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Joomla! URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
-** Please ensure an external IP is associated to the {{ template "joomla.fullname" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "joomla.fullname" . }} **
+** Please ensure an external IP is associated to the {{ template "common.names.fullname" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "joomla.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "Joomla! URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "joomla.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
   echo "Joomla! URL: http://127.0.0.1:8080/"
 
 {{- end }}
@@ -61,23 +61,26 @@ host. To configure Joomla! to use and external database host:
 
 {{- include "joomla.checkRollingTags" . }}
 
-{{- $passwordErrors := list -}}
+{{- $passwordValidationErrors := list -}}
 {{- $secretName := include "joomla.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
   {{- $requiredJoomlaPassword := dict "valueKey" "joomlaPassword" "secret" $secretName "field" "joomla-password" "context" $ -}}
   {{- $requiredJoomlaPasswordError := include "common.validations.values.single.empty" $requiredJoomlaPassword -}}
-  {{- $passwordErrors =  append $passwordErrors $requiredJoomlaPasswordError -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredJoomlaPasswordError -}}
 {{- end -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" (include "joomla.mariadb.fullname" .) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+{{- $databaseSecretName := include "joomla.databaseSecretName" . -}}
 
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
 {{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $databaseSecretName := printf "%s-%s" .Release.Name "externaldb" -}}
-  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "db-password" -}}
+  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "mariadb-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
   {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
