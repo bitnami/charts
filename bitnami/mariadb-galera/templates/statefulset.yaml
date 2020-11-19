@@ -76,6 +76,8 @@ spec:
               value: {{ .Values.galera.name | quote }}
             - name: MARIADB_GALERA_CLUSTER_ADDRESS
               value: "gcomm://{{ template "mariadb-galera.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            - name: MARIADB_ROOT_USER
+              value: {{ .Values.rootUser.user | quote }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -188,7 +190,7 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -202,7 +204,7 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD
+                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -244,6 +246,8 @@ spec:
           env:
             - name: MARIADB_METRICS_EXTRA_FLAGS
               value: {{ default "" (join " " .Values.metrics.extraFlags) | quote }}
+            - name: MARIADB_ROOT_USER
+              value: {{ .Values.rootUser.user | quote }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -257,7 +261,7 @@ spec:
             - sh
             - -c
             - |
-              DATA_SOURCE_NAME="root:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
+              DATA_SOURCE_NAME="$MARIADB_ROOT_USER:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
           ports:
             - name: metrics
               containerPort: 9104
