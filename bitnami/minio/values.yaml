@@ -143,9 +143,14 @@ statefulset:
 ##
 # existingSecret:
 
-## Mount MinIO secret as a file instead of passing environment variable
+## Mount MinIO secret as a file instead of passing environment variable. If useSecretValues is true it will mount the values from the minio secret. Otherwise a local file can be used.
 ##
-useCredentialsFile: false
+credentialsFile:
+  enabled: false
+  useSecretValues: true
+  mountPath: /opt/bitnami/minio/secrets/
+  accessKeyFile: access-key
+  secretKeyFile: secret-key
 
 ## Force reconfiguring new keys whenever the credentials change
 ##

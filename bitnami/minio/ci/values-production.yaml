@@ -6,7 +6,8 @@ volumePermissions:
 
 mode: distributed
 
-useCredentialsFile: true
+credentialsFile:
+  enabled: true
 
 disableWebUI: false
 

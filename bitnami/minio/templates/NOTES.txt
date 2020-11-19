@@ -4,10 +4,18 @@ MinIO can be accessed via port {{ .Values.service.port }} on the following DNS n
 
    {{ include "minio.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
+{{- if and .Values.credentialsFile.enabled (not .Values.credentialsFile.useSecretValues) }}
+Since you've indicated to use credentials from file and not to load them from a secret, you should have your Minio credentials stored elsewhere already.
+To set the credentials run:
+
+   export MINIO_ACCESS_KEY=<your_predetermined_access_key>
+   export MINIO_SECRET_KEY=<your_predetermined_secret_key>
+{{- else }}
 To get your credentials run:
 
    export MINIO_ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
    export MINIO_SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.fullname" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
+{{- end }}
 
 To connect to your MinIO server using a client:
 
