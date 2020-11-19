@@ -17,17 +17,6 @@ engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/suitecrm
 icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-110x117.png
 keywords:
-<<<<<<< HEAD
-- suitecrm
-- CRM
-maintainers:
-- email: containers@bitnami.com
-  name: Bitnami
-name: suitecrm
-sources:
-- https://github.com/bitnami/bitnami-docker-suitecrm
-- http://www.suitecrm.com
-=======
   - suitecrm
   - CRM
 maintainers:
@@ -37,5 +26,4 @@ name: suitecrm
 sources:
   - https://github.com/bitnami/bitnami-docker-suitecrm
   - http://www.suitecrm.com
->>>>>>> 06a6471f1f040aceec432792ab9ff5fbb2e74a8e
 version: 9.0.0
