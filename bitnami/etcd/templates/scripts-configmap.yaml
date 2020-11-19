@@ -2,7 +2,6 @@
 {{- $clientPort := int .Values.service.port }}
 {{- $peerPort := int .Values.service.peerPort }}
 {{- $etcdAuthOptions := include "etcd.authOptions" . }}
-{{- $etcdDataDir := include "etcd.dataDir" . }}
 {{- $etcdFullname := include "etcd.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}

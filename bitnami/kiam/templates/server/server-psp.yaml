@@ -1,0 +1,49 @@
+{{- if and .Values.server.enabled .Values.server.podSecurityPolicy.create }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  volumes:
+    - 'secret'
+    - 'hostPath'
+  allowedHostPaths:
+    - pathPrefix: {{ .Values.server.sslCertHostPath }}
+      readOnly: true
+    {{- if .Values.server.podSecurityPolicy.allowedHostPaths }}
+    {{- toYaml .Values.server.podSecurityPolicy.allowedHostPaths | nindent 4 }}
+    {{- end }}
+  hostNetwork: {{ .Values.server.useHostNetwork }}
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    {{- if .Values.server.containerSecurityContext.seLinuxOptions }}
+    rule: 'MustRunAs'
+    seLinuxOptions: {{- toYaml .Values.server.containerSecurityContext.seLinuxOptions | nindent 6 }}
+    {{- else }}
+    rule: 'RunAsAny'
+    {{- end }}
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  readOnlyRootFilesystem: false
+{{- end }}
