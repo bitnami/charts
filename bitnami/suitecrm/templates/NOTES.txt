@@ -13,6 +13,10 @@
 {{- else }}
 
 {{- if not .Values.suitecrmHost }}
+
+  This deployment will be incomplete until you configure SuiteCRM with a resolvable
+  host.
+
   ############################################################
   # Complete the deployment running the following commands
   ############################################################

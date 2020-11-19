@@ -156,7 +156,7 @@ mariadb:
       existingClaim:
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   # HTTP Port
   port: 8080
   # HTTPS Port
