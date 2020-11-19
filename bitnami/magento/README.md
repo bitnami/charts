@@ -248,12 +248,12 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 
 ## Upgrading
 
-### To 8.0.0
+### To 15.0.0
 
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+2. Updated MariaDB and Elasticsearch dependency versions
 
 Please read the update notes carefully.
 
@@ -282,28 +282,27 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+In this major the MariaDB and Elasticsearch dependency versions were also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `8.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Magento data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `magento` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
+To upgrade to `15.0.0`, it should be done reusing the PVCs used to hold data from MariaDB, Elasticsearch and Magento data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `magento` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
-Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Magento data on your current release:
+Obtain the credentials and the names of the PVCs used to hold the MariaDB data on your current release:
 
 ```console
-export MAGENTO_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=magento -o jsonpath="{.items[0].metadata.name}")
+$ export MAGENTO_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+$ export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 --decode)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=magento -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
 ```console
-  $ kubectl delete deployments.apps magento
-
-  $ kubectl delete statefulsets.apps magento-mariadb --cascade=false
+$ kubectl delete deployments.apps magento
+$ kubectl delete statefulsets.apps magento-mariadb --cascade=false
 ```
 
 Now the upgrade works:
@@ -314,9 +313,9 @@ $ helm upgrade magento bitnami/magento --set mariadb.primary.persistence.existin
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
 
-  ```console
-  $ kubectl delete pod magento-mariadb-0
-  ```
+```console
+$ kubectl delete pod magento-mariadb-0z
+```
 
 Finally, you should see the lines below in MariaDB container logs:
 
