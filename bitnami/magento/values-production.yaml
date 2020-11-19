@@ -146,7 +146,7 @@ mariadb:
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
   architecture: standalone
-  
+
   ## MariaDB Authentication parameters
   ##
   auth:
