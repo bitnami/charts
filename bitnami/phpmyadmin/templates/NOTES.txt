@@ -65,16 +65,16 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
   {{- $requiredPasswords := list -}}
   {{- $secretName := include "mariadb.fullname" . -}}
 
-  {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.rootUser.password" "secret" $secretName "field" "mariadb-root-password" -}}
+  {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.auth.rootPassword" "secret" $secretName "field" "mariadb-root-password" -}}
   {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
 
-  {{- if not (empty .Values.mariadb.db.user) -}}
-    {{- $requiredMariadbPassword := dict "valueKey" "mariadb.db.password" "secret" $secretName "field" "mariadb-password" -}}
+  {{- if not (empty .Values.mariadb.auth.user) -}}
+    {{- $requiredMariadbPassword := dict "valueKey" "mariadb.auth.password" "secret" $secretName "field" "mariadb-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
   {{- end -}}
 
-  {{- if .Values.mariadb.replication.enabled -}}
-    {{- $requiredReplicationPassword := dict "valueKey" "mariadb.replication.password" "secret" $secretName "field" "mariadb-replication-password" -}}
+  {{- if eq .Values.mariadb.architecture "replication" -}}
+    {{- $requiredReplicationPassword := dict "valueKey" "mariadb.auth.replicationPassword" "secret" $secretName "field" "mariadb-replication-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
   {{- end -}}
 
