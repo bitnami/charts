@@ -2,16 +2,14 @@ annotations:
   category: CMS
 apiVersion: v2
 appVersion: 3.37.1
-name: ghost
-version: 11.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-  - name: mariadb
-    condition: mariadb.enabled
+  - condition: mariadb.enabled
+    name: mariadb
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ghost-database
@@ -29,10 +27,10 @@ keywords:
   - nodejs
   - javascript
 maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
+  - email: containers@bitnami.com
+    name: Bitnami
+name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - http://www.ghost.org/
-
-
+version: 11.0.0

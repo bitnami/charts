@@ -26,7 +26,7 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
-  
+
 ## Command and args for running the Ghost container (set to default if not set). Use array form
 ##
 command: []
@@ -287,7 +287,7 @@ persistence:
   # storageClass: "-"
   accessMode: ReadWriteOnce
   size: 8Gi
-  
+
   ## A manually managed Persistent Volume Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
