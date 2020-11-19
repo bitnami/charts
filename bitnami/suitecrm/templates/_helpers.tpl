@@ -29,12 +29,16 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* Database secret name */}}
-{{- define "suitecrm.databaseSecretName" }}
+{{/*
+Return the MariaDB Secret Name
+*/}}
+{{- define "suitecrm.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
-{{- printf "%s" (include "suitecrm.mariadb.fullname" .) -}}
+    {{- printf "%s" (include "suitecrm.mariadb.fullname" .) -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
 {{- end -}}
 
@@ -143,18 +147,5 @@ Return the MariaDB User
     {{- printf "%s" .Values.mariadb.auth.username -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.user -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the MariaDB Secret Name
-*/}}
-{{- define "suitecrm.databaseSecretName" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "suitecrm.mariadb.fullname" .) -}}
-{{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
-{{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
 {{- end -}}

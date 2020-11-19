@@ -203,7 +203,7 @@ spec:
               path: /metrics
               port: metrics
             initialDelaySeconds: 15
-            timeoutSeconds: 5
+              timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /metrics

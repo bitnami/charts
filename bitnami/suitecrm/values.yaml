@@ -116,8 +116,6 @@ mariadb:
   ##
   architecture: standalone
 
-  port: 3306
-
   ## MariaDB Authentication parameters
   ##
   auth:
