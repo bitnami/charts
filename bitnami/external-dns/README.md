@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -75,6 +75,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `aws.credentials.secretKey`            | When using the AWS provider, set `aws_secret_access_key` in the AWS credentials (optional)                                                                                                                      | `""`                                                    |
 | `aws.credentials.mountPath`            | When using the AWS provider, determine `mountPath` for `credentials` secret                                                                                                                                     | `"/.aws"`                                               |
 | `aws.region`                           | When using the AWS provider, `AWS_DEFAULT_REGION` to set in the environment (optional)                                                                                                                          | `us-east-1`                                             |
+| `aws.apiRetries`                       | Maximum number of retries for AWS API calls before giving up                                                                                                                 | `3`                                                    |
 | `aws.zoneType`                         | When using the AWS provider, filter for zones of this type (optional, options: public, private)                                                                                                                 | `""`                                                    |
 | `aws.assumeRoleArn`                    | When using the AWS provider, assume role by specifying --aws-assume-role to the external-dns daemon                                                                                                             | `""`                                                    |
 | `aws.batchChangeSize`                  | When using the AWS provider, set the maximum number of changes that will be applied in each batch                                                                                                               | `1000`                                                  |
@@ -120,10 +121,14 @@ The following table lists the configurable parameters of the external-dns chart 
 | `ovh.consumerKey`                      | When using the OVH provider, specify the existing consumer key. (required when provider=ovh)                                                                                                                    | `""`                                                    |
 | `ovh.applicationKey`                   | When using the OVH provider with an existing application, specify the application key. (required when provider=ovh)                                                                                             | `""`                                                    |
 | `ovh.applicationSecret`                | When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh)                                                                                          | `""`                                                    |
+| `scaleway.scwAccessKey`                | When using the Scaleway provider, specify an existing access key. (required when provider=scaleway)                                                                                                             | `""`                                                    |
+| `scaleway.scwSecretKey`                | When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)                                                                                                             | `""`                                                    |
+| `scaleway.scwDefaultOrganizationId`    | When using the Scaleway provider, specify the existing organization id. (required when provider=scaleway)                                                                                                       | `""`                                                    |
 | `infoblox.gridHost`                    | When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)                                                                                                              | `""`                                                    |
 | `infoblox.wapiUsername`                | When using the Infoblox provider, specify the Infoblox WAPI username                                                                                                                                            | `"admin"`                                               |
 | `infoblox.wapiPassword`                | When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)                                                                                                          | `""`                                                    |
 | `infoblox.domainFilter`                | When using the Infoblox provider, specify the domain (optional)                                                                                                                                                 | `""`                                                    |
+| `infoblox.secretName`                  | When using the Infoblox provider, specify a name of existing Secret with wapiUsername and wapiPassword (optional)                                                                                              | `""`                                                    |
 | `infoblox.noSslVerify`                 | When using the Infoblox provider, disable SSL verification (optional)                                                                                                                                           | `false`                                                 |
 | `infoblox.wapiPort`                    | When using the Infoblox provider, specify the Infoblox WAPI port (optional)                                                                                                                                     | `""`                                                    |
 | `infoblox.wapiVersion`                 | When using the Infoblox provider, specify the Infoblox WAPI version (optional)                                                                                                                                  | `""`                                                    |
@@ -264,7 +269,32 @@ $ helm install my-release \
   bitnami/external-dns
 ```
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
+
+### To 4.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 3.0.0
 

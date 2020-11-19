@@ -52,6 +52,9 @@ spec:
       {{- if .Values.portal.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.portal.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.portal.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: portal
           image: {{ include "harbor.portalImage" . }}

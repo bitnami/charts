@@ -130,7 +130,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) -}}
+{{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
     {{- true -}}
@@ -139,6 +139,8 @@ Return true if a secret object should be created
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
@@ -164,6 +166,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.google.serviceAccountSecret }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
+{{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
+{{- .Values.infoblox.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -246,6 +250,9 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -310,10 +317,11 @@ Validate values of External DNS:
 - must provide a WAPI password when provider is "infoblox"
 */}}
 {{- define "external-dns.validateValues.infoblox.wapiPassword" -}}
-{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.wapiPassword) -}}
+{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
 external-dns: infoblox.wapiPassword
     You must provide a WAPI password when provider="infoblox".
     Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
+    or you can provide an existing secret name via infoblox.secretName
 {{- end -}}
 {{- end -}}
 
@@ -622,6 +630,42 @@ Validate values of External DNS:
 external-dns: ovh.applicationSecret
     You must provide the OVH appliciation secret key when provider="ovh".
     Please set the applicationSecret parameter (--set ovh.applicationSecret="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Scaleway access key when provider is "scaleway"
+*/}}
+{{- define "external-dns.validateValues.scaleway.scwAccessKey" -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwAccessKey) -}}
+external-dns: scaleway.scwAccessKey
+    You must provide the Scaleway access key when provider="scaleway".
+    Please set the scwAccessKey parameter (--set scaleway.scwAccessKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the scaleway secret key when provider is "scaleway"
+*/}}
+{{- define "external-dns.validateValues.scaleway.scwSecretKey" -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwSecretKey) -}}
+external-dns: scaleway.scwSecretKey
+    You must provide the scaleway secret key when provider="scaleway".
+    Please set the scwSecretKey parameter (--set scaleway.scwSecretKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the scaleway organization id when provider is "scaleway"
+*/}}
+{{- define "external-dns.validateValues.scaleway.scwDefaultOrganizationId" -}}
+{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwDefaultOrganizationId) -}}
+external-dns: scaleway.scwDefaultOrganizationId
+    You must provide the scaleway organization id key when provider="scaleway".
+    Please set the scwDefaultOrganizationId parameter (--set scaleway.scwDefaultOrganizationId="xxxx")
 {{- end -}}
 {{- end -}}
 

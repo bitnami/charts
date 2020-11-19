@@ -2,26 +2,26 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "rabbitmq.fullname" . }}-headless
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   clusterIP: None
   ports:
-    - name: epmd
+    - name: {{ .Values.service.epmdPortName }}
       port: 4369
       targetPort: epmd
     - name: amqp
       port: {{ .Values.service.port }}
-      targetPort: amqp
+      targetPort: {{ .Values.service.portName }}
     {{- if .Values.auth.tls.enabled }}
-    - name: amqp-tls
+    - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
       targetPort: amqp-tls
     {{- end }}
-    - name: dist
+    - name: {{ .Values.service.distPortName }}
       port: {{ .Values.service.distPort }}
       targetPort: dist
-    - name: stats
+    - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

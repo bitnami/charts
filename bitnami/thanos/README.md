@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -152,6 +152,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `querier.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `querier.service.annotations`                   | Annotations for Thanos Querier service                                                                 | `{}`                                                    |
+| `querier.service.labelSelectorsOverride`        | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `querier.serviceAccount.annotations`            | Annotations for Thanos Querier Service Account                                                         | `{}`                                                    |
 | `querier.rbac.create`                           | Create RBAC                                                                                            | `false`                                                 |
 | `querier.pspEnabled`                            | Create PodSecurityPolicy                                                                               | `false`                                                 |
@@ -167,6 +168,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `querier.ingress.certManager`                   | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `querier.ingress.hostname`                      | Default host for the ingress resource                                                                  | `thanos.local`                                          |
 | `querier.ingress.annotations`                   | Ingress annotations                                                                                    | `[]`                                                    |
+| `querier.ingress.tls`                           | Create ingress TLS section                                                                             | `false`                                                    |
 | `querier.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `querier.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `querier.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
@@ -216,6 +218,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.service.loadBalancerIP`          | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `queryFrontend.service.loadBalancerSourceRanges`| Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `queryFrontend.service.annotations`             | Annotations for Thanos Query Frontend service                                                          | `{}`                                                    |
+| `queryFrontend.service.labelSelectorsOverride`  | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `queryFrontend.serviceAccount.annotations`      | Annotations for Thanos Query Frontend Service Account                                                  | `{}`                                                    |
 | `queryFrontend.rbac.create`                     | Create RBAC                                                                                            | `false`                                                 |
 | `queryFrontend.pspEnabled`                      | Create PodSecurityPolicy                                                                               | `false`                                                 |
@@ -269,6 +272,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `bucketweb.service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `bucketweb.service.annotations`                      | Annotations for Thanos Bucket Web service                                                              | `{}`                                                    |
+| `bucketweb.service.labelSelectorsOverride`           | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `bucketweb.serviceAccount.annotations`               | Annotations for Thanos Bucket Web Service Account                                                      | `{}`                                                    |
 | `bucketweb.serviceAccount.existingServiceAccount`    | Name for an existing Thanos Bucket Web Service Account                                                 | `nil`                                                   |
 | `bucketweb.pdb.create`                               | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
@@ -278,6 +282,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.ingress.certManager`                      | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `bucketweb.ingress.hostname`                         | Default host for the ingress resource                                                                  | `thanos-bucketweb.local`                                |
 | `bucketweb.ingress.annotations`                      | Ingress annotations                                                                                    | `[]`                                                    |
+| `bucketweb.ingress.tls`                             | Create ingress TLS section                                                                               | `false`                                                    |
 | `bucketweb.ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
@@ -317,6 +322,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `compactor.service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `compactor.service.annotations`                      | Annotations for Thanos Compactor service                                                               | `{}`                                                    |
+| `compactor.service.labelSelectorsOverride`          | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `compactor.serviceAccount.annotations`               | Annotations for Thanos Compactor Service Account                                                       | `{}`                                                    |
 | `compactor.serviceAccount.existingServiceAccount`    | Name for an existing Thanos Compactor Service Account                                                  | `nil`                                                   |
 | `compactor.persistence.enabled`                      | Enable data persistence                                                                                | `true`                                                  |
@@ -358,6 +364,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `storegateway.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `storegateway.service.annotations`                   | Annotations for Thanos Store Gateway service                                                           | `{}`                                                    |
+| `storegateway.service.labelSelectorsOverride`        | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `storegateway.service.additionalHeadless`            | Additional Headless service                                                                            | `false`                                                 |
 | `storegateway.serviceAccount.annotations`            | Annotations for Thanos Store Gateway Service Account                                                   | `{}`                                                    |
 | `storegateway.serviceAccount.existingServiceAccount` | Name for an existing Thanos Store Gateway Service Account                                              | `nil`                                                   |
@@ -412,6 +419,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.service.loadBalancerIP`                       | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `ruler.service.loadBalancerSourceRanges`             | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `ruler.service.annotations`                          | Annotations for Thanos Ruler service                                                                   | `{}`                                                    |
+| `ruler.service.labelSelectorsOverride`        | Selector for Thanos querier service                                                                    | `{}`                                                    |
 | `ruler.service.additionalHeadless`                   | Additional Headless service                                                                            | `false`                                                 |
 | `ruler.serviceAccount.annotations`                   | Annotations for Thanos Ruler Service Account                                                           | `{}`                                                    |
 | `ruler.serviceAccount.existingServiceAccount`        | Name for an existing Thanos Ruler Service Account                                                      | `nil`                                                   |
@@ -631,7 +639,34 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
+
+### To 3.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 2.4.0
 

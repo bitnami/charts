@@ -103,7 +103,7 @@ Most likely you will only want to have one hostname that maps to this Kubeapps i
 
 ##### Annotations
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
+For annotations, please see [this document](https://github.com/kubeapps/kubeapps/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
 
 ##### TLS
 
@@ -147,7 +147,7 @@ The first command removes most of the Kubernetes components associated with the 
 
 > **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
 
-If you have dedicated a namespace only for Kubeapps you can completely clean remaining completed/failed jobs or any stale resources by deleting the namespace
+If you have dedicated a namespace only for Kubeapps you can completely clean the remaining completed/failed jobs or any stale resources by deleting the namespace
 
 ```bash
 kubectl delete namespace kubeapps
@@ -179,7 +179,7 @@ Or:
 Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
 ```
 
-It is possible, though uncommon, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
 
 ```bash
 kubectl api-versions
@@ -195,7 +195,7 @@ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.cr
 
 It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
 
-> Note: This steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
+> Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
 
 > Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-2-0).
 
@@ -247,8 +247,8 @@ After that you should be able to access the new version of Kubeapps. If the abov
 Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 
  - Helm 2 is no longer supported. If you are still using some Helm 2 charts, [migrate them with the available tools](https://helm.sh/docs/topics/v2_v3_migration/). Note that some charts (but not all of them) may require to be migrated to the [new Chart specification (v2)](https://helm.sh/docs/topics/charts/#the-apiversion-field). If you are facing any issue managing this migration and Kubeapps, please open a new issue!
- - MongoDB is not longer supported. Since 2.0, the only database supported is PostgreSQL.
- - PosgreSQL chart dependency has been upgraded to a new major version.
+ - MongoDB is no longer supported. Since 2.0, the only database supported is PostgreSQL.
+ - PostgreSQL chart dependency has been upgraded to a new major version.
 
 Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:
 

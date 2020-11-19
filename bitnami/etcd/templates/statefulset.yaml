@@ -20,12 +20,12 @@ spec:
   template:
     metadata:
       labels: {{- include "etcd.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations (not .Values.metrics.serviceMonitor.enabled)) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "etcd.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.metrics.podAnnotations }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations (not .Values.metrics.serviceMonitor.enabled) }}
         {{- include "etcd.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
@@ -112,7 +112,7 @@ spec:
             - name: ETCD_NAME
               value: "$(MY_POD_NAME)"
             - name: ETCD_DATA_DIR
-              value: {{ include "etcd.dataDir" . }}
+              value: /bitnami/etcd/data
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS

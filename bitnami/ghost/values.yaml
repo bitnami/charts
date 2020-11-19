@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.35.5-debian-10-r0
+  tag: 3.37.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -323,6 +323,11 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Priority Class Name
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+##
+# priorityClassName: ""
 
 ## Add sidecars to the pod
 ## For example:

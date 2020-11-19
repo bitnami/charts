@@ -44,6 +44,13 @@ Return the proper image name (for the init container auto-discovery image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the TLS Certs image)
+*/}}
+{{- define "mongodb.tls.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb.imagePullSecrets" -}}
@@ -264,3 +271,14 @@ mongodb: rbac.create
     by specifying "--set rbac.create=true".
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate values of MongoDB exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
+*/}}
+{{- define "mongodb.mongodb_exporter.uri" -}}
+    {{- $uriTlsArgs := ternary "tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
+    {{- $uriAuth := ternary "root:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+
+    {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+{{- end -}}
+

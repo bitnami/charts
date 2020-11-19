@@ -58,6 +58,9 @@ spec:
       {{- if .Values.nginx.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.nginx.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: nginx
           image: {{ include "harbor.nginxImage" . }}
