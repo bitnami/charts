@@ -240,9 +240,9 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=sui
 Delete the SuiteCRM deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
 
 ```console
-  $ kubectl delete deployments.apps suitecrm
+$ kubectl delete deployments.apps suitecrm
 
-  $ kubectl delete statefulsets.apps suitecrm-mariadb --cascade=false
+$ kubectl delete statefulsets.apps suitecrm-mariadb --cascade=false
 ```
 
 Now the upgrade works:
@@ -253,9 +253,9 @@ $ helm upgrade suitecrm bitnami/suitecrm --set mariadb.primary.persistence.exist
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
 
-  ```console
-  $ kubectl delete pod suitecrm-mariadb-0
-  ```
+```console
+$ kubectl delete pod suitecrm-mariadb-0
+```
 
 Finally, you should see the lines below in MariaDB container logs:
 
@@ -267,7 +267,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
 ```
 
-### 8.0.0
+### To 8.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
