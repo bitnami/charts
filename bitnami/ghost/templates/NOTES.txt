@@ -1,6 +1,6 @@
 {{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
-{{- $ghostSecretName := (include "ghost.fullname" .) -}}
-{{- $mariadbSecretName := (include "ghost.mariadb.fullname" .) -}}
+{{- $ghostSecretName := (include "common.names.fullname" .) -}}
+{{- $databaseSecretName := include "ghost.databaseSecretName" . -}}
 {{- if empty (include "ghost.host" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
@@ -18,22 +18,22 @@ host. To configure Ghost with the URL of your service:
   {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "ghost.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
   {{- end }}
 
   {{ include "common.utils.secret.getvalue" (dict "secret" $ghostSecretName "field" $ghostPasswordKey "context" $) }}
-  {{- if .Values.mariadb.mariadbRootPassword }}
-    {{ include "common.utils.secret.getvalue" (dict "secret" $mariadbSecretName "field" "mariadb-root-password" "context" $) }}
+  {{- if .Values.mariadb.auth.rootPassword }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-root-password" "context" $) }}
   {{- end }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $mariadbSecretName "field" "mariadb-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
 
 2. Complete your Ghost deployment by running:
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD,{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$MARIADB_ROOT_PASSWORD{{ end }}mariadb.db.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD{{ if .Values.mariadb.auth.rootPassword }},mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD{{ end }},mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else -}}
 1. Get the Ghost URL by running:
 
@@ -41,11 +41,11 @@ host. To configure Ghost with the URL of your service:
 
   echo Blog URL  : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ .Values.ghostPath }}
   echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ default "/" .Values.ghostPath }}ghost
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "ghost.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
 
 {{- else if eq .Values.service.type "NodePort" }}
   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "ghost.fullname" . }})
+  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
 
   echo Blog URL  : http://$APP_HOST:$APP_PORT{{ .Values.ghostPath }}
   echo Admin URL : http://$APP_HOST:$APP_PORT{{ default "/" .Values.ghostPath }}ghost
@@ -59,26 +59,26 @@ host. To configure Ghost with the URL of your service:
 2. Get your Ghost login credentials by running:
 
   echo Email:    {{ .Values.ghostEmail }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "ghost.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
 {{- end }}
 
 {{ include "common.warnings.rollingTag" .Values.image }}
 
-{{- $passwordErrors := list -}}
+{{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
   {{- $requiredGhostPassword := dict "valueKey" "ghostPassword" "secret" $ghostSecretName "field" "ghost-password" "context" $ -}}
   {{- $requiredGhostPasswordError := include "common.validations.values.single.empty" $requiredGhostPassword -}}
-  {{- $passwordErrors =  append $passwordErrors $requiredGhostPasswordError -}}
+  {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredGhostPasswordError -}}
 {{- end -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" $mariadbSecretName "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
-
-{{- if and (not .Values.mariadb.enabled) .Values.externalDatabase.host .Release.IsUpgrade -}}
-  {{- $externaldbSecretName := include "ghost.externalDb.secret.name" . -}}
-  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $externaldbSecretName "field" "mariadb-password" -}}
+{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade .Values.externalDatabase.password -}}
+  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "mariadb-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
   {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
