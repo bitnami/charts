@@ -544,7 +544,7 @@ Using Helm’s hook annotations ensures that the certs will only be generated on
 
 ### Accessing the cluster
 
-To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset.
+To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
 Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster

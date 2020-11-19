@@ -143,7 +143,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `sidecars`                                | Add additional sidecar containers to the RabbitMQ pod                                                                | `{}` (evaluated as a template)                               |
 | `extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts .                                                           | `{}`                                                         |
 | `extraVolumes`                            | Optionally specify extra list of additional volumes .                                                                | `{}`                                                         |
-| `extraSecrets`                            | Optionally specify extra secrets to be created by the chart.                                                         | `{}`                                                         |
+| `extraSecrets`                            | Optionally specify extra secrets to be created by the chart.                                                         | `{}` (evaluated as a template)                               |
 
 ### Exposure parameters
 
@@ -402,6 +402,13 @@ type: Opaque
 stringData:
   load_definition.json: |-
     {
+      "users": [
+        {
+          "name": "user",
+          "password": "CHANGEME",
+          "tags": "administrator"
+        }
+      ],
       "vhosts": [
         {
           "name": "/"
@@ -414,13 +421,20 @@ Then, specify the `load_definitions` property as an `extraConfiguration` pointin
 
 > Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
-If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. For example :
+If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. For example:
 
 ```yaml
 extraSecrets:
   load-definition:
     load_definition.json: |
       {
+        "users": [
+          {
+            "name": "{{ .Values.auth.username }}",
+            "password": "{{ .Values.auth.password }}",
+            "tags": "administrator"
+          }
+        ],
         "vhosts": [
           {
             "name": "/"

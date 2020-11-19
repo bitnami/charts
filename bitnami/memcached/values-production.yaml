@@ -129,6 +129,11 @@ nodeSelector: {}
 ##
 tolerations: {}
 
+## Pod priority
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 persistence:
