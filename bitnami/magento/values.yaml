@@ -142,7 +142,7 @@ mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-  ## Tag for the Bitnami MariaDb image to use
+  ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
   image:
     registry: docker.io
@@ -201,7 +201,6 @@ elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   enabled: true
-
   ## Enable to perform the sysctl operation
   sysctlImage:
     enabled: true
