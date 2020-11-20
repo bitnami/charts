@@ -1,4 +1,0 @@
-dependencies:
-  - name: postgresql
-    version: ">= 9.7.0"
-    repository: https://charts.bitnami.com/bitnami

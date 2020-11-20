@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.1-debian-10-r2
+  tag: 2.4.1-debian-10-r24
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
@@ -103,6 +103,11 @@ allowEmptyPassword: "yes"
 ## External database configuration
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   host:
 
@@ -135,31 +140,38 @@ externalElasticsearch:
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
+  ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 10.4.17-debian-10-r7
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_magento
-    user: bn_magento
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    # password:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_magento
+    username: bn_magento
+    password: ""
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -169,9 +181,16 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
 ##
 ## Elasticsearch chart configuration
@@ -182,12 +201,6 @@ elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   enabled: true
-  ## Tag for the Bitnami Elasticsearch image to use
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
-  image:
-    registry: docker.io
-    repository: bitnami/elasticsearch
-    tag: 6.8.12-debian-10-r61
   ## Enable to perform the sysctl operation
   sysctlImage:
     enabled: true
@@ -351,7 +364,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r190
+    tag: 0.8.0-debian-10-r217
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,22 +1,27 @@
-apiVersion: v1
-name: owncloud
-version: 8.3.1
+annotations:
+  category: Infrastructure
+apiVersion: v2
 appVersion: 10.5.0
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
 description: A file sharing server that puts the control and security of your own data back into your hands.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/owncloud
+icon: https://bitnami.com/assets/stacks/owncloud/img/owncloud-stack-220x234.png
 keywords:
   - owncloud
   - storage
   - http
   - web
   - php
-home: https://github.com/bitnami/charts/tree/master/bitnami/owncloud
-icon: https://bitnami.com/assets/stacks/owncloud/img/owncloud-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Infrastructure
+version: 9.0.0

@@ -18,23 +18,23 @@
     {{- end }}
   {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "phpbb.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "phpBB URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
-** Please ensure an external IP is associated to the {{ template "phpbb.fullname" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "phpbb.fullname" . }} **
+** Please ensure an external IP is associated to the {{ template "common.names.fullname" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "phpbb.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "phpBB URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "phpbb.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
   echo "phpBB URL: http://127.0.0.1:8080/"
 
 {{- end }}
@@ -61,22 +61,25 @@ host. To configure phpBB to use and external database host:
 
 {{- include "phpbb.checkRollingTags" . }}
 
-{{- $passwordErrors := list -}}
+{{- $passwordValidationErrors := list -}}
 {{- $secretName := include "phpbb.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
   {{- $requiredphpBBPassword := dict "valueKey" "phpbbPassword" "secret" $secretName "field" "phpbb-password" "context" $ -}}
   {{- $requiredphpBBPasswordError := include "common.validations.values.single.empty" $requiredphpBBPassword -}}
-  {{- $passwordErrors =  append $passwordErrors $requiredphpBBPasswordError -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredphpBBPasswordError -}}
 {{- end -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" (include "phpbb.mariadb.fullname" .) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+{{- $databaseSecretName := include "phpbb.databaseSecretName" . -}}
 
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 
 {{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $databaseSecretName := printf "%s-%s" .Release.Name "externaldb" -}}
   {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password"  "secret" $databaseSecretName "field" "db-password" -}}
 
 WARNING: Review values for the following password in the command, if they are correct please ignore this notice.

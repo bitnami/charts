@@ -112,7 +112,7 @@ spec:
             - name: ETCD_NAME
               value: "$(MY_POD_NAME)"
             - name: ETCD_DATA_DIR
-              value: {{ include "etcd.dataDir" . }}
+              value: /bitnami/etcd/data
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS

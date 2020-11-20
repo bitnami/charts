@@ -48,17 +48,18 @@ spec:
               value: "1"
           {{- end }}
             - name: MARIADB_HOST
-          {{- if .Values.mariadb.enabled }}
-              value: {{ template "magento.mariadb.fullname" . }}
-          {{- else }}
-              value: {{ .Values.externalDatabase.host | quote }}
-          {{- end }}
+              value: {{ include "magento.databaseHost" . | quote }}
             - name: MARIADB_PORT_NUMBER
-            {{- if .Values.mariadb.enabled }}
-              value: "3306"
-            {{- else }}
-              value: {{ .Values.externalDatabase.port | quote }}
-            {{- end }}
+              value: {{ include "magento.databasePort" . | quote }}
+            - name: MAGENTO_DATABASE_NAME
+              value: {{ include "magento.databaseName" . | quote }}
+            - name: MAGENTO_DATABASE_USER
+              value: {{ include "magento.databaseUser" . | quote }}
+            - name: MAGENTO_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "magento.databaseSecretName" . }}
+                  key: mariadb-password
             - name: ELASTICSEARCH_HOST
             {{- if .Values.elasticsearch.enabled }}
               value: {{ template "magento.elasticsearch.fullname" . }}
@@ -75,28 +76,6 @@ spec:
             {{- else }}
               value: ""
             {{- end }}
-            - name: MAGENTO_DATABASE_NAME
-            {{- if .Values.mariadb.enabled }}
-              value: {{ .Values.mariadb.db.name | quote }}
-            {{- else }}
-              value: {{ .Values.externalDatabase.database | quote }}
-            {{- end }}
-            - name: MAGENTO_DATABASE_USER
-            {{- if .Values.mariadb.enabled }}
-              value: {{ .Values.mariadb.db.user | quote }}
-            {{- else }}
-              value: {{ .Values.externalDatabase.user | quote }}
-            {{- end }}
-            - name: MAGENTO_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.mariadb.enabled }}
-                  name: {{ template "magento.mariadb.fullname" . }}
-                  key: mariadb-password
-                  {{- else }}
-                  name: {{ template "magento.fullname" . }}-externaldb
-                  key: db-password
-                  {{- end }}
             {{- $port:=.Values.service.port | toString }}
             - name: MAGENTO_HOST
               value: "{{ include "magento.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
