@@ -29,6 +29,11 @@ spec:
       {{- else if eq .Values.queryFrontend.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector:
+    {{- if .Values.queryFrontend.service.labelSelectorsOverride }}
+    {{- include "thanos.tplValue" (dict "value" .Values.queryFrontend.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
+    {{- end }}
 {{- end }}

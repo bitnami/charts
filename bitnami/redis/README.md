@@ -37,7 +37,7 @@ The main features of each chart are the following:
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -100,6 +100,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `containerSecurityContext.runAsUser`          | User ID for the container (both redis master and slave containers)                                                                                  | `1001`                                                  |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                | `false`                                                 |
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                            | Generated using the fullname template                   |
+| `serviceAccount.annotations`                  | Specifies annotations to add to ServiceAccount.                                                                                                     | `nil`                                                   |
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                                                 |
 | `rbac.role.rules`                             | Rules to create                                                                                                                                     | `[]`                                                    |
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                | `false`                                                 |
@@ -410,8 +411,6 @@ tls.certKeyFilename="cert.key"
 tls.certCAFilename="ca.pem"
 ```
 
-> **Note TLS and Prometheus Metrics**: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod is likely to not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.
-
 ### Metrics
 
 The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
@@ -668,17 +667,38 @@ kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove
 kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
-## Notable changes
+## Upgrading
 
-### 11.0.0
+### To 12.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 11.0.0
 
 When deployed with sentinel enabled, only a group of nodes is deployed and the master/slave role is handled in the group. To avoid breaking the compatibility, the settings for this nodes are given through the `slave.xxxx` parameters in `values.yaml`
 
-### 9.0.0
+### To 9.0.0
 
 The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
 
-### 7.0.0
+### To 7.0.0
 
 In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
 

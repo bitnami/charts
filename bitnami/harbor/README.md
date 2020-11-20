@@ -26,7 +26,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -65,8 +65,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 | Parameter                             | Description                                                                                                                                               | Default                                                 |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `caBundleSecretName`                  | The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components. | `nil` |
-
+| `caBundleSecretName`                  | The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components. | `nil`              |
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
 | `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
@@ -232,6 +231,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `nginx.updateStrategy`       | Deployment update strategy                                                                                            | `nil`                                                   |
 | `nginx.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                   |
 | `nginx.extraVolumeMounts`    | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                   |
+| `nginx.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `nginx.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                   |
 | `nginx.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                   |
 | `nginx.podLabels`            | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                   |
@@ -266,6 +266,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `portal.updateStrategy`       | Deployment update strategy                                                                                            | `nil`                                                   |
 | `portal.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                   |
 | `portal.extraVolumeMounts`    | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                   |
+| `portal.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `portal.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                   |
 | `portal.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                   |
 | `portal.podLabels`            | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                   |
@@ -305,6 +306,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `core.updateStrategy`       | Deployment update strategy                                                                                                                                                                                                                                                               | `nil`                                                   |
 | `core.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                                                                       | `nil`                                                   |
 | `core.extraVolumeMounts`    | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                                                                    | `nil`                                                   |
+| `core.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `core.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                                                                                        | `nil`                                                   |
 | `core.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                                                                                                                                                                                      | `nil`                                                   |
 | `core.podLabels`            | Add additional labels to the pod (evaluated as a template)                                                                                                                                                                                                                               | `nil`                                                   |
@@ -343,6 +345,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `jobservice.updateStrategy`       | Deployment update strategy                                                                                                                                   | `nil`                                                   |
 | `jobservice.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                           | `nil`                                                   |
 | `jobservice.extraVolumeMounts`    | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                                        | `nil`                                                   |
+| `jobservice.hostAliases`          | Specify hostAliases for the Pod to use                                                                                                                       | `nil`                                                   |
 | `jobservice.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                                                            | `nil`                                                   |
 | `jobservice.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                                                          | `nil`                                                   |
 | `jobservice.podLabels`            | Add additional labels to the pod (evaluated as a template)                                                                                                   | `nil`                                                   |
@@ -383,6 +386,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `registry.middleware.cloudFront.privateKeySecret` | CloudFront CDN settings: Secret name with the private key                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                     |
 | `registry.secret`                                 | Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.                                                                                                                                                                                                                                  | `nil`                                                                               |
 | `registry.extraVolumes`                           | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                                                                                                                                                                                                                                                                               | `nil`                                                                               |
+| `registry.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `registry.updateStrategy`                         | Deployment update strategy                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `nil`                                                                               |
 | `registry.sidecars`                               | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                                                                                                                                                                                                                                                                                                | `nil`                                                                               |
 | `registry.initContainers`                         | Add additional init containers to the pod (evaluated as a template)                                                                                                                                                                                                                                                                                                                                                                                                                              | `nil`                                                                               |
@@ -461,6 +465,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `chartmuseum.updateStrategy`         | Deployment update strategy                                                                                                                      | `nil`                                                   |
 | `chartmuseum.extraVolumes`           | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                              | `nil`                                                   |
 | `chartmuseum.extraVolumeMounts`      | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                           | `nil`                                                   |
+| `chartmuseum.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `chartmuseum.sidecars`               | Attach additional containers to the pod (evaluated as a template)                                                                               | `nil`                                                   |
 | `chartmuseum.initContainers`         | Add additional init containers to the pod (evaluated as a template)                                                                             | `nil`                                                   |
 | `chartmuseum.podLabels`              | Add additional labels to the pod (evaluated as a template)                                                                                      | `nil`                                                   |
@@ -494,6 +499,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `clair.podAnnotations`               | Annotations to add to the clair pod                                                                                                             | `{}`                                                    |
 | `clair.podLabels`                    | Add additional labels to the pod (evaluated as a template)                                                                                      | `nil`                                                   |
 | `clair.extraVolumes`                 | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                              | `nil`                                                   |
+| `clair.hostAliases`                  | Specify hostAliases for the Pod to use                                                                                                          | `nil`                                                   |
 | `clair.sidecars`                     | Attach additional containers to the pod (evaluated as a template)                                                                               | `nil`                                                   |
 | `clair.initContainers`               | Add additional init containers to the pod (evaluated as a template)                                                                             | `nil`                                                   |
 | `clair.server.resources`             | The [resources] to allocate for container                                                                                                       | undefined                                               |
@@ -563,6 +569,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.server.livenessProbe`        | Liveness probe configuration for Portal                                                                                                                                                                                                                                                                      | `Check values.yaml file`                                |
 | `notary.server.readinessProbe`       | Readines probe configuration for Portal                                                                                                                                                                                                                                                                      | `Check values.yaml file`                                |
 | `notary.server.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                                                                                           | `nil`                                                   |
+| `notary.server.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `notary.server.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                                                                                                            | `nil`                                                   |
 | `notary.server.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.server.updateStrategy`       | Deployment update strategy                                                                                                                                                                                                                                                                                   | `nil`                                                   |
@@ -584,6 +591,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.signer.livenessProbe`        | Liveness probe configuration for Portal                                                                                                                                                                                                                                                                      | `Check values.yaml file`                                |
 | `notary.signer.readinessProbe`       | Readines probe configuration for Portal                                                                                                                                                                                                                                                                      | `Check values.yaml file`                                |
 | `notary.signer.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                                                                                           | `nil`                                                   |
+| `notary.signer.hostAliases`          | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `notary.signer.sidecars`             | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                                                                                                            | `nil`                                                   |
 | `notary.signer.initContainers`       | Add additional init containers to the pod (evaluated as a template)                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.signer.updateStrategy`       | Deployment update strategy                                                                                                                                                                                                                                                                                   | `nil`                                                   |
@@ -628,6 +636,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `trivy.updateStrategy`               | Deployment update strategy                                                                                            | `nil`                                                   |
 | `trivy.extraVolumes`                 | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                   |
 | `trivy.extraVolumeMounts`            | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                   |
+| `trivy.hostAliases`                  | Specify hostAliases for the Pod to use                                                                                | `nil`                                                   |
 | `trivy.sidecars`                     | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                   |
 | `trivy.initContainers`               | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                   |
 | `trivy.podLabels`                    | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                   |
@@ -837,21 +846,45 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Upgrade
+## Upgrading
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
 
-## 8.0.0
+### To 9.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 8.0.0
 
 Redis dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
 
-## 7.0.0
+### To 7.0.0
 
 This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
 
 You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
-## 6.0.0 to 6.0.2
+### From 6.0.0 to 6.0.2
 
 Due to an issue with Trivy volumeClaimTemplates, the upgrade needs to be done in two steps:
 
@@ -867,7 +900,7 @@ $ helm upgrade bitnami/chart --version 6.0.2 --set trivy.enabled=false <REST OF 
 $ helm upgrade bitnami/chart --set trivy.enabled=true <REST OF THE UPGRADE PARAMETERS>
 ```
 
-## 6.0.0
+### To 6.0.0
 
 The chart was changed to adapt to the common Bitnami chart standards. Now it includes common elements such as sidecar and init container support, custom commands, custom liveness/readiness probes, extra environment variables support, extra pod annotations and labels, among others. In addition, it adds a new Trivy deployment for image scanning.
 
@@ -876,14 +909,14 @@ No issues are expected between upgrades but please double check the updated para
 - `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
 - `secretKey` has been moved to `core.secretKey`.
 
-## 4.0.0
+### To 4.0.0
 
 PostgreSQL and Redis dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
 
 - [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/README.md#upgrade)
 - [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
 
-## 3.0.0
+### To 3.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -891,7 +924,7 @@ In c085d396a0515be7217d65e92f4fbd474840908b the `apiVersion` of the deployment r
 
 This major version signifies this change.
 
-## 2.0.0
+### To 2.0.0
 
 In this version, two major changes were performed:
 
