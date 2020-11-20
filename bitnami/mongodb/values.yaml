@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.1-debian-10-r61
+  tag: 4.4.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -98,7 +98,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.4-debian-10-r13
+    tag: 1.19.4-debian-10-r19
     pullPolicy: IfNotPresent
 
 ## Name of the replica set
@@ -473,7 +473,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.10-debian-10-r21
+      tag: 1.18.12-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -816,7 +816,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r39
+    tag: 0.11.2-debian-10-r44
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -913,8 +913,20 @@ metrics:
     ## Specify the namespace where Prometheus Operator is running
     ##
     # namespace: monitoring
+
     ## Define individual alerting rules as required
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    ##
+    ## This is an example of a rule, you should add the below code block under the "rules" param, removing the brackets
+    ## - name: example
+    ##   rules:
+    ##   - alert: HighRequestLatency
+    ##     expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    ##     for: 10m
+    ##     labels:
+    ##       severity: page
+    ##     annotations:
+    ##       summary: High request latency
     ##
     rules: {}

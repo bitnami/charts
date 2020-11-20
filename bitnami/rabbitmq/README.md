@@ -73,9 +73,9 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `image.debug`                             | Set to true if you would like to see extra information on logs                                                       | `false`                                                      |
 | `auth.username`                           | RabbitMQ application username                                                                                        | `user`                                                       |
 | `auth.password`                           | RabbitMQ application password                                                                                        | _random 10 character long alphanumeric string_               |
-| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials                                                                            | `nil` (evaluated as a template)                              |
+| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                         | `nil` (evaluated as a template)                              |
 | `auth.erlangCookie`                       | Erlang cookie                                                                                                        | _random 32 character long alphanumeric string_               |
-| `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie                                                                          | `nil`                                                        |
+| `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                  | `nil`                                                        |
 | `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                       | `false`                                                      |
 | `auth.tls.failIfNoPeerCert`               | When set to true, TLS connection will be rejected if client fails to provide a certificate                           | `true`                                                       |
 | `auth.tls.sslOptionsVerify`               | Should [peer verification](https://www.rabbitmq.com/ssl.html#peer-verification) be enabled?                          | `verify_peer`                                                |
@@ -90,9 +90,9 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `memoryHighWatermark.enabled`             | Enable configuring Memory high watermark on RabbitMQ                                                                 | `false`                                                      |
 | `memoryHighWatermark.type`                | Memory high watermark type. Either `absolute` or `relative`                                                          | `relative`                                                   |
 | `memoryHighWatermark.value`               | Memory high watermark value                                                                                          | `0.4`                                                        |
-| `plugins`                                 | List of plugins to enable                                                                                            | `rabbitmq_management rabbitmq_peer_discovery_k8s`            |
+| `plugins`                                 | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`) | `rabbitmq_management rabbitmq_peer_discovery_k8s`            |
 | `communityPlugins`                        | List of custom plugins (URLs) to be downloaded during container initialization                                       | `nil`                                                        |
-| `extraPlugins`                            | Extra plugins to enable                                                                                              | `nil`                                                        |
+| `extraPlugins`                            | Extra plugins to enable (single string containing a space-separated list)                                            | `nil`                                                        |
 | `clustering.addressType`                  | Switch clustering mode. Either `ip` or `hostname`                                                                    | `hostname`                                                   |
 | `clustering.rebalance`                    | Rebalance master for queues in cluster when new replica is created                                                   | `false`                                                      |
 | `clustering.forceBoot`                    | Rebalance master for queues in cluster when new replica is created                                                   | `false`                                                      |
@@ -143,7 +143,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `sidecars`                                | Add additional sidecar containers to the RabbitMQ pod                                                                | `{}` (evaluated as a template)                               |
 | `extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts .                                                           | `{}`                                                         |
 | `extraVolumes`                            | Optionally specify extra list of additional volumes .                                                                | `{}`                                                         |
-| `extraSecrets`                            | Optionally specify extra secrets to be created by the chart.                                                         | `{}`                                                         |
+| `extraSecrets`                            | Optionally specify extra secrets to be created by the chart.                                                         | `{}` (evaluated as a template)                               |
 
 ### Exposure parameters
 
@@ -402,6 +402,13 @@ type: Opaque
 stringData:
   load_definition.json: |-
     {
+      "users": [
+        {
+          "name": "user",
+          "password": "CHANGEME",
+          "tags": "administrator"
+        }
+      ],
       "vhosts": [
         {
           "name": "/"
@@ -414,13 +421,20 @@ Then, specify the `load_definitions` property as an `extraConfiguration` pointin
 
 > Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
-If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. For example :
+If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. For example:
 
 ```yaml
 extraSecrets:
   load-definition:
     load_definition.json: |
       {
+        "users": [
+          {
+            "name": "{{ .Values.auth.username }}",
+            "password": "{{ .Values.auth.password }}",
+            "tags": "administrator"
+          }
+        ],
         "vhosts": [
           {
             "name": "/"

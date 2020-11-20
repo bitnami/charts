@@ -52,6 +52,9 @@ spec:
       {{- if .Values.notary.server.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.notary.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: notary-server
           image: {{ include "harbor.notaryServerImage" . | quote }}
