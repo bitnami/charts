@@ -87,7 +87,6 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.jksSecret`                    | Existing secret containing the truststore and one keystore per Keycloak replica          | `nil`                                                   |
 | `auth.tls.keystorePassword`             | Password to access the keystore when it's password-protected                             | `nil`                                                   |
 | `auth.tls.truststorePassword`           | Password to access the truststore when it's password-protected                           | `nil`                                                   |
-| `bindAddress`                           | Keycloak bind address                                                                    | `0.0.0.0`                                               |
 | `proxyAddressForwarding`                | Enable Proxy Address Forwarding                                                          | `false`                                                 |
 | `serviceDiscovery.enabled`              | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                 | `false`                                                 |
 | `serviceDiscovery.protocol`             | Sets the protocol that Keycloak nodes would use to discover new peers                    | `kubernetes.KUBE_PING`                                  |
@@ -266,10 +265,9 @@ Note also that if you disable PostgreSQL per above you MUST supply values for th
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
 ```yaml
-kong:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
+extraEnvVars:
+  - name: KEYCLOAK_LOG_LEVEL
+    value: DEBUG
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.

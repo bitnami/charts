@@ -130,7 +130,7 @@ replication:
   applicationName: my_application
 
 ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/primary/README.md#creating-a-database-user-on-first-run (see note!)
+## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
 # postgresqlPostgresPassword:
 
 ## PostgreSQL user (has superuser privileges if username is `postgres`)
