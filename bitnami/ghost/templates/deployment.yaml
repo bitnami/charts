@@ -14,7 +14,8 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  replicas: {{ .Values.replicaCount }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.strategy "context" $) | nindent 4 }}
+  replicas: 1
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}

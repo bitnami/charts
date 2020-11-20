@@ -119,6 +119,20 @@ allowEmptyPassword: true
 # smtpFromAddress
 # smtpService:
 
+## DeploymentStrategy to use when updating.
+## Defaults to Recreate as the default persistence.accessMode is ReadWriteOnce
+strategy:
+  type: Recreate
+  ## Set to type: RollingUpdate only if you have ReadWriteMany volumes or your newly
+  ## scheduled pods can’t mount the volume as the old pod still has it mounted
+  # type: RollingUpdate
+
+  ## Additional settings when using type: RollingUpdate
+  ## Each of those settings can be used alone or together with others.
+  # rollingUpdate:
+  #   maxSurge: 25%
+  #   maxUnavailable: 25%
+
 ## Use an existing secrets which already store your password data
 ##
 # existingSecret:

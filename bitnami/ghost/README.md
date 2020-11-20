@@ -146,6 +146,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `smtpPassword`                              | SMTP password                                                                                                         | `nil`                                                        |
 | `smtpFromAddress`                           | SMTP from address                                                                                                     | `nil`                                                        |
 | `smtpService`                               | SMTP service                                                                                                          | `nil`                                                        |
+| `strategy`                                  | The DeploymentStrategy to use when updating (Recreate or RollingUpdate)                                               | `{ type: Recreate }`                                         |
 | `tolerations`                               | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)                  |
 | `updateStrategy`                            | Deployment update strategy                                                                                            | `nil`                                                        |
 
