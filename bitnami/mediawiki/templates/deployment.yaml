@@ -4,22 +4,22 @@ kind: Deployment
 metadata:
   name: {{ template "mediawiki.fullname" . }}
   labels:
-    app: {{ template "mediawiki.name" . }}
-    chart: {{ template "mediawiki.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+    helm.sh/chart: {{ include "mediawiki.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "mediawiki.name" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "mediawiki.name" . }}
-        chart: {{ template "mediawiki.chart" . }}
-        release: {{ .Release.Name | quote }}
+        app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+        helm.sh/chart: {{ include "mediawiki.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
   {{- if .Values.podAnnotations }}
