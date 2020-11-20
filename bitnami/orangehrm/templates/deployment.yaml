@@ -3,21 +3,21 @@ kind: Deployment
 metadata:
   name: {{ template "orangehrm.fullname" . }}
   labels:
-    app: {{ template "orangehrm.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "orangehrm.fullname" . }}
+    helm.sh/chart: {{ include "orangehrm.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "orangehrm.fullname" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ include "orangehrm.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        app: {{ template "orangehrm.fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
+        app.kubernetes.io/name: {{ include "orangehrm.fullname" . }}
+        helm.sh/chart: {{ include "orangehrm.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}
