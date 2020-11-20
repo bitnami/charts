@@ -335,6 +335,11 @@ podAnnotations: {}
 ##
 updateStrategyType: RollingUpdate
 
+## Statefulset labels. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+statefulsetLabels: {}
+
 ## Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
