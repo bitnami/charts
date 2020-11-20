@@ -146,10 +146,24 @@ statefulset:
 ## Mount MinIO secret as a file instead of passing environment variable. If useSecretValues is true it will mount the values from the minio secret. Otherwise a local file can be used.
 ##
 credentialsFile:
+  ## Use credential files instead of env
+  ##
   enabled: false
+
+  ## Use the values from a Kubernetes secret
+  ##
   useSecretValues: true
+
+  ## The path to mount the credentials secret. (when credentialsFile.useSecretValues is false this is the path where the self provisioned files are located)
+  ##
   mountPath: /opt/bitnami/minio/secrets/
+
+  ## File name for the access key file
+  ##
   accessKeyFile: access-key
+
+  ## File name for the secret key file
+  ##
   secretKeyFile: secret-key
 
 ## Force reconfiguring new keys whenever the credentials change

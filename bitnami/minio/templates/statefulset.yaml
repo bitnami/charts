@@ -92,7 +92,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.credentialsFile.enabled }}
             - name: MINIO_ACCESS_KEY_FILE
-              value: {{ .Values.credentialsFile.mountPath }}{{ .Values.credentialsFile.accessKeyFile }}
+              value: {{ .Values.credentialsFile.mountPath }}/{{ .Values.credentialsFile.accessKeyFile }}
             {{- else }}
             - name: MINIO_ACCESS_KEY
               valueFrom:
@@ -102,7 +102,7 @@ spec:
             {{- end }}
             {{- if .Values.credentialsFile.enabled }}
             - name: MINIO_SECRET_KEY_FILE
-              value: {{ .Values.credentialsFile.mountPath }}{{ .Values.credentialsFile.secretKeyFile }}
+              value: {{ .Values.credentialsFile.mountPath }}/{{ .Values.credentialsFile.secretKeyFile }}
             {{- else }}
             - name: MINIO_SECRET_KEY
               valueFrom:
