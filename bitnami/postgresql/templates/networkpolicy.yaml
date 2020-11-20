@@ -28,7 +28,7 @@ spec:
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
-              role: slave
+              role: read
       {{- end }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes
