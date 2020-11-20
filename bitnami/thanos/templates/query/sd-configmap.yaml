@@ -1,3 +1,4 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if (include "thanos.query.createSDConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
@@ -7,5 +8,5 @@ metadata:
     app.kubernetes.io/component: query
 data:
   servicediscovery.yml: |-
-    {{- include "thanos.tplValue" (dict "value" .Values.query.sdConfig "context" $) | nindent 4 }}
+    {{- include "thanos.tplValue" (dict "value" $query.sdConfig "context" $) | nindent 4 }}
 {{ end }}

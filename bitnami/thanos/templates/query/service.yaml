@@ -1,46 +1,47 @@
-{{- if .Values.query.enabled -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "thanos.fullname" . }}-query
   labels: {{- include "thanos.labels" . | nindent 4 }}
     app.kubernetes.io/component: query
-  {{- if .Values.query.service.annotations }}
-  annotations: {{- include "thanos.tplValue" (dict "value" .Values.query.service.annotations "context" $) | nindent 4 }}
+  {{- if $query.service.annotations }}
+  annotations: {{- include "thanos.tplValue" (dict "value" $query.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.query.service.type }}
-  {{- if and .Values.query.service.clusterIP (eq .Values.query.service.type "ClusterIP") }}
-  clusterIP: {{ .Values.query.service.clusterIP }}
+  type: {{ $query.service.type }}
+  {{- if and $query.service.clusterIP (eq $query.service.type "ClusterIP") }}
+  clusterIP: {{ $query.service.clusterIP }}
   {{- end }}
-  {{- if and .Values.query.service.loadBalancerIP (eq .Values.query.service.type "LoadBalancer") }}
-  loadBalancerIP: {{ .Values.query.service.loadBalancerIP }}
+  {{- if and $query.service.loadBalancerIP (eq $query.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ $query.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.query.service.type "LoadBalancer") .Values.query.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.query.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq $query.service.type "LoadBalancer") $query.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $query.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.query.service.http.port }}
+    - port: {{ $query.service.http.port }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) .Values.query.service.http.nodePort) }}
-      nodePort: {{ .Values.query.service.http.nodePort }}
-      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.http.nodePort) }}
+      nodePort: {{ $query.service.http.nodePort }}
+      {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ .Values.query.service.grpc.port }}
+    - port: {{ $query.service.grpc.port }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if (and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) .Values.query.service.grpc.nodePort) }}
-      nodePort: {{ .Values.query.service.grpc.nodePort }}
-      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.grpc.nodePort) }}
+      nodePort: {{ $query.service.grpc.nodePort }}
+      {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
   selector: 
-    {{- if .Values.query.service.labelSelectorsOverride }}
-    {{- include "thanos.tplValue" (dict "value" .Values.query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- if $query.service.labelSelectorsOverride }}
+    {{- include "thanos.tplValue" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
     {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: query

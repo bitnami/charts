@@ -165,11 +165,28 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return a YAML of either .Values.query or .Values.querier
+If .Values.querier is used, we merge in the defaults from .Values.query, giving preference to .Values.querier
+*/}}
+{{- define "thanos.query.values" -}}
+{{- if .Values.querier -}}
+    {{- if .Values.query -}}
+        {{- mergeOverwrite .Values.query .Values.querier | toYaml -}}
+    {{- else -}}
+        {{- .Values.querier | toYaml -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.query | toYaml -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Thanos Query Service Discovery configuration configmap.
 */}}
 {{- define "thanos.query.SDConfigmapName" -}}
-{{- if .Values.query.existingSDConfigmap -}}
-    {{- printf "%s" (tpl .Values.query.existingSDConfigmap $) -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.existingSDConfigmap -}}
+    {{- printf "%s" (tpl $query.existingSDConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-query-sd-configmap" (include "thanos.fullname" .) -}}
 {{- end -}}
@@ -179,7 +196,8 @@ Return the Thanos Query Service Discovery configuration configmap.
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.query.createSDConfigmap" -}}
-{{- if and .Values.query.sdConfig (not .Values.query.existingSDConfigmap) }}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.sdConfig (not $query.existingSDConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

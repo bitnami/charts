@@ -1,4 +1,5 @@
-{{- if and .Values.query.enabled .Values.query.autoscaling.enabled }}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -10,19 +11,19 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "thanos.fullname" . }}-query
-  minReplicas: {{ .Values.query.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.query.autoscaling.maxReplicas }}
+  minReplicas: {{ $query.autoscaling.minReplicas }}
+  maxReplicas: {{ $query.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.query.autoscaling.targetCPU }}
+    {{- if $query.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.query.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ $query.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.query.autoscaling.targetMemory }}
+    {{- if $query.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.query.autoscaling.targetMemory  }}
+        targetAverageUtilization: {{ $query.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}    

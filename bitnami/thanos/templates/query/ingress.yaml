@@ -1,20 +1,21 @@
-{{- if .Values.query.ingress.enabled -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.ingress.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "thanos.fullname" . }}-query
   labels: {{- include "thanos.labels" . | nindent 4 }}
   annotations:
-    {{- if .Values.query.ingress.certManager }}
+    {{- if $query.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- range $key, $value := .Values.query.ingress.annotations }}
+    {{- range $key, $value := $query.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   rules:
-    {{- if .Values.query.ingress.hostname }}
-    - host: {{ .Values.query.ingress.hostname }}
+    {{- if $query.ingress.hostname }}
+    - host: {{ $query.ingress.hostname }}
       http:
         paths:
           - path: /
@@ -22,7 +23,7 @@ spec:
               serviceName: {{ template "thanos.fullname" . }}-query
               servicePort: http
     {{- end }}
-    {{- range .Values.query.ingress.extraHosts }}
+    {{- range $query.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
@@ -31,15 +32,15 @@ spec:
               serviceName: {{ template "thanos.fullname" $ }}-query
               servicePort: http
     {{- end }}
-  {{- if or .Values.query.ingress.tls .Values.query.ingress.extraTls .Values.query.ingress.hosts }}
+  {{- if or $query.ingress.tls $query.ingress.extraTls $query.ingress.hosts }}
   tls:
-    {{- if or .Values.query.ingress.secrets .Values.query.ingress.tls }}
+    {{- if or $query.ingress.secrets $query.ingress.tls }}
     - hosts:
-        - {{ .Values.query.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.query.ingress.hostname }}
+        - {{ $query.ingress.hostname }}
+      secretName: {{ printf "%s-tls" $query.ingress.hostname }}
     {{- end }}
-    {{- if .Values.query.ingress.extraTls }}
-    {{- toYaml .Values.query.ingress.extraTls | nindent 4 }}
+    {{- if $query.ingress.extraTls }}
+    {{- toYaml $query.ingress.extraTls | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
