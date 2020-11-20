@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.10.0-debian-10-r2
+  tag: 11.10.0-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -130,7 +130,7 @@ replication:
   applicationName: my_application
 
 ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/primary/README.md#creating-a-database-user-on-first-run (see note!)
+## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
 # postgresqlPostgresPassword:
 
 ## PostgreSQL user (has superuser privileges if username is `postgres`)
@@ -670,7 +670,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r272
+    tag: 0.8.0-debian-10-r275
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

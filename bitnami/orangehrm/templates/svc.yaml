@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "orangehrm.fullname" . }}
   labels:
-    app: {{ template "orangehrm.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "orangehrm.fullname" . }}
+    helm.sh/chart: {{ include "orangehrm.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
@@ -26,4 +26,5 @@ spec:
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}  
   selector:
-    app: {{ template "orangehrm.fullname" . }}
+    app.kubernetes.io/name: {{ include "orangehrm.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
