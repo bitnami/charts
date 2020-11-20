@@ -1,9 +1,0 @@
-dependencies:
-  - name: mariadb
-    version: 7.x.x
-    repository: https://charts.bitnami.com/bitnami
-    condition: mariadb.enabled
-  - name: elasticsearch
-    version: 12.x.x
-    repository: https://charts.bitnami.com/bitnami
-    condition: elasticsearch.enabled
