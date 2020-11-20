@@ -534,7 +534,6 @@ $ helm upgrade my-release stable/postgresql \
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
-- The term `master` has been replaced with `primary` and `slave` with `readReplicas` throughout the chart. Role names have changed from `master` and `readReplicas` to `primary` and `read`.
 
 **Considerations when upgrading to this version**
 
@@ -547,6 +546,10 @@ $ helm upgrade my-release stable/postgresql \
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+#### Breaking changes
+
+- The term `master` has been replaced with `primary` and `slave` with `readReplicas` throughout the chart. Role names have changed from `master` and `slave` to `primary` and `read`.
 
 ## To 9.0.0
 
@@ -608,17 +611,17 @@ postgresql-postgresql-0   1/1     Running   0          19s
 
 Please, note that without the `--cascade=false` both objects (statefulset and pod) are going to be removed and both objects will be deployed again with the `helm upgrade` command
 
-## To 8.0.0
+### To 8.0.0
 
 Prefixes the port names with their protocols to comply with Istio conventions.
 
 If you depend on the port names in your setup, make sure to update them to reflect this change.
 
-## To 7.1.0
+### To 7.1.0
 
 Adds support for LDAP configuration.
 
-## To 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -626,7 +629,7 @@ In https://github.com/helm/charts/pull/17281 the `apiVersion` of the statefulset
 
 This major version bump signifies this change.
 
-## To 6.5.7
+### To 6.5.7
 
 In this version, the chart will use PostgreSQL with the Postgis extension included. The version used with Postgresql version 10, 11 and 12 is Postgis 2.5. It has been compiled with the following dependencies:
 
@@ -636,7 +639,7 @@ In this version, the chart will use PostgreSQL with the Postgis extension includ
 - geos
 - proj
 
-## 5.0.0
+### To 5.0.0
 
 In this version, the **chart is using PostgreSQL 11 instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
 
