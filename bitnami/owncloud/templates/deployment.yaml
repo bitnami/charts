@@ -4,15 +4,15 @@ kind: Deployment
 metadata:
   name: {{ template "owncloud.fullname" . }}
   labels:
-    app: {{ template "owncloud.fullname" . }}
-    chart: {{ template "owncloud.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+    helm.sh/chart: {{ include "owncloud.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "owncloud.fullname" . }}
-      release: "{{ .Release.Name }}"
+      app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   replicas: 1
 {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
@@ -20,9 +20,9 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "owncloud.fullname" . }}
-        chart: {{ template "owncloud.chart" . }}
-        release: "{{ .Release.Name }}"
+        app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+        helm.sh/chart: {{ include "owncloud.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
 {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
   {{- if .Values.podAnnotations }}
