@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: redmine
 version: 15.0.0
 appVersion: 4.1.1
@@ -23,3 +23,17 @@ maintainers:
 engine: gotpl
 annotations:
   category: ProjectManagement
+dependencies:
+  - name: common
+    version: 0.x.x
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+  - name: mariadb
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled
+  - name: postgresql
+    version: 9.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
