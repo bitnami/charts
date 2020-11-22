@@ -81,6 +81,7 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `phabricatorEmail`               | Admin email                                                                                              | `user@example.com`                                           |
 | `phabricatorFirstName`           | First name                                                                                               | `First Name`                                                 |
 | `phabricatorLastName`            | Last name                                                                                                | `Last Name`                                                  |
+| `phabricatorGitSSH`              | Enabled SSH to access Git repositories                                                                   | `false`                                                      |
 | `smtpHost`                       | SMTP host                                                                                                | `nil`                                                        |
 | `smtpPort`                       | SMTP port                                                                                                | `nil`                                                        |
 | `smtpUser`                       | SMTP user                                                                                                | `nil`                                                        |
@@ -126,10 +127,13 @@ The above parameters map to the env variables defined in [bitnami/phabricator](h
 | `service.type`                   | Kubernetes Service type                                                                                  | `LoadBalancer`                                               |
 | `service.port`                   | Service HTTP port                                                                                        | `80`                                                         |
 | `service.httpsPort`              | Service HTTP port                                                                                        | `443`                                                        |
+| `service.sshPort`                | Service SSH port                                                                                         | `22`                                                         |
 | `service.loadBalancerIP`         | `loadBalancerIP` for the Phabricator Service                                                             | `nil`                                                        |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation                                                                     | `Cluster`                                                    |
 | `service.nodePorts.http`         | Kubernetes http node port                                                                                | `""`                                                         |
 | `service.nodePorts.https`        | Kubernetes https node port                                                                               | `""`                                                         |
+| `service.nodePorts.ssh`          | Kubernetes ssh node port                                                                                 | `""`                                                         |
+| `service.annotations`            | Service annotations                                                                                      | `[]`                                                         |
 | `ingress.enabled`                | Enable ingress rules resource                                                                            | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                                                                         | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                                                                      | `[]`                                                         |

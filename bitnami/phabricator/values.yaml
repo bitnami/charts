@@ -71,6 +71,12 @@ phabricatorFirstName: First Name
 ##
 phabricatorLastName: Last Name
 
+## SSH
+## ref: https://github.com/bitnami/bitnami-docker-phabricator#environment-variables
+## Instead of yes/no use true/false
+##
+phabricatorGitSSH: false
+
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator/#smtp-configuration
 ##
@@ -137,14 +143,21 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
+  # SSH Port
+  sshPort: 22
   ## loadBalancerIP:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##   ssh: <to set explicitly, choose port between 30000-32767>
   nodePorts:
     http: ""
     https: ""
+    ssh: ""
+  ## In case you want to use an Azure internal load balancer add the annotation that is described
+  ## here: https://docs.microsoft.com/en-us/azure/aks/internal-lb
+  annotations: {}
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
