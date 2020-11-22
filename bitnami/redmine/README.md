@@ -413,14 +413,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version includes all the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, please follow the instructions below.
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
-- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 8**. Apart from the changes that are described in this section, there are also other major changes due to the `master/slave` nomenclature was replaced by `primary/readReplica` or the standardization of Helm labels. For further details regarding the changes introduced, refer to [version 10 changes](https://github.com/bitnami/charts/pull/4385) or [version 9 changes](https://github.com/bitnami/charts/pull/3021) respectively.
-
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
@@ -430,6 +423,13 @@ Find more information about how to deal with common errors related to Bitnami’
 - MariaDB dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#upgrading) for more information.
 - Inclusion of the`bitnami/common` library chart, standardizations and adaptation of labels to follow helm's standards.
 - `securityContext.*` is deprecated in favor of `podSecurityContext`, `containerSecurityContext`, `mailReceiver.podSecurityContext`, and `mailReceiver.containerSecurityContext`.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, please follow the instructions below.
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 8**. Apart from the changes that are described in this section, there are also other major changes due to the `master/slave` nomenclature was replaced by `primary/readReplica` or the standardization of Helm labels. For further details regarding the changes introduced, refer to [version 10 changes](https://github.com/bitnami/charts/pull/4385) or [version 9 changes](https://github.com/bitnami/charts/pull/3021) respectively.
 
 As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `15.0.0` there are two alternatives:
 
@@ -444,69 +444,69 @@ As a consequence, backwards compatibility from previous versions is not guarante
 
 1. Old version is up and running
 
-  ```console
-  $ kubectl get pods
-  NAME                              READY   STATUS    RESTARTS   AGE
-  example-mariadb-0                 1/1     Running   0          40s
-  example-redmine-9f8c7b54d-trns2   1/1     Running   0          72s
-  ```
+```console
+$ kubectl get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+example-mariadb-0                 1/1     Running   0          40s
+example-redmine-9f8c7b54d-trns2   1/1     Running   0          72s
+```
 
 2. Export both MariaDB and Redmine credentials in order to provide them in the update
 
-  ```console
-  $ export REDMINE_PASSWORD=$(kubectl get secret --namespace default example-redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+```console
+$ export REDMINE_PASSWORD=$(kubectl get secret --namespace default example-redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
 
-  $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
 
-  $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-  ```
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```
 
 3. Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
-  ```console
-  $ kubectl delete deployment.apps/example-redmine
-  deployment.apps "example-redmine" deleted
+```console
+$ kubectl delete deployment.apps/example-redmine
+deployment.apps "example-redmine" deleted
 
-  $ kubectl delete statefulset.apps/example-mariadb --cascade=false
-  statefulset.apps "example-mariadb" deleted
-  ```
+$ kubectl delete statefulset.apps/example-mariadb --cascade=false
+statefulset.apps "example-mariadb" deleted
+```
 
 4. Now the upgrade works
 
-  ```console
-  $ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD
+```console
+$ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD
 
-  $ helm ls
-  NAME   	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART         	APP VERSION
-  example	default  	1       	2020-10-29 20:33:17.776769 +0100 CET	deployed	redmine-15.0.0	4.1.1
-  ```
+$ helm ls
+NAME   	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART         	APP VERSION
+example	default  	1       	2020-10-29 20:33:17.776769 +0100 CET	deployed	redmine-15.0.0	4.1.1
+```
 
 5. You should kill the existing MariaDB pod now and the new statefulset is going to create a new one
 
-  ```console
-  $ kubectl delete pod example-mariadb-0
-  pod "example-mariadb-0" deleted
+```console
+$ kubectl delete pod example-mariadb-0
+pod "example-mariadb-0" deleted
 
-  $ kubectl get pods
-  NAME                               READY   STATUS    RESTARTS   AGE
-  example-mariadb-0                  1/1     Running   0          19s
-  example-redmine-766c69d549-4zlgh   1/1     Running   2          2m26s
-  ```
+$ kubectl get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+example-mariadb-0                  1/1     Running   0          19s
+example-redmine-766c69d549-4zlgh   1/1     Running   2          2m26s
+```
 
-**Useful links regarding Helm v3 migration**
+#### Useful links
 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
-### 14.0.0
+### To 14.0.0
 
 - Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 - The `databaseType` parameters is no longer an object but a string. Allowed values are "mariadb" and "postgresql".
 - Ingress configuration was standardized to simplify the way to configure the main host.
 - Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
 
-### 13.0.0
+### To 13.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
