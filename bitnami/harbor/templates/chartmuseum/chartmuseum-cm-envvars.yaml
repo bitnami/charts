@@ -19,8 +19,9 @@ data:
   {{- end }}
   {{- if .Values.chartmuseum.useRedisCache }}
   CACHE: "redis"
-  CACHE_REDIS_ADDR: {{ printf "%s:%s" ( include "harbor.redis.host" . ) ( include "harbor.redis.port" . ) | quote }}
+  CACHE_REDIS_ADDR: {{ include "harbor.redisForChartmuseum" . | quote }}
   CACHE_REDIS_DB: {{ include "harbor.redis.chartmuseumDatabaseIndex" . | quote }}
+  CACHE_REDIS_MASTERNAME: {{ include "harbor.redis.masterSet" . | quote }}
   {{- end }}
   # The user is hardcoded because the core binary has it hardcoded so it is not configurable.
   BASIC_AUTH_USER: "chart_controller"

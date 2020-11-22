@@ -44,7 +44,7 @@ data:
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
-  CHART_CACHE_DRIVER: "redis"
+  CHART_CACHE_DRIVER: {{ include "harbor.core.chartCacheDriver" . | quote }}
   PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
