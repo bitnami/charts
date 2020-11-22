@@ -22,6 +22,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
