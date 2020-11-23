@@ -415,6 +415,8 @@ You can manually create a config map containing all your DAG files and then pass
 
 You can store all your DAG files on GitHub repositories and then clone to the Airflow pods with an initContainer. The repositories will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
+> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach dags if it was needed.
+
 ```console
 git.dags.enabled=true
 git.dags.repositories[0].repository=https://github.com/USERNAME/REPOSITORY
@@ -427,6 +429,8 @@ If you use a private repository from GitHub, a possible option to clone the file
 ### Loading Plugins
 
 You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
+
+> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach plugins if it was needed.
 
 ```console
 git.plugins.enabled=true
