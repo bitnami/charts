@@ -10,7 +10,7 @@ assignees: ''
 <!--
  Before you open the bug report please review the following troubleshooting guide:
 
- - [Troubleshoot Bitnami Helm Chart Issues](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues)
+ - [Troubleshoot Bitnami Helm Chart Issues](https://docs.bitnami.com/kubernetes/how-to/troubleshoot-helm-chart-issues)
  -->
 
 **Which chart**:
