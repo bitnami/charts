@@ -135,7 +135,7 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.web.containerPort }}
         {{- if .Values.web.livenessProbe.enabled }}
           livenessProbe:
           {{- if .Values.web.baseUrl }}

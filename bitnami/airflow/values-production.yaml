@@ -99,6 +99,9 @@ web:
   ## Add extra annotations to the web's pods
   ##
   podAnnotations:
+  ## Container port to be used.
+  ##
+  containerPort: 8080
   ## Add extra volume mounts
   ##
   extraVolumeMounts:
