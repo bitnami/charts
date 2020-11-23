@@ -168,11 +168,6 @@ data:
       volumes:
         - name: k8s-executor-config
           emptyDir: {}
-      {{- if .Files.Glob "files/dags/*.py" }}
-        - name: local-dag-files
-          configMap:
-            name: {{ include "common.names.fullname" . }}-dag-files
-      {{- end }}
       {{- if .Values.dagsConfigMap }}
         - name: external-dag-files
           configMap:

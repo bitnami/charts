@@ -32,7 +32,6 @@ spec:
     metadata:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
-        checksum/configmapdags: {{ include (print $.Template.BasePath "/config/configmap-dags.yaml") . | sha256sum }}
       {{- if .Values.worker.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -158,11 +157,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Files.Glob "files/dags/*.py" }}
-        - name: local-dag-files
-          configMap:
-            name: {{ include "common.names.fullname" . }}-dag-files
-      {{- end }}
       {{- if .Values.dagsConfigMap }}
         - name: external-dag-files
           configMap:

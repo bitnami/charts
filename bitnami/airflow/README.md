@@ -405,17 +405,13 @@ Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
 
 ### Load DAG files
 
-There are three different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
+There are two different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
 
-#### Option 1: Load locally from the `files` folder
-
-If you plan to deploy the chart from your filesystem, you can copy your DAG files inside the `files/dags` directory. A config map will be created with those files and it will be mounted in all airflow nodes.
-
-#### Option 2: Specify an existing config map
+#### Option 1: Specify an existing config map
 
 You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dagsConfigMap`.
 
-#### Option 3: Get your DAG files from a git repository
+#### Option 2: Get your DAG files from a git repository
 
 You can store all your DAG files on GitHub repositories and then clone to the Airflow pods with an initContainer. The repositories will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
@@ -569,6 +565,7 @@ Find more information about how to deal with common errors related to Bitnami’
   - `airflow.baseUrl` has been moved to `web.baseUrl`.
   - Security context has been migrated to the bitnami standard way so that `securityContext.*` has been divided into `podSecurityContext.*` that will define the `fsGroup` for all the containers in the pod and `containerSecurityContext.*` that will define the user id that will run the main containers.
   - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `9.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)
+  - `./files/dags/*.py` will not be include in the deployment any more.
 
 - Some new features:
   - The folder structure has changed, we separated yaml manifest into folders by components.
