@@ -1,21 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "airflow.fullname" . }}
-  labels:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    helm.sh/chart: {{ include "airflow.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     {{- if .Values.commonAnnotations }}
-    {{- include "airflow.tplValue" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
     {{- range $key, $value := .Values.service.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ include "common.tplvalues.render" (dict "value" $value "context" $) | quote }}
     {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -29,9 +25,9 @@ spec:
       port: {{ .Values.service.port }}
       {{- if and .Values.service.nodePort (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.service.nodePort }}
+      {{- else }}
+      nodePort: null
       {{- end }}
       targetPort: http
-  selector:
-    app.kubernetes.io/name: {{ include "airflow.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: web
