@@ -130,6 +130,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.token (not .Values.hetzner.secretName) -}}
+    {{- true -}}
 {{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
@@ -164,6 +166,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName -}}
+{{- .Values.hetzner.secretName -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
 {{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
@@ -582,6 +586,19 @@ Validate values of TransIP DNS:
 external-dns: transip.account
     You must provide the TransIP account name when provider="transip".
     Please set the account parameter (--set transip.account="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide an API token when provider is "hetzner"
+*/}}
+{{- define "external-dns.validateValues.hetzner" -}}
+{{- if and (eq .Values.provider "hetzner") (or (not .Values.hetzner.token) (not .Values.hetzner.secretName)) -}}
+external-dns: hetzner.token
+    You must provide the a Hetzner API Token when provider="hetzner".
+    Please set the token parameter (--set hetzner.token="xxxx")
+    or specify a secret that contains an API token. (--set hetzner.secretName="xxxx")
 {{- end -}}
 {{- end -}}
 

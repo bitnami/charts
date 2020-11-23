@@ -40,7 +40,7 @@ sources:
   - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, hetzner, infoblox, rfc2136, transip
 ##
 provider: aws
 
@@ -268,6 +268,20 @@ google:
   serviceAccountSecret: ""
   serviceAccountSecretKey: "credentials.json"
   serviceAccountKey: ""
+
+## Hetzner configuration to be set via arguments/env. variables
+##
+hetzner:
+  ## Hetzner API token to use. If you do not want to set it clear-text,
+  ## create the secret yourself and specify `hetzner.secretName`.
+  ##
+  ## Mutually exclusive with `hetzner.secretName`.
+  ##
+  token: ""
+
+  ## Use an existing secret. Mutually exclusive with `hetzner.token`
+  secretName: ""
+  secretKey: "hetzner_token"
 
 ## OVH configuration to be set via arguments/env. variables
 ##
