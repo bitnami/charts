@@ -402,17 +402,12 @@ nodeAffinityPreset:
   ##
   values: []
 
-<<<<<<< HEAD
 ## Affinity for pod assignment. Evaluated as a template.
-=======
-## Affinity for pod assignment
->>>>>>> [bitnami/*] Affinity based on common presets (ii)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-<<<<<<< HEAD
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -429,19 +424,6 @@ tolerations: []
 podLabels: {}
 
 ## Annotations for server pods.
-=======
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Additional pod annotations
->>>>>>> [bitnami/*] Affinity based on common presets (ii)
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}

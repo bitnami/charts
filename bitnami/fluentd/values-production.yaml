@@ -65,10 +65,11 @@ forwarder:
     enabled: true
     privileged: false
     allowPrivilegeEscalation: false
+    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    ##
+    # readOnlyRootFilesystem: true
     capabilities:
       drop: ['ALL']
-    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
-    # readOnlyRootFilesystem: true
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -245,12 +246,6 @@ forwarder:
   ##
   affinity: {}
 
-<<<<<<< HEAD
-  ## Annotations for the forwarder
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  annotations: {}
-=======
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -260,7 +255,6 @@ forwarder:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
->>>>>>> [bitnami/*] Affinity based on common presets (ii)
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -348,10 +342,11 @@ aggregator:
     enabled: true
     privileged: false
     allowPrivilegeEscalation: false
+    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    ##
+    # readOnlyRootFilesystem: true
     capabilities:
       drop: ['ALL']
-    # Requires mounting an `extraVolume` of type `emptyDir` into /tmp
-    # readOnlyRootFilesystem: true
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -522,19 +517,6 @@ aggregator:
   ##
   tolerations: []
 
-<<<<<<< HEAD
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
-  ## Annotations for the aggregator
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  annotations: {}
-
-=======
->>>>>>> [bitnami/*] Affinity based on common presets (ii)
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

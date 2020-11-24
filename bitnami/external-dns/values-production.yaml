@@ -555,7 +555,7 @@ rbac:
   clusterRole: true
   ## RBAC API version
   ##
-  apiVersion: v1beta1
+  apiVersion: v1
   ## Podsecuritypolicy
   ##
   pspEnabled: false
