@@ -22,18 +22,16 @@ host. To configure ownCloud with the URL of your service:
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "owncloud.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "owncloud.fullname" . }} -o jsonpath="{.data.owncloud-password}" | base64 --decode)
-  {{- if .Values.mariadb.mariadbRootPassword }}
-  export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "owncloud.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
   {{- end }}
-  {{- end }}
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "owncloud.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "owncloud.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+  export MARIADB_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "owncloud.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 
 2. Complete your ownCloud deployment by running:
 
 {{- if .Values.mariadb.enabled }}
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$DATABASE_ROOT_PASSWORD{{ end }},mariadb.db.password=$APP_DATABASE_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+    --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
@@ -53,7 +51,7 @@ host. To configure ownCloud with the URL of your service:
 {{- else }}
 
 {{- $port:=.Values.service.port | toString }}
-  echo "ownCloud URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "ownCloud URL: http://$APP_HOST{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- end }}
 

@@ -901,6 +901,11 @@ persistence:
   ## Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
 
 ## PgPool service paramaters
 ##

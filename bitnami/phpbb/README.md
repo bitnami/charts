@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -68,8 +68,8 @@ The following table lists the configurable parameters of the phpBB chart and the
 | `image.pullPolicy`  | phpBB image pull policy                                                      | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override phpbb.fullname template                         | `nil`                                                   |
-| `fullnameOverride`  | String to fully override phpbb.fullname template                             | `nil`                                                   |
+| `nameOverride`      | String to partially override common.names.fullname template                         | `nil`                                                   |
+| `fullnameOverride`  | String to fully override common.names.fullname template                             | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
@@ -106,6 +106,9 @@ The following table lists the configurable parameters of the phpBB chart and the
 | `phpbbPassword`                      | Application password                                                                                                                                      | _random 10 character alphanumeric string_   |
 | `phpbbEmail`                         | Admin email                                                                                                                                               | `user@example.com`                          |
 | `phpbbDisableSessionValidation`      | Disable session validation                                                                                                                                | `yes`                                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                        |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                        |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                        |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}` (The value is evaluated as a template) |
 | `persistence.accessMode`             | PVC Access Mode for phpBB volume                                                                                                                          | `ReadWriteOnce`                             |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                                                              | `true`                                      |
@@ -113,10 +116,13 @@ The following table lists the configurable parameters of the phpBB chart and the
 | `persistence.hostPath`               | Host mount path for phpBB volume                                                                                                                          | `nil` (will not mount to a host path)       |
 | `persistence.size`                   | PVC Storage Request for phpBB volume                                                                                                                      | `8Gi`                                       |
 | `persistence.storageClass`           | PVC Storage Class for phpBB volume                                                                                                                        | `nil` (uses alpha storage class annotation) |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                        |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                      |
 | `podAnnotations`                     | Pod annotations                                                                                                                                           | `{}`                                        |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                                                                | `nil`                                       |
 | `podSecurityContext.enabled`         | Enable phpBB pods' Security Context                                                                                                                       | `true`                                      |
 | `podSecurityContext.fsGroup`         | phpBB pods' group ID                                                                                                                                      | `1001`                                      |
+| `priorityClassName`                  | Define the priority class name to use for the phpbb pods here.                                                                                            | `""`                                        |
 | `readinessProbe`                     | Readiness probe configuration                                                                                                                             | `Check values.yaml file`                    |
 | `replicaCount`                       | Number of phpBB Pods to run                                                                                                                               | `1`                                         |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                                                       | Memory: `512Mi`, CPU: `300m`                |
@@ -139,6 +145,7 @@ The following table lists the configurable parameters of the phpBB chart and the
 | `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`      |
 | `service.nodePorts.http`         | Kubernetes http node port             | `""`           |
 | `service.nodePorts.https`        | Kubernetes https node port            | `""`           |
+| `service.loadBalancerIP`         | loadBalancerIP for phpBB Service    | `nil`          |
 | `ingress.enabled`                | Enable ingress controller resource    | `false`        |
 | `ingress.certManager`            | Add annotations for cert-manager      | `false`        |
 | `ingress.hostname`               | Default host for the ingress resource | `phpbb.local`  |
@@ -153,25 +160,26 @@ The following table lists the configurable parameters of the phpBB chart and the
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_phpbb`                                |
-| `mariadb.db.user`                          | Database user to create                  | `bn_phpbb`                                     |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_phpbb`                                     |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_phpbb`                                |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                  | Description                                                                 | Default                                        |
+|--------------------------------------------|-----------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                                            | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)                        | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                                        | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                    | Database name to create                                                     | `bitnami_phpbb`                                |
+| `mariadb.auth.username`                    | Database user to create                                                     | `bn_phpbb`                                     |
+| `mariadb.auth.password`                    | Password for the database                                                   | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                                       | `true`                                         |
+| `mariadb.primary.persistence.existingClaim`| Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas    | `nil`                                          |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes                                     | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                                             | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass` | MariaDB primary persistent volume storage Class                             | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                                          | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                                        | `bn_phpbb`                                     |
+| `externalDatabase.password`                | Password for the above username                                             | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                                               | `bitnami_phpbb`                                |
+| `externalDatabase.host`                    | Host of the existing database                                               | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                                               | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object                                 | `nil`                                          |
 
 ### Metrics parameters
 
@@ -275,6 +283,77 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+In this major there were two main changes introduced:
+
+1. Adaptation to Helm v2 EOL
+2. Updated MariaDB dependency version
+
+Please read the update notes carefully.
+
+**1. Adaptation to Helm v2 EOL**
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+**2. Updated MariaDB dependency version**
+
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and phpBB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `phpbb`):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpBB data on your current release:
+
+```console
+export PHPBB_PASSWORD=$(kubectl get secret --namespace default phpbb -o jsonpath="{.data.phpbb-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpbb -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling phpBB replicas to 0:
+
+```console
+$ helm upgrade phpbb bitnami/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
+```
+
+Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade phpbb bitnami/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=phpbb,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 8.0.0
 

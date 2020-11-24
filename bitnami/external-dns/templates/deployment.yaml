@@ -341,6 +341,32 @@ spec:
               value: /etc/secrets/service-account/credentials.json
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "hetzner" }}
+            # Hetzner environment variables
+            {{- if .Values.hetzner.secretName }}
+            - name: HETZNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.hetzner.secretName }}
+                  key: {{ .Values.hetzner.secretKey }}
+            {{- else }}
+            - name: HETZNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: hetzner_token
+            {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "linode" }}
+            # Linode environment variables
+            {{- if or (.Values.linode.apiToken) (.Values.linode.secretName) }}
+            - name: LINODE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: linode_api_token
+            {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
             {{- if .Values.ovh.consumerKey }}

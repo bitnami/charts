@@ -4,10 +4,10 @@ kind: Ingress
 metadata:
   name: {{ template "owncloud.fullname" . }}
   labels:
-    app: {{ template "owncloud.fullname" . }}
-    chart: {{ template "owncloud.chart" . }}
-    release: "{{ $.Release.Name }}"
-    heritage: "{{ $.Release.Service }}"
+    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+    helm.sh/chart: {{ include "owncloud.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
   annotations:
     {{- range .Values.ingress.hosts }}
     {{- if .tls }}

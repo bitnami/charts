@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.8-debian-10-r15
+  tag: 1.6.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -129,6 +129,11 @@ nodeSelector: {}
 ##
 tolerations: {}
 
+## Pod priority
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 persistence:
@@ -171,7 +176,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.7.0-debian-10-r92
+    tag: 0.7.0-debian-10-r104
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
