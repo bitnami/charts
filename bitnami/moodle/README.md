@@ -1,6 +1,8 @@
 # Moodle<sup>TM</sup> LMS
 
-[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments
+[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. Bitnami does not provide commercial license of any of these products. This listing has an open source license. Moodle<sup>TM</sup> LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
 ## TL;DR
 
@@ -20,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -162,7 +164,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                       | `8Gi`                                                        |
 | `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                       | `nil` (uses alpha storage class annotation)                  |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                                                    | `nil` (will not mount to a host path)                        |
-| `externalDatabase.username`                 | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
 | `externalDatabase.password`                 | Password for the above username                                                                                       | `nil`                                                        |
 | `externalDatabase.database`                 | Name of the existing database                                                                                         | `bitnami_moodle`                                             |
 | `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |
@@ -190,6 +192,10 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `metrics.image.tag`                         | Apache exporter image tag                                                                                             | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                  | Image pull policy                                                                                                     | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.service.type`                      | Prometheus metrics service type                                                                                       | `LoadBalancer`                                               |
+| `metrics.service.port`                      | Prometheus metrics service port                                                                                       | `9117`                                                       |
+| `metrics.service.loadBalancerIP`            | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                              | `nil`                                                        |
+| `metrics.service.annotations`               | Annotations for Prometheus metrics service                                                                            | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.podAnnotations`                    | Additional annotations for Metrics exporter pod                                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                         | Exporter resource requests/limit                                                                                      | `{}`                                                         |
 
@@ -305,6 +311,29 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 9.0.0
 

@@ -57,6 +57,9 @@ spec:
       {{- if .Values.core.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.core.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: core
           image: {{ include "harbor.coreImage" . }}

@@ -1,0 +1,21 @@
+{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "SequentialExecutor")) }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}-scheduler-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: None
+  ports:
+    - name: task-logs
+      port: {{ .Values.worker.port }}
+      targetPort: task-logs
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+{{- end }}

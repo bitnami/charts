@@ -1,3 +1,6 @@
+{{- $secretName := include "redmine.secretName" . -}}
+{{- $dbSecretName := include "redmine.database.secretName" . -}}
+
 {{- if and (not (eq .Values.databaseType "mariadb")) (not (eq .Values.databaseType "postgresql")) }}
 ################################################################################
 ### ERROR: You did not indicate MariaDB nor PostgreSQL as the database       ###
@@ -22,39 +25,61 @@ You have 4 alternatives:
   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 
-{{- else if contains "NodePort" .Values.service.type }}
+{{- else if eq .Values.service.type "NodePort" }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "redmine.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Redmine URL: http://$NODE_IP:$NODE_PORT/"
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "redmine.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "redmine.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "Redmine URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
-{{- else if contains "ClusterIP" .Values.service.type }}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Redmine URL: http://127.0.0.1:{{ .Values.service.port }}/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "redmine.fullname" . }} 3000:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 3000:{{ .Values.service.port }}
 
 {{- end }}
 
 2. Login with the following credentials
 
-  echo Username: {{ .Values.redmineUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redmine.fullname" . }} -o jsonpath="{.data.redmine-password}" | base64 --decode)
+  export REDMINE_USERNAME={{ .Values.redmineUsername }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "redmine-password" "context" $) }}
+
+  echo Username: $REDMINE_USERNAME
+  echo Password: $REDMINE_PASSWORD
+
+   You can access the DB using the following password:
+   {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "mariadb-password" "context" $) }}
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- if .Values.mailReceiver.enabled }}
+{{- include "common.warnings.rollingTag" .Values.mailReceiver.image }}
 {{- end }}
+
+{{- $passwordValidationErrors := list }}
+
+{{- if not .Values.existingSecret -}}
+  {{- $requiredRedminePassword := dict "valueKey" "redminePassword" "secret" $secretName "field" "redmine-password" "context" $ -}}
+  {{- $requiredRedminePasswordError := include "common.validations.values.single.empty" $requiredRedminePassword -}}
+  {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredRedminePasswordError -}}
+{{- end -}}
+
+{{- if eq .Values.databaseType "postgresql" }}
+{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
+{{- else }}
+  {{- $dbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

@@ -33,7 +33,7 @@ spec:
     {{- end }}
   {{- if or .Values.querier.ingress.tls .Values.querier.ingress.extraTls .Values.querier.ingress.hosts }}
   tls:
-    {{- if .Values.querier.ingress.secrets }}
+    {{- if or .Values.querier.ingress.secrets .Values.querier.ingress.tls }}
     - hosts:
         - {{ .Values.querier.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.querier.ingress.hostname }}

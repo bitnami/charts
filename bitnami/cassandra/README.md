@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -163,19 +163,22 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `persistence.annotations`                 | Persistent Volume Claim annotations Annotations                                                                      | `{}` (evaluated as a template)                               |
 | `persistence.accessMode`                  | PVC Access Mode for Cassandra data volume                                                                            | `[ReadWriteOnce]`                                            |
 | `persistence.size`                        | PVC Storage Request for Cassandra data volume                                                                        | `8Gi`                                                        |
+| `persistence.mountPath`                   | The path the volume will be mounted at                                                                               | `/bitnami/cassandra`                                         |
 
 ### Volume Permissions parameters
 
-| Parameter                                 | Description                                                                                                          | Default                                                      |
-|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`               | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
-| `volumePermissions.image.registry`        | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
-| `volumePermissions.image.repository`      | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`             | Init container volume-permissions image tag                                                                          | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`      | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
-| `volumePermissions.image.pullSecrets`     | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.resources.limits`      | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
-| `volumePermissions.resources.requests`    | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| Parameter                                     | Description                                                                                                          | Default                                                      |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                         |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                          |
 
 ### Metrics parameters
 
@@ -334,6 +337,29 @@ $ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+
+### To 7.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 6.0.0
 

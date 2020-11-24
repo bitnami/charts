@@ -1,24 +1,30 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "kong.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels: {{- include "kong.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "kong.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: server
         {{- if .Values.podLabels }}
-        {{- include "kong.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
         {{- if (include "kong.createExternalDBSecret" .) }}
@@ -29,47 +35,52 @@ spec:
         checksum/configmap-metrics-plugin: {{ include (print $.Template.BasePath "/metrics-script-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.podAnnotations }}
-        {{- include "kong.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- if .Values.ingressController.enabled }}
       serviceAccountName: {{ include "kong.serviceAccount" . }}
       {{- end }}
       {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "kong.tplValue" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "kong.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "kong.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "kong.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
     {{- if .Values.initContainers }}
       initContainers:
-      {{- include "kong.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
     {{- end }}
       containers:
         - name: kong
           image: {{ template "kong.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.command }}
-          command: {{- include "kong.tplValue" (dict "value" .Values.kong.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.kong.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.args }}
-          args: {{- include "kong.tplValue" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.kong.lifecycleHooks }}
-          lifecycle: 
+          lifecycle:
             preStop:
               exec:
                 command:
@@ -77,7 +88,7 @@ spec:
                   - -c
                   - kong quit
           {{ else }}
-          lifecycle: {{- include "kong.tplValue" (dict "value" .Values.kong.lifecycleHooks "context" $) | nindent 12 }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kong.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.service.exposeAdmin }}
@@ -127,7 +138,7 @@ spec:
               value: "/bitnami/kong/metrics-exporter/exporter.conf"
             {{- end }}
             {{- if .Values.kong.extraEnvVars }}
-            {{- include "kong.tplValue" (dict "value" .Values.kong.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.kong.extraEnvVarsCM .Values.kong.extraEnvVarsSecret }}
           envFrom:
@@ -171,7 +182,7 @@ spec:
             failureThreshold: {{ .Values.kong.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.kong.livenessProbe.successThreshold }}
           {{- else if .Values.kong.customLivenessProbe }}
-          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.readinessProbe.enabled }}
           readinessProbe:
@@ -186,7 +197,7 @@ spec:
             failureThreshold: {{ .Values.kong.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.kong.readinessProbe.successThreshold }}
           {{- else if .Values.kong.customReadinessProbe }}
-          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
@@ -209,17 +220,17 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.kong.extraVolumeMounts }}
-            {{- include "kong.tplValue" (dict "value" .Values.kong.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.ingressController.enabled }}
         - name: kong-ingress-controller
           image: {{ template "kong.ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.ingressController.image.pullPolicy }}
           {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.args }}
-          command: {{- include "kong.tplValue" (dict "value" .Values.ingressController.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - bash
@@ -227,13 +238,13 @@ spec:
             - /health/ingress-container-start.sh
           {{- end }}
           {{- if .Values.ingressController.args }}
-          args: {{- include "kong.tplValue" (dict "value" .Values.ingressController.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: CONTROLLER_KONG_ADMIN_URL
               value: http://127.0.0.1:8001
             - name: CONTROLLER_PUBLISH_SERVICE
-              value: {{ printf "%s/%s" .Release.Namespace (include "kong.fullname" .) | quote }}
+              value: {{ printf "%s/%s" .Release.Namespace (include "common.names.fullname" .) | quote }}
             - name: CONTROLLER_INGRESS_CLASS
               value: {{ .Values.ingressController.ingressClass }}
             - name: CONTROLLER_ELECTION_ID
@@ -247,7 +258,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             {{- if .Values.ingressController.extraEnvVars }}
-            {{- include "kong.tplValue" (dict "value" .Values.ingressController.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.ingressController.extraEnvVarsCM .Values.ingressController.extraEnvVarsSecret }}
           envFrom:
@@ -276,7 +287,7 @@ spec:
             failureThreshold: {{ .Values.ingressController.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.ingressController.livenessProbe.successThreshold }}
           {{- else if .Values.ingressController.customLivenessProbe }}
-          livenessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.readinessProbe.enabled }}
           readinessProbe:
@@ -290,7 +301,7 @@ spec:
             failureThreshold: {{ .Values.ingressController.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.ingressController.readinessProbe.successThreshold }}
           {{- else if .Values.ingressController.customReadinessProbe }}
-          readinessProbe: {{- include "kong.tplValue" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}
@@ -299,25 +310,25 @@ spec:
             - name: health
               mountPath: /health
             {{- if .Values.ingressController.extraVolumeMounts }}
-            {{- include "kong.tplValue" (dict "value" .Values.ingressController.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "kong.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: health
           configMap:
-            name: {{ template "kong.fullname" . }}-scripts
+            name: {{ template "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- if .Values.metrics.enabled }}
         - name: metrics-init-scripts
           configMap:
-            name: {{ template "kong.fullname" . }}-metrics-scripts
+            name: {{ template "common.names.fullname" . }}-metrics-scripts
             defaultMode: 0755
         - name: metrics-server-block
           configMap:
-            name: {{ template "kong.fullname" . }}-metrics-exporter
+            name: {{ template "common.names.fullname" . }}-metrics-exporter
         {{- end }}
         {{- if .Values.kong.initScriptsCM }}
         - name: custom-init-scripts-cm
@@ -331,6 +342,6 @@ spec:
             secretName: {{ .Values.kong.initScriptsSecret }}
             defaultMode: 0755
         {{- end }}
-      {{- if .Values.extraVolumes }}
-      {{- include "kong.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
-      {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

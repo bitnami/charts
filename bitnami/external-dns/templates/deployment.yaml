@@ -121,6 +121,9 @@ spec:
             {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS arguments
+            {{- if .Values.aws.apiRetries }}
+            - --aws-api-retries={{ .Values.aws.apiRetries }}
+            {{- end }}
             {{- if .Values.aws.zoneType }}
             - --aws-zone-type={{ .Values.aws.zoneType }}
             {{- end }}
@@ -338,6 +341,22 @@ spec:
               value: /etc/secrets/service-account/credentials.json
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "hetzner" }}
+            # Hetzner environment variables
+            {{- if .Values.hetzner.secretName }}
+            - name: HETZNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.hetzner.secretName }}
+                  key: {{ .Values.hetzner.secretKey }}
+            {{- else }}
+            - name: HETZNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: hetzner_token
+            {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
             {{- if .Values.ovh.consumerKey }}
@@ -360,6 +379,30 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_secret
+            {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "scaleway" }}
+            # Scaleway environment variables
+            {{- if .Values.scaleway.scwAccessKey }}
+            - name: SCW_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_access_key
+            {{- end }}
+            {{- if .Values.scaleway.scwSecretKey }}
+            - name: SCW_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_secret_key
+            {{- end }}
+            {{- if .Values.scaleway.scwDefaultOrganizationId }}
+            - name: SCW_DEFAULT_ORGANIZATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: scw_default_organization_id
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}

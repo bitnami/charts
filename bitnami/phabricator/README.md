@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,6 +81,7 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `phabricatorEmail`               | Admin email                                                                                              | `user@example.com`                                           |
 | `phabricatorFirstName`           | First name                                                                                               | `First Name`                                                 |
 | `phabricatorLastName`            | Last name                                                                                                | `Last Name`                                                  |
+| `phabricatorGitSSH`              | Enabled SSH to access Git repositories                                                                   | `false`                                                      |
 | `smtpHost`                       | SMTP host                                                                                                | `nil`                                                        |
 | `smtpPort`                       | SMTP port                                                                                                | `nil`                                                        |
 | `smtpUser`                       | SMTP user                                                                                                | `nil`                                                        |
@@ -100,15 +101,24 @@ The above parameters map to the env variables defined in [bitnami/phabricator](h
 
 ### Database parameters
 
-| Parameter                        | Description                                                                                              | Default                                                      |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `mariadb.enabled`                | Deploy MariaDB container(s)                                                                              | `true`                                                       |
-| `mariadb.rootUser.password`      | MariaDB admin password                                                                                   | `nil`                                                        |
-| `externalDatabase.host`          | Host of the external database                                                                            | `localhost`                                                  |
-| `externalDatabase.rootUser`      | Existing username in the external db                                                                     | `bn_wordpress`                                               |
-| `externalDatabase.rootPassword`  | Password for the above username                                                                          | `nil`                                                        |
-| `externalDatabase.database`      | Name of the existing database                                                                            | `bitnami_wordpress`                                          |
-| `externalDatabase.port`          | Database port number                                                                                     | `3306`                                                       |
+| Parameter                                  | Description                                           | Default                                        |
+|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
+| `mariadb.primary.extraFlags`               | Additional command line flags                         | `true`                                         |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                  | `bn_phabricator`                               |
+| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                         | `bitnami_phabricator`                          |
+| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
 
 ### Traffic Exposure Parameters
 
@@ -117,10 +127,13 @@ The above parameters map to the env variables defined in [bitnami/phabricator](h
 | `service.type`                   | Kubernetes Service type                                                                                  | `LoadBalancer`                                               |
 | `service.port`                   | Service HTTP port                                                                                        | `80`                                                         |
 | `service.httpsPort`              | Service HTTP port                                                                                        | `443`                                                        |
+| `service.sshPort`                | Service SSH port                                                                                         | `22`                                                         |
 | `service.loadBalancerIP`         | `loadBalancerIP` for the Phabricator Service                                                             | `nil`                                                        |
 | `service.externalTrafficPolicy`  | Enable client source IP preservation                                                                     | `Cluster`                                                    |
 | `service.nodePorts.http`         | Kubernetes http node port                                                                                | `""`                                                         |
 | `service.nodePorts.https`        | Kubernetes https node port                                                                               | `""`                                                         |
+| `service.nodePorts.ssh`          | Kubernetes ssh node port                                                                                 | `""`                                                         |
+| `service.annotations`            | Service annotations                                                                                      | `[]`                                                         |
 | `ingress.enabled`                | Enable ingress rules resource                                                                            | `false`                                                      |
 | `ingress.certManager`            | Add annotations for cert-manager                                                                         | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                                                                      | `[]`                                                         |
@@ -228,6 +241,85 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+In this major there were two main changes introduced:
+
+1. Adaptation to Helm v2 EOL
+2. Updated MariaDB dependency version
+
+Please read the update notes carefully.
+
+**1. Adaptation to Helm v2 EOL**
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+**2. Updated MariaDB dependency version**
+
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `10.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Phabricator data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `phabricator` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Phabricator data on your current release:
+
+```console
+export PHABRICATOR_HOST=$(kubectl get svc --namespace default phabricator --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export PHABRICATOR_PASSWORD=$(kubectl get secret --namespace default phabricator -o jsonpath="{.data.phabricator-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phabricator-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phabricator -o jsonpath="{.items[0].metadata.name}")
+```
+
+Delete the Phabricator deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
+
+```console
+  $ kubectl delete deployments.apps phabricator
+
+  $ kubectl delete statefulsets.apps phabricator-mariadb --cascade=false
+```
+
+Now the upgrade works:
+
+```console
+$ helm upgrade phabricator bitnami/phabricator --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set phabricatorPassword=$PHABRICATOR_PASSWORD --set phabricatorHost=$PHABRICATOR_HOST
+```
+
+You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod phabricator-mariadb-0
+  ```
+
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=phabricator,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 9.0.0
 

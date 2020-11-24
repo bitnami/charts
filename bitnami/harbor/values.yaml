@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.1.0-debian-10-r31
+  tag: 2.1.1-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -65,7 +65,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r191
+  tag: 0.12.0-debian-10-r211
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,7 +115,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,7 +140,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -165,7 +165,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -190,7 +190,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.1.0-debian-10-r38
+  tag: 2.1.1-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -241,7 +241,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.1.0-debian-10-r37
+  tag: 2.1.1-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -266,7 +266,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -291,7 +291,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.4-debian-10-r0
+  tag: 1.19.4-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -694,6 +694,10 @@ nginx:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -826,6 +830,10 @@ portal:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -967,6 +975,10 @@ core:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1120,6 +1132,10 @@ jobservice:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1360,6 +1376,10 @@ registry:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1513,6 +1533,10 @@ chartmuseum:
   ## Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
 
   ## Extra init containers to add to the deployment
   ##
@@ -1763,6 +1787,10 @@ clair:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1898,6 +1926,10 @@ trivy:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -2000,6 +2032,10 @@ notary:
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
+
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
 
     ## lifecycleHooks for the container to automate configuration before or after startup.
     ##
@@ -2134,6 +2170,10 @@ notary:
     ## Extra volumes to add to the deployment
     ##
     extraVolumes: []
+
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
 
     ## Extra init containers to add to the deployment
     ##

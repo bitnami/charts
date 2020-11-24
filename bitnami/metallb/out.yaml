@@ -1,0 +1,567 @@
+---
+# Source: metallb/templates/controller/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metallb-controller
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+---
+# Source: metallb/templates/speaker/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metallb-speaker
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+---
+# Source: metallb/templates/controller/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metallb-config
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+data:
+  config: |
+    {}
+---
+# Source: metallb/templates/controller/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metallb-controller
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - services/status
+    verbs:
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - policy
+    resourceNames:
+      - metallb-controller
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+---
+# Source: metallb/templates/speaker/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metallb-speaker
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - services
+      - endpoints
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - policy
+    resourceNames:
+      - metallb-speaker
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+---
+# Source: metallb/templates/controller/rbac.yaml
+## Role bindings
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: metallb-controller
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+subjects:
+- kind: ServiceAccount
+  name: metallb-controller
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: metallb-controller
+---
+# Source: metallb/templates/speaker/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: metallb-speaker
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+subjects:
+- kind: ServiceAccount
+  name: metallb-speaker
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: metallb-speaker
+---
+# Source: metallb/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metallb-config-watcher
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+---
+# Source: metallb/templates/speaker/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metallb-pod-lister
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  verbs:
+  - list
+---
+# Source: metallb/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metallb-config-watcher
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+subjects:
+- kind: ServiceAccount
+  name: metallb-controller
+- kind: ServiceAccount
+  name: metallb-speaker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: metallb-config-watcher
+---
+# Source: metallb/templates/speaker/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metallb-pod-lister
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: metallb-pod-lister
+subjects:
+- kind: ServiceAccount
+  name: metallb-speaker
+---
+# Source: metallb/templates/controller/servicemonitor.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: metallb-controller-metrics
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+spec:
+  type: None
+  selector:
+    app.kubernetes.io/name: metallb
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/component: controller
+  ports:
+  - name: metrics
+    port: 7472
+    protocol: TCP
+    targetPort: 7472
+---
+# Source: metallb/templates/speaker/servicemonitor.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: metallb-speaker-metrics
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+spec:
+  type: None
+  selector:
+    app.kubernetes.io/name: metallb
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/component: speaker
+  ports:
+  - name: metrics
+    port: 7472
+    protocol: TCP
+    targetPort: 7472
+---
+# Source: metallb/templates/speaker/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: metallb-speaker
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metallb
+      app.kubernetes.io/instance: metallb
+      app.kubernetes.io/component: speaker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: metallb
+        helm.sh/chart: metallb-1.0.0
+        app.kubernetes.io/instance: metallb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: speaker
+    spec:
+      
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      serviceAccountName: metallb-speaker
+      terminationGracePeriodSeconds: 2
+      hostNetwork: true
+      containers:
+      - name: metallb-speaker
+        image: docker.io/bitnami/metallb-speaker:0.9.3-debian-10-r166
+        imagePullPolicy: IfNotPresent
+        args:
+        - --port=7472
+        - --config=metallb-config
+        env:
+        - name: METALLB_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: METALLB_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: METALLB_ML_BIND_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: METALLB_ML_LABELS
+          value: "app.kubernetes.io/name=metallb,app.kubernetes.io/instance=metallb,app.kubernetes.io/component=speaker"
+        - name: METALLB_ML_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: METALLB_ML_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: metallb-memberlist
+              key: secretkey
+        ports:
+        - name: metrics
+          containerPort: 7472
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        securityContext:
+          runAsUser: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_ADMIN
+      nodeSelector:
+        "kubernetes.io/os": linux
+---
+# Source: metallb/templates/controller/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metallb-controller
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metallb
+      app.kubernetes.io/instance: metallb
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: metallb
+        helm.sh/chart: metallb-1.0.0
+        app.kubernetes.io/instance: metallb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: controller
+    spec:
+      
+      serviceAccountName: metallb-controller
+      terminationGracePeriodSeconds: 0
+      nodeSelector:
+        "kubernetes.io/os": linux
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: metallb
+                    app.kubernetes.io/instance: metallb
+                namespaces:
+                  - default
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      containers:
+      - name: metallb-controller
+        image: docker.io/bitnami/metallb-controller:0.9.3-debian-10-r156
+        imagePullPolicy: IfNotPresent
+        args:
+        - --port=7472
+        - --config=metallb-config
+        ports:
+        - name: metrics
+          containerPort: 7472
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
+        runAsNonRoot: true
+---
+# Source: metallb/templates/prometheus/metallb.alerts.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: metallb
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+spec:
+  groups:
+  - name: metallb.alerts
+    rules:
+    - alert: MetalLBStaleConfig
+      annotations:
+        message: '{{ $labels.job }} - MetalLB {{ $labels.container_name }} on {{ $labels.instance
+          }} has a stale config for > 1 minute'
+      expr: metallb_k8s_client_config_stale_bool{job="metallb"} == 1
+      for: 1m
+      labels:
+        severity: warning
+    - alert: MetalLBConfigNotLoaded
+      annotations:
+        message: '{{ $labels.job }} - MetalLB {{ $labels.container_name }} on {{ $labels.instance
+          }} has not loaded for > 1 minute'
+      expr: metallb_k8s_client_config_loaded_bool{job="metallb"} == 0
+      for: 1m
+      labels:
+        severity: warning
+---
+# Source: metallb/templates/controller/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: metallb-controller
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+spec:
+  jobLabel: "app.kubernetes.io/name"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metallb
+      app.kubernetes.io/instance: metallb
+      app.kubernetes.io/component: controller
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: metrics
+---
+# Source: metallb/templates/speaker/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: metallb-speaker
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+spec:
+  jobLabel: "app.kubernetes.io/name"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metallb
+      app.kubernetes.io/instance: metallb
+      app.kubernetes.io/component: speaker
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: metrics
+---
+# Source: metallb/templates/speaker/secret.yaml
+apiVersion: v1
+data:
+  secretkey: "cTM3aWVmRDRTVXM4Q1hacU9XdXdoZE9ubklZQlJ4NEN1SnRNU2NMSTlURDFFWUFpcXQ4UHg5bXVYc1NJMjc3QUVpYVlUTzhDc0ZMVkdaeGxjd3NLZWZOdzA2QWR2SnpjSFJiRlNoMVU3NFFHdTgyMzZTaXg2SGk1TFkxanBERlhsSVoxTmNkZ29GaW1zd2RmenNsNUMxZHFJdVIxM2cyc0VCQTFqUlBZb1hwQmUxVWwwRHBpbHZHM1pWcWt4OEE5bTlHNVgxeUQyYkVBVzV3aTVLV2h0N29ydUdBOThUeVpVZUNxVTBKOVQ5ZlNOQXRValpZTFBpUTRTN2ZvR1pveg=="
+kind: Secret
+metadata:
+  name: metallb-memberlist
+  labels:
+    app.kubernetes.io/name: metallb
+    helm.sh/chart: metallb-1.0.0
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: speaker
+  annotations:
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
