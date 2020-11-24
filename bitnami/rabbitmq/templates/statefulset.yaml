@@ -56,7 +56,7 @@ spec:
       {{- if .Values.podSecurityContext }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext }}
@@ -240,14 +240,11 @@ spec:
             postStart:
               exec:
                 command:
-                  - /bin/bash
-                  - -ec
-                  - |
-                    until rabbitmqctl cluster_status >/dev/null; do
-                        echo "Waiting for cluster readiness..."
-                        sleep 5
-                    done
-                    rabbitmq-queues rebalance "all"
+                  - /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh
+                  - -t
+                  - {{ .Values.terminationGracePeriodSeconds | quote }}
+                  - -d
+                  - {{ ternary "true" "false" .Values.image.debug | quote }}
           {{- end }}
             preStop:
               exec:
