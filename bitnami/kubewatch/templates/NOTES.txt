@@ -1,3 +1,8 @@
+
+** Please be patient while the chart is being deployed **
+
 To verify that kubewatch has started, run:
 
-  kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "kubewatch.name" . }},release={{ .Release.Name }}"
+  kubectl get deploy -w --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}
+
+{{- include "kubewatch.checkRollingTags" . }}

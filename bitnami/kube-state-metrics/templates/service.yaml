@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "kube-state-metrics.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
     {{- if not .Values.serviceMonitor.enabled }}
     prometheus.io/scrape: "true"
     {{- end }}
     {{- if .Values.service.annotations }}
-    {{- include "kube-state-metrics.tplValue" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
-  labels: {{- include "kube-state-metrics.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.service.labels }}
     {{- toYaml .Values.service.labels | nindent 4 }}
     {{- end }}
@@ -36,4 +36,4 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "kube-state-metrics.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

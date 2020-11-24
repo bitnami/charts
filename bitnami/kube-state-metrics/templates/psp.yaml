@@ -2,8 +2,8 @@
 apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "kube-state-metrics.fullname" . }}
-  labels: {{- include "kube-state-metrics.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   privileged: false
   volumes:
