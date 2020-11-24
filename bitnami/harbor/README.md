@@ -683,6 +683,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
 | `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
 | `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |
+| `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                   | `0`         |
 | `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                             | `1`         |
 | `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                               | `2`         |
 | `externalRedis.chartmuseumDatabaseIndex`  | Index for chartmuseum database                                                                            | `3`         |
