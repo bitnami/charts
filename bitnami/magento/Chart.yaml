@@ -28,4 +28,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 15.0.0
+version: 15.0.1
