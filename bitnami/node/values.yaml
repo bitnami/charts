@@ -70,16 +70,24 @@ volumePermissions:
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
 git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.29.1-debian-10-r5
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Bitnami git image version
+  ## ref: https://hub.docker.com/r/bitnami/git/tags/
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.29.2-debian-10-r23
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
 
 ## Enable to download app from external git repository.
 ## Disable it if your docker image already includes your application at /app

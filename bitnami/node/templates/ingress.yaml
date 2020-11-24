@@ -3,8 +3,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "node.fullname" $ }}
-  labels: {{- include "node.labels" $ | nindent 4 }}
+  name: {{ template "common.names.fullname" $ }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
   annotations:
     {{- if .certManager }}
     kubernetes.io/tls-acme: "true"
@@ -19,7 +19,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "node.fullname" $ }}
+              serviceName: {{ template "common.names.fullname" $ }}
               servicePort: 80
   {{- if .tls }}
   tls:
