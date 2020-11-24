@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 10.23.0
+appVersion: 14.15.1
 dependencies:
   - condition: mongodb.install
     name: mongodb
