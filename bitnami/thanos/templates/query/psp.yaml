@@ -1,10 +1,11 @@
-{{- if and .Values.querier.enabled .Values.querier.pspEnabled .Values.querier.rbac.create -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.pspEnabled $query.rbac.create -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ include "thanos.fullname" . }}-querier
+  name: {{ include "thanos.fullname" . }}-query
   labels: {{- include "thanos.labels" . | nindent 4 }}
-    app.kubernetes.io/component: querier
+    app.kubernetes.io/component: query
 spec:
   fsGroup:
     rule: RunAsAny
