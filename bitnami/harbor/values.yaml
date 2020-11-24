@@ -914,6 +914,11 @@ core:
   ##
   args:
 
+  ## Set the chart cache driver: memory, redis, redis_sentinel
+  ## Leave unset to detect redis or redis_sentinel.
+  ##
+  chartCacheDriver: ''
+
   ## UAA Authentication Options
   ## If you're using UAA for authentication behind a self-signed
   ## certificate you will need to provide the CA Cert.
@@ -2266,14 +2271,37 @@ redis:
   ## password: ""
   ##
   usePassword: false
+  ## Enable master/slave topology.
+  ##
   cluster:
     enabled: false
+    slaveCount: 2
+  ## Specifies the Kubernetes Cluster's Domain Name.
+  ##
+  clusterDomain: cluster.local
   master:
     persistence:
       enabled: true
+  ## Enable master/slave topology with sentinel.
+  ## redis.cluster must also be enabled.
+  ## redis.cluster.slaveCount must be >= 3 to prevent split-brain.
+  ##
+  sentinel:
+    # Sentinel is not supported by all components.  Chartmuseum does not use sentinel.
+    # See https://github.com/helm/chartmuseum/issues/179
+    enabled: false
+    masterSet: harbor
+    service:
+      sentinelPort: 26379
+    staticID: true
+    usePassword: false
   slave:
     persistence:
       enabled: true
+
+## Set idle timeout on redis connections that support it
+##
+redisIdleTimeoutSeconds: 30
 
 ## If the Redis included in the chart is disabled, Harbor will use below
 ## Redis parameters to connect to an external Redis server.
@@ -2288,6 +2316,21 @@ externalRedis:
   ## Redis password
   ##
   password: ''
+  ## Sentinel is used.
+  ## Redis host and port are not used.
+  ##
+  sentinel:
+    # Sentinel is not supported by all components.  Chartmuseum does not use sentinel.
+    # See https://github.com/helm/chartmuseum/issues/179
+    enabled: false
+    ## Comma-separated list of sentinel host:port
+    ## <host_sentinel1>:<port_sentinel1>,<host_sentinel2>:<port_sentinel2>,<host_sentinel3>:<port_sentinel3>
+    ##
+    addresses: ''
+    masterSet: harbor
+    ## Harbor redis clients do not support password authentication for the sentinels
+    usePassword: false
+  coreDatabaseIndex: '0'
   jobserviceDatabaseIndex: '1'
   registryDatabaseIndex: '2'
   chartmuseumDatabaseIndex: '3'

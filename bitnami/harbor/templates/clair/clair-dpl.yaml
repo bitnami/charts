@@ -194,10 +194,6 @@ spec:
             - name: SCANNER_CLAIR_URL
               # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
               value: "http://127.0.0.1:6060"
-            - name: SCANNER_STORE_REDIS_URL
-              value: {{ include "harbor.redisForClairAdapter" . }}
-            - name: SCANNER_CLAIR_DATABASE_URL
-              value: {{ include "harbor.database.clair" . }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -212,6 +208,8 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
+            - secretRef:
+                name: {{ include "harbor.clair" . }}-envvars
             {{- if .Values.clair.adapter.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVarsCM "context" $) }}

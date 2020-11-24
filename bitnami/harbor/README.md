@@ -89,6 +89,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `proxy.components`                    | The component list that the proxy settings apply to                                                                                                       | core, jobservice, clair                                 |
 | `externalURL`                         | The external URL for Harbor core service                                                                                                                  | `https://core.harbor.domain`                            |
 | `extraDeploy`                         | Array of extra objects to deploy with the release (evaluated as a template).                                                                              | `nil`                                                   |
+| `redisIdleTimeoutSeconds`             | Idle timeout on redis connections that support it                                                                                                         | `30`                                                    |
 
 ### Traffic Exposure Parameters
 
@@ -281,6 +282,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `coreImage.pullPolicy`      | Harbor Core image pull policy                                                                                                                                                                                                                                                            | `IfNotPresent`                                          |
 | `coreImage.pullSecrets`     | Specify docker-registry secret names as an array                                                                                                                                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `coreImage.debug`           | Specify if debug logs should be enabled                                                                                                                                                                                                                                                  | `false`                                                 |
+| `core.chartCacheDriver`     | The driver type to cache charts: `memory`, `redis`, or `redis_sentinel`. | Detected from `redis` or `externalRedis` configuration. |
 | `core.secretKey`            | The key used for encryption. Must be a string of 16 chars                                                                                                                                                                                                                                | Random 16 character long alphanumeric string            |
 | `core.uaaSecretName`        | If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.                                                                                                                                                      | ``                                                      |
 | `core.tls.existingSecret`                 | Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated                                                     | `nil`                                                   |
@@ -430,7 +432,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `chartmuseum.replicas`               | Number of ChartMuseum replicas                                                                                                                  | `1`                                                     |
 | `chartmuseum.resources`              | The [resources] to allocate for container                                                                                                       | undefined                                               |
 | `chartmuseum.updateStrategy`         | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported | `RollingUpdate`                                         |
-| `chartmuseum.useRedisCache`          | Specify if ChartMuseum will use redis cache                                                                                                     | `true`                                                  |
+| `chartmuseum.useRedisCache`          | Specify if ChartMuseum will use redis cache.  Chartmuseum [does not yet support Sentinel and uses redis](https://github.com/helm/chartmuseum/issues/179). | `true`                                        |
 | `chartmuseum.absoluteUrl`            | Specify an absolute URL for ChartMuseum registry                                                                                                | `false`                                                 |
 | `chartmuseum.chartRepoName`          | Specify the endpoint for the chartmuseum registry. Only applicable if `chartmuseum.absoluteUrl` is `true`                                       | `chartsRepo`                                            |
 | `chartmuseum.maxUploadSize`          | Maximum upload size                                                                                                                             | `nil`                                                   |
@@ -671,23 +673,32 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 ### Redis Parameters
 
-| Parameter                                 | Description                                                                                               | Default     |
-|-------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------|
-| `redis.enabled`                           | If external redis is used, set it to `false`                                                              | `true`      |
-| `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`       |
-| `redis.password`                          | Redis password                                                                                            | `nil`       |
-| `redis.usePassword`                       | Use redis password                                                                                        | `false`     |
-| `redis.cluster.enabled`                   | Enable cluster redis                                                                                      | `false`     |
-| `redis.master.persistence.enabled`        | Enable persistence for master Redis                                                                       | `true`      |
-| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis                                                                        | `true`      |
-| `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
-| `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
-| `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |
-| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                             | `1`         |
-| `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                               | `2`         |
-| `externalRedis.chartmuseumDatabaseIndex`  | Index for chartmuseum database                                                                            | `3`         |
-| `externalRedis.clairAdapterDatabaseIndex` | Index for chartmuseum database                                                                            | `3`         |
-| `externalRedis.trivyAdapterDatabaseIndex` | Index for chartmuseum database                                                                            | `3`         |
+| Parameter                                 | Description                                                                                               | Default         |
+|-------------------------------------------|-----------------------------------------------------------------------------------------------------------|-----------------|
+| `redis.enabled`                           | If external redis is used, set it to `false`                                                              | `true`          |
+| `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`           |
+| `redis.password`                          | Redis password                                                                                            | `nil`           |
+| `redis.usePassword`                       | Use redis password                                                                                        | `false`         |
+| `redis.cluster.enabled`                   | Enable cluster redis                                                                                      | `false`         |
+| `redis.clusterDomain`                     | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `redis.master.persistence.enabled`        | Enable persistence for master Redis                                                                       | `true`          |
+| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis                                                                        | `true`          |
+| `redis.sentinel.enabled`                  | Enable Redis Sentinel if `redis.cluster.enabled`. `redis.cluster.slaveCount` >= 3 to prevent split-brain  | `false`         |
+| `redis.sentinel.masterSet`                | Name of Redis master set                                                                                  | `harbor`        |
+| `redis.sentinel.service.sentinelPort`     | Port of Redis Sentinel                                                                                    | `26379`         |
+| `redis.sentinel.usePassword`              | Use password to access sentinel.                                                                          | `false`         |
+| `externalRedis.host`                      | Host of the external redis                                                                                | `localhost`     |
+| `externalRedis.port`                      | Port of the external redis                                                                                | `6379`          |
+| `externalRedis.password`                  | Password for the external redis                                                                           | `nil`           |
+| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                             | `1`             |
+| `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                               | `2`             |
+| `externalRedis.chartmuseumDatabaseIndex`  | Index for chartmuseum database                                                                            | `3`             |
+| `externalRedis.clairAdapterDatabaseIndex` | Index for chartmuseum database                                                                            | `3`             |
+| `externalRedis.trivyAdapterDatabaseIndex` | Index for chartmuseum database                                                                            | `3`             |
+| `externalRedis.sentinel.enabled`          | Use Redis Sentinel redis                                                                                  | `false`         |
+| `externalRedis.sentinel.addresses`        | Comma-separated list of sentinel host:port addresses                                                      | `nil`           |
+| `externalRedis.sentinel.masterSet`        | Name of Redis master set                                                                                  | `harbor`        |
+| `externalRedis.sentinel.usePassword`      | Use password to access Sentinel service                                                                   | `false`         |
 
 [resources]: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 
