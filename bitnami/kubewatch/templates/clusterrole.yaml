@@ -2,61 +2,64 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    app: {{ template "kubewatch.name" . }}
-    chart: {{ template "kubewatch.chart" . }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: {{ template "kubewatch.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
     resources:
-    - pods
-    - namespaces
-    - services
-    - deployments
-    - replicationcontrollers
-    - replicasets
-    - daemonsets
-    - persistentvolumes
+      - pods
+      - namespaces
+      - services
+      - deployments
+      - replicationcontrollers
+      - replicasets
+      - daemonsets
+      - persistentvolumes
     verbs:
-    - list
-    - watch
-    - get
+      - list
+      - watch
+      - get
   - apiGroups:
-    - apps
+      - apps
     resources:
-    - daemonsets
-    - deployments
-    - deployments/scale
-    - replicasets
-    - replicasets/scale
-    - statefulsets
+      - daemonsets
+      - deployments
+      - deployments/scale
+      - replicasets
+      - replicasets/scale
+      - statefulsets
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
   - apiGroups:
-    - extensions
+      - extensions
     resources:
-    - daemonsets
-    - deployments
-    - deployments/scale
-    - replicasets
-    - replicasets/scale
-    - replicationcontrollers/scale
+      - daemonsets
+      - deployments
+      - deployments/scale
+      - replicasets
+      - replicasets/scale
+      - replicationcontrollers/scale
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
   - apiGroups:
-    - batch
+      - batch
     resources:
-    - cronjobs
-    - jobs
+      - cronjobs
+      - jobs
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
 {{- end -}}
