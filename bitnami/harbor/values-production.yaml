@@ -2289,6 +2289,7 @@ externalRedis:
   ## Redis password
   ##
   password: ''
+  coreDatabaseIndex: '0'
   jobserviceDatabaseIndex: '1'
   registryDatabaseIndex: '2'
   chartmuseumDatabaseIndex: '3'
