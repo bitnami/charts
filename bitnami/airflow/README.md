@@ -569,7 +569,7 @@ Find more information about how to deal with common errors related to Bitnami’
   - Liveness and rediness probe have been separated by components `airflow.livenessProbe.*` and `airflow.redinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.redinessProbe` and `worker.redinessProbe`.
   - `airflow.baseUrl` has been moved to `web.baseUrl`.
   - Security context has been migrated to the bitnami standard way so that `securityContext.*` has been divided into `podSecurityContext.*` that will define the `fsGroup` for all the containers in the pod and `containerSecurityContext.*` that will define the user id that will run the main containers.
-  - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `9.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)
+  - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `10.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1000) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)
   - `./files/dags/*.py` will not be include in the deployment any more.
 
 - Some new features:
@@ -602,6 +602,7 @@ $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o js
 $ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ##### Delete statefulsets
@@ -626,6 +627,7 @@ $ helm upgrade airflow bitnami/airflow \
     --set auth.password=$AIRFLOW_PASSWORD \
     --set auth.fernetKey=$AIRFLOW_FERNETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \
     --set redis.cluster.enabled=true
 ```
