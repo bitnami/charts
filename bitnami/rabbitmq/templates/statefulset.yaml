@@ -240,18 +240,23 @@ spec:
             postStart:
               exec:
                 command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    until rabbitmqctl cluster_status >/dev/null; do
+                        echo "Waiting for cluster readiness..."
+                        sleep 5
+                    done
+                    rabbitmq-queues rebalance "all"
+          {{- end }}
+            preStop:
+              exec:
+                command:
                   - /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh
                   - -t
                   - {{ .Values.terminationGracePeriodSeconds | quote }}
                   - -d
                   - {{ ternary "true" "false" .Values.image.debug | quote }}
-          {{- end }}
-            preStop:
-              exec:
-                command:
-                  - bash
-                  - -ec
-                  - rabbitmqctl stop_app
           volumeMounts:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf
