@@ -78,9 +78,9 @@ The following table lists the configurable parameters of the Node chart and thei
 | `getAppFromExternalRepository`          | Whether to get app from external git repo or not                            | `true`                                                  |
 | `repository`                            | Repo of the application                                                     | `https://github.com/bitnami/sample-mean.git`            |
 | `revision`                              | Revision to checkout                                                        | `master`                                                |
-| `replicas`                              | Number of replicas for the application                                      | `1`                                                     |
+| `replicaCount`                          | Number of replicas for the application                                      | `1`                                                     |
 | `applicationPort`                       | Port where the application will be running                                  | `3000`                                                  |
-| `extraEnv`                              | Any extra environment variables to be pass to the pods                      | `[]`                                                    |
+| `extraEnvVars`                          | Any extra environment variables to be pass to the pods                      | `[]`                                                    |
 | `affinity`                              | Map of node/pod affinities                                                  | `{}` (The value is evaluated as a template)             |
 | `nodeSelector`                          | Node labels for pod assignment                                              | `{}` (The value is evaluated as a template)             |
 | `tolerations`                           | Tolerations for pod assignment                                              | `[]` (The value is evaluated as a template)             |
@@ -119,11 +119,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicas=2 \
+  --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicaCount=2 \
     bitnami/node
 ```
 
-The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicas` to `2`.
+The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicaCount` to `2`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
