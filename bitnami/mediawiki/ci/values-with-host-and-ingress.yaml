@@ -1,5 +1,10 @@
+mediawikiHost: mediawiki.local
 service:
   type: ClusterIP
+ingress:
+  enabled: true
+  tls: true
+  hostname: mediawiki.local
 livenessProbe:
   httpGet:
     httpHeaders: []

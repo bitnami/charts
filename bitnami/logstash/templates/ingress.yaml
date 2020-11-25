@@ -6,8 +6,8 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ template "logstash.fullname" . }}
-  labels: {{ include "logstash.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -23,7 +23,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ include "logstash.fullname" $ }}
+              serviceName: {{ include "common.names.fullname" $ }}
               servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}

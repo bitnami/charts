@@ -2,13 +2,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "mariadb-galera.fullname" . }}
-  labels:
-    {{- include "mariadb-galera.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- toYaml .Values.metrics.prometheusRules.selector | nindent 4 }}
 spec:
   groups:
-  - name: {{ include "mariadb-galera.fullname" . }}
+  - name: {{ include "common.names.fullname" . }}
     rules:
       {{- toYaml .Values.metrics.prometheusRules.rules | nindent 6 }}
 {{- end }}

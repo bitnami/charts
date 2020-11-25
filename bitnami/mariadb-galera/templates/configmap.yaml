@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "mariadb-galera.fullname" . }}-configuration
-  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
 {{- if (.Files.Glob "files/my.cnf") }}
 {{ (.Files.Glob "files/my.cnf").AsConfig | indent 2 }}

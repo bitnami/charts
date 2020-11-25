@@ -7,3 +7,9 @@ metrics:
   enabled: true
 ingress:
   enabled: true
+livenessProbe:
+  httpGet:
+    httpHeaders: []
+readinessProbe:
+  httpGet:
+    httpHeaders: []

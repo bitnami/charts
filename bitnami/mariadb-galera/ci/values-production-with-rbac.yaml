@@ -9,7 +9,7 @@ podDisruptionBudget:
 
 extraEnvVars: |-
   - name: TEST
-    value: {{ include "mariadb-galera.fullname" . | quote }}
+    value: {{ include "common.names.fullname" . | quote }}
 
 extraEnvVarsSecret: example-secret
 extraEnvVarsCM: example-cm
