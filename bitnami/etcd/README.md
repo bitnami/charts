@@ -99,7 +99,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `clusterDomain`                                 | Default Kubernetes cluster domain                                                                                                                         | `cluster.local`                                             |
 | `service.type`                                  | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                 |
 | `service.port`                                  | etcd client port                                                                                                                                          | `2379`                                                      |
+| `service.clientPortNameOverride`                | etcd client port name override                                                                                                                            | `""`                                                    |
 | `service.peerPort`                              | etcd peer port                                                                                                                                            | `2380`                                                      |
+| `service.peerPortNameOverride`                  | etcd peer port name override                                                                                                                              | `""`                                                    |
 | `service.nodePorts.clientPort`                  | Kubernetes etcd client node port                                                                                                                          | `""`                                                        |
 | `service.nodePorts.peerPort`                    | Kubernetes etcd peer node port                                                                                                                            | `""`                                                        |
 | `service.annotations`                           | Annotations for etcd service                                                                                                                              | `{}`                                                        |
@@ -128,9 +130,14 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                                                         |
 | `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                         |
 | `podAnnotations`                                | Annotations to be added to pods                                                                                                                           | `{}`                                                        |
-| `affinity`                                      | Map of node/pod affinities                                                                                                                                | `{}` (The value is evaluated as a template)                 |
-| `nodeSelector`                                  | Node labels for pod assignment                                                                                                                            | `{}` (The value is evaluated as a template)                 |
-| `tolerations`                                   | Tolerations for pod assignment                                                                                                                            | `[]` (The value is evaluated as a template)                 |
+| `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                        |
+| `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                      |
+| `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                        |
+| `nodeAffinityPreset.key`                        | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                        |
+| `nodeAffinityPreset.values`                     | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                        |
+| `affinity`                                      | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                              |
+| `nodeSelector`                                  | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                              |
+| `tolerations`                                   | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                              |
 | `priorityClassName`                             | Name of the existing priority class to be used by etcd pods.                                                                                              | `""`                                                        |
 | `metrics.enabled`                               | Enable Prometheus exporter to expose etcd metrics                                                                                                         | `false`                                                     |
 | `metrics.podAnnotations`                        | Annotations for enabling prometheus to access the metrics endpoint                                                                                        | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`} |
@@ -295,6 +302,12 @@ disasterRecovery.pvc.storageClassName=nfs
 
 > **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
@@ -315,6 +328,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### 5.2.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 

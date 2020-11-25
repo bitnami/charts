@@ -44,10 +44,11 @@ data:
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
       "kubeappsNamespace": "{{ .Release.Namespace }}",
-      "appVersion": "{{ .Chart.AppVersion }}",
+      "appVersion": "v{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
+      "authProxySkipLoginPage": {{ .Values.authProxy.skipKubeappsLoginPage }},
       "featureFlags": {{ .Values.featureFlags | toJson }},
       "clusters": {{ template "kubeapps.clusterNames" . }}
     }

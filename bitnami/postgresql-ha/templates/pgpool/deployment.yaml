@@ -85,7 +85,6 @@ spec:
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
       {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-      {{- $releaseNamespace := .Release.Namespace }}
       {{- $clusterDomain:= .Values.clusterDomain }}
       containers:
         - name: pgpool
@@ -118,8 +117,12 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolCustomUsersSecretName" . }}
                   key: passwords
             {{- end }}
+            - name: PGPOOL_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: PGPOOL_BACKEND_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:5432,{{ end }}
+              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(PGPOOL_NAMESPACE).svc.{{ $clusterDomain }}:5432,{{ end }}
             - name: PGPOOL_SR_CHECK_USER
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}

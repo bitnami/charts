@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -589,13 +589,32 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Notable changes
+## Upgrading
 
-### 7.4.0
+### To 13.0.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-### 12.0.0
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 12.0.0
 
 Several changes were introduced that breaks backwards compatibilty:
 
@@ -603,7 +622,7 @@ Several changes were introduced that breaks backwards compatibilty:
 - Labels are adapted to follow the Helm charts best practices.
 - Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
-### 11.0.0
+### To 11.0.0
 
 Elasticsearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
@@ -614,11 +633,11 @@ $ kubectl delete statefulset elasticsearch-master
 $ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
 ```
 
-### 10.0.0
+### TO 10.0.0
 
 In this version, Kibana was added as dependant chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
 
-### 9.0.0
+### To 9.0.0
 
 Elasticsearch master nodes store the cluster status at `/bitnami/elasticsearch/data`. Among other things this includes the UUID of the elasticsearch cluster. Without a persistent data store for this data, the UUID of a cluster could change if k8s node(s) hosting the es master nodes go down and are scheduled on some other master node. In the event that this happens, the data nodes will no longer be able to join a cluster as the uuid changed resulting in a broken cluster.
 
@@ -630,12 +649,16 @@ Helm performs a lookup for the object based on its group (apps), version (v1), a
 
 In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/commit/4dfac075aacf74405e31ae5b27df4369e84eb0b0) the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
-### 7.0.0
+### To 7.4.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 7.0.0
 
 This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
-### 3.0.0
+### To 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is elasticsearch:

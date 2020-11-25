@@ -1,0 +1,54 @@
+{{- if and .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: agent
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-agent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  privileged: false
+  {{- if .Values.agent.iptables }}
+  allowedCapabilities:
+    - "NET_ADMIN"
+  {{ end }}
+  allowPrivilegeEscalation: false
+  volumes:
+    - 'secret'
+    - 'hostPath'
+  allowedHostPaths:
+    - pathPrefix: "/run/xtables.lock"
+    - pathPrefix: {{ .Values.agent.sslCertHostPath }}
+      readOnly: true
+    {{- if .Values.agent.podSecurityPolicy.allowedHostPaths }}
+    {{- toYaml .Values.agent.podSecurityPolicy.allowedHostPaths | nindent 4 }}
+    {{- end }}
+  hostNetwork: {{ .Values.agent.useHostNetwork }}
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    {{- if .Values.agent.containerSecurityContext.seLinuxOptions }}
+    rule: 'MustRunAs'
+    seLinuxOptions: {{- toYaml .Values.agent.containerSecurityContext.seLinuxOptions | nindent 6 }}
+    {{- else }}
+    rule: 'RunAsAny'
+    {{- end }}
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  readOnlyRootFilesystem: false
+{{- end }}

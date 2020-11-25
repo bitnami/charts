@@ -162,6 +162,10 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the fullname template
   name:
+  ## Add annotations to service account
+  # annotations:
+  #   iam.gke.io/gcp-service-account: "sa@project.iam.gserviceaccount.com"
+
 
 rbac:
   ## Specifies whether RBAC resources should be created

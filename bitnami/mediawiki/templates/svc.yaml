@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "mediawiki.fullname" . }}
   labels:
-    app: {{ template "mediawiki.name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+    helm.sh/chart: {{ include "mediawiki.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   {{- if .Values.service.loadBalancerIP }}
@@ -31,5 +31,5 @@ spec:
       {{- end }}
   {{- end }}
   selector:
-    app: {{ template "mediawiki.name" . }}
-    release: "{{ .Release.Name }}"
+    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}

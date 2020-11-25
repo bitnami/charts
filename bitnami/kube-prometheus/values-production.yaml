@@ -20,7 +20,7 @@ global:
 # fullnameOverride:
 
 ## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
   create: true
@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.43.2-debian-10-r0
+    tag: 0.43.2-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -146,28 +146,52 @@ operator:
   ##
   podAnnotations: {}
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAffinityPreset: ""
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAntiAffinity: soft
+  podAntiAffinityPreset: soft
 
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  podAffinity: {}
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: operator.podAffinityPreset, operator.podAntiAffinityPreset, and operator.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -220,7 +244,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.4.0-debian-10-r100
+      tag: 0.4.0-debian-10-r103
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -251,7 +275,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.22.1-debian-10-r3
+    tag: 2.22.1-debian-10-r6
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -385,29 +409,52 @@ prometheus:
   ##
   resources: {}
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAffinityPreset: ""
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAntiAffinity: soft
-  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
+  podAntiAffinityPreset: soft
 
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  podAffinity: {}
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: prometheus.podAffinityPreset, prometheus.podAntiAffinityPreset, and prometheus.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -604,11 +651,11 @@ prometheus:
   containers: []
 
   ## Volumes allows configuration of additonal volumes. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   volumes: []
 
   ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   volumeMounts: []
 
   ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
@@ -691,7 +738,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.16.0-scratch-r0
+      tag: 0.16.0-scratch-r1
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -776,7 +823,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r133
+    tag: 0.21.0-debian-10-r136
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -912,29 +959,52 @@ alertmanager:
   ##
   resources: {}
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAffinityPreset: ""
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAntiAffinity: soft
-  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
+  podAntiAffinityPreset: soft
 
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  podAffinity: {}
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: alertmanager.podAffinityPreset, alertmanager.podAntiAffinityPreset, and alertmanager.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -1038,11 +1108,11 @@ alertmanager:
   containers: []
 
   ## Volumes allows configuration of additonal volumes. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   volumes: []
 
   ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   volumeMounts: []
 
   ## Priority class assigned to the Pods

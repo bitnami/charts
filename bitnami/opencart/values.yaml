@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/opencart
-  tag: 3.0.3-6-debian-10-r93
+  tag: 3.0.3-6-debian-10-r98
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -256,6 +256,10 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  sessionAffinity: "None"
 
 ## Configure the ingress resource that allows you to access the
 ## OpenCart installation. Set up the URL
@@ -315,11 +319,6 @@ ingress:
   # - name: opencart.local-tls
   #   key:
   #   certificate:
-
-## Control where client requests go, to the same pod or round-robin
-## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
-sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -504,7 +503,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r204
+    tag: 0.8.0-debian-10-r209
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,20 +1,32 @@
-apiVersion: v1
-name: phpmyadmin
-version: 6.5.4
+annotations:
+  category: Infrastructure
+apiVersion: v2
 appVersion: 5.0.4
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - condition: db.bundleTestDB
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - phpmyadmin-database
+    version: 9.x.x
 description: phpMyAdmin is an mysql administration frontend
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
+icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
 keywords:
   - mariadb
   - mysql
   - phpmyadmin
-home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
-icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: phpmyadmin
 sources:
   - https://github.com/bitnami/bitnami-docker-phpmyadmin
   - https://www.phpmyadmin.net/
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Infrastructure
+version: 7.0.0

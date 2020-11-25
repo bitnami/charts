@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.9.0-debian-10-r82
+  tag: 11.10.0-debian-10-r2
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r269
+  tag: 0.8.0-debian-10-r272
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -901,6 +901,11 @@ persistence:
   ## Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
 
 ## PgPool service paramaters
 ##

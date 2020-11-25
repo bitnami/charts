@@ -38,7 +38,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r3
+  tag: 11.0.3-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -92,11 +92,6 @@ auth:
     ## Password to access the truststore when it's password-protected.
     ##
     truststorePassword: ""
-
-## Keycloak bind address
-## ref: https://github.com/bitnami/bitnami-docker-keycloak#port-and-address-binding
-##
-bindAddress: 0.0.0.0
 
 ## Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy

@@ -69,6 +69,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `filter`                                   | Filter Plugins configuration                                                                                         | `nil`                                                   |
 | `output`                                   | Output Plugins configuration                                                                                         | `Check values.yaml file`                                |
 | `existingConfiguration`                    | Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored). | `nil`                                                   |
+| `enableMultiplePipelines`                  | Allows user to use multiple pipelines                                                                                | `false`                                                 |
 | `containerPorts`                           | Array containing the ports to open in the Logstash container                                                         | `Check values.yaml file`                                |
 | `extraVolumes`                             | Array to add extra volumes (evaluated as a template)                                                                 | `[]`                                                    |
 | `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                 | `[]`                                                    |
@@ -175,9 +176,9 @@ This chart includes a `values-production.yaml` file where you can find some para
 ### Configure the way how to expose Logstash
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose Logstash through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `logstash.service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `logstash.service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `logstash.service.type=LoadBalancer` to choose this service type.
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
+- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
 
 ### Using custom configuration
 
@@ -187,13 +188,96 @@ You can achieve any Logstash configuration by providing your custom configuratio
 
 Add your custom configuration files to "files/conf" in your working directory. These files will be mounted as a configMap to the containers and they will be used for configuring Logstash.
 
-Alternatively, you can specify the Logstash configuration using the `logstash.input`, `logstash.filter`, and `logstash.output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
+Alternatively, you can specify the Logstash configuration using the `input`, `filter`, and `output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
 
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `logstash.existingConfiguration` parameter. Note that this will override the two previous options.
+In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter. Note that this will override the two previous options.
+
+### Using multiple pipelines
+
+You can use [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
+
+In that case, you should place your `pipelines.yml` file in the "files/conf" directory (together with the rest of the desired configuration files). If the `enableMultiplePipelines` parameter is set to `true` but there is not any `pipelines.yml` file in the mounted volume, a dummy file is created using the default configuration file as a single pipeline.
+
+You can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter.
+
+Find below a basic example placing the configuration files in the "files/conf" folder although the same approach can be followed by using a ConfigMap:
+
+- Configuration files placed in `files/conf`:
+
+```console
+$ cat files/conf/bye.conf
+input {
+  file {
+    path => "/tmp/bye"
+  }
+}
+output {
+  stdout { }
+}
+
+$ cat files/conf/hello.conf
+input {
+  file {
+    path => "/tmp/hello"
+  }
+}
+output {
+  stdout { }
+}
+
+$ cat files/conf/pipelines.yml
+- pipeline.id: hello
+  path.config: "/opt/bitnami/logstash/config/hello.conf"
+- pipeline.id: bye
+  path.config: "/opt/bitnami/logstash/config/bye.conf"
+```
+
+- Deploy the Helm Chart with the `enableMultiplePipelines` parameter:
+
+```console
+$ helm install logstash . --set enableMultiplePipelines=true
+
+$ kubectl logs -f logstash-0
+logstash 12:57:43.51 INFO  ==> ** Starting Logstash setup **
+logstash 12:57:43.54 INFO  ==> Initializing Logstash server...
+logstash 12:57:43.56 INFO  ==> Mounted config directory detected
+logstash 12:57:43.62 INFO  ==> User's pipelines file detected.
+logstash 12:57:43.63 INFO  ==> ** Logstash setup finished! **
+logstash 12:57:43.64 INFO  ==> ** Starting Logstash **
+logstash 12:57:43.64 INFO  ==> Starting logstash using pipelines file (pipelines.yml)
+...
+[2020-11-25T12:58:23,802][INFO ][logstash.javapipeline    ][bye] Pipeline started {"pipeline.id"=>"bye"}
+[2020-11-25T12:58:23,810][INFO ][logstash.javapipeline    ][hello] Pipeline started {"pipeline.id"=>"hello"}
+[2020-11-25T12:58:23,931][INFO ][logstash.agent           ] Pipelines running {:count=>2, :running_pipelines=>[:bye, :hello], :non_running_pipelines=>[]}
+```
+
+- According to the previous logs, both pipelines are being taken into account. Let's create some events in the tracked files and see the result in the Logstash output:
+```console
+$ kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
+$ kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
+
+$ kubectl logs -f logstash-0
+...
+[2020-11-25T12:58:24,535][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=>9600}
+{
+      "@version" => "1",
+    "@timestamp" => 2020-11-25T12:59:39.624Z,
+          "path" => "/tmp/hello",
+          "host" => "logstash-0",
+       "message" => "hi"
+}
+{
+      "@version" => "1",
+    "@timestamp" => 2020-11-25T12:59:54.351Z,
+          "path" => "/tmp/bye",
+          "host" => "logstash-0",
+       "message" => "bye"
+}
+```
 
 ### Adding extra environment variables
 
-In case you want to add extra environment variables, you can use the `logstash.extraEnvVars` property.
+In case you want to add extra environment variables, you can use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:

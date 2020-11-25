@@ -19,7 +19,6 @@ data:
   KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
-  KEYCLOAK_BIND_ADDRESS: {{ .Values.bindAddress | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   KEYCLOAK_PROXY_ADDRESS_FORWARDING: {{ ternary "true" "false" .Values.proxyAddressForwarding | quote }}
   KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}

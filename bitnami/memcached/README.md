@@ -85,6 +85,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `affinity`                               | Map of node/pod affinities                                                                             | `{}` (The value is evaluated as a template)                  |
 | `nodeSelector`                           | Node labels for pod assignment                                                                         | `{}` (The value is evaluated as a template)                  |
 | `tolerations`                            | Tolerations for pod assignment                                                                         | `[]` (The value is evaluated as a template)                  |
+| `priorityClassName`                      | Controller priorityClassName                                                                           | `nil`                                                        |
 | `metrics.enabled`                        | Start a side-car prometheus exporter                                                                   | `false`                                                      |
 | `metrics.image.registry`                 | Memcached exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`               | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                                 |

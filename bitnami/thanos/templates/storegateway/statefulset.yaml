@@ -89,8 +89,8 @@ spec:
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
-            {{- range .Values.storegateway.extraFlags }}
-            - {{ . }}
+            {{- if .Values.storegateway.extraFlags }}
+            {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           ports:
             - name: http

@@ -112,6 +112,29 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "metrics-server.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "metrics-server.validateValues.extraVolumes" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of metrics-server - Incorrect extra volume settings */}}
+{{- define "metrics-server.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+metrics-server: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
 Renders a value that contains template.
 Usage:
 {{ include "metrics-server.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}

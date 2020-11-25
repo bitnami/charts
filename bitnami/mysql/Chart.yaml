@@ -19,4 +19,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
   - https://mysql.com
-version: 7.0.1
+version: 7.1.0

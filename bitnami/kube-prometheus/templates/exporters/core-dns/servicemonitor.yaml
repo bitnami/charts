@@ -15,17 +15,15 @@ spec:
     matchNames:
       - {{ .Values.coreDns.namespace }}
   endpoints:
-  - port: http-metrics
-    {{- if .Values.coreDns.serviceMonitor.interval}}
-    interval: {{ .Values.coreDns.serviceMonitor.interval }}
-    {{- end }}
-    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-{{- if .Values.coreDns.serviceMonitor.metricRelabelings }}
-    metricRelabelings:
-{{ tpl (toYaml .Values.coreDns.serviceMonitor.metricRelabelings | indent 4) . }}
-{{- end }}
-{{- if .Values.coreDns.serviceMonitor.relabelings }}
-    relabelings:
-{{ toYaml .Values.coreDns.serviceMonitor.relabelings | indent 4 }}
-{{- end }}
+    - port: http-metrics
+      {{- if .Values.coreDns.serviceMonitor.interval}}
+      interval: {{ .Values.coreDns.serviceMonitor.interval }}
+      {{- end }}
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- if .Values.coreDns.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.coreDns.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.coreDns.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" (dict "value" .Values.coreDns.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}

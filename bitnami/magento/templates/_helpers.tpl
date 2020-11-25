@@ -244,3 +244,64 @@ Return the appropriate apiVersion for deployment.
 {{- print "apps/v1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the MariaDB Hostname
+*/}}
+{{- define "magento.databaseHost" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- if eq .Values.mariadb.architecture "replication" }}
+        {{- printf "%s-%s" (include "magento.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- printf "%s" (include "magento.mariadb.fullname" .) -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Port
+*/}}
+{{- define "magento.databasePort" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "3306" -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Database Name
+*/}}
+{{- define "magento.databaseName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" .Values.mariadb.auth.database -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB User
+*/}}
+{{- define "magento.databaseUser" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" .Values.mariadb.auth.username -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.user -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Secret Name
+*/}}
+{{- define "magento.databaseSecretName" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "magento.mariadb.fullname" .) -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+{{- end -}}
+{{- end -}}

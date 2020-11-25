@@ -1,3 +1,4 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if .Values.ruler.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -81,8 +82,8 @@ spec:
             {{- range .Values.ruler.alertmanagers }}
             - --alertmanagers.url={{ . }}
             {{- end }}
-            {{- if and .Values.querier.enabled .Values.ruler.dnsDiscovery.enabled }}
-            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-querier.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
+            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
@@ -92,8 +93,8 @@ spec:
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
-            {{- range .Values.ruler.extraFlags }}
-            - {{ . }}
+            {{- if .Values.ruler.extraFlags }}
+            {{- .Values.ruler.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           env:
             - name: POD_NAME

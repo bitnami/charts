@@ -61,8 +61,8 @@ spec:
             {{- if .Values.bucketweb.timeout }}
             - --timeout={{ .Values.bucketweb.timeout }}
             {{- end }}
-            {{- range .Values.bucketweb.extraFlags }}
-            - {{ . }}
+            {{- if .Values.bucketweb.extraFlags }}
+            {{- .Values.bucketweb.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           ports:
             - name: http

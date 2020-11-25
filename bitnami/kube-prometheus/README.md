@@ -28,7 +28,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.16+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -107,11 +107,14 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `operator.serviceMonitor.relabelings`                 | Relabel configs                                                                                                     | `[]`                                                                         |
 | `operator.resources`                                  | CPU/Memory resource requests/limits for node                                                                        | `{}`                                                                         |
 | `operator.podAnnotations`                             | Pod annotations                                                                                                     | `{}`                                                                         |
-| `operator.nodeAffinity`                               | Node Affinity (this value is evaluated as a template)                                                               | `{}`                                                                         |
-| `operator.podAntiAffinity`                            | Pod anti-affinity policy                                                                                            | `soft`                                                                       |
-| `operator.podAffinity`                                | Affinity, in addition to antiAffinity (this value is evaluated as a template)                                       | `{}`                                                                         |
-| `operator.nodeSelector`                               | Node labels for pod assignment (this value is evaluated as a template)                                              | `{}`                                                                         |
-| `operator.tolerations`                                | List of node taints to tolerate (this value is evaluated as a template)                                             | `[]`                                                                         |
+| `operator.podAffinityPreset`                          | Prometheus Operator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                                         |
+| `operator.podAntiAffinityPreset`                      | Prometheus Operator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `soft`                                                                       |
+| `operator.nodeAffinityPreset.type`                    | Prometheus Operator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                                         |
+| `operator.nodeAffinityPreset.key`                     | Prometheus Operator Node label key to match Ignored if `affinity` is set.                                           | `""`                                                                         |
+| `operator.nodeAffinityPreset.values`                  | Prometheus Operator Node label values to match. Ignored if `affinity` is set.                                       | `[]`                                                                         |
+| `operator.affinity`                                   | Prometheus Operator Affinity for pod assignment                                                                     | `{}` (evaluated as a template)                                               |
+| `operator.nodeSelector`                               | Prometheus Operator Node labels for pod assignment                                                                  | `{}` (evaluated as a template)                                               |
+| `operator.tolerations`                                | Prometheus Operator Tolerations for pod assignment                                                                  | `[]` (evaluated as a template)                                               |
 | `operator.priorityClassName`                          | Priority class assigned to the Pods                                                                                 | `nil`                                                                        |
 | `operator.livenessProbe.enabled`                      | Turn on and off liveness probe                                                                                      | `true`                                                                       |
 | `operator.livenessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated                                                                            | `120`                                                                        |
@@ -181,13 +184,14 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                                           | `prometheus.local-tls`                                                                                                                  |
 | `prometheus.externalUrl`                              | External URL used to access Prometheus                                                                              | Generated from `prometheus.ingress` or Service data                                                                                     |
 | `prometheus.resources`                                | CPU/Memory resource requests/limits for node                                                                        | `{}`                                                                                                                                    |
-| `prometheus.nodeAffinity`                             | Node Affinity (this value is evaluated as a template)                                                               | `{}`                                                                                                                                    |
-| `prometheus.podAntiAffinity`                          | Pod anti-affinity policy                                                                                            | `soft`                                                                                                                                  |
-| `prometheus.podAntiAffinityTopologyKey`               | Topology key for the pod anti-affinity policy                                                                       | `kubernetes.io/hostname`                                                                                                                |
-| `prometheus.podAntiAffinitySpec`                      | Pod anti-affinity spec (this value is evaluated as a template)                                                      | `nil`                                                                                                                                   |
-| `prometheus.podAffinity`                              | Affinity, in addition to antiAffinity (this value is evaluated as a template)                                       | `{}`                                                                                                                                    |
-| `prometheus.nodeSelector`                             | Node labels for pod assignment (this value is evaluated as a template)                                              | `{}`                                                                                                                                    |
-| `prometheus.tolerations`                              | List of node taints to tolerate (this value is evaluated as a template)                                             | `[]`                                                                                                                                    |
+| `prometheus.podAffinityPreset`                        | Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                                                                                                    |
+| `prometheus.podAntiAffinityPreset`                    | Prometheus Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                                                                                                  |
+| `prometheus.nodeAffinityPreset.type`                  | Prometheus Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                                                                                                    |
+| `prometheus.nodeAffinityPreset.key`                   | Prometheus Node label key to match Ignored if `affinity` is set.                                                    | `""`                                                                                                                                    |
+| `prometheus.nodeAffinityPreset.values`                | Prometheus Node label values to match. Ignored if `affinity` is set.                                                | `[]`                                                                                                                                    |
+| `prometheus.affinity`                                 | Prometheus Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                                                                                                          |
+| `prometheus.nodeSelector`                             | Prometheus Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                                                                                                          |
+| `prometheus.tolerations`                              | Prometheus Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                                                                                                          |
 | `prometheus.replicaCount`                             | Number of Prometheus replicas desired                                                                               | `1`                                                                                                                                     |
 | `prometheus.logLevel`                                 | Log level for Prometheus                                                                                            | `info`                                                                                                                                  |
 | `prometheus.logFormat`                                | Log format for Prometheus                                                                                           | `logfmt`                                                                                                                                |
@@ -296,13 +300,14 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `alertmanager.ingress.tls[0].secretName`              | TLS Secret (certificates)                                                                                                      | `alertmanager.local-tls`                                                                                                                                                                                                                            |
 | `alertmanager.externalUrl`                            | External URL used to access Alertmanager                                                                                       | Generated from `alertmanager.ingress` or Service data                                                                                                                                                                                               |
 | `alertmanager.resources`                              | CPU/Memory resource requests/limits for node                                                                                   | `{}`                                                                                                                                                                                                                                                |
-| `alertmanager.nodeAffinity`                           | Node Affinity (this value is evaluated as a template)                                                                          | `{}`                                                                                                                                                                                                                                                |
-| `alertmanager.podAntiAffinity`                        | Pod anti-affinity policy                                                                                                       | `soft`                                                                                                                                                                                                                                              |
-| `alertmanager.podAntiAffinityTopologyKey`             | Topology key for the pod anti-affinity policy                                                                                  | `kubernetes.io/hostname`                                                                                                                                                                                                                            |
-| `alertmanager.podAntiAffinitySpec`                    | Pod anti-affinity spec (this value is evaluated as a template)                                                                 | nil                                                                                                                                                                                                                                                 |
-| `alertmanager.podAffinity`                            | Affinity, in addition to antiAffinity (this value is evaluated as a template)                                                  | `{}`                                                                                                                                                                                                                                                |
-| `alertmanager.nodeSelector`                           | Node labels for pod assignment (this value is evaluated as a template)                                                         | `{}`                                                                                                                                                                                                                                                |
-| `alertmanager.tolerations`                            | List of node taints to tolerate (this value is evaluated as a template)                                                        | `[]`                                                                                                                                                                                                                                                |
+| `alertmanager.podAffinityPreset`                      | Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                                                                                                                                                                                                                                                |
+| `alertmanager.podAntiAffinityPreset`                  | Alertmanager Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `soft`                                                                                                                                                                                                                                              |
+| `alertmanager.nodeAffinityPreset.type`                | Alertmanager Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                                                                                                                                                                                                                                                |
+| `alertmanager.nodeAffinityPreset.key`                 | Alertmanager Node label key to match Ignored if `affinity` is set.                                                             | `""`                                                                                                                                                                                                                                                |
+| `alertmanager.nodeAffinityPreset.values`              | Alertmanager Node label values to match. Ignored if `affinity` is set.                                                         | `[]`                                                                                                                                                                                                                                                |
+| `alertmanager.affinity`                               | Alertmanager Affinity for pod assignment                                                                                       | `{}` (evaluated as a template)                                                                                                                                                                                                                      |
+| `alertmanager.nodeSelector`                           | Alertmanager Node labels for pod assignment                                                                                    | `{}` (evaluated as a template)                                                                                                                                                                                                                      |
+| `alertmanager.tolerations`                            | Alertmanager Tolerations for pod assignment                                                                                    | `[]` (evaluated as a template)                                                                                                                                                                                                                      |
 | `alertmanager.config`                                 | Alertmanager configuration directive                                                                                           | `{"global":{"resolve_timeout":"5m"},"route":{"group_by":["job"],"group_wait":"30s","group_interval":"5m","repeat_interval":"12h","receiver":"null","routes":[{"match":{"alertname":"Watchdog"},"receiver":"null"}]},"receivers":[{"name":"null"}]}` |
 | `alertmanager.externalConfig`                         | Alertmanager configuration is created externally. If true, `alertmanager.config` is ignored, and a secret will not be created. | `false` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/alerting.md) for details                                                                                                        |
 | `alertmanager.replicaCount`                           | Number of Alertmanager replicas desired                                                                                        | `1`                                                                                                                                                                                                                                                 |
@@ -487,6 +492,12 @@ prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -496,6 +507,39 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+
+### To 3.1.0
+
+Some parameters dissapeared in favor of new ones:
+
+- `*.podAffinity` -> deprecated in favor of `*.podAffinityPreset`.
+- `*.podAntiAffinity` -> deprecated in favor of `*.podAntiAffinityPreset`.
+- `*.nodeAffinity` -> deprecated in favor of `*.nodeAffinityPreset.type`, `*.nodeAffinityPreset.key` and `*.nodeAffinityPreset.values`.
+
+Adapt you parameters accordingly if you are setting custom affinity.
+
+### To 3.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 2.1.0
 
@@ -515,7 +559,7 @@ $ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prome
 - CRDs were updated to the latest prometheus-operator v0.4.1 release artifacts
   - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`
   - Kubernetes 1.16 is required
-  
+
 ### To 1.0.0
 
 - The chart was renamed to `kube-prometheus` to be more accurate with the actual capabilities of the chart: it does not just deploy the Prometheus operator, it deploys an entire cluster monitoring stack, that includes other components (e.g. NodeExporter or Kube State metrics). Find more information about the reasons behind this decision at [#3490](https://github.com/bitnami/charts/issues/3490).

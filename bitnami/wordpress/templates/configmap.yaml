@@ -1,0 +1,8 @@
+{{- if .Values.customPostInitScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "wordpress.fullname" . }}-postinit
+data:
+{{- include "wordpress.tplValue" ( dict "value" .Values.customPostInitScripts "context" $ ) | nindent 2 }}
+{{- end }}

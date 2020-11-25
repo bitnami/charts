@@ -1,0 +1,4 @@
+autoscaling:
+  enabled: true
+pdb:
+  create: true

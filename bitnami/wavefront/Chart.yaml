@@ -1,23 +1,33 @@
-apiVersion: v1
-name: wavefront
+annotations:
+  category: Analytics
+apiVersion: v2
+appVersion: 1.2.6
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - condition: kube-state-metrics.enabled
+    name: kube-state-metrics
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
 description: Chart for Wavefront Collector for Kubernetes
-appVersion: 1.2.4
-version: 0.2.0
+engine: gotpl
+home: https://www.wavefront.com
+icon: https://bitnami.com/assets/stacks/wavefront-collector/img/wavefront-collector-stack-110x117.png
 keywords:
   - metric
   - monitoring
   - observability
   - alerting
-home: https://www.wavefront.com
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: wavefront
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/wavefront-collector/img/wavefront-collector-stack-110x117.png
-annotations:
-  category: Analytics
+version: 1.0.2

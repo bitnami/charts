@@ -78,8 +78,8 @@ spec:
             - --retention.resolution-1h={{ .Values.compactor.retentionResolution1h }}
             - --consistency-delay={{ .Values.compactor.consistencyDelay }}
             - --objstore.config-file=/conf/objstore.yml
-            {{- range .Values.compactor.extraFlags }}
-            - {{ . }}
+            {{- if .Values.compactor.extraFlags }}
+            {{- .Values.compactor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
             - --wait
           ports:

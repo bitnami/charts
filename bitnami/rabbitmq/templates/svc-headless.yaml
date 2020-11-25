@@ -14,7 +14,7 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.portName }}
     {{- if .Values.auth.tls.enabled }}
-    - name: {{ .Values.service.TlsPortName }}
+    - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
       targetPort: amqp-tls
     {{- end }}

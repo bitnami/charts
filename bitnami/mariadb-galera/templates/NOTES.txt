@@ -11,14 +11,14 @@ MariaDB can be accessed via port "{{ .Values.service.port }}" on the following D
 
     {{ template "mariadb-galera.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
-To obtain the password for the MariaDB "root" user run the following command:
+To obtain the password for the MariaDB admin user run the following command:
 
     echo "$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)"
 
 To connect to your database run the following command:
 
     kubectl run {{ template "mariadb-galera.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ template "mariadb-galera.image" . }} --command \
-      -- mysql -h {{ template "mariadb-galera.fullname" . }} -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}root{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
+      -- mysql -h {{ template "mariadb-galera.fullname" . }} -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}{{ .Values.rootUser.user }}{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
 
 To connect to your database from outside the cluster execute the following commands:
 
@@ -26,7 +26,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "mariadb-galera.fullname" . }})
-    mysql -h $NODE_IP -P $NODE_PORT -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}root{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
+    mysql -h $NODE_IP -P $NODE_PORT -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}{{ .Values.rootUser.user }}{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -34,12 +34,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "mariadb-galera.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mariadb-galera.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    mysql -h $SERVICE_IP -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}root{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
+    mysql -h $SERVICE_IP -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}{{ .Values.rootUser.user }}{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "mariadb-galera.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-    mysql -h 127.0.0.1 -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}root{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
+    mysql -h 127.0.0.1 -P {{ .Values.service.port }} -u{{ if .Values.db.user }}{{ .Values.db.user }}{{ else }}{{ .Values.rootUser.user }}{{ end }} -p{{ if .Values.db.user }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode){{ else }}$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "mariadb-galera.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode){{ end }} {{ .Values.db.name }}
 
 {{- end }}
 

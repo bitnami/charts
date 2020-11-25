@@ -4,10 +4,10 @@ kind: Ingress
 metadata:
   name: {{ template "jasperreports.fullname" . }}
   labels:
-    app: "{{ template "jasperreports.fullname" . }}"
-    chart: "{{ template "jasperreports.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: "{{ include "jasperreports.fullname" . }}"
+    helm.sh/chart: "{{ include "jasperreports.chart" . }}"
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"

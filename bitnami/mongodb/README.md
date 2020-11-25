@@ -510,6 +510,27 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination. You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Using Prometheus rules
+
+You can use custom Prometheus rules for Prometheus operator by using the `prometheusRule` parameter, see below a basic configuration example:
+
+```yaml
+metrics:
+  enabled: true
+  prometheusRule:
+    enabled: true
+    rules:
+    - name: rule1
+      rules:
+      - alert: HighRequestLatency
+        expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: High request latency
+```
+
 ## Enabling SSL/TLS
 
 This container supports enabling SSL/TLS between nodes in the cluster, as well as between mongo clients and nodes, by setting the MONGODB_EXTRA_FLAGS and MONGODB_CLIENT_EXTRA_FLAGS environment variables, together with the correct MONGODB_ADVERTISED_HOSTNAME.
@@ -523,7 +544,7 @@ Using Helm’s hook annotations ensures that the certs will only be generated on
 
 ### Accessing the cluster
 
-To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset.
+To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
 Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster

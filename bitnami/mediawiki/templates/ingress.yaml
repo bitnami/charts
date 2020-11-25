@@ -5,10 +5,10 @@ kind: Ingress
 metadata:
   name: {{ template "mediawiki.fullname" $ }}
   labels:
-    app: {{ template "mediawiki.name" $ }}
-    chart: {{ template "mediawiki.chart" $ }}
-    release: {{ $.Release.Name | quote }}
-    heritage: {{ $.Release.Service | quote }}
+    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
+    helm.sh/chart: {{ include "mediawiki.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
   annotations:
     {{- if .tls }}
     ingress.kubernetes.io/secure-backends: "true"

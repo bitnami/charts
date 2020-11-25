@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -73,15 +73,6 @@ The following table lists the configurable parameters of the MediaWiki chart and
 | `smtpHostID`                         | SMTP host ID                                                                                           | `nil`                                                        |
 | `smtpUser`                           | SMTP user                                                                                              | `nil`                                                        |
 | `smtpPassword`                       | SMTP password                                                                                          | `nil`                                                        |
-| `externalDatabase.host`              | Host of the external database                                                                          | `nil`                                                        |
-| `externalDatabase.user`              | Existing username in the external db                                                                   | `bn_mediawiki`                                               |
-| `externalDatabase.password`          | Password for the above username                                                                        | `nil`                                                        |
-| `externalDatabase.database`          | Name of the existing database                                                                          | `bitnami_mediawiki`                                          |
-| `mariadb.enabled`                    | Use or not the mariadb chart                                                                           | `true`                                                       |
-| `mariadb.rootUser.password`          | MariaDB admin password                                                                                 | `nil`                                                        |
-| `mariadb.db.name`                    | Database name to create                                                                                | `bitnami_mediawiki`                                          |
-| `mariadb.db.user`                    | Database user to create                                                                                | `bn_mediawiki`                                               |
-| `mariadb.db.password`                | Password for the database                                                                              | _random 10 character long alphanumeric string_               |
 | `service.type`                       | Kubernetes Service type                                                                                | `LoadBalancer`                                               |
 | `service.loadBalancer`               | Kubernetes LoadBalancerIP to request                                                                   | `nil`                                                        |
 | `service.port`                       | Service HTTP port                                                                                      | `80`                                                         |
@@ -132,6 +123,29 @@ The following table lists the configurable parameters of the MediaWiki chart and
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                        | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                       | {}                                                           |
 
+### Database parameters
+
+| Parameter                                  | Description                                           | Default                                        |
+|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                    | Database name to create                               | `bitnami_mediawiki`                            |
+| `mariadb.auth.username`                    | Database user to create                               | `bn_mediawiki`                                 |
+| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                  | `bn_mediawiki`                                 |
+| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                         | `bitnami_mediawiki`                            |
+| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
+
 The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
 
 > **Note**:
@@ -176,6 +190,86 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+In this major there were two main changes introduced:
+
+1. Adaptation to Helm v2 EOL
+2. Updated MariaDB dependency version
+
+Please read the update notes carefully.
+
+**1. Adaptation to Helm v2 EOL**
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+**2. Updated MariaDB dependency version**
+
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `11.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Mediawiki data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `mediawiki` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Mediawiki data on your current release:
+
+```console
+export MEDIAWIKI_HOST=$(kubectl get svc --namespace default mediawiki --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export MEDIAWIKI_PASSWORD=$(kubectl get secret --namespace default mediawiki -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=mediawiki -o jsonpath="{.items[0].metadata.name}")
+```
+
+Delete the Mediawiki deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
+
+```console
+  $ kubectl delete deployments.apps mediawiki
+
+  $ kubectl delete statefulsets.apps mediawiki-mariadb --cascade=false
+```
+
+Now the upgrade works:
+
+```console
+$ helm upgrade mediawiki bitnami/mediawiki --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set mediawikiPassword=$MEDIAWIKI_PASSWORD --set mediawikiHost=$MEDIAWIKI_HOST
+```
+
+You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
+
+  ```console
+  $ kubectl delete pod mediawiki-mariadb-0
+  ```
+
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=mediawiki,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 10.0.0
 

@@ -1,8 +1,9 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "phpbb.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: phpbb
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,6 +20,7 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: phpbb
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -39,12 +41,20 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       hostAliases:
         - ip: "127.0.0.1"
@@ -94,35 +104,19 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
-          {{- if .Values.mariadb.enabled }}
             - name: PHPBB_DATABASE_HOST
-              value: {{ template "phpbb.mariadb.fullname" . }}
+              value: {{ include "phpbb.databaseHost" . | quote }}
             - name: PHPBB_DATABASE_PORT_NUMBER
-              value: "3306"
+              value: {{ include "phpbb.databasePort" . | quote }}
             - name: PHPBB_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ include "phpbb.databaseName" . | quote }}
             - name: PHPBB_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ include "phpbb.databaseUser" . | quote }}
             - name: PHPBB_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "phpbb.mariadb.fullname" . }}
+                  name: {{ include "phpbb.databaseSecretName" . }}
                   key: mariadb-password
-          {{- else }}
-            - name: PHPBB_DATABASE_HOST
-              value: {{ .Values.externalDatabase.host | quote }}
-            - name: PHPBB_DATABASE_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            - name: PHPBB_DATABASE_NAME
-              value: {{ .Values.externalDatabase.database | quote }}
-            - name: PHPBB_DATABASE_USER
-              value: {{ .Values.externalDatabase.user | quote }}
-            - name: PHPBB_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-          {{- end }}
             - name: PHPBB_SKIP_BOOTSTRAP
               value: {{ default "no" .Values.phpbbSkipInstall | quote }}
             - name: PHPBB_USERNAME
@@ -233,7 +227,7 @@ spec:
         - name: phpbb-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "phpbb.fullname" . ) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" . ) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
