@@ -508,6 +508,16 @@ Find more information about how to deal with common errors related to Bitnami’
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
 
+### To 3.1.0
+
+Some parameters dissapeared in favor of new ones:
+
+- `*.podAffinity` -> deprecated in favor of `*.podAffinityPreset`.
+- `*.podAntiAffinity` -> deprecated in favor of `*.podAntiAffinityPreset`.
+- `*.nodeAffinity` -> deprecated in favor of `*.nodeAffinityPreset.type`, `*.nodeAffinityPreset.key` and `*.nodeAffinityPreset.values`.
+
+Adapt you parameters accordingly if you are setting custom affinity.
+
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
