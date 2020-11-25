@@ -476,10 +476,54 @@ Find more information about how to deal with common errors related to Bitnami’
 
 **Considerations when upgrading to this version**
 
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 - This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+- If you want to upgrade to this version from a previous one installed with Helm v3, it should be done reusing the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `discourse`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+##### Export secrets and required values to update
+
+```console
+$ export DISCOURSE_HOST=$(kubectl get svc --namespace default discourse --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+$ export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse-discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+##### Delete statefulsets
+
+Delete the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter:
+
+```
+$ kubectl delete deployments.apps discourse
+$ kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+```
+
+##### Upgrade the chart release
+
+```console
+$ helm upgrade discourse bitnami/discourse \
+    --set discourse.host=$DISCOURSE_HOST \
+    --set discourse.password=$DISCOURSE_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+##### Force new statefulset to create a new pod for postgresql
+
+```console
+$ kubectl delete pod discourse-postgresql-0
+```
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 **Useful links**
 

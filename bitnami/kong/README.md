@@ -442,9 +442,48 @@ $ helm upgrade my-release bitnami/kong \
 
 **Considerations when upgrading to this version**
 
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+- If you want to upgrade to this version from a previous one installed with Helm v3, it should be done reusing the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `kong`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+##### Export secrets and required values to update
+
+```console
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+##### Delete statefulsets
+
+Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
+
+```
+$ kubectl delete statefulsets.apps kong-postgresql --cascade=false
+```
+
+##### Upgrade the chart release
+
+```console
+$ helm upgrade kong bitnami/kong \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+##### Force new statefulset to create a new pod for postgresql
+
+```console
+$ kubectl delete pod kong-postgresql-0
+```
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 **Useful links**
 

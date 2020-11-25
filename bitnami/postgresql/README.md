@@ -538,7 +538,6 @@ $ helm upgrade my-release stable/postgresql \
 
 **Considerations when upgrading to this version**
 
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
@@ -552,7 +551,45 @@ $ helm upgrade my-release stable/postgresql \
 
 - The term `master` has been replaced with `primary` and `slave` with `readReplicas` throughout the chart. Role names have changed from `master` and `slave` to `primary` and `read`.
 
-## To 9.0.0
+To upgrade to `10.0.0`, it should be done reusing the PVCs used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `postgresql`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+```console
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+Delete the PostgreSQL statefulset. Notice the option `--cascade=false`:
+
+```console
+$ kubectl delete statefulsets.apps postgresql-postgresql --cascade=false
+```
+
+Now the upgrade works:
+
+```console
+$ helm upgrade postgresql bitnami/postgresql --set postgresqlPassword=$POSTGRESQL_PASSWORD --set persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
+
+```console
+$ kubectl delete pod postgresql-postgresql-0
+```
+
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+### To 9.0.0
 
 In this version the chart was adapted to follow the Helm label best practices, see [PR 3021](https://github.com/bitnami/charts/pull/3021). That means the backward compatibility is not guarantee when upgrading the chart to this major version.
 
