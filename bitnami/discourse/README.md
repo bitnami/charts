@@ -494,7 +494,7 @@ $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discours
 
 ##### Delete statefulsets
 
-Delete the Odoo deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter:
+Delete the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter:
 
 ```
 $ kubectl delete deployments.apps discourse
