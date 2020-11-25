@@ -17,4 +17,4 @@ name: logstash
 sources:
   - https://github.com/bitnami/bitnami-docker-logstash
   - https://www.elastic.co/products/logstash
-version: 1.0.2
+version: 1.1.0
