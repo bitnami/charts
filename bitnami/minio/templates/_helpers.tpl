@@ -129,6 +129,7 @@ Return true if a secret object should be created
 {{- define "minio.createSecret" -}}
 {{- if .Values.global.minio.existingSecret }}
 {{- else if .Values.existingSecret -}}
+{{- else if not .Values.credentialsFile.useSecretValues -}}
 {{- else -}}
     {{- true -}}
 {{- end -}}

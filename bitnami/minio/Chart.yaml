@@ -19,4 +19,4 @@ name: minio
 sources:
   - https://github.com/bitnami/bitnami-docker-minio
   - https://min.io
-version: 4.0.3
+version: 5.0.0
