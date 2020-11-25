@@ -70,7 +70,7 @@ spec:
   evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
   {{- end }}
   {{- if .Values.prometheus.resources }}
-  resources: {{- toYaml .Values.prometeheus.resources | nindent 4 }}
+  resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- end }}
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
