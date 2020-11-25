@@ -52,6 +52,8 @@ spec:
             - name: LOGSTASH_CONF_FILENAME
               value: {{ .Values.configFileName | quote }}
             {{- end }}
+            - name: LOGSTASH_ENABLE_MULTIPLE_PIPELINES
+              value: {{ ternary "true" "false" .Values.enableMultiplePipelines | quote }}
             - name: LOGSTASH_EXPOSE_API
               value: {{ ternary "yes" "no" .Values.enableMonitoringAPI | quote }}
             - name: LOGSTASH_API_PORT_NUMBER
