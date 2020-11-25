@@ -4,10 +4,10 @@ kind: Secret
 metadata:
   name: {{ template "phpmyadmin.fullname" . }}-certs
   labels:
-    app: {{ template "phpmyadmin.name" . }}
-    chart: {{ template "phpmyadmin.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 type: Opaque
 data:
   {{- if not (empty .Values.db.ssl.clientKey) }}
