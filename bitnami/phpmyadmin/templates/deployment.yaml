@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   name: {{ template "phpmyadmin.fullname" . }}
   labels:
-    app: {{ template "phpmyadmin.name" . }}
-    chart: {{ template "phpmyadmin.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "phpmyadmin.name" . }}
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        app: {{ template "phpmyadmin.name" . }}
-        chart: {{ template "phpmyadmin.chart" . }}
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+        helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
   {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
   {{- end }}

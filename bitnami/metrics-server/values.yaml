@@ -153,3 +153,13 @@ resources:
   requests: {}
   #   cpu: 250m
   #   memory: 256Mi
+
+## Extra volumes to mount
+## Example Use Case: mount an `emptyDir` to allow running with a `readOnlyRootFilesystem: true`
+#  extraVolumes:
+#  - name: tmpdir
+#    emptyDir: {}
+#
+#  extraVolumeMounts:
+#  - name: tmpdir
+#    mountPath: /tmp

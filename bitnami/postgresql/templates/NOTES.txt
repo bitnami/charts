@@ -7,7 +7,7 @@ PostgreSQL can be accessed via port {{ template "postgresql.port" . }} on the fo
     {{ template "postgresql.fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
 {{- end }}
 
-{{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
+{{- if not (eq (include "postgresql.username" .) "postgres")  }}
 
 To get the password for "postgres" run:
 

@@ -45,6 +45,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nginx.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.nginx.podAffinityPreset "component" "nginx" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.nginx.podAntiAffinityPreset "component" "nginx" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nginx.nodeAffinityPreset.type "key" .Values.nginx.nodeAffinityPreset.key "values" .Values.nginx.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nginx.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.nodeSelector "context" $) | nindent 8 }}
