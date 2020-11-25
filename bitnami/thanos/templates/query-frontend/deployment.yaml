@@ -61,8 +61,8 @@ spec:
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
             - --query-range.response-cache-config-file=/conf/cache/config.yml
             {{- end }}
-            {{- range .Values.queryFrontend.extraFlags }}
-            - {{ . }}
+            {{- if .Values.queryFrontend.extraFlags }}
+            {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           ports:
             - name: http

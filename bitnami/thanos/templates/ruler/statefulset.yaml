@@ -93,8 +93,8 @@ spec:
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
-            {{- range .Values.ruler.extraFlags }}
-            - {{ . }}
+            {{- if .Values.ruler.extraFlags }}
+            {{- .Values.ruler.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           env:
             - name: POD_NAME

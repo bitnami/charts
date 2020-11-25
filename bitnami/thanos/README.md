@@ -532,6 +532,27 @@ storegateway:
     - --chunk-pool-size=2GB
 ```
 
+This also works for multi-line flags. This can be useful when you want to configure caching for a particular component without using a configMap. For example, to configure the [query-range response cache of the Thanos Query Frontend](https://thanos.io/tip/components/query-frontend.md/#memcached), use:
+
+```yaml
+queryFrontend:
+  extraFlags:
+    - |
+      --query-range.response-cache-config=
+      type: MEMCACHED
+      config:
+        addresses:
+          - <MEMCACHED_SERVER>:11211
+        timeout: 500ms
+        max_idle_connections: 100
+        max_async_concurrency: 10
+        max_async_buffer_size: 10000
+        max_get_multi_concurrency: 100
+        max_get_multi_batch_size: 0
+        dns_provider_update_interval: 10s
+        expiration: 24h
+```
+
 ### Using custom Objstore configuration
 
 This helm chart supports using custom Objstore configuration.

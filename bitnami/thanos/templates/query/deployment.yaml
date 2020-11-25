@@ -100,8 +100,8 @@ spec:
             - --grpc-client-server-name={{$query.grpcTLS.client.servername}}
             {{- end }}
             {{- end }}
-            {{- range $query.extraFlags }}
-            - {{ . }}
+            {{- if $query.extraFlags }}
+            {{- $query.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           ports:
             - name: http
