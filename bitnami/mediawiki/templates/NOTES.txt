@@ -22,18 +22,15 @@ host. To configure Mediawiki with the URL of your service:
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
-  {{- if .Values.mariadb.mariadbRootPassword }}
-  export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-  {{- end }}
-  {{- end }}
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)  {{- end }}
+  export MARIADB_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 
 2. Complete your Mediawiki deployment by running:
 
 {{- if .Values.mariadb.enabled }}
 
   helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set mediawikiHost=$APP_HOST,mediawikiPassword=$APP_PASSWORD{{ if .Values.mariadb.mariadbRootPassword }},mariadb.mariadbRootPassword=$DATABASE_ROOT_PASSWORD{{ end }},mariadb.db.password=$APP_DATABASE_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+    --set mediawikiHost=$APP_HOST,mediawikiPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##

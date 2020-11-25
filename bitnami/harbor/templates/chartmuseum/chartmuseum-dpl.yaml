@@ -43,6 +43,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.chartmuseum.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.chartmuseum.podAffinityPreset "component" "chartmuseum" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.chartmuseum.podAntiAffinityPreset "component" "chartmuseum" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.chartmuseum.nodeAffinityPreset.type "key" .Values.chartmuseum.nodeAffinityPreset.key "values" .Values.chartmuseum.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.chartmuseum.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.nodeSelector "context" $) | nindent 8 }}

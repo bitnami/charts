@@ -141,6 +141,8 @@ securityContext:
 ## Database credentials for root (admin) user
 ##
 rootUser:
+  ## MariaDB admin user
+  user: root
   ## MariaDB admin password
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run

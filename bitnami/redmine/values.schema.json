@@ -47,7 +47,7 @@
     "ingress": {
       "type": "object",
       "form": true,
-      "title": "Ingress Details",
+      "title": "Ingress Configuration",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -85,6 +85,19 @@
         }
       }
     },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
+        }
+      }
+    },
     "databaseType": {
       "type": "string",
       "form": true,
@@ -107,7 +120,7 @@
           "form": true,
           "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
         },
-        "master": {
+        "primary": {
           "type": "object",
           "properties": {
             "persistence": {

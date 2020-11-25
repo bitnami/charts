@@ -72,4 +72,9 @@ You can access the Prometheus metrics following the steps below:
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
 {{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
 
+{{- $keycloakSecretName := printf "%s-env-vars" (include "keycloak.fullname" .) -}}
+{{- $requiredAdminPassword := dict "valueKey" "auth.adminPassword" "secret" $keycloakSecretName "field" "KEYCLOAK_ADMIN_PASSWORD" -}}
+{{- $requiredKeycloakErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $requiredKeycloakErrors -}}
+
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

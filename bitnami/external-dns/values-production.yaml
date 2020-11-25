@@ -40,7 +40,7 @@ sources:
   - ingress
 
 ## DNS provider where the DNS records will be created. Available providers are:
-## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, infoblox, rfc2136, transip
+## - alibabacloud, aws, azure, cloudflare, coredns, designate, digitalocoean, google, hetzner, infoblox, linode, rfc2136, transip
 ##
 provider: aws
 
@@ -269,6 +269,31 @@ google:
   serviceAccountSecretKey: "credentials.json"
   serviceAccountKey: ""
 
+## Hetzner configuration to be set via arguments/env. variables
+##
+hetzner:
+  ## Hetzner API token to use. If you do not want to set it clear-text,
+  ## create the secret yourself and specify `hetzner.secretName`.
+  ##
+  ## Mutually exclusive with `hetzner.secretName`.
+  ##
+  token: ""
+
+  ## Use an existing secret. Mutually exclusive with `hetzner.token`
+  secretName: ""
+  secretKey: "hetzner_token"
+
+## Linode configuration to be set via arguments/env. variables
+##
+linode:
+  ## `LINODE_TOKEN` to set in the environment
+  ##
+  apiToken: ""
+  ## Use an existing secret with key "linode_api_token" defined.
+  ## This ignores linode.apiToken
+  ##
+  # secretName:
+
 ## OVH configuration to be set via arguments/env. variables
 ##
 ovh:
@@ -404,24 +429,63 @@ extraEnv: []
 ##
 replicas: 3
 
-## Affinity for pod assignment (this value is evaluated as a template)
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-## Node labels for pod assignment (this value is evaluated as a template)
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-## Tolerations for pod assignment (this value is evaluated as a template)
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
 ## Annotations for external-dns pods
 ##
 podAnnotations: {}
+
 ## Additional labels for the pod(s).
 ##
 podLabels: {}
+
 ## Pod priority class name
 ##
 priorityClassName: ""
@@ -491,7 +555,7 @@ rbac:
   clusterRole: true
   ## RBAC API version
   ##
-  apiVersion: v1beta1
+  apiVersion: v1
   ## Podsecuritypolicy
   ##
   pspEnabled: false

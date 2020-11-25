@@ -181,25 +181,9 @@ spec:
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
-            {{- if .Values.mongos.initScriptsCM }}
-            - name: custom-init-scripts
-              mountPath: /docker-entrypoint-initdb.d/configmap
-            {{- end }}
-            {{- if .Values.mongos.initScriptsSecret }}
-            - name: custom-init-scripts-secrets
-              mountPath: /docker-entrypoint-initdb.d/secret
-            {{- end }}
             {{- if or .Values.mongos.config .Values.mongos.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
-            {{- end }}
-            {{- if $.Values.common.initScriptsCM }}
-            - name: custom-init-scripts-cm
-              mountPath: /docker-entrypoint-initdb.d/cm
-            {{- end }}
-            {{- if $.Values.common.initScriptsSecret }}
-            - name: custom-init-scripts-secret
-              mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if $.Values.common.extraVolumeMounts }}
               {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
@@ -285,18 +269,6 @@ spec:
         - name: config
           configMap:
             name: {{ include "mongodb-sharded.mongos.configCM" . }}
-        {{- end }}
-        {{- if $.Values.common.initScriptsCM }}
-        - name: custom-init-scripts-cm
-          configMap:
-            name: {{ include "mongodb-sharded.initScriptsCM" . }}
-            defaultMode: 0755
-        {{- end }}
-        {{- if $.Values.common.initScriptsSecret }}
-        - name: custom-init-scripts-secret
-          secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
-            defaultMode: 0755
         {{- end }}
         {{- if $.Values.common.extraVolumes }}
           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
