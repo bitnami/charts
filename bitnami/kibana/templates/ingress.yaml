@@ -1,10 +1,10 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "kibana.fullname" . -}}
+{{- $fullName := include "common.names.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"

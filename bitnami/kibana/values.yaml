@@ -27,11 +27,11 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override kibana.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override kibana.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 

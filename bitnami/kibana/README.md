@@ -64,8 +64,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `image.tag`                            | Kibana image tag                                                                                                                                          | `{TAG_NAME}`                                                                                            |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`                                                                                          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)                                                 |
-| `nameOverride`                         | String to partially override kibana.fullname template with a string (will prepend the release name)                                                       | `nil`                                                                                                   |
-| `fullnameOverride`                     | String to fully override kibana.fullname template with a string                                                                                           | `nil`                                                                                                   |
+| `nameOverride`                         | String to partially override common.names.fullname template with a string (will prepend the release name)                                                 | `nil`                                                                                                   |
+| `fullnameOverride`                     | String to fully override common.names.fullname template with a string                                                                                     | `nil`                                                                                                   |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                                                                                                     |
 | `updateStrategy`                       | Update strategy for deployment (evaluated as a template)                                                                                                  | `{type: "RollingUpdate"}`                                                                               |
 | `schedulerName`                        | Alternative scheduler                                                                                                                                     | `nil`                                                                                                   |
@@ -323,6 +323,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.2.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 6.0.0
 

@@ -19,18 +19,17 @@ Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of
   {{- end }}
 {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "kibana.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" .Values.service.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "kibana.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "kibana.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SERVICE_IP:{{ .Values.service.port }}
 {{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "kibana.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward svc/{{ include "kibana.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 {{- end }}
 
 {{- if or .Values.ingress.enabled (contains "NodePort" .Values.service.type) (contains "LoadBalancer" .Values.service.type) }}
@@ -39,17 +38,12 @@ WARNING: Kibana is externally accessible from the cluster but the dashboard does
 +info https://www.elastic.co/guide/en/elastic-stack-overview/current/setting-up-authentication.html
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-
 {{- if .Values.metrics.enabled }}
 
 WARNING: For Prometheus metrics to work, make sure that the kibana-prometheus-exporter plugin is installed:
 +info https://github.com/pjhampton/kibana-prometheus-exporter
 {{- end }}
 
-{{ include "kibana.validateValues" . }}
+{{- include "kibana.validateValues" . }}
+{{- include "kibana.checkRollingTags" . }}
 {{- end }}
