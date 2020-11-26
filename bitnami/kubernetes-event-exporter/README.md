@@ -17,7 +17,7 @@ This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -94,6 +94,7 @@ The following table lists the configurable parameters of the Kubernetes Event Ex
 | `serviceAccount.create`                           | Create a serviceAccount for the pod                                                       | `true`                                                   |
 | `serviceAccount.name`                             | Use the serviceAccount with the specified name                                            | `""`                                                     |
 | `tolerations`                                     | Tolerations for pod assignment                                                            | `[]`                                                     |
+| `extraDeploy`                                     | Array of extra objects to deploy with the release (evaluated as a template).              | `nil`                                                    |
 
 ### Kubernetes Event Exporter parameters
 
