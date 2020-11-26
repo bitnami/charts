@@ -56,7 +56,7 @@ spec:
       {{- if .Values.podSecurityContext }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext }}
@@ -252,9 +252,11 @@ spec:
             preStop:
               exec:
                 command:
-                  - bash
-                  - -ec
-                  - rabbitmqctl stop_app
+                  - /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh
+                  - -t
+                  - {{ .Values.terminationGracePeriodSeconds | quote }}
+                  - -d
+                  - {{ ternary "true" "false" .Values.image.debug | quote }}
           volumeMounts:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf

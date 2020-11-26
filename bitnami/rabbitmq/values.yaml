@@ -155,6 +155,10 @@ loadDefinition:
 # command:
 # args:
 
+## Default duration in seconds k8s waits for container to exit before sending kill signal. Any time in excess of
+## 10 seconds will be spent waiting for any synchronization neccessary for cluster not to lose data.
+terminationGracePeriodSeconds: 120
+
 ## Additional environment variables to set
 ## E.g:
 ## extraEnvVars:
