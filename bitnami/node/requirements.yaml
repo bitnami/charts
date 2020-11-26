@@ -1,0 +1,5 @@
+dependencies:
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+    condition: mongodb.install
