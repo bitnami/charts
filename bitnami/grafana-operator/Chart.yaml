@@ -1,31 +1,27 @@
+annotations:
+  category: Analytics
 apiVersion: v2
-name: grafana-operator
-description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
-version: 1.0.2
 appVersion: 3.6.0
-
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
+home: https://github.com/integr8ly/grafana-operator
+icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
   - grafana
   - operator
   - monitoring
-home: https://github.com/integr8ly/grafana-operator
-icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
-sources:
-  - https://github.com/integr8ly/grafana-operator
-  - https://github.com/bitnami/bitnami-docker-grafana-operator
-
 maintainers:
   - name: cellebyte
     url: cellebyte@gmail.com
-  - name: Bitnami
-    email: containers@bitnami.com
-
-annotations:
-  category: Analytics
-
-dependencies:
-  - name: common
-    version: 1.x.x
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
+  - email: containers@bitnami.com
+    name: Bitnami
+name: grafana-operator
+sources:
+  - https://github.com/integr8ly/grafana-operator
+  - https://github.com/bitnami/bitnami-docker-grafana-operator
+version: 1.0.0
