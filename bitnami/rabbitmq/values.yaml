@@ -540,6 +540,7 @@ networkPolicy:
 ## Kubernetes service type
 service:
   type: ClusterIP
+  clusterIP: ''
   ## Amqp port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
