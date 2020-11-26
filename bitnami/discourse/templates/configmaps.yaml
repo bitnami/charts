@@ -19,6 +19,7 @@ data:
   REDIS_PORT_NUMBER: {{ template "discourse.redisPort" . }}
   POSTGRESQL_HOST: {{ template "discourse.databaseHost" . }}
   POSTGRESQL_PORT_NUMBER: {{ template "discourse.databasePort" . }}
+  POSTGRESQL_BACKUP_PORT_NUMBER: {{ template "discourse.databaseBackupPort" . }}
   DISCOURSE_POSTGRESQL_NAME: {{ template "discourse.databaseName" . }}
   DISCOURSE_POSTGRESQL_USERNAME: {{ template "discourse.databaseUser" . }}
   POSTGRESQL_ROOT_USER: "postgres"

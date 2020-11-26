@@ -52,6 +52,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     --set service.type={{ .Values.service.type }} \
     --set externalDatabase.host={{ .Values.externalDatabase.host }} \
     --set externalDatabase.port={{ .Values.externalDatabase.port }} \
+    --set externalDatabase.backupPort={{ .Values.externalDatabase.backupPort }} \
     --set externalDatabase.user={{ .Values.externalDatabase.user }} \
     --set externalDatabase.password=$POSTGRESQL_PASSWORD \
     --set externalDatabase.database={{ .Values.externalDatabase.database }} \

@@ -527,6 +527,9 @@ externalDatabase:
   ## Database port
   ##
   port: 5432
+  ## PostgreSQL port to use when taking a backup via `pg_dump`
+  ##
+  backupPort: 5432
   ## non-root Username for Discourse Database
   ##
   user: bn_discourse

@@ -102,6 +102,17 @@ Return the Postgresql port
 {{- end -}}
 
 {{/*
+Return the Postgresql backup port
+*/}}
+{{- define "discourse.databaseBackupPort" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "5432" | quote -}}
+{{- else -}}
+    {{- .Values.externalDatabase.backupPort | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Postgresql database name
 */}}
 {{- define "discourse.databaseName" -}}
