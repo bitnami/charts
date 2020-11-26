@@ -2,6 +2,12 @@ annotations:
   category: Infrastructure
 apiVersion: v2
 appVersion: 1.6.9
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Chart for Memcached
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/memcached
@@ -16,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/bitnami-docker-memcached
   - http://memcached.org/
-version: 5.2.1
+version: 5.3.0

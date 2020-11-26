@@ -77,9 +77,14 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `updateStrategy`                           | Update strategy (`RollingUpdate`, or `OnDelete`)                                                                     | `RollingUpdate`                                         |
 | `podManagementPolicy`                      | Pod management policy                                                                                                | `OrderedReady`                                          |
 | `podAnnotations`                           | Pod annotations                                                                                                      | `{}` (The value is evaluated as a template)             |
-| `affinity`                                 | Affinity for pod assignment                                                                                          | `{}` (The value is evaluated as a template)             |
-| `nodeSelector`                             | Node labels for pod assignment                                                                                       | `{}` (The value is evaluated as a template)             |
-| `tolerations`                              | Tolerations for pod assignment                                                                                       | `[]` (The value is evaluated as a template)             |
+| `podAffinityPreset`                        | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                                                    |
+| `podAntiAffinityPreset`                    | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                                                  |
+| `nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                                                    |
+| `nodeAffinityPreset.key`                   | Node label key to match. Ignored if `affinity` is set.                                                               | `""`                                                    |
+| `nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                                                    |
+| `affinity`                                 | Affinity for pod assignment                                                                                          | `{}` (evaluated as a template)                          |
+| `nodeSelector`                             | Node labels for pod assignment                                                                                       | `{}` (evaluated as a template)                          |
+| `tolerations`                              | Tolerations for pod assignment                                                                                       | `[]` (evaluated as a template)                          |
 | `priorityClassName`                        | Controller priorityClassName                                                                                         | `nil`                                                   |
 | `securityContext.enabled`                  | Enable security context for Logstash                                                                                 | `true`                                                  |
 | `securityContext.fsGroup`                  | Group ID for the Logstash filesystem                                                                                 | `1001`                                                  |
@@ -285,11 +290,21 @@ extraEnvVars:
     value: "x.y.z"
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 1.2.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 

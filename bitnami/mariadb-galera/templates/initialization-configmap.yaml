@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "mariadb-galera.fullname" . }}-init-scripts
-  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
+  name: {{ printf "%s-init-scripts" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 {{- if and (.Files.Glob "files/docker-entrypoint-initdb.d/*.sql.gz") (not .Values.initdbScriptsConfigMap) }}
 binaryData:
 {{- $root := . }}
