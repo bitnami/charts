@@ -396,7 +396,7 @@ logLevel: info
 ## - text, json
 ##
 logFormat: text
-## Modify how DNS records are sychronized between sources and providers (options: sync, upsert-only)
+## Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only)
 ##
 policy: upsert-only
 ## Registry Type. Available types are: txt, noop
