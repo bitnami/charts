@@ -24,4 +24,4 @@ name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/bitnami-docker-kubernetes-event-exporter
   - https://github.com/opsgenie/kubernetes-event-exporter
-version: 1.0.0
+version: 1.0.1
