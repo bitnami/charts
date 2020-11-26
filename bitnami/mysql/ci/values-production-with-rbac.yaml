@@ -22,7 +22,7 @@ secondary:
 
 serviceAccount:
   create: true
-  name: mariadb-service-account
+  name: mysql-service-account
 rbac:
   create: true
 
