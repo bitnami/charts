@@ -1,7 +1,3 @@
-## Default values for grafana-operator.
-## This is a YAML-formatted file.
-## Declare variables to be passed into your templates.
-
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets
@@ -61,7 +57,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.2.1
+    tag: 7.3.4-debian-10-r1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -115,7 +111,6 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
@@ -144,7 +139,6 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
