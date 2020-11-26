@@ -12,6 +12,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "ClusterIP" }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
   {{- if eq .Values.service.type "LoadBalancer" }}
   {{- if not (empty .Values.service.loadBalancerIP) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
