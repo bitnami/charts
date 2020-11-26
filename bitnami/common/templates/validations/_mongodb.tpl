@@ -12,13 +12,15 @@ Params:
   {{- $existingSecret := include "common.mongodb.values.auth.existingSecret" . -}}
   {{- $enabled := include "common.mongodb.values.enabled" . -}}
   {{- $authPrefix := include "common.mongodb.values.key.auth" . -}}
-  {{- $authEnabled := include "common.mongodb.values.key.auth.enabled" . -}}
   {{- $architecture := include "common.mongodb.values.architecture" . -}}
   {{- $valueKeyRootPassword := printf "%s.rootPassword" $authPrefix -}}
   {{- $valueKeyUsername := printf "%s.username" $authPrefix -}}
   {{- $valueKeyDatabase := printf "%s.database" $authPrefix -}}
   {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
   {{- $valueKeyReplicaSetKey := printf "%s.replicaSetKey" $authPrefix -}}
+  {{- $valueKeyAuthEnabled := printf "%s.enabled" $authPrefix -}}
+
+  {{- $authEnabled := include "common.utils.getValueFromKey" (dict "key" $valueKeyAuthEnabled "context" .context) -}}
 
   {{- if and (not $existingSecret) (eq $enabled "true") (eq $authEnabled "true") -}}
     {{- $requiredPasswords := list -}}
@@ -86,22 +88,6 @@ Params:
     mongodb.auth
   {{- else -}}
     auth
-  {{- end -}}
-{{- end -}}
-
-{{/*
-Auxiliar function to get the right value for the key auth enabled
-
-Usage:
-{{ include "common.mongodb.values.key.auth.enabled" (dict "subchart" "true" "context" $) }}
-Params:
-  - subchart - Boolean - Optional. Whether MongoDB is used as subchart or not. Default: false
-*/}}
-{{- define "common.mongodb.values.key.auth.enabled" -}}
-  {{- if .subchart -}}
-    mongodb.auth.enabled
-  {{- else -}}
-    auth.enabled
   {{- end -}}
 {{- end -}}
 
