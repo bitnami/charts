@@ -252,11 +252,14 @@ spec:
             preStop:
               exec:
                 command:
-                  - /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh
-                  - -t
-                  - {{ .Values.terminationGracePeriodSeconds | quote }}
-                  - -d
-                  - {{ ternary "true" "false" .Values.image.debug | quote }}
+                  - /bin/bash
+                  - -ec
+                  - |
+                    if [[ -f /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh ]]; then
+                        /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh -t {{ .Values.terminationGracePeriodSeconds | quote }} -d  {{ ternary "true" "false" .Values.image.debug | quote }}
+                    else
+                        rabbitmq stop_app
+                    fi
           volumeMounts:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf
