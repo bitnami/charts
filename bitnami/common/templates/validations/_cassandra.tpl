@@ -42,7 +42,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliar function to get the right value for enabled mariadb.
+Auxiliar function to get the right value for enabled cassandra.
 
 Usage:
 {{ include "common.cassandra.values.enabled" (dict "context" $) }}

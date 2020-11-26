@@ -5,7 +5,7 @@ Validate PostgreSQL required passwords are not empty.
 Usage:
 {{ include "common.validations.values.postgresql.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
 Params:
-  - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "mysql-passwords-secret"
+  - secret - String - Required. Name of the secret where postgresql values are stored, e.g: "postgresql-passwords-secret"
   - subchart - Boolean - Optional. Whether postgresql is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.postgresql.passwords" -}}
