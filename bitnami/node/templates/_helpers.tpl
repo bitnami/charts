@@ -76,10 +76,10 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Node - Database */}}
 {{- define "node.validateValues.database" -}}
-{{- if and .Values.mongodb.install .Values.externaldb.enabled -}}
+{{- if and .Values.mongodb.enabled .Values.externaldb.enabled -}}
 node: Database
     You can only use one database.
-    Please choose installing a MongoDB chart (--set mongodb.install=true) or
+    Please choose installing a MongoDB chart (--set mongodb.enabled=true) or
     using an external database (--set externaldb.enabled=true)
 {{- end -}}
 {{- end -}}

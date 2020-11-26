@@ -398,11 +398,24 @@ mongodb:
   ## Whether to deploy a MongoDB server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
   ##
-  install: true
-  ## MongoDB custom user and database
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+  enabled: true
+
+  ## MongoDB Authentication parameters
   ##
   auth:
+    ## Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+
+    ## MongoDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ""
+
+    ## MongoDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
     username: user
     database: test_db
     password: secret_password

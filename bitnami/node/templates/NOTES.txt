@@ -1,3 +1,4 @@
+{{- $dbSecretName := include "node.secretName" . -}}
 
 1. Get the URL of your Node app  by running:
 
@@ -24,3 +25,12 @@
 
 {{- include "node.checkRollingTags" . }}
 {{- include "node.validateValues" . }}
+
+{{- $passwordValidationErrors := list }}
+
+{{- if .Values.mongodb.enabled }}
+{{- $dbPasswordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

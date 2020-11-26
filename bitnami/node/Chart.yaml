@@ -3,7 +3,7 @@ annotations:
 apiVersion: v2
 appVersion: 14.15.1
 dependencies:
-  - condition: mongodb.install
+  - condition: mongodb.enabled
     name: mongodb
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x

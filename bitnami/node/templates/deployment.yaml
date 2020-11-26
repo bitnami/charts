@@ -105,7 +105,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.mongodb.install }}
+            {{- if .Values.mongodb.enabled }}
             - name: DATABASE_HOST
               value: {{ template "node.mongodb.fullname" . }}
             - name: DATABASE_PORT

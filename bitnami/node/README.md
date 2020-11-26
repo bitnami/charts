@@ -83,8 +83,13 @@ The following table lists the configurable parameters of the Node chart and thei
 | `extraEnvVars`                          | Extra environment variables to be set on Node container                     | `{}`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                        | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                           | `nil`                                                   |
-| `mongodb.install`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
-| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.install=true`)   | `false`                                                 |
+| `mongodb.enabled`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
+| `mongodb.auth.enabled`                  | Wheter to enable auth or not for the MongoDB chart                          | `true`                                                  |
+| `mongodb.auth.rootPassword`             | MongoDB admin password                                                      | `nil`                                                   |
+| `mongodb.auth.username`                 | MongoDB custom user                                                         | `user`                                                  |
+| `mongodb.auth.database`                 | MongoDB custom database                                                     | `test_db`                                               |
+| `mongodb.auth.password`                 | MongoDB custom password                                                     | `secret_password`                                       |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)   | `false`                                                 |
 | `externaldb.secretName`                 | Secret containing existing database credentials                             | `nil`                                                   |
 | `externaldb.type`                       | Type of database that defines the database secret mapping                   | `osba`                                                  |
 | `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                     | `nil`                                                   |
@@ -248,7 +253,7 @@ ingress:
 2. Deploy the node chart specifying the secret name
 
   ```console
-  mongodb.install=false
+  mongodb.enabled=false
   externaldb.enabled=true
   externaldb.secretName=my-database-secret
   ```
@@ -291,7 +296,7 @@ ingress:
 4. Deploy the helm chart:
 
     ```command
-    mongodb.install=false
+    mongodb.enabled=false
     externaldb.enabled=true
     externaldb.broker.serviceInstanceName=azure-mongodb-instance
     externaldb.ssl=true
