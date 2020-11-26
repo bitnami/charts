@@ -170,24 +170,5 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "mongodb.validateValues" . }}
 {{- $secretName := include "mongodb.fullname" . -}}
-{{- $requiredPasswords := list -}}
-
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
-
-{{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mongodb-root-password" "context" $ -}}
-{{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-
-{{- if and .Values.auth.username .Values.auth.database }}
-  {{- $requiredDBPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mongodb-password" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
-{{- end -}}
-
-
-{{- if eq .Values.architecture "replicaset" }}
-  {{- $requiredReplicaSetKey := dict "valueKey" "auth.replicaSetKey" "secret" $secretName "field" "mongodb-replica-set-key" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
-{{- end -}}
-
-{{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}
-{{- end }}
+{{- $passwordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $secretName "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
