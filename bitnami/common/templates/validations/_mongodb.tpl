@@ -12,25 +12,31 @@ Params:
   {{- $existingSecret := include "common.mongodb.values.auth.existingSecret" . -}}
   {{- $enabled := include "common.mongodb.values.enabled" . -}}
   {{- $authPrefix := include "common.mongodb.values.key.auth" . -}}
+  {{- $authEnabled := include "common.mongodb.values.key.auth.enabled" . -}}
+  {{- $architecture := include "common.mongodb.values.architecture" . -}}
   {{- $valueKeyRootPassword := printf "%s.rootPassword" $authPrefix -}}
   {{- $valueKeyUsername := printf "%s.username" $authPrefix -}}
+  {{- $valueKeyDatabase := printf "%s.database" $authPrefix -}}
   {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
   {{- $valueKeyReplicaSetKey := printf "%s.replicaSetKey" $authPrefix -}}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") -}}
+  {{- if and (not $existingSecret) (eq $enabled "true") (eq $authEnabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mongodb-root-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
 
     {{- $valueUsername := include "common.utils.getValueFromKey" (dict "key" $valueKeyUsername "context" .context) }}
-    {{- if not (empty $valueUsername) -}}
+    {{- $valueDatabase := include "common.utils.getValueFromKey" (dict "key" $valueKeyDatabase "context" .context) }}
+    {{- if and $valueUsername $valueDatabase -}}
         {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "mongodb-password" -}}
         {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
     {{- end -}}
 
-    {{- $requiredReplicaSetKey := dict "valueKey" $valueKeyReplicaSetKey "secret" .secret "field" "mongodb-replica-set-key" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
+    {{- if (eq $architecture "replicaset") -}}
+        {{- $requiredReplicaSetKey := dict "valueKey" $valueKeyReplicaSetKey "secret" .secret "field" "mongodb-replica-set-key" -}}
+        {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
+    {{- end -}}
 
     {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
 
@@ -80,5 +86,37 @@ Params:
     mongodb.auth
   {{- else -}}
     auth
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for the key auth enabled
+
+Usage:
+{{ include "common.mongodb.values.key.auth.enabled" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether MongoDB is used as subchart or not. Default: false
+*/}}
+{{- define "common.mongodb.values.key.auth.enabled" -}}
+  {{- if .subchart -}}
+    mongodb.auth.enabled
+  {{- else -}}
+    auth.enabled
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Auxiliar function to get the right value for architecture
+
+Usage:
+{{ include "common.mongodb.values.architecture" (dict "subchart" "true" "context" $) }}
+Params:
+  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+*/}}
+{{- define "common.mongodb.values.architecture" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.mongodb.architecture -}}
+  {{- else -}}
+    {{- .context.Values.architecture -}}
   {{- end -}}
 {{- end -}}
