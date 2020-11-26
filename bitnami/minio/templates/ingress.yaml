@@ -2,9 +2,9 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "minio.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "minio.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 {{- range $key, $value := .Values.ingress.labels }}
     {{ $key }}: {{ $value }}
 {{- end }}
@@ -23,7 +23,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ include "minio.fullname" $ }}
+              serviceName: {{ include "common.names.fullname" $ }}
               servicePort: minio
     {{- end }}
   tls:

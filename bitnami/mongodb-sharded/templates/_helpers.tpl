@@ -1,54 +1,16 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "mongodb-sharded.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "mongodb-sharded.labels" -}}
-app.kubernetes.io/name: {{ include "mongodb-sharded.name" . }}
-helm.sh/chart: {{ include "mongodb-sharded.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "mongodb-sharded.matchLabels" -}}
-app.kubernetes.io/name: {{ include "mongodb-sharded.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "mongodb-sharded.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "mongodb-sharded.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
 
 {{/*
 Returns a ServiceAccount name for specified path or falls back to `common.serviceAccount.name`
 if `common.serviceAccount.create` is set to true. Falls back to Chart's fullname otherwise.
-
 Usage:
 {{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.path.to.serviceAccount "context" $) }}
 */}}
 {{- define "mongodb-sharded.serviceAccountName" -}}
 {{- if .value.create }}
-    {{- default (include "mongodb-sharded.fullname" .context) .value.name | quote }}
+    {{- default (include "common.names.fullname" .context) .value.name | quote }}
 {{- else if .context.Values.common.serviceAccount.create }}
-    {{- default (include "mongodb-sharded.fullname" .context) .context.Values.common.serviceAccount.name | quote }}
+    {{- default (include "common.names.fullname" .context) .context.Values.common.serviceAccount.name | quote }}
 {{- else -}}
     {{- default "default" .value.name | quote }}
 {{- end }}
@@ -66,41 +28,16 @@ kind: ServiceAccount
 metadata:
   name: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .value "context" .context) }}
   labels:
-    {{- include "mongodb-sharded.labels" .context | nindent 4 }}
+    {{- include "common.labels.standard" .context | nindent 4 }}
 ---
 {{ end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "mongodb-sharded.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "mongodb-sharded.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "mongodb-sharded.secret" -}}
   {{- if .Values.existingSecret -}}
     {{- .Values.existingSecret -}}
   {{- else }}
-    {{- include "mongodb-sharded.fullname" . -}}
+    {{- include "common.names.fullname" . -}}
   {{- end }}
 {{- end -}}
 
@@ -108,7 +45,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.configsvr.external.host -}}
   {{- .Values.configsvr.external.host }}
   {{- else -}}
-  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" . ) (include "mongodb-sharded.fullname" .) .Release.Namespace .Values.clusterDomain -}}
+  {{- printf "%s-configsvr-0.%s-headless.%s.svc.%s" (include "common.names.fullname" . ) (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain -}}
   {{- end -}}
 {{- end -}}
 
@@ -116,7 +53,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.configsvr.external.replicasetName -}}
     {{- .Values.configsvr.external.replicasetName }}
   {{- else }}
-    {{- printf "%s-configsvr" ( include "mongodb-sharded.fullname" . ) -}}
+    {{- printf "%s-configsvr" ( include "common.names.fullname" . ) -}}
   {{- end }}
 {{- end -}}
 
@@ -124,7 +61,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.mongos.configCM -}}
     {{- .Values.mongos.configCM -}}
   {{- else }}
-    {{- printf "%s-mongos" (include "mongodb-sharded.fullname" .) -}}
+    {{- printf "%s-mongos" (include "common.names.fullname" .) -}}
   {{- end }}
 {{- end -}}
 
@@ -132,7 +69,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.shardsvr.dataNode.configCM -}}
     {{- .Values.shardsvr.dataNode.configCM -}}
   {{- else }}
-    {{- printf "%s-shardsvr-data" (include "mongodb-sharded.fullname" .) -}}
+    {{- printf "%s-shardsvr-data" (include "common.names.fullname" .) -}}
   {{- end }}
 {{- end -}}
 
@@ -140,7 +77,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.shardsvr.arbiter.configCM -}}
     {{- .Values.shardsvr.arbiter.configCM -}}
   {{- else }}
-    {{- printf "%s-shardsvr-arbiter" (include "mongodb-sharded.fullname" .) -}}
+    {{- printf "%s-shardsvr-arbiter" (include "common.names.fullname" .) -}}
   {{- end }}
 {{- end -}}
 
@@ -148,7 +85,7 @@ Create chart name and version as used by the chart label.
   {{- if .Values.configsvr.configCM -}}
     {{- .Values.configsvr.configCM -}}
   {{- else }}
-    {{- printf "%s-configsvr" (include "mongodb-sharded.fullname" .) -}}
+    {{- printf "%s-configsvr" (include "common.names.fullname" .) -}}
   {{- end }}
 {{- end -}}
 
@@ -156,14 +93,14 @@ Create chart name and version as used by the chart label.
 Get the initialization scripts Secret name.
 */}}
 {{- define "mongodb-sharded.initScriptsSecret" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsSecret "context" $)) -}}
+  {{- printf "%s" (include "common.tplvalues.render" (dict "value" .Values.common.initScriptsSecret "context" $)) -}}
 {{- end -}}
 
 {{/*
 Get the initialization scripts configmap name.
 */}}
 {{- define "mongodb-sharded.initScriptsCM" -}}
-  {{- printf "%s" (include "mongodb-sharded.tplValue" (dict "value" .Values.common.initScriptsCM "context" $)) -}}
+  {{- printf "%s" (include "common.tplvalues.render" (dict "value" .Values.common.initScriptsCM "context" $)) -}}
 {{- end -}}
 
 {{/*
@@ -173,7 +110,7 @@ Create the name for the admin secret.
     {{- if .Values.auth.existingAdminSecret -}}
         {{- .Values.auth.existingAdminSecret -}}
     {{- else -}}
-        {{- include "mongodb-sharded.fullname" . -}}-admin
+        {{- include "common.names.fullname" . -}}-admin
     {{- end -}}
 {{- end -}}
 
@@ -184,7 +121,19 @@ Create the name for the key secret.
   {{- if .Values.auth.existingKeySecret -}}
       {{- .Values.auth.existingKeySecret -}}
   {{- else -}}
-      {{- include "mongodb-sharded.fullname" . -}}-keyfile
+      {{- include "common.names.fullname" . -}}-keyfile
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Returns the proper Service name depending if an explicit service name is set
+in the values file. If the name is not explicitly set it will take the "common.names.fullname"
+*/}}
+{{- define "mongodb-sharded.serviceName" -}}
+  {{- if .Values.service.name -}}
+    {{ .Values.service.name }}
+  {{- else -}}
+    {{ include "common.names.fullname" .}}
   {{- end -}}
 {{- end -}}
 
@@ -192,87 +141,28 @@ Create the name for the key secret.
 Return the proper MongoDB image name
 */}}
 {{- define "mongodb-sharded.image" -}}
-  {{- $registryName := .Values.image.registry -}}
-  {{- $repositoryName := .Values.image.repository -}}
-  {{- $tag := .Values.image.tag | toString -}}
-  {{/*
-  Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-  but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-  Also, we can't use a single if because lazy evaluation is not an option
-  */}}
-  {{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-      {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-      {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-  {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-  {{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "mongodb-sharded.metrics.image" -}}
-  {{- $registryName := .Values.metrics.image.registry -}}
-  {{- $repositoryName := .Values.metrics.image.repository -}}
-  {{- $tag := .Values.metrics.image.tag | toString -}}
-  {{/*
-  Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-  but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-  Also, we can't use a single if because lazy evaluation is not an option
-  */}}
-  {{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-      {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-      {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-  {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "mongodb-sharded.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- $imagePullSecrets := coalesce .Values.global.imagePullSecrets .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets .Values.metrics.image.pullSecrets -}}
-{{- if $imagePullSecrets }}
-imagePullSecrets:
-{{- range $imagePullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "mongodb-sharded.volumePermissions.image" -}}
-  {{- $registryName := .Values.volumePermissions.image.registry -}}
-  {{- $repositoryName := .Values.volumePermissions.image.repository -}}
-  {{- $tag := .Values.volumePermissions.image.tag | toString -}}
-  {{/*
-  Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-  but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-  Also, we can't use a single if because lazy evaluation is not an option
-  */}}
-  {{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-      {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-      {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-  {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-  {{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "mongodb-sharded.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -368,84 +258,8 @@ mongodb: configSvrNodeConflictingConfig
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return  the proper Storage Class
-*/}}
-{{- define "mongodb-sharded.shardsvr.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.shardsvr.persistence.storageClass -}}
-              {{- if (eq "-" .Values.shardsvr.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.shardsvr.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.shardsvr.persistence.storageClass -}}
-        {{- if (eq "-" .Values.shardsvr.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.shardsvr.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return  the proper Storage Class
-*/}}
-{{- define "mongodb-sharded.configsvr.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.configsvr.persistence.storageClass -}}
-              {{- if (eq "-" .Values.configsvr.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.configsvr.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.configsvr.persistence.storageClass -}}
-        {{- if (eq "-" .Values.configsvr.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.configsvr.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Returns the proper Service name depending if an explicit service name is set
-in the values file. If the name is not explicitly set it will take the "mongodb-sharded.fullname"
-*/}}
-{{- define "mongodb-sharded.serviceName" -}}
-  {{- if .Values.service.name -}}
-    {{ .Values.service.name }}
-  {{- else -}}
-    {{ include "mongodb-sharded.fullname" .}}
-  {{- end -}}
+{{/* Check if there are rolling tags in the images */}}
+{{- define "mongodb-sharded.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- end -}}

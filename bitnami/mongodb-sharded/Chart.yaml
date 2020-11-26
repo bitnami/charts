@@ -2,6 +2,12 @@ annotations:
   category: Database
 apiVersion: v2
 appVersion: 4.4.2
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: NoSQL document-oriented database that stores JSON-like documents with dynamic schemas, simplifying the integration of data in content-driven applications. Sharded topology.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb-sharded
@@ -20,4 +26,4 @@ name: mongodb-sharded
 sources:
   - https://github.com/bitnami/bitnami-docker-mongodb-sharded
   - https://mongodb.org
-version: 3.0.4
+version: 3.1.0

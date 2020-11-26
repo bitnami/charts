@@ -49,73 +49,83 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the metallb chart and their default values.
 
-| Parameter                                             | Description                                                                                          | Default                                                 |
-|-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                                | Global Docker image registry                                                                         | `nil`                                                   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods) |
-| `controller.image.registry`                           | MetalLB Controller image registry                                                                    | `docker.io`                                             |
-| `controller.image.repository`                         | MetalLB Controller image name                                                                        | `bitnami/metallb-controller`                            |
-| `controller.image.tag`                                | MetalLB Controller image tag                                                                         | `{TAG_NAME}`                                            |
-| `controller.image.pullPolicy`                         | MetalLB Controller image pull policy                                                                 | `IfNotPresent`                                          |
-| `controller.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `controller.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
-| `controller.resources.requests`                       | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
-| `controller.nodeSelector`                             | Node labels for controller pod assignment                                                            | `{}`                                                    |
-| `controller.tolerations`                              | Tolerations for controller pod assignment                                                            | `[]`                                                    |
-| `controller.affinity`                                 | Affinity for controller pod assignment                                                               | `{}`                                                    |
-| `controller.podAnnotations`                           | Controller Pod annotations                                                                           | `{}`                                                    |
-| `controller.serviceAccount.create`                    | create a serviceAccount for the controller pod                                                       | `true`                                                  |
-| `controller.serviceAccount.name`                      | use the serviceAccount with the specified name                                                       | ""                                                      |
-| `controller.revisionHistoryLimit`                     | the revision history limit for the deployment.                                                       | `3`                                                     |
-| `controller.securityContext.enabled`                  | Enable pods' security context                                                                        | `true`                                                  |
-| `controller.securityContext.runAsNonRoot`             | MetalLB Controller must runs as nonRoot.                                                             | `true`                                                  |
-| `controller.securityContext.runAsUser`                | User ID for the pods.                                                                                | `1001`                                                  |
-| `controller.securityContext.fsGroup`                  | Group ID for the pods.                                                                               | `1001`                                                  |
-| `controller.securityContext.allowPrivilegeEscalation` | This defines if privilegeEscalation is allowed on that container                                     | `false`                                                 |
-| `controller.securityContext.readOnlyRootFilesystem`   | This defines if the container can read the root fs on the host                                       | `true`                                                  |
-| `controller.securityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                            | `["ALL"]`                                               |
-| `speaker.image.registry`                              | MetalLB Speaker image registry                                                                       | `docker.io`                                             |
-| `speaker.image.repository`                            | MetalLB Speaker image name                                                                           | `bitnami/metallb-speaker`                               |
-| `speaker.image.tag`                                   | MetalLB Speaker image tag                                                                            | `{TAG_NAME}`                                            |
-| `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                    | `IfNotPresent`                                          |
-| `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `speaker.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
-| `speaker.resources.requests`                          | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
-| `speaker.nodeSelector`                                | Node labels for speaker pod assignment                                                               | `{}`                                                    |
-| `speaker.tolerations`                                 | Tolerations for speaker pod assignment                                                               | `[]`                                                    |
-| `speaker.affinity`                                    | Affinity for speaker pod assignment                                                                  | `{}`                                                    |
-| `speaker.podAnnotations`                              | Speaker Pod annotations                                                                              | `{}`                                                    |
-| `speaker.serviceAccount.create`                       | create a serviceAccount for the speaker pod                                                          | `true`                                                  |
-| `speaker.serviceAccount.name`                         | use the serviceAccount with the specified name                                                       | ""                                                      |
-| `speaker.daemonset.hostPorts.metrics`                 | the tcp port to listen on for the openmetrics endpoint.                                              | `7472`                                                  |
-| `speaker.daemonset.terminationGracePeriodSeconds`     | The terminationGracePeriod in seconds for the daemonset to stop                                      | `2`                                                     |
-| `speaker.securityContext.enabled`                     | Enable pods' security context                                                                        | `true`                                                  |
-| `speaker.securityContext.runAsUser`                   | User ID for the pods.                                                                                | `0`                                                     |
-| `speaker.securityContext.allowPrivilegeEscalation`    | Enables privilege Escalation context for the pod.                                                    | `false`                                                 |
-| `speaker.securityContext.readOnlyRootFilesystem`      | Allows the pod to mount the RootFS as ReadOnly                                                       | `true`                                                  |
-| `speaker.securityContext.capabilities.drop`           | Drop capabilities for the securityContext                                                            | `["ALL"]`                                               |
-| `speaker.securityContext.capabilities.add`            | Add capabilities for the securityContext                                                             | `["NET_ADMIN", "NET_RAW", "SYS_ADMIN"]`                 |
-| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                             | `nil`                                                   |
-| `speaker.secretKey`                                   | References a Secret key for the member secret outside of the helm chart                              | `nil`                                                   |
-| `speaker.extraEnvVars`                                | Extra environment variable to pass to the running container.                                         | `[]`                                                    |
-| `nameOverride`                                        | String to partially override metallb.fullname template with a string (will prepend the release name) | `nil`                                                   |
-| `fullnameOverride`                                    | String to fully override metallb.fullname template with a string                                     | `nil`                                                   |
-| `livenessProbe.enabled`                               | Enable/disable the Liveness probe                                                                    | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`                   | Delay before liveness probe is initiated                                                             | `60`                                                    |
-| `livenessProbe.periodSeconds`                         | How often to perform the probe                                                                       | `10`                                                    |
-| `livenessProbe.timeoutSeconds`                        | When the probe times out                                                                             | `5`                                                     |
-| `livenessProbe.successThreshold`                      | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
-| `livenessProbe.failureThreshold`                      | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `6`                                                     |
-| `existingConfigMap`                                   | Specify an existing configMapName to use. (this is mutually exclusive with the configInline option)  | `nil`                                                   |
-| `configInline`                                        | Specify the config for metallb as a new configMap inline.                                            | `{}` (does not create configMap)                        |
-| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessarry Rolebindings.                 | `true`                                                  |
-| `prometheus.enabled`                                  | Enable for Prometheus alertmanager basic alerts.                                                     | `false`                                                 |
-| `prometheus.serviceMonitor.enabled`                   | Specify if a servicemonitor will be deployed for prometheus-operator.                                | `true`                                                  |
-| `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                              | `app.kubernetes.io/name"`                               |
-| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
-| `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
-| `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
-| `prometheus.serviceMonitor.prometheusRule.enabled`    | Enable prometheus alertmanager basic alerts.                                                         | `true`                                                  |
+| Parameter                                             | Description                                                                                                  | Default                                                 |
+|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`                                | Global Docker image registry                                                                                 | `nil`                                                   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                              | `[]` (does not add image pull secrets to deployed pods) |
+| `controller.image.registry`                           | MetalLB Controller image registry                                                                            | `docker.io`                                             |
+| `controller.image.repository`                         | MetalLB Controller image name                                                                                | `bitnami/metallb-controller`                            |
+| `controller.image.tag`                                | MetalLB Controller image tag                                                                                 | `{TAG_NAME}`                                            |
+| `controller.image.pullPolicy`                         | MetalLB Controller image pull policy                                                                         | `IfNotPresent`                                          |
+| `controller.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `controller.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                                       | `{}` (does not add resource limits to deployed pods)    |
+| `controller.resources.requests`                       | Specify resource requests which the container needs to spawn.                                                | `{}` (does not add resource limits to deployed pods)    |
+| `controller.podAffinityPreset`                        | MetalLB Controller Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
+| `controller.podAntiAffinityPreset`                    | MetalLB Controller Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `controller.nodeAffinityPreset.type`                  | MetalLB Controller Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `controller.nodeAffinityPreset.key`                   | MetalLB Controller Node label key to match Ignored if `affinity` is set.                                     | `""`                                                    |
+| `controller.nodeAffinityPreset.values`                | MetalLB Controller Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                    |
+| `controller.affinity`                                 | MetalLB Controller Affinity for pod assignment                                                               | `{}` (evaluated as a template)                          |
+| `controller.nodeSelector`                             | MetalLB Controller Node labels for pod assignment                                                            | `{}` (evaluated as a template)                          |
+| `controller.tolerations`                              | MetalLB Controller Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                          |
+| `controller.podAnnotations`                           | Controller Pod annotations                                                                                   | `{}`                                                    |
+| `controller.serviceAccount.create`                    | create a serviceAccount for the controller pod                                                               | `true`                                                  |
+| `controller.serviceAccount.name`                      | use the serviceAccount with the specified name                                                               | ""                                                      |
+| `controller.revisionHistoryLimit`                     | the revision history limit for the deployment.                                                               | `3`                                                     |
+| `controller.securityContext.enabled`                  | Enable pods' security context                                                                                | `true`                                                  |
+| `controller.securityContext.runAsNonRoot`             | MetalLB Controller must runs as nonRoot.                                                                     | `true`                                                  |
+| `controller.securityContext.runAsUser`                | User ID for the pods.                                                                                        | `1001`                                                  |
+| `controller.securityContext.fsGroup`                  | Group ID for the pods.                                                                                       | `1001`                                                  |
+| `controller.securityContext.allowPrivilegeEscalation` | This defines if privilegeEscalation is allowed on that container                                             | `false`                                                 |
+| `controller.securityContext.readOnlyRootFilesystem`   | This defines if the container can read the root fs on the host                                               | `true`                                                  |
+| `controller.securityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                    | `["ALL"]`                                               |
+| `speaker.image.registry`                              | MetalLB Speaker image registry                                                                               | `docker.io`                                             |
+| `speaker.image.repository`                            | MetalLB Speaker image name                                                                                   | `bitnami/metallb-speaker`                               |
+| `speaker.image.tag`                                   | MetalLB Speaker image tag                                                                                    | `{TAG_NAME}`                                            |
+| `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                            | `IfNotPresent`                                          |
+| `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `speaker.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                                       | `{}` (does not add resource limits to deployed pods)    |
+| `speaker.resources.requests`                          | Specify resource requests which the container needs to spawn.                                                | `{}` (does not add resource limits to deployed pods)    |
+| `speaker.podAffinityPreset`                           | MetalLB Speaker Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                                                    |
+| `speaker.podAntiAffinityPreset`                       | MetalLB Speaker Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `soft`                                                  |
+| `speaker.nodeAffinityPreset.type`                     | MetalLB Speaker Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`    | `""`                                                    |
+| `speaker.nodeAffinityPreset.key`                      | MetalLB Speaker Node label key to match Ignored if `affinity` is set.                                        | `""`                                                    |
+| `speaker.nodeAffinityPreset.values`                   | MetalLB Speaker Node label values to match. Ignored if `affinity` is set.                                    | `[]`                                                    |
+| `speaker.affinity`                                    | MetalLB Speaker Affinity for pod assignment                                                                  | `{}` (evaluated as a template)                          |
+| `speaker.nodeSelector`                                | MetalLB Speaker Node labels for pod assignment                                                               | `{}` (evaluated as a template)                          |
+| `speaker.tolerations`                                 | MetalLB Speaker Tolerations for pod assignment                                                               | `[]` (evaluated as a template)                          |
+| `speaker.podAnnotations`                              | Speaker Pod annotations                                                                                      | `{}`                                                    |
+| `speaker.serviceAccount.create`                       | create a serviceAccount for the speaker pod                                                                  | `true`                                                  |
+| `speaker.serviceAccount.name`                         | use the serviceAccount with the specified name                                                               | ""                                                      |
+| `speaker.daemonset.hostPorts.metrics`                 | the tcp port to listen on for the openmetrics endpoint.                                                      | `7472`                                                  |
+| `speaker.daemonset.terminationGracePeriodSeconds`     | The terminationGracePeriod in seconds for the daemonset to stop                                              | `2`                                                     |
+| `speaker.securityContext.enabled`                     | Enable pods' security context                                                                                | `true`                                                  |
+| `speaker.securityContext.runAsUser`                   | User ID for the pods.                                                                                        | `0`                                                     |
+| `speaker.securityContext.allowPrivilegeEscalation`    | Enables privilege Escalation context for the pod.                                                            | `false`                                                 |
+| `speaker.securityContext.readOnlyRootFilesystem`      | Allows the pod to mount the RootFS as ReadOnly                                                               | `true`                                                  |
+| `speaker.securityContext.capabilities.drop`           | Drop capabilities for the securityContext                                                                    | `["ALL"]`                                               |
+| `speaker.securityContext.capabilities.add`            | Add capabilities for the securityContext                                                                     | `["NET_ADMIN", "NET_RAW", "SYS_ADMIN"]`                 |
+| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                                     | `nil`                                                   |
+| `speaker.secretKey`                                   | References a Secret key for the member secret outside of the helm chart                                      | `nil`                                                   |
+| `speaker.extraEnvVars`                                | Extra environment variable to pass to the running container.                                                 | `[]`                                                    |
+| `nameOverride`                                        | String to partially override common.names.fullname template with a string (will prepend the release name)    | `nil`                                                   |
+| `fullnameOverride`                                    | String to fully override common.names.fullname template with a string                                        | `nil`                                                   |
+| `livenessProbe.enabled`                               | Enable/disable the Liveness probe                                                                            | `true`                                                  |
+| `livenessProbe.initialDelaySeconds`                   | Delay before liveness probe is initiated                                                                     | `60`                                                    |
+| `livenessProbe.periodSeconds`                         | How often to perform the probe                                                                               | `10`                                                    |
+| `livenessProbe.timeoutSeconds`                        | When the probe times out                                                                                     | `5`                                                     |
+| `livenessProbe.successThreshold`                      | Minimum consecutive successes for the probe to be considered successful after having failed.                 | `1`                                                     |
+| `livenessProbe.failureThreshold`                      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                   | `6`                                                     |
+| `existingConfigMap`                                   | Specify an existing configMapName to use. (this is mutually exclusive with the configInline option)          | `nil`                                                   |
+| `configInline`                                        | Specify the config for metallb as a new configMap inline.                                                    | `{}` (does not create configMap)                        |
+| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessarry Rolebindings.                         | `true`                                                  |
+| `prometheus.enabled`                                  | Enable for Prometheus alertmanager basic alerts.                                                             | `false`                                                 |
+| `prometheus.serviceMonitor.enabled`                   | Specify if a servicemonitor will be deployed for prometheus-operator.                                        | `true`                                                  |
+| `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                                      | `app.kubernetes.io/name"`                               |
+| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                           | `""`                                                    |
+| `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                                    | `[]`                                                    |
+| `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                                  | `[]`                                                    |
+| `prometheus.serviceMonitor.prometheusRule.enabled`    | Enable prometheus alertmanager basic alerts.                                                                 | `true`                                                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -124,6 +134,7 @@ $ helm install my-release \
   --set livenessProbe.successThreshold=5 \
     bitnami/metallb
 ```
+
 The above command sets the `livenessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
@@ -160,11 +171,21 @@ configInline:
     - 10.27.50.30-10.27.50.35
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 1.1.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 
