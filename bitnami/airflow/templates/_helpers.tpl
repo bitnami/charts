@@ -276,10 +276,6 @@ Add environmnet variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernetKey
-- name: AIRFLOW_WEBSERVER_HOST
-  value: {{ include "common.names.fullname" . }}
-- name: AIRFLOW_WEBSERVER_PORT_NUMBER
-  value: {{ .Values.service.port | quote }}
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}

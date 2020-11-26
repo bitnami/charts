@@ -17,7 +17,7 @@ spec:
   type: {{ .Values.service.type }}
   {{- if eq .Values.service.type "LoadBalancer" }}
   {{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ default "" .Values.service.loadBalancerIP | quote }}
   {{- end }}
   {{- end }}
   ports:
