@@ -1,0 +1,5 @@
+elasticsearch:
+  hosts:
+    - elasticsearch-1
+    - elasticsearch-2
+  port: 9300

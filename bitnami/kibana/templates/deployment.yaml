@@ -1,25 +1,25 @@
 {{- if and .Values.elasticsearch.hosts .Values.elasticsearch.port -}}
-apiVersion: {{ template "kibana.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "kibana.fullname" . }}
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
   strategy: {{- tpl (toYaml .Values.updateStrategy) $ | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "kibana.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "kibana.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "kibana.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: kibana
         {{- if .Values.podLabels }}
-        {{- include "kibana.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "kibana.imagePullSecrets" . | nindent 6 }}
@@ -59,7 +59,7 @@ spec:
             mountPath: /bitnami/kibana
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "kibana.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 10 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 10 }}
         {{- end }}
       {{- end }}
       containers:
@@ -78,7 +78,7 @@ spec:
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
           {{- if .Values.extraEnvVars }}
-          {{- include "kibana.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
@@ -126,7 +126,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{- include "kibana.tplValue" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: kibana-data
@@ -154,10 +154,10 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "kibana.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.sidecars }}
-      {{- include "kibana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         - name: kibana-data
@@ -173,13 +173,13 @@ spec:
         {{- if (include "kibana.importSavedObjects" .) }}
         - name: saved-objects-init-scripts
           configMap:
-            name: {{ include "kibana.fullname" . }}-saved-objects
+            name: {{ include "common.names.fullname" . }}-saved-objects
             defaultMode: 0755
         {{- end }}
         {{- if .Values.plugins }}
         - name: plugins-init-scripts
           configMap:
-            name: {{ include "kibana.fullname" . }}-plugins
+            name: {{ include "common.names.fullname" . }}-plugins
             defaultMode: 0755
         {{- end }}
         {{- if .Values.initScriptsCM }}
@@ -200,6 +200,6 @@ spec:
             name: {{ template "kibana.savedObjectsCM" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
-        {{- include "kibana.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}
