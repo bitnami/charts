@@ -24,7 +24,7 @@
 ## format. When configInline is used, Helm manages MetalLB's
 ## configuration ConfigMap as part of the release, and
 ## existingConfigMap is ignored.
-## refer to https://metallb.universe.tf/configuration/ for
+## Refer to https://metallb.universe.tf/configuration/ for
 ## available options.
 #
 configInline: {}
@@ -81,66 +81,31 @@ controller:
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
+  resources: {}
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
+    # limits:
     #   cpu: 100m
     #   memory: 100Mi
-    requests: {}
+    # requests:
     #   memory: 25Mi
     #   cpu: 25m
-
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: controller.podAffinityPreset, controller.podAntiAffinityPreset, and controller.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
   ## Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -156,7 +121,7 @@ controller:
 
 
   ## Pod securityContext
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
@@ -167,15 +132,15 @@ controller:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-        - ALL
+      - ALL
 
   ## Configure the revisionHistoryLimit of the Controller deployment
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
   ##
   revisionHistoryLimit: 3
 
   ## Configure the grace time period for sig term
-  ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
   ##
   terminationGracePeriodSeconds: 0
 
@@ -185,7 +150,7 @@ controller:
     metrics: 7472
 
   ## Liveness and readiness probe values
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
     enabled: true
@@ -224,66 +189,31 @@ speaker:
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources:
+  resources: {}
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
+    # limits:
     #   cpu: 100m
     #   memory: 100Mi
-    requests: {}
+    # requests:
     #   memory: 25Mi
     #   cpu: 25m
-
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: speaker.podAffinityPreset, speaker.podAntiAffinityPreset, and speaker.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
   ## Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
 
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -300,7 +230,7 @@ speaker:
   ##
   daemonset:
     ## Configure the grace time period for sig term
-    ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+    ## Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
     ##
     terminationGracePeriodSeconds: 2
     ## HTTP Metrics Endpoint
@@ -317,7 +247,7 @@ speaker:
   # secretKey:
 
   ## Pod securityContext
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: true
@@ -326,11 +256,11 @@ speaker:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-        - ALL
+      - ALL
       add:
-        - NET_ADMIN
-        - NET_RAW
-        - SYS_ADMIN
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
 
   ## An array to add extra env vars
   ## For example:
@@ -341,7 +271,7 @@ speaker:
   extraEnvVars: []
 
   ## Liveness and readiness probe values
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
     enabled: true

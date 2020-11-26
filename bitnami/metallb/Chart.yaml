@@ -2,12 +2,6 @@ annotations:
   category: Infrastructure
 apiVersion: v2
 appVersion: 0.9.5
-dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
 description: The Metal LB for Kubernetes
 home: https://github.com/bitnami/charts/tree/master/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
@@ -29,4 +23,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 1.1.0
+version: 1.0.1

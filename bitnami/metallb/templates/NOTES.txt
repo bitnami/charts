@@ -37,5 +37,3 @@ If it is missing create it with:
 
     kubectl create secret {{ include "metallb.secretName" .}} --from-file={{ include "metallb.secretKey" . }}
 {{- end }}
-
-{{- include "metallb.checkRollingTags" . }}
