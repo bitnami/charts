@@ -1,7 +1,7 @@
 {{- $airflowSecretName := include "airflow.secretName" . -}}
 {{- $postgresqlSecretName := include "airflow.postgresql.secretName" . -}}
 {{- $redisSecretName := include "airflow.redis.secretName" . -}}
-{{- if not .Values.web.baseUrl -}}
+{{- if not (include "airflow.baseUrl" .) -}}
 ###############################################################################
 ### ERROR: You did not provide an external URL in your 'helm install' call ###
 ###############################################################################

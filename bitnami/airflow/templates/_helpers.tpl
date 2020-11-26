@@ -319,6 +319,39 @@ Add environmnet variables to configure airflow kubernetes executor
 {{- end -}}
 
 {{/*
+Get the user defined LoadBalancerIP for this release.
+Note, returns 127.0.0.1 if using ClusterIP.
+*/}}
+{{- define "airflow.serviceIP" -}}
+{{- if eq .Values.service.type "ClusterIP" -}}
+127.0.0.1
+{{- else -}}
+{{- .Values.service.loadBalancerIP | default "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+*/}}
+{{- define "airflow.baseUrl" -}}
+{{- $host := include "airflow.serviceIP" . -}}
+
+{{- $port := "" -}}
+{{- $servicePortString := printf "%v" .Values.service.port -}}
+{{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+{{- end -}}
+
+{{- $defaultUrl := "" -}}
+{{- if $host -}}
+  {{- $defaultUrl = printf "http://%s%s" $host $port -}}
+{{- end -}}
+
+{{- default $defaultUrl .Values.web.baseUrl -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "airflow.validateValues" -}}
