@@ -1,4 +1,4 @@
-{{- $dbSecretName := include "node.secretName" . -}}
+{{- $dbSecretName := include "node.mongodb.fullname" . -}}
 
 1. Get the URL of your Node app  by running:
 
