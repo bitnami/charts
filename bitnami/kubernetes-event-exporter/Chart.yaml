@@ -1,0 +1,27 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.9.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: This tool allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
+home: https://github.com/bitnami/charts/tree/master/bitnami/kubernetes-event-exporter
+keywords:
+  - alerting
+  - event exporting
+  - events
+  - kubernetes events
+  - monitoring
+  - observability
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: kubernetes-event-exporter
+sources:
+  - https://github.com/bitnami/bitnami-docker-kubernetes-event-exporter
+  - https://github.com/opsgenie/kubernetes-event-exporter
+version: 1.0.0

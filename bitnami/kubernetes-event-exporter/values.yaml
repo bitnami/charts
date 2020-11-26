@@ -1,0 +1,197 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+
+## String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override kubernetes-event-exporter.fullname template
+##
+# fullnameOverride:
+
+## Common annotations to add to all resources. Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all resources. Evaluated as a template
+##
+commonLabels: {}
+
+config:
+  logLevel: debug
+  logFormat: pretty
+  receivers:
+    - name: "dump"
+      file:
+        path: "/dev/stdout"
+        # layout:
+        #   message: "{{ .Message }}"
+        #   reason: "{{ .Reason }}"
+        #   type: "{{ .Type }}"
+        #   count: "{{ .Count }}"
+        #   kind: "{{ .InvolvedObject.Kind }}"
+        #   name: "{{ .InvolvedObject.Name }}"
+        #   namespace: "{{ .Namespace }}"
+        #   component: "{{ .Source.Component }}"
+        #   host: "{{ .Source.Host }}"
+  route:
+    routes:
+      - match:
+          - receiver: "dump"
+        # drop:
+        # - type: "Normal"
+
+rbac:
+  # create specifies whether to install and use RBAC rules.
+  create: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.  If not set and create is
+  # true, a name is generated using the fullname template
+  name: ""
+
+image:
+  registry: docker.io
+  repository: bitnami/kubernetes-event-exporter
+  tag: 0.9.0-debian-10-r8
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## SecurityContext holds pod-level security attributes and common container settings.
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+containerSecurityContext:
+  enabled: true
+  capabilities:
+    add: []
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
+## Container resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+    # cpu: 400m
+    # memory: 250Mi
+  requests: {}
+    # cpu: 100m
+    # memory: 25Mi
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+
+## Name of a ConfigMap containing extra env vars
+##
+extraEnvVarsConfigMap: ""
+
+## Name of a Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
+
+## Array to add extra mounts (normally used with extraVolumes)
+##
+extraVolumeMounts: []
+
+## Array to add extra volumes
+##
+extraVolumes: []
+
+## Add init containers to the pod
+## For example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##
+initContainers: []
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
