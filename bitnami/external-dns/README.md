@@ -167,7 +167,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `logFormat`                            | Which format to output logs in (options: text, json)                                                                                                                                                            | `text`                                                  |
 | `interval`                             | Interval update period to use                                                                                                                                                                                   | `1m`                                                    |
 | `triggerLoopOnEvent`                   | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                                                       | `false`                                                 |
-| `policy`                               | Modify how DNS records are sychronized between sources and providers (options: sync, upsert-only )                                                                                                              | `upsert-only`                                           |
+| `policy`                               | Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )                                                                                                              | `upsert-only`                                           |
 | `registry`                             | Registry method to use (options: txt, noop)                                                                                                                                                                     | `txt`                                                   |
 | `txtOwnerId`                           | When using the TXT registry, a name that identifies this instance of ExternalDNS (optional)                                                                                                                     | `"default"`                                             |
 | `txtPrefix`                            | When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)                                                                                                 | `""`                                                    |
@@ -257,7 +257,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
