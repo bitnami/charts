@@ -543,7 +543,7 @@ service:
   ## Set the ClusterIP
   ##
   # clusterIP:
-  
+
   ## Amqp port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
