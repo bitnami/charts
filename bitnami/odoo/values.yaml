@@ -113,11 +113,11 @@ odooPassword: Devops123!
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
 
-smtpHost: smtp.mailgun.org
+smtpHost: in-v3.mailjet.com
 smtpPort: 587
-smtpUser: odoo2@mg.rg-21.com
-smtpPassword: 1976a2896080e08cc552a422cdd54713-360a0b2c-68935990
-smtpProtocol: ssl,tsl
+smtpUser: 742e3f75925d389a30b16ee2f601252b
+smtpPassword: f045fd585a0cd37ff0d546cb08ca8483
+smtpProtocol:
 
 ## Use existing secret for the application password
 ##
