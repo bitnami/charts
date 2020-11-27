@@ -2,32 +2,32 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "nats.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels:
-    app: {{ template "nats.name" . }}
-    chart: {{ template "nats.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
-    {{ $key }}: {{ $value | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.selector "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   endpoints:
-  - port: metrics
-    {{- if .Values.metrics.serviceMonitor.interval }}
-    interval: {{ .Values.metrics.serviceMonitor.interval }}
-    {{- end }}
+    - port: metrics
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
   selector:
-    matchLabels:
-      app: {{ template "nats.name" . }}
-      release: {{ .Release.Name }}
-      app.kubernetes.io/component: "metrics"
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+      - {{ .Release.Namespace }}
 {{- end -}}
