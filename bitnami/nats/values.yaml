@@ -92,7 +92,7 @@ debug:
 ## to specify the proper filename according to the image version.
 ##
 natsFilename: nats-server
-  
+
 ## Command and args for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -533,4 +533,3 @@ metrics:
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
-
