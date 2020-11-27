@@ -280,6 +280,11 @@ initJob:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Priority class name
+  ##
+  #priorityClassName: ""
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -365,6 +370,11 @@ updateJob:
   ## Redis pod/node affinity/anti-affinity
   ##
   affinity: {}
+
+  ## Priority class name
+  ##
+  #priorityClassName: ""
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
