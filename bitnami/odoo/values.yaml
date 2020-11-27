@@ -117,7 +117,7 @@ smtpHost: in-v3.mailjet.com
 smtpPort: 587
 smtpUser: 742e3f75925d389a30b16ee2f601252b
 smtpPassword: f045fd585a0cd37ff0d546cb08ca8483
-smtpProtocol:
+smtpProtocol: tls
 
 ## Use existing secret for the application password
 ##
