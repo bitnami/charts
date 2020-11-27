@@ -114,22 +114,19 @@ spec:
               value: {{ .Values.primary.service.port | quote }}
             - name: MYSQL_MASTER_ROOT_USER
               value: "root"
+            - name: MYSQL_REPLICATION_USER
+              value: {{ .Values.auth.replicationUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
               value: "/opt/bitnami/mysql/secrets/mysql-root-password"
+            - name: MYSQL_REPLICATION_PASSWORD_FILE
+              value: "/opt/bitnami/mysql/secrets/mysql-replication-password"
             {{- else }}
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mysql.secretName" . }}
                   key: mysql-root-password
-            {{- end }}
-            - name: MYSQL_REPLICATION_USER
-              value: {{ .Values.auth.replicationUser | quote }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: MYSQL_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/mysql/secrets/mysql-replication-password"
-            {{- else }}
             - name: MYSQL_REPLICATION_PASSWORD
               valueFrom:
                 secretKeyRef:

@@ -124,7 +124,6 @@ Return true if a secret object should be created for MySQL
 {{- define "mysql.createSecret" -}}
 {{- if not .Values.auth.existingSecret }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 
