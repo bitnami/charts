@@ -1,4 +1,6 @@
 
+** Please be patient while the chart is being deployed **
+
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
   You should be able to access your new phpMyAdmin installation through
@@ -23,9 +25,9 @@
   echo "phpMyAdmin URL: http://$SERVICE_IP:{{ .Values.service.port }}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "phpmyadmin.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "phpMyAdmin URL: http://127.0.0.1:8080"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "phpmyadmin.fullname" . }} 8080:80
+
+  echo "phpMyAdmin URL: http://127.0.0.1:{{ .Values.service.port }}"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
 
 {{- end }}
 
@@ -51,33 +53,12 @@ $ helm upgrade {{.Release.Name}} bitnami/phpmyadmin --set db.host=mydb
 {{- end }}
 
 {{- include "phpmyadmin.validateValues" . -}}
+{{- include "phpmyadmin.checkRollingTags" . -}}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- $passwordValidationErrors := list -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbSecretName := include "magento.databaseSecretName" . -}}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- end }}
-
-** Please be patient while the chart is being deployed **
-
-{{- if and (not .Values.mariadb.existingSecret) .Values.db.bundleTestDB -}}
-  {{- $requiredPasswords := list -}}
-  {{- $secretName := include "mariadb.fullname" . -}}
-
-  {{- $requiredRootMariadbPassword := dict "valueKey" "mariadb.auth.rootPassword" "secret" $secretName "field" "mariadb-root-password" -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootMariadbPassword -}}
-
-  {{- if not (empty .Values.mariadb.auth.user) -}}
-    {{- $requiredMariadbPassword := dict "valueKey" "mariadb.auth.password" "secret" $secretName "field" "mariadb-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredMariadbPassword -}}
-  {{- end -}}
-
-  {{- if eq .Values.mariadb.architecture "replication" -}}
-    {{- $requiredReplicationPassword := dict "valueKey" "mariadb.auth.replicationPassword" "secret" $secretName "field" "mariadb-replication-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
-  {{- end -}}
-
-  {{- $passwordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
-{{- end -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
