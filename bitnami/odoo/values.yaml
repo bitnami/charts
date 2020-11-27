@@ -96,26 +96,28 @@ extraVolumeMounts: []
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooUsername: user@example.com
+odooUsername: devops1@rg-21.com
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooEmail: user@example.com
+odooEmail: devops1@rg-21.com
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-# odooPassword:
+
+odooPassword: Devops123!
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
+
+smtpHost: smtp.mailgun.org
+smtpPort: 587
+smtpUser: odoo2@mg.rg-21.com
+smtpPassword: 1976a2896080e08cc552a422cdd54713-360a0b2c-68935990
+smtpProtocol: ssl,tsl
 
 ## Use existing secret for the application password
 ##
@@ -124,13 +126,13 @@ existingSecret:
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
   ## Database host
-  host: localhost
+  host: 10.59.176.3
 
   ## non-root Username for Odoo database
-  user: postgres
+  user: odoo2
 
   ## Database password
-  password: ""
+  password: Odoo123!
 
   ## Database port number
   port: 5432
@@ -141,11 +143,13 @@ externalDatabase:
 ## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
-  enabled: true
+  enabled: false
+
   ## PostgreSQL password
   ## ref: https://hub.docker.com/_/postgres/
   ##
-  # postgresqlPassword:
+  
+  postgresqlPassword: Odoo123!
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
