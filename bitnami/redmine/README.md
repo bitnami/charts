@@ -36,91 +36,6 @@ The command deploys Redmine on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Deploying to a sub-URI
-
-(adapted from https://hub.docker.com/r/bitnami/redmine/)
-
-On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
-
-### Create a configmap containing an altered version of init.sh
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redmine-init-configmap
-  namespace: <same-namespace-as-the-chart>
-  labels:
-  ...
-data:
-
-  init.sh: |-
-
-    #!/bin/bash
-
-    # Set default values depending on database variation
-    if [ -n "$REDMINE_DB_POSTGRES" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-5432}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-postgres}
-    elif [ -n "$REDMINE_DB_MYSQL" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-3306}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-root}
-    fi
-
-    # REPLACE WITH YOUR OWN SUB-URI
-    SUB_URI_PATH='/redmine'
-
-    #Config files where to apply changes
-    config1=/opt/bitnami/redmine/config.ru
-    config2=/opt/bitnami/redmine/config/environment.rb
-
-    if [[ ! -d /opt/bitnami/redmine/conf/ ]]; then
-        sed -i '$ d' ${config1}
-        echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
-        echo 'run Rails.application' >> ${config1}
-        echo 'end' >> ${config1}
-        echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
-    fi
-
-    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
-    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
-```
-
-### Add this confimap as a volume/volume mount in the chart values
-
-```yaml
-## Extra volumes to add to the deployment
-##
-extraVolumes: 
-  - name: redmine-init-volume
-    configMap:
-      name: redmine-init-configmap
-
-## Extra volume mounts to add to the container
-##
-extraVolumeMounts:
-  - name: "redmine-init-volume"
-    mountPath: "/init.sh"
-    subPath: init.sh
-```
-
-### Change the probes URI
-
-```yaml
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-##
-livenessProbe:
-  enabled: true
-  path: /redmine/
-...
-
-readinessProbe:
-  enabled: true
-  path: /redmine/
-...
-```
-
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
@@ -412,6 +327,91 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Replicas
 
 Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
+
+### Deploying to a sub-URI
+
+(adapted from https://hub.docker.com/r/bitnami/redmine/)
+
+On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
+
+#### Create a configmap containing an altered version of init.sh
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redmine-init-configmap
+  namespace: <same-namespace-as-the-chart>
+  labels:
+  ...
+data:
+
+  init.sh: |-
+
+    #!/bin/bash
+
+    # Set default values depending on database variation
+    if [ -n "$REDMINE_DB_POSTGRES" ]; then
+        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-5432}
+        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-postgres}
+    elif [ -n "$REDMINE_DB_MYSQL" ]; then
+        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-3306}
+        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-root}
+    fi
+
+    # REPLACE WITH YOUR OWN SUB-URI
+    SUB_URI_PATH='/redmine'
+
+    #Config files where to apply changes
+    config1=/opt/bitnami/redmine/config.ru
+    config2=/opt/bitnami/redmine/config/environment.rb
+
+    if [[ ! -d /opt/bitnami/redmine/conf/ ]]; then
+        sed -i '$ d' ${config1}
+        echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
+        echo 'run Rails.application' >> ${config1}
+        echo 'end' >> ${config1}
+        echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
+    fi
+
+    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
+    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
+```
+
+#### Add this confimap as a volume/volume mount in the chart values
+
+```yaml
+## Extra volumes to add to the deployment
+##
+extraVolumes: 
+  - name: redmine-init-volume
+    configMap:
+      name: redmine-init-configmap
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts:
+  - name: "redmine-init-volume"
+    mountPath: "/init.sh"
+    subPath: init.sh
+```
+
+#### Change the probes URI
+
+```yaml
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  path: /redmine/
+...
+
+readinessProbe:
+  enabled: true
+  path: /redmine/
+...
+```
 
 ## Persistence
 
