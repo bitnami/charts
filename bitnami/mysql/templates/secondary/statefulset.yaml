@@ -45,7 +45,7 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ template "mysql.serviceAccountName" . }}
+      serviceAccountName: {{ include "mysql.serviceAccountName" . }}
       {{- if .Values.secondary.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.affinity "context" $) | nindent 8 }}
       {{- else }}

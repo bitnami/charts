@@ -14,5 +14,5 @@ metadata:
   {{- end }}
 data:
   my.cnf: |-
-{{ .Values.primary.configuration | indent 4 }}
+    {{ .Values.primary.configuration | nindent 4 }}
 {{- end -}}

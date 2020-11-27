@@ -232,7 +232,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mysql.secretName" . }}
+                  name: {{ include "mysql.secretName" . }}
                   key: mysql-root-password
             {{- end }}
           command:
@@ -280,12 +280,12 @@ spec:
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "mysql.initdbScriptsCM" . }}
+            name: {{ include "mysql.initdbScriptsCM" . }}
         {{- end }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: mysql-credentials
           secret:
-            secretName: {{ template "mysql.secretName" . }}
+            secretName: {{ include "mysql.secretName" . }}
             items:
               - key: mysql-root-password
                 path: mysql-root-password
