@@ -73,6 +73,10 @@ spec:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: '0.0.0.0'
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.web.containerPort | quote }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.auth.username }}
             - name: AIRFLOW_PASSWORD
@@ -80,9 +84,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "airflow.secretName" . }}
                   key: airflow-password
-            {{- if .Values.web.baseUrl }}
+            {{- $baseUrl := include "airflow.baseUrl" . }}
+            {{- if $baseUrl }}
             - name: AIRFLOW_BASE_URL
-              value: {{ .Values.web.baseUrl }}
+              value: {{ $baseUrl }}
             {{- end }}
             - name: AIRFLOW_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
@@ -138,7 +143,7 @@ spec:
               containerPort: {{ .Values.web.containerPort }}
         {{- if .Values.web.livenessProbe.enabled }}
           livenessProbe:
-          {{- if .Values.web.baseUrl }}
+          {{- if $baseUrl }}
             tcpSocket:
               port: http
           {{- else }}
@@ -153,7 +158,7 @@ spec:
         {{- end }}
         {{- if .Values.web.readinessProbe.enabled }}
           readinessProbe:
-          {{- if .Values.web.baseUrl }}
+          {{- if $baseUrl }}
             tcpSocket:
               port: http
           {{- else }}

@@ -276,10 +276,6 @@ Add environmnet variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernetKey
-- name: AIRFLOW_WEBSERVER_HOST
-  value: {{ include "common.names.fullname" . }}
-- name: AIRFLOW_WEBSERVER_PORT_NUMBER
-  value: {{ .Values.service.port | quote }}
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}
@@ -316,6 +312,39 @@ Add environmnet variables to configure airflow kubernetes executor
 - name: AIRFLOW__KUBERNETES__POD_TEMPLATE_FILE
   value: "/opt/bitnami/airflow/pod_template.yaml"
 {{- end }}
+{{- end -}}
+
+{{/*
+Get the user defined LoadBalancerIP for this release.
+Note, returns 127.0.0.1 if using ClusterIP.
+*/}}
+{{- define "airflow.serviceIP" -}}
+{{- if eq .Values.service.type "ClusterIP" -}}
+127.0.0.1
+{{- else -}}
+{{- .Values.service.loadBalancerIP | default "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+*/}}
+{{- define "airflow.baseUrl" -}}
+{{- $host := include "airflow.serviceIP" . -}}
+
+{{- $port := "" -}}
+{{- $servicePortString := printf "%v" .Values.service.port -}}
+{{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+{{- end -}}
+
+{{- $defaultUrl := "" -}}
+{{- if $host -}}
+  {{- $defaultUrl = printf "http://%s%s" $host $port -}}
+{{- end -}}
+
+{{- default $defaultUrl .Values.web.baseUrl -}}
 {{- end -}}
 
 {{/*

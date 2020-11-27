@@ -1,7 +1,8 @@
 {{- $airflowSecretName := include "airflow.secretName" . -}}
 {{- $postgresqlSecretName := include "airflow.postgresql.secretName" . -}}
 {{- $redisSecretName := include "airflow.redis.secretName" . -}}
-{{- if not .Values.web.baseUrl -}}
+{{- $baseUrl := (include "airflow.baseUrl" .) -}}
+{{- if not $baseUrl -}}
 ###############################################################################
 ### ERROR: You did not provide an external URL in your 'helm install' call ###
 ###############################################################################
@@ -61,7 +62,7 @@ host. To configure Airflow with the URL of your service:
 
 {{- if .Values.ingress.enabled }}
 
-  echo URL  : {{ .Values.web.baseUrl }}
+  echo URL  : {{ $baseUrl }}
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
@@ -76,7 +77,7 @@ host. To configure Airflow with the URL of your service:
 
 {{- else }}
 
-  echo URL  : {{ .Values.web.baseUrl }}
+  echo URL  : {{ $baseUrl }}
 {{- end }}
 
 2. Get your Airflow login credentials by running:
