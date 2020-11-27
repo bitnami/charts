@@ -283,7 +283,7 @@ initJob:
 
   ## Priority class name
   ##
-  #priorityClassName: ""
+  # priorityClassName: ""
 
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -373,7 +373,7 @@ updateJob:
 
   ## Priority class name
   ##
-  #priorityClassName: ""
+  # priorityClassName: ""
 
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
