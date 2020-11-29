@@ -323,6 +323,7 @@ spec:
     - metadata:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+          app.kubernetes.io/managed-by: {{ .Release.Service }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
