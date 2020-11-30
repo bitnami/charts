@@ -106,6 +106,13 @@ podAffinityPreset: ""
 ##
 podAntiAffinityPreset: soft
 
+## Pod disruption budget
+# https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets
+podDisruptionBudget:
+  enabled: false
+  minAvailable:
+  maxUnavailable:
+
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ## Allowed values: soft, hard
