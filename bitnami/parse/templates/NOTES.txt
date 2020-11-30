@@ -1,3 +1,4 @@
+{{- $dbSecretName := include "parse.mongodb.fullname" . -}}
 
 ******************************************************************
 *** PLEASE BE PATIENT: Parse may take a few minutes to install ***
@@ -98,3 +99,10 @@ service:
 
 {{ include "parse.validateValues" . }}
 {{ include "parse.checkRollingTags" . }}
+
+{{- $passwordValidationErrors := list }}
+
+{{- $dbPasswordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
