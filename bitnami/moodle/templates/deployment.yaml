@@ -173,7 +173,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: moodle-password
-            {{-if .Values.moodleSiteName }}
+            {{- if .Values.moodleSiteName }}
             - name: MOODLE_SITE_NAME
               value: {{ .Values.moodleSiteName| quote }}
             {{- end }}
