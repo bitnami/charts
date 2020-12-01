@@ -380,6 +380,10 @@ persistence:
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
+  # This is necessary for bitnami/common validation purposes. Setting enabled=false will
+  # make no difference in deploying the subchart. Change this when further standardizations
+  # are added (externalDB)
+  enabled: true
   ## MongoDB Authentication parameters
   ##
   auth:
