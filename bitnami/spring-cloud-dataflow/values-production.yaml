@@ -333,6 +333,16 @@ server:
     ##
     port: 5005
 
+  ## Extra volumes to mount
+  ##
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -567,6 +577,16 @@ skipper:
     ## Specify port for remote debugging.
     ##
     port: 5005
+
+  ## Extra volumes to mount
+  ##
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
 
 ##
 ## External Skipper Configuration
