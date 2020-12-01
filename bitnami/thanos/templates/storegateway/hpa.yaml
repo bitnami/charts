@@ -13,16 +13,16 @@ spec:
   minReplicas: {{ .Values.storegateway.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.storegateway.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.storegateway.autoscaling.targetCPU }}
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetCPU }}
-    {{- end }}
     {{- if .Values.storegateway.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetMemory  }}
+    {{- end }}
+    {{- if .Values.storegateway.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetCPU }}
     {{- end }}
 {{- end }}
