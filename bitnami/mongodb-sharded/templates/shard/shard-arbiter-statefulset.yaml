@@ -4,35 +4,35 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-shard%d-arbiter" (include "common.names.fullname" $ ) $i }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  name: {{ printf "%s-shard%d-arbiter" (include "mongodb-sharded.fullname" $ ) $i }}
+  labels: {{- include "mongodb-sharded.labels" $ | nindent 4 }}
     app.kubernetes.io/component: shardsvr-arbiter
 spec:
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: shardsvr-arbiter
   podManagementPolicy: {{ $.Values.shardsvr.arbiter.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.arbiter.updateStrategy | nindent 4 }}
-  serviceName: {{ include "common.names.fullname" $ }}-headless
+  serviceName: {{ include "mongodb-sharded.fullname" $ }}-headless
   replicas: {{ $.Values.shardsvr.arbiter.replicas }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+      labels: {{- include "mongodb-sharded.labels" $ | nindent 8 }}
         app.kubernetes.io/component: shardsvr-arbiter
         {{- if $.Values.shardsvr.arbiter.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
+          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
         shard: {{ $i | quote }}
       {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations $.Values.metrics.enabled }}
       annotations:
         {{- if $.Values.common.podAnnotations }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.common.podAnnotations "context" $ ) | nindent 8 }}
+           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.shardsvr.arbiter.podAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podAnnotations "context" $ ) | nindent 8 }}
+          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.metrics.enabled }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+           {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -40,20 +40,9 @@ spec:
       {{- if $.Values.common.schedulerName }}
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}
-      {{- if $.Values.shardsvr.arbiter.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.affinity "context" $) | nindent 8 }}
-      {{- else }}
-      affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAffinityPreset "component" "shardsvr-arbiter" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAntiAffinityPreset "component" "shardsvr-arbiter" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.arbiter.nodeAffinityPreset.type "key" $.Values.shardsvr.arbiter.nodeAffinityPreset.key "values" $.Values.shardsvr.arbiter.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
-      {{- if $.Values.shardsvr.arbiter.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if $.Values.shardsvr.arbiter.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.tolerations "context" $) | nindent 8 }}
-      {{- end }}
+      nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.nodeSelector "context" $ ) | nindent 8 }}
+      affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.affinity "context" (set $ "arbiterLoopId" $i) ) | nindent 8 }}
+      tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.tolerations "context" $ ) | nindent 8 }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}
@@ -62,10 +51,10 @@ spec:
       {{- if or (ge (len $.Values.shardsvr.arbiter.initContainers) 1) (ge (len $.Values.common.initContainers) 1) }}
       initContainers:
         {{- with $.Values.shardsvr.arbiter.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
         {{- with $.Values.common.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       {{- end }}
       containers:
@@ -104,12 +93,12 @@ spec:
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "common.names.fullname" $ ) $i (include "common.names.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
+              value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "mongodb-sharded.fullname" $ ) $i (include "mongodb-sharded.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
-              value: {{ printf "%s-shard-%d" ( include "common.names.fullname" $ ) $i }}
+              value: {{ printf "%s-shard-%d" ( include "mongodb-sharded.fullname" $ ) $i }}
             {{- if $.Values.common.useHostnames }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MONGODB_POD_NAME).{{ include "common.names.fullname" $ }}-headless.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}"
+              value: "$(MONGODB_POD_NAME).{{ include "mongodb-sharded.fullname" $ }}-headless.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}"
             {{- end }}
             - name: MONGODB_ENABLE_IPV6
             {{- if $.Values.common.mongodbEnableIPv6 }}
@@ -144,23 +133,29 @@ spec:
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $.Values.shardsvr.arbiter.mongodbExtraFlags | join " " | quote }}
             {{- end }}
+            {{- if .Values.common.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.shardsvr.arbiter.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
           {{- if or $.Values.common.extraEnvVarsCM $.Values.common.extraEnvVarsSecret $.Values.shardsvr.arbiter.extraEnvVarsCM $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
           envFrom:
             {{- if $.Values.common.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.common.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.arbiter.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           {{- if $.Values.livenessProbe.enabled }}
@@ -201,10 +196,10 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if $.Values.common.extraVolumeMounts }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
             {{- if $.Values.shardsvr.arbiter.extraVolumeMounts }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
         {{- if $.Values.metrics.enabled }}
@@ -269,10 +264,10 @@ spec:
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- with $.Values.shardsvr.arbiter.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
         {{- with $.Values.common.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       volumes:
         {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
@@ -298,10 +293,10 @@ spec:
             defaultMode: 0755
         {{- end }}
       {{- if $.Values.common.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraVolumes "context" $ ) | nindent 8 }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.arbiter.extraVolumes "context" $ ) | nindent 8 }}
       {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---
