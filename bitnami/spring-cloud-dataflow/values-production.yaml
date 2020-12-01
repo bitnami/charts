@@ -333,6 +333,17 @@ server:
     ##
     port: 5005
 
+  ## Extra volumes to mount
+  ## Example Use Case: mount systemd journal volume
+  # extraVolumes:
+  #   - name: systemd
+  #       hostPath:
+  #         path: /run/log/journal/
+  #
+  # extraVolumeMounts:
+  #   - name: systemd
+  #     mountPath: /run/log/journal/
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -567,6 +578,17 @@ skipper:
     ## Specify port for remote debugging.
     ##
     port: 5005
+
+  ## Extra volumes to mount
+  ## Example Use Case: mount systemd journal volume
+  # extraVolumes:
+  #   - name: systemd
+  #       hostPath:
+  #         path: /run/log/journal/
+  #
+  # extraVolumeMounts:
+  #   - name: systemd
+  #     mountPath: /run/log/journal/
 
 ##
 ## External Skipper Configuration
