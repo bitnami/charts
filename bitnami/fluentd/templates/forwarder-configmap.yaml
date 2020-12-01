@@ -60,9 +60,12 @@ data:
     <source>
       @type tail
       path /var/log/containers/*.log
+
       # exclude Fluentd logs
       exclude_path /var/log/containers/*fluentd*.log
+
       pos_file /opt/bitnami/fluentd/logs/buffers/fluentd-docker.pos
+      
       tag kubernetes.*
       read_from_head true
       <parse>
@@ -76,6 +79,7 @@ data:
     <filter kubernetes.**>
       @type kubernetes_metadata
     </filter>
+    
     {{ if .Values.aggregator.enabled }}
     # Forward all logs to the aggregators
     <match **>
@@ -101,10 +105,12 @@ data:
         flush_interval 5s
       </buffer>
     </match>
-    {{- else }}
+    {{ else }}
     # Send the logs to the standard output
     <match **>
       @type stdout
     </match>
-    {{- end -}}
+    {{ end -}}
+
+    {{ .Values.forwarder.extraConfig | indent 4 }}
 {{- end -}}

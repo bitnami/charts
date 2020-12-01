@@ -81,6 +81,19 @@ forwarder:
   ##
   # configMap:
 
+  ## Extra configuration to be appended to the fluentd.conf created by default 
+  ## ConfigMap created by this chart. For more details on default ConfigMap view 
+  ## /templates/forwarder-configmap.yaml
+  ## To learn more about fluend configurations 
+  ## https://docs.fluentd.org/configuration/config-file#list-of-directives
+  ##
+  ## extraConfig: |
+  ##   # Send the logs to the standard output
+  ##   <match **>
+  ##     @type stdout
+  ##   </match>
+  extraConfig: ""
+
   ## String with extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -357,6 +370,17 @@ aggregator:
   ## If not specified, one will be created by default
   ##
   # configMap:
+
+  ## Extra configuration to be appended to the fluentd.conf created by default 
+  ## ConfigMap created by this chart. For more details on default ConfigMap view 
+  ## /templates/aggregator-configmap.yaml
+  ## To learn more about fluend configurations 
+  ## https://docs.fluentd.org/configuration/config-file#list-of-directives
+  extraConfig: |
+    # Send all logs to the standard output
+    <match **>
+      @type stdout
+    </match>
 
   ## Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter

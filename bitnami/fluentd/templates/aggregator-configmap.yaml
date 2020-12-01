@@ -59,7 +59,10 @@ data:
     </match>
 
     # Send the logs to the standard output
-    <match **>
-      @type stdout
-    </match>
+    # Following config will match widely causing any matches that follows invalid. Hence commented out.
+    # <match **>
+    #   @type stdout
+    # </match>
+    
+    {{ .Values.aggregator.extraConfig | indent 4 }}
 {{- end -}}

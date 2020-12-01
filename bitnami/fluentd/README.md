@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.containerSecurityContext.*`          | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
 | `forwarder.configFile`                          | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `forwarder.configMap`                           | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
+| `forwarder.extraConfig`                         | Additional Fluentd configuration to be appended to the default ConfigMap created by this chart.                | `Check values.yaml`                                                                                     |
 | `forwarder.extraArgs`                           | Extra arguments for the Fluentd command line                                                                   | `nil`                                                                                                   |
 | `forwarder.priorityClassName`                   | Set Pods Priority Class                                                                                        | `nil`                                                                                                   |
 | `forwarder.extraEnv`                            | Extra environment variables to pass to the container                                                           | `[]`                                                                                                    |
@@ -127,6 +128,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.containerSecurityContext.*`         | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
 | `aggregator.configFile`                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `aggregator.configMap`                          | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
+| `aggregator.extraConfig`                        | Additional Fluentd configuration to be appended to the default ConfigMap created by this chart.                | `Check values.yaml`                                                                                     |
 | `aggregator.port`                               | Kubernetes Service port - Fluentd transport port for the aggregators                                           | `24224`                                                                                                 |
 | `aggregator.extraArgs`                          | Extra arguments for the Fluentd command line                                                                   | `nil`                                                                                                   |
 | `aggregator.extraEnv`                           | Extra environment variables to pass to the container                                                           | `[]`                                                                                                    |
@@ -237,11 +239,50 @@ This chart includes a `values-production.yaml` file where you can find some para
 + forwarder.rbac.pspEnabled: true
 ```
 
+- Enable forwarding logs to another service like ElasticSearch
+```diff
+-  aggregator.extraConfig: |
+-    # Send all logs to the standard output
+-    <match **>
+-      @type stdout
+-    </match>
++  aggregator.extraConfig: |
++   # Send all logs to elasticsearch 
++    <match **>
++      @type elasticsearch
++      host elasticsearch-master-headless.default.svc.cluster.local
++      port 9200
++
++      type_name fluentd
++      logstash_format true
++      time_key @timestamp
++      include_tag_key true
++      include_timestamp true
++      reconnect_on_error true
++      reload_on_failure true
++      reload_connections false
++      request_timeout 120s
++
++      # enables debugging network issues
++      with_transporter_log true
++      @log_level debug
++
++      <buffer>
++        @type file
++        path /opt/bitnami/fluentd/logs/buffers/aggregator.logs.buffer
++        flush_thread_count 2
++        flush_interval 5s
++      </buffer>
++    </match>
+```
+
 To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
 
 ### Forwarding the logs to another service
 
-By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files. For example:
+By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files, or by using `aggregator.extraConfig` to append the configuration to the default ConfigMap. 
+
+#### By mounting own Configuration File
 
 **configmap.yaml**
 
@@ -325,6 +366,11 @@ aggregator.extraEnv[0].value=your-ip-here
 aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
 ```
+
+#### By changing the value at `aggregator.extraConfig`
+
+An example of how to do this is available in the `values-production.yaml`
+
 
 ### Forwarder Security Context & Policy
 
