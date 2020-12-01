@@ -115,6 +115,11 @@ resources:
 ##
 nodeSelector: {}
 
+## Set Priority Class Name to allow priority control over other pods
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
