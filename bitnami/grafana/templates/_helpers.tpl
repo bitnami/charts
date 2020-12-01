@@ -39,6 +39,9 @@ app.kubernetes.io/name: {{ include "grafana.name" . }}
 helm.sh/chart: {{ include "grafana.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.imageRenderer.podLabels }}
+{{ toYaml .Values.imageRenderer.podLabels }}
+{{- end }}
 {{- end -}}
 
 {{/*
