@@ -335,13 +335,13 @@ server:
 
   ## Extra volumes to mount
   ##
-  #extraVolumes:
-  #  - name: sample
-  #    emptyDir: {}
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
   #
-  #extraVolumeMounts:
-  #  - name: sample
-  #    mountPath: /temp/sample
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
 
 ##
 ## Spring Cloud Skipper parameters.
@@ -580,13 +580,13 @@ skipper:
 
   ## Extra volumes to mount
   ##
-  #extraVolumes:
-  #  - name: sample
-  #    emptyDir: {}
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
   #
-  #extraVolumeMounts:
-  #  - name: sample
-  #    mountPath: /temp/sample
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
 
 ##
 ## External Skipper Configuration
