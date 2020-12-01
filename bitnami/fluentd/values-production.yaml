@@ -81,10 +81,10 @@ forwarder:
   ##
   # configMap:
 
-  ## Extra configuration to be appended to the fluentd.conf created by default 
-  ## ConfigMap created by this chart. For more details on default ConfigMap view 
+  ## Extra configuration to be appended to the fluentd.conf created by default
+  ## ConfigMap created by this chart. For more details on default ConfigMap view
   ## /templates/forwarder-configmap.yaml
-  ## To learn more about fluend configurations 
+  ## To learn more about fluend configurations
   ## https://docs.fluentd.org/configuration/config-file#list-of-directives
   ##
   ## extraConfig: |
@@ -371,10 +371,10 @@ aggregator:
   ##
   # configMap:
 
-  ## Extra configuration to be appended to the fluentd.conf created by default 
-  ## ConfigMap created by this chart. For more details on default ConfigMap view 
+  ## Extra configuration to be appended to the fluentd.conf created by default
+  ## ConfigMap created by this chart. For more details on default ConfigMap view
   ## /templates/aggregator-configmap.yaml
-  ## To learn more about fluend configurations 
+  ## To learn more about fluend configurations
   ## https://docs.fluentd.org/configuration/config-file#list-of-directives
   extraConfig: |
     # Send all logs to elasticsearch 
