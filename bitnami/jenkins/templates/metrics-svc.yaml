@@ -2,10 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "jenkins.fullname" . }}-metrics
-  labels: {{- include "jenkins.labels" . | nindent 4 }}
+  name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{ include "jenkins.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -21,5 +23,5 @@ spec:
       {{- else if eq .Values.metrics.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "jenkins.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}
