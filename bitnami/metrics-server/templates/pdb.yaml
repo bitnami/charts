@@ -2,14 +2,8 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  labels:
-    app: {{ template "metrics-server.name" . }}
-    chart: {{ template "metrics-server.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-  name: {{ template "metrics-server.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   {{- if .Values.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
@@ -18,6 +12,5 @@ spec:
   maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
   {{- end  }}
   selector:
-    matchLabels:
-      app: {{ template "metrics-server.name" . }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end -}}
