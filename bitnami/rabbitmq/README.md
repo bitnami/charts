@@ -126,10 +126,15 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `statefulsetLabels`                       | RabbitMQ statefulset labels                                                                                              | `{}` (evaluated as a template)                               |
 | `podLabels`                               | RabbitMQ pod labels                                                                                                      | `{}` (evaluated as a template)                               |
 | `podAnnotations`                          | RabbitMQ Pod annotations                                                                                                 | `{}` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
-| `priorityClassName`                       | Name of the existing priority class to be used by kafka pods                                                             | `""`                                                         |
+| `podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                                                         |
+| `podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                                                       |
+| `nodeAffinityPreset.type`                 | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                                                         |
+| `nodeAffinityPreset.key`                  | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                                                         |
+| `nodeAffinityPreset.values`               | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                                                         |
 | `nodeSelector`                            | Node labels for pod assignment                                                                                           | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                                                           | `[]` (evaluated as a template)                               |
+| `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
+| `priorityClassName`                       | Name of the existing priority class to be used by kafka pods                                                             | `""`                                                         |
 | `podSecurityContext`                      | RabbitMQ pods' Security Context                                                                                          | `{}`                                                         |
 | `containerSecurityContext`                | RabbitMQ containers' Security Context                                                                                    | `{}`                                                         |
 | `resources.limits`                        | The resources limits for RabbitMQ containers                                                                             | `{}`                                                         |
@@ -274,9 +279,16 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one. In case you want to spread the deployment accross nodes you should configure the affinity parameters.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Increase the number of replicas:
 
