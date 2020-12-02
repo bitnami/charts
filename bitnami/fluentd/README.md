@@ -239,7 +239,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + forwarder.rbac.pspEnabled: true
 ```
 
-- Enable forwarding logs to another service like ElasticSearch
+- Enable forwarding logs to another service like Elasticsearch
 ```diff
 -  aggregator.extraConfig: |
 -    # Send all logs to the standard output
@@ -370,7 +370,6 @@ aggregator.extraEnv[1].value=your-port-here
 #### By changing the value at `aggregator.extraConfig`
 
 An example of how to do this is available in the `values-production.yaml`
-
 
 ### Forwarder Security Context & Policy
 
