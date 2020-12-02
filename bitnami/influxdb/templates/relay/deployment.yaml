@@ -25,7 +25,7 @@ spec:
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.relay.affinity }}
-      affinity: {{- include "fluentd.tplValue" (dict "value" .Values.relay.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "influxdb.tplValue" (dict "value" .Values.relay.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.relay.podAffinityPreset "component" "relay" "context" $) | nindent 10 }}
