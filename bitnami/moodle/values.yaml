@@ -49,6 +49,10 @@ replicaCount: 1
 ##
 moodleSkipInstall: false
 
+## Site name
+## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+moodleSiteName: ""
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
