@@ -54,6 +54,10 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Use a service account for the WordPress pod
+##
+serviceAccountName: default
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
@@ -458,6 +462,7 @@ ingress:
   ##   backend:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -673,4 +678,5 @@ externalDatabase:
 ##     ...
 ##
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
+##
 customPostInitScripts: {}
