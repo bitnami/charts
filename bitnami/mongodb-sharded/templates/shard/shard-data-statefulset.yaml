@@ -154,10 +154,10 @@ spec:
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $.Values.shardsvr.dataNode.mongodbExtraFlags | join " " | quote }}
             {{- end }}
-            {{- if .Values.common.extraEnvVars }}
+            {{- if $.Values.common.extraEnvVars }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
-            {{- if .Values.shardsvr.dataNode.extraEnvVars }}
+            {{- if $.Values.shardsvr.dataNode.extraEnvVars }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or $.Values.common.extraEnvVarsCM $.Values.common.extraEnvVarsSecret $.Values.shardsvr.dataNode.extraEnvVarsCM $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
