@@ -330,7 +330,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 
 ### Deploying to a sub-URI
 
-(adapted from https://hub.docker.com/r/bitnami/redmine/)
+(adapted from https://github.com/bitnami/bitnami-docker-redmine)
 
 On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
