@@ -264,11 +264,12 @@ worker:
 metrics:
   enabled: false
 
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '8081'
-   #FIXME: remove this line
-    test/test: "test"
+  masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8080'
+  workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8081'
 
   serviceMonitor:
     enabled: false
