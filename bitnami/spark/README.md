@@ -47,17 +47,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 
+
+### Global parameters
+
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                               | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                            | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common paramters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `nameOverride`                              | String to partially override common.names.fullname template with a string (will prepend the release name)                                  | `nil`                                                   |
+| `fullnameOverride`                          | String to fully override common.names.fullname template with a string                                                                      | `nil`                                                   |
+
+### Spark parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `image.registry`                            | spark image registry                                                                                                                       | `docker.io`                                             |
 | `image.repository`                          | spark Image name                                                                                                                           | `bitnami/spark`                                         |
 | `image.tag`                                 | spark Image tag                                                                                                                            | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                          | spark image pull policy                                                                                                                    | `IfNotPresent`                                          |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                              | String to partially override common.names.fullname template with a string (will prepend the release name)                                  | `nil`                                                   |
-| `fullnameOverride`                          | String to fully override common.names.fullname template with a string                                                                      | `nil`                                                   |
+
+### Spark master parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `master.debug`                              | Specify if debug values should be set on the master                                                                                        | `false`                                                 |
 | `master.webPort`                            | Specify the port where the web interface will listen on the master                                                                         | `8080`                                                  |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                                                      | `7077`                                                  |
@@ -87,6 +105,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                   | 5                                                       |
 | `master.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                 | 6                                                       |
 | `master.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                | 1                                                       |
+
+### Spark worker parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `worker.debug`                              | Specify if debug values should be set on workers                                                                                           | `false`                                                 |
 | `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                                                         | `8080`                                                  |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                                                   | `7077`                                                  |
@@ -124,6 +147,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.extraEnvVars`                       | Extra environment variables to pass to the worker container                                                                                | `{}`                                                    |
 | `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`     | `nil`                                                   |
 | `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`. | `nil`                                                   |
+
+### Security paramters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                                                                    | No default                                              |
 | `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                                                              | `false`                                                 |
 | `security.rpc.encryptionEnabled`            | Enable the encryption for RPC                                                                                                              | `false`                                                 |
@@ -132,6 +160,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `security.ssl.needClientAuth`               | Enable the client authentication                                                                                                           | `false`                                                 |
 | `security.ssl.protocol`                     | Set the SSL protocol                                                                                                                       | `TLSv1.2`                                               |
 | `security.certificatesSecretName`           | Set the name of the secret that contains the certificates                                                                                  | No default                                              |
+
+### Exposure parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                              | Kubernetes Service type                                                                                                                    | `ClusterIP`                                             |
 | `service.webPort`                           | Spark client port                                                                                                                          | `80`                                                    |
 | `service.clusterPort`                       | Spark cluster port                                                                                                                         | `7077`                                                  |
@@ -148,6 +181,26 @@ The following tables lists the configurable parameters of the spark chart and th
 | `ingress.hosts[0].tls`                      | Utilize TLS backend in ingress                                                                                                             | `false`                                                 |
 | `ingress.hosts[0].tlsHosts`                 | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                       | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`                | TLS Secret (certificates)                                                                                                                  | `spark.local-tls`                                       |
+
+### Metrics parameters
+
+| Parameter                                 | Description                                                                                                                                  | Default                                                      |
+|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                         | Start a side-car prometheus exporter                                                                                                         | `false`                                                      |
+| `metrics.service.port`                    | Service Metrics port                                                                                                                         | `9117`                                                       |
+| `metrics.service.annotations`             | Annotations for enabling prometheus to access the metrics endpoints                                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources.limits`                | The resources limits for the metrics exporter container                                                                                      | `{}`                                                         |
+| `metrics.resources.requests`              | The requested resources for the metrics exporter container                                                                                   | `{}`                                                         |
+| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                 | `false`                                                      |
+| `metrics.serviceMonitor.namespace`        | Namespace where servicemonitor resource should be created                                                                                    | `nil`                                                        |
+| `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                                                                                      | `30s`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                                                                          | `nil`                                                        |
+| `metrics.masterAnnotations`               | Annotations for enabling prometheus to access the metrics endpoint of the master nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |
+| `metrics.workerAnnotations`               | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "8081"}` |
+| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus                                                                                    | `false`                                                      |
+| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                       | `{}`                                                         |
+| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                                                                                   | the same namespace as spark                                  |
+| `metrics.prometheusRule.rules`            | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.              | `[]`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

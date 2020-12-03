@@ -262,18 +262,44 @@ worker:
 ## Metrics configuration
 ##
 metrics:
-  enabled: false
+  enabled: enabled
 
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '8081'
+  ## Prometheus metrics service parameters
+  ##
+  service:
+    ## Metrics port
+    ##
+    port: 9117
+    ## Annotations for the Prometheus metics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
   serviceMonitor:
+    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
     enabled: false
-    additionalLabels: {}
-    # namespace: monitoring
+    ## Specify the namespace in which the serviceMonitor resource will be created
+    # namespace: ""
+    ## Specify the interval at which metrics should be scraped
+    ##
     # interval: 30s
+    ## Specify the timeout after which the scrape is ended
     # scrapeTimeout: 10s
+
+  masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: "{{ .Values.master.webPort }}"
+
+  workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: "{{ .Values.worker.webPort }}"
+
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -313,17 +339,17 @@ security:
   ##
   storageEncryptionEnabled: true
 
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
+  ##
+  certificatesSecretName: my-certificates-secret
+
   ## SSL configuration
   ##
   ssl:
     enabled: true
     needClientAuth: true
     protocol: TLSv1.2
-
-  ## Name of the secret that contains the certificates
-  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
-  ##
-  certificatesSecretName: my-certificates-secret
 
 ## Service parameters
 ##
