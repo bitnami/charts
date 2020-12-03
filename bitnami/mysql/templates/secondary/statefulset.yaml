@@ -118,7 +118,7 @@ spec:
               value: {{ .Values.auth.replicationUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mysql/secrets/mysql-root-password" .Values.auth.customPasswordFiles.masterRoot }}
+              value: {{ default "/opt/bitnami/mysql/secrets/mysql-root-password" .Values.auth.customPasswordFiles.root }}
             - name: MYSQL_REPLICATION_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mysql/secrets/mysql-replication-password" .Values.auth.customPasswordFiles.replicator }}
             {{- else }}
