@@ -293,12 +293,12 @@ metrics:
     # scrapeTimeout: 10s
 
   masterAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: "{{ .Values.master.webPort }}"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "{{ .Values.master.webPort }}"
 
   workerAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: "{{ .Values.worker.webPort }}"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "{{ .Values.worker.webPort }}"
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
