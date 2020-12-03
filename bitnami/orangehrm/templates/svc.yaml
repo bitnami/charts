@@ -6,8 +6,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -35,10 +41,13 @@ spec:
       {{- end }}
     - name: https
       port: {{ .Values.service.httpsPort }}
-      targetPort: https
+      targetPort: {{ .Values.service.httpsTargetPort }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

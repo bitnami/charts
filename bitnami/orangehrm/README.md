@@ -132,25 +132,31 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                             | Default           |
-|----------------------------------|-----------------------------------------|-------------------|
-| `service.type`                   | Kubernetes Service type                 | `LoadBalancer`    |
-| `service.port`                   | Service HTTP port                       | `80`              |
-| `service.httpsPort`              | Service HTTPS port                      | `443`             |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation    | `Cluster`         |
-| `service.nodePorts.http`         | Kubernetes http node port               | `""`              |
-| `service.nodePorts.https`        | Kubernetes https node port              | `""`              |
-| `ingress.enabled`                | Enable ingress controller resource      | `false`           |
-| `ingress.certManager`            | Add annotations for cert-manager        | `false`           |
-| `ingress.hostname`               | Default host for the ingress resource   | `orangehrm.local` |
-| `ingress.annotations`            | Ingress annotations                     | `{}`              |
-| `ingress.hosts[0].name`          | Hostname to your OrangeHRM installation | `nil`             |
-| `ingress.hosts[0].path`          | Path within the url structure           | `nil`             |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                               | `nil`             |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)               | `nil`             |
-| `ingress.secrets[0].name`        | TLS Secret Name                         | `nil`             |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                  | `nil`             |
-| `ingress.secrets[0].key`         | TLS Secret Key                          | `nil`             |
+| Parameter                                 | Description                                                                   | Default                        |
+|-------------------------------------------|-------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                            | Kubernetes Service type                                                       | `LoadBalancer`                 |
+| `service.port`                            | Service HTTP port                                                             | `80`                           |
+| `service.httpsPort`                       | Service HTTPS port                                                            | `443`                          |
+| `service.httpsTargetPort`                 | Service Target HTTPS port                                                     | `https`                        |
+| `service.nodePorts.http`                  | Kubernetes http node port                                                     | `""`                           |
+| `service.nodePorts.https`                 | Kubernetes https node port                                                    | `""`                           |
+| `service.extraPorts`                      | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`                          |
+| `service.clusterIP`                       | WordPress service clusterIP IP                                                | `None`                         |
+| `service.loadBalancerSourceRanges`        | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)    | `[]`                           |
+| `service.loadBalancerIP`                  | loadBalancerIP if service type is `LoadBalancer`                              | `nil`                          |
+| `service.externalTrafficPolicy`           | Enable client source IP preservation                                          | `Cluster`                      |
+| `service.annotations`                     | Service annotations                                                           | `{}` (evaluated as a template) |
+| `ingress.enabled`                         | Enable ingress controller resource                                            | `false`                        |
+| `ingress.certManager`                     | Add annotations for cert-manager                                              | `false`                        |
+| `ingress.hostname`                        | Default host for the ingress resource                                         | `orangehrm.local`              |
+| `ingress.annotations`                     | Ingress annotations                                                           | `{}` (evaluated as a template) |
+| `ingress.hosts[0].name`                   | Hostname to your OrangeHRM installation                                       | `nil`                          |
+| `ingress.hosts[0].path`                   | Path within the url structure                                                 | `nil`                          |
+| `ingress.tls[0].hosts[0]`                 | TLS hosts                                                                     | `nil`                          |
+| `ingress.tls[0].secretName`               | TLS Secret (certificates)                                                     | `nil`                          |
+| `ingress.secrets[0].name`                 | TLS Secret Name                                                               | `nil`                          |
+| `ingress.secrets[0].certificate`          | TLS Secret Certificate                                                        | `nil`                          |
+| `ingress.secrets[0].key`                  | TLS Secret Key                                                                | `nil`                          |
 
 ### Database parameters
 
