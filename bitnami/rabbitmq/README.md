@@ -134,7 +134,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `nodeSelector`                            | Node labels for pod assignment                                                                                           | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                                                           | `[]` (evaluated as a template)                               |
 | `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
-| `priorityClassName`                       | Name of the existing priority class to be used by kafka pods                                                             | `""`                                                         |
+| `priorityClassName`                       | Name of the existing priority class to be used by rabbitmq pods                                                          | `""`                                                         |
 | `podSecurityContext`                      | RabbitMQ pods' Security Context                                                                                          | `{}`                                                         |
 | `containerSecurityContext`                | RabbitMQ containers' Security Context                                                                                    | `{}`                                                         |
 | `resources.limits`                        | The resources limits for RabbitMQ containers                                                                             | `{}`                                                         |
@@ -284,7 +284,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 
 ### Production configuration and horizontal scaling
 
