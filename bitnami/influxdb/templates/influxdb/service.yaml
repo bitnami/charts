@@ -6,7 +6,7 @@ metadata:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
   {{- if .Values.influxdb.service.annotations }}
-  annotations: {{- include "influxdb.tplValue" ( dict "value" .Values.influxdb.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.influxdb.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.influxdb.service.type }}
