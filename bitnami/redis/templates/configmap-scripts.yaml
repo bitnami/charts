@@ -75,6 +75,11 @@ data:
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+			sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port  }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet  }}"
+			if [[ ! ($($sentinel_info_command))  ]]; then
+				exit 1
+			fi
     fi
 
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
@@ -225,6 +230,11 @@ data:
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+			sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port  }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet  }}"
+			if [[ ! ($($sentinel_info_command))  ]]; then
+				exit 1
+			fi
     fi
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
 
