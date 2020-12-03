@@ -502,10 +502,10 @@ readinessProbe:
 startupProbe:
   enabled: false
   path: /login
-  initialDelaySeconds: 600
+  initialDelaySeconds: 0
   periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
+  timeoutSeconds: 3
+  failureThreshold: 60
   successThreshold: 1
 
 ## Custom Liveness probe
