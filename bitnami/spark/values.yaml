@@ -259,6 +259,45 @@ worker:
     ## Max number of workers when using autoscaling
     replicasMax: 5
 
+## Metrics configuration
+##
+metrics:
+  enabled: false
+
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8081'
+   #FIXME: remove this line
+    test/test: "test"
+
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    # namespace: monitoring
+    # interval: 30s
+    # scrapeTimeout: 10s
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    enabled: false
+    additionalLabels: {}
+    namespace: ''
+    ## These are just examples rules, please adapt them to your needs.
+    ## Make sure to constraint the rules to the current postgresql service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: pg_replication_lag{service="{{ template "postgresql.fullname" . }}-metrics"} / 3600 > 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
+    ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
+    ##
+    rules: []
+
 ## Security configuration
 ##
 security:
@@ -319,7 +358,7 @@ service:
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  annotations: {}
+  annotations:
 
 ## Ingress paramaters
 ##

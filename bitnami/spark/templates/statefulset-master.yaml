@@ -66,6 +66,10 @@ spec:
             - name: BASH_DEBUG
               value: {{ ternary "1" "0" .Values.image.debug | quote }}
             {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - name: SPARK_METRICS_ENABLED
+              value: true
+            {{- end}}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
             {{- if .Values.master.clusterPort }}
