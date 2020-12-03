@@ -7,7 +7,7 @@ metadata:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{- include "influxdb.tplValue" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
