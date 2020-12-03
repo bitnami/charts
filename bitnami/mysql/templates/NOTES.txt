@@ -51,7 +51,7 @@ To upgrade this helm chart:
 
 {{ include "mysql.validateValues" . }}
 {{ include "mysql.checkRollingTags" . }}
-{{- if not .Values.auth.existingSecret -}}
+{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) -}}
     {{- $secretName := include "mysql.secretName" . -}}
     {{- $requiredPasswords := list -}}
 
