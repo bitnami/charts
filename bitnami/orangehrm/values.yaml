@@ -367,6 +367,9 @@ persistence:
   ## Default: nil.
   ##
   hostPath:
+  ## volumeMount subPath, use it for compatibility with previous versions of the chart
+  ##
+  subPath: orangehrm
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity

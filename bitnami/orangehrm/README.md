@@ -111,6 +111,7 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 | `persistence.hostPath`               | Host mount path for OrangeHRM volume                                                                                  | `nil` (will not mount to a host path)          |
 | `persistence.size`                   | PVC Storage Request for OrangeHRM volume                                                                              | `8Gi`                                          |
 | `persistence.storageClass`           | PVC Storage Class for OrangeHRM volume                                                                                | `nil` (uses alpha storage class annotation)    |
+| `persistence.subPath`                | volumeMount subPath, use it for compatibility with previous versions of the chart                                     | `orangehrm`                                    |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
@@ -379,6 +380,8 @@ The [Bitnami OrangeHRM](https://github.com/bitnami/bitnami-docker-orangehrm) ima
 If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
+
+To upgrade from `8.x.x`, backup OrangeHRM data and the previous MariaDB databases, install a new OrangeHRM chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume. As an alternative, you can use `helm upgrade` if you specify `volumePermissions.enabled=true` and `persistence.subPath=""`.
 
 ### To 8.0.0
 

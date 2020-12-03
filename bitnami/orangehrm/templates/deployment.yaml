@@ -77,7 +77,9 @@ spec:
           volumeMounts:
             - name: orangehrm-data
               mountPath: /bitnami/orangehrm
-              subPath: orangehrm
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath | quote }}
+              {{- end }}
         {{- end }}
         {{- if .Values.certificates.customCAs }}
         - name: certificates
@@ -250,7 +252,9 @@ spec:
           volumeMounts:
             - name: orangehrm-data
               mountPath: /bitnami/orangehrm
-              subPath: orangehrm
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath | quote }}
+              {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
