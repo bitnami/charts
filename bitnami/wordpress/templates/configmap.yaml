@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "wordpress.fullname" . }}-postinit
+  name: {{ include "common.names.fullname" . }}-postinit
 data:
-{{- include "wordpress.tplValue" ( dict "value" .Values.customPostInitScripts "context" $ ) | nindent 2 }}
+{{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
 {{- end }}

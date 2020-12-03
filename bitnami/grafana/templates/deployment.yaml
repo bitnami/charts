@@ -70,7 +70,7 @@ spec:
                   key: {{ include "grafana.adminSecretPasswordKey" . }}
             {{- if .Values.smtp.enabled }}
             - name: GF_SMTP_ENABLED
-              value: true
+              value: "true"
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
