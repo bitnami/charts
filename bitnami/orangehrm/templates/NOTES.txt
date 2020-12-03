@@ -1,4 +1,3 @@
-
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 ** Please be patient while the chart is being deployed **
 {{- if and .Values.ingress.enabled (ne .Values.service.type "ClusterIP") }}
