@@ -481,8 +481,8 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 livenessProbe:
   enabled: true
   path: /login
@@ -499,6 +499,14 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
+startupProbe:
+  enabled: false
+  path: /login
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 60
+  successThreshold: 1
 
 ## Custom Liveness probe
 ##
@@ -507,6 +515,10 @@ customLivenessProbe: {}
 ## Custom Readiness probe
 ##
 customReadinessProbe: {}
+
+## Custom Startup probe
+##
+customStartupProbe: {}
 
 ## lifecycleHooks for the container to automate configuration before or after startup.
 ##
