@@ -44,7 +44,7 @@ clusterDomain: cluster.local
 admin:
   ## Admin username
   ##
-  user: "admin"
+  user: 'admin'
   ## Admin password
   ## If a password is not provided a random password will be generated
   ##
@@ -64,6 +64,9 @@ smtp:
   ##
   user: user
   password: password
+  ## Custom host for the smtp server
+  ##
+  # host: mysmtphost.com
   ## Name of existing secret containing SMTP credentials (user and password)
   ##
   # existingSecret:
@@ -182,7 +185,7 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ""
+podAffinityPreset: ''
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -197,12 +200,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ""
+  type: ''
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ""
+  key: ''
   ## Node label values to match
   ## E.g.
   ## values:
@@ -367,7 +370,7 @@ ingress:
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
     - name: grafana.local
-      paths: ["/"]
+      paths: ['/']
 
       ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
       extraPaths: []
@@ -398,26 +401,23 @@ metrics:
   ##
   service:
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "3000"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '3000'
+      prometheus.io/path: '/metrics'
 
   serviceMonitor:
     enabled: false
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -482,9 +482,9 @@ imageRenderer:
     ## Prometheus annotations
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "8080"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8080'
+      prometheus.io/path: '/metrics'
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:

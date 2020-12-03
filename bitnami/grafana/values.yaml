@@ -64,6 +64,9 @@ smtp:
   ##
   user: user
   password: password
+  ## Custom host for the smtp server
+  ##
+  # host: mysmtphost.com
   ## Name of existing secret containing SMTP credentials (user and password)
   ##
   # existingSecret:
