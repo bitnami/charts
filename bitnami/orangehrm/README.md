@@ -125,7 +125,8 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 | `smtpPort`                           | SMTP port                                                                                                             | `nil`                                          |
 | `smtpProtocol`                       | SMTP Protocol (options: ssl, none)                                                                                    | `nil`                                          |
 | `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
-| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
+| `smtpPassword`                       | SMTP password. Ignored if `smtpExistingSecret` is set                                                                 | `nil`                                          |
+| `smtpExistingSecret`                 | Name of a secret with the SMTP password                                                                               | `nil`                                          |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
 

@@ -42,7 +42,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
+Return the proper Storage Class
 */}}
 {{- define "orangehrm.storageClass" -}}
 {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
@@ -53,6 +53,13 @@ OrangeHRM credential secret name
 */}}
 {{- define "orangehrm.secretName" -}}
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Return the SMTP secret name
+*/}}
+{{- define "orangehrm.smtpSecretName" -}}
+{{- coalesce .Values.smtpExistingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*

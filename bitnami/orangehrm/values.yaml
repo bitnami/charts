@@ -165,6 +165,13 @@ smtpUser:
 smtpPassword:
 smtpProtocol:
 
+## Use an existing secret for the SMTP Password
+## Can be the same secret as existingSecret
+## Must contain key `smtp-password`
+## NOTE: When it's set, the `smtpPassword` parameter is ignored
+##
+smtpExistingSecret:
+
 ##
 ## MariaDB chart configuration
 ##

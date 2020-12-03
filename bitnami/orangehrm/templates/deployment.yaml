@@ -187,11 +187,11 @@ spec:
             - name: SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
+            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "orangehrm.smtpSecretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
