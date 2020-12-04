@@ -647,6 +647,7 @@ proxy:
     - core
     - jobservice
     - clair
+    - trivy
 
 nginx:
   ## NGINX container command (using container default if not set)
@@ -742,6 +743,7 @@ nginx:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -919,6 +921,7 @@ portal:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1096,6 +1099,7 @@ core:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1289,6 +1293,7 @@ jobservice:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1548,6 +1553,7 @@ registry:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1756,6 +1762,7 @@ chartmuseum:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -2027,6 +2034,7 @@ clair:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -2230,6 +2238,7 @@ trivy:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -2389,6 +2398,7 @@ notary:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
@@ -2514,6 +2524,7 @@ notary:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
