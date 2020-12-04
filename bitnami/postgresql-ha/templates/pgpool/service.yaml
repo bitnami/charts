@@ -7,7 +7,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.pgpool.serviceLabels }}
-{{ toYaml .Values.pgpool.serviceLabels | indent 4 }}
+    {{ toYaml .Values.service.serviceLabels | indent 4 }}
     {{- end }}
 
   annotations:
