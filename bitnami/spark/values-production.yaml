@@ -259,6 +259,69 @@ worker:
     ## Max number of workers when using autoscaling
     replicasMax: 10
 
+## Metrics configuration
+##
+metrics:
+  enabled: enabled
+
+  ## Prometheus metrics service parameters
+  ##
+  service:
+    ## Metrics port
+    ##
+    port: 9117
+    ## Annotations for the Prometheus metics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  podMonitor:
+    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
+    enabled: false
+    ## Specify the namespace in which the podMonitor resource will be created
+    # namespace: ""
+    ## Specify the interval at which metrics should be scraped
+    ##
+    # interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    # scrapeTimeout: 10s
+
+  masterAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "{{ .Values.master.webPort }}"
+
+  workerAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "{{ .Values.worker.webPort }}"
+
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    enabled: false
+    additionalLabels: {}
+    namespace: ''
+    ## These are just examples rules, please adapt them to your needs.
+    ## Make sure to constraint the rules to the current postgresql service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: pg_replication_lag{service="{{ template "postgresql.fullname" . }}-metrics"} / 3600 > 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
+    ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
+    ##
+    rules: []
+
 ## Security configuration
 ##
 security:
@@ -276,17 +339,17 @@ security:
   ##
   storageEncryptionEnabled: true
 
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
+  ##
+  certificatesSecretName: my-certificates-secret
+
   ## SSL configuration
   ##
   ssl:
     enabled: true
     needClientAuth: true
     protocol: TLSv1.2
-
-  ## Name of the secret that contains the certificates
-  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
-  ##
-  certificatesSecretName: my-certificates-secret
 
 ## Service parameters
 ##
