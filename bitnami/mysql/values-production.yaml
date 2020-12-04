@@ -95,7 +95,6 @@ auth:
   customPasswordFiles: {}
   #   root: /vault/secrets/mysql-root
   #   user: /vault/secrets/mysql-user
-  #   masterRoot: /vault/secrets/mysql-root
   #   replicator: /vault/secrets/mysql-replicator
 
 ## initdb scripts
