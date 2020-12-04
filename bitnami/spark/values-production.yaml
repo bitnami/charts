@@ -280,11 +280,11 @@ metrics:
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
-  serviceMonitor:
+  podMonitor:
     ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
     ##
     enabled: false
-    ## Specify the namespace in which the serviceMonitor resource will be created
+    ## Specify the namespace in which the podMonitor resource will be created
     # namespace: ""
     ## Specify the interval at which metrics should be scraped
     ##
