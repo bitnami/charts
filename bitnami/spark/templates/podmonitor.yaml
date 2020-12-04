@@ -1,6 +1,6 @@
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
@@ -13,8 +13,8 @@ metadata:
     {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
-  endpoints:
-    - port: metrics
+  podMetricsEndpoints:
+    - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
@@ -26,5 +26,4 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: metrics
 {{- end }}

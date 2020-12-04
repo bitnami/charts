@@ -17,10 +17,10 @@ spec:
         {{- if .Values.master.extraPodLabels }}
           {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPodLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.worker.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.master.podAnnotations .Values.metrics.enabled }}
       annotations:
-      {{- if .Values.worker.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- if .Values.master.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       {{- if and .Values.metrics.enabled }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.masterAnnotations "context" $) | nindent 8 }}
