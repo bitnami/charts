@@ -87,9 +87,15 @@ auth:
   ## Force users to specify required passwords
   ##
   forcePassword: false
-  ## Mount credentials as a files instead of using an environment variable
+  ## Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
+  ## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
+  ##
+  customPasswordFiles: {}
+  #   root: /vault/secrets/mariadb-root
+  #   user: /vault/secrets/mariadb-user
+  #   replicator: /vault/secrets/mariadb-replicator
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
