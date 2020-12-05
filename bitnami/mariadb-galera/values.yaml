@@ -68,6 +68,11 @@ service:
   ##
   # nodePort: 30001
 
+  ## Specify the externalIP value ClusterIP service type.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  ##
+  # externalIPs: []
+
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
