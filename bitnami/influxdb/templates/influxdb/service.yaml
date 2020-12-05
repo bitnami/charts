@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "influxdb.fullname" . }}
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
   {{- if .Values.influxdb.service.annotations }}
@@ -41,6 +41,6 @@ spec:
       {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: 
+  selector:
     {{- include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
