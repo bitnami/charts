@@ -250,8 +250,16 @@ metrics:
     interval: 30s
     ## Specify the timeout after which the scrape is ended
     # scrapeTimeout: 30s
-    ## Specify Metric Relabellings to add to the scrape endpoint
+    ## Relabeling (before scrape)
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
     # relabellings:
+    ## Specify honorLabels parameter to add the scrape endpoint
+    ##
+    ## Metric relabeling
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    # metricRelabelings:
     ## Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
