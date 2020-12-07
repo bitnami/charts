@@ -1,11 +1,13 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}-mongos
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongos
 spec:
-  strategy: {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
+  updateStrategy: {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
+  podManagementPolicy: {{ .Values.mongos.podManagementPolicy }}
+  serviceName: {{ include "mongodb-sharded.serviceName" . }}
   replicas: {{ .Values.mongos.replicas }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
