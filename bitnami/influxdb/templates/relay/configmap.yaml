@@ -3,12 +3,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 data:
 {{- if (.Files.Glob "files/conf/relay.toml") }}
-{{ (.Files.Glob "iles/conf/relay.toml").AsConfig | indent 2 }}
+{{ (.Files.Glob "files/conf/relay.toml").AsConfig | indent 2 }}
 {{- else if .Values.relay.configuration }}
   relay.toml: |-
 {{ tpl .Values.relay.configuration . | indent 4 }}

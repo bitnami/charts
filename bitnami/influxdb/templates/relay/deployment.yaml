@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
@@ -14,12 +14,12 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: 
+    matchLabels:
       {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
-      labels: 
+      labels:
         {{- include "influxdb.labels" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
