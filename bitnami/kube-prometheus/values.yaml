@@ -107,7 +107,7 @@ operator:
     ## There are two available options: Cluster (default) and Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # externalTrafficPolicy: Cluster
+    externalTrafficPolicy: Cluster
 
     ## Specifies the health check node port (numeric port number) for the service
     ## if externalTrafficPolicy is set to Local.
@@ -343,7 +343,7 @@ prometheus:
     ## There are two available options: Cluster (default) and Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # externalTrafficPolicy: Cluster
+    externalTrafficPolicy: Cluster
 
     ## Specifies the health check node port (numeric port number) for the service
     ## if externalTrafficPolicy is set to Local.
@@ -916,7 +916,7 @@ alertmanager:
     ## There are two available options: Cluster (default) and Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # externalTrafficPolicy: Cluster
+    externalTrafficPolicy: Cluster
 
     ## Specifies the health check node port (numeric port number) for the service
     ## if externalTrafficPolicy is set to Local.
