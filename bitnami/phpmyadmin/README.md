@@ -101,6 +101,13 @@ The following table lists the configurable parameters of the phpMyAdmin chart an
 | `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`     | Additional annotations for Metrics exporter pod                                                         | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`          | Exporter resource requests/limit                                                                        | `{}`                                                         |
+| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false`                                                      |
+| `metrics.serviceMonitor.namespace`        | Namespace where servicemonitor resource should be created                             | `nil`                                                        |
+| `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                               | `30s`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                   | `nil`                                                        |
+| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                             | `nil`                                                        |
+| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.             | `false`                                                      |
+| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator            | `{}`                                                         |
 
 For more information please refer to the [bitnami/phpmyadmin](http://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
 
