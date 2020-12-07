@@ -1,0 +1,46 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+  labels: {{- include "thanos.labels" . | nindent 4 }}
+  annotations:
+    {{- if $query.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := $query.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if $query.ingress.hostname }}
+    - host: {{ $query.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ template "thanos.fullname" . }}-query
+              servicePort: http
+    {{- end }}
+    {{- range $query.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ template "thanos.fullname" $ }}-query
+              servicePort: http
+    {{- end }}
+  {{- if or $query.ingress.tls $query.ingress.extraTls $query.ingress.hosts }}
+  tls:
+    {{- if or $query.ingress.secrets $query.ingress.tls }}
+    - hosts:
+        - {{ $query.ingress.hostname }}
+      secretName: {{ printf "%s-tls" $query.ingress.hostname }}
+    {{- end }}
+    {{- if $query.ingress.extraTls }}
+    {{- toYaml $query.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

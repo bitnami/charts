@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "phpmyadmin.fullname" . }}
   labels:
-    app: {{ template "phpmyadmin.name" . }}
-    chart: {{ template "phpmyadmin.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "phpmyadmin.name" . }}
-    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}

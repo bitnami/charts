@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   name: {{ template "phpmyadmin.fullname" . }}
   labels:
-    app: {{ template "phpmyadmin.name" . }}
-    chart: {{ template "phpmyadmin.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "phpmyadmin.name" . }}
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   template:
     metadata:
       labels:
-        app: {{ template "phpmyadmin.name" . }}
-        chart: {{ template "phpmyadmin.chart" . }}
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+        helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
   {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
   {{- end }}
@@ -137,7 +137,7 @@ spec:
         - name: metrics
           image: {{ template "phpmyadmin.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
           ports:
             - name: metrics
               containerPort: 9117

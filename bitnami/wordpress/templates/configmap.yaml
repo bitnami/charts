@@ -1,0 +1,8 @@
+{{- if .Values.customPostInitScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-postinit
+data:
+{{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
+{{- end }}

@@ -66,6 +66,9 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `pdb.create`                            | Created a PodDisruptionBudget                              | `false`                                                 |
+| `pdb.minAvailable`                      | Set PDB minAvailable value                                 | `1`                                                     |
+| `pdb.maxUnavailable`                    | Set PDB maxUnavailable value                               | `nil`                                                   |
 
 ### NGINX parameters
 
@@ -116,6 +119,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                     | `nil`                                                   |
 | `extraVolumes`                          | Array to add extra volumes                                                               | `[]` (evaluated as a template)                          |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                 | `[]` (evaluated as a template)                          |
+| `sidecars`                              | Attach additional containers to nginx pods                                               | `nil`
 
 ### Custom NGINX application parameters
 

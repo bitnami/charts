@@ -1,29 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "redmine.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "redmine.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -40,126 +16,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "redmine.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "redmine.labels" -}}
-app.kubernetes.io/name: {{ template "redmine.name" . }}
-helm.sh/chart: {{ template "redmine.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "redmine.matchLabels" -}}
-app.kubernetes.io/name: {{ template "redmine.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Return the proper Redmine image name
 */}}
 {{- define "redmine.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redmine.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.mailReceiver.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return  the proper Storage Class
 */}}
 {{- define "redmine.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for deployment.
-*/}}
-{{- define "redmine.deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
+{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -167,7 +41,7 @@ Create the name of the service account to use
 */}}
 {{- define "redmine.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{ default (include "redmine.fullname" .) .Values.serviceAccount.name }}
+{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
 {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -180,28 +54,15 @@ Return the name of the Secret used to store the passwords
 {{- if .Values.existingSecret -}}
 {{ .Values.existingSecret }}
 {{- else -}}
-{{ template "redmine.fullname" . }}
+{{ include "common.names.fullname" . }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "redmine.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "redmine.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}
 
 {{/*
 Expand the name of the chart.
 */}}
 {{- define "redmine.mailReceiver.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-mail-receiver" (include "common.names.name" .) -}}
 {{- end -}}
 
 {{/*
@@ -209,47 +70,102 @@ Create a default fully qualified mail receiver app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "redmine.mailReceiver.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-mail-receiver" .Release.Name $name | trunc 40 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
+{{- printf "%s-mail-receiver" (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*
 Return the proper Redmine mail Receiver image name
 */}}
 {{- define "redmine.mailReceiver.image" -}}
-{{- $registryName := .Values.mailReceiver.image.registry -}}
-{{- $repositoryName := .Values.mailReceiver.image.repository -}}
-{{- $tag := .Values.mailReceiver.image.tag | toString -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.mailReceiver.image "global" .Values.global) }}
+{{- end -}}
+
 {{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
+Return whether to use the external DB or the built-in subcharts
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- define "redmine.useExternalDB" -}}
+{{- if or (and (eq .Values.databaseType "mariadb") (not .Values.mariadb.enabled)) (and (eq .Values.databaseType "postgresql") (not .Values.postgresql.enabled)) -}}
+  {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Mail Receiver CronJob labels
+Return whether to create an external secret containing the
+credentials for the external database or not
 */}}
-{{- define "redmine.mailReceiver.labels" -}}
-app.kubernetes.io/name: {{ template "redmine.mailReceiver.name" . }}
-helm.sh/chart: {{ template "redmine.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- define "redmine.createExternalDBSecret" -}}
+{{- if and (include "redmine.useExternalDB" .) (not .Values.externalDatabase.existingSecret) -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database host for Redmine
+*/}}
+{{- define "redmine.database.host" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
+{{- else }}
+    {{- .Values.externalDatabase.host | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database name for Redmine
+*/}}
+{{- define "redmine.database.name" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- .Values.mariadb.auth.database | quote }}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- .Values.postgresql.postgresqlDatabase | quote }}
+{{- else }}
+    {{- .Values.externalDatabase.name | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database username for Redmine
+*/}}
+{{- define "redmine.database.username" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- .Values.mariadb.auth.username | quote }}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- .Values.postgresql.postgresqlUsername | quote }}
+{{- else }}
+    {{- .Values.externalDatabase.user | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the name of the database secret with its credentials
+*/}}
+{{- define "redmine.database.secretName" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- if .Values.mariadb.existingSecret -}}
+        {{- printf "%s" .Values.mariadb.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
+    {{- end -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- if .Values.postgresql.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "redmine.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}

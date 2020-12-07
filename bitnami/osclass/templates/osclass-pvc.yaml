@@ -4,10 +4,10 @@ apiVersion: v1
 metadata:
   name: {{ template "osclass.fullname" . }}-osclass
   labels:
-    app: {{ template "osclass.fullname" . }}
-    chart: {{ template "osclass.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "osclass.fullname" . }}
+    helm.sh/chart: {{ include "osclass.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   accessModes:
     - {{ .Values.persistence.osclass.accessMode | quote }}

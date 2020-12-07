@@ -2,13 +2,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "redmine.fullname" . }}
-  labels: {{- include "redmine.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mail-receiver
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   receive.sh: |
     #!/usr/bin/env bash
 
-    if [ $REDMINE_MAIL_RECEIVER_DEBUG ]; then 
+    if [ $REDMINE_MAIL_RECEIVER_DEBUG ]; then
         set -x
     fi
 
@@ -48,7 +55,7 @@ data:
             port: <%= ENV["REDMINE_MAIL_RECEIVER_DB_PORT"] %>
             encoding: utf8
 
-        test: 
+        test:
             adapter: postgresql
             database: <%= ENV["REDMINE_MAIL_RECEIVER_DB_DATABASE"] %>
             host: <%= ENV["REDMINE_MAIL_RECEIVER_DB_POSTGRES"] %>
@@ -68,7 +75,7 @@ data:
             port: <%= ENV["REDMINE_MAIL_RECEIVER_DB_PORT"] %>
             encoding: utf8
 
-        production: 
+        production:
             adapter: postgresql
             database: <%= ENV["REDMINE_MAIL_RECEIVER_DB_DATABASE"] %>
             host: <%= ENV["REDMINE_MAIL_RECEIVER_DB_POSTGRES"] %>
@@ -98,15 +105,15 @@ data:
 
         if [ "$REDMINE_MAIL_RECEIVER_IMAP_MOVE_ON_FAILURE" != "" ]; then
             COMMAND="$COMMAND move_on_failure=\"$REDMINE_MAIL_RECEIVER_IMAP_MOVE_ON_FAILURE\" "
-        fi    
+        fi
 
     elif [ "$REDMINE_MAIL_RECEIVER_PROTOCOL" = "IMAP" ]; then
         COMMAND="bundle exec rake redmine:email:receive_pop3 --trace "
-        
+
         if [ "$REDMINE_MAIL_RECEIVER_POP3_DELETE_UNPROCESSED" != "" ]; then
             COMMAND="$COMMAND delete_unprocessed=\"$REDMINE_MAIL_RECEIVER_POP3_DELETE_UNPROCESSED\" "
         fi
-        
+
     else
         echo "Unsupported mail receive protocol. Exiting"
         exit 1
@@ -177,7 +184,7 @@ data:
         COMMAND="$COMMAND allow_override=\"$REDMINE_MAIL_RECEIVER_ALLOW_OVERRIDE\" "
     fi
 
-    if [ $REDMINE_MAIL_RECEIVER_DEBUG ]; then 
+    if [ $REDMINE_MAIL_RECEIVER_DEBUG ]; then
         echo "Unsecure printing mail receiving command"
         echo $COMMAND
         echo ""

@@ -2,7 +2,7 @@
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
 {{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mongodb.fullname" . }}
@@ -50,13 +50,18 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
       {{- if .Values.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "mongodb" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "mongodb" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
@@ -131,6 +136,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.externalAccess.service.loadBalancerIPs }}
+              {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
+              IP.{{ $key }} = {{ $val | quote }}
+              {{- end }}
+              {{- end }}
               EOL
 
               export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
@@ -359,11 +369,7 @@ spec:
             - -ec
           args:
             - |
-              {{- if .Values.auth.enabled }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root:$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:27017/admin{{ .Values.metrics.extraUri }} {{ .Values.metrics.extraFlags }}
-              {{- else }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://localhost:27017/admin{{ .Values.metrics.extraUri }} {{ .Values.metrics.extraFlags }}
-              {{- end }}
+              /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           env:
           {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
@@ -372,14 +378,23 @@ spec:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
           {{- end }}
+          volumeMounts:
+          {{- if .Values.tls.enabled }}
+          - name: certs
+            mountPath: /certs
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9216
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
+            exec:
+              command:
+                - sh
+                - -c
+                - >-
+                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+                  --test
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
@@ -388,9 +403,13 @@ spec:
           {{- end }}
           {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
+            exec:
+              command:
+                - sh
+                - -c
+                - >-
+                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+                  --test
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}

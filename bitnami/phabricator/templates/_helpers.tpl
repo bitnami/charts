@@ -46,20 +46,24 @@ Return the MariaDB Hostname
 */}}
 {{- define "phabricator.databaseHost" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "phabricator.mariadb.fullname" .) -}}
+    {{- if eq .Values.mariadb.architecture "replication" }}
+        {{- printf "%s-%s" (include "phabricator.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- printf "%s" (include "phabricator.mariadb.fullname" .) -}}
+    {{- end -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.host -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the MariaDB root user
+Return the MariaDB User
 */}}
 {{- define "phabricator.databaseUser" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "root" -}}
+    {{- printf "%s" .Values.mariadb.auth.username -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.rootUser -}}
+    {{- printf "%s" .Values.externalDatabase.user -}}
 {{- end -}}
 {{- end -}}
 
@@ -75,11 +79,13 @@ Return the MariaDB Port
 {{- end -}}
 
 {{/*
-Return the MariaDB User
+Return the MariaDB Secret Name
 */}}
 {{- define "phabricator.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
     {{- printf "%s" (include "phabricator.mariadb.fullname" .) -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}

@@ -21,7 +21,7 @@ global:
 # fullnameOverride:
 
 ## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
   create: true
@@ -187,18 +187,52 @@ updateStrategy: {}
 ##
 minReadySeconds: 0
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
 

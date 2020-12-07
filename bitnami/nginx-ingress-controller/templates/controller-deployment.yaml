@@ -16,7 +16,9 @@ spec:
   selector:
     matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
       component: {{ .Values.name }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   minReadySeconds: {{ .Values.minReadySeconds }}

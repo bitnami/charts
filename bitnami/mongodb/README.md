@@ -70,7 +70,7 @@ The standalone architecture installs a deployment (or statefulset) with one Mong
 
 The chart supports the replicaset architecture with and without a [MongoDB Arbiter](https://docs.mongodb.com/manual/core/replica-set-arbiter/):
 
-* When the MongoDB Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB arbiter node (it cannot be scaled).
+- When the MongoDB Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB arbiter node (it cannot be scaled).
 
     ```
         ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌─────────────┐
@@ -91,7 +91,7 @@ The chart supports the replicaset architecture with and without a [MongoDB Arbit
 
     _Note:_ An update takes your MongoDB replicaset offline if the Arbiter is enabled and the number of MongoDB replicas is two. Helm applies updates to the statefulsets for the MongoDB instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
 
-* Without the Arbiter, the chart deploys a single statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes)
+- Without the Arbiter, the chart deploys a single statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes)
 
     ```
         ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
@@ -152,7 +152,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `auth.password`                           | MongoDB custom user password                                                                               | _random 10 character long alphanumeric string_          |
 | `auth.database`                           | MongoDB custom database                                                                                    | `nil`                                                   |
 | `auth.replicaSetKey`                      | Key used for authentication in the replicaset (only when `architecture=replicaset`)                        | _random 10 character long alphanumeric string_          |
-| `auth.existingSecret`                     | Existing secret with MongoDB credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)  | `nil`                                                   |
+| `auth.existingSecret`                     | Existing secret with MongoDB credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)  | `nil`                                    |
 | `replicaSetName`                          | Name of the replica set (only when `architecture=replicaset`)                                              | `rs0`                                                   |
 | `replicaSetHostnames`                     | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                        | `true`                                                  |
 | `enableIPv6`                              | Switch to enable/disable IPv6 on MongoDB                                                                   | `false`                                                 |
@@ -171,7 +171,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
 | `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |
-| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                                  |
+| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
 | `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`                                                |
 
@@ -188,9 +188,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `podLabels`                               | MongoDB pod labels                                                                                         | `{}` (evaluated as a template)                          |
 | `podAnnotations`                          | MongoDB Pod annotations                                                                                    | `{}` (evaluated as a template)                          |
 | `priorityClassName`                       | Name of the existing priority class to be used by MongoDB pod(s)                                           | `""`                                                    |
-| `affinity`                                | Affinity for MongoDB pod(s) assignment                                                                     | `{}` (evaluated as a template)                          |
-| `nodeSelector`                            | Node labels for MongoDB pod(s) assignment                                                                  | `{}` (evaluated as a template)                          |
-| `tolerations`                             | Tolerations for MongoDB pod(s) assignment                                                                  | `[]` (evaluated as a template)                          |
+| `podAffinityPreset`                       | MongoDB Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                    |
+| `podAntiAffinityPreset`                   | MongoDB Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                                                  |
+| `nodeAffinityPreset.type`                 | MongoDB Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                                                    |
+| `nodeAffinityPreset.key`                  | MongoDB Node label key to match Ignored if `affinity` is set.                                              | `""`                                                    |
+| `nodeAffinityPreset.values`               | MongoDB Node label values to match. Ignored if `affinity` is set.                                          | `[]`                                                    |
+| `affinity`                                | MongoDB Affinity for pod assignment                                                                        | `{}` (evaluated as a template)                          |
+| `nodeSelector`                            | MongoDB Node labels for pod assignment                                                                     | `{}` (evaluated as a template)                          |
+| `tolerations`                             | MongoDB Tolerations for pod assignment                                                                     | `[]` (evaluated as a template)                          |
 | `podSecurityContext`                      | MongoDB pod(s)' Security Context                                                                           | Check `values.yaml` file                                |
 | `containerSecurityContext`                | MongoDB containers' Security Context                                                                       | Check `values.yaml` file                                |
 | `resources.limits`                        | The resources limits for MongoDB containers                                                                | `{}`                                                    |
@@ -287,9 +292,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `arbiter.podLabels`                       | Arbiter pod labels                                                                                         | `{}` (evaluated as a template)                               |
 | `arbiter.podAnnotations`                  | Arbiter Pod annotations                                                                                    | `{}` (evaluated as a template)                               |
 | `arbiter.priorityClassName`               | Name of the existing priority class to be used by Arbiter pod(s)                                           | `""`                                                         |
-| `arbiter.affinity`                        | Affinity for Arbiter pod(s) assignment                                                                     | `{}` (evaluated as a template)                               |
-| `arbiter.nodeSelector`                    | Node labels for Arbiter pod(s) assignment                                                                  | `{}` (evaluated as a template)                               |
-| `arbiter.tolerations`                     | Tolerations for Arbiter pod(s) assignment                                                                  | `[]` (evaluated as a template)                               |
+| `arbiter.podAffinityPreset`               | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                         |
+| `arbiter.podAntiAffinityPreset`           | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                                                       |
+| `arbiter.nodeAffinityPreset.type`         | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                                                         |
+| `arbiter.nodeAffinityPreset.key`          | Arbiter Node label key to match Ignored if `affinity` is set.                                              | `""`                                                         |
+| `arbiter.nodeAffinityPreset.values`       | Arbiter Node label values to match. Ignored if `affinity` is set.                                          | `[]`                                                         |
+| `arbiter.affinity`                        | Arbiter Affinity for pod assignment                                                                        | `{}` (evaluated as a template)                               |
+| `arbiter.nodeSelector`                    | Arbiter Node labels for pod assignment                                                                     | `{}` (evaluated as a template)                               |
+| `arbiter.tolerations`                     | Arbiter Tolerations for pod assignment                                                                     | `[]` (evaluated as a template)                               |
 | `arbiter.podSecurityContext`              | Arbiter pod(s)' Security Context                                                                           | Check `values.yaml` file                                     |
 | `arbiter.containerSecurityContext`        | Arbiter containers' Security Context                                                                       | Check `values.yaml` file                                     |
 | `arbiter.resources.limits`                | The resources limits for Arbiter containers                                                                | `{}`                                                         |
@@ -316,8 +326,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `metrics.image.tag`                       | MongoDB Prometheus exporter image tag                                                                      | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | MongoDB Prometheus exporter image pull policy                                                              | `Always`                                                     |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.extraFlags`                      | Additional command line flags                                                                      | `""`                                                         |
-| `metrics.extraUri`                        | Additional URI options of the metrics service                                                   | `""`                                                         |
+| `metrics.extraFlags`                      | Additional command line flags                                                                              | `""`                                                         |
+| `metrics.extraUri`                        | Additional URI options of the metrics service                                                              | `""`                                                         |
 | `metrics.service.type`                    | Type of the Prometheus metrics service                                                                     | `ClusterIP file`                                             |
 | `metrics.service.port`                    | Port of the Prometheus metrics service                                                                     | `9216`                                                       |
 | `metrics.service.annotations`             | Annotations for Prometheus metrics service                                                                 | Check `values.yaml` file                                     |
@@ -544,12 +554,18 @@ Using Helm’s hook annotations ensures that the certs will only be generated on
 
 ### Accessing the cluster
 
-To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset.
+To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
 Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster
 
 After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). This value can be changed via the MONGODB_EXTRA_FLAGS field using the tlsMode. The client should now be able to connect to the TLS enabled cluster with the provided certs.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

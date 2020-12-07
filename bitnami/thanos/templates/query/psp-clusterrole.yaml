@@ -1,0 +1,13 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.pspEnabled $query.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - {{ include "thanos.fullname" . }}-query
+{{- end -}}

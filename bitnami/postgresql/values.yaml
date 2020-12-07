@@ -15,7 +15,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.10.0-debian-10-r0
+  tag: 11.10.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -118,14 +118,12 @@ replication:
   enabled: false
   user: repl_user
   password: repl_password
-  slaveReplicas: 1
+  readReplicas: 1
   ## Set synchronous commit mode: on, off, remote_apply, remote_write and local
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
-  ##
   synchronousCommit: 'off'
-  ## From the number of `slaveReplicas` defined above, set the number of those that will have synchronous replication
-  ## NOTE: It cannot be > slaveReplicas
-  ##
+  ## From the number of `readReplicas` defined above, set the number of those that will have synchronous replication
+  ## NOTE: It cannot be > readReplicas
   numSynchronousReplicas: 0
   ## Replication Cluster application name. Useful for defining multiple replication policies
   ##
@@ -200,14 +198,14 @@ extraEnv: []
 ##
 # postgresqlExtendedConf:
 
-## Configure current cluster's master server to be the standby server in other cluster.
+## Configure current cluster's primary server to be the standby server in other cluster.
 ## This will allow cross cluster replication and provide cross cluster high availability.
 ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.
 ##
-masterAsStandBy:
+primaryAsStandBy:
   enabled: false
-  #  masterHost:
-  #  masterPort:
+  #  primaryHost:
+  #  primaryPort:
 
 ## PostgreSQL client authentication configuration
 ## Specify content for pg_hba.conf
@@ -361,7 +359,7 @@ service:
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
 
-## Start master and slave(s) pod(s) without limitations on shm memory.
+## Start primary and read(s) pod(s) without limitations on shm memory.
 ## By default docker and containerd (and possibly other container runtimes)
 ## limit `/dev/shm` to `64M` (see e.g. the
 ## [docker issue](https://github.com/docker-library/postgres/issues/416) and the
@@ -409,17 +407,22 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
 
-## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
+## updateStrategy for PostgreSQL StatefulSet and its reads StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
   type: RollingUpdate
 
 ##
-## PostgreSQL Master parameters
+## PostgreSQL Primary parameters
 ##
-master:
+primary:
   ## Node, affinity, tolerations, and priorityclass settings for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -444,10 +447,10 @@ master:
   ##
   extraInitContainers: []
 
-  ## Additional PostgreSQL Master Volume mounts
+  ## Additional PostgreSQL primary Volume mounts
   ##
   extraVolumeMounts: []
-  ## Additional PostgreSQL Master Volumes
+  ## Additional PostgreSQL primary Volumes
   ##
   extraVolumes: []
   ## Add sidecars to the pod
@@ -463,7 +466,7 @@ master:
   ##
   sidecars: []
 
-  ## Override the service configuration for master
+  ## Override the service configuration for primary
   ##
   service: {}
   # type:
@@ -471,9 +474,9 @@ master:
   # clusterIP:
 
 ##
-## PostgreSQL Slave parameters
+## PostgreSQL read only replica parameters
 ##
-slave:
+readReplicas:
   ## Node, affinity, tolerations, and priorityclass settings for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -488,6 +491,7 @@ slave:
   podLabels: {}
   podAnnotations: {}
   priorityClassName: ''
+
   ## Extra init containers
   ## Example
   ##
@@ -498,12 +502,14 @@ slave:
   ##
   extraInitContainers: []
 
-  ## Additional PostgreSQL Slave Volume mounts
+  ## Additional PostgreSQL read replicas Volume mounts
   ##
   extraVolumeMounts: []
-  ## Additional PostgreSQL Slave Volumes
+
+  ## Additional PostgreSQL read replicas Volumes
   ##
   extraVolumes: []
+
   ## Add sidecars to the pod
   ##
   ## For example:
@@ -517,19 +523,19 @@ slave:
   ##
   sidecars: []
 
-  ## Override the service configuration for slave
+  ## Override the service configuration for read
   ##
   service: {}
   # type:
   # nodePort:
   # clusterIP:
 
-  ## Whether to enable PostgreSQL slave replicas data Persistent
+  ## Whether to enable PostgreSQL read replicas data Persistent
   ##
   persistence:
     enabled: true
 
-  # Override the resource configuration for slave
+  # Override the resource configuration for read replicas
   resources: {}
   # requests:
   #   memory: 256Mi
@@ -669,7 +675,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.8.0-debian-10-r270
+    tag: 0.8.0-debian-10-r290
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

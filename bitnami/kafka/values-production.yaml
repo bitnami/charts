@@ -371,17 +371,51 @@ podAnnotations: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 priorityClassName: ""
 
-## Affinity for pod assignment. Evaluated as a template
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## Node labels for pod assignment. Evaluated as a template
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
-## Tolerations for pod assignment. Evaluated as a template
+## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
@@ -603,6 +637,35 @@ persistence:
   ## set, choosing the default provisioner.
   ##
   # storageClass: "-"
+  ## PV Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## PVC size
+  ##
+  size: 8Gi
+  ## PVC annotations
+  ##
+  annotations: {}
+
+## Log Persistence parameters
+##
+logPersistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  # existingClaim:
+  ## PV Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ## set, choosing the default provisioner.
+  # existingLogClaim:
+  ## PV Storage Class
+  ## It getted from persistence.storageClass
+  ##
   ## PV Access Mode
   ##
   accessModes:

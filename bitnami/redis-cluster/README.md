@@ -204,6 +204,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `initJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `initJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `initJob.affinity`                                      | Affinity settings for                      | {}                |
+| `initJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster update job parameters
 | Parameter                                       | Description                                                    | Default           |
@@ -224,6 +225,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `updateJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `updateJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `updateJob.affinity`                                      | Affinity settings for                      | {}                |
+| `updateJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster management parameters
 

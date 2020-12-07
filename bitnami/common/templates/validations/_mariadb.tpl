@@ -9,7 +9,7 @@ Params:
   - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.mariadb.passwords" -}}
-  {{- $existingSecret := include "common.mariadb.values.existingSecret" . -}}
+  {{- $existingSecret := include "common.mariadb.values.auth.existingSecret" . -}}
   {{- $enabled := include "common.mariadb.values.enabled" . -}}
   {{- $architecture := include "common.mariadb.values.architecture" . -}}
   {{- $authPrefix := include "common.mariadb.values.key.auth" . -}}
@@ -44,15 +44,15 @@ Params:
 Auxiliar function to get the right value for existingSecret.
 
 Usage:
-{{ include "common.mariadb.values.existingSecret" (dict "context" $) }}
+{{ include "common.mariadb.values.auth.existingSecret" (dict "context" $) }}
 Params:
   - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
 */}}
-{{- define "common.mariadb.values.existingSecret" -}}
+{{- define "common.mariadb.values.auth.existingSecret" -}}
   {{- if .subchart -}}
-    {{- .context.Values.mariadb.existingSecret | quote -}}
+    {{- .context.Values.mariadb.auth.existingSecret | quote -}}
   {{- else -}}
-    {{- .context.Values.existingSecret | quote -}}
+    {{- .context.Values.auth.existingSecret | quote -}}
   {{- end -}}
 {{- end -}}
 

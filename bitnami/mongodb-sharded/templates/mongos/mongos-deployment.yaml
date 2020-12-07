@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mongodb-sharded.fullname" . }}-mongos
-  labels: {{- include "mongodb-sharded.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-mongos
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongos
 spec:
   strategy: {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
   replicas: {{ .Values.mongos.replicas }}
   selector:
-    matchLabels: {{- include "mongodb-sharded.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: mongos
   template:
     metadata:
-      labels: {{- include "mongodb-sharded.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: mongos
         {{- if .Values.mongos.podLabels }}
-          {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       {{- if or .Values.common.podAnnotations .Values.mongos.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.common.podAnnotations }}
-           {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.common.podAnnotations "context" $ ) | nindent 8 }}
+           {{- include "common.tplvalues.render" ( dict "value" .Values.common.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.mongos.podAnnotations }}
-          {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.mongos.podAnnotations "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
-           {{- include "mongodb-sharded.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+           {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -34,9 +34,20 @@ spec:
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.mongos.serviceAccount "context" $) }}
-      nodeSelector: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.nodeSelector "context" $ ) | nindent 8 }}
-      affinity: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.affinity "context" $ ) | nindent 8 }}
-      tolerations: {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.tolerations "context" $ ) | nindent 8 }}
+      {{- if .Values.mongos.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAntiAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.mongos.nodeAffinityPreset.type "key" .Values.mongos.nodeAffinityPreset.key "values" .Values.mongos.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.mongos.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mongos.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -45,10 +56,10 @@ spec:
       {{- if or (ge (len $.Values.mongos.initContainers) 1) (ge (len $.Values.common.initContainers) 1) }}
       initContainers:
         {{- with $.Values.mongos.initContainers }}
-        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
         {{- with $.Values.common.initContainers }}
-        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       {{- end }}
       containers:
@@ -123,28 +134,28 @@ spec:
               value: {{ .Values.mongos.mongodbExtraFlags | join " " | quote }}
             {{- end }}
             {{- if .Values.common.extraEnvVars }}
-              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVars }}
-              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.extraEnvVars "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or .Values.common.extraEnvVarsCM .Values.common.extraEnvVarsSecret .Values.mongos.extraEnvVarsCM .Values.mongos.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.common.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" .Values.common.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.common.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.common.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" .Values.common.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.common.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
             {{- if .Values.configsvr.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVarsSecret }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:
@@ -181,31 +192,15 @@ spec:
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
-            {{- if .Values.mongos.initScriptsCM }}
-            - name: custom-init-scripts
-              mountPath: /docker-entrypoint-initdb.d/configmap
-            {{- end }}
-            {{- if .Values.mongos.initScriptsSecret }}
-            - name: custom-init-scripts-secrets
-              mountPath: /docker-entrypoint-initdb.d/secret
-            {{- end }}
             {{- if or .Values.mongos.config .Values.mongos.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
             {{- end }}
-            {{- if $.Values.common.initScriptsCM }}
-            - name: custom-init-scripts-cm
-              mountPath: /docker-entrypoint-initdb.d/cm
-            {{- end }}
-            {{- if $.Values.common.initScriptsSecret }}
-            - name: custom-init-scripts-secret
-              mountPath: /docker-entrypoint-initdb.d/secret
-            {{- end }}
             {{- if $.Values.common.extraVolumeMounts }}
-              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
             {{- if $.Values.mongos.extraVolumeMounts }}
-              {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml .Values.mongos.resources | nindent 12 }}
         {{- if .Values.metrics.enabled }}
@@ -270,10 +265,10 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- with $.Values.mongos.sidecars }}
-        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
         {{- with $.Values.common.sidecars }}
-        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}
@@ -286,21 +281,9 @@ spec:
           configMap:
             name: {{ include "mongodb-sharded.mongos.configCM" . }}
         {{- end }}
-        {{- if $.Values.common.initScriptsCM }}
-        - name: custom-init-scripts-cm
-          configMap:
-            name: {{ include "mongodb-sharded.initScriptsCM" . }}
-            defaultMode: 0755
-        {{- end }}
-        {{- if $.Values.common.initScriptsSecret }}
-        - name: custom-init-scripts-secret
-          secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
-            defaultMode: 0755
-        {{- end }}
         {{- if $.Values.common.extraVolumes }}
-          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.mongos.extraVolumes }}
-          {{- include "mongodb-sharded.tplValue" ( dict "value" $.Values.mongos.extraVolumes "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}

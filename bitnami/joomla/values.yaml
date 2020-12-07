@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.9.22-debian-10-r28
+  tag: 3.9.23-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -32,11 +32,11 @@ image:
   ##
   debug: false
 
-## String to partially override joomla.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
 
-## String to fully override joomla.fullname template
+## String to fully override common.names.fullname template
 ##
 fullnameOverride:
 
@@ -124,11 +124,6 @@ initContainers: []
 ##
 sidecars: []
 
-## Tolerations for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
 ## Use existing secret for the application password
 ##
 existingSecret:
@@ -137,6 +132,11 @@ existingSecret:
 ## External database configuration
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   ##
   host: ""
@@ -174,31 +174,30 @@ mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-  ## Disable MariaDB replication
-  ##
-  replication:
-    enabled: false
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_joomla
-    user: bn_joomla
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    password: ""
-
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  rootUser:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_joomla
+    username: bn_joomla
     password: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
-  master:
+  primary:
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -234,6 +233,10 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
+  ## loadBalancerIP for the Joomla Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  ## loadBalancerIP:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -334,20 +337,63 @@ persistence:
   ##
   hostPath:
 
-## Affinity for pod assignment
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
+  # limits:
+  ##   cpu: 100m
+  ##   memory: 128Mi
+  ##
   requests:
     memory: 512Mi
     cpu: 300m
@@ -388,6 +434,11 @@ customLivenessProbe: {}
 
 customReadinessProbe: {}
 
+## Joomla pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
 ## lifecycleHooks for the container to automate configuration before or after startup.
 ##
 lifecycleHooks:
@@ -409,7 +460,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r208
+    tag: 0.8.0-debian-10-r221
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

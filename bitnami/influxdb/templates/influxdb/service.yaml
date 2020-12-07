@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "influxdb.fullname" . }}
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
   {{- if .Values.influxdb.service.annotations }}
-  annotations: {{- include "influxdb.tplValue" ( dict "value" .Values.influxdb.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.influxdb.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.influxdb.service.type }}
@@ -41,6 +41,6 @@ spec:
       {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: 
+  selector:
     {{- include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb

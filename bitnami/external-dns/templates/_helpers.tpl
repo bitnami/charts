@@ -130,7 +130,11 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.token (not .Values.hetzner.secretName) -}}
+    {{- true -}}
 {{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
     {{- true -}}
@@ -164,6 +168,10 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName -}}
+{{- .Values.hetzner.secretName -}}
+{{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
+{{- .Values.linode.secretName }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
 {{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
@@ -247,6 +255,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionAadClientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.linode.apiToken" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
@@ -307,7 +316,7 @@ Validate values of External DNS:
 {{- define "external-dns.validateValues.infoblox.gridHost" -}}
 {{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.gridHost) -}}
 external-dns: infoblox.gridHost
-    You must provide the the Grid Manager host when provider="infoblox".
+    You must provide the Grid Manager host when provider="infoblox".
     Please set the gridHost parameter (--set infoblox.gridHost="xxxx")
 {{- end -}}
 {{- end -}}
@@ -343,7 +352,7 @@ Validate values of External DNS:
 {{- define "external-dns.validateValues.pdns.apiUrl" -}}
 {{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiUrl) -}}
 external-dns: pdns.apiUrl
-    You must provide the the PowerDNS API URL when provider="pdns".
+    You must provide the PowerDNS API URL when provider="pdns".
     Please set the apiUrl parameter (--set pdns.apiUrl="xxxx")
 {{- end -}}
 {{- end -}}
@@ -355,7 +364,7 @@ Validate values of External DNS:
 {{- define "external-dns.validateValues.pdns.apiKey" -}}
 {{- if and (eq .Values.provider "pdns") (not .Values.pdns.apiKey) (not .Values.pdns.secretName) -}}
 external-dns: pdns.apiKey
-    You must provide the the PowerDNS API key when provider="pdns".
+    You must provide the PowerDNS API key when provider="pdns".
     Please set the apiKey parameter (--set pdns.apiKey="xxxx")
 {{- end -}}
 {{- end -}}
@@ -586,6 +595,19 @@ external-dns: transip.account
 {{- end -}}
 
 {{/*
+Validate values of External DNS:
+- must provide an API token when provider is "hetzner"
+*/}}
+{{- define "external-dns.validateValues.hetzner" -}}
+{{- if and (eq .Values.provider "hetzner") (or (not .Values.hetzner.token) (not .Values.hetzner.secretName)) -}}
+external-dns: hetzner.token
+    You must provide the a Hetzner API Token when provider="hetzner".
+    Please set the token parameter (--set hetzner.token="xxxx")
+    or specify a secret that contains an API token. (--set hetzner.secretName="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of TransIP DNS:
 - must provide the API key when provider is "transip"
 */}}
@@ -594,6 +616,18 @@ Validate values of TransIP DNS:
 external-dns: transip.apiKey
     You must provide the TransIP API key when provider="transip".
     Please set the apiKey parameter (--set transip.apiKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Linode API token when provider is "linode"
+*/}}
+{{- define "external-dns.validateValues.linode.apiToken" -}}
+{{- if and (eq .Values.provider "linode") (not .Values.linode.apiToken) (not .Values.linode.secretName) -}}
+external-dns: linode.apiToken
+    You must provide the Linode API token when provider="linode".
+    Please set the apiToken parameter (--set linode.apiToken="xxxx")
 {{- end -}}
 {{- end -}}
 

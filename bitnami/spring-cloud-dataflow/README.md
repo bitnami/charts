@@ -139,7 +139,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `server.jdwp.enabled`                        | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `server.jdwp.port`                           | JDWP TCP port                                                                                          | `5005`                                                  |
-
+| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                     | `nil`                                                   |
+| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                 | `nil`                                                   |
 ### Dataflow Skipper parameters
 
 | Parameter                                    | Description                                                                                            | Default                                                 |
@@ -191,6 +192,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `skipper.jdwp.enabled`                       | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `skipper.jdwp.port`                          | JDWP TCP port                                                                                          | `5005`                                                  |
+| `skipper.extraVolumes`                       | Extra Volumes to be set on the Skipper Pod                                                             | `nil`                                                   |
+| `skipper.extraVolumeMounts`                  | Extra VolumeMounts to be set on the Skipper Container                                                  | `nil`                                                   |
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                      | `localhost`                                             |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                    | `7577`                                                  |
 
@@ -297,7 +300,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)
 
 ## Configuration and installation details
 

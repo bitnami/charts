@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -246,6 +246,71 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+- If you want to upgrade to this version from a previous one installed with Helm v3, it should be done reusing the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `odoo`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+##### Export secrets and required values to update
+
+```console
+$ export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+##### Delete statefulsets
+
+Delete the Odoo deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter:
+
+```
+$ kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+```
+
+##### Upgrade the chart release
+
+```console
+$ helm upgrade odoo bitnami/odoo \
+    --set odooPassword=$ODOO_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+##### Force new statefulset to create a new pod for postgresql
+
+```console
+$ kubectl delete pod odoo-postgresql-0
+```
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 16.0.0
 

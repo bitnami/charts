@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "suitecrm.fullname" . }}
-  labels:
-    app: {{ template "suitecrm.name" . }}
-    chart: "{{ template "suitecrm.chart" . }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  name: {{ include "suitecrm.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
@@ -28,7 +30,5 @@ spec:
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https)))}}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
-  selector:
-    app: {{ template "suitecrm.name" . }}
-    release: "{{ .Release.Name }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  publishNotReadyAddresses: true
