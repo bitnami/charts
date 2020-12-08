@@ -270,6 +270,6 @@ readinessProbe:
   failureThreshold: 3
   timeoutSeconds: 3
 
-## Additional labels to apply to all resources
+## Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template
+##
 commonLabels: {}
-#   foo: bar
