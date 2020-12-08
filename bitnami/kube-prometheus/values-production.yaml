@@ -115,7 +115,7 @@ operator:
     ##
     # healthCheckNodePort:
 
-      ## Provide any additional annotations which may be required.
+    ## Provide any additional annotations which may be required.
     ##
     annotations: {}
 
