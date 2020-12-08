@@ -269,3 +269,7 @@ readinessProbe:
   periodSeconds: 51
   failureThreshold: 3
   timeoutSeconds: 3
+
+## Additional labels to apply to all resources
+commonLabels: {}
+#   foo: bar
