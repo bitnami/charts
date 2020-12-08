@@ -502,6 +502,7 @@ crd:
 ## Kubernetes svc configutarion
 ##
 service:
+  enabled: true
   ## Kubernetes svc type
   ##
   type: ClusterIP
