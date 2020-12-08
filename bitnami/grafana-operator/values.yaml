@@ -67,9 +67,9 @@ grafana:
 
 grafanaPluginInit:
   image:
-    registry: quay.io
-    repository: integreatly/grafana_plugins_init
-    tag: 0.0.3
+    registry: docker.io
+    repository: bitnami/grafana
+    tag: 7.3.4-debian-10-r1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
