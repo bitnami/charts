@@ -17,6 +17,7 @@ metadata:
 spec:
   podMetricsEndpoints:
     - port: http
+      path: /metrics/
       {{- if .Values.metrics.podMonitor.interval }}
       interval: {{ .Values.metrics.podMonitor.interval }}
       {{- end }}
