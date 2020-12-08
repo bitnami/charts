@@ -61,7 +61,7 @@ spec:
               name: ghost-data
       {{- end }}
       {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | indent 8 }}
+        {{ include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | indent 8 }}
       {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
@@ -203,7 +203,7 @@ spec:
             - name: ghost-data
               mountPath: /bitnami/ghost
           {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 10 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
       {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
