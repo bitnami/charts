@@ -91,11 +91,13 @@ auth:
   ##
   usePasswordFiles: true
   ## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
+  ## Example:
+  ## customPasswordFiles:
+  ##   root: /vault/secrets/mariadb-root
+  ##   user: /vault/secrets/mariadb-user
+  ##   replicator: /vault/secrets/mariadb-replicator
   ##
   customPasswordFiles: {}
-  #   root: /vault/secrets/mysql-root
-  #   user: /vault/secrets/mysql-user
-  #   replicator: /vault/secrets/mysql-replicator
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
