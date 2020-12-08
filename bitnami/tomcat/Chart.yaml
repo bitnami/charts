@@ -20,4 +20,4 @@ name: tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
   - http://tomcat.apache.org
-version: 7.0.1
+version: 7.1.1

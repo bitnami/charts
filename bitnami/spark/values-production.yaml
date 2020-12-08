@@ -352,41 +352,40 @@ ingress:
 metrics:
   enabled: enabled
 
-  ## Prometheus metrics service parameters
+  ## Annotations for the Prometheus metrics on master nodes
   ##
-  service:
-    ## Metrics port
-    ##
-    port: 9117
-    ## Annotations for the Prometheus metics service
-    ##
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+  masterAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics/"
+    prometheus.io/port: "{{ .Values.master.webPort }}"
+  ## Annotations for the Prometheus metrics on worker nodes
+  ##
+  workerAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics/"
+    prometheus.io/port: "{{ .Values.worker.webPort }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
   podMonitor:
-    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
     ##
     enabled: false
     ## Specify the namespace in which the podMonitor resource will be created
+    ##
     # namespace: ""
     ## Specify the interval at which metrics should be scraped
     ##
-    # interval: 30s
+    interval: 30s
     ## Specify the timeout after which the scrape is ended
-    # scrapeTimeout: 10s
-
-  masterAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: "{{ .Values.master.webPort }}"
-
-  workerAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: "{{ .Values.worker.webPort }}"
+    ##
+    # scrapeTimeout: 30s
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
