@@ -103,6 +103,18 @@ operator:
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
+
     ## Provide any additional annotations which may be required.
     ##
     annotations: {}
@@ -326,6 +338,18 @@ prometheus:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
 
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
@@ -887,6 +911,18 @@ alertmanager:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
 
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
