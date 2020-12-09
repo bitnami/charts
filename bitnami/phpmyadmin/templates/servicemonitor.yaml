@@ -43,4 +43,5 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
 {{- end }}
