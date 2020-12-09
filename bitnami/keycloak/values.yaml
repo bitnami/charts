@@ -38,7 +38,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r18
+  tag: 11.0.3-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -146,6 +146,10 @@ cache:
 ## NOTE: When it's set the configuration parameter is ignored
 ##
 # existingConfigmap:
+
+## Add extra args to default startup command
+##
+extraStartupArgs:
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
@@ -282,6 +286,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

@@ -68,7 +68,6 @@ spec:
             {{- if .Values.operator.logLevel }}
             - --log-level={{ .Values.operator.logLevel }}
             {{- end }}
-            - --logtostderr=true
             - --localhost=127.0.0.1
             - --config-reloader-image=$(CONFIG_RELOADER_IMAGE)
             - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)

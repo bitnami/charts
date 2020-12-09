@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
-apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
-  name: {{ template "common.names.fullname" $ }}
+  name: {{ include "common.names.fullname" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
     {{- if .certManager }}
@@ -15,8 +15,8 @@ metadata:
     {{- range $key, $value := .annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:
@@ -25,7 +25,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "common.names.fullname" $ }}
+              serviceName: {{ include "common.names.fullname" $ }}
               servicePort: 80
   {{- if .tls }}
   tls:

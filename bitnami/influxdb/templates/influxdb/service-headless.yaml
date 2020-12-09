@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "influxdb.fullname" . }}-headless
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 spec:
@@ -18,7 +18,7 @@ spec:
       targetPort: rpc
       protocol: TCP
       name: rpc
-  selector: 
+  selector:
     {{- include "influxdb.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 {{- end }}

@@ -1,4 +1,4 @@
-{{- if and $.Values.shards $.Values.shardsvr.arbiter.replicas }}
+{{- if and .Values.shards .Values.shardsvr.arbiter.replicas }}
 {{- $replicas := $.Values.shards | int }}
 {{- range $i, $e := until $replicas }}
 apiVersion: apps/v1
@@ -143,6 +143,12 @@ spec:
             {{- if $.Values.shardsvr.arbiter.mongodbExtraFlags }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $.Values.shardsvr.arbiter.mongodbExtraFlags | join " " | quote }}
+            {{- end }}
+            {{- if $.Values.common.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if $.Values.shardsvr.arbiter.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or $.Values.common.extraEnvVarsCM $.Values.common.extraEnvVarsSecret $.Values.shardsvr.arbiter.extraEnvVarsCM $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
           envFrom:

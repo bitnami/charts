@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 9.0.39
+appVersion: 9.0.40
 description: Chart for Apache Tomcat
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/tomcat
@@ -20,4 +20,4 @@ name: tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
   - http://tomcat.apache.org
-version: 7.0.0
+version: 7.1.1

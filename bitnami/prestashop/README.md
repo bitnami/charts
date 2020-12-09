@@ -88,6 +88,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `containerSecurityContext.runAsUser` | PrestaShop containers' Security Context                                                                               | `1001`                                         |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
 | `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
+| `customStartupProbe`                 | Override default startup probe                                                                                        | `nil`                                          |
 | `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
 | `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
@@ -132,6 +133,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                          |
 | `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
 | `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
+| `startupProbe`                       | Startup probe configuration                                                                                           | `Check values.yaml file`                       |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
 

@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.4-debian-10-r38
+  tag: 5.0.4-debian-10-r51
   ## Specify a imagePullPolicy
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -215,7 +215,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r222
+    tag: 0.8.0-debian-10-r234
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -232,5 +232,40 @@ metrics:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
+    enabled: false
+    ## Specify the namespace in which the serviceMonitor resource will be created
+    # namespace: ""
+    ## The name of the label on the target service to use as the job name in prometheus
+    # jobLabel:
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    # scrapeTimeout: 30s
+    ## Relabeling (before scrape)
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    # relabellings:
+    ## Specify honorLabels parameter to add the scrape endpoint
+    ##
+    ## Metric relabeling
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    # metricRelabelings:
+    ## Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
 
 mariadb: {}

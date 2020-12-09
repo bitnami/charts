@@ -69,6 +69,12 @@ spec:
                   name: {{ include "grafana.adminSecretName" . }}
                   key: {{ include "grafana.adminSecretPasswordKey" . }}
             {{- if .Values.smtp.enabled }}
+            - name: GF_SMTP_ENABLED
+              value: "true"
+            {{- if .Values.smtp.host }}
+            - name: GF_SMTP_HOST
+              value: {{ .Values.smtp.host }}
+            {{- end }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
