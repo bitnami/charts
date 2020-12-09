@@ -162,8 +162,11 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 | `metrics.image.tag`                       | Apache exporter image tag                                                              | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | Image pull policy                                                                      | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`                  | Additional annotations for Metrics exporter pod                                        | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                       | Exporter resource requests/limit                                                       | `{}`                                                         |
+| `metrics.service.type`                    | Prometheus metrics service type                                                        | `LoadBalancer`                                               |
+| `metrics.service.port`                    | Prometheus metrics service port                                                        | `9117`                                                       |
+| `metrics.service.loadBalancerIP`          | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`               | `nil`                                                        |
+| `metrics.service.annotations`             | Annotations for Prometheus metrics service                                             | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`                                                      |
 | `metrics.serviceMonitor.namespace`        | Namespace where servicemonitor resource should be created                              | `nil`                                                        |
 | `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                                | `30s`                                                        |

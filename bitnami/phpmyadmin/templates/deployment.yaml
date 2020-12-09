@@ -157,7 +157,7 @@ spec:
         - name: metrics
           image: {{ template "phpmyadmin.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
+          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
           ports:
             - name: metrics
               containerPort: 9117
@@ -184,7 +184,7 @@ spec:
         {{- if .Values.db.enableSsl }}
         - name: ssl-certs
           secret:
-            secretName: {{ template "phpmyadmin.fullname" . }}-certs
+            secretName: {{ printf "%s-certs" (include "common.names.fullname" .) }}
             items:
               {{- if not (empty .Values.db.ssl.clientKey) }}
               - key: server_key.pem

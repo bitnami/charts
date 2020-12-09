@@ -4,3 +4,5 @@ ingress:
   enabled: true
   tls: true
   hostname: phpmyadmin.local
+metrics:
+  enabled: true
