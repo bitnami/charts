@@ -20,6 +20,9 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
