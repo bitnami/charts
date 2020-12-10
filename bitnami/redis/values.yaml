@@ -413,6 +413,7 @@ master:
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
     labels: {}
+    annotations: {}
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -600,6 +601,7 @@ slave:
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
     labels: {}
+    annotations: {}
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
