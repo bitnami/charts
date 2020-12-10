@@ -7,6 +7,11 @@ dependencies:
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: The JasperReports server can be used as a stand-alone or embedded reporting and BI server that offers web-based reporting, analytic tools and visualization, and a dashboard feature for compiling multiple custom views
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/jasperreports
@@ -25,4 +30,4 @@ name: jasperreports
 sources:
   - https://github.com/bitnami/bitnami-docker-jasperreports
   - http://community.jaspersoft.com/project/jasperreports-server
-version: 9.1.0
+version: 9.1.1
