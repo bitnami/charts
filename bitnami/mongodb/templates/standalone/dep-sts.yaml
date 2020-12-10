@@ -376,7 +376,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: ca-clients
+            secretName: {{ default "ca-clients" .Values.tls.existingSecret }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
