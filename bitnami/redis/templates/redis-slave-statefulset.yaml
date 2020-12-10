@@ -12,6 +12,10 @@ metadata:
   {{- if .Values.slave.statefulset.labels }}
   {{- toYaml .Values.slave.statefulset.labels | nindent 4 }}
   {{- end }}
+{{- if .Values.slave.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.slave.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
 {{- if .Values.slave.updateStrategy }}
   strategy: {{- toYaml .Values.slave.updateStrategy | nindent 4 }}
