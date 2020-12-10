@@ -126,6 +126,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `listenerSecurityProtocolMap`                     | The protocol->listener mapping. Auto-calculated it's set to nil                                                                   | `nil`                                                   |
 | `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
 | `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
+| `initContainers`                                  | Add extra init containers                                                                                                         | `[]`                                                    |
 
 ### Statefulset parameters
 

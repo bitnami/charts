@@ -1000,3 +1000,7 @@ externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
   servers: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
