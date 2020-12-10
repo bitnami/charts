@@ -20,9 +20,9 @@ Administrator credentials:
 {{- if not (empty .Values.auth.username) }}
 User credentials:
 
-  echo Database: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-database}" | base64 --decode)
-  echo Username: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-username}" | base64 --decode)
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-password}" | base64 --decode)
+  echo Database: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-database}" | base64 --decode)
+  echo Username: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-username}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 {{- end}}
 
 To connect to your database:
