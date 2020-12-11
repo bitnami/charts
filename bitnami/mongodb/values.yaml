@@ -92,6 +92,12 @@ auth:
 tls:
   ## Enable or disable MongoDB TLS Support
   enabled: false
+
+  ## Existing secret with MongoDB TLS certificates
+  ## NOTE: When it's set it will disable certificate creation
+  ##
+  # existingSecret: name-of-existing-secret
+
   ##
   ## Bitnami Nginx image
   ##
