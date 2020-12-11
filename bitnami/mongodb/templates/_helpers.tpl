@@ -142,6 +142,17 @@ Return true if a secret object should be created for MongoDB
 {{- end -}}
 
 {{/*
+Return true if a secret object should be created for MongoDB
+*/}}
+{{- define "mongodb.caSecretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{ .Values.tls.existingSecret }}
+{{- else -}}
+    {{ include "mongodb.fullname" . }}-ca
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mongodb.initdbScriptsCM" -}}
