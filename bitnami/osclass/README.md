@@ -100,8 +100,8 @@ The following table lists the configurable parameters of the Osclass chart and t
 
 | Parameter                               | Description                                                                              | Default                                                 |
 |-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `containerPorts.http`                   | HTTP port to expose at container level                                                   | `8080`                                                  |
-| `containerPorts.https`                  | HTTPS port to expose at container level                                                  | `8443`                                                  |
+| `containerPorts.http`                   | HTTP port to expose at container level                                                   | `80`                                                    |
+| `containerPorts.https`                  | HTTPS port to expose at container level                                                  | `84`                                                    |
 | `podSecurityContext`                    | Osclass pods' Security Context                                                           | Check `values.yaml` file                                |
 | `containerSecurityContext`              | Osclass containers' Security Context                                                     | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Osclass container                                           | `{}`                                                    |
@@ -212,7 +212,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set osclassUsername=admin,osclassPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
     bitnami/osclass
 ```
 
