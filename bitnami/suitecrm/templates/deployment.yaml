@@ -191,11 +191,13 @@ spec:
               value: {{ .Values.suitecrmSmtpPort | quote }}
             - name: SUITECRM_SMTP_USER
               value: {{ .Values.suitecrmSmtpUser | quote }}
+            {{- if .Values.smtpPassword }}
             - name: SUITECRM_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: suitecrm-smtp-password
+            {{- end }}
             - name: SUITECRM_SMTP_PROTOCOL
               value: {{ .Values.suitecrmSmtpProtocol | quote }}
             {{- if .Values.extraEnvVars }}
