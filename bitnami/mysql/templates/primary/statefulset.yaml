@@ -312,6 +312,10 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: primary
+      {{- if .Values.primary.persistence.annotations }}
+        annotations:
+          {{- toYaml .Values.primary.persistence.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.primary.persistence.accessModes }}
