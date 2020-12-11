@@ -350,6 +350,12 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Pod topology spread constraints
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
