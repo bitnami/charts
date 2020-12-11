@@ -1,3 +1,5 @@
+annotations:
+  category: Infrastructure
 apiVersion: v1
 description: DEPRECATED A Helm chart for eventruter (https://github.com/heptiolabs/eventrouter)
 name: eventrouter
