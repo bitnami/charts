@@ -2,7 +2,7 @@
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
