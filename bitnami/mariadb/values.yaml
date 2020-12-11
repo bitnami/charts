@@ -87,6 +87,9 @@ auth:
   ## Force users to specify required passwords
   ##
   forcePassword: false
+  ## Mount credentials as files instead of using an environment variable
+  ##
+  usePasswordFiles: false
   ## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
   ## Example:
   ## customPasswordFiles:
