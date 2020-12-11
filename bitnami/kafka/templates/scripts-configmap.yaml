@@ -71,8 +71,12 @@ data:
   setup.sh: |-
     #!/bin/bash
 
-    ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
+    if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
+        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+    else
+        ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+        export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
+    fi
 
     {{- if .Values.externalAccess.enabled }}
     # Configure external ip and port
