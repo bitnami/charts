@@ -121,9 +121,7 @@ host. To configure ownCloud to use and external database host:
 {{- $requiredOwncloudPassword := dict "valueKey" "owncloudPassword" "secret" $secretName "field" "owncloud-password" "context" $ -}}
 {{- $requiredOwncloudPasswordError := include "common.validations.values.single.empty" $requiredOwncloudPassword -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOwncloudPasswordError -}}
-{{- if .Values.mariadb.enabled }}
-    {{- $mariadbSecretName := include "owncloud.databaseSecretName" . -}}
-    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
-{{- end }}
+{{- $mariadbSecretName := include "owncloud.databaseSecretName" . -}}
+{{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
