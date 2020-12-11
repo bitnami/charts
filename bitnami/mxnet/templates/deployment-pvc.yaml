@@ -2,8 +2,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "mxnet.fullname" . }}{{ if eq .Values.mode "distributed" }}-scheduler{{ end }}
-  labels: {{- include "mxnet.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}{{ if eq .Values.mode "distributed" }}-scheduler{{ end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}
@@ -12,5 +12,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-  {{ include "mxnet.storageClass" . }}
+  {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 2 }}
 {{- end }}

@@ -1,29 +1,42 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ template "node-exporter.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "node-exporter.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   selector:
-    matchLabels: {{- include "node-exporter.matchLabels" . | nindent 6 }}
-  updateStrategy:
-{{ toYaml .Values.updateStrategy | indent 4 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   minReadySeconds: {{ .Values.minReadySeconds }}
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "node-exporter.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "node-exporter.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels | indent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      {{- include "node-exporter.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "node-exporter.serviceAccountName" . }}
-{{- include "node-exporter.imagePullSecrets" . | indent 6 }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -32,7 +45,7 @@ spec:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       {{- end }}
       containers:
-        - name: {{ template "node-exporter.name" . }}
+        - name: node-exporter
           image: {{ template "node-exporter.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
@@ -50,16 +63,14 @@ spec:
             - name: metrics
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" ( dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-{{ toYaml .Values.livenessProbe | indent 12 }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" ( dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-{{ toYaml .Values.readinessProbe | indent 12 }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
@@ -71,19 +82,10 @@ spec:
               mountPath: /host/sys
               readOnly: true
             {{- if .Values.extraVolumeMounts }}
-{{ toYaml .Values.extraVolumeMounts | indent 12}}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       hostPID: true
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "node-exporter.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{- include "node-exporter.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.affinity }}
-      affinity: {{- include "node-exporter.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- end }}
       volumes:
         - name: proc
           hostPath:
@@ -92,5 +94,5 @@ spec:
           hostPath:
             path: /sys
         {{- if .Values.extraVolumes }}
-{{ toYaml .Values.extraVolumes | indent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

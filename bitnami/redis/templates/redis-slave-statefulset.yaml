@@ -12,6 +12,10 @@ metadata:
   {{- if .Values.slave.statefulset.labels }}
   {{- toYaml .Values.slave.statefulset.labels | nindent 4 }}
   {{- end }}
+{{- if .Values.slave.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.slave.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
 {{- if .Values.slave.updateStrategy }}
   strategy: {{- toYaml .Values.slave.updateStrategy | nindent 4 }}
@@ -206,6 +210,9 @@ spec:
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -c

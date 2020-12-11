@@ -1032,15 +1032,24 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9216"
 
-  # Enable this if you're using https://github.com/coreos/prometheus-operator
-  serviceMonitor:
-    enabled: false
-    namespace: monitoring
-    # fallback to the prometheus default unless specified
-    # interval: 10s
-    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  podMonitor:
+    ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
     ##
-    selector:
-      prometheus: kube-prometheus
+    enabled: false
+    ## Specify the namespace in which the podMonitor resource will be created
+    ##
+    namespace: monitoring
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    ##
+    # scrapeTimeout: 30s
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}

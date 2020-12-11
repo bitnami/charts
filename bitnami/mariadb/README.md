@@ -338,7 +338,7 @@ initdbScripts:
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MariaDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:

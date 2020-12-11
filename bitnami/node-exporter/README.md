@@ -56,13 +56,13 @@ The following table lists the configurable parameters of the Node Exporter chart
 | `global.imagePullSecrets`               | Global Docker registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)                   |
 | `global.storageClass`                   | Global storage class for dynamic provisioning                                                            | `nil`                                                                     |
 | `global.labels`                         | Additional labels to apply to all resource                                                               | `{}`                                                                      |
-| `nameOverride`                          | String to partially override `node-exporter.name` template with a string (will prepend the release name) | `nil`                                                                     |
-| `fullnameOverride`                      | String to fully override `node-exporter.fullname` template with a string                                 | `nil`                                                                     |
+| `nameOverride`                          | String to partially override `common.names.fullname` template with a string                              | `nil`                                                                     |
+| `fullnameOverride`                      | String to fully override `common.names.fullname` template with a string                                  | `nil`                                                                     |
 | `rbac.create`                           | Wether to create & use RBAC resources or not                                                             | `true`                                                                    |
 | `rbac.apiVersion`                       | Version of the RBAC API                                                                                  | `v1beta1`                                                                 |
 | `rbac.pspEnabled`                       | PodSecurityPolicy                                                                                        | `true`                                                                    |
 | `serviceAccount.create`                 | Specify whether to create a ServiceAccount for Node Exporter                                             | `true`                                                                    |
-| `serviceAccount.name`                   | The name of the ServiceAccount to create                                                                 | Generated using the `node-exporter.fullname` template                     |
+| `serviceAccount.name`                   | The name of the ServiceAccount to create                                                                 | Generated using the `common.names.fullname` template                      |
 | `image.registry`                        | Node Exporter image registry                                                                             | `docker.io`                                                               |
 | `image.repository`                      | Node Exporter Image name                                                                                 | `bitnami/node-exporter`                                                   |
 | `image.tag`                             | Node Exporter Image tag                                                                                  | `{TAG_NAME}`                                                              |
@@ -91,9 +91,14 @@ The following table lists the configurable parameters of the Node Exporter chart
 | `resources`                             | Resource requests/limit                                                                                  | `{}`                                                                      |
 | `podLabels`                             | Pod labels                                                                                               | `{}`                                                                      |
 | `podAnnotations`                        | Pod annotations                                                                                          | `{}`                                                                      |
-| `affinity`                              | Map of node/pod affinities                                                                               | `{} (The value is evaluated as a template)`                               |
-| `nodeSelector`                          | Node labels for pod assignment (this value is evaluated as a template)                                   | `{} (The value is evaluated as a template)`                               |
-| `tolerations`                           | List of node taints to tolerate (this value is evaluated as a template)                                  | `[] (The value is evaluated as a template)`                               |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                                      |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                                    |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                                      |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                    | `""`                                                                      |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                                                                      |
+| `affinity`                              | Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                                            |
+| `nodeSelector`                          | Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                                            |
+| `tolerations`                           | Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                                            |
 | `livenessProbe.enabled`                 | Turn on and off liveness probe                                                                           | `true`                                                                    |
 | `livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                                 | `120`                                                                     |
 | `livenessProbe.periodSeconds`           | How often to perform the probe                                                                           | `10`                                                                      |
@@ -136,6 +141,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `XpodAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -146,22 +157,26 @@ Find more information about how to deal with common errors related to Bitnami’
 $ helm upgrade my-release bitnami/node-exporter
 ```
 
+### To 2.1.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
 ### To 2.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/

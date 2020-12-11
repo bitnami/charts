@@ -21,4 +21,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-tensorflow-serving
   - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
   - https://www.tensorflow.org/serving/
-version: 3.0.0
+version: 3.0.1

@@ -45,6 +45,9 @@ app: {{ include "tomcat.name" . }}
 chart: {{ include "tomcat.chart" . }}
 release: {{ .Release.Name }}
 heritage: {{ .Release.Service }}
+{{- if .Values.commonLabels }}
+{{ toYaml .Values.commonLabels }}
+{{- end }}
 {{- end -}}
 
 {{/*

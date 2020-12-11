@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/bitnami-docker-phpmyadmin
   - https://www.phpmyadmin.net/
-version: 7.0.1
+version: 8.0.1
