@@ -67,7 +67,7 @@ The following table lists the configurable parameters of the Osclass chart and t
 | `osclassUsername`                  | User of the application                                                                              | `user`                                                       |
 | `osclassPassword`                  | Application password                                                                                 | `bitnami`                                                    |
 | `osclassEmail`                     | Admin email                                                                                          | `user@example.com`                                           |
-| `osclassWebTitle`                  | Application tittle                                                                                   | `Sample Web Page`                                            |
+| `osclassWebTitle`                  | Application title                                                                                   | `Sample Web Page`                                            |
 | `osclassPingEngines`               | Allow site to appear in search engines                                                               | `1`                                                          |
 | `osclassSaveStats`                 | Send statistics and reports to Osclass                                                               | `1`                                                          |
 | `smtpHost`                         | SMTP host                                                                                            | `nil`                                                        |

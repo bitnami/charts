@@ -105,7 +105,7 @@ mariadb-galera: galera.mariabackup.password
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MariaDB Galera - must provide mandatory LDAP paremeters when LDAP is enabled */}}
+{{/* Validate values of MariaDB Galera - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "mariadb-galera.validateValues.ldap" -}}
 {{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
 mariadb-galera: LDAP

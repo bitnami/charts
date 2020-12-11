@@ -185,7 +185,7 @@ service:
   # loadBalancerIP:
   # HTTP Port
   port: 80
-  ## Use nodePort to requets some specific port when usin NodePort
+  ## Use nodePort to requets some specific port when using NodePort
   ##
   nodePort: ""
 
