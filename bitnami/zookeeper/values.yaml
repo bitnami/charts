@@ -115,6 +115,12 @@ podManagementPolicy: Parallel
 ##
 replicaCount: 1
 
+## Minimal server ID (ZooKeeper myid) value
+## servers increment their ID starting at this minimal value.
+## E.g., with `minServerId=10` and 3 replicas, server IDs will be 10, 11, 12 for z-0, z-1 and z-2 respectively.
+##
+minServerId: 1
+
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##
 tickTime: 2000

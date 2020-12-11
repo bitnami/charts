@@ -100,27 +100,28 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 
 ### Statefulset parameters
 
-| Parameter                                         | Description                                                                                                                       | Default                                                 |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                                    | Number of ZooKeeper nodes                                                                                                         | `1`                                                     |
-| `updateStrategy`                                  | Update strategy for the statefulset                                                                                               | `RollingUpdate`                                         |
-| `rollingUpdatePartition`                          | Partition update strategy                                                                                                         | `nil`                                                   |
-| `podManagementPolicy`                             | Pod management policy                                                                                                             | `Parallel`                                              |
-| `podLabels`                                       | ZooKeeper pod labels                                                                                                              | `{}` (evaluated as a template)                          |
-| `podAnnotations`                                  | ZooKeeper Pod annotations                                                                                                         | `{}` (evaluated as a template)                          |
-| `affinity`                                        | Affinity for pod assignment                                                                                                       | `{}` (evaluated as a template)                          |
-| `nodeSelector`                                    | Node labels for pod assignment                                                                                                    | `{}` (evaluated as a template)                          |
-| `tolerations`                                     | Tolerations for pod assignment                                                                                                    | `[]` (evaluated as a template)                          |
-| `priorityClassName`                               | Name of the existing priority class to be used by ZooKeeper pods                                                                  |  `""`                                                   |
-| `securityContext.enabled`                         | Enable security context (ZooKeeper master pod)                                                                                    | `true`                                                  |
-| `securityContext.fsGroup`                         | Group ID for the container (ZooKeeper master pod)                                                                                 | `1001`                                                  |
-| `securityContext.runAsUser`                       | User ID for the container (ZooKeeper master pod)                                                                                  | `1001`                                                  |
-| `resources`                                       | CPU/Memory resource requests/limits                                                                                               | Memory: `256Mi`, CPU: `250m`                            |
-| `livenessProbe`                                   | Liveness probe configuration for ZooKeeper                                                                                        | Check `values.yaml` file                                |
-| `readinessProbe`                                  | Readiness probe configuration for ZooKeeper                                                                                       | Check `values.yaml` file                                |
-| `extraVolumes`                                    | Extra volumes                                                                                                                     | `nil`                                                   |
-| `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                             | `nil`                                                   |
-| `podDisruptionBudget.maxUnavailable`              | Max number of pods down simultaneously                                                                                            | `1`                                                     |
+| Parameter                            | Description                                                      | Default                        |
+|:-------------------------------------|:-----------------------------------------------------------------|:-------------------------------|
+| `replicaCount`                       | Number of ZooKeeper nodes                                        | `1`                            |
+| `minServerId`                        | Minimal SERVER_ID value, nodes increment their IDs respectively  | `1`                            |
+| `updateStrategy`                     | Update strategy for the statefulset                              | `RollingUpdate`                |
+| `rollingUpdatePartition`             | Partition update strategy                                        | `nil`                          |
+| `podManagementPolicy`                | Pod management policy                                            | `Parallel`                     |
+| `podLabels`                          | ZooKeeper pod labels                                             | `{}` (evaluated as a template) |
+| `podAnnotations`                     | ZooKeeper Pod annotations                                        | `{}` (evaluated as a template) |
+| `affinity`                           | Affinity for pod assignment                                      | `{}` (evaluated as a template) |
+| `nodeSelector`                       | Node labels for pod assignment                                   | `{}` (evaluated as a template) |
+| `tolerations`                        | Tolerations for pod assignment                                   | `[]` (evaluated as a template) |
+| `priorityClassName`                  | Name of the existing priority class to be used by ZooKeeper pods | `""`                           |
+| `securityContext.enabled`            | Enable security context (ZooKeeper master pod)                   | `true`                         |
+| `securityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                | `1001`                         |
+| `securityContext.runAsUser`          | User ID for the container (ZooKeeper master pod)                 | `1001`                         |
+| `resources`                          | CPU/Memory resource requests/limits                              | Memory: `256Mi`, CPU: `250m`   |
+| `livenessProbe`                      | Liveness probe configuration for ZooKeeper                       | Check `values.yaml` file       |
+| `readinessProbe`                     | Readiness probe configuration for ZooKeeper                      | Check `values.yaml` file       |
+| `extraVolumes`                       | Extra volumes                                                    | `nil`                          |
+| `extraVolumeMounts`                  | Mount extra volume(s)                                            | `nil`                          |
+| `podDisruptionBudget.maxUnavailable` | Max number of pods down simultaneously                           | `1`                            |
 
 ### Exposure parameters
 
