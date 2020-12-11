@@ -12,6 +12,10 @@ metadata:
   {{- if .Values.master.statefulset.labels }}
   {{- toYaml .Values.master.statefulset.labels | nindent 4 }}
   {{- end }}
+{{- if .Values.master.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.master.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
   selector:
     matchLabels:

@@ -1,4 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
+
 {{/*
 Expand the name of the chart.
 */}}
@@ -7,69 +8,31 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "mxnet.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "mxnet.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "mxnet.labels" -}}
-app.kubernetes.io/name: {{ include "mxnet.name" . }}
-helm.sh/chart: {{ include "mxnet.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "mxnet.matchLabels" -}}
-app.kubernetes.io/name: {{ include "mxnet.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Return the proper Apache MXNet (Incubating) image name
 */}}
 {{- define "mxnet.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
+
+{{/*
+Return the proper git image name
+*/}}
+{{- define "git.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.git "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "mxnet.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "mxnet.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.git .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
@@ -85,69 +48,21 @@ sleep infinity
   {{- end }}
 {{- end -}}
 
-{{/*
-Return the proper git image name
-*/}}
-{{- define "git.image" -}}
-{{- $registryName := .Values.git.registry -}}
-{{- $repositoryName := .Values.git.repository -}}
-{{- $tag := .Values.git.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "mxnet.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
+{{- define "mxnet.parseEnvVars" -}}
+{{- range $env := . }}
+{{- if $env.value }}
+- name: {{ $env.name }}
+  value: {{ $env.value | quote }}
+{{- else if $env.valueFrom }}
+- name: {{ $env.name }}
+  valueFrom:
+{{ toYaml $env.valueFrom | indent 4 }}
+{{- else }} {{/* Leave this for future compatibility */}}
+-
+{{ toYaml $env | indent 2}}
 {{- end }}
-{{- else if or .Values.image.pullSecrets .Values.git.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
 {{- end }}
-{{- range .Values.git.pullSecrets }}
-  - name: {{ . }}
 {{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.git.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.git.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Compile all warnings into a single message, and call fail.
@@ -176,107 +91,26 @@ mxnet: mode
 
 {{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
 {{- define "mxnet.validateValues.workerCount" -}}
-{{- $replicaCount := int .Values.workerCount }}
+{{- $replicaCount := int .Values.worker.replicaCount }}
 {{- if and (eq .Values.mode "distributed") (lt $replicaCount 1) -}}
-mxnet: workerCount
+mxnet: worker.replicaCount
     Worker count must be greater than 0 in distributed mode!!
-    Please set a valid worker count size (--set workerCount=X)
+    Please set a valid worker count size (--set worker.replicaCount=X)
 {{- end -}}
 {{- end -}}
-
-{{- define "mxnet.parseEnvVars" -}}
-{{- range $env := . }}
-{{- if $env.value }}
-- name: {{ $env.name }}
-  value: {{ $env.value | quote }}
-{{- else if $env.valueFrom }}
-- name: {{ $env.name }}
-  valueFrom:
-{{ toYaml $env.valueFrom | indent 4 }}
-{{- else }} {{/* Leave this for future compatibility */}}
--
-{{ toYaml $env | indent 2}}
-{{- end }}
-{{- end }}
-{{- end }}
 
 {{/* Validate values of Apache MXNet (Incubating) - number of workers must be greater than 0 */}}
 {{- define "mxnet.validateValues.serverCount" -}}
-{{- $replicaCount := int .Values.serverCount }}
+{{- $replicaCount := int .Values.server.replicaCount }}
 {{- if and (eq .Values.mode "distributed") (lt $replicaCount 1) -}}
-mxnet: serverCount
+mxnet: server.replicaCount
     Server count must be greater than 0 in distributed mode!!
-    Please set a valid worker count size (--set serverCount=X)
+    Please set a valid worker count size (--set server.replicaCount=X)
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "mxnet.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class
-*/}}
-{{- define "mxnet.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "mxnet.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "mxnet.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{/* Check if there are rolling tags in the images */}}
+{{- define "mxnet.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.git }}
 {{- end -}}

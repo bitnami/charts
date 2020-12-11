@@ -24,4 +24,4 @@ name: osclass
 sources:
   - https://github.com/bitnami/bitnami-docker-osclass
   - https://osclass.org/
-version: 8.0.0
+version: 8.0.1
