@@ -745,6 +745,9 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Use StatefulSet instead of Deployment when deploying standalone
+  ##
+  useStatefulSet: false
   ## Pod disruption budget
   ##
   pdb:
