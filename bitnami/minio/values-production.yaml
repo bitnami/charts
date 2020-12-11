@@ -198,7 +198,7 @@ securityContext:
 ##
 podAnnotations:
   prometheus.io/scrape: "true"
-  prometheus.io/path: "/minio/prometheus/metric"
+  prometheus.io/path: "/minio/prometheus/metrics"
   prometheus.io/port: "9000"
 
 ## Pod affinity preset
