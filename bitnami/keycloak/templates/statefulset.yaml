@@ -89,7 +89,7 @@ spec:
                   echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
                   exit 1
               fi
-              exec /opt/bitnami/scripts/schema-registry/entrypoint.sh /opt/bitnami/scripts/schema-registry/run.sh
+              exec /opt/bitnami/scripts/keycloak/entrypoint.sh /opt/bitnami/scripts/keycloak/run.sh
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
