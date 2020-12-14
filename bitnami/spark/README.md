@@ -55,7 +55,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                               | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                            | `[]` (does not add image pull secrets to deployed pods) |
 
-### Common paramters
+### Common parameters
 
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -148,7 +148,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`     | `nil`                                                   |
 | `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`. | `nil`                                                   |
 
-### Security paramters
+### Security parameters
 
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|

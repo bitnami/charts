@@ -96,7 +96,7 @@ extraEnv: []
 ##
 # command: []
 
-## Custom args for the custom commad:
+## Custom args for the custom command:
 # args: []
 
 ## Additional volume mounts

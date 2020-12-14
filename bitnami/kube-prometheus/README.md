@@ -72,7 +72,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `global.labels`           | Additional labels to apply to all resource                                                                 | `{}`                                                    |
 | `nameOverride`            | String to partially override `kube-prometheus.name` template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`        | String to fully override `kube-prometheus.fullname` template with a string                                 | `nil`                                                   |
-| `rbac.create`             | Wether to create & use RBAC resources or not                                                               | `true`                                                  |
+| `rbac.create`             | Whether to create & use RBAC resources or not                                                               | `true`                                                  |
 | `rbac.apiVersion`         | Version of the RBAC API                                                                                    | `v1beta1`                                               |
 | `rbac.pspEnabled`         | PodSecurityPolicy                                                                                          | `true`                                                  |
 
@@ -234,7 +234,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.persistence.size`                              | Persistent Volume Size                                                                                  | `8Gi`                                                                                                                                   |
 | `prometheus.priorityClassName`                             | Priority class assigned to the Pods                                                                     | ``                                                                                                                                      |
 | `prometheus.containers`                                    | Containers allows injecting additional containers                                                       | `[]`                                                                                                                                    |
-| `prometheus.volumes`                                       | Volumes allows configuration of additonal volumes. Evaluated as a template                              | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
+| `prometheus.volumes`                                       | Volumes allows configuration of additional volumes. Evaluated as a template                              | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
 | `prometheus.volumeMounts`                                  | VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template                   | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
 | `prometheus.additionalPrometheusRules`                     | PrometheusRule defines recording and alerting rules for a Prometheus instance.                          | `[]`                                                                                                                                    |
 | `prometheus.additionalScrapeConfigsExternal.enabled`       | Enable additional scrape configs that are managed externally to this chart                              | `false` See [docs](#additional-scrape-configurations) for details.                                                                      |
@@ -329,7 +329,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `alertmanager.paused`                             | If true, the Operator won't process any Alertmanager configuration changes                                                     | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.listenLocal`                        | ListenLocal makes the Alertmanager server listen on loopback                                                                   | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.containers`                         | Containers allows injecting additional containers                                                                              | `[]`                                                                                                                                                                                                                                                |
-| `prometheus.volumes`                              | Volumes allows configuration of additonal volumes. Evaluated as a template                                                     | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
+| `prometheus.volumes`                              | Volumes allows configuration of additional volumes. Evaluated as a template                                                     | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
 | `prometheus.volumeMounts`                         | VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template                                          | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
 | `alertmanager.priorityClassName`                  | Priority class assigned to the Pods                                                                                            | ``                                                                                                                                                                                                                                                  |
 | `alertmanager.additionalPeers`                    | AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster             | `[]`                                                                                                                                                                                                                                                |
@@ -476,7 +476,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Additional scrape configurations
 
-It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigsExternal.enabled` to `true`. The secret must exist in the same namespace which the kube-prometheus will be deployed into. Set the secret name using the parameter `prometheus.additionalScrapeConfigsExternal.name`, and the key containining the additional scrape configuration using the `prometheus.additionalScrapeConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-scrape-config` and it contains a file named `additional-scrape-configs.yaml`, use the parameters below:
+It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigsExternal.enabled` to `true`. The secret must exist in the same namespace which the kube-prometheus will be deployed into. Set the secret name using the parameter `prometheus.additionalScrapeConfigsExternal.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-scrape-config` and it contains a file named `additional-scrape-configs.yaml`, use the parameters below:
 
 ```console
 prometheus.additionalScrapeConfigsExternal.enabled=true
@@ -488,7 +488,7 @@ For more information, see [Prometheus Operator - Additional scrape configuration
 
 ### Additional alert relabel configurations
 
-It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace which the kube-prometheus will be deployed into. Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containining the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace which the kube-prometheus will be deployed into. Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
 
 ```console
 prometheus.additionalAlertRelabelConfigsExternal.enabled=true
@@ -498,7 +498,7 @@ prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-co
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -514,7 +514,7 @@ $ helm upgrade my-release bitnami/kube-prometheus
 
 ### To 3.1.0
 
-Some parameters dissapeared in favor of new ones:
+Some parameters disappeared in favor of new ones:
 
 - `*.podAffinity` -> deprecated in favor of `*.podAffinityPreset`.
 - `*.podAntiAffinity` -> deprecated in favor of `*.podAntiAffinityPreset`.
@@ -549,7 +549,7 @@ Adapt you parameters accordingly if you are setting custom affinity.
 
 > Note: ignore these instructions if you did not enabled the Thanos sidecar on Prometheus pods.
 
-The Thanos sidecar svc is transformed into a headless service by default so Thanos can discover every available sidecar. You can undo this change by setting the `prometheus.thanos.service.clusterIP` parameter to an emtpy string `""`.
+The Thanos sidecar svc is transformed into a headless service by default so Thanos can discover every available sidecar. You can undo this change by setting the `prometheus.thanos.service.clusterIP` parameter to an empty string `""`.
 
 To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
 

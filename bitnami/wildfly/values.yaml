@@ -223,7 +223,7 @@ sidecars:
 
 ## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes liveness probe
 ## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-## Evaulated as a template
+## Evaluated as a template
 ##
 livenessProbe:
   httpGet:
@@ -235,7 +235,7 @@ livenessProbe:
 
 ## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes readiness probe
 ## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-## Evaulated as a template
+## Evaluated as a template
 ##
 readinessProbe:
   httpGet:
