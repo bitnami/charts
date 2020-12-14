@@ -58,7 +58,7 @@ The following table lists the configurable parameters of the Node Exporter chart
 | `global.labels`                         | Additional labels to apply to all resource                                                               | `{}`                                                                      |
 | `nameOverride`                          | String to partially override `common.names.fullname` template with a string                              | `nil`                                                                     |
 | `fullnameOverride`                      | String to fully override `common.names.fullname` template with a string                                  | `nil`                                                                     |
-| `rbac.create`                           | Wether to create & use RBAC resources or not                                                             | `true`                                                                    |
+| `rbac.create`                           | Whether to create & use RBAC resources or not                                                             | `true`                                                                    |
 | `rbac.apiVersion`                       | Version of the RBAC API                                                                                  | `v1beta1`                                                                 |
 | `rbac.pspEnabled`                       | PodSecurityPolicy                                                                                        | `true`                                                                    |
 | `serviceAccount.create`                 | Specify whether to create a ServiceAccount for Node Exporter                                             | `true`                                                                    |
@@ -143,7 +143,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `XpodAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

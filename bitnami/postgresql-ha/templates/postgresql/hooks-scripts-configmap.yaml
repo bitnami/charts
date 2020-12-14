@@ -26,7 +26,7 @@ data:
     . /opt/bitnami/scripts/libpostgresql.sh
     . /opt/bitnami/scripts/librepmgr.sh
 
-    # Auxiliar functions
+    # Auxiliary functions
     is_new_primary_ready() {
         return_value=1
         currenty_primary_node="$(repmgr_get_primary_node)"

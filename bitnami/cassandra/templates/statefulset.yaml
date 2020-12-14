@@ -61,6 +61,9 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if or (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) (.Values.initContainers) }}
       initContainers:
         {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}

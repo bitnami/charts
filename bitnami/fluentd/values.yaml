@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.5-debian-10-r4
+  tag: 1.11.5-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -317,7 +317,7 @@ forwarder:
   #   - name: systemd
   #     mountPath: /run/log/journal/
 
-## Agregator parameters
+## Aggregator parameters
 ##
 aggregator:
   ## Enable Aggregator daemonset

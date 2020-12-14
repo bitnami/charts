@@ -379,7 +379,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -399,7 +399,7 @@ $ helm upgrade my-release bitnami/mysql --set auth.rootPassword=[ROOT_PASSWORD]
 
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - Credentials parameters are reorganized under the `auth` parameter.
   - `replication.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.

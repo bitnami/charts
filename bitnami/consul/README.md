@@ -341,7 +341,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -418,7 +418,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
   - `replicas` is renamed to `replicaCount`.
   - `updateStrategy.type` is renamed to `updateStrategy`.
@@ -452,7 +452,7 @@ $ helm upgrade my-release bitnami/consul
 If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/consul --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/consul --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 2.0.0

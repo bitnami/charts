@@ -8,12 +8,12 @@ Return a soft nodeAffinity definition
 preferredDuringSchedulingIgnoredDuringExecution:
   - preference:
       matchExpressions:
-        key: {{ .key }}
-        operator: In
-        values:
-          {{- range .values }}
-          - {{ . }}
-          {{- end }}
+        - key: {{ .key }}
+          operator: In
+          values:
+            {{- range .values }}
+            - {{ . }}
+            {{- end }}
     weight: 1
 {{- end -}}
 
@@ -25,12 +25,12 @@ Return a hard nodeAffinity definition
 requiredDuringSchedulingIgnoredDuringExecution:
   nodeSelectorTerms:
     - matchExpressions:
-        key: {{ .key }}
-        operator: In
-        values:
-          {{- range .values }}
-          - {{ . }}
-          {{- end }}
+        - key: {{ .key }}
+          operator: In
+          values:
+            {{- range .values }}
+            - {{ . }}
+            {{- end }}
 {{- end -}}
 
 {{/*

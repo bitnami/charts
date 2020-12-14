@@ -77,7 +77,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shards`                                      | Number of shards to be created                                                                                                                            | `2`                                                      |
 | `common.mongodbEnableIPv6`                    | Switch to enable/disable IPv6 on MongoDB                                                                                                                  | `false`                                                  |
 | `common.mongodbDirectoryPerDB`                | Switch to enable/disable DirectoryPerDB on MongoDB                                                                                                        | `false`                                                  |
-| `common.mongodbSystemLogVerbosity`            | MongoDB systen log verbosity level                                                                                                                        | `0`                                                      |
+| `common.mongodbSystemLogVerbosity`            | MongoDB system log verbosity level                                                                                                                        | `0`                                                      |
 | `common.mongodbDisableSystemLog`              | Whether to disable MongoDB system log or not                                                                                                              | `false`                                                  |
 | `common.mongodbMaxWaitTimeout`                | Maximum time (in seconds) for MongoDB nodes to wait for another MongoDB node to be ready                                                                  | `120`                                                    |
 | `common.podLabels`                            | Extra labels for all pods in the cluster (evaluated as a template)                                                                                        | `{}`                                                     |
@@ -455,7 +455,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

@@ -1,4 +1,4 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kongconsumers.configuration.konghq.com
@@ -32,7 +32,7 @@ spec:
           items:
             type: string
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kongcredentials.configuration.konghq.com
@@ -67,7 +67,7 @@ spec:
         type:
           type: string
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kongplugins.configuration.konghq.com
@@ -128,7 +128,7 @@ spec:
             - tcp
             - tls
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kongclusterplugins.configuration.konghq.com
@@ -189,7 +189,7 @@ spec:
             - tcp
             - tls
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kongingresses.configuration.konghq.com
@@ -349,7 +349,7 @@ spec:
                     healthy: *healthy
                     unhealthy: *unhealthy
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: tcpingresses.configuration.konghq.com
