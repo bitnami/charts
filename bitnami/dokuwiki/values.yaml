@@ -86,7 +86,7 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
-  ## Use nodePorts to requets some specific ports when usin NodePort
+  ## Use nodePorts to requets some specific ports when using NodePort
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>

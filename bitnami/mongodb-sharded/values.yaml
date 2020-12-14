@@ -147,7 +147,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -302,7 +302,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -479,7 +479,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -682,7 +682,7 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -913,7 +913,7 @@ service:
   ## MongoDB Service port and Container Port
   ##
   port: 27017
-  ## Set a fixed service ClusterIP addrress
+  ## Set a fixed service ClusterIP address
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
   ##
   clusterIP:

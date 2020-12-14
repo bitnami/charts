@@ -17,7 +17,7 @@ keywords:
   - database
   - sql
   - cluster
-  - high availablity
+  - high availability
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami

@@ -182,7 +182,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                                                         | `Always`                                                |
 | `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                                                     | `{}`                                                    |
 | `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                                                   | `{}`                                                    |
-| `externalAccess.service.type`                     | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                   | `LoadBalancer`                                          |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                                                   | `LoadBalancer`                                          |
 | `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                                             | `9094`                                                  |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for Kafka brokers                                                                                      | `[]`                                                    |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                         | `[]`                                                    |
@@ -564,13 +564,13 @@ sidecars:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connnect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
@@ -695,7 +695,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ### To 11.8.0
 
-External access to brokers can now be achived through the cluster's Kafka service.
+External access to brokers can now be achieved through the cluster's Kafka service.
 
 - `service.nodePort` -> deprecated  in favor of `service.nodePorts.client` and `service.nodePorts.external`
 
@@ -710,7 +710,7 @@ The way to configure the users and passwords changed. Now it is allowed to creat
 
 The way to configure listeners and athentication on Kafka is totally refactored allowing users to configure different authentication protocols on different listeners. Please check the sections [Listeners Configuration](listeners-configuration) and [Listeners Configuration](enable-kafka-for-kafka-and-zookeeper) for more information.
 
-Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed or dissapeared in favor of new ones on this major version:
+Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed or disappeared in favor of new ones on this major version:
 
 - `auth.enabled` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.
 - `auth.ssl` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.

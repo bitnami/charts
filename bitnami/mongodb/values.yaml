@@ -92,6 +92,12 @@ auth:
 tls:
   ## Enable or disable MongoDB TLS Support
   enabled: false
+
+  ## Existing secret with MongoDB TLS certificates
+  ## NOTE: When it's set it will disable certificate creation
+  ##
+  # existingSecret: name-of-existing-secret
+
   ##
   ## Bitnami Nginx image
   ##
@@ -289,7 +295,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## Lables for MongoDB pods. Evaluated as a template.
+## Labels for MongoDB pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
@@ -676,7 +682,7 @@ arbiter:
   ##
   tolerations: []
 
-  ## Lables for MongoDB Arbiter pods. Evaluated as a template.
+  ## Labels for MongoDB Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
@@ -823,7 +829,7 @@ rbac:
   ##
   create: false
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
