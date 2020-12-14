@@ -348,7 +348,12 @@ interBrokerListenerName: INTERNAL
 ##
 replicaCount: 1
 
+## Minimal broker.id value
+## Brokers increment their ID starting at this minimal value.
+## E.g., with `minBrokerId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
+##
 minBrokerId: 0
+
 ## StrategyType, can be set to RollingUpdate or OnDelete by default.
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
