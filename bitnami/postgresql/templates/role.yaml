@@ -2,7 +2,7 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -14,6 +14,6 @@ rules:
     resources: ["podsecuritypolicies"]
     verbs: ["use"]
     resourceNames:
-      - {{ template "postgresql.fullname" . }}
+      - {{ template "common.names.fullname" . }}
   {{- end }}
 {{- end }}

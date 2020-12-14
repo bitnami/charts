@@ -171,6 +171,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
 | `tls.existingSecret`                      | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)            | `nil`                                                   |
+| `tls.caCert`                             | Custom CA certificated (base64 encoded)         | `nil`                                                 |
+| `tls.caKey`                             | CA certificate private key (base64 encoded)      | `nil`                                                 |
 | `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |
 | `tls.image.repository`                    | Init container TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
@@ -245,13 +247,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 | Parameter                                 | Description                                                                                                | Default                                                 |
 |-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `persistence.enabled`                     | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
-| `persistence.existingClaim`               | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
-| `persistence.storageClass`                | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
-| `persistence.accessMode`                  | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
-| `persistence.size`                        | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.mountPath`                   | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
-| `persistence.subPath`                     | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
+| `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
+| `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
+| `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
+| `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
+| `persistence.size`                          | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
+| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                        |
+| `persistence.subPath`                       | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
+| `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes)                         | ``                                                      |
 
 ### RBAC parameters
 
@@ -552,6 +555,10 @@ To enable full TLS encryption set tls.enabled to true
 The secrets-ca.yaml utilizes the helm "pre-install" hook to ensure that the certs will only be generated on chart install. The genCA function will create a new self-signed x509 certificate authority, the genSignedCert function creates an object with a pair of items in it — the Cert and Key which we base64 encode and use in a yaml like object. With the genSignedCert function, we pass the CN, an empty IP list (the nil part), the validity and the CA created previously.
 To hold the signed certificate created above, we can use a kubernetes Secret object and the initContainer sets up the rest.
 Using Helm’s hook annotations ensures that the certs will only be generated on chart install. This will prevent overriding the certs anytime we upgrade the chart’s released instance.
+
+### Using your own CA
+
+To use your own CA set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The secrets-ca.yaml will utilize this data to create secret. Please Note:- Currently only RSA private keys are supported.
 
 ### Accessing the cluster
 

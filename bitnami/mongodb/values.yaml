@@ -98,6 +98,9 @@ tls:
   ##
   # existingSecret: name-of-existing-secret
 
+  ## Add Custom CA certificate
+  # caCert: base64 encoded ca certificate
+  # caKey: base64 encoded private key
   ##
   ## Bitnami Nginx image
   ##
@@ -457,6 +460,11 @@ persistence:
   ## and one PV for multiple services.
   ##
   subPath: ""
+  ## Fine tuning for volumeClaimTemplates
+  volumeClaimTemplates:
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+    selector:
 
 ## Service parameters
 ##
