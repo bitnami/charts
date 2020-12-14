@@ -35,10 +35,10 @@ auth:
   ## If it is not forced, a random password will be generated.
   ##
   forcePassword: true
-  ## Specify username to acccess web UI
+  ## Specify username to access web UI
   ##
   username: user
-  ## Specify password to acccess web UI
+  ## Specify password to access web UI
   ##
   password:
   ## Specify a fernet key to secure airflow connections
@@ -415,7 +415,7 @@ worker:
     ## Whether enabled horizontal pod autoscale
     ##
     enabled: true
-    ## Configure a minimun/maximun amount of pods
+    ## Configure a minimum/maximum amount of pods
     ##
     replicas:
       min: 1

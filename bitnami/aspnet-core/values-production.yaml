@@ -337,7 +337,7 @@ autoscaling:
   # targetCPU: 50
   # targetMemory: 50
 
-## ASP.NET Core Service paramaters.
+## ASP.NET Core Service parameters.
 ##
 service:
   ## Service type.

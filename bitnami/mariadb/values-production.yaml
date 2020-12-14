@@ -352,7 +352,7 @@ primary:
   ##
   sidecars: []
 
-  ## MariaDB Primary Service paramaters
+  ## MariaDB Primary Service parameters
   ##
   service:
     ## Service type
@@ -630,7 +630,7 @@ secondary:
   ##
   sidecars: []
 
-  ## MariaDB Secondary Service paramaters
+  ## MariaDB Secondary Service parameters
   ##
   service:
     ## Service type
@@ -715,7 +715,7 @@ volumePermissions:
     #   - myRegistryKeySecretName
   resources: {}
 
-## Mysqld Prometheus exporter paramters
+## Mysqld Prometheus exporter parameters
 ##
 metrics:
   enabled: false

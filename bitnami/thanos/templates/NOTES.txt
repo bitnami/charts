@@ -67,7 +67,7 @@ To access Thanos Query from outside the cluster execute the following commands:
 
 {{- else }}
 
-WARNING: You deployed Thanos whitout enabling Thanos Query!!
+WARNING: You deployed Thanos without enabling Thanos Query!!
 
 {{- end }}
 

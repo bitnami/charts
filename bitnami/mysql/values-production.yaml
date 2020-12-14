@@ -354,7 +354,7 @@ primary:
   ##
   sidecars: []
 
-  ## MySQL Primary Service paramaters
+  ## MySQL Primary Service parameters
   ##
   service:
     ## Service type
@@ -634,7 +634,7 @@ secondary:
   ##
   sidecars: []
 
-  ## MySQL Secondary Service paramaters
+  ## MySQL Secondary Service parameters
   ##
   service:
     ## Service type
@@ -719,7 +719,7 @@ volumePermissions:
     #   - myRegistryKeySecretName
   resources: {}
 
-## Mysqld Prometheus exporter paramters
+## Mysqld Prometheus exporter parameters
 ##
 metrics:
   enabled: true
