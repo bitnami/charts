@@ -372,7 +372,7 @@ shmVolume:
   ##
   enabled: true
   ## Set to `true` to `chmod 777 /dev/shm` on a initContainer.
-  ## This option is ingored if `volumePermissions.enabled` is `false`
+  ## This option is ignored if `volumePermissions.enabled` is `false`
   ##
   chmod:
     enabled: true

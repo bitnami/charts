@@ -188,7 +188,7 @@ server:
   ##
   customReadinessProbe: {}
 
-  ## Dataflow Server Service paramaters.
+  ## Dataflow Server Service parameters.
   ##
   service:
     ## Service type.
@@ -490,7 +490,7 @@ skipper:
   ##
   customReadinessProbe: {}
 
-  ## Skipper Service paramaters.
+  ## Skipper Service parameters.
   ##
   service:
     ## Service type.

@@ -186,7 +186,7 @@ The following tables lists the configurable parameters of the InfluxDB (TM) char
 | `backup.cronjob.historyLimit`                     | cronjob historylimit                                                                                                                | `1`                                                     |
 | `backup.cronjob.annotations`                      | backup pod annotations                                                                                                              | `{}`                                                    |
 | `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                                              | `false`                                                 |
-| `backup.uploadProviders.google.secret`            | json secret whith serviceaccount data to access Google storage bucket                                                               | `""`                                                    |
+| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                                               | `""`                                                    |
 | `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                                                     | `"key.json"`                                            |
 | `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                                                          | `""`                                                    |
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                                                     | `"gs://bucket/influxdb"`                                |
@@ -196,7 +196,7 @@ The following tables lists the configurable parameters of the InfluxDB (TM) char
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                                                  | `IfNotPresent`                                          |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
 | `backup.uploadProviders.azure.enabled`            | enable upload to azure storage container                                                                                            | `false`                                                 |
-| `backup.uploadProviders.azure.secret`             | secret whith credentials to access Azure storage                                                                                    | `""`                                                    |
+| `backup.uploadProviders.azure.secret`             | secret with credentials to access Azure storage                                                                                    | `""`                                                    |
 | `backup.uploadProviders.azure.secretKey`          | service account secret key name                                                                                                     | `"connection-string"`                                   |
 | `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                                                      | `""`                                                    |
 | `backup.uploadProviders.azure.containerName`      | destination container                                                                                                               | `"influxdb-container"`                                  |
@@ -386,7 +386,7 @@ The allowed extensions are `.sh`, and `.txt`.
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

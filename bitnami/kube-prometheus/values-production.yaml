@@ -674,7 +674,7 @@ prometheus:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Volumes allows configuration of additional volumes. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   volumes: []
 
@@ -1143,7 +1143,7 @@ alertmanager:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Volumes allows configuration of additional volumes. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   volumes: []
 
@@ -1331,7 +1331,7 @@ coreDns:
     targetPort: 9153
     # selector:
     #   k8s-app: kube-dns
-  
+
   serviceMonitor:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##

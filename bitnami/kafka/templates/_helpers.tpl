@@ -325,7 +325,7 @@ kafka: .Values.externalAccess.service.nodePorts
 {{- define "kafka.validateValues.externalAccessServiceType" -}}
 {{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
 kafka: externalAccess.service.type
-    Available servive type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort or LoadBalancer.
 {{- end -}}
 {{- end -}}
 

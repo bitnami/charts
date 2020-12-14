@@ -247,7 +247,7 @@ influxdb:
     http: 8086
     rpc: 8088
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -435,7 +435,7 @@ relay:
   containerPorts:
     http: 9096
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -465,7 +465,7 @@ relay:
     ##
     annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -570,7 +570,7 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: false
@@ -582,7 +582,7 @@ networkPolicy:
   ##
   allowExternal: true
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -606,7 +606,7 @@ persistence:
   ##
   size: 8Gi
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume mountpoint to 'runAsUser:fsGroup'
 ## values from the securityContext section.
 ##

@@ -311,7 +311,7 @@ persistence:
   accessMode: ReadWriteOnce
   size: 1Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -344,7 +344,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation

@@ -254,7 +254,7 @@ readinessProbe:
   # successThreshold: 1
   # failureThreshold: 6
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -289,7 +289,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
