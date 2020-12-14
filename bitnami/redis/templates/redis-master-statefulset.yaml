@@ -310,7 +310,7 @@ spec:
         {{- if .Values.persistence.existingClaim }}
         - name: "redis-data"
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
+            claimName: {{ tpl .Values.persistence.existingClaim .}}
         {{- end }}
         {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
