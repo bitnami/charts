@@ -38,7 +38,7 @@ data:
     # Pid file
     pid_file: "/tmp/{{ .Values.natsFilename }}.pid"
 
-    # Some system overides
+    # Some system overrides
     {{- if .Values.maxConnections }}
     max_connections: {{ int .Values.maxConnections }}
     {{- end }}

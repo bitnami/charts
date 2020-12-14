@@ -568,7 +568,7 @@ postgresql-ha: Nodes hostnames
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP paremeters when LDAP is enabled */}}
+{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "postgresql-ha.validateValues.ldap" -}}
 {{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
 postgresql-ha: LDAP

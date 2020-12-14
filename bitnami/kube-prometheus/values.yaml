@@ -670,7 +670,7 @@ prometheus:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes
+  ## Volumes allows configuration of additional volumes
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ##
   volumes: []
@@ -1152,7 +1152,7 @@ alertmanager:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Volumes allows configuration of additional volumes. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   ##
   volumes: []

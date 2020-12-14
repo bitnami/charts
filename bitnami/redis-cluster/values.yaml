@@ -226,7 +226,7 @@ initJob:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 
@@ -313,7 +313,7 @@ updateJob:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 

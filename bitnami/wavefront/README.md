@@ -98,7 +98,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.logLevel`                       | Min logging level (info, debug, trace)                                                                                 | `info`                                                  |
 | `collector.interval`                       | Default metrics collection interval                                                                                    | `60s`                                                   |
 | `collector.flushInterval`                  | How often to force a metrics flush                                                                                     | `10s`                                                   |
-| `collector.sinkDelay`                      | Timout for exporting data                                                                                              | `10s`                                                   |
+| `collector.sinkDelay`                      | Timeout for exporting data                                                                                              | `10s`                                                   |
 | `collector.useReadOnlyPort`                | Use un-authenticated port for kubelet                                                                                  | `false`                                                 |
 | `collector.useProxy`                       | Use a Wavefront Proxy to send metrics through                                                                          | `true`                                                  |
 | `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false                           | `nil`                                                   |
@@ -173,7 +173,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.tracePort`                          | Port for distributed tracing data (usually 30000)                                                                      | `nil`                                                   |
 | `proxy.jaegerPort`                         | Port for Jaeger format distributed tracing data (usually 30001)                                                        | `nil`                                                   |
 | `proxy.traceJaegerHttpListenerPort`        | Port for Jaeger Thrift format data (usually 30080)                                                                     | `nil`                                                   |
-| `proxy.zipkinPort`                         | Port for Zipkin format distribued tracing data (usually 9411)                                                          | `nil`                                                   |
+| `proxy.zipkinPort`                         | Port for Zipkin format distributed tracing data (usually 9411)                                                          | `nil`                                                   |
 | `proxy.traceSamplingRate`                  | Distributed tracing data sampling rate (0 to 1)                                                                        | `nil`                                                   |
 | `proxy.traceSamplingDuration`              | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                        | `nil`                                                   |
 | `proxy.histogramPort`                      | Port for histogram distribution format data (usually 40000)                                                            | `nil`                                                   |
@@ -184,7 +184,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.args`                               | Additional Wavefront proxy properties to be passed as command line arguments in the `--<property_name> <value>` format | `nil`                                                   |
 | `proxy.heap`                               | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                                                | `nil`                                                   |
 | `proxy.existingConfigmap`                  | Name of existing ConfigMap with Proxy preprocessor configuration                                                       | `nil`                                                   |
-| `proxy.preprocessor.rules.yaml`            | YAML configuraiton for Wavefront proxy preprocessor rules                                                              | `nil`                                                   |
+| `proxy.preprocessor.rules.yaml`            | YAML configuration for Wavefront proxy preprocessor rules                                                              | `nil`                                                   |
 
 #### Kube State Metrics parameters
 

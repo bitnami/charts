@@ -233,7 +233,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## Service configuratiom
+## Service configuration
 ##
 service:
   ## Service type.
@@ -273,7 +273,7 @@ service:
   ##
   annotations: {}
 
-## Ingress configuratiom
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation

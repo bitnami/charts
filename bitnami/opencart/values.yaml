@@ -77,7 +77,7 @@ allowEmptyPassword: true
 ## Container command (using container default if not set)
 ##
 command:
-## Container args (using container default if ot set)
+## Container args (using container default if not set)
 ##
 args:
 

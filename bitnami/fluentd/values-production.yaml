@@ -317,7 +317,7 @@ forwarder:
   #   - name: systemd
   #     mountPath: /run/log/journal/
 
-## Agregator parameters
+## Aggregator parameters
 ##
 aggregator:
   ## Enable Aggregator daemonset

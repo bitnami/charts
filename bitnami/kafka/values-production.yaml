@@ -55,7 +55,7 @@ commonAnnotations: {}
 ## Kafka Configuration
 ## Specify content for server.properties
 ## NOTE: This will override any KAFKA_CFG_ environment variables (including those set by the chart)
-## The server.properties is auto-generated based on other parameters when this paremeter is not specified
+## The server.properties is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## config: |-
@@ -621,7 +621,7 @@ externalAccess:
     ##
     annotations: {}
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -677,7 +677,7 @@ logPersistence:
   ##
   annotations: {}
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
