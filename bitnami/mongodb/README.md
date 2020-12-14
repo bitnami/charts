@@ -247,13 +247,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 | Parameter                                 | Description                                                                                                | Default                                                 |
 |-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `persistence.enabled`                     | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
-| `persistence.existingClaim`               | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
-| `persistence.storageClass`                | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
-| `persistence.accessMode`                  | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
-| `persistence.size`                        | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.mountPath`                   | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
-| `persistence.subPath`                     | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
+| `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
+| `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
+| `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
+| `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
+| `persistence.size`                          | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
+| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                        |
+| `persistence.subPath`                       | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
+| `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes)                         | ``                                                      |
 
 ### RBAC parameters
 
