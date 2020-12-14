@@ -98,6 +98,9 @@ tls:
   ##
   # existingSecret: name-of-existing-secret
 
+  ## Add Custom CA certificate
+  # caCert: base64 encoded ca certificate
+  # caKey: base64 encoded private key
   ##
   ## Bitnami Nginx image
   ##
