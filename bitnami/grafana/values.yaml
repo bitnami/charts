@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 7.3.4-debian-10-r1
+  tag: 7.3.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -64,6 +64,9 @@ smtp:
   ##
   user: user
   password: password
+  ## Custom host for the smtp server
+  ##
+  # host: mysmtphost.com
   ## Name of existing secret containing SMTP credentials (user and password)
   ##
   # existingSecret:
@@ -432,7 +435,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 2.0.0-debian-10-r132
+    tag: 2.0.0-debian-10-r146
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

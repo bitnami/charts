@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.249.3-debian-10-r6
+  tag: 2.263.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -258,7 +258,7 @@ persistence:
   ##
   size: 8Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -298,7 +298,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -364,7 +364,7 @@ ingress:
   ##
   secrets: []
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the podSecurityContext section of the component
 ##
@@ -414,7 +414,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/jenkins-exporter
-    tag: 0.20171225.0-debian-10-r273
+    tag: 0.20171225.0-debian-10-r292
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

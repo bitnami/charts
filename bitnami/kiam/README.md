@@ -237,7 +237,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                         | Description                                                                  | Default                                                      |
 |---------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `agent.metrics.enabled`                           | Enable exposing kiam statistics                                              | `false`                                                      |
-| `agent.metrics.port`                              | Service HTTP managemenet port                                                | `9990`                                                       |
+| `agent.metrics.port`                              | Service HTTP management port                                                | `9990`                                                       |
 | `agent.metrics.syncInterval`                      | Metrics synchronization interval statistics                                  | `5s`                                                         |
 | `agent.metrics.annotations`                       | Annotations for enabling prometheus to access the metrics endpoints          | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
 | `agent.metrics.serviceMonitor.enabled`            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                                                      |
@@ -330,7 +330,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` paremeters. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `server.podAffinityPreset`, `agent.podAffinityPreset`, `server.podAntiAffinityPreset`, `agent.podAntiAffinityPreset`, or `server.nodeAffinityPreset` and `agent.nodeAffinityPreset` parameters.
 

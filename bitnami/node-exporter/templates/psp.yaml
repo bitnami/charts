@@ -2,8 +2,8 @@
 apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "node-exporter.fullname" . }}
-  labels: {{- include "node-exporter.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false

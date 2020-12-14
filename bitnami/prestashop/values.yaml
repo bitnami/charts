@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/prestashop
-  tag: 1.7.6-9-debian-10-r0
+  tag: 1.7.7-0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -102,7 +102,7 @@ allowEmptyPassword: true
 ## Container command (using container default if not set)
 ##
 command:
-## Container args (using container default if ot set)
+## Container args (using container default if not set)
 ##
 args:
 
@@ -481,8 +481,8 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 livenessProbe:
   enabled: true
   path: /login
@@ -499,6 +499,14 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
+startupProbe:
+  enabled: false
+  path: /login
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 60
+  successThreshold: 1
 
 ## Custom Liveness probe
 ##
@@ -507,6 +515,10 @@ customLivenessProbe: {}
 ## Custom Readiness probe
 ##
 customReadinessProbe: {}
+
+## Custom Startup probe
+##
+customStartupProbe: {}
 
 ## lifecycleHooks for the container to automate configuration before or after startup.
 ##
@@ -529,7 +541,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r213
+    tag: 0.8.0-debian-10-r235
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

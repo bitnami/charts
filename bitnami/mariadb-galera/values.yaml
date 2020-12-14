@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.5.8-debian-10-r0
+  tag: 10.5.8-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,6 +67,11 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort: 30001
+
+  ## Specify the externalIP value ClusterIP service type.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  ##
+  # externalIPs: []
 
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -185,7 +190,7 @@ galera:
   ## Bootstraping options
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   bootstrap:
-    ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ## Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node
     ##
     bootstrapFromNode:
     ## Force safe_to_bootstrap in grastate.date file.
@@ -582,7 +587,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r264
+    tag: 0.12.1-debian-10-r292
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.6.0-debian-10-r78
+  tag: 2.6.0-debian-10-r106
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,7 +55,7 @@ commonAnnotations: {}
 ## Kafka Configuration
 ## Specify content for server.properties
 ## NOTE: This will override any KAFKA_CFG_ environment variables (including those set by the chart)
-## The server.properties is auto-generated based on other parameters when this paremeter is not specified
+## The server.properties is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## config: |-
@@ -554,7 +554,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.13-debian-10-r21
+      tag: 1.17.15-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -621,7 +621,7 @@ externalAccess:
     ##
     annotations: {}
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -677,7 +677,7 @@ logPersistence:
   ##
   annotations: {}
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
@@ -753,7 +753,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r277
+      tag: 1.2.0-debian-10-r305
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -841,7 +841,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.14.0-debian-10-r64
+      tag: 0.14.0-debian-10-r92
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -993,3 +993,7 @@ externalZookeeper:
   ## Server or list of external zookeeper servers to use.
   ##
   servers: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []

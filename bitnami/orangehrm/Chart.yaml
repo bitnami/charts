@@ -7,6 +7,11 @@ dependencies:
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: OrangeHRM is a free HR management system that offers a wealth of modules to suit the needs of your business.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/orangehrm
@@ -26,4 +31,4 @@ name: orangehrm
 sources:
   - https://github.com/bitnami/bitnami-docker-orangehrm
   - https://www.orangehrm.com
-version: 8.0.0
+version: 9.0.1

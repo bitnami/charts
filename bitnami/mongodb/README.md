@@ -170,8 +170,9 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                       | `nil`                                                   |
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
+| `tls.existingSecret`                      | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)            | `nil`                                                   |
 | `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |
-| `tls.image.repository`                    | Init contianer TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
+| `tls.image.repository`                    | Init container TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
 | `tls.image.pullPolicy`                    | Init container TLS certs setup image pull policy (nginx)                                                   | `Always`                                                |
 
@@ -232,7 +233,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                          | `Always`                                                |
 | `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                      | `{}`                                                    |
 | `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                    | `{}`                                                    |
-| `externalAccess.service.type`                     | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                    | `LoadBalancer`                                          |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                    | `LoadBalancer`                                          |
 | `externalAccess.service.port`                     | MongoDB port used for external access when service type is LoadBalancer                            | `27017`                                                 |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB nodes                                                       | `[]`                                                    |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                          | `[]`                                                    |
@@ -462,8 +463,8 @@ architecture=replicaset
 replicaCount=2
 externalAccess.enabled=true
 externalAccess.service.type=NodePort
-externalAccess.serivce.nodePorts[0]='node-port-1'
-externalAccess.serivce.nodePorts[1]='node-port-2'
+externalAccess.service.nodePorts[0]='node-port-1'
+externalAccess.service.nodePorts[1]='node-port-2'
 ```
 
 > Note: You need to know in advance the node ports that will be exposed so each MongoDB node advertised hostname is configured with it.
@@ -555,7 +556,7 @@ Using Helm’s hook annotations ensures that the certs will only be generated on
 ### Accessing the cluster
 
 To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
-Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Requst will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certficate. The process will be repeated for each node in the cluster.
+Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certificate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster
 
@@ -563,7 +564,7 @@ After the certs have been generated and made available to the containers at the 
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -616,7 +617,7 @@ MongoDB container images were updated to `4.4.x` and it can affect compatibility
 - Architecture used to configure MongoDB as a replicaset was completely refactored. Now, both primary and secondary nodes are part of the same statefulset.
 - Chart labels were adapted to follow the Helm charts best practices.
 - This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
-- Several parameters were renamed or dissapeared in favor of new ones on this major version. These are the most important ones:
+- Several parameters were renamed or disappeared in favor of new ones on this major version. These are the most important ones:
   - `replicas` is renamed to `replicaCount`.
   - Authentication parameters are reorganized under the `auth.*` parameter:
     - `usePassword` is renamed to `auth.enabled`.

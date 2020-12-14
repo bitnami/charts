@@ -137,7 +137,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `service.tls.client_enable`                       | Enable tls for client connections                                                                                                 | `false`                                                 |
 | `service.tls.quorum_enable`                       | Enable tls for quorum protocol                                                                                                    | `false`                                                 |
 | `service.tls.disable_base_client_port`            | Remove client port from service definitions.                                                                                      | `false`                                                 |
-| `service.tls.client_port`                         | Service port fot tls client connections                                                                                           | `3181`                                                  |
+| `service.tls.client_port`                         | Service port for tls client connections                                                                                           | `3181`                                                  |
 | `service.tls.client_keystore_path`                | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                  | `/tls_key_store/key_store_file`                         |
 | `service.tls.client_keystore_password`            | KeyStore password. You can use environment variables.                                                                             | `nil`                                                   |
 | `service.tls.client_truststore_path`              | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                | `/tls_trust_store/trust_store_file`                     |
@@ -293,7 +293,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 5.21.0
 
-A couple of parameters related to Zookeeper metrics were renamed or dissapeared in favor of new ones:
+A couple of parameters related to Zookeeper metrics were renamed or disappeared in favor of new ones:
 
 - `metrics.port` is renamed to `metrics.containerPort`.
 - `metrics.annotations` is deprecated in favor of `metrics.service.annotations`.

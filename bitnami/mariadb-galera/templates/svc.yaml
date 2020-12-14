@@ -14,6 +14,9 @@ spec:
   {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.service.externalIPs }}
+  externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
   clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
