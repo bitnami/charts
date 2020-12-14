@@ -21,7 +21,7 @@ the service name.
 {{ include "common.names.fullname" . }}-master-svc
 {{- end -}}
 
-{{/* Get the secret for paswords */}}
+{{/* Get the secret for passwords */}}
 {{- define "spark.passwordsSecretName" -}}
 {{- if .Values.security.passwordsSecretName -}}
   {{- printf "%s" .Values.security.passwordsSecretName -}}

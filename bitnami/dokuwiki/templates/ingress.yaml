@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled }}
-{{- range .Values.ingress.hosts  }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -23,6 +22,11 @@ metadata:
     {{- end }}
 spec:
   rules:
+  {{- $tls := false }}
+  {{- range .Values.ingress.hosts  }}
+  {{- if .tls }}
+    {{- $tls = true }}
+  {{- end }}
   - host: {{ .name }}
     http:
       paths:
@@ -30,12 +34,15 @@ spec:
           backend:
             serviceName: {{ template "dokuwiki.fullname" $ }}
             servicePort: 80
-{{- if .tls }}
+  {{- end }}
+  {{- if $tls }}
   tls:
+  {{- range .Values.ingress.hosts  }}
+  {{- if .tls }}
   - hosts:
     - {{ .name }}
     secretName: {{ .tlsSecret }}
-{{- end }}
----
-{{- end }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
 {{- end }}

@@ -1,6 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Returns the name that will identify the repository internaly and it will be used to create folders or
+Returns the name that will identify the repository internally and it will be used to create folders or
 volume names
 */}}
 {{- define "airflow.git.repository.name" -}}

@@ -351,7 +351,7 @@ Providing the values above, the cluster will have 3 masters and, each master, wi
 
 There is a job that will be executed using a `post-upgrade` hook that will allow you to add a new node. To use it, you should provide some parameters to the upgrade:
 
-- Pass as `password` the password used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
+- Pass as `password` the password used in the installation time. If you did not provide a password follow the instructions from the NOTES.txt to get the generated password.
 - Set the desired number of nodes at `cluster.nodes`.
 - Set the number of current nodes at `cluster.update.currentNumberOfNodes`.
 - Set to true `cluster.update.addNodes`.

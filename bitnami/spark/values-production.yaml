@@ -151,7 +151,7 @@ worker:
   ##
   # memoryLimit:
 
-  ## Set the maximun number of cores
+  ## Set the maximum number of cores
   ##
   # coreLimit:
 
@@ -163,7 +163,7 @@ worker:
   ##
   # javaOptions:
 
-  ## Configuraion options in the form "-Dx=y"
+  ## Configuration options in the form "-Dx=y"
   ##
   # configOptions:
 
@@ -321,7 +321,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation

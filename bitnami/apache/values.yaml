@@ -173,7 +173,7 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -276,7 +276,7 @@ extraVolumeMounts: []
 ##
 extraEnvVars: []
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
