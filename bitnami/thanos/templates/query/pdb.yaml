@@ -3,8 +3,8 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "thanos.fullname" . }}-query
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
 spec:
   {{- if $query.pdb.minAvailable }}
@@ -14,6 +14,6 @@ spec:
   maxUnavailable: {{ $query.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: query
 {{- end }}

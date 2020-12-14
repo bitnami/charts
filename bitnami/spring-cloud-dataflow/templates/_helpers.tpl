@@ -1,10 +1,4 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "scdf.name" -}}
-{{- include "common.names.name" . -}}
-{{- end }}
 
 {{/*
 Create a default fully qualified app name.
@@ -53,13 +47,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "scdf.chart" -}}
-{{- include "common.names.chart" . -}}
-{{- end }}
 
 {{/*
 Return the proper Spring Cloud Dataflow Server image name

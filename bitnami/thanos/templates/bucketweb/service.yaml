@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}-bucketweb
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-bucketweb
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
   {{- if .Values.bucketweb.service.annotations }}
-  annotations: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.bucketweb.service.type }}
@@ -30,9 +30,9 @@ spec:
       {{- end }}
   selector:
     {{- if .Values.bucketweb.service.labelSelectorsOverride }}
-    {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "thanos.matchLabels" . | nindent 4 }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
     {{- end }}
 {{- end }}

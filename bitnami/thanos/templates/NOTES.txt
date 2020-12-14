@@ -23,7 +23,7 @@ Thanos chart was deployed enabling the following components:
 
 Thanos Query can be accessed through following DNS name from within your cluster:
 
-    {{ include "thanos.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ $query.service.http.port }})
+    {{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ $query.service.http.port }})
 
 To access Thanos Query from outside the cluster execute the following commands:
 
@@ -41,23 +41,23 @@ To access Thanos Query from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" $query.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "thanos.fullname" . }}-query)
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }}-query)
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "http://${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" $query.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "thanos.fullname" . }}-query'
+        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}-query'
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "thanos.fullname" . }}-query)
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "thanos.fullname" . }}-query -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }}-query)
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-query -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "http://${SERVICE_IP}:${SERVICE_PORT}"
 
 {{- else if contains "ClusterIP" $query.service.type }}
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "thanos.fullname" . }}-query)
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "thanos.fullname" . }}-query ${SERVICE_PORT}:${SERVICE_PORT} &
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }}-query)
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }}-query ${SERVICE_PORT}:${SERVICE_PORT} &
     echo "http://127.0.0.1:${SERVICE_PORT}"
 
 {{- end }}

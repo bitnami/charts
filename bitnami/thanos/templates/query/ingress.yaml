@@ -3,8 +3,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "thanos.fullname" . }}-query
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if $query.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -20,7 +20,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "thanos.fullname" . }}-query
+              serviceName: {{ template "common.names.fullname" . }}-query
               servicePort: http
     {{- end }}
     {{- range $query.ingress.extraHosts }}
@@ -29,7 +29,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "thanos.fullname" $ }}-query
+              serviceName: {{ template "common.names.fullname" $ }}-query
               servicePort: http
     {{- end }}
   {{- if or $query.ingress.tls $query.ingress.extraTls $query.ingress.hosts }}

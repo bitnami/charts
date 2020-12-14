@@ -3,6 +3,11 @@ annotations:
 apiVersion: v2
 appVersion: 0.17.2
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - condition: minio.enabled
     name: minio
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +28,4 @@ name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
-version: 3.2.4
+version: 3.3.0

@@ -2,7 +2,7 @@
 kind: NetworkPolicy
 apiVersion: {{ template "postgresql-ha.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "postgresql-ha.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -22,7 +22,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "postgresql-ha.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
       {{- end }}

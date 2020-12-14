@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}
@@ -45,15 +45,20 @@ spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.postgresql.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.postgresql.podAffinityPreset "component" "postgresql" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.postgresql.podAntiAffinityPreset "component" "postgresql" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.postgresql.nodeAffinityPreset.type "key" .Values.postgresql.nodeAffinityPreset.key "values" .Values.postgresql.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.postgresql.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.postgresql.priorityClassName }}
-      priorityClassName: {{ .Values.postgresql.priorityClassName }}
-      {{- end }}
       {{- if .Values.postgresql.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.postgresql.priorityClassName }}
+      priorityClassName: {{ .Values.postgresql.priorityClassName }}
       {{- end }}
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
@@ -447,8 +452,8 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "postgresql-ha.storageClass" . | nindent 8 }}
         {{- if .Values.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end -}}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
