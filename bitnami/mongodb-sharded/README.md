@@ -77,7 +77,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shards`                                      | Number of shards to be created                                                                                                                            | `2`                                                      |
 | `common.mongodbEnableIPv6`                    | Switch to enable/disable IPv6 on MongoDB                                                                                                                  | `false`                                                  |
 | `common.mongodbDirectoryPerDB`                | Switch to enable/disable DirectoryPerDB on MongoDB                                                                                                        | `false`                                                  |
-| `common.mongodbSystemLogVerbosity`            | MongoDB systen log verbosity level                                                                                                                        | `0`                                                      |
+| `common.mongodbSystemLogVerbosity`            | MongoDB system log verbosity level                                                                                                                        | `0`                                                      |
 | `common.mongodbDisableSystemLog`              | Whether to disable MongoDB system log or not                                                                                                              | `false`                                                  |
 | `common.mongodbMaxWaitTimeout`                | Maximum time (in seconds) for MongoDB nodes to wait for another MongoDB node to be ready                                                                  | `120`                                                    |
 | `common.podLabels`                            | Extra labels for all pods in the cluster (evaluated as a template)                                                                                        | `{}`                                                     |
@@ -309,10 +309,11 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `metrics.readinessProbe.timeoutSeconds`       | Timeout for Readiness Check of Prometheus metrics exporter                                                                                                | `1`                                                      |
 | `metrics.readinessProbe.failureThreshold`     | Failure Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `3`                                                      |
 | `metrics.readinessProbe.successThreshold`     | Success Threshold for Readiness Check of Prometheus metrics exporter                                                                                      | `1`                                                      |
-| `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                     | `false`                                                  |
-| `metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                                                                                  | `monitoring`                                             |
-| `metrics.serviceMonitor.interval`             | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `nil`                                                    |
-| `metrics.serviceMonitor.selector`             | Default to kube-prometheus install (CoreOS recommended), but should be set according to Prometheus install                                                | `{ prometheus: kube-prometheus }`                        |
+| `metrics.podMonitor.enabled`                  | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                                                  | `false`                                                  |
+| `metrics.podMonitor.namespace`                | Namespace where podmonitor resource should be created                                                                                                     | `monitoring`                                             |
+| `metrics.podMonitor.interval`                 | Specify the interval at which metrics should be scraped                                                                                                   | `30s`                                                    |
+| `metrics.podMonitor.scrapeTimeout`            | Specify the timeout after which the scrape is ended                                                                                                       | `nil`                                                    |
+| `metrics.podMonitor.additionalLabels`         | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                                                        | `{}`                                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -454,7 +455,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

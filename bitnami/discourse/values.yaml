@@ -19,7 +19,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.5.5-debian-10-r0
+  tag: 2.6.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -76,7 +76,7 @@ discourse:
   ##
   # command: []
 
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   # args: []
 
   containerSecurityContext: {}
@@ -175,7 +175,7 @@ sidekiq:
   ##
   command: ['/app-entrypoint.sh']
 
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   ##
   args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
 
@@ -347,7 +347,7 @@ service:
   nodePorts:
     http: ''
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation

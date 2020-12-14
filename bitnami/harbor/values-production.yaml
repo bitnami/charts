@@ -387,15 +387,15 @@ service:
     ## "ca.crt" - the certificate of CA (optional)
     ## Self-signed TLS certificates will be used otherwise.
     ##
-    existingSecret: ''
+    existingSecret: ""
     ## By default, the Notary service will use the same certificate described above.
     ## Fill the name of secret if you want to use a separated on for Notary.
     ##
-    notaryExistingSecret: ''
+    notaryExistingSecret: ""
     ## The common name used to automatically generate the certificates.
     ## Mandatory when "secretName" is not provided or type is not "Ingress".
     ##
-    commonName: 'core.harbor.domain'
+    commonName: "core.harbor.domain"
   ## Service parameters when type is "clusterIP"
   ##
   ports:
@@ -440,10 +440,10 @@ ingress:
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   annotations:
-    ingress.kubernetes.io/ssl-redirect: 'true'
-    ingress.kubernetes.io/proxy-body-size: '0'
-    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 ## The external URL for Harbor core service. It is used to
 ## 1) populate the docker/helm commands showed on portal
@@ -471,7 +471,7 @@ podSecurityContext:
   fsGroup: 1001
 
 ## The persistence is enabled by default and a default StorageClass
-## is needed in the k8s cluster to provision volumes dynamicly.
+## is needed in the k8s cluster to provision volumes dynamically.
 ## Specify another StorageClass in the "storageClass" or set "existingClaim"
 ## if you have already existing persistent volumes to use
 ##
@@ -483,46 +483,46 @@ persistence:
   ## Resource Policy
   ## Setting it to "keep" to avoid removing PVCs during a helm delete operation
   ##
-  resourcePolicy: 'keep'
+  resourcePolicy: "keep"
   persistentVolumeClaim:
     registry:
       ## If you want to reuse an existing claim, you can pass the name of the PVC using
       ## the existingClaim variable
       ##
-      existingClaim: ''
+      existingClaim: ""
       ## Specify the "storageClass" used to provision the volume.
       ## Set it to "-" to disable dynamic provisioning
       ##
-      storageClass: ''
-      subPath: ''
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
     jobservice:
       ## If you want to reuse an existing claim, you can pass the name of the PVC using
       ## the existingClaim variable
       ##
-      existingClaim: ''
+      existingClaim: ""
       ## Specify the "storageClass" used to provision the volume.
       ## Set it to "-" to disable dynamic provisioning
       ##
-      storageClass: ''
-      subPath: ''
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 1Gi
     chartmuseum:
       ## If you want to reuse an existing claim, you can pass the name of the PVC using
       ## the existingClaim variable
       ##
-      existingClaim: ''
+      existingClaim: ""
       ## Specify the "storageClass" used to provision the volume.
       ## Set it to "-" to disable dynamic provisioning
       ##
-      storageClass: ''
-      subPath: ''
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
     trivy:
-      storageClass: ''
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 5Gi
 
@@ -531,7 +531,7 @@ persistence:
   ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
   ##
   imageChartStorage:
-    ## Name of a secret contaning the CA bundle
+    ## Name of a secret containing the CA bundle
     ##
     caBundleSecretName:
     ## Specify whether to disable `redirect` for images and chart storage, for
@@ -640,19 +640,20 @@ harborAdminPassword:
 ## artifacts from/to the registries that cannot be reached directly
 ##
 proxy:
-  httpProxy: ''
-  httpsProxy: ''
+  httpProxy: ""
+  httpsProxy: ""
   noProxy: 127.0.0.1,localhost,.local,.internal
   components:
     - core
     - jobservice
     - clair
+    - trivy
 
 nginx:
   ## NGINX container command (using container default if not set)
   ##
   command:
-  ## NGINX container args (using container default if ot set)
+  ## NGINX container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -742,6 +743,7 @@ nginx:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -814,7 +816,7 @@ portal:
   ## Harbor portal container command (using container default if not set)
   ##
   command:
-  ## Harbor portal container args (using container default if ot set)
+  ## Harbor portal container args (using container default if not set)
   ##
   args:
 
@@ -919,6 +921,7 @@ portal:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -983,7 +986,7 @@ core:
   ## Harbor core container command (using container default if not set)
   ##
   command:
-  ## Harbor core container args (using container default if ot set)
+  ## Harbor core container args (using container default if not set)
   ##
   args:
 
@@ -1096,6 +1099,7 @@ core:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1140,7 +1144,7 @@ core:
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
-  secret: ''
+  secret: ""
   ## Fill the name of a kubernetes secret if you want to use your own
   ## TLS certificate and private key for token encryption/decryption.
   ## The secret must contain keys named:
@@ -1148,10 +1152,10 @@ core:
   ## "tls.key" - the private key
   ## The default key pair will be used if it isn't set
   ##
-  secretName: ''
+  secretName: ""
   ## The CSRF key. Will be generated automatically if it isn't specified
   ##
-  csrfKey: ''
+  csrfKey: ""
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
   lifecycleHooks:
@@ -1180,7 +1184,7 @@ jobservice:
   ## Harbor Jobservice container command (using container default if not set)
   ##
   command:
-  ## Harbor Jobservice container args (using container default if ot set)
+  ## Harbor Jobservice container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -1289,6 +1293,7 @@ jobservice:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1333,7 +1338,7 @@ jobservice:
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
-  secret: ''
+  secret: ""
 
   ## Harbor Jobservice containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1377,7 +1382,7 @@ registry:
     ## Container command (using container default if not set)
     ##
     command:
-    ## Container args (using container default if ot set)
+    ## Container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1448,7 +1453,7 @@ registry:
     ## Container command (using container default if not set)
     ##
     command:
-    ## Container args (using container default if ot set)
+    ## Container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1548,6 +1553,7 @@ registry:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1594,17 +1600,17 @@ registry:
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
-  secret: ''
+  secret: ""
   ## If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
   ##
   relativeurls: false
   credentials:
-    username: 'harbor_registry_user'
-    password: 'harbor_registry_password'
+    username: "harbor_registry_user"
+    password: "harbor_registry_password"
     ## If you update the username or password of registry, make sure use cli tool htpasswd to generate the bcrypt hash
     ## e.g. "htpasswd -nbBC10 $username $password"
     ##
-    htpasswd: 'harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m'
+    htpasswd: "harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m"
 
   middleware:
     enabled: false
@@ -1617,7 +1623,7 @@ registry:
       ## The secret key that should be present is CLOUDFRONT_KEY_DATA, which should be the encoded private key
       ## that allows access to CloudFront
       ##
-      privateKeySecret: 'my-secret'
+      privateKeySecret: "my-secret"
 
 ## Chartmuseum parameters
 ##
@@ -1626,7 +1632,7 @@ chartmuseum:
   ## Chartmuseum container command (using container default if not set)
   ##
   command:
-  ## Chartmuseum container args (using container default if ot set)
+  ## Chartmuseum container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -1646,7 +1652,7 @@ chartmuseum:
   ## endpoint where it will be available.
   ##
   absoluteUrl: false
-  chartRepoName: 'chartsRepo'
+  chartRepoName: "chartsRepo"
 
   depth: 1
   logJson: false
@@ -1756,6 +1762,7 @@ chartmuseum:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1847,13 +1854,13 @@ clair:
   ##
   updatersInterval: 12
 
-  ## Harbor needs Clair adapter to comunicate with Clair API.
+  ## Harbor needs Clair adapter to communicate with Clair API.
   ##
   adapter:
     ## Clair adapter container command (using container default if not set)
     ##
     command:
-    ## Clair adapter container args (using container default if ot set)
+    ## Clair adapter container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1924,7 +1931,7 @@ clair:
     ## Clair container command (using container default if not set)
     ##
     command:
-    ## Clair container args (using container default if ot set)
+    ## Clair container args (using container default if not set)
     ##
     args:
 
@@ -2027,6 +2034,7 @@ clair:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -2080,7 +2088,7 @@ trivy:
   ## Harbor Trivy container command (using container default if not set)
   ##
   command:
-  ## Harbor Trivy container args (using container default if ot set)
+  ## Harbor Trivy container args (using container default if not set)
   ##
   args:
 
@@ -2101,13 +2109,13 @@ trivy:
   debugMode: false
   ## vulnType a comma-separated list of vulnerability types. Possible values are `os` and `library`.
   ##
-  vulnType: 'os,library'
+  vulnType: "os,library"
   ## Automount service account token
   ##
   automountServiceAccountToken: false
   ## severity a comma-separated list of severities to be checked
   ##
-  severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+  severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
   ## ignoreUnfixed the flag to display only fixed vulnerabilities
   ##
   ignoreUnfixed: false
@@ -2130,14 +2138,14 @@ trivy:
   ## You can create a GitHub token by following the instructions in
   ## https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
   ##
-  gitHubToken: ''
+  gitHubToken: ""
   ## skipUpdate the flag to disable Trivy DB downloads from GitHub
   ## You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
   ## If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
   ## `/home/scanner/.cache/trivy/db/trivy.db` path.
   ##
   skipUpdate: false
-  cacheDir: '/bitnami/harbor-adapter-trivy/.cache'
+  cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
   resources:
     requests:
       cpu: 200m
@@ -2230,6 +2238,7 @@ trivy:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -2278,7 +2287,7 @@ notary:
     ## Notary server container command (using container default if not set)
     ##
     command:
-    ## Notary server container args (using container default if ot set)
+    ## Notary server container args (using container default if not set)
     ##
     args:
     replicas: 1
@@ -2389,6 +2398,7 @@ notary:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
@@ -2433,7 +2443,7 @@ notary:
     ## Notary signer container command (using container default if not set)
     ##
     command:
-    ## Notary signer container args (using container default if ot set)
+    ## Notary signer container args (using container default if not set)
     ##
     args:
     replicas: 1
@@ -2514,6 +2524,7 @@ notary:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
@@ -2591,7 +2602,7 @@ notary:
   ## contain the CA, certificate and private key.
   ## They will be generated if not set.
   ##
-  secretName: ''
+  secretName: ""
 
 ## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
 ##
@@ -2634,13 +2645,13 @@ externalRedis:
   port: 6379
   ## Redis password
   ##
-  password: ''
-  coreDatabaseIndex: '0'
-  jobserviceDatabaseIndex: '1'
-  registryDatabaseIndex: '2'
-  chartmuseumDatabaseIndex: '3'
-  clairAdapterDatabaseIndex: '4'
-  trivyAdapterDatabaseIndex: '5'
+  password: ""
+  coreDatabaseIndex: "0"
+  jobserviceDatabaseIndex: "1"
+  registryDatabaseIndex: "2"
+  chartmuseumDatabaseIndex: "3"
+  clairAdapterDatabaseIndex: "4"
+  trivyAdapterDatabaseIndex: "5"
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -2686,7 +2697,7 @@ externalDatabase:
   user: bn_harbor
   ## Database password
   ##
-  password: ''
+  password: ""
   ## Database port number
   ##
   port: 5432

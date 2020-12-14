@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
 {{- with .Values.metrics.prometheusRule.namespace }}
   namespace: {{ . }}
 {{- end }}

@@ -25,7 +25,7 @@ spec:
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.influxdb.affinity }}
-      affinity: {{- include "fluentd.tplValue" (dict "value" .Values.influxdb.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAffinityPreset "component" "influxdb" "context" $) | nindent 10 }}
@@ -33,10 +33,10 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.influxdb.nodeAffinityPreset.type "key" .Values.influxdb.nodeAffinityPreset.key "values" .Values.influxdb.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.influxdb.nodeSelector }}
-      nodeSelector: {{- include "influxdb.tplValue" (dict "value" .Values.influxdb.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.influxdb.tolerations }}
-      tolerations: {{- include "influxdb.tplValue" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.influxdb.securityContext.enabled }}
       securityContext:

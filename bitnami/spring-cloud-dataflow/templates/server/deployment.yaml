@@ -126,7 +126,7 @@ spec:
             - name: JAVA_TOOL_OPTIONS
               value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.server.jdwp.port }}"
             {{- end }}
-            - name: SPRING_CLOUD_DATAFLOW_TASK_COMPOSED_TASK_RUNNER_URI
+            - name: SPRING_CLOUD_DATAFLOW_TASK_COMPOSEDTASKRUNNER_URI
               value: 'docker://{{ include "common.images.image" (dict "imageRoot" .Values.server.composedTaskRunner.image) }}'
             {{- range $key, $value := .Values.server.extraEnvVars }}
             - name: {{ $value.name }}
@@ -188,6 +188,9 @@ spec:
             - name: config
               mountPath: /opt/bitnami/spring-cloud-dataflow/conf
               readOnly: true
+            {{- if .Values.server.extraVolumeMounts }}
+            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- end }}
         {{- if .Values.server.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -206,4 +209,7 @@ spec:
           configMap:
             name: {{ include "scdf.fullname" . }}-scripts
             defaultMode: 0755
+        {{- end }}
+        {{- if .Values.server.extraVolumes }}
+          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
         {{- end }}

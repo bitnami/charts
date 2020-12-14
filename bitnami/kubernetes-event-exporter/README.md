@@ -88,6 +88,7 @@ The following table lists the configurable parameters of the Kubernetes Event Ex
 | `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `"soft"`                                                 |
 | `podSecurityContext.enabled`                      | Enable security context                                                                   | `true`                                                   |
 | `podSecurityContext.fsGroup`                      | Group ID for the container                                                                | `1001`                                                   |
+| `priorityClassName`                               | priorityClassName of the pods                                                             | `""`                                                     |
 | `rbac.create`                                     | Create the RBAC roles for API accessibility                                               | `true`                                                   |
 | `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                    | `{}`                                                     |
 | `resources.requests`                              | Specify resource requests which the container needs to spawn.                             | `{}`                                                     |

@@ -113,7 +113,7 @@ applicationPort: 3000
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ""
+podAffinityPreset: ''
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -128,12 +128,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ""
+  type: ''
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ""
+  key: ''
   ## Node label values to match
   ## E.g.
   ## values:
@@ -183,7 +183,7 @@ extraDeploy: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 livenessProbe:
   enabled: true
-  path: "/"
+  path: '/'
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
@@ -191,7 +191,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
-  path: "/"
+  path: '/'
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 3
@@ -311,7 +311,7 @@ persistence:
   accessMode: ReadWriteOnce
   size: 1Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -328,7 +328,7 @@ service:
   ## Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/
-  sessionAffinity: "None"
+  sessionAffinity: 'None'
 
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -344,7 +344,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -411,7 +411,7 @@ mongodb:
     ## MongoDB root password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
-    rootPassword: ""
+    rootPassword: ''
 
     ## MongoDB custom user and database
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run

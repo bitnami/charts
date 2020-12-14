@@ -59,7 +59,7 @@ spec:
       {{- if .Values.arbiter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      initContainers: 
+      initContainers:
         {{- if .Values.arbiter.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -103,7 +103,7 @@ spec:
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
               EOL
- 
+
               export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
               #Create the client/server cert
               openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
@@ -251,7 +251,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: ca-clients
+            secretName: {{ template "mongodb.caSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert

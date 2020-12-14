@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "postgresql.fullname" . }}-extended-configuration
+  name: {{ template "common.names.fullname" . }}-extended-configuration
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}

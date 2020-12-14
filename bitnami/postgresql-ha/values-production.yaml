@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.10.0-debian-10-r2
+  tag: 11.10.0-debian-10-r27
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.4-debian-10-r48
+  tag: 4.2.0-debian-10-r14
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r272
+  tag: 0.8.0-debian-10-r298
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -197,7 +197,7 @@ postgresql:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 
@@ -455,7 +455,7 @@ pgpool:
   ## will be appended to the "pgpool_passwd" file
   ##
   customUsers: {}
-  ##  Comma or semicolon separeted list of postgres usernames
+  ##  Comma or semicolon separated list of postgres usernames
   #   usernames: 'user01;user02'
 
   ##  Comma or semicolon separated list of the associated passwords for the
@@ -575,7 +575,7 @@ pgpool:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 
@@ -702,7 +702,7 @@ pgpool:
   # configurationCM:
 
   ## initdb scripts
-  ## Specify dictionary of scripts to be run everytime Pgpool container is initialized
+  ## Specify dictionary of scripts to be run every time Pgpool container is initialized
   ## Alternatively, you can put your scripts under the files/pgpool-entrypoint-initdb.d directory
   ##
   # initdbScripts:
@@ -710,7 +710,7 @@ pgpool:
   #      #!/bin/sh
   #      echo "Do something."
 
-  ## ConfigMap with scripts to be run everytime Pgpool container is initialized
+  ## ConfigMap with scripts to be run every time Pgpool container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
   # initdbScriptsCM:
@@ -766,7 +766,7 @@ ldap:
   tlsReqcert:
   nssInitgroupsIgnoreusers: root,nslcd
 
-## Init Container paramaters
+## Init Container parameters
 ##
 volumePermissions:
   enabled: false
@@ -868,7 +868,7 @@ metrics:
     ##
     metricRelabelings: []
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -904,7 +904,7 @@ persistence:
   ##     app: my-app
   selector: {}
 
-## PgPool service paramaters
+## PgPool service parameters
 ##
 service:
   ## Service type
@@ -934,7 +934,7 @@ service:
   ##
   annotations: {}
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: true

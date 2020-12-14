@@ -75,6 +75,19 @@ data:
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+
+      # Immediately attempt to connect to the reported master. If it doesn't exist the connection attempt will either hang
+      # or fail with "port unreachable" and give no data. The liveness check will then timeout waiting for the redis
+      # container to be ready and restart the it. By then the new master will likely have been elected
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+
+      if [[ ! ($($sentinel_info_command)) ]]; then
+        # master doesn't actually exist, this probably means the remaining pods haven't elected a new one yet
+        # and are reporting the old one still. Once this happens the container will get stuck and never see the new
+        # master. We stop here to allow the container to not pass the liveness check and be restarted.
+        exit 1
+      fi
     fi
 
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
@@ -225,6 +238,18 @@ data:
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+      # Immediately attempt to connect to the reported master. If it doesn't exist the connection attempt will either hang
+      # or fail with "port unreachable" and give no data. The liveness check will then timeout waiting for the sentinel
+      # container to be ready and restart the it. By then the new master will likely have been elected
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+
+      if [[ ! ($($sentinel_info_command)) ]]; then
+        # master doesn't actually exist, this probably means the remaining pods haven't elected a new one yet
+        # and are reporting the old one still. Once this happens the container will get stuck and never see the new
+        # master. We stop here to allow the container to not pass the liveness check and be restarted.
+        exit 1
+      fi
     fi
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
 
