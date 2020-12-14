@@ -698,6 +698,10 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## podManagementPolicy for the statefulset, allows parallel startup of pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -761,6 +765,9 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Use StatefulSet instead of Deployment
+  ##
+  useStatefulSet: false
   ## Pod disruption budget
   ##
   pdb:
