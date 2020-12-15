@@ -96,8 +96,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `image.tag`                                          | Thanos image tag                                                                                       | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                                   | Thanos image pull policy                                                                               | `IfNotPresent`                                          |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                                       | String to partially override thanos.fullname                                                           | `nil`                                                   |
-| `fullnameOverride`                                   | String to fully override thanos.fullname                                                               | `nil`                                                   |
+| `nameOverride`                                       | String to partially override common.names.fullname                                                     | `nil`                                                   |
+| `fullnameOverride`                                   | String to fully override common.names.fullname                                                         | `nil`                                                   |
 | `clusterDomain`                                      | Default Kubernetes cluster domain                                                                      | `cluster.local`                                         |
 | `objstoreConfig`                                     | [Objstore configuration](https://thanos.io/storage.md/#configuration)                                  | `nil`                                                   |
 | `indexCacheConfig`                                   | [Index cache configuration](https://thanos.io/components/store.md/#memcached-index-cache)              | `nil`                                                   |
@@ -108,85 +108,89 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Thanos Query parameters
 
-| Parameter                                       | Description                                                                                            | Default                                                 |
-|-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `query.enabled`                               | Enable/disable Thanos Query component                                                                | `true`                                                  |
-| `query.logLevel`                              | Thanos Query log level                                                                               | `info`                                                  |
-| `query.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                  | `[replica]`                                             |
-| `query.dnsDiscovery.enabled`                  | Enable store APIs discovery via DNS                                                                    | `true`                                                  |
-| `query.dnsDiscovery.sidecarsService`          | Sidecars service name to discover them using DNS discovery                                             | `nil` (evaluated as a template)                         |
-| `query.dnsDiscovery.sidecarsNamespace`        | Sidecars namespace to discover them using DNS discovery                                                | `nil` (evaluated as a template)                         |
-| `query.stores`                                | Store APIs to connect with Thanos Query                                                              | `[]`                                                    |
-| `query.sdConfig`                              | Service Discovery configuration                                                                        | `nil`                                                   |
-| `query.existingSDConfigmap`                   | Name of existing ConfigMap with Ruler configuration                                                    | `nil`                                                   |
-| `query.extraFlags`                            | Extra Flags to passed to Thanos Query                                                                | `[]`                                                    |
-| `query.replicaCount`                          | Number of Thanos Query replicas to deploy                                                            | `1`                                                     |
-| `query.strategyType`                          | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `query.affinity`                              | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `query.nodeSelector`                          | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `query.tolerations`                           | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
-| `query.priorityClassName`                     | Controller priorityClassName                                                                           | `nil`                                                   |
-| `query.securityContext.enabled`               | Enable security context for Thanos Query pods                                                        | `true`                                                  |
-| `query.securityContext.fsGroup`               | Group ID for the Thanos Query filesystem                                                             | `1001`                                                  |
-| `query.securityContext.runAsUser`             | User ID for the Thanos Query container                                                               | `1001`                                                  |
-| `query.resources.limits`                      | The resources limits for the Thanos Query container                                                  | `{}`                                                    |
-| `query.resources.requests`                    | The requested resources for the Thanos Query container                                               | `{}`                                                    |
-| `query.podAnnotations`                        | Annotations for Thanos Query pods                                                                    | `{}`                                                    |
-| `query.livenessProbe`                         | Liveness probe configuration for Thanos Query                                                        | `Check values.yaml file`                                |
-| `query.readinessProbe`                        | Readiness probe configuration for Thanos Query                                                       | `Check values.yaml file`                                |
-| `query.grpcTLS.server.secure`                 | Enable TLS for GRPC server                                                                             | `false`                                                 |
-| `query.grpcTLS.server.cert`                   | TLS Certificate for gRPC server                                                                        | `nil`                                                   |
-| `query.grpcTLS.server.key`                    | TLS Key for gRPC server                                                                                | `nil`                                                   |
-| `query.grpcTLS.server.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server                      | `nil`                                                   |
-| `query.grpcTLS.client.secure`                 | Use TLS when talking to the gRPC server                                                                | `false`                                                 |
-| `query.grpcTLS.client.cert`                   | TLS Certificates to use to identify this client to the server                                          | `nil`                                                   |
-| `query.grpcTLS.client.key`                    | TLS Key for the client's certificate                                                                   | `nil`                                                   |
-| `query.grpcTLS.client.ca`                     | TLS CA Certificates to use to verify gRPC servers                                                      | `nil`                                                   |
-| `query.grpcTLS.client.servername`             | Server name to verify the hostname on the returned gRPC certificates.                                  | `nil`                                                   |
-| `query.service.type`                          | Kubernetes service type                                                                                | `ClusterIP`                                             |
-| `query.service.clusterIP`                     | Thanos Query service clusterIP IP                                                                    | `None`                                                  |
-| `query.service.http.port`                     | Service HTTP port                                                                                      | `9090`                                                  |
-| `query.service.http.nodePort`                 | Service HTTP node port                                                                                 | `nil`                                                   |
-| `query.service.grpc.port`                     | Service GRPC port                                                                                      | `10901`                                                 |
-| `query.service.grpc.nodePort`                 | Service GRPC node port                                                                                 | `nil`                                                   |
-| `query.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
-| `query.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
-| `query.service.annotations`                   | Annotations for Thanos Query service                                                                 | `{}`                                                    |
-| `query.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                    | `{}`                                                    |
-| `query.serviceAccount.annotations`            | Annotations for Thanos Query Service Account                                                         | `{}`                                                    |
-| `query.rbac.create`                           | Create RBAC                                                                                            | `false`                                                 |
-| `query.pspEnabled`                            | Create PodSecurityPolicy                                                                               | `false`                                                 |
-| `query.autoscaling.enabled`                   | Enable autoscaling for Thanos Query                                                                  | `false`                                                 |
-| `query.autoscaling.minReplicas`               | Minimum number of Thanos Query replicas                                                              | `nil`                                                   |
-| `query.autoscaling.maxReplicas`               | Maximum number of Thanos Query replicas                                                              | `nil`                                                   |
-| `query.autoscaling.targetCPU`                 | Target CPU utilization percentage                                                                      | `nil`                                                   |
-| `query.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                   | `nil`                                                   |
-| `query.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
-| `query.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
-| `query.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
-| `query.ingress.enabled`                       | Enable ingress controller resource                                                                     | `false`                                                 |
-| `query.ingress.certManager`                   | Add annotations for cert-manager                                                                       | `false`                                                 |
-| `query.ingress.hostname`                      | Default host for the ingress resource                                                                  | `thanos.local`                                          |
-| `query.ingress.annotations`                   | Ingress annotations                                                                                    | `[]`                                                    |
-| `query.ingress.tls`                           | Create ingress TLS section                                                                             | `false`                                                    |
-| `query.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
-| `query.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                     | `nil`                                                   |
-| `query.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
-| `query.ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
-| `query.ingress.secrets[0].name`               | TLS Secret Name                                                                                        | `nil`                                                   |
-| `query.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                 | `nil`                                                   |
-| `query.ingress.secrets[0].key`                | TLS Secret Key                                                                                         | `nil`                                                   |
-| `query.ingress.grpc.enabled`                  | Enable ingress controller resource (GRPC)                                                              | `false`                                                 |
-| `query.ingress.grpc.certManager`              | Add annotations for cert-manager (GRPC)                                                                | `false`                                                 |
-| `query.ingress.grpc.hostname`                 | Default host for the ingress resource (GRPC)                                                           | `thanos.local`                                          |
-| `query.ingress.grpc.annotations`              | Ingress annotations (GRPC)                                                                             | `[]`                                                    |
-| `query.ingress.grpc.extraHosts[0].name`       | Additional hostnames to be covered (GRPC)                                                              | `nil`                                                   |
-| `query.ingress.grpc.extraHosts[0].path`       | Additional hostnames to be covered (GRPC)                                                              | `nil`                                                   |
-| `query.ingress.grpc.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered (GRPC)                                        | `nil`                                                   |
-| `query.ingress.grpc.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered (GRPC)                                        | `nil`                                                   |
-| `query.ingress.grpc.secrets[0].name`          | TLS Secret Name (GRPC)                                                                                 | `nil`                                                   |
-| `query.ingress.grpc.secrets[0].certificate`   | TLS Secret Certificate (GRPC)                                                                          | `nil`                                                   |
-| `query.ingress.grpc.secrets[0].key`           | TLS Secret Key (GRPC)                                                                                  | `nil`                                                   |
+| Parameter                                     | Description                                                                                                  | Default                                                 |
+|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `query.enabled`                               | Enable/disable Thanos Query component                                                                        | `true`                                                  |
+| `query.logLevel`                              | Thanos Query log level                                                                                       | `info`                                                  |
+| `query.replicaLabel`                          | Replica indicator(s) along which data is deduplicated                                                        | `[replica]`                                             |
+| `query.dnsDiscovery.enabled`                  | Enable store APIs discovery via DNS                                                                          | `true`                                                  |
+| `query.dnsDiscovery.sidecarsService`          | Sidecars service name to discover them using DNS discovery                                                   | `nil` (evaluated as a template)                         |
+| `query.dnsDiscovery.sidecarsNamespace`        | Sidecars namespace to discover them using DNS discovery                                                      | `nil` (evaluated as a template)                         |
+| `query.stores`                                | Store APIs to connect with Thanos Query                                                                      | `[]`                                                    |
+| `query.sdConfig`                              | Service Discovery configuration                                                                              | `nil`                                                   |
+| `query.existingSDConfigmap`                   | Name of existing ConfigMap with Ruler configuration                                                          | `nil`                                                   |
+| `query.extraFlags`                            | Extra Flags to passed to Thanos Query                                                                        | `[]`                                                    |
+| `query.replicaCount`                          | Number of Thanos Query replicas to deploy                                                                    | `1`                                                     |
+| `query.strategyType`                          | Deployment Strategy Type                                                                                     | `RollingUpdate`                                         |
+| `query.podAntiAffinityPreset`                 | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `query.nodeAffinityPreset.type`               | Thanos Query node affinity preset type. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `query.nodeAffinityPreset.key`                | Thanos Query node label key to match Ignored if `query.affinity` is set.                                     | `""`                                                    |
+| `query.nodeAffinityPreset.values`             | Thanos Query node label values to match. Ignored if `query.affinity` is set.                                 | `[]`                                                    |
+| `query.affinity`                              | Thanos Query affinity for pod assignment                                                                     | `{}` (evaluated as a template)                          |
+| `query.nodeSelector`                          | Thanos Query node labels for pod assignment                                                                  | `{}` (evaluated as a template)                          |
+| `query.tolerations`                           | Thanos Query tolerations for pod assignment                                                                  | `[]` (evaluated as a template)                          |
+| `query.priorityClassName`                     | Controller priorityClassName                                                                                 | `nil`                                                   |
+| `query.securityContext.enabled`               | Enable security context for Thanos Query pods                                                                | `true`                                                  |
+| `query.securityContext.fsGroup`               | Group ID for the Thanos Query filesystem                                                                     | `1001`                                                  |
+| `query.securityContext.runAsUser`             | User ID for the Thanos Query container                                                                       | `1001`                                                  |
+| `query.resources.limits`                      | The resources limits for the Thanos Query container                                                          | `{}`                                                    |
+| `query.resources.requests`                    | The requested resources for the Thanos Query container                                                       | `{}`                                                    |
+| `query.podAnnotations`                        | Annotations for Thanos Query pods                                                                            | `{}`                                                    |
+| `query.livenessProbe`                         | Liveness probe configuration for Thanos Query                                                                | `Check values.yaml file`                                |
+| `query.readinessProbe`                        | Readiness probe configuration for Thanos Query                                                               | `Check values.yaml file`                                |
+| `query.grpcTLS.server.secure`                 | Enable TLS for GRPC server                                                                                   | `false`                                                 |
+| `query.grpcTLS.server.cert`                   | TLS Certificate for gRPC server                                                                              | `nil`                                                   |
+| `query.grpcTLS.server.key`                    | TLS Key for gRPC server                                                                                      | `nil`                                                   |
+| `query.grpcTLS.server.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server                            | `nil`                                                   |
+| `query.grpcTLS.client.secure`                 | Use TLS when talking to the gRPC server                                                                      | `false`                                                 |
+| `query.grpcTLS.client.cert`                   | TLS Certificates to use to identify this client to the server                                                | `nil`                                                   |
+| `query.grpcTLS.client.key`                    | TLS Key for the client's certificate                                                                         | `nil`                                                   |
+| `query.grpcTLS.client.ca`                     | TLS CA Certificates to use to verify gRPC servers                                                            | `nil`                                                   |
+| `query.grpcTLS.client.servername`             | Server name to verify the hostname on the returned gRPC certificates.                                        | `nil`                                                   |
+| `query.service.type`                          | Kubernetes service type                                                                                      | `ClusterIP`                                             |
+| `query.service.clusterIP`                     | Thanos Query service clusterIP IP                                                                            | `None`                                                  |
+| `query.service.http.port`                     | Service HTTP port                                                                                            | `9090`                                                  |
+| `query.service.http.nodePort`                 | Service HTTP node port                                                                                       | `nil`                                                   |
+| `query.service.grpc.port`                     | Service GRPC port                                                                                            | `10901`                                                 |
+| `query.service.grpc.nodePort`                 | Service GRPC node port                                                                                       | `nil`                                                   |
+| `query.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                             | `nil`                                                   |
+| `query.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                        | `[]`                                                    |
+| `query.service.annotations`                   | Annotations for Thanos Query service                                                                         | `{}`                                                    |
+| `query.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                            | `{}`                                                    |
+| `query.serviceAccount.annotations`            | Annotations for Thanos Query Service Account                                                                 | `{}`                                                    |
+| `query.rbac.create`                           | Create RBAC                                                                                                  | `false`                                                 |
+| `query.pspEnabled`                            | Create PodSecurityPolicy                                                                                     | `false`                                                 |
+| `query.autoscaling.enabled`                   | Enable autoscaling for Thanos Query                                                                          | `false`                                                 |
+| `query.autoscaling.minReplicas`               | Minimum number of Thanos Query replicas                                                                      | `nil`                                                   |
+| `query.autoscaling.maxReplicas`               | Maximum number of Thanos Query replicas                                                                      | `nil`                                                   |
+| `query.autoscaling.targetCPU`                 | Target CPU utilization percentage                                                                            | `nil`                                                   |
+| `query.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                         | `nil`                                                   |
+| `query.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                              | `false`                                                 |
+| `query.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                               | `1`                                                     |
+| `query.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                               | `nil`                                                   |
+| `query.ingress.enabled`                       | Enable ingress controller resource                                                                           | `false`                                                 |
+| `query.ingress.certManager`                   | Add annotations for cert-manager                                                                             | `false`                                                 |
+| `query.ingress.hostname`                      | Default host for the ingress resource                                                                        | `thanos.local`                                          |
+| `query.ingress.annotations`                   | Ingress annotations                                                                                          | `[]`                                                    |
+| `query.ingress.tls`                           | Create ingress TLS section                                                                                   | `false`                                                 |
+| `query.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                           | `nil`                                                   |
+| `query.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                           | `nil`                                                   |
+| `query.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                                     | `nil`                                                   |
+| `query.ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                                     | `nil`                                                   |
+| `query.ingress.secrets[0].name`               | TLS Secret Name                                                                                              | `nil`                                                   |
+| `query.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                       | `nil`                                                   |
+| `query.ingress.secrets[0].key`                | TLS Secret Key                                                                                               | `nil`                                                   |
+| `query.ingress.grpc.enabled`                  | Enable ingress controller resource (GRPC)                                                                    | `false`                                                 |
+| `query.ingress.grpc.certManager`              | Add annotations for cert-manager (GRPC)                                                                      | `false`                                                 |
+| `query.ingress.grpc.hostname`                 | Default host for the ingress resource (GRPC)                                                                 | `thanos.local`                                          |
+| `query.ingress.grpc.annotations`              | Ingress annotations (GRPC)                                                                                   | `[]`                                                    |
+| `query.ingress.grpc.extraHosts[0].name`       | Additional hostnames to be covered (GRPC)                                                                    | `nil`                                                   |
+| `query.ingress.grpc.extraHosts[0].path`       | Additional hostnames to be covered (GRPC)                                                                    | `nil`                                                   |
+| `query.ingress.grpc.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered (GRPC)                                              | `nil`                                                   |
+| `query.ingress.grpc.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered (GRPC)                                              | `nil`                                                   |
+| `query.ingress.grpc.secrets[0].name`          | TLS Secret Name (GRPC)                                                                                       | `nil`                                                   |
+| `query.ingress.grpc.secrets[0].certificate`   | TLS Secret Certificate (GRPC)                                                                                | `nil`                                                   |
+| `query.ingress.grpc.secrets[0].key`           | TLS Secret Key (GRPC)                                                                                        | `nil`                                                   |
 
 ### Thanos Query Frontend parameters
 
@@ -199,9 +203,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.existingConfigmap`               | Name of existing ConfigMap with Thanos Query Frontend cache configuration                              | `nil`                                                   |
 | `queryFrontend.replicaCount`                    | Number of Thanos Query Frontend replicas to deploy                                                     | `1`                                                     |
 | `queryFrontend.strategyType`                    | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `queryFrontend.affinity`                        | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `queryFrontend.nodeSelector`                    | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `queryFrontend.tolerations`                     | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `queryFrontend.podAntiAffinityPreset`           | Thanos Query Frontend pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                           |
+| `queryFrontend.nodeAffinityPreset.type`         | Thanos Query Frontend node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard` | `""`                             |
+| `queryFrontend.nodeAffinityPreset.key`          | Thanos Query Frontend node label key to match Ignored if `queryFrontend.affinity` is set.                                     | `""`                             |
+| `queryFrontend.nodeAffinityPreset.values`       | Thanos Query Frontend node label values to match. Ignored if `queryFrontend.affinity` is set.                                 | `[]`                             |
+| `queryFrontend.affinity`                        | Thanos Query Frontend affinity for pod assignment                                                                             | `{}` (evaluated as a template)   |
+| `queryFrontend.nodeSelector`                    | Thanos Query Frontend node labels for pod assignment                                                                          | `{}` (evaluated as a template)   |
+| `queryFrontend.tolerations`                     | Thanos Query Frontend tolerations for pod assignment                                                                          | `[]` (evaluated as a template)   |
 | `queryFrontend.priorityClassName`               | Controller priorityClassName                                                                           | `nil`                                                   |
 | `queryFrontend.securityContext.enabled`         | Enable security context for Thanos Query Frontend pods                                                 | `true`                                                  |
 | `queryFrontend.securityContext.fsGroup`         | Group ID for the Thanos Query Frontend filesystem                                                      | `1001`                                                  |
@@ -218,7 +226,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.service.loadBalancerIP`          | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `queryFrontend.service.loadBalancerSourceRanges`| Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `queryFrontend.service.annotations`             | Annotations for Thanos Query Frontend service                                                          | `{}`                                                    |
-| `queryFrontend.service.labelSelectorsOverride`  | Selector for Thanos query service                                                                    | `{}`                                                    |
+| `queryFrontend.service.labelSelectorsOverride`  | Selector for Thanos query service                                                                      | `{}`                                                    |
 | `queryFrontend.serviceAccount.annotations`      | Annotations for Thanos Query Frontend Service Account                                                  | `{}`                                                    |
 | `queryFrontend.rbac.create`                     | Create RBAC                                                                                            | `false`                                                 |
 | `queryFrontend.pspEnabled`                      | Create PodSecurityPolicy                                                                               | `false`                                                 |
@@ -253,9 +261,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.extraFlags`                               | Extra Flags to passed to Thanos Bucket Web                                                             | `[]`                                                    |
 | `bucketweb.replicaCount`                             | Number of Thanos Bucket Web replicas to deploy                                                         | `1`                                                     |
 | `bucketweb.strategyType`                             | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `bucketweb.affinity`                                 | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `bucketweb.nodeSelector`                             | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `bucketweb.tolerations`                              | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `bucketweb.podAntiAffinityPreset`                    | Thanos Bucket Web pod anti-affinity preset. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                   |
+| `bucketweb.nodeAffinityPreset.type`                  | Thanos Bucket Web node affinity preset type. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard` | `""`                                     |
+| `bucketweb.nodeAffinityPreset.key`                   | Thanos Bucket Web node label key to match Ignored if `bucketweb.affinity` is set.                                     | `""`                                     |
+| `bucketweb.nodeAffinityPreset.values`                | Thanos Bucket Web node label values to match. Ignored if `bucketweb.affinity` is set.                                 | `[]`                                     |
+| `bucketweb.affinity`                                 | Thanos Bucket Web affinity for pod assignment                                                                         | `{}` (evaluated as a template)           |
+| `bucketweb.nodeSelector`                             | Thanos Bucket Web node labels for pod assignment                                                                      | `{}` (evaluated as a template)           |
+| `bucketweb.tolerations`                              | Thanos Bucket Web tolerations for pod assignment                                                                      | `[]` (evaluated as a template)           |
 | `bucketweb.priorityClassName`                        | Controller priorityClassName                                                                           | `nil`                                                   |
 | `bucketweb.securityContext.enabled`                  | Enable security context for Thanos Bucket Web pods                                                     | `true`                                                  |
 | `bucketweb.securityContext.fsGroup`                  | Group ID for the Thanos Bucket Web filesystem                                                          | `1001`                                                  |
@@ -272,7 +284,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `bucketweb.service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `bucketweb.service.annotations`                      | Annotations for Thanos Bucket Web service                                                              | `{}`                                                    |
-| `bucketweb.service.labelSelectorsOverride`           | Selector for Thanos query service                                                                    | `{}`                                                    |
+| `bucketweb.service.labelSelectorsOverride`           | Selector for Thanos query service                                                                      | `{}`                                                    |
 | `bucketweb.serviceAccount.annotations`               | Annotations for Thanos Bucket Web Service Account                                                      | `{}`                                                    |
 | `bucketweb.serviceAccount.existingServiceAccount`    | Name for an existing Thanos Bucket Web Service Account                                                 | `nil`                                                   |
 | `bucketweb.pdb.create`                               | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
@@ -282,7 +294,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.ingress.certManager`                      | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `bucketweb.ingress.hostname`                         | Default host for the ingress resource                                                                  | `thanos-bucketweb.local`                                |
 | `bucketweb.ingress.annotations`                      | Ingress annotations                                                                                    | `[]`                                                    |
-| `bucketweb.ingress.tls`                             | Create ingress TLS section                                                                               | `false`                                                    |
+| `bucketweb.ingress.tls`                             | Create ingress TLS section                                                                              | `false`                                                 |
 | `bucketweb.ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |
@@ -303,9 +315,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.consistencyDelay`                         | Minimum age of fresh blocks before they are being processed                                            | `30m`                                                   |
 | `compactor.extraFlags`                               | Extra Flags to passed to Thanos Compactor                                                              | `[]`                                                    |
 | `compactor.strategyType`                             | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `compactor.affinity`                                 | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `compactor.nodeSelector`                             | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `compactor.tolerations`                              | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `compactor.podAntiAffinityPreset`                    | Thanos Compactor pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                    |
+| `compactor.nodeAffinityPreset.type`                  | Thanos Compactor node affinity preset type. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard` | `""`                                      |
+| `compactor.nodeAffinityPreset.key`                   | Thanos Compactor node label key to match Ignored if `compactor.affinity` is set.                                     | `""`                                      |
+| `compactor.nodeAffinityPreset.values`                | Thanos Compactor node label values to match. Ignored if `compactor.affinity` is set.                                 | `[]`                                      |
+| `compactor.affinity`                                 | Thanos Compactor affinity for pod assignment                                                                         | `{}` (evaluated as a template)            |
+| `compactor.nodeSelector`                             | Thanos Compactor node labels for pod assignment                                                                      | `{}` (evaluated as a template)            |
+| `compactor.tolerations`                              | Thanos Compactor tolerations for pod assignment                                                                      | `[]` (evaluated as a template)            |
 | `compactor.priorityClassName`                        | Controller priorityClassName                                                                           | `nil`                                                   |
 | `compactor.securityContext.enabled`                  | Enable security context for Thanos Compactor pods                                                      | `true`                                                  |
 | `compactor.securityContext.fsGroup`                  | Group ID for the Thanos Compactor filesystem                                                           | `1001`                                                  |
@@ -322,7 +338,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `compactor.service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `compactor.service.annotations`                      | Annotations for Thanos Compactor service                                                               | `{}`                                                    |
-| `compactor.service.labelSelectorsOverride`          | Selector for Thanos query service                                                                    | `{}`                                                    |
+| `compactor.service.labelSelectorsOverride`          | Selector for Thanos query service                                                                       | `{}`                                                    |
 | `compactor.serviceAccount.annotations`               | Annotations for Thanos Compactor Service Account                                                       | `{}`                                                    |
 | `compactor.serviceAccount.existingServiceAccount`    | Name for an existing Thanos Compactor Service Account                                                  | `nil`                                                   |
 | `compactor.persistence.enabled`                      | Enable data persistence                                                                                | `true`                                                  |
@@ -343,9 +359,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.updateStrategyType`                    | Statefulset Update Strategy Type                                                                       | `RollingUpdate`                                         |
 | `storegateway.podManagementPolicy`                   | Statefulset Pod Management Policy Type                                                                 | `OrderedReady`                                          |
 | `storegateway.replicaCount`                          | Number of Thanos Store Gateway replicas to deploy                                                      | `1`                                                     |
-| `storegateway.affinity`                              | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `storegateway.nodeSelector`                          | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `storegateway.tolerations`                           | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `storegateway.podAntiAffinityPreset`                 | Thanos Store Gateway pod anti-affinity preset. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                             |
+| `storegateway.nodeAffinityPreset.type`               | Thanos Store Gateway node affinity preset type. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard` | `""`                               |
+| `storegateway.nodeAffinityPreset.key`                | Thanos Store Gateway node label key to match Ignored if `storegateway.affinity` is set.                                     | `""`                               |
+| `storegateway.nodeAffinityPreset.values`             | Thanos Store Gateway node label values to match. Ignored if `storegateway.affinity` is set.                                 | `[]`                               |
+| `storegateway.affinity`                              | Thanos Store Gateway affinity for pod assignment                                                                            | `{}` (evaluated as a template)     |
+| `storegateway.nodeSelector`                          | Thanos Store Gateway node labels for pod assignment                                                                         | `{}` (evaluated as a template)     |
+| `storegateway.tolerations`                           | Thanos Store Gateway tolerations for pod assignment                                                                         | `[]` (evaluated as a template)     |
 | `storegateway.priorityClassName`                     | Controller priorityClassName                                                                           | `nil`                                                   |
 | `storegateway.securityContext.enabled`               | Enable security context for Thanos Store Gateway pods                                                  | `true`                                                  |
 | `storegateway.securityContext.fsGroup`               | Group ID for the Thanos Store Gateway filesystem                                                       | `1001`                                                  |
@@ -364,7 +384,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `storegateway.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `storegateway.service.annotations`                   | Annotations for Thanos Store Gateway service                                                           | `{}`                                                    |
-| `storegateway.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                    | `{}`                                                    |
+| `storegateway.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                      | `{}`                                                    |
 | `storegateway.service.additionalHeadless`            | Additional Headless service                                                                            | `false`                                                 |
 | `storegateway.serviceAccount.annotations`            | Annotations for Thanos Store Gateway Service Account                                                   | `{}`                                                    |
 | `storegateway.serviceAccount.existingServiceAccount` | Name for an existing Thanos Store Gateway Service Account                                              | `nil`                                                   |
@@ -388,7 +408,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `ruler.enabled`                                      | Enable/disable Thanos Ruler component                                                                  | `false`                                                 |
 | `ruler.logLevel`                                     | Thanos Ruler log level                                                                                 | `info`                                                  |
-| `ruler.dnsDiscovery.enabled`                         | Enable Query APIs discovery via DNS                                                                  | `true`                                                  |
+| `ruler.dnsDiscovery.enabled`                         | Enable Query APIs discovery via DNS                                                                    | `true`                                                  |
 | `ruler.alertmanagers`                                | Alermanager URLs array                                                                                 | `[]`                                                    |
 | `ruler.evalInterval`                                 | The default evaluation interval to use                                                                 | `1m`                                                    |
 | `ruler.clusterName`                                  | Used to set the 'ruler_cluster' label                                                                  | `nil`                                                   |
@@ -398,9 +418,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.updateStrategyType`                           | Statefulset Update Strategy Type                                                                       | `RollingUpdate`                                         |
 | `ruler.podManagementPolicy`                          | Statefulset Pod Management Policy Type                                                                 | `OrderedReady`                                          |
 | `ruler.replicaCount`                                 | Number of Thanos Ruler replicas to deploy                                                              | `1`                                                     |
-| `ruler.affinity`                                     | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `ruler.nodeSelector`                                 | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `ruler.tolerations`                                  | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `ruler.podAntiAffinityPreset`                        | Thanos Ruler pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
+| `ruler.nodeAffinityPreset.type`                      | Thanos Ruler node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
+| `ruler.nodeAffinityPreset.key`                       | Thanos Ruler node label key to match Ignored if `ruler.affinity` is set.                                     | `""`                                              |
+| `ruler.nodeAffinityPreset.values`                    | Thanos Ruler node label values to match. Ignored if `ruler.affinity` is set.                                 | `[]`                                              |
+| `ruler.affinity`                                     | Thanos Ruler affinity for pod assignment                                                                     | `{}` (evaluated as a template)                    |
+| `ruler.nodeSelector`                                 | Thanos Ruler node labels for pod assignment                                                                  | `{}` (evaluated as a template)                    |
+| `ruler.tolerations`                                  | Thanos Ruler tolerations for pod assignment                                                                  | `[]` (evaluated as a template)                    |
 | `ruler.priorityClassName`                            | Controller priorityClassName                                                                           | `nil`                                                   |
 | `ruler.securityContext.enabled`                      | Enable security context for Thanos Ruler pods                                                          | `true`                                                  |
 | `ruler.securityContext.fsGroup`                      | Group ID for the Thanos Ruler filesystem                                                               | `1001`                                                  |
@@ -419,7 +443,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.service.loadBalancerIP`                       | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                   |
 | `ruler.service.loadBalancerSourceRanges`             | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `ruler.service.annotations`                          | Annotations for Thanos Ruler service                                                                   | `{}`                                                    |
-| `ruler.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                    | `{}`                                                    |
+| `ruler.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                             | `{}`                                                    |
 | `ruler.service.additionalHeadless`                   | Additional Headless service                                                                            | `false`                                                 |
 | `ruler.serviceAccount.annotations`                   | Annotations for Thanos Ruler Service Account                                                           | `{}`                                                    |
 | `ruler.serviceAccount.existingServiceAccount`        | Name for an existing Thanos Ruler Service Account                                                      | `nil`                                                   |
@@ -660,11 +684,21 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.3.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.1.0
 
@@ -778,7 +812,7 @@ querier.ingress.grpc.secrets[0].key           -> query.ingress.grpc.secrets[0].k
 The Ingress API object name for Querier changes from:
 
 ```yaml
-{{ include "thanos.fullname" . }}
+{{ include "common.names.fullname" . }}
 ```
 
 > **NOTE**: Which in most cases (depending on any set values in `fullnameOverride` or `nameOverride`) resolves to the used Helm release name (`.Release.Name`).
@@ -786,7 +820,7 @@ The Ingress API object name for Querier changes from:
 To:
 
 ```yaml
-{{ include "thanos.fullname" . }}-querier
+{{ include "common.names.fullname" . }}-querier
 ```
 
 ### To 2.0.0

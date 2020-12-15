@@ -7,7 +7,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 0.x.x
+    version: 1.x.x
 description: Spark is a fast and general-purpose cluster computing system.
 home: https://github.com/bitnami/charts/tree/master/bitnami/spark
 icon: https://bitnami.com/assets/stacks/spark/img/spark-stack-220x234-1ea65541e9e427ca5b93300e61d4778576c7f679ae02addb86a2641b0ca70476.png
@@ -21,4 +21,4 @@ name: spark
 sources:
   - https://github.com/bitnami/bitnami-docker-spark
   - https://spark.apache.org/
-version: 4.2.3
+version: 4.3.0

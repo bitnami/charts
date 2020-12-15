@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "thanos.fullname" . }}-query-frontend
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query-frontend
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ include "thanos.fullname" . }}-query-frontend
+    name: {{ include "common.names.fullname" . }}-query-frontend
   minReplicas: {{ .Values.queryFrontend.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.queryFrontend.autoscaling.maxReplicas }}
   metrics:
