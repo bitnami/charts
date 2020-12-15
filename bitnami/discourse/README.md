@@ -119,7 +119,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `discourse.existingSecret`                | Name of an existing Kubernetes secret                                                 | `nil`                                                        |
 | `discourse.email`                         | Admin user email of the application                                                   | `user@example.com`                                           |
 | `discourse.command`                       | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                              |
-| `discourse.args`                          | Custom args for the custom command                                                     | `nil` (evaluated as a template)                              |
+| `discourse.args`                          | Custom args for the custom commad                                                     | `nil` (evaluated as a template)                              |
 | `discourse.containerSecurityContext`      | Container security context specification                                              | `{}`                                                         |
 | `discourse.resources`                     | Discourse container's resource requests and limits                                    | `{}`                                                         |
 | `discourse.livenessProbe.enabled`         | Enable/disable livenessProbe                                                          | `true`                                                       |
@@ -148,7 +148,7 @@ The following table lists the configurable parameters of the Discourse chart and
 |-------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `sidekiq.containerSecurityContext`        | Container security context specification                                              | `{}`                                                         |
 | `sidekiq.command`                         | Custom command to override image cmd (evaluated as a template)                        | `["/app-entrypoint.sh"]`                                     |
-| `sidekiq.args`                            | Custom args for the custom command (evaluated as a template)                           | `["nami", "start", "--foreground", "discourse-sidekiq"`      |
+| `sidekiq.args`                            | Custom args for the custom commad (evaluated as a template)                           | `["nami", "start", "--foreground", "discourse-sidekiq"`      |
 | `sidekiq.resources`                       | Sidekiq container's resource requests and limits                                      | `{}`                                                         |
 | `sidekiq.livenessProbe.enabled`           | Enable/disable livenessProbe                                                          | `true`                                                       |
 | `sidekiq.livenessProbe.initialDelaySeconds`| Delay before liveness probe is initiated                                             | `500`                                                        |
@@ -428,7 +428,7 @@ Please see [this example](https://github.com/kubernetes/contrib/tree/master/ingr
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

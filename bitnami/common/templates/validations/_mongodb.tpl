@@ -46,7 +46,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for existingSecret.
+Auxiliar function to get the right value for existingSecret.
 
 Usage:
 {{ include "common.mongodb.values.auth.existingSecret" (dict "context" $) }}
@@ -62,7 +62,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for enabled mongodb.
+Auxiliar function to get the right value for enabled mongodb.
 
 Usage:
 {{ include "common.mongodb.values.enabled" (dict "context" $) }}
@@ -76,7 +76,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for the key auth
+Auxiliar function to get the right value for the key auth
 
 Usage:
 {{ include "common.mongodb.values.key.auth" (dict "subchart" "true" "context" $) }}
@@ -92,7 +92,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for architecture
+Auxiliar function to get the right value for architecture
 
 Usage:
 {{ include "common.mongodb.values.architecture" (dict "subchart" "true" "context" $) }}

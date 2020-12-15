@@ -117,7 +117,7 @@ ingress:
   #     ##
   #     tlsSecret: kubeapps.local-tls
 
-## Frontend parameters
+## Frontend paramters
 ##
 frontend:
   replicaCount: 2
@@ -520,7 +520,7 @@ postgresql:
       memory: 256Mi
       cpu: 250m
 
-## RBAC parameters
+## RBAC paramters
 ##
 rbac:
   ## Perform creation of RBAC resources

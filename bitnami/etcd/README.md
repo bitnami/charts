@@ -129,9 +129,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`                 | When the probe times out                                                                                                                                  | `5`                                                         |
 | `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                                                         |
 | `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                         |
-| `statefulsetLabels`                             | Extra statefulset labels                                                                                                                                  | `{}` (evaluated as a template)                               |
 | `podAnnotations`                                | Annotations to be added to pods                                                                                                                           | `{}`                                                        |
-| `podLabels`                                     | Extra pod labels                                                                                                                                          | `{}` (evaluated as a template)                               |
 | `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                        |
 | `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                      |
 | `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                        |
@@ -306,7 +304,7 @@ disasterRecovery.pvc.storageClassName=nfs
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

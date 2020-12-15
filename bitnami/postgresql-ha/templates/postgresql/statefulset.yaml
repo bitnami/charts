@@ -104,7 +104,7 @@ spec:
           {{- if .Values.postgresql.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          # Auxiliary vars to populate environment variables
+          # Auxiliar vars to populate environment variables
           {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
           {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
           {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}

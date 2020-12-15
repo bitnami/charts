@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "influxdb.fullname" . }}-relay
-  labels:
+  labels: 
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
@@ -14,18 +14,18 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels:
+    matchLabels: 
       {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
-      labels:
+      labels: 
         {{- include "influxdb.labels" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.relay.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.relay.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "fluentd.tplValue" (dict "value" .Values.relay.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.relay.podAffinityPreset "component" "relay" "context" $) | nindent 10 }}
@@ -33,10 +33,10 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.relay.nodeAffinityPreset.type "key" .Values.relay.nodeAffinityPreset.key "values" .Values.relay.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.relay.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.relay.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "influxdb.tplValue" (dict "value" .Values.relay.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.relay.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.relay.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "influxdb.tplValue" (dict "value" .Values.relay.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.relay.securityContext.enabled }}
       securityContext:

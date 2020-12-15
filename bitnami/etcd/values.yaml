@@ -297,20 +297,10 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 5
 
-## Statefulset labels. Evaluated as a template
-## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-statefulsetLabels: {}
-
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod labels. Evaluated as a template
-## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity

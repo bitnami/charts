@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.17.2-scratch-r0
+  tag: 0.17.1-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -76,7 +76,7 @@ query:
   ##
   replicaLabel: [replica]
 
-  ## Dynamically configure store APIs using DNS discovery
+  ## Dinamically configure store APIs using DNS discovery
   ##
   dnsDiscovery:
     enabled: true
@@ -219,7 +219,7 @@ query:
       # Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1
       servername:
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -498,7 +498,7 @@ queryFrontend:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -714,7 +714,7 @@ bucketweb:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -810,7 +810,7 @@ bucketweb:
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
     tls: false
-
+    
     secrets: []
     # - name: thanos-bucketweb.local-tls
     #   key:
@@ -923,7 +923,7 @@ compactor:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -956,7 +956,7 @@ compactor:
     ##
     labelSelectorsOverride: {}
 
-  ## Persistence parameters
+  ## Persistence paramaters
   ##
   persistence:
     enabled: true
@@ -1096,7 +1096,7 @@ storegateway:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -1140,7 +1140,7 @@ storegateway:
     ##
     additionalHeadless: false
 
-  ## Persistence parameters
+  ## Persistence paramaters
   ##
   persistence:
     enabled: true
@@ -1204,7 +1204,7 @@ ruler:
     ##
     # existingServiceAccount: ruler-service-account
 
-  ## Dynamically configure Query APIs using DNS discovery
+  ## Dinamically configure Query APIs using DNS discovery
   ##
   dnsDiscovery:
     enabled: true
@@ -1318,7 +1318,7 @@ ruler:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## Service parameters
+  ## Service paramaters
   ##
   service:
     ## Service type
@@ -1362,7 +1362,7 @@ ruler:
     ##
     additionalHeadless: false
 
-  ## Persistence parameters
+  ## Persistence paramaters
   ##
   persistence:
     enabled: true
@@ -1422,7 +1422,7 @@ metrics:
     ##
     # scrapeTimeout: 10s
 
-## Init Container parameters
+## Init Container paramaters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##

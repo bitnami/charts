@@ -320,7 +320,7 @@ service:
   # HTTPS Port
   ## Set this to any value (recommended: 443) to enable the https service port
   # httpsPort: 443
-  ## Use nodePorts to requets some specific ports when using NodePort
+  ## Use nodePorts to requets some specific ports when usin NodePort
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
@@ -333,7 +333,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Ingress configuration
+## Ingress configuratiom
 ##
 ingress:
   ## Set to true to enable ingress record generation

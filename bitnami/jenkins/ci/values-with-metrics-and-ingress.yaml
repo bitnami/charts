@@ -3,7 +3,7 @@
 
 ingress:
   enabled: true
-  tls: true
+  tls: []
 
 service:
   type: ClusterIP

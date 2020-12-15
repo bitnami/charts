@@ -26,7 +26,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for existingSecret.
+Auxiliar function to get the right value for existingSecret.
 
 Usage:
 {{ include "common.cassandra.values.existingSecret" (dict "context" $) }}
@@ -42,7 +42,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for enabled cassandra.
+Auxiliar function to get the right value for enabled cassandra.
 
 Usage:
 {{ include "common.cassandra.values.enabled" (dict "context" $) }}
@@ -56,7 +56,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for the key dbUser
+Auxiliar function to get the right value for the key dbUser
 
 Usage:
 {{ include "common.cassandra.values.key.dbUser" (dict "subchart" "true" "context" $) }}

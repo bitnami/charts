@@ -1,9 +1,2 @@
 service:
   type: ClusterIP
-# Avoids issues with yamllint
-livenessProbe:
-  httpGet:
-    httpHeaders: []
-readinessProbe:
-  httpGet:
-    httpHeaders: []

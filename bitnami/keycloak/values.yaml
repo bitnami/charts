@@ -38,7 +38,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r27
+  tag: 11.0.3-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,7 +67,7 @@ auth:
   ##
   adminUser: user
   adminPassword: ""
-  ## Wildfly management user and password
+  ## Wildfly managemenet user and password
   ##
   managementUser: manager
   managementPassword: ""
@@ -133,7 +133,7 @@ cache:
 ## Keycloak Configuration
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
-## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
+## The standalone-ha.xml is auto-generated based on other parameters when this paremeter is not specified
 ##
 ## Example:
 ## configuration: |-
@@ -146,10 +146,6 @@ cache:
 ## NOTE: When it's set the configuration parameter is ignored
 ##
 # existingConfigmap:
-
-## Add extra args to default startup command
-##
-extraStartupArgs:
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
@@ -286,7 +282,6 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -367,7 +362,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## Service configuration
+## Service configuratiom
 ##
 service:
   ## Service type.
@@ -407,7 +402,7 @@ service:
   ##
   annotations: {}
 
-## Ingress configuration
+## Ingress configuratiom
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -557,7 +552,7 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## HTTP management port
+    ## HTTP managemenet port
     ##
     port: 9990
     ## Annotations for the Prometheus exporter service

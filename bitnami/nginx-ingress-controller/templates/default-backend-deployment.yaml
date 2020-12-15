@@ -1,63 +1,56 @@
 {{- if .Values.defaultBackend.enabled }}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
+  name: {{ template "nginx-ingress.defaultBackend.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: default-backend
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.defaultBackend.name }}
     {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: default-backend
+    matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
+      component: {{ .Values.defaultBackend.name }}
   replicas: {{ .Values.defaultBackend.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     metadata:
       {{- if .Values.defaultBackend.podAnnotations }}
-      annotations: {{- include "nginx-ingress-controller.annotations" (dict "annotations" .Values.defaultBackend.podAnnotations "context" $) | trim | nindent 8 }}
+      annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.defaultBackend.podAnnotations "context" $) | trim | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: default-backend
+      labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
+        component: {{ .Values.defaultBackend.name }}
         {{- if .Values.defaultBackend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
+        {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "nginx-ingress-controller.imagePullSecrets" . | nindent 6 }}
+{{- include "nginx-ingress-controller.imagePullSecrets" . | indent 6 }}
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.defaultBackend.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
-      {{- else }}
-      affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.defaultBackend.nodeAffinityPreset.type "key" .Values.defaultBackend.nodeAffinityPreset.key "values" .Values.defaultBackend.nodeAffinityPreset.values) | nindent 10 }}
+      affinity: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.defaultBackend.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.podSecurityContext }}
-      securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- toYaml .Values.defaultBackend.podSecurityContext | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
+      serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
       terminationGracePeriodSeconds: 60
       containers:
-        - name: default-backend
+        - name: {{ template "nginx-ingress.name" . }}-{{ .Values.defaultBackend.name }}
           image: {{ template "nginx-ingress-controller.defaultBackend.image" . }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
-          {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
           args:
           {{- range $key, $value := .Values.defaultBackend.extraArgs }}
             {{- if $value }}
@@ -66,21 +59,31 @@ spec:
             - --{{ $key }}
             {{- end }}
           {{- end }}
-          {{- if .Values.defaultBackend.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.defaultBackend.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.defaultBackend.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.defaultBackend.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
+          securityContext:
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.defaultBackend.livenessProbe.path }}
+              port: {{ .Values.defaultBackend.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.defaultBackend.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.defaultBackend.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.defaultBackend.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.defaultBackend.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.defaultBackend.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.defaultBackend.readinessProbe.path }}
+              port: {{ .Values.defaultBackend.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.defaultBackend.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.defaultBackend.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.defaultBackend.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.defaultBackend.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.defaultBackend.readinessProbe.failureThreshold }}
           ports:
             - name: http
-              containerPort: {{ .Values.defaultBackend.containerPort }}
+              containerPort: {{ .Values.defaultBackend.port }}
               protocol: TCP
-          {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
-          {{- end }}
 {{- end }}

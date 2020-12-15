@@ -114,7 +114,6 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `readinessProbe.periodSeconds`       | How often (in seconds) to perform the probe                                                         | `51`                                                    |
 | `readinessProbe.failureThreshold`    | Number of times probe can fail before giving up                                                     | `3`                                                     |
 | `readinessProbe.timeoutSeconds`      | Number of seconds after which the probe times out                                                   | `3`                                                     |
-| `commonLabels`                       | Additional labels to apply to all resource                                                          | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -205,7 +204,7 @@ $ helm upgrade my-release bitnami/tomcat
 If you use a previous container image (previous to **8.5.35-r26**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/tomcat --set securityContext.enabled=false,image.tag=XXX
+$ helm upgrade my-release bitnami/tomcat --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 1.0.0

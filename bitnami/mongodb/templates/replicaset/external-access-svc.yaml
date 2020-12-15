@@ -5,7 +5,6 @@
 
 {{- range $i, $e := until $replicaCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
-{{- $_ := set $ "targetPod" $targetPod }}
 ---
 apiVersion: v1
 kind: Service

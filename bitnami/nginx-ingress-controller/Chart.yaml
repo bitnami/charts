@@ -2,12 +2,6 @@ annotations:
   category: Infrastructure
 apiVersion: v2
 appVersion: 0.41.2
-dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
 description: Chart for the nginx Ingress controller
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
@@ -26,4 +20,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 7.0.2
+version: 6.0.1

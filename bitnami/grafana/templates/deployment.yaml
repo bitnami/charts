@@ -69,12 +69,6 @@ spec:
                   name: {{ include "grafana.adminSecretName" . }}
                   key: {{ include "grafana.adminSecretPasswordKey" . }}
             {{- if .Values.smtp.enabled }}
-            - name: GF_SMTP_ENABLED
-              value: "true"
-            {{- if .Values.smtp.host }}
-            - name: GF_SMTP_HOST
-              value: {{ .Values.smtp.host }}
-            {{- end }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
@@ -133,7 +127,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/health
+              path: /
               port: dashboard
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -144,7 +138,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: /
               port: dashboard
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}

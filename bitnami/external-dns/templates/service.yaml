@@ -1,4 +1,3 @@
-{{- if .Values.service.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -33,4 +32,3 @@ spec:
       {{- end }}
   selector: {{ include "external-dns.matchLabels" . | nindent 4 }}
   type: {{ .Values.service.type }}
-{{- end }}
