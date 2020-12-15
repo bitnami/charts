@@ -154,7 +154,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 0.10.0-debian-10-r81
+    tag: 1.1.0-debian-10-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
