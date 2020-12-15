@@ -17,12 +17,12 @@ To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) 
 
 To connect to your database run the following command:
 
-    kubectl run {{ include "postgresql-ha.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresqlImage" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "postgresql-ha.fullname" . }}-client=true" {{- end }} \
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresqlImage" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
         --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
 
 {{- end }}
 

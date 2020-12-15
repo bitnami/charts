@@ -505,12 +505,6 @@ metrics:
     ##
     # serviceAccount: prometheus
 
-    # If RBAC enabled on the cluster, Additional resources will be required
-    # so Prometheus can reach kong's namespace
-    rbac:
-      enabled: true
-
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -526,6 +520,12 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+    ## If RBAC enabled on the cluster, Additional resources will be required
+    ## so Prometheus can reach kong's namespace
+    ##
+    rbac:
+      enabled: true
 
 ## Add an horizontal pod autoscaler
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/

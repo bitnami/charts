@@ -1,10 +1,10 @@
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if $query.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "thanos.fullname" . }}-query
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
 spec:
   replicas: {{ $query.replicaCount }}
@@ -14,11 +14,11 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: query
   template:
     metadata:
-      labels: {{- include "thanos.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query
       {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap $query.podAnnotations }}
       annotations:
@@ -26,20 +26,25 @@ spec:
         checksum/ruler-configuration: {{ include (print $.Template.BasePath "/query/sd-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if $query.podAnnotations }}
-        {{- include "thanos.tplValue" (dict "value" $query.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" $query.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "query" "context" $) }}
       {{- if $query.affinity }}
-      affinity: {{- include "thanos.tplValue" (dict "value" $query.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $query.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $query.podAffinityPreset "component" "query" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $query.podAntiAffinityPreset "component" "query" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $query.nodeAffinityPreset.type "key" $query.nodeAffinityPreset.key "values" $query.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $query.nodeSelector }}
-      nodeSelector: {{- include "thanos.tplValue" (dict "value" $query.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $query.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if $query.tolerations }}
-      tolerations: {{- include "thanos.tplValue" (dict "value" $query.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $query.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if $query.priorityClassName }}
       priorityClassName: {{ $query.priorityClassName | quote }}
@@ -69,13 +74,13 @@ spec:
             - --store.sd-files=/conf/servicediscovery.yml
             {{- end }}
             {{- if and $query.dnsDiscovery.enabled $query.dnsDiscovery.sidecarsService $query.dnsDiscovery.sidecarsNamespace }}
-            - --store=dnssrv+_grpc._tcp.{{- include "thanos.tplValue" ( dict "value" $query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "thanos.tplValue"  ( dict "value" $query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{- include "common.tplvalues.render" ( dict "value" $query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "common.tplvalues.render"  ( dict "value" $query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.storegateway.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "thanos.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.ruler.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "thanos.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- range $query.stores }}
             - --store={{ . }}
@@ -111,10 +116,10 @@ spec:
               containerPort: 10901
               protocol: TCP
           {{- if $query.livenessProbe }}
-          livenessProbe: {{- include "thanos.tplValue" (dict "value" $query.livenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $query.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if $query.readinessProbe }}
-          readinessProbe: {{- include "thanos.tplValue" (dict "value" $query.readinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $query.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if $query.resources }}
           resources: {{- toYaml $query.resources | nindent 12 }}
@@ -142,11 +147,11 @@ spec:
       {{- if $query.grpcTLS.server.secure }}
         - name: tls-server
           secret:
-            secretName: {{ include "thanos.fullname" . }}-query-tls-server
+            secretName: {{ include "common.names.fullname" . }}-query-tls-server
       {{- end }}
       {{- if $query.grpcTLS.client.secure }}
         - name: tls-client
           secret:
-            secretName: {{ include "thanos.fullname" . }}-query-tls-client
+            secretName: {{ include "common.names.fullname" . }}-query-tls-client
       {{- end }}
 {{- end }}

@@ -82,150 +82,169 @@ The following table lists the configurable parameters of the Redis chart and the
 
 #### Common parameters
 
-| Parameter                                       | Description                                                    | Default           |
-|-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `image.registry`                                | Redis Image registry                                           | `docker.io`       |
-| `image.repository`                              | Redis Image name                                               | `bitnami/redis`   |
-| `image.tag`                                     | Redis Image tag                                                | `{TAG_NAME}`      |
-| `image.pullPolicy`                              | Image pull policy                                              | `IfNotPresent`    |
-| `image.pullSecrets`                             | Specify docker-registry secret names as an array               | `nil`             |
-| `nameOverride`                                  | String to partially override redis.fullname template with a string (will prepend the release name) | `nil`             |
-| `fullnameOverride`                              | String to fully override redis.fullname template with a string | `nil`             |
-| `existingSecret`                                | Name of existing secret object (for password authentication)   | `nil`             |
-| `existingSecretPasswordKey`                     | Name of key containing password to be retrieved from the existing secret | `nil`             |
-| `usePassword`                                   | Use password                                                   | `true`            |
-| `usePasswordFile`                               | Mount passwords as files instead of environment variables      | `false`           |
-| `password`                                      | Redis password (ignored if existingSecret set)                 | Randomly generated |
-| `configmap`                                     | Additional common Redis node configuration (this value is evaluated as a template) | See values.yaml   |
-| `networkPolicy.enabled`                         | Enable NetworkPolicy                                           | `false`           |
-| `networkPolicy.allowExternal`                   | Don't require client label for connections                     | `true`            |
-| `networkPolicy.ingressNSMatchLabels`            | Allow connections from other namespaces                        | `{}`              |
-| `networkPolicy.ingressNSPodMatchLabels`         | For other namespaces match by pod labels and namespace labels  | `{}`              |
-| `podSecurityContext.fsGroup`                    | Group ID for the pods.                                         | `1001`            |
-| `podSecurityContext.sysctls`                    | Set namespaced sysctls for the pods.                           | `nil`             |
-| `podDisruptionBudget`                           | Configure podDisruptionBudget policy                           | `{}`              |
-| `containerSecurityContext.runAsUser`            | User ID for the containers.                                    | `1001`            |
-| `containerSecurityContext.sysctls`              | Set namespaced sysctls for the containers.                     | `nil`             |
-| `serviceAccount.create`                         | Specifies whether a ServiceAccount should be created           | `false`           |
-| `serviceAccount.name`                           | The name of the ServiceAccount to create                       | Generated using the fullname template |
-| `rbac.create`                                   | Specifies whether RBAC resources should be created             | `false`           |
-| `rbac.role.rules`                               | Rules to create                                                | `[]`              |
-| `persistence.enabled`                           | Use a PVC to persist data.                                     | `true`            |
-| `persistence.path`                              | Path to mount the volume at, to use other images               | `/bitnami/redis/data` |
-| `persistence.subPath`                           | Subdirectory of the volume to mount at                         | `""`              |
-| `persistence.storageClass`                      | Storage class of backing PVC                                   | `generic`         |
-| `persistence.accessModes`                       | Persistent Volume Access Modes                                 | `[ReadWriteOnce]` |
-| `persistence.size`                              | Size of data volume                                            | `8Gi`             |
-| `persistence.matchLabels`                       | matchLabels persistent volume selector                         | `{}`              |
-| `persistence.matchExpressions`                  | matchExpressions persistent volume selector                    | `{}`              |
-| `statefulset.updateStrategy`                    | Update strategy for StatefulSet                                | onDelete          |
-| `statefulset.rollingUpdatePartition`            | Partition update strategy                                      | `nil`             |
-| `tls.enabled`                                   | Enable TLS support for replication traffic                     | `false`           |
-| `tls.authClients`                               | Require clients to authenticate or not                         | `true`            |
-| `tls.certificatesSecret`                        | Name of the secret that contains the certificates              | `nil`             |
-| `tls.certFilename`                              | Certificate filename                                           | `nil`             |
-| `tls.certKeyFilename`                           | Certificate key filename                                       | `nil`             |
-| `tls.certCAFilename`                            | CA Certificate filename                                        | `nil`             |
-| `tls.dhParamsFilename`                          | DH params (in order to support DH based ciphers)               | `nil`             |
-| `podSecurityPolicy.create`                      | Specifies whether a PodSecurityPolicy should be created        | `false`           |
-| `service.port`                                  | Kubernetes Service port.                                       | `6379`            |
-| `service.annotations`                           | annotations for redis service                                  | {}                |
-| `service.labels`                                | Additional labels for redis service                            | {}                |
-| `service.type`                                  | Service type for default redis service                         | `ClusterIP`       |
-| `service.loadBalancerIP`                         | loadBalancerIP if service.type is `LoadBalancer`               | `nil`             |
-| `volumePermissions.enabled`                     | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`           |
-| `volumePermissions.image.registry`              | Init container volume-permissions image registry               | `docker.io`       |
-| `volumePermissions.image.repository`            | Init container volume-permissions image name                   | `bitnami/minideb` |
-| `volumePermissions.image.tag`                   | Init container volume-permissions image tag                    | `buster`          |
-| `volumePermissions.image.pullPolicy`            | Init container volume-permissions image pull policy            | `Always`          |
-| `volumePermissions.resources`                   | Init container volume-permissions CPU/Memory resource requests/limits | {}                |
-| `volumePermissions.image.pullSecrets`           | Specify docker-registry secret names as an array               | `[]` (does not add image pull secrets to deployed pods) |
-| `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
-| `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
-| `extraDeploy`                         | Array of extra objects to deploy with the release (evaluated as a template).                                                                              | `nil`                                                   |
+
+| Parameter                               | Description                                                                         | Default                                                 |
+|-----------------------------------------|-------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`                        | Redis Image registry                                                                | `docker.io`                                             |
+| `image.repository`                      | Redis Image name                                                                    | `bitnami/redis`                                         |
+| `image.tag`                             | Redis Image tag                                                                     | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                      | Image pull policy                                                                   | `IfNotPresent`                                          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                    | `nil`                                                   |
+| `nameOverride`                          | String to partially override redis.fullname template with a string                  | `nil`                                                   |
+| `fullnameOverride`                      | String to fully override redis.fullname template with a string                      | `nil`                                                   |
+| `existingSecret`                        | Name of existing secret object (for password authentication)                        | `nil`                                                   |
+| `existingSecretPasswordKey`             | Name of key containing password to be retrieved from the existing secret            | `nil`                                                   |
+| `usePassword`                           | Use password                                                                        | `true`                                                  |
+| `usePasswordFile`                       | Mount passwords as files instead of environment variables                           | `false`                                                 |
+| `password`                              | Redis password (ignored if existingSecret set)                                      | Randomly generated                                      |
+| `configmap`                             | Additional common Redis node configuration (this value is evaluated as a template)  | See `values.yaml`                                       |
+| `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                | `false`                                                 |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                          | `true`                                                  |
+| `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                                             | `{}`                                                    |
+| `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                       | `{}`                                                    |
+| `podSecurityContext.fsGroup`            | Group ID for the pods.                                                              | `1001`                                                  |
+| `podSecurityContext.sysctls`            | Set namespaced sysctls for the pods.                                                | `nil`                                                   |
+| `podDisruptionBudget`                   | Configure podDisruptionBudget policy                                                | `{}`                                                    |
+| `containerSecurityContext.runAsUser`    | User ID for the containers.                                                         | `1001`                                                  |
+| `containerSecurityContext.sysctls`      | Set namespaced sysctls for the containers.                                          | `nil`                                                   |
+| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                | `false`                                                 |
+| `serviceAccount.name`                   | The name of the ServiceAccount to create                                            | Generated using the `common.names.fullname` template    |
+| `rbac.create`                           | Specifies whether RBAC resources should be created                                  | `false`                                                 |
+| `rbac.role.rules`                       | Rules to create                                                                     | `[]`                                                    |
+| `persistence.enabled`                   | Use a PVC to persist data.                                                          | `true`                                                  |
+| `persistence.path`                      | Path to mount the volume at, to use other images                                    | `/bitnami/redis/data`                                   |
+| `persistence.subPath`                   | Subdirectory of the volume to mount at                                              | `""`                                                    |
+| `persistence.storageClass`              | Storage class of backing PVC                                                        | `generic`                                               |
+| `persistence.accessModes`               | Persistent Volume Access Modes                                                      | `[ReadWriteOnce]`                                       |
+| `persistence.size`                      | Size of data volume                                                                 | `8Gi`                                                   |
+| `persistence.matchLabels`               | matchLabels persistent volume selector                                              | `{}`                                                    |
+| `persistence.matchExpressions`          | matchExpressions persistent volume selector                                         | `{}`                                                    |
+| `statefulset.updateStrategy`            | Update strategy for StatefulSet                                                     | onDelete                                                |
+| `statefulset.rollingUpdatePartition`    | Partition update strategy                                                           | `nil`                                                   |
+| `tls.enabled`                           | Enable TLS support for replication traffic                                          | `false`                                                 |
+| `tls.authClients`                       | Require clients to authenticate or not                                              | `true`                                                  |
+| `tls.certificatesSecret`                | Name of the secret that contains the certificates                                   | `nil`                                                   |
+| `tls.certFilename`                      | Certificate filename                                                                | `nil`                                                   |
+| `tls.certKeyFilename`                   | Certificate key filename                                                            | `nil`                                                   |
+| `tls.certCAFilename`                    | CA Certificate filename                                                             | `nil`                                                   |
+| `tls.dhParamsFilename`                  | DH params (in order to support DH based ciphers)                                    | `nil`                                                   |
+| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created                             | `false`                                                 |
+| `service.port`                          | Kubernetes Service port.                                                            | `6379`                                                  |
+| `service.annotations`                   | annotations for redis service                                                       | {}                                                      |
+| `service.labels`                        | Additional labels for redis service                                                 | {}                                                      |
+| `service.type`                          | Service type for default redis service                                              | `ClusterIP`                                             |
+| `service.loadBalancerIP`                | loadBalancerIP if service.type is `LoadBalancer`                                    | `nil`                                                   |
+| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`           |
+| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                    | `docker.io`                                             |
+| `volumePermissions.image.repository`    | Init container volume-permissions image name                                        | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                         | `buster`                                                |
+| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                 | `Always`                                                |
+| `volumePermissions.resources`           | Init container volume-permissions CPU/Memory resource requests/limits               | {}                                                      |
+| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                    | `[]` (does not add image pull secrets to deployed pods) |
+| `commonLabels`                          | Labels to add to all deployed objects                                               | `nil`                                                   |
+| `commonAnnotations`                     | Annotations to add to all deployed objects                                          | `[]`                                                    |
+| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template).        | `nil`                                                   |
 
 #### Redis statefulset parameters
-| Parameter                                       | Description                                                    | Default           |
-|-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `redis.port`                                     | Redis port.                                                    | `6379`            |
-| `redis.useAOFPersistence`                             | Enables AOF persistence mode                                   | `"yes"`           |
-| `redis.podLabels`                                     | Additional labels for Redis pod                                | {}                |
-| `redis.command`                                       | Redis entrypoint string. The command `redis-server` is executed if this is not provided. | `nil`             |
-| `redis.args`                                          | Arguments for the provided command if needed                   | `nil`             |
-| `redis.schedulerName`                                 | Name of an alternate scheduler                                 | `nil`             |
-| `redis.configmap`                                     | Additional Redis configuration for the nodes (this value is evaluated as a template) | `nil`             |
-| `redis.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
-| `redis.nodeSelector`                                  | Node labels for pod assignment                           | {"beta.kubernetes.io/arch": "amd64"} |
-| `redis.podAnnotations`                                | Additional annotations for Redis pod                           | {}                |
-| `redis.busPort`                               | Port for the Redis gossip protocol                             | `16379`           |
-| `redis.lifecycleHooks`       | LifecycleHook to set additional configuration at startup. Evaluated as a template    | ``                                                      |
-| `redis.livenessProbe.enabled`                         | Turn on and off liveness probe.                                | `true`            |
-| `redis.livenessProbe.initialDelaySeconds`             | Delay before liveness probe is initiated.                      | `30`              |
-| `redis.livenessProbe.periodSeconds`                   | How often to perform the probe.                                | `30`              |
-| `redis.livenessProbe.timeoutSeconds`                  | When the probe times out.                                      | `5`               |
-| `redis.livenessProbe.successThreshold`                | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`               |
-| `redis.livenessProbe.failureThreshold`                | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `5`               |
-| `redis.readinessProbe.enabled`                        | Turn on and off readiness probe.                               | `true`            |
-| `redis.readinessProbe.initialDelaySeconds`            | Delay before readiness probe is initiated.                     | `5`               |
-| `redis.readinessProbe.periodSeconds`                  | How often to perform the probe.                                | `10`              |
-| `redis.readinessProbe.timeoutSeconds`                 | When the probe times out.                                      | `1`               |
-| `redis.readinessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`               |
-| `redis.readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `5`               |
-| `redis.priorityClassName`                             | Redis Master pod priorityClassName                             | {}                |
-| `redis.customLivenessProbe`  | Override default liveness probe                                                                                       | `nil`                                                   |
-| `redis.customReadinessProbe` | Override default readiness probe                                                                                      | `nil`                                                   |
-| `redis.extraVolumes`                                  | Array of extra volumes to be added to all pods (evaluated as a template). Requires setting `extraVolumeMounts` | `[]`              |
-| `redis.extraVolumeMounts`                             | Array of extra volume mounts to be added to all pods (evaluated as a template). Normally used with `extraVolumes` | `[]`              |
-| `redis.affinity`                                      | Affinity settings for Redis pod assignment                     | {}                |
-| `redis.topologySpreadConstraints`                     | Pod topology spread constraints for Redis pod                     | `[]`                |
-| `redis.extraEnvVars`                                  | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`              |
-| `redis.extraEnvVarsCM`                         | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `redis.extraEnvVarsSecret`                            | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `redis.initContainers`                           | Init containers to add to the cronjob container                | {}                |
-| `redis.sidecars`                                      | Attach additional containers to the pod (evaluated as a template) | `nil`             |
-| `redis.resources`                                     | Redis CPU/Memory resource requests/limits                      | Memory: `256Mi`, CPU: `100m` |
+
+| Parameter                                  | Description                                                                                           | Default                                                 |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `redis.port`                               | Redis port.                                                                                           | `6379`                                                  |
+| `redis.useAOFPersistence`                  | Enables AOF persistence mode                                                                          | `"yes"`                                                 |
+| `redis.podLabels`                          | Additional labels for Redis pod                                                                       | {}                                                      |
+| `redis.command`                            | Redis entrypoint string. The command `redis-server` is executed if this is not provided.              | `nil`                                                   |
+| `redis.args`                               | Arguments for the provided command if needed                                                          | `nil`                                                   |
+| `redis.schedulerName`                      | Name of an alternate scheduler                                                                        | `nil`                                                   |
+| `redis.configmap`                          | Additional Redis configuration for the nodes (this value is evaluated as a template)                  | `nil`                                                   |
+| `redis.podAffinityPreset`                  | Redis pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
+| `redis.podAntiAffinityPreset`              | Redis pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `redis.nodeAffinityPreset.type`            | Redis node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `redis.nodeAffinityPreset.key`             | Redis node label key to match Ignored if `redis.affinity` is set.                                     | `""`                                                    |
+| `redis.nodeAffinityPreset.values`          | Redis node label values to match. Ignored if `redis.affinity` is set.                                 | `[]`                                                    |
+| `redis.affinity`                           | Affinity for Redis pods assignment                                                                    | `{}` (evaluated as a template)                          |
+| `redis.nodeSelector`                       | Node labels for Redis pods assignment                                                                 | `{}` (evaluated as a template)                          |
+| `redis.tolerations`                        | Tolerations for Redis pods assignment                                                                 | `[]` (evaluated as a template)                          |
+| `redis.busPort`                            | Port for the Redis gossip protocol                                                                    | `16379`                                                 |
+| `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup. Evaluated as a template                     | ``                                                      |
+| `redis.livenessProbe.enabled`              | Turn on and off liveness probe.                                                                       | `true`                                                  |
+| `redis.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated.                                                             | `30`                                                    |
+| `redis.livenessProbe.periodSeconds`        | How often to perform the probe.                                                                       | `30`                                                    |
+| `redis.livenessProbe.timeoutSeconds`       | When the probe times out.                                                                             | `5`                                                     |
+| `redis.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.          | `1`                                                     |
+| `redis.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.            | `5`                                                     |
+| `redis.readinessProbe.enabled`             | Turn on and off readiness probe.                                                                      | `true`                                                  |
+| `redis.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated.                                                            | `5`                                                     |
+| `redis.readinessProbe.periodSeconds`       | How often to perform the probe.                                                                       | `10`                                                    |
+| `redis.readinessProbe.timeoutSeconds`      | When the probe times out.                                                                             | `1`                                                     |
+| `redis.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.          | `1`                                                     |
+| `redis.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.            | `5`                                                     |
+| `redis.priorityClassName`                  | Redis Master pod priorityClassName                                                                    | `{}`                                                    |
+| `redis.customLivenessProbe`                | Override default liveness probe                                                                       | `nil`                                                   |
+| `redis.customReadinessProbe`               | Override default readiness probe                                                                      | `nil`                                                   |
+| `redis.extraVolumes`                       | Array of extra volumes to be added to all pods (evaluated as a template)                              | `[]`                                                    |
+| `redis.extraVolumeMounts`                  | Array of extra volume mounts to be added to all pods (evaluated as a template)                        | `[]`                                                    |
+| `redis.affinity`                           | Affinity settings for Redis pod assignment                                                            | `{}`                                                    |
+| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis pod                                                         | `[]`                                                    |
+| `redis.extraEnvVars`                       | Array containing extra env vars to be added to all pods (evaluated as a template)                     | `[]`                                                    |
+| `redis.extraEnvVarsCM`                     | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                 | `nil`                                                   |
+| `redis.extraEnvVarsSecret`                 | Secret containing extra env vars to be added to all pods (evaluated as a template)                    | `nil`                                                   |
+| `redis.initContainers`                     | Init containers to add to the cronjob container                                                       | `{}`                                                    |
+| `redis.sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                     | `nil`                                                   |
+| `redis.resources`                          | Redis CPU/Memory resource requests/limits                                                             | `{Memory: "256Mi", CPU: "100m"}`                        |
 
 #### Cluster initialization job parameters
-| Parameter                                       | Description                                                    | Default           |
-|-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `initJob.activeDeadlineSeconds`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
-| `initJob.command`                                       | Entrypoint string.  | `nil`             |
-| `initJob.args`                                          | Arguments for the provided command if needed                   | `nil`             |
-| `initJob.annotations`                                          | Job annotations                   | `nil`             |
-| `initJob.podAnnotations`                                          | Job pod annotations                   | `nil`             |
-| `initJob.extraEnvVars`                                  | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`              |
-| `initJob.extraEnvVarsCM`                         | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `initJob.extraEnvVarsSecret`                            | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `initJob.initContainers`                           | Init containers to add to the cronjob container                | {}                |
-| `initJob.extraVolumes`                                  | Array of extra volumes to be added to all pods (evaluated as a template). Requires setting `extraVolumeMounts` | `[]`              |
-| `initJob.extraVolumeMounts`                             | Array of extra volume mounts to be added to all pods (evaluated as a template). Normally used with `extraVolumes` | `[]`              |
-| `initJob.nodeSelector`                                  | Node labels for pod assignment                           | `nil`|
-| `initJob.podLabels`                                     | Additional labels                                | {}                |
-| `initJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
-| `initJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
-| `initJob.affinity`                                      | Affinity settings for                      | {}                |
-| `initJob.priorityClassName`                             | Priority class name                      | `nil`                |
+
+| Parameter                                  | Description                                                                                                | Default                                            |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------|----------------------------------------------------|
+| `initJob.activeDeadlineSeconds`            | Maximum time (in seconds) to wait for the cluster initialization job to succeed                            | `600`                                              |
+| `initJob.command`                          | Entrypoint string.                                                                                         | `nil`                                              |
+| `initJob.args`                             | Arguments for the provided command if needed                                                               | `nil`                                              |
+| `initJob.annotations`                      | Job annotations                                                                                            | `nil`                                              |
+| `initJob.podAnnotations`                   | Job pod annotations                                                                                        | `nil`                                              |
+| `initJob.extraEnvVars`                     | Array containing extra env vars to be added to all pods (evaluated as a template)                          | `[]`                                               |
+| `initJob.extraEnvVarsCM`                   | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                      | `nil`                                              |
+| `initJob.extraEnvVarsSecret`               | Secret containing extra env vars to be added to all pods (evaluated as a template)                         | `nil`                                              |
+| `initJob.initContainers`                   | Init containers to add to the cronjob container                                                            | `{}`                                               |
+| `initJob.extraVolumes`                     | Array of extra volumes to be added to all pods (evaluated as a template)                                   | `[]`                                               |
+| `initJob.extraVolumeMounts`                | Array of extra volume mounts to be added to all pods (evaluated as a template)                             | `[]`                                               |
+| `initJob.podLabels`                        | Additional labels                                                                                          | `{}`                                               |
+| `initJob.podAffinityPreset`                | Init job pod affinity preset. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                               |
+| `initJob.podAntiAffinityPreset`            | Init job pod anti-affinity preset. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                             |
+| `initJob.nodeAffinityPreset.type`          | Init job node affinity preset type. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard` | `""`                                               |
+| `initJob.nodeAffinityPreset.key`           | Init job node label key to match Ignored if `initJob.affinity` is set.                                     | `""`                                               |
+| `initJob.nodeAffinityPreset.values`        | Init job node label values to match. Ignored if `initJob.affinity` is set.                                 | `[]`                                               |
+| `initJob.affinity`                         | Affinity for init job pods assignment                                                                      | `{}` (evaluated as a template)                     |
+| `initJob.nodeSelector`                     | Node labels for init job pods assignment                                                                   | `{}` (evaluated as a template)                     |
+| `initJob.tolerations`                      | Tolerations for init job pods assignment                                                                   | `[]` (evaluated as a template)                     |
+| `initJob.resources`                        | Redis CPU/Memory resource requests/limits                                                                  | `nil`                                              |
+| `initJob.priorityClassName`                | Priority class name                                                                                        | `nil`                                              |
 
 #### Cluster update job parameters
-| Parameter                                       | Description                                                    | Default           |
-|-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `updateJob.activeDeadlineSeconds`                                      | Maximum time (in seconds) to wait for the cluster initialization job to succeed | `600`             |
-| `updateJob.command`                                       | Entrypoint string.  | `nil`             |
-| `updateJob.args`                                          | Arguments for the provided command if needed                   | `nil`             |
-| `updateJob.annotations`                                          | Job annotations                   | `nil`             |
-| `updateJob.podAnnotations`                                          | Job pod annotations                   | `nil`             |
-| `updateJob.extraEnvVars`                                  | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`              |
-| `updateJob.extraEnvVarsCM`                         | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `updateJob.extraEnvVarsSecret`                            | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`             |
-| `updateJob.initContainers`                           | Init containers to add to the cronjob container                | {}                |
-| `updateJob.extraVolumes`                                  | Array of extra volumes to be added to all pods (evaluated as a template). Requires setting `extraVolumeMounts` | `[]`              |
-| `updateJob.extraVolumeMounts`                             | Array of extra volume mounts to be added to all pods (evaluated as a template). Normally used with `extraVolumes` | `[]`              |
-| `updateJob.nodeSelector`                                  | Node labels for pod assignment                           | `nil`|
-| `updateJob.podLabels`                                     | Additional labels                                | {}                |
-| `updateJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
-| `updateJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
-| `updateJob.affinity`                                      | Affinity settings for                      | {}                |
-| `updateJob.priorityClassName`                             | Priority class name                      | `nil`                |
+
+| Parameter                                  | Description                                                                                                    | Default                                        |
+|--------------------------------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `updateJob.activeDeadlineSeconds`          | Maximum time (in seconds) to wait for the cluster initialization job to succeed                                | `600`                                          |
+| `updateJob.command`                        | Entrypoint string.                                                                                             | `nil`                                          |
+| `updateJob.args`                           | Arguments for the provided command if needed                                                                   | `nil`                                          |
+| `updateJob.annotations`                    | Job annotations                                                                                                | `nil`                                          |
+| `updateJob.podAnnotations`                 | Job pod annotations                                                                                            | `nil`                                          |
+| `updateJob.extraEnvVars`                   | Array containing extra env vars to be added to all pods (evaluated as a template)                              | `[]`                                           |
+| `updateJob.extraEnvVarsCM`                 | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                          | `nil`                                          |
+| `updateJob.extraEnvVarsSecret`             | Secret containing extra env vars to be added to all pods (evaluated as a template)                             | `nil`                                          |
+| `updateJob.initContainers`                 | Init containers to add to the cronjob container                                                                | `{}`                                           |
+| `updateJob.extraVolumes`                   | Array of extra volumes to be added to all pods (evaluated as a template)                                       | `[]`                                           |
+| `updateJob.extraVolumeMounts`              | Array of extra volume mounts to be added to all pods (evaluated as a template)                                 | `[]`                                           |
+| `updateJob.podLabels`                      | Additional labels                                                                                              | `{}`                                           |
+| `updateJob.podAffinityPreset`              | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                           |
+| `updateJob.podAntiAffinityPreset`          | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                         |
+| `updateJob.nodeAffinityPreset.type`        | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`                                           |
+| `updateJob.nodeAffinityPreset.key`         | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`                                           |
+| `updateJob.nodeAffinityPreset.values`      | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`                                           |
+| `updateJob.affinity`                       | Affinity for update job pods assignment                                                                        | `{}` (evaluated as a template)                 |
+| `updateJob.nodeSelector`                   | Node labels for update job pods assignment                                                                     | `{}` (evaluated as a template)                 |
+| `updateJob.tolerations`                    | Tolerations for update job pods assignment                                                                     | `[]` (evaluated as a template)                 |
+| `updateJob.resources`                      | Redis CPU/Memory resource requests/limits                                                                      | `nil`                                          |
+| `updateJob.priorityClassName`              | Priority class name                                                                                            | `nil`                                          |
 
 #### Cluster management parameters
 
@@ -316,12 +335,14 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Enable NetworkPolicy:
+
 ```diff
 - networkPolicy.enabled: false
 + networkPolicy.enabled: true
 ```
 
 - Start a side-car prometheus exporter:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
@@ -340,8 +361,9 @@ The replicas will be read-only replicas of the masters. By default only one serv
 Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as explained before, but the all the IPs will be public.
 
 In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
-  - `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
-  - `cluster.replicas=2`
+
+- `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
+- `cluster.replicas=2`
 
 Providing the values above, the cluster will have 3 masters and, each master, will have 2 replicas.
 
@@ -536,7 +558,7 @@ after a successful install.
 
 With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
 
-```
+```yaml
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
@@ -544,6 +566,12 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

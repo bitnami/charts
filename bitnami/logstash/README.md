@@ -134,6 +134,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `podDisruptionBudget.create`               | If true, create a pod disruption budget for pods.                                                                    | `false`                                                 |
 | `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                     | `1`                                                     |
 | `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                     | `nil`                                                   |
+| `extraDeploy`                              | Array of extra objects to deploy with the release (evaluated as a template).                                         | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -191,9 +192,7 @@ By default, this Helm chart provides a very basic configuration for Logstash, wh
 
 You can achieve any Logstash configuration by providing your custom configuration files. To do so, this helm chart supports to customize every configuration file.
 
-Add your custom configuration files to "files/conf" in your working directory. These files will be mounted as a configMap to the containers and they will be used for configuring Logstash.
-
-Alternatively, you can specify the Logstash configuration using the `input`, `filter`, and `output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
+You can specify the Logstash configuration using the `input`, `filter`, and `output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
 
 In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter. Note that this will override the two previous options.
 
@@ -207,10 +206,10 @@ You can also set an external ConfigMap with all the configuration files. This is
 
 Find below a basic example placing the configuration files in the "files/conf" folder although the same approach can be followed by using a ConfigMap:
 
-- Configuration files placed in `files/conf`:
+- ConfigMap with the configuration files:
 
 ```console
-$ cat files/conf/bye.conf
+$ cat bye.conf
 input {
   file {
     path => "/tmp/bye"
@@ -220,7 +219,7 @@ output {
   stdout { }
 }
 
-$ cat files/conf/hello.conf
+$ cat hello.conf
 input {
   file {
     path => "/tmp/hello"
@@ -230,17 +229,19 @@ output {
   stdout { }
 }
 
-$ cat files/conf/pipelines.yml
+$ cat pipelines.yml
 - pipeline.id: hello
   path.config: "/opt/bitnami/logstash/config/hello.conf"
 - pipeline.id: bye
   path.config: "/opt/bitnami/logstash/config/bye.conf"
+
+$ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
 ```
 
 - Deploy the Helm Chart with the `enableMultiplePipelines` parameter:
 
 ```console
-$ helm install logstash . --set enableMultiplePipelines=true
+$ helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
 
 $ kubectl logs -f logstash-0
 logstash 12:57:43.51 INFO  ==> ** Starting Logstash setup **
@@ -301,6 +302,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This version drops support of including files in the `files/` folder, as it was working only under certain circumstances and the chart already provides alternative mechanisms like the `input` , `output` and `filter`, the `existingConfiguration` or the `extraDeploy` values.
 
 ### To 1.2.0
 
