@@ -112,6 +112,7 @@ enableMultiplePipelines: false
 ##   - name: myvolume
 ##     configMap:
 ##       name: myconfigmap
+##
 extraVolumes: []
 
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
@@ -120,6 +121,7 @@ extraVolumes: []
 ##   - mountPath: /opt/bitnami/desired-path
 ##     name: myvolume
 ##     readOnly: true
+##
 extraVolumeMounts: []
 
 containerPorts:
@@ -174,6 +176,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -293,9 +296,11 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
   ## Ingress annotations done as key:value pairs
@@ -304,11 +309,13 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ##
   hosts:
     - name: logstash.local
       path: /
@@ -377,17 +384,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -456,3 +460,7 @@ podDisruptionBudget:
   create: false
   minAvailable: 1
   # maxUnavailable: 1
+
+## Array of extra objects to deploy
+##
+extraDeploy:

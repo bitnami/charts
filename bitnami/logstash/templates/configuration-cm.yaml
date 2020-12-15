@@ -1,27 +1,25 @@
-{{ if and (or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
+{{ if and (or .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
-{{- if (.Files.Glob "files/conf/*") }}
-{{ (.Files.Glob "files/conf/*").AsConfig | indent 2 }}
-{{- else if (or .Values.input .Values.filter .Values.output) }}
+{{- if (or .Values.input .Values.filter .Values.output) }}
   logstash.conf: |-
 {{- if .Values.input }}
     input {
-{{ tpl .Values.input $ | indent 6 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.input "context" $) | nindent 6 }}
     }
 {{- end }}
 {{- if .Values.filter }}
     filter {
-{{ tpl .Values.filter $ | indent 6 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.filter "context" $) | nindent 6 }}
     }
 {{- end }}
 {{- if .Values.output }}
     output {
-{{ tpl .Values.output $ | indent 6 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.output "context" $) | nindent 6 }}
     }
 {{- end }}
 {{ end }}
