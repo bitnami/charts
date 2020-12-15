@@ -2,9 +2,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}-udp
+  name: {{ printf "%s-udp" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
-    component: {{ .Values.name }}
-data: {{- include "nginx-ingress.tplValue" (dict "value" .Values.udp "context" $) | nindent 2 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data: {{- include "common.tplvalues.render" (dict "value" .Values.udp "context" $) | nindent 2 }}
 {{- end }}

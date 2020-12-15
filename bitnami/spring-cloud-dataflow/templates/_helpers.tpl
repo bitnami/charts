@@ -150,6 +150,28 @@ Return true if a configmap object should be created for Spring Cloud Skipper
 {{- end -}}
 
 {{/*
+Return the database URL used by the dataflow server
+*/}}
+{{- define "scdf.database.dataflow.url" -}}
+  {{- if .Values.externalDatabase.dataflow.url }}
+    {{- printf "%s" .Values.externalDatabase.dataflow.url -}}
+  {{- else -}}
+    {{- printf "jdbc:%s://%s:%s/%s%s" (include "scdf.database.scheme" .) (include "scdf.database.host" .) (include "scdf.database.port" .) (include "scdf.database.server.name" .) (include "scdf.database.jdbc.parameters" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the database URL used by skipper
+*/}}
+{{- define "scdf.database.skipper.url" -}}
+  {{- if .Values.externalDatabase.skipper.url }}
+    {{- printf "%s" .Values.externalDatabase.skipper.url -}}
+  {{- else -}}
+    {{- printf "jdbc:%s://%s:%s/%s%s" (include "scdf.database.scheme" .) (include "scdf.database.host" .) (include "scdf.database.port" .) (include "scdf.database.skipper.name" .) (include "scdf.database.jdbc.parameters" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Return the database Hostname
 */}}
 {{- define "scdf.database.host" -}}
@@ -209,7 +231,7 @@ Return the Data Flow Database Name
 */}}
 {{- define "scdf.database.server.name" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "dataflow" -}}
+    {{- printf "%s" .Values.mariadb.auth.database -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.dataflow.database -}}
 {{- end -}}
@@ -220,9 +242,9 @@ Return the Data Flow Database User
 */}}
 {{- define "scdf.database.server.user" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "dataflow" -}}
+    {{- printf "%s" .Values.mariadb.auth.username -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.dataflow.user -}}
+    {{- printf "%s" .Values.externalDatabase.dataflow.username -}}
 {{- end -}}
 {{- end -}}
 
@@ -244,7 +266,7 @@ Return the Skipper Database User
 {{- if .Values.mariadb.enabled }}
     {{- printf "skipper" -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.skipper.user -}}
+    {{- printf "%s" .Values.externalDatabase.skipper.username -}}
 {{- end -}}
 {{- end -}}
 

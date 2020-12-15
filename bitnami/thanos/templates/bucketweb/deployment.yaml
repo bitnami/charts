@@ -61,8 +61,8 @@ spec:
             {{- if .Values.bucketweb.timeout }}
             - --timeout={{ .Values.bucketweb.timeout }}
             {{- end }}
-            {{- range .Values.bucketweb.extraFlags }}
-            - {{ . }}
+            {{- if .Values.bucketweb.extraFlags }}
+            {{- .Values.bucketweb.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           ports:
             - name: http
@@ -79,12 +79,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
-              {{- if .Values.existingObjstoreSecretItems }}
               mountPath: /conf
-              {{- else }}
-              mountPath: /conf/objstore.yml
-              subPath: objstore.yml
-              {{- end }}
       volumes:
         - name: objstore-config
           secret:

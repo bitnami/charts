@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: {{ template "owncloud.fullname" . }}
   labels:
-    app: {{ template "owncloud.fullname" . }}
-    chart: {{ template "owncloud.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+    helm.sh/chart: {{ include "owncloud.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
@@ -23,4 +23,5 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
   selector:
-    app: {{ template "owncloud.fullname" . }}
+    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}

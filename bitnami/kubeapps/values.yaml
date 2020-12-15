@@ -8,13 +8,35 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Enable this feature flag to use Kubeapps with Helm 3 support.
-## If you set it to true, Kubeapps will not work with releases installed with Helm 2.
-useHelm3: false
-
 ## Disable this feature flag to disallow users to discover available namespaces (only the ones they have access).
 ## When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
 allowNamespaceDiscovery: true
+
+## Enable IPv6 Configuration for Nginx
+enableIPv6: false
+
+## clusters can be configured with a list of clusters that Kubeapps can target for deployments.
+## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
+## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
+## the user as potential targets for install or browsing.
+## Note that you can define a single cluster without an apiServiceURL and the chart will assume this is
+## the name you are assigning to the cluster on which Kubeapps is itself installed. Specifying more than
+## one cluster without an apiServiceURL will cause the chart display an error.
+## The base64-encoded certificateAuthorityData can be obtained from the additional cluster's kube config
+## file, for example, to get the ca data for the 0th cluster in your config (adjust the index 0 as necessary):
+## kubectl --kubeconfig ~/.kube/kind-config-kubeapps-additional config view --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
+#
+# clusters:
+# - name: default
+# - name: second-cluster
+#   apiServiceURL: https://second-cluster:6443
+#   # certificateAuthorityData is required for secure communication with the additional API server.
+#   certificateAuthorityData: LS0tLS1CRUdJ...
+#   # serviceToken is an optional token configured to allow LIST namespaces and packagemanifests (operators) only on the additional cluster
+#   # so that the UI can present a list of (only) those namespaces to which the user has access and the available operators.
+#   serviceToken: ...
+clusters:
+  - name: default
 
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
@@ -95,7 +117,7 @@ ingress:
   #     ##
   #     tlsSecret: kubeapps.local-tls
 
-## Frontend paramters
+## Frontend parameters
 ##
 frontend:
   replicaCount: 2
@@ -105,7 +127,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.18.0-debian-10-r38
+    tag: 1.19.2-debian-10-r32
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -176,6 +198,10 @@ frontend:
   ## Some K8s distributions such as GKE requires it
   ##
   proxypassAccessTokenAsBearer: false
+  ## Set large_client_header_buffers in nginx config
+  ## Can be required when using OIDC or LDAP due to large cookies
+  #
+  largeClientHeaderBuffers: "4 32k"
 
 ## AppRepository Controller is the controller used to manage the repositories to
 ## sync. Set apprepository.initialRepos to configure the initial set of
@@ -193,7 +219,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 1.10.3-scratch-r0
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -205,7 +231,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 1.10.3-scratch-r0
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -221,12 +247,6 @@ apprepository:
   ## Initial chart repositories to configure
   ##
   initialRepos:
-    - name: stable
-      url: https://kubernetes-charts.storage.googleapis.com
-    - name: incubator
-      url: https://kubernetes-charts-incubator.storage.googleapis.com
-    - name: svc-cat
-      url: https://svc-catalog-charts.storage.googleapis.com
     - name: bitnami
       url: https://charts.bitnami.com/bitnami
   # Additional repositories
@@ -268,6 +288,10 @@ apprepository:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+  ## The controller watches all namespaces by default to support separate AppRepositories per namespace.
+  ## Switch this off only if you require running multiple instances of Kubeapps in different namespaces
+  ## without each instance watching AppRepositories of each other.
+  watchAllNamespaces: true
 
 ## Hooks are used to perform actions like populating apprepositories
 ## or creating required resources during installation or upgrade
@@ -279,7 +303,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.16.3-debian-10-r85
+    tag: 1.18.9-debian-10-r5
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -299,13 +323,12 @@ hooks:
   tolerations: {}
 
 # Kubeops is an interface between the Kubeapps Dashboard and Helm 3/Kubernetes.
-# Set useHelm3 to true to use Kubeops instead of Tiller Proxy.
 kubeops:
   replicaCount: 2
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 1.10.3-scratch-r0
+    tag: 2.0.1-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -339,87 +362,6 @@ kubeops:
   tolerations: []
   affinity: {}
 
-## Tiller Proxy is a secure REST API on top of Helm's Tiller component used to
-## manage Helm chart releases in the cluster from Kubeapps. Set tillerProxy.host
-## to configure a different Tiller host to use.
-##
-tillerProxy:
-  replicaCount: 2
-
-  ## Bitnami Kubeapps Tiller Proxy image
-  ## ref: https://hub.docker.com/r/bitnami/kubeapps-tiller-proxy/tags/
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-tiller-proxy
-    tag: 1.10.3-scratch-r0
-    ## Specify a imagePullPolicy
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-
-  ## Tiller Proxy service parameters
-  ##
-  service:
-    ## HTTP Port
-    ##
-    port: 8080
-  host: tiller-deploy.kube-system:44134
-
-  ## TLS parameters
-  ##
-  tls: {}
-  #  ca:
-  #  cert:
-  #  key:
-  #  verify: false
-
-  ## It's possible to modify the default timeout for install/upgrade/rollback/delete apps
-  ## (Default: 300s)
-  # timeout: 300
-
-  ## Tiller Proxy containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## Default values set based on usage data from running Kubeapps instances
-    ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
-    ##
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Tiller Proxy containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    httpGet:
-      path: /live
-      port: 8080
-    initialDelaySeconds: 60
-    timeoutSeconds: 5
-  readinessProbe:
-    httpGet:
-      path: /ready
-      port: 8080
-    initialDelaySeconds: 0
-    timeoutSeconds: 5
-
-  ## Affinity for Tiller Proxy pods assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-  ## Node labels for Tiller Proxy pods assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## Tolerations for Tiller Proxy pods assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: {}
-
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
 assetsvc:
@@ -430,7 +372,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 1.10.3-scratch-r0
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -495,7 +437,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 1.10.3-debian-10-r0
+    tag: 2.0.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -548,45 +490,10 @@ dashboard:
   ##
   tolerations: {}
 
-## MongoDB chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
-##
-mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
-  enabled: false
-  ## Kubeapps uses MongoDB as a cache and persistence is not required
-  ##
-  persistence:
-    enabled: false
-    size: 8Gi
-  ## MongoDB credentials are handled by kubeapps to facilitate upgrades
-  ##
-  existingSecret: kubeapps-mongodb
-  ## Pod Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ##
-  securityContext:
-    enabled: false
-  ## MongoDB containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## Default values set based on usage data from running Kubeapps instances
-    ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
-    ##
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 256Mi
-
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
-  ## Whether to deploy a postgresql server to satisfy the applications database requirements.
-  enabled: true
   ## Enable replication for high availability
   replication:
     enabled: true
@@ -613,7 +520,7 @@ postgresql:
       memory: 256Mi
       cpu: 250m
 
-## RBAC paramters
+## RBAC parameters
 ##
 rbac:
   ## Perform creation of RBAC resources
@@ -633,26 +540,45 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.18.0-debian-10-r38
+  tag: 1.19.2-debian-10-r32
 
-# Auth Proxy for OIDC support
+# Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
 authProxy:
-  # Set to true to enable the OIDC proxy
+  ## Set to true if Kubeapps should configure the OAuth login/logout URIs defined below.
+  #
   enabled: false
+  ## When authProxy.enabled is true, by default Kubeapps will deploy its own
+  ## auth-proxy service as part of the Kubeapps frontend. Set external to true
+  ## if you are configuring your own auth proxy service external to Kubeapps
+  ## and therefore don't want Kubeapps to deploy its own auth-proxy.
+  #
+  external: false
+  ## Overridable flags for OAuth URIs to which the Kubeapps frontend redirects for authn.
+  ## Useful when serving Kubeapps under a sub path or using an external auth proxy.
+  ##
+  oauthLoginURI: /oauth2/start
+  oauthLogoutURI: /oauth2/sign_out
+
+  ## Skip the Kubeapps login page when using OIDC and directly redirect to the IdP
+  ##
+  skipKubeappsLoginPage: false
+
+  ## The remaining auth proxy values are relevant only if an internal auth-proxy is
+  ## being configured by Kubeapps.
   ## Bitnami OAuth2 Proxy image
   ## ref: https://hub.docker.com/r/bitnami/oauth2-proxy/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 5.1.0-debian-10-r24
+    tag: 6.1.1-debian-10-r12
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
 
-  ## Mandatory parameters
+  ## Mandatory parameters for the internal auth-proxy.
   ##
   provider: ""
   clientID: ""
@@ -668,17 +594,12 @@ authProxy:
   ## Additional flags for oauth2-proxy
   ##
   additionalFlags: []
-  # - -ssl-insecure-skip-verify
-  # - -cookie-secure=false
-  # - -scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
-  # - -oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
+  # - --ssl-insecure-skip-verify
+  # - --cookie-secure=false
+  # - --scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
+  # - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  ## Overridable flags for OAuth URIs that Kubeapps uses, useful when serving
-  ## Kubeapps under a sub path
-  oauthLoginURI: /oauth2/start
-  oauthLogoutURI: /oauth2/sign_out
   ##
   resources:
     ## Default values set based on usage data from running Kubeapps instances
@@ -690,16 +611,8 @@ authProxy:
     requests:
       cpu: 25m
       memory: 32Mi
+
 ## Feature flags
 ## These are used to switch on in development features or new features which are ready to be released.
 featureFlags:
   invalidateCache: true
-  operators: false
-  # additionalClusters is a WIP feature for multi-cluster support.
-  additionalClusters: []
-  # additionalClusters:
-  # - name: second-cluster
-  #   apiServiceURL: https://second-cluster:6443
-  #   certificateAuthorityData: LS0tLS1CRUdJ...
-  # ui is a WIP feature for the migration to Clarity design system.
-  ui: hex

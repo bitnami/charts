@@ -8,270 +8,679 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami Airflow image version
-## ref: https://hub.docker.com/r/bitnami/airflow/tags/
-##
-image:
-  registry: docker.io
-  repository: bitnami/airflow
-  tag: 1.10.11-debian-10-r0
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
-
-## Bitnami Airflow Scheduler image version
-## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
-##
-schedulerImage:
-  registry: docker.io
-  repository: bitnami/airflow-scheduler
-  tag: 1.10.11-debian-10-r9
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
-
-## Bitnami Airflow Worker image version
-## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-##
-workerImage:
-  registry: docker.io
-  repository: bitnami/airflow-worker
-  tag: 1.10.11-debian-10-r8
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
-
-## Bitnami git image version
-## ref: https://hub.docker.com/r/bitnami/git/tags/
-##
-git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.27.0-debian-10-r44
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
-# nameOverride:
-
+nameOverride:
 ## String to fully override airflow.fullname template
 ##
-# fullnameOverride:
-
-## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
-## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+fullnameOverride:
+## Airflow executor
+## ref: http://airflow.apache.org/docs/stable/executor/index.html
+## valid values: ['SequentialExecutor', 'Local Executor', 'CeleryExecutor', 'KubernetesExecutor']
 ##
-updateStrategy: RollingUpdate
-
-## Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+executor: 'CeleryExecutor'
+## Name of an existing config map containing the Airflow config file
 ##
-# rollingUpdatePartition:
-
-## Airflow Components configuration
+configurationConfigMap:
+## Name of an existing config map containing all the DAGs files you want to load in Airflow.
 ##
-airflow:
-  ## Name of an existing config map containing the Airflow config file
+dagsConfigMap:
+## Whether to load examples dags or not
+##
+loadExamples: false
+## Authentication options
+##
+auth:
+  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+  ## If it is not forced, a random password will be generated.
   ##
-  # configurationConfigMap:
-  ## Name of an existing config map containing all the DAGs files you want to load in Airflow.
+  forcePassword: true
+  ## Specify username to access web UI
   ##
-  ## dagsConfigMap:
-  ## Airflow generic configuration
+  username: user
+  ## Specify password to access web UI
   ##
-  loadExamples: false
+  password:
+  ## Specify a fernet key to secure airflow connections
+  ## Fernet key must be 32 url-safe base64-encoded bytes.
+  ## More info at:
+  ## - https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
+  ## - https://bcb.github.io/airflow/fernet-key
+  ##
+  fernetKey:
+  ## Use existing secret (ignores previous password and fernetKey)
+  ##
+  existingSecret:
 
-  ## Interval to pull the git repository containing the plugins and/or DAG files
-  #
-  gitSyncInterval: 60
-  ## Enable in order to download DAG files from git repository.
+## Web component related properties
+##
+web:
+  ## Bitnami Airflow image version
+  ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
   ##
-  cloneDagFilesFromGit:
-    enabled: false
-    # repository:
-    # branch:
-    # path:
-  clonePluginsFromGit:
-    enabled: false
-    # repository:
-    # branch:
-    # path:
+  image:
+    registry: docker.io
+    repository: bitnami/airflow
+    tag: 1.10.14-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and NAMI debugging in minideb
+    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ##
+    debug: false
+  ## Number of web replicas
+  ##
+  replicaCount: 1
   ## URL used to access to airflow web ui
   ##
   baseUrl: http://airflow.local
-  ## Airflow worker component configuration
-  worker:
-    port: 8793
-    replicas: 3
-    ## podManagementPolicy to manage scaling operation of worker pods
-    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-    ##
-    # podManagementPolicy: Parallel
-
-    ## Worker containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      limits: {}
-      #    cpu: 200m
-      #    memory: 1Gi
-      requests: {}
-      #    memory: 256Mi
-      #    cpu: 250m
-
-  ## Airflow web specific configuration
-  #
-  web:
-    ## Web container' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      limits: {}
-      #    cpu: 200m
-      #    memory: 1Gi
-      requests: {}
-      #    memory: 256Mi
-      #    cpu: 250m
-
-  ## Airflow scheduler specific configuration
-  #
-  scheduler:
-    ## Scheduler containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      limits: {}
-      #    cpu: 200m
-      #    memory: 1Gi
-      requests: {}
-      #    memory: 256Mi
-      #    cpu: 250m
-
-  ## All the parameters from the configuration file can be overwritten by using environment variables with this format:
-  ## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+  ## Name of an existing config map containing the Airflow webserver config file
   ##
-  # extraEnvVars:
-  #   - name: AIRFLOW__SMTP__SMTP_HOST
-  #     value: "localhost"
-  #   - name: AIRFLOW__SMTP__SMTP_PORT
-  #     value: "25"
-  #   - name: AIRFLOW__SMTP__USER
-  #     value: ""
+  configMap:
+  ## Override cmd
+  ##
+  command:
+  ## Override args
+  ##
+  args:
+  ## Add extra labels to the web's pods
+  ##
+  podLabels:
+  ## Add extra annotations to the web's pods
+  ##
+  podAnnotations:
+  ## Container port to be used.
+  ##
+  containerPort: 8080
+  ## Add extra volume mounts
+  ##
+  extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
+  ## Add extra environment variables
+  ##
+  extraEnvVars:
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+  ## Web container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #    cpu: 200m
+    #    memory: 1Gi
+    requests: {}
+    #    memory: 256Mi
+    #    cpu: 250m
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+  ## Custom Liveness probe
+  ##
+  customReadinessProbe: {}
+  ## Enable PodDisruptionBudget for scheduler pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  podDisruptionBudget:
+    enabled: false
+    minAvailable: 1
+    # maxUnavailable: 1
+  ## Add sidecars to the web pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars:
+  ## Add initContainers to the web pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
 
-  auth:
-    ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-    ## If it is not forced, a random password will be generated.
+## Scheculer component related properties
+##
+scheduler:
+  ## Bitnami Airflow Scheduler image version
+  ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/airflow-scheduler
+    tag: 1.10.13-debian-10-r13
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    forcePassword: true
-    ## Specify username to acccess web UI
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    username: user
-    ## Specify password to acccess web UI
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and NAMI debugging in minideb
+    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
     ##
-    # password:
-    ## Specify a fernet key to secure airflow connections
-    ## Fernet key must be 32 url-safe base64-encoded bytes.
-    ## More info at:
-    ## - https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
-    ## - https://bcb.github.io/airflow/fernet-key
+    debug: false
+  ## Number of scheduler replicas
+  ##
+  replicaCount: 1
+  ## Override cmd
+  ##
+  command:
+  ## Override args
+  ##
+  args:
+  ## Add extra labels to the web's pods
+  ##
+  podLabels:
+  ## Add extra annotations to the web's pods
+  ##
+  podAnnotations:
+  ## Add extra volume mounts
+  ##
+  extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
+  ## Add extra environment variables
+  ##
+  extraEnvVars:
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+  ## Scheduler containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #    cpu: 200m
+    #    memory: 1Gi
+    requests: {}
+    #    memory: 256Mi
+    #    cpu: 250m
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+  ## Custom Liveness probe
+  ##
+  customReadinessProbe: {}
+  ## Enable PodDisruptionBudget for scheduler pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  podDisruptionBudget:
+    enabled: false
+    minAvailable: 1
+    # maxUnavailable: 1
+  ## Add sidecars to the scheduler pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars:
+  ## Add initContainers to the scheduler pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
+
+## Worker component related properties
+##
+worker:
+  ## Bitnami Airflow Worker image version
+  ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/airflow-worker
+    tag: 1.10.13-debian-10-r12
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    # fernetKey:
-    ## Use existing secret (ignores previous password and fernetKey)
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # existingSecret:
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and NAMI debugging in minideb
+    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ##
+    debug: false
+  ## Port where the worker will be exposed
+  ##
+  port: 8793
+  ## Number of worker replicas
+  ##
+  replicaCount: 3
+  ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
+  ##
+  podTemplate:
+  ## podManagementPolicy to manage scaling operation of worker pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy:
+  ## Override cmd
+  ##
+  command:
+  ## Override args
+  ##
+  args:
+  ## Add annotations to the worker pods
+  ##
+  podAnnotations: {}
+  ## Add extra labels to the web's pods
+  ##
+  podLabels:
+  ## Add extra volume mounts
+  ##
+  extraVolumeMounts:
+  ## Add extra volumes
+  ##
+  extraVolumes:
+  ## Add extra environment variables
+  ##
+  extraEnvVars:
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+  ## Worker containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #    cpu: 200m
+    #    memory: 1Gi
+    requests: {}
+    #    memory: 256Mi
+    #    cpu: 250m
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+  ## Custom Liveness probe
+  ##
+  customReadinessProbe: {}
+  ## Enable PodDisruptionBudget for worker pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  podDisruptionBudget:
+    enabled: false
+    minAvailable: 1
+    # maxUnavailable: 1
+  ## Enable HorizontalPodAutoscaler for worker pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ##
+  autoscaling:
+    ## Whether enabled horizontal pod autoscale
+    ##
+    enabled: true
+    ## Configure a minimum/maximum amount of pods
+    ##
+    replicas:
+      min: 1
+      max: 3
+    ## Define the target to trigger the scaling actions (utilization percentage)
+    ##
+    targets:
+      cpu: 80
+      memory: 80
+  ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ##
+  updateStrategy: RollingUpdate
+  ## Partition update strategy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  rollingUpdatePartition:
+  ## Add sidecars to the worker pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars:
+  ## Add initContainers to the worker pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers:
+  ## Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## Common parameters to all Airflow containers: the parameters from the configuration file can be overwritten by using environment variables with this format:
+## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+##
+## - name: AIRFLOW__SMTP__SMTP_HOST
+##   value: "localhost"
+## - name: AIRFLOW__SMTP__SMTP_PORT
+##   value: "25"
+## - name: AIRFLOW__SMTP__USER
+##   value: ""
+##
+extraEnvVars: []
+## ConfigMap with common settings for all Airflow containers
+##
+extraEnvVarsCM:
+## Secret with common settings for all Airflow containers
+##
+extraEnvVarsSecret:
+## Add sidecars to all the pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars:
+## Add initContainers to all the pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers:
+
+## Configure git to pull dags and plugins
+##
+git:
+  ## Bitnami git image version
+  ## ref: https://hub.docker.com/r/bitnami/git/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.29.2-debian-10-r39
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+  ## digits (0-9), lower case letters (a-z), -, and .
+  ##
+  ##   - repository: https://github.com/myuser/myrepo
+  ##     branch: main
+  ##     name: my-dags
+  ##     path: /
+  ##
+  dags:
+    ## Enable in order to download DAG files from git repositories.
+    ##
+    enabled: false
+    repositories:
+      - repository:
+        branch:
+        name:
+        path:
+  plugins:
+    ## Enable in order to download Plugins files from git repositories.
+    ##
+    enabled: false
+    repositories:
+      - repository:
+        branch:
+        name:
+        path:
+  ## Properties for the clone init container
+  ##
+  clone:
+    ## Override cmd
+    ##
+    command:
+    ## Override args
+    ##
+    args:
+    ## Add extra volume mounts
+    ##
+    extraVolumeMounts:
+    ## Add extra environment variables
+    ##
+    extraEnvVars:
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
+  sync:
+    ## Interval in seconds to pull the git repository containing the plugins and/or DAG files
+    ##
+    interval: 60
+    ## Override cmd
+    ##
+    command:
+    ## Override args
+    ##
+    args:
+    ## Add extra volume mounts
+    ##
+    extraVolumeMounts:
+    ## Add extra environment variables
+    ##
+    extraEnvVars:
+    ## ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM:
+    ## Secret with extra environment variables
+    ##
+    extraEnvVarsSecret:
 
 ## LDAP configuration
 ##
 ldap:
-  # Enable LDAP authentication
+  ## Enable LDAP authentication
+  ##
   enabled: false
-  # Server URI, eg. ldap://ldap_server:389
-  uri: "ldap://ldap_server:389"
-  # Base of the search, eg. ou=example,o=org
-  base: "ou=example,o=org"
-  # Bind DN
-  binddn: "cn=user,ou=example,o=org"
-  # Bind Password
-  bindpw: ""
-  # Field used for uid
-  uidField: "uid"
-  # SSL/TLS parameters for LDAP
+  ## Server URI, eg. ldap://ldap_server:389
+  ##
+  uri: 'ldap://ldap_server:389'
+  ## Base of the search, eg. ou=example,o=org
+  ##
+  base: 'ou=example,o=org'
+  ## Bind DN
+  ##
+  binddn: 'cn=user,ou=example,o=org'
+  ## Bind Password
+  ##
+  bindpw: ''
+  ## Field used for uid
+  ##
+  uidField: 'uid'
+  ## SSL/TLS parameters for LDAP
+  ##
   tls:
-    # Enabled TLS/SSL for LDAP, you must include the CA file.
+    ## Enabled TLS/SSL for LDAP, you must include the CA file.
+    ##
     enabled: false
     ## Allow to use self signed certificates
+    ##
     allowSelfSigned: true
     ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
     ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
-    CAcertificateSecret: ""
+    ##
+    CAcertificateSecret: ''
     ## LDAP CA cert filename
     ## eg. ca.pem
-    CAcertificateFilename: ""
+    ##
+    CAcertificateFilename: ''
 
-## Kubernetes Security Context
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-securityContext:
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: false
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the airflow.fullname template
+  # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
+
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicies:
+  ## Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: false
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -283,12 +692,13 @@ service:
   ## Specify the NodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort:
+  nodePort:
 
   ## Use loadBalancerIP to request a specific static IP,
   # loadBalancerIP:
 
   ## Service annotations done as key:value pairs
+  ##
   annotations:
 
 ## Configure the ingress resource that allows you to access the
@@ -297,9 +707,11 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: true
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
   ## Ingress annotations done as key:value pairs
@@ -308,6 +720,7 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations:
   #  kubernetes.io/ingress.class: nginx
 
@@ -318,16 +731,19 @@ ingress:
     - name: airflow.local
       path: /
       ## Set this to true in order to enable TLS on the ingress record
+      ##
       tls: false
 
       ## Optionally specify the TLS hosts for the ingress record
       ## Useful when the Ingress controller supports www-redirection
       ## If not specified, the above host name will be used
-      # tlsHosts:
+      ##
+      tlsHosts: []
       # - www.airflow.local
       # - airflow.local
 
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      ##
       tlsSecret: airflow.local-tls
 
   secrets:
@@ -344,6 +760,45 @@ ingress:
   #   key:
   #   certificate:
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ''
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ''
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -353,29 +808,6 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 180
-  periodSeconds: 20
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
 
 ##
 ## PostgreSQL chart configuration
@@ -388,22 +820,29 @@ postgresql:
   # postgresqlPassword:
   postgresqlDatabase: bitnami_airflow
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
-  existingSecret: ""
+  ##
+  existingSecret:
 
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
   ## Database host
+  ##
   host: localhost
   ## non-root Username for Airflow Database
+  ##
   user: bn_airflow
   ## Database password
-  password: ""
+  ##
+  password:
+  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ##
+  existingSecret:
   ## Database name
+  ##
   database: bitnami_airflow
   ## Database port number
+  ##
   port: 5432
-  ## Name of an existing secret resource containing the Postgres password in a 'postgresql-password' key
-  existingSecret: ""
 
 ##
 ## Redis chart configuration
@@ -412,9 +851,14 @@ externalDatabase:
 ##
 redis:
   enabled: true
-  # password: ""
+  ## Cluster settings
+  ##
+  cluster:
+    enabled: true
   ## In case of redis.enabled = true, allow the usage of existing secrets for redis
-  existingSecret: ""
+  ##
+  existingSecret:
+  # password: ""
 
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false
@@ -426,14 +870,15 @@ externalRedis:
   port: 6379
   ## Redis password
   ##
-  password: ""
+  password:
+  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
+  ##
+  existingSecret:
   ## Redis username
   ## Most Redis implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
-  # username: ""
-  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
-  existingSecret: ""
+  username:
 
 ## Prometheus Exporter / Metrics
 ##
@@ -443,27 +888,32 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r171
+    tag: 0.20180711.0-debian-10-r297
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
+    pullSecrets: []
     #   - myRegistryKeySecretName
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
 
   ## Metrics exporter labels and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
-  # tolerations: []
+  tolerations: []
 
   ## Metrics exporter pod Annotation and Labels
-  # podLabels: {}
+  ##
+  podLabels: {}
 
   podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9112"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9112'
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "grafana.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
     app.kubernetes.io/component: grafana
 spec:

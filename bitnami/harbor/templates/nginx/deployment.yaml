@@ -1,5 +1,5 @@
 {{- if not .Values.ingress.enabled }}
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
@@ -45,6 +45,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nginx.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.nginx.podAffinityPreset "component" "nginx" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.nginx.podAntiAffinityPreset "component" "nginx" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nginx.nodeAffinityPreset.type "key" .Values.nginx.nodeAffinityPreset.key "values" .Values.nginx.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nginx.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.nodeSelector "context" $) | nindent 8 }}
@@ -57,6 +62,9 @@ spec:
       {{- end }}
       {{- if .Values.nginx.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nginx.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: nginx

@@ -2,7 +2,7 @@
 
 [Kong](https://konghq.com/kong/) is a scalable, open source API layer (aka API gateway or API middleware) that runs in front of any RESTful API. Extra functionalities beyond the core platform are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
-## TL;DR;
+## TL;DR
 
 ```console
   helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -60,6 +60,8 @@ The following tables list the configurable parameters of the kong chart and thei
 |-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | `nameOverride`                                  | String to partially override kong.fullname template with a string (will prepend the release name)                                                     | `nil`                                                                                                       |
 | `fullnameOverride`                              | String to fully override kong.fullname template with a string                                                                                         | `nil`                                                                                                       |
+| `commonLabels`                                  | Labels to add to all deployed objects                                                                                                                 | `nil`                                                                                                       |
+| `commonAnnotations`                             | Annotations to add to all deployed objects                                                                                                            | `[]`                                                                                                        |
 | `clusterDomain`                                 | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                                                                             |
 
 ### Deployment Parameters
@@ -80,7 +82,13 @@ The following tables list the configurable parameters of the kong chart and thei
 | `nodeSelector`                                  | Node labels for pod assignment                                                                                                                        | `{}`                                                                                                        |
 | `tolerations`                                   | Tolerations for pod assignment                                                                                                                        | `[]`                                                                                                        |
 | `affinity`                                      | Affinity for pod assignment                                                                                                                           | `{}`                                                                                                        |
+| `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                   | `""`                                                                                                        |
+| `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                              | `soft`                                                                                                      |
+| `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                             | `""`                                                                                                        |
+| `nodeAffinityPreset.key`                        | Node label key to match Ignored if `affinity` is set.                                                                                                 | `""`                                                                                                        |
+| `nodeAffinityPreset.values`                     | Node label values to match. Ignored if `affinity` is set.                                                                                             | `[]`                                                                                                        |
 | `podAnnotations`                                | Pod annotations                                                                                                                                       | `{}`                                                                                                        |
+| `podLabels`                                     | Pod labels                                                                                                                                       | `{}`                                                                                                        |
 | `sidecars`                                      | Attach additional containers to the pod (evaluated as a template)                                                                                     | `nil`                                                                                                       |
 | `initContainers`                                | Add additional init containers to the pod (evaluated as a template)                                                                                   | `nil`                                                                                                       |
 | `pdb.enabled`                                   | Deploy a pdb object for the Kong pod                                                                                                                  | `false`                                                                                                     |
@@ -92,11 +100,16 @@ The following tables list the configurable parameters of the kong chart and thei
 | `autoscaling.metrics`                           | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                                        | `Check values.yaml`                                                                                         |
 | `extraVolumes`                                  | Array of extra volumes to be added to the Kong deployment deployment (evaluated as template). Requires setting `extraVolumeMounts`                    | `nil`                                                                                                       |
 | `kong.livenessProbe`                            | Liveness probe  (kong container)                                                                                                                      | `Check values.yaml`                                                                                         |
-| `kong.readinessProbe`                           | Readiness probe (kong contaienr)                                                                                                                      | `Check values.yaml`                                                                                         |
+| `kong.readinessProbe`                           | Readiness probe (kong container)                                                                                                                      | `Check values.yaml`                                                                                         |
+| `kong.lifecycleHooks`                           | Lifecycle hooks (kong container)                                                                                                                      | `Check deployment.yaml`                                                                                         |
+| `kong.customLivenessProbe`                      | Override default liveness probe (kong container)                                                                                                                      | `nil`                                                                                         |
+| `kong.customReadinessProbe`                     | Override default readiness probe (kong container)                                                                                                                     | `nil`                                                                                         |
 | `kong.resources`                                | Configure resource requests and limits (kong container)                                                                                               | `nil`                                                                                                       |
 | `kong.extraVolumeMounts`                        | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`.                            | `nil`                                                                                                       |
 | `ingressController.livenessProbe`               | Liveness probe (kong ingress controller container)                                                                                                    | `Check values.yaml`                                                                                         |
 | `ingressController.readinessProbe`              | Readiness probe (kong ingress controller container)                                                                                                   | `Check values.yaml`                                                                                         |
+| `ingressController.customLivenessProbe`         | Override default liveness probe (kong ingress controller container)                                                                                                                      | `nil`                                                                                         |
+| `ingressController.customReadinessProbe`        | Override default readiness probe (kong ingress controller container)                                                                                                                      | `nil`                                                                                         |
 | `ingressController.resources`                   | Configure resource requests and limits (kong ingress controller container)                                                                            | `nil`                                                                                                       |
 | `ingressController.extraVolumeMounts`           | Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`.         | `nil`                                                                                                       |
 | `migration.resources`                           | Configure resource requests and limits  (migration container)                                                                                         | `nil`                                                                                                       |
@@ -182,7 +195,7 @@ The following tables list the configurable parameters of the kong chart and thei
 
 | Parameter                                       | Description                                                                                                                                           | Default                                                                                                     |
 |-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| `postgresql.enabled`                            | Deploy the PostgreSQL sub-chart                                                                                                                       | `false`                                                                                                     |
+| `postgresql.enabled`                            | Deploy the PostgreSQL sub-chart                                                                                                                       | `true`                                                                                                      |
 | `postgresql.usePasswordFile`                    | Mount the PostgreSQL secret as a file                                                                                                                 | `no`                                                                                                        |
 | `postgresql.existingSecret`                     | Use an existing secret file with the PostgreSQL password (can be used with the bundled chart or with an existing installation)                        | `nil`                                                                                                       |
 | `postgresql.postgresqlDatabase`                 | Database name to be used by Kong                                                                                                                      | `kong`                                                                                                      |
@@ -279,7 +292,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 ```
 ### Database backend
 
-The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassandra. For each option, there are two extra possibilites: deploy a sub-chart with the database installation or use an existing one. The list below details the different options (replace the placeholders specified between _UNDERSCORES_):
+The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassandra. For each option, there are two extra possibilities: deploy a sub-chart with the database installation or use an existing one. The list below details the different options (replace the placeholders specified between _UNDERSCORES_):
 
 - Deploy the PostgreSQL sub-chart (default)
 
@@ -383,15 +396,25 @@ extraDeploy: |-
   - apiVersion: configuration.konghq.com/v1
     kind: KongPlugin
     metadata:
-      name: {{ include "kong.fullname" . }}-plugin-correlation
+      name: {{ include "common.names.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "kong.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
     config:
       header_name: my-request-id
     plugin: correlation-id
 ```
 
-## Upgrade
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
@@ -405,4 +428,75 @@ $ helm upgrade my-release bitnami/kong \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+### To 3.0.0
 
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+- If you want to upgrade to this version from a previous one installed with Helm v3, it should be done reusing the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `kong`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+##### Export secrets and required values to update
+
+```console
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+##### Delete statefulsets
+
+Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
+
+```
+$ kubectl delete statefulsets.apps kong-postgresql --cascade=false
+```
+
+##### Upgrade the chart release
+
+```console
+$ helm upgrade kong bitnami/kong \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+##### Force new statefulset to create a new pod for postgresql
+
+```console
+$ kubectl delete pod kong-postgresql-0
+```
+Finally, you should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 2.0.0
+
+PostgreSQL and Cassandra dependencies versions were bumped to new major versions, `9.x.x` and `6.x.x` respectively. Both of these include breaking changes and hence backwards compatibility is no longer guaranteed.
+
+In order to properly migrate your data to this new version:
+
+* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900).
+
+* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-600).

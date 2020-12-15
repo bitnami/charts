@@ -21,7 +21,7 @@ spec:
         - |
             n=0
             until [ "$n" -ge 5 ]; do
-              if curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/ns/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress; then
+              if curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/clusters/default/namespaces/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress; then
                 break
               fi
               sleep 10

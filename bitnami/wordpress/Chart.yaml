@@ -1,23 +1,34 @@
-apiVersion: v1
-name: wordpress
-version: 9.4.0
-appVersion: 5.4.2
-description: Web publishing platform for building blogs and websites.
-icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
-keywords:
-  - wordpress
-  - cms
-  - blog
-  - http
-  - web
-  - application
-  - php
-home: http://www.wordpress.com/
-sources:
-  - https://github.com/bitnami/bitnami-docker-wordpress
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
 annotations:
   category: CMS
+apiVersion: v2
+appVersion: 5.6.0
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Web publishing platform for building blogs and websites.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
+icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
+keywords:
+  - application
+  - blog
+  - cms
+  - http
+  - php
+  - web
+  - wordpress
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: wordpress
+sources:
+  - https://github.com/bitnami/bitnami-docker-wordpress
+  - http://www.wordpress.com/
+version: 10.1.1

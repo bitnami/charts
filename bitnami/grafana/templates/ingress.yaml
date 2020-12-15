@@ -3,6 +3,7 @@ apiVersion: {{ template "grafana.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "grafana.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
     app.kubernetes.io/component: grafana
   annotations:

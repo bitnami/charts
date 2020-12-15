@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.6-debian-10-r0
+  tag: 6.0.9-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -226,7 +226,7 @@ initJob:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 
@@ -280,6 +280,11 @@ initJob:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+
+  ## Priority class name
+  ##
+  priorityClassName:
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -308,7 +313,7 @@ updateJob:
   ##
   command:
 
-  ## Container args (using container default if ot set)
+  ## Container args (using container default if not set)
   ##
   args:
 
@@ -365,6 +370,11 @@ updateJob:
   ## Redis pod/node affinity/anti-affinity
   ##
   affinity: {}
+
+  ## Priority class name
+  ##
+  priorityClassName:
+
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -587,7 +597,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.9.0-debian-10-r11
+    tag: 1.13.1-debian-10-r27
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -648,7 +658,7 @@ metrics:
     #       redis_memory_used_bytes{service="{{ template "common.names.fullname" . }}-metrics"} * 100
     #       /
     #       redis_memory_max_bytes{service="{{ template "common.names.fullname" . }}-metrics"}
-    #       > 90 =< 100
+    #       > 90
     #    for: 2m
     #    labels:
     #      severity: error

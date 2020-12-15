@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "grafana.fullname" . }}-image-renderer
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer
   {{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.annotations }}

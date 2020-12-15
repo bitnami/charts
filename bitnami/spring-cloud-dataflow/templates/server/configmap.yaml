@@ -43,6 +43,9 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
@@ -77,6 +80,10 @@ data:
                         port: {{ $rsocketPort }}
             {{- end }}
           {{- end }}
+          {{- if .Values.server.configuration.grafanaInfo }}
+          grafana-info:
+            url: {{ .Values.server.configuration.grafanaInfo }}
+          {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -85,12 +92,7 @@ data:
             dialect: {{ $hibernateDialect }}
       {{- end }}
       datasource:
-        {{- $databaseScheme := include "scdf.database.scheme" .  }}
-        {{- $databaseHost := include "scdf.database.host" .  }}
-        {{- $databasePort := include "scdf.database.port" .  }}
-        {{- $databaseName := include "scdf.database.server.name" .  }}
-        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
+        url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
         {{ if .Values.externalDatabase.existingPasswordSecret }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r79
+  tag: 3.6.2-debian-10-r89
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -148,6 +148,14 @@ listenOnAllIPs: false
 ##
 allowAnonymousLogin: true
 
+autopurge:
+  ## Retains the snapRetainCount most recent snapshots and the corresponding transaction logs and deletes the rest
+  ##
+  snapRetainCount: 3
+  ## The time interval in hours for which the purge task has to be triggered. Set to a positive integer (1 and above) to enable the auto purging.
+  ##
+  purgeInterval: 0
+
 auth:
   ## Use existing secret (ignores previous password)
   ##
@@ -176,6 +184,8 @@ heapSize: 1024
 ##
 logLevel: ERROR
 
+## Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir.
+## This allows a dedicated log device to be used, and helps avoid competition between logging and snaphots.
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
@@ -189,11 +199,18 @@ dataLogDir: ""
 ##
 # config:
 
+## Namespace for ZooKeeper resources
+# namespaceOverride:
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
   type: ClusterIP
+  ## loadBalancerIP for the Zookeper Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
   port: 2181
   followerPort: 2888
   electionPort: 3888
@@ -418,4 +435,3 @@ metrics:
     #    for: 5m
     #    labels:
     #      severity: critical
-

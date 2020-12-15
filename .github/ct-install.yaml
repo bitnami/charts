@@ -11,4 +11,6 @@ excluded-charts:
   - mariadb-galera
   - discourse
   - ejbca
+  - wavefront
+  - harbor
 remote: origin

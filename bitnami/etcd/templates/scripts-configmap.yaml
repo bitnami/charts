@@ -2,7 +2,6 @@
 {{- $clientPort := int .Values.service.port }}
 {{- $peerPort := int .Values.service.peerPort }}
 {{- $etcdAuthOptions := include "etcd.authOptions" . }}
-{{- $etcdDataDir := include "etcd.dataDir" . }}
 {{- $etcdFullname := include "etcd.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
@@ -106,7 +105,7 @@ data:
 {{- end }}
     }
 
-    ## Check wether the member was succesfully removed from the cluster
+    ## Check whether the member was successfully removed from the cluster
     should_add_new_member() {
         return_value=0
         if (grep -E "^Member[[:space:]]+[a-z0-9]+\s+removed\s+from\s+cluster\s+[a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \

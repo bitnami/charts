@@ -14,10 +14,10 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- if .Values.commonLabels }}
-    {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "zookeeper.tplvalue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   selector:
@@ -34,5 +34,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ template "zookeeper.namespace" . }}
 {{- end }}

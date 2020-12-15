@@ -3,6 +3,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
+  {{- if .Values.aggregator.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+  {{- end }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
@@ -29,19 +32,27 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.aggregator.securityContext.runAsUser }}
-        fsGroup: {{ .Values.aggregator.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.aggregator.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAntiAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.aggregator.nodeAffinityPreset.type "key" .Values.aggregator.nodeAffinityPreset.key "values" .Values.aggregator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.aggregator.nodeSelector }}
       nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.tolerations }}
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.aggregator.initContainers }}
+      initContainers:
+      {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd
@@ -94,6 +105,9 @@ spec:
           {{- if .Values.aggregator.resources }}
           resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.aggregator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{ end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
@@ -108,7 +122,16 @@ spec:
             - name: certs
               mountPath: /opt/bitnami/fluentd/certs
             {{- end }}
+            {{- if .Values.aggregator.extraVolumeMounts }}
+            {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+        {{- if .Values.aggregator.sidecars }}
+        {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       volumes:
+        {{- if .Values.aggregator.extraVolumes }}
+          {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: certs
           secret:

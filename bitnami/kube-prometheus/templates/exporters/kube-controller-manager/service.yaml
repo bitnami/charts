@@ -1,0 +1,25 @@
+{{- if and .Values.kubeControllerManager.enabled .Values.kubeControllerManager.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+  namespace: {{ .Values.kubeControllerManager.namespace }}
+  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+spec:
+  clusterIP: None
+  ports:
+    - name: http-metrics
+      port: {{ .Values.kubeControllerManager.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.kubeControllerManager.service.targetPort }}
+{{- if .Values.kubeControllerManager.endpoints }}{{- else }}
+  selector:
+    {{- if .Values.kubeControllerManager.service.selector }}
+{{ toYaml .Values.kubeControllerManager.service.selector | indent 4 }}
+    {{- else}}
+    component: kube-controller-manager
+    {{- end}}
+{{- end }}
+  type: ClusterIP
+{{- end }}

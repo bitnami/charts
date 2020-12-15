@@ -3,6 +3,9 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "fluentd.fullname" . }}
+  {{- if .Values.forwarder.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
+  {{- end }}
   labels: {{- include "fluentd.labels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
@@ -25,11 +28,20 @@ spec:
         {{- if .Values.forwarder.podAnnotations }}
         {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.forwarder.rbac.pspEnabled }}
+        checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
+        {{- end }}
     spec:
 {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "fluentd.serviceAccountName" . }}
+      serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
+      priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
       affinity: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAntiAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.forwarder.nodeAffinityPreset.type "key" .Values.forwarder.nodeAffinityPreset.key "values" .Values.forwarder.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.forwarder.nodeSelector }}
       nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.nodeSelector "context" $) | nindent 8 }}
@@ -38,9 +50,10 @@ spec:
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.forwarder.securityContext.runAsUser }}
-        fsGroup: {{ .Values.forwarder.securityContext.fsGroup }}
+      securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.forwarder.initContainers }}
+      initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
         - name: fluentd
@@ -92,6 +105,9 @@ spec:
           {{- if .Values.forwarder.resources }}
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.forwarder.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{ end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
@@ -109,6 +125,9 @@ spec:
             {{- if .Values.forwarder.extraVolumeMounts }}
             {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.forwarder.sidecars }}
+        {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.forwarder.extraVolumes }}
             {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}

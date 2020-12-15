@@ -2,9 +2,9 @@
 ** Please be patient while the chart is being deployed **
 
 {{- if eq .Values.architecture "standalone" }}
-Memcached can be accessed on port 11211 on the following DNS name from within your cluster: {{ template "memcached.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+Memcached can be accessed on port 11211 on the following DNS name from within your cluster: {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 {{- else if eq .Values.architecture "high-availability" }}
-Memcached endpoints are exposed on the headless service named: {{ template "memcached.fullname" . }}.
+Memcached endpoints are exposed on the headless service named: {{ template "common.names.fullname" . }}.
 Please see https://github.com/memcached/memcached/wiki/ConfiguringClient to understand the Memcached model and need for client-based consistent hashing.
 You might also want to consider more advanced routing/replication approaches with mcrouter: https://github.com/facebook/mcrouter/wiki/Replicated-pools-setup
 {{- end }}
@@ -19,9 +19,10 @@ WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.t
 
 To access the Memcached Prometheus metrics from outside the cluster execute the following commands:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "memcached.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
     curl http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics
 
 {{- end }}
 
 {{- include "memcached.validateValues" . }}
+{{- include "memcached.checkRollingTags" . }}

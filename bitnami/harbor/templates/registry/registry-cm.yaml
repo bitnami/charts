@@ -153,8 +153,8 @@ data:
       addr: :{{ include "harbor.registry.containerPort" . }}
       {{- if .Values.internalTLS.enabled }}
       tls:
-        certificate: /bitnami/certs/tls.crt
-        key: /bitnami/certs/tls.key
+        certificate: /etc/harbor/ssl/registry/tls.crt
+        key: /etc/harbor/ssl/registry/tls.key
         minimumtls: tls1.2
       {{- end }}
       # set via environment variable
@@ -195,10 +195,11 @@ data:
     protocol: "https"
     port: 8443
     https_config:
-      cert: "/bitnami/certs/tls.crt"
-      key: "/bitnami/certs/tls.key"
+      cert: "/etc/harbor/ssl/registry/tls.crt"
+      key: "/etc/harbor/ssl/registry/tls.key"
     {{- else }}
     protocol: "http"
     port: 8080
     {{- end }}
     log_level: {{ .Values.logLevel }}
+    registry_config: "/etc/registry/config.yml"

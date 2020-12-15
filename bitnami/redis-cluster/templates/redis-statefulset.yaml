@@ -13,9 +13,6 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  {{- if .Values.updateStrategy }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- end }}
   replicas: {{ .Values.cluster.nodes }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: "Parallel"
@@ -160,8 +157,9 @@ spec:
               value: {{ .Values.redis.port | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.redis.extraEnvVarsCM .Values.redis.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}
             - configMapRef:
@@ -171,6 +169,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redis.port }}
@@ -249,7 +248,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
-              value: {{ printf "127.0.0.1:%g" .Values.redis.port | quote }}
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.port | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -266,7 +265,10 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis-cluster.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
+          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
@@ -277,6 +279,7 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+          {{- end }}
           ports:
             - name: http-metrics
               containerPort: 9121
@@ -293,7 +296,7 @@ spec:
         - name: volume-permissions
           image: {{ include "redis-cluster.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
             runAsUser: 0
           resources:
@@ -373,6 +376,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{- include "redis-cluster.storageClass" . | nindent 8 }}
+        {{- if or .Values.persistence.matchLabels .Values.persistence.matchExpressions }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:
@@ -382,6 +386,7 @@ spec:
           matchExpressions:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+        {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}

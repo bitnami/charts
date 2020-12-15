@@ -39,26 +39,7 @@ spec:
           imagePullPolicy: {{ .Values.assetsvc.image.pullPolicy | quote }}
           command:
             - /assetsvc
-          {{- if .Values.mongodb.enabled }}
           args:
-            - --database-type=mongodb
-            - --database-user=root
-            - --database-name=charts
-            - --database-url={{ template "kubeapps.mongodb.fullname" . }}
-          env:
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.mongodb.existingSecret }}
-                  key: mongodb-root-password
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          {{- end }}
-          {{- if .Values.postgresql.enabled }}
-          args:
-            - --database-type=postgresql
             - --database-user=postgres
             - --database-name=assets
             - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:5432
@@ -72,7 +53,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.assetsvc.service.port }}

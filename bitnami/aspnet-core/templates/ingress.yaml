@@ -34,7 +34,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ include "aspnet-core.fullname" . }}
+              serviceName: {{ include "aspnet-core.fullname" $ }}
               servicePort: http
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls .Values.ingress.hosts }}

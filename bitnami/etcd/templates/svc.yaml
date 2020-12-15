@@ -11,8 +11,15 @@ spec:
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   ports:
-    - name: client
+    {{- if .Values.auth.client.clientPortNameOverride }}
+    - name: {{ .Values.service.clientPortNameOverride }}
+    {{- else }}
+    - name: "client"
+    {{- end }}
       port: {{ .Values.service.port  }}
       targetPort: client
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientPort)) }}
@@ -20,7 +27,11 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: peer
+    {{- if .Values.auth.client.peerPortNameOverride }}
+    - name: {{ .Values.service.peerPortNameOverride }}
+    {{- else }}
+    - name: "peer"
+    {{- end }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.peerPort)) }}

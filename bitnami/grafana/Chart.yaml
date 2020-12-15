@@ -1,20 +1,27 @@
-apiVersion: v1
-name: grafana
-version: 3.3.1
-appVersion: 7.1.1
+annotations:
+  category: Analytics
+apiVersion: v2
+appVersion: 7.3.5
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/grafana
+icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
   - analytics
   - monitoring
   - metrics
   - logs
-home: https://grafana.com/
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: grafana
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
-annotations:
-  category: Analytics
+  - https://grafana.com/
+version: 4.2.3

@@ -1,32 +1,41 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "spark.fullname" . }}-worker
-  labels: {{- include "spark.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-worker
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
 spec:
-  serviceName: {{ template "spark.fullname" . }}-headless
+  serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.worker.replicaCount }}
   selector:
-    matchLabels: {{- include "spark.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
   template:
     metadata:
-      labels: {{- include "spark.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: worker
+        {{- if .Values.worker.extraPodLabels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraPodLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.worker.podAnnotations .Values.metrics.enabled }}
+      annotations:
       {{- if .Values.worker.podAnnotations }}
-      annotations: {{- include "spark.tplValue" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}        
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.workerAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
     spec:
 {{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.affinity }}
-      affinity: {{- include "spark.tplValue" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.nodeSelector }}
-      nodeSelector: {{- include "spark.tplValue" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.tolerations }}
-      tolerations: {{- include "spark.tplValue" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.securityContext.enabled }}
       securityContext:
@@ -65,6 +74,10 @@ spec:
               value: {{ ternary "1" "0" .Values.image.debug | quote }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.worker.daemonMemoryLimit | quote }}
+            {{- if .Values.metrics.enabled }}
+            - name: SPARK_METRICS_ENABLED
+              value: "true"
+            {{- end}}
             ## There are some environment variables whose existence needs
             ## to be checked because Spark checks if they are null instead of an
             ## empty string
@@ -101,11 +114,7 @@ spec:
             - name: SPARK_RPC_AUTHENTICATION_SECRET
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.security.passwordsSecretName }}
-                  name: {{ .Values.security.passwordsSecretName }}
-                  {{- else }}
-                  name: {{ include "spark.fullname" . }}-secret
-                  {{- end }}
+                  name: {{ template "spark.passwordsSecretName" . }}
                   key: rpc-authentication-secret
             {{- end }}
             {{- if .Values.security.rpc.encryptionEnabled }}
@@ -122,17 +131,17 @@ spec:
             - name: SPARK_SSL_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" . }}
+                  name: {{ template "spark.passwordsSecretName" . }}
                   key: ssl-key-password
             - name: SPARK_SSL_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" . }}
+                  name: {{ template "spark.passwordsSecretName" . }}
                   key: ssl-keystore-password
             - name: SPARK_SSL_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "spark.get.passwordSecretName" . }}
+                  name: {{ template "spark.passwordsSecretName" . }}
                   key: ssl-truststore-password
             - name: SPARK_SSL_NEED_CLIENT_AUTH
               value: {{ .Values.security.ssl.needClientAuth | quote }}

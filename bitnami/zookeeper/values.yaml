@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.1-debian-10-r79
+  tag: 3.6.2-debian-10-r89
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -198,11 +198,18 @@ dataLogDir: ""
 ##
 # config:
 
+## Namespace for ZooKeeper resources
+# namespaceOverride:
+
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
   type: ClusterIP
+  ## loadBalancerIP for the Zookeper Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
   port: 2181
   followerPort: 2888
   electionPort: 3888

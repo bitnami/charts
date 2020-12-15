@@ -1,9 +1,22 @@
-apiVersion: v1
-name: mediawiki
-version: 10.0.2
-appVersion: 1.34.2
+annotations:
+  category: Wiki
+apiVersion: v2
+appVersion: 1.35.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - mediawiki-database
+    version: 9.x.x
 description: Extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database.
-home: http://www.mediawiki.org/
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/mediawiki
 icon: https://bitnami.com/assets/stacks/mediawiki/img/mediawiki-stack-220x234.png
 keywords:
   - mediawiki
@@ -12,11 +25,11 @@ keywords:
   - web
   - application
   - php
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Wiki
+  - http://www.mediawiki.org/
+version: 12.0.1

@@ -192,6 +192,17 @@ apache: htdocs-git-branch
 {{- end -}}
 
 {{/*
+Validate values of Apache - Incorrect extra volume settings
+*/}}
+{{- define "apache.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+apache: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper git image name
 */}}
 {{- define "git.image" -}}
@@ -248,3 +259,5 @@ Usage:
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
 {{- end -}}
+
+

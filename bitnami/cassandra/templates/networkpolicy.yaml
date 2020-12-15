@@ -2,11 +2,18 @@
 kind: NetworkPolicy
 apiVersion: {{ include "networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "cassandra.fullname" . }}
-  labels: {{- include "cassandra.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
-    matchLabels: {{- include "cassandra.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
     # CQL and Thrift ports
@@ -17,10 +24,10 @@ spec:
       {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:
             matchLabels:
-              {{ include "cassandra.fullname" . }}-client: "true"
+              {{ include "common.names.fullname" . }}-client: "true"
       {{- end }}
         - podSelector:
-            matchLabels: {{- include "cassandra.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
     # Internal ports
     - ports:
         - port: intra
@@ -28,7 +35,7 @@ spec:
         - port: jmx
       from:
         - podSelector:
-            matchLabels: {{- include "cassandra.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:

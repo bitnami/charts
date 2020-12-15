@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "kibana.fullname" . }}-saved-objects
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-saved-objects
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
   import-saved-objects.sh: |
     #!/bin/bash

@@ -3,7 +3,7 @@
 
 [Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 # Testing configuration
@@ -36,7 +36,7 @@ The main features of each chart are the following:
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -204,6 +204,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `initJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `initJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `initJob.affinity`                                      | Affinity settings for                      | {}                |
+| `initJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster update job parameters
 | Parameter                                       | Description                                                    | Default           |
@@ -224,6 +225,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `updateJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `updateJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `updateJob.affinity`                                      | Affinity settings for                      | {}                |
+| `updateJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster management parameters
 
@@ -349,7 +351,7 @@ Providing the values above, the cluster will have 3 masters and, each master, wi
 
 There is a job that will be executed using a `post-upgrade` hook that will allow you to add a new node. To use it, you should provide some parameters to the upgrade:
 
-- Pass as `password` the password used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
+- Pass as `password` the password used in the installation time. If you did not provide a password follow the instructions from the NOTES.txt to get the generated password.
 - Set the desired number of nodes at `cluster.nodes`.
 - Set the number of current nodes at `cluster.update.currentNumberOfNodes`.
 - Set to true `cluster.update.addNodes`.
@@ -440,8 +442,6 @@ tls.certKeyFilename="cert.key"
 tls.certCAFilename="ca.pem"
 ```
 
-> **Note TLS and Prometheus Metrics**: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod may not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.
-
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as Redis (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
@@ -513,7 +513,7 @@ Note that this will not disable transparent huge tables.
 
 ## Helm Upgrade
 
- By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
 ## Persistence
 
@@ -545,12 +545,39 @@ networkPolicy:
     redis-client: true
 ```
 
-## Notable changes
+## Troubleshooting
 
-### 3.0.0
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 4.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 3.0.0
 
 This version of the chart adapts the chart to the most recent Bitnami best practices and standards. Most of the Redis parameters were moved to the `redis` values section (such as extraEnvVars, sidecars, and so on). No major issues are expected during the upgrade.
 
-### 2.0.0
+### To 2.0.0
 
 The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.

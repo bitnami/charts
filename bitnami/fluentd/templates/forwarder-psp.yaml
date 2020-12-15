@@ -1,0 +1,63 @@
+{{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "fluentd.fullname" . }}-forwarder
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: forwarder
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  allowedHostPaths:
+    - pathPrefix: '/var/lib/docker/containers'
+      readOnly: true
+    - pathPrefix: '/var/log'
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'hostPath'
+    - 'persistentVolumeClaim'
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    {{- if eq (int .Values.forwarder.securityContext.runAsUser) 0 }}
+    rule: 'RunAsAny'
+    {{- else }}
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.forwarder.securityContext.runAsUser }}
+        max: {{ .Values.forwarder.securityContext.runAsUser }}
+    {{- end }}
+  runAsGroup:
+    {{- if eq (int .Values.forwarder.securityContext.runAsGroup) 0 }}
+    rule: 'RunAsAny'
+    {{- else }}
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.forwarder.securityContext.runAsGroup }}
+        max: {{ .Values.forwarder.securityContext.runAsGroup }}
+    {{- end }}
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  fsGroup:
+    {{- if eq (int .Values.forwarder.securityContext.fsGroup) 0 }}
+    rule: 'RunAsAny'
+    {{- else }}
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.forwarder.securityContext.fsGroup }}
+        max: {{ .Values.forwarder.securityContext.fsGroup }}
+    {{- end }}
+  readOnlyRootFilesystem: {{ .Values.forwarder.containerSecurityContext.readOnlyRootFilesystem | default false }}
+  {{- end }}

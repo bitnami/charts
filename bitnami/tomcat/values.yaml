@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 9.0.37-debian-10-r0
+  tag: 9.0.41-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,6 +27,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Number of Tomcat replicas
+##
+replicaCount: 1
+
 ## String to partially override tomcat.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -34,6 +38,11 @@ image:
 ## String to fully override tomcat.fullname template
 ##
 # fullnameOverride:
+
+## Optionally specify a command to pass to the image
+##
+# command: []
+
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -232,3 +241,35 @@ ingress:
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       ##
       tlsSecret: tomcat.local-tls
+
+## Additional environment variables to set
+## E.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvVars: []
+
+## Liveness and Readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+##
+livenessProbe:
+  enabled: true
+  path: "/"
+  port: http
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  failureThreshold: 6
+  timeoutSeconds: 5
+readinessProbe:
+  enabled: true
+  path: "/"
+  port: http
+  initialDelaySeconds: 30
+  periodSeconds: 51
+  failureThreshold: 3
+  timeoutSeconds: 3
+
+## Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}

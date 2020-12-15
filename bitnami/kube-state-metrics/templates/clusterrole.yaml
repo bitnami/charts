@@ -2,8 +2,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "kube-state-metrics.fullname" . }}
-  labels: {{- include "kube-state-metrics.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   {{- if .Values.collectors.certificatesigningrequests }}
   - apiGroups: ["certificates.k8s.io"]

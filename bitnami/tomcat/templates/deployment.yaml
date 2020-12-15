@@ -11,6 +11,7 @@ spec:
     {{- end }}
   selector:
     matchLabels: {{- include "tomcat.matchLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels: {{- include "tomcat.labels" . | nindent 8 }}
@@ -56,6 +57,9 @@ spec:
         - name: tomcat
           image: {{ template "tomcat.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "tomcat.tplValue" ( dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: TOMCAT_USERNAME
               value: {{ .Values.tomcatUsername | quote }}
@@ -66,23 +70,32 @@ spec:
                   key: tomcat-password
             - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
               value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+          {{-  if .Values.extraEnvVars }}
+            {{- include "tomcat.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 120
-            timeoutSeconds: 5
-            failureThreshold: 6
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.livenessProbe.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 30
-            timeoutSeconds: 3
-            periodSeconds: 51
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.readinessProbe.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}

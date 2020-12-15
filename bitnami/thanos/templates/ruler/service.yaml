@@ -41,6 +41,11 @@ spec:
       {{- else if eq .Values.ruler.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector:
+    {{- if .Values.ruler.service.labelSelectorsOverride }}
+    {{- include "thanos.tplValue" (dict "value" .Values.ruler.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
+    {{- end }}
 {{- end }}

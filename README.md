@@ -14,6 +14,10 @@ $ helm install my-release bitnami/<chart>
 
 ## Before you begin
 
+### Prerequisites
+- Kubernetes 1.12+
+- Helm 3.0-beta3+
+
 ### Setup a Kubernetes Cluster
 
 The quickest way to setup a Kubernetes cluster to install Bitnami Charts is following the "Bitnami Get Started" guides for the different services:

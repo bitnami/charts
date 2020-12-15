@@ -3,12 +3,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app: "{{ template "nats.name" . }}"
-    chart: "{{ template "nats.chart" . }}"
-    heritage: {{ .Release.Service | quote }}
-    release: {{ .Release.Name | quote }}
-  name: {{ template "nats.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{ .Values.natsFilename }}.conf: |-
     listen: 0.0.0.0:{{ .Values.client.service.port }}
@@ -35,7 +38,7 @@ data:
     # Pid file
     pid_file: "/tmp/{{ .Values.natsFilename }}.pid"
 
-    # Some system overides
+    # Some system overrides
     {{- if .Values.maxConnections }}
     max_connections: {{ int .Values.maxConnections }}
     {{- end }}
@@ -73,12 +76,12 @@ data:
       routes = [
         {{- if .Values.clusterAuth.enabled }}
         {{- if .Values.clusterAuth.user }}
-        nats://{{ .Values.clusterAuth.user }}:{{ $clusterAuthPwd }}@{{ template "nats.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
+        nats://{{ .Values.clusterAuth.user }}:{{ $clusterAuthPwd }}@{{ template "common.names.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
         {{- else if .Values.clusterAuth.token }}
-        nats://{{ .Values.clusterAuth.token }}@{{ template "nats.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
+        nats://{{ .Values.clusterAuth.token }}@{{ template "common.names.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
         {{- end }}
         {{- else }}
-        nats://{{ template "nats.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
+        nats://{{ template "common.names.fullname" . }}-cluster:{{ .Values.cluster.service.port }}
         {{- end }}
       ]
 

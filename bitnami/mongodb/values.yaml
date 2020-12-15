@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.2.8-debian-10-r39
+  tag: 4.4.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -82,12 +82,33 @@ auth:
   ## Key used for replica set authentication
   ## Ignored when mongodb.architecture=standalone
   ##
-  # replicaSetKey: key
+  replicaSetKey: ""
 
   ## Existing secret with MongoDB credentials
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   # existingSecret: name-of-existing-secret
+
+tls:
+  ## Enable or disable MongoDB TLS Support
+  enabled: false
+
+  ## Existing secret with MongoDB TLS certificates
+  ## NOTE: When it's set it will disable certificate creation
+  ##
+  # existingSecret: name-of-existing-secret
+
+  ## Add Custom CA certificate
+  # caCert: base64 encoded ca certificate
+  # caKey: base64 encoded private key
+  ##
+  ## Bitnami Nginx image
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.19.4-debian-10-r19
+    pullPolicy: IfNotPresent
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
@@ -119,7 +140,7 @@ disableSystemLog: false
 ## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
-## configuration:
+## configuration: |-
 ##   # where and how to store data.
 ##   storage:
 ##     dbPath: /bitnami/mongodb/data/db
@@ -228,8 +249,42 @@ strategyType: RollingUpdate
 ##
 podManagementPolicy: OrderedReady
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -243,7 +298,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## Lables for MongoDB pods. Evaluated as a template.
+## Labels for MongoDB pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
@@ -270,14 +325,15 @@ podSecurityContext:
   ## - name: net.core.somaxconn
   ##   value: "10000"
   ##
-  sysctls: {}
+  sysctls: []
 
-## MongoDB containers' Security Context (only main container).
+## MongoDB containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 
 ## MongoDB containers' resource requests and limits.
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -404,6 +460,11 @@ persistence:
   ## and one PV for multiple services.
   ##
   subPath: ""
+  ## Fine tuning for volumeClaimTemplates
+  volumeClaimTemplates:
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+    selector:
 
 ## Service parameters
 ##
@@ -460,7 +521,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.6-debian-10-r5
+      tag: 1.18.12-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -487,7 +548,7 @@ externalAccess:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
-  ## Parameters to configure K8s service(s) used to externally access Kafka brokers
+  ## Parameters to configure K8s service(s) used to externally access MongoDB
   ## A new service per broker will be created
   ##
   service:
@@ -497,7 +558,7 @@ externalAccess:
     ## Port used when service type is LoadBalancer
     ##
     port: 27017
-    ## Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
+    ## Array of load balancer IPs for each MongoDB node. Length must be the same as replicaCount
     ## Example:
     ## loadBalancerIPs:
     ##   - X.X.X.X
@@ -511,14 +572,14 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## Array of node ports used for each Kafka broker. Length must be the same as replicaCount
+    ## Array of node ports used for each MongoDB nodes. Length must be the same as replicaCount
     ## Example:
     ## nodePorts:
     ##   - 30001
     ##   - 30002
     ##
     nodePorts: []
-    ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
+    ## When service type is NodePort, you can specify the domain used for MongoDB advertised hostnames.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     # domain: mydomain.com
@@ -580,22 +641,56 @@ arbiter:
   ##
   labels: {}
 
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: arbiter.podAffinityPreset, arbiter.podAntiAffinityPreset, and arbiter.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
-  ## Lables for MongoDB Arbiter pods. Evaluated as a template.
+  ## Labels for MongoDB Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
@@ -622,7 +717,7 @@ arbiter:
     ## - name: net.core.somaxconn
     ##   value: "10000"
     ##
-    sysctls: {}
+    sysctls: []
 
   ## MongoDB Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -737,12 +832,12 @@ serviceAccount:
 ##
 rbac:
   ## Specifies whether RBAC rules should be created
-  ## binding Kafka ServiceAccount to a role
-  ## that allows Kafka pods querying the K8s API
+  ## binding MongoDB ServiceAccount to a role
+  ## that allows MongoDB pods querying the K8s API
   ##
   create: false
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
@@ -781,6 +876,17 @@ volumePermissions:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false and shmVolume.chmod.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0
 
 ## Prometheus Exporter / Metrics
 ##
@@ -792,7 +898,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.0-debian-10-r88
+    tag: 0.11.2-debian-10-r44
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -805,6 +911,11 @@ metrics:
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
   extraFlags: ""
+
+  ## String with additional URI options to the metrics exporter
+  ## ref: https://docs.mongodb.com/manual/reference/connection-string
+  ##
+  extraUri: ""
 
   ## Metrics exporter container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -884,8 +995,20 @@ metrics:
     ## Specify the namespace where Prometheus Operator is running
     ##
     # namespace: monitoring
+
     ## Define individual alerting rules as required
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    ##
+    ## This is an example of a rule, you should add the below code block under the "rules" param, removing the brackets
+    ## - name: example
+    ##   rules:
+    ##   - alert: HighRequestLatency
+    ##     expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    ##     for: 10m
+    ##     labels:
+    ##       severity: page
+    ##     annotations:
+    ##       summary: High request latency
     ##
     rules: {}

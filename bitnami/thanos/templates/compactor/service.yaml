@@ -28,6 +28,11 @@ spec:
       {{- else if eq .Values.compactor.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector:
+    {{- if .Values.compactor.service.labelSelectorsOverride }}
+    {{- include "thanos.tplValue" (dict "value" .Values.compactor.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "thanos.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: compactor
+    {{- end }}
 {{- end }}

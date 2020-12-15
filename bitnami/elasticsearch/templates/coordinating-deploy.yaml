@@ -32,6 +32,11 @@ spec:
 {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.coordinating.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAntiAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.coordinating.nodeAffinityPreset.type "key" .Values.coordinating.nodeAffinityPreset.key "values" .Values.coordinating.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.coordinating.nodeSelector }}
       nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.nodeSelector "context" $) | nindent 8 }}
@@ -54,6 +59,9 @@ spec:
             - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: initcontainer-script
               mountPath: /scripts/sysctl.sh

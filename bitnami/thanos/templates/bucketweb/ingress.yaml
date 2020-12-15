@@ -33,7 +33,7 @@ spec:
     {{- end }}
   {{- if or .Values.bucketweb.ingress.tls .Values.bucketweb.ingress.extraTls .Values.bucketweb.ingress.hosts }}
   tls:
-    {{- if .Values.bucketweb.ingress.tls }}
+    {{- if or .Values.bucketweb.ingress.secrets .Values.bucketweb.ingress.tls }}
     - hosts:
         - {{ .Values.bucketweb.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.bucketweb.ingress.hostname }}

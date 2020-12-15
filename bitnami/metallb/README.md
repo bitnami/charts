@@ -2,7 +2,7 @@
 
 [MetalLB](https://metallb.universe.tf/faq/) is an open source, rock solid LoadBalancer. It handles the `ServiceType: Loadbalancer`.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - Virtual IPs for Layer 2 or Route Reflector for BGP setup.
 
 ## Installing the Chart
@@ -56,7 +56,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `controller.image.registry`                           | MetalLB Controller image registry                                                                    | `docker.io`                                             |
 | `controller.image.repository`                         | MetalLB Controller image name                                                                        | `bitnami/metallb-controller`                            |
 | `controller.image.tag`                                | MetalLB Controller image tag                                                                         | `{TAG_NAME}`                                            |
-| `controller.pullPolicy`                               | MetalLB Controller image pull policy                                                                 | `IfNotPresent`                                          |
+| `controller.image.pullPolicy`                         | MetalLB Controller image pull policy                                                                 | `IfNotPresent`                                          |
 | `controller.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `controller.resources.limits`                         | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
 | `controller.resources.requests`                       | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
@@ -77,7 +77,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `speaker.image.registry`                              | MetalLB Speaker image registry                                                                       | `docker.io`                                             |
 | `speaker.image.repository`                            | MetalLB Speaker image name                                                                           | `bitnami/metallb-speaker`                               |
 | `speaker.image.tag`                                   | MetalLB Speaker image tag                                                                            | `{TAG_NAME}`                                            |
-| `speaker.pullPolicy`                                  | MetalLB Speaker image pull policy                                                                    | `IfNotPresent`                                          |
+| `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                    | `IfNotPresent`                                          |
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `speaker.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
 | `speaker.resources.requests`                          | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
@@ -108,10 +108,11 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `livenessProbe.failureThreshold`                      | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `6`                                                     |
 | `existingConfigMap`                                   | Specify an existing configMapName to use. (this is mutually exclusive with the configInline option)  | `nil`                                                   |
 | `configInline`                                        | Specify the config for metallb as a new configMap inline.                                            | `{}` (does not create configMap)                        |
-| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessarry Rolebindings.                 | `true`                                                  |
+| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessary Rolebindings.                 | `true`                                                  |
+| `prometheus.enabled`                                  | Enable for Prometheus alertmanager basic alerts.                                                     | `false`                                                 |
 | `prometheus.serviceMonitor.enabled`                   | Specify if a servicemonitor will be deployed for prometheus-operator.                                | `true`                                                  |
-| `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                              | `metallb`                                               |
-| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
+| `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                              | `app.kubernetes.io/name"`                               |
+| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use default prometheus scrapeIntervall                   | `""`                                                    |
 | `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
 | `prometheus.serviceMonitor.prometheusRule.enabled`    | Enable prometheus alertmanager basic alerts.                                                         | `true`                                                  |
@@ -158,3 +159,30 @@ configInline:
     addresses:
     - 10.27.50.30-10.27.50.35
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/

@@ -8,7 +8,12 @@ data:
   vhost.conf: |-
     server {
       listen 8080;
+  {{- if .Values.frontend.largeClientHeaderBuffers }}
+      large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
+  {{- end }}
+  {{- if .Values.enableIPv6 }}
       listen [::]:8080;
+  {{- end}}
       server_name _;
 
       gzip on;
@@ -37,10 +42,13 @@ data:
     }
   config.json: |-
     {
-      "namespace": "{{ .Release.Namespace }}",
-      "appVersion": "{{ .Chart.AppVersion }}",
+      "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
+      "kubeappsNamespace": "{{ .Release.Namespace }}",
+      "appVersion": "v{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
-      "featureFlags": {{ .Values.featureFlags | toJson }}
+      "authProxySkipLoginPage": {{ .Values.authProxy.skipKubeappsLoginPage }},
+      "featureFlags": {{ .Values.featureFlags | toJson }},
+      "clusters": {{ template "kubeapps.clusterNames" . }}
     }

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/suitecrm
-  tag: 7.11.15-debian-10-r36
+  tag: 7.11.18-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,6 +35,8 @@ image:
 ##
 # fullnameOverride:
 
+replicaCount: 1
+
 ## SuiteCRM host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
@@ -43,7 +45,7 @@ image:
 ## SuiteCRM validate user IP
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-suitecrmValidateUserIP: "no"
+suitecrmValidateUserIP: false
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
@@ -61,19 +63,19 @@ suitecrmUsername: user
 ##
 suitecrmEmail: user@example.com
 
-## Lastname
-## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
-##
-suitecrmLastName: Name
-
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
-allowEmptyPassword: "yes"
+allowEmptyPassword: "no"
 
 ##
 ## External database configuration
 ##
 externalDatabase:
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
   host:
 
@@ -98,39 +100,41 @@ externalDatabase:
 # suitecrmSmtpUser:
 # suitecrmSmtpPassword:
 # suitecrmSmtpProtocol:
+# suitecrmNotifyAddress: user@example.com
+# suitecrmNotifyName: UserName
 
-##
 ## MariaDB chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_suitecrm
-    user: bn_suitecrm
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    # password:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_suitecrm
+    username: bn_suitecrm
+    password: ""
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -140,16 +144,23 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
 service:
   type: LoadBalancer
   # HTTP Port
-  port: 80
+  port: 8080
   # HTTPS Port
-  httpsPort: 443
+  httpsPort: 8443
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -192,9 +203,9 @@ persistence:
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources: {}
-  # requests:
-  #   memory: 512Mi
-  #   cpu: 300m
+# requests:
+#   memory: 512Mi
+#   cpu: 300m
 
 ## Configure the ingress resource that allows you to access the
 ## SuiteCRM installation. Set up the URL
@@ -219,21 +230,21 @@ ingress:
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
-  - name: suitecrm.local
-    path: /
+    - name: suitecrm.local
+      path: /
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
+      ## Set this to true in order to enable TLS on the ingress record
+      tls: false
 
-    ## Optionally specify the TLS hosts for the ingress record
-    ## Useful when the Ingress controller supports www-redirection
-    ## If not specified, the above host name will be used
-    # tlsHosts:
-    # - www.suitecrm.local
-    # - suitecrm.local
+      ## Optionally specify the TLS hosts for the ingress record
+      ## Useful when the Ingress controller supports www-redirection
+      ## If not specified, the above host name will be used
+      # tlsHosts:
+      # - www.suitecrm.local
+      # - suitecrm.local
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: suitecrm.local-tls
+      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+      tlsSecret: suitecrm.local-tls
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -255,10 +266,143 @@ ingress:
 ##
 podAnnotations: {}
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ''
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ''
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+## SecurityContext configuration for the pods
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## SecurityContext configuration for the container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+
+## Configure extra options for Redis liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    ##   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
 
 ## Prometheus Exporter / Metrics
 ##
@@ -267,7 +411,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r108
+    tag: 0.8.0-debian-10-r236
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -275,11 +419,13 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-     ## Metrics exporter pod Annotation and Labels
+
+  ## Metrics exporter pod Annotation and Labels
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}

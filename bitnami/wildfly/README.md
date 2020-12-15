@@ -2,7 +2,7 @@
 
 [Wildfly](http://wildfly.org/) formerly known as JBoss AS, or simply JBoss, is an application server authored by JBoss, now developed by Red Hat. WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -90,6 +90,14 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
 | `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
 | `service.annotations`                | Service annotations                                                                                                                                       | `{}`                                                    |
+| `extraVolumes`                       | Extra Volumes                                                                                                                                             | `[]`                                                    |
+| `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |
+| `extraEnvVars`                       | Extra Environment Variables                                                                                                                               | `nil`                                                   |
+| `extraEnvVarsCM`                     | Extra Environment Variables ConfigMap                                                                                                                     | `nil`                                                   |
+| `extraEnvVarsSecret`                 | Extra Environment Variables Secret                                                                                                                        | `nil`                                                   |
+| `sidecars`                           | Sidecar images to add to the pod. Evaluated as a template.                                                                                                | `[]`                                                    |
+| `livenessProbe`                      | The Kubernetes livenssProbe. Evaluated as a template.                                                                                                     | `{"httpGet": {"path": "/", "port": "http"}, "initialDelaySeconds": 120, "timeoutSeconds": 5, "failureThreshold": 6}` |        
+| `readinessProbe`                     | The Kubernetes readinessProbe. Evaluated as a template.                                                                                                   | `{"httpGet": {"path": "/", "port": "http"}, "initialDelaySeconds": 30, "timeoutSeconds": 3, "periodSeconds": 5}`     |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -119,6 +127,19 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Sidecars
+If you have a need for additional containers to run within the same pod as  Wildfly (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+```
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+      containerPort: 1234
+```
+
 ## Persistence
 
 The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
@@ -135,7 +156,32 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
+
+### To 6.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 2.1.0
 
@@ -148,7 +194,7 @@ $ helm upgrade my-release bitnami/wildfly
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=fase,image.tag=XXX
+$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 1.0.0

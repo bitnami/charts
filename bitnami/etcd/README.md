@@ -2,7 +2,7 @@
 
 [etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -83,24 +83,34 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `auth.client.useAutoTLS`                        | Switch to automatically create the TLS certificates                                                                                                       | `false`                                                     |
 | `auth.client.enableAuthentication`              | Switch to enable host authentication using TLS certificates. Requires existing secret.                                                                    | `secret`                                                    |
 | `auth.client.existingSecret`                    | Name of the existing secret containing cert files for client communication.                                                                               | `nil`                                                       |
+| `auth.client.certFilename`                      | Name of the file containing the client certificate.                                                                                                       | `cert.pem`                                                  |
+| `auth.client.certKeyFilename`                   | Name of the file containing the client certificate private key.                                                                                           | `key.pem`                                                   |
+| `auth.client.caFilename`                        | Name of the file containing the client CA certificate. If not specified and `enableAuthentication` or `rbac.enabled` is true, the default is is `ca.crt`. | `""`                                                        |
 | `auth.peer.secureTransport`                     | Switch to encrypt peer communication using TLS certificates                                                                                               | `false`                                                     |
 | `auth.peer.useAutoTLS`                          | Switch to automatically create the TLS certificates                                                                                                       | `false`                                                     |
 | `auth.peer.enableAuthentication`                | Switch to enable host authentication using TLS certificates. Requires existing secret.                                                                    | `false`                                                     |
 | `auth.peer.existingSecret`                      | Name of the existing secret containing cert files for peer communication.                                                                                 | `nil`                                                       |
+| `auth.peer.certFilename`                        | Name of the file containing the peer certificate.                                                                                                         | `cert.pem`                                                  |
+| `auth.peer.certKeyFilename`                     | Name of the file containing the peer certificate private key.                                                                                             | `key.pem`                                                   |
+| `auth.peer.caFilename`                          | Name of the file containing the peer CA certificate. If not specified and `enableAuthentication` or `rbac.enabled` is true, the default is is `ca.crt`.   | `""`                                                        |
 | `securityContext.enabled`                       | Enable security context                                                                                                                                   | `true`                                                      |
 | `securityContext.fsGroup`                       | Group ID for the container                                                                                                                                | `1001`                                                      |
 | `securityContext.runAsUser`                     | User ID for the container                                                                                                                                 | `1001`                                                      |
 | `clusterDomain`                                 | Default Kubernetes cluster domain                                                                                                                         | `cluster.local`                                             |
 | `service.type`                                  | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                 |
 | `service.port`                                  | etcd client port                                                                                                                                          | `2379`                                                      |
+| `service.clientPortNameOverride`                | etcd client port name override                                                                                                                            | `""`                                                    |
 | `service.peerPort`                              | etcd peer port                                                                                                                                            | `2380`                                                      |
+| `service.peerPortNameOverride`                  | etcd peer port name override                                                                                                                              | `""`                                                    |
 | `service.nodePorts.clientPort`                  | Kubernetes etcd client node port                                                                                                                          | `""`                                                        |
 | `service.nodePorts.peerPort`                    | Kubernetes etcd peer node port                                                                                                                            | `""`                                                        |
 | `service.annotations`                           | Annotations for etcd service                                                                                                                              | `{}`                                                        |
 | `service.loadBalancerIP`                        | loadBalancerIP if etcd service type is `LoadBalancer`                                                                                                     | `nil`                                                       |
+| `service.loadBalancerSourceRanges`              | loadBalancerSourceRanges if etcd service type is `LoadBalancer`                                                                                           | `nil`                                                       |
 | `persistence.enabled`                           | Enable persistence using PVC                                                                                                                              | `true`                                                      |
 | `persistence.storageClass`                      | PVC Storage Class for etcd volume                                                                                                                         | `nil`                                                       |
 | `persistence.accessMode`                        | PVC Access Mode for etcd volume                                                                                                                           | `ReadWriteOnce`                                             |
+| `persistence.selector`                          | PVC label selector for etcd volume                                                                                                                        | `{}`                                                        |
 | `persistence.size`                              | PVC Storage Request for etcd volume                                                                                                                       | `8Gi`                                                       |
 | `persistence.annotations`                       | Annotations for the PVC                                                                                                                                   | `{}`                                                        |
 | `pdb.enabled`                                   | Pod Disruption Budget toggle                                                                                                                              | `false`                                                     |
@@ -119,18 +129,29 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`                 | When the probe times out                                                                                                                                  | `5`                                                         |
 | `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                                                         |
 | `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                         |
+| `statefulsetLabels`                             | Extra statefulset labels                                                                                                                                  | `{}` (evaluated as a template)                               |
 | `podAnnotations`                                | Annotations to be added to pods                                                                                                                           | `{}`                                                        |
-| `affinity`                                      | Map of node/pod affinities                                                                                                                                | `{}` (The value is evaluated as a template)                 |
-| `nodeSelector`                                  | Node labels for pod assignment                                                                                                                            | `{}` (The value is evaluated as a template)                 |
-| `tolerations`                                   | Tolerations for pod assignment                                                                                                                            | `[]` (The value is evaluated as a template)                 |
+| `podLabels`                                     | Extra pod labels                                                                                                                                          | `{}` (evaluated as a template)                               |
+| `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                        |
+| `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                      |
+| `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                        |
+| `nodeAffinityPreset.key`                        | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                        |
+| `nodeAffinityPreset.values`                     | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                        |
+| `affinity`                                      | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                              |
+| `nodeSelector`                                  | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                              |
+| `tolerations`                                   | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                              |
 | `priorityClassName`                             | Name of the existing priority class to be used by etcd pods.                                                                                              | `""`                                                        |
 | `metrics.enabled`                               | Enable Prometheus exporter to expose etcd metrics                                                                                                         | `false`                                                     |
 | `metrics.podAnnotations`                        | Annotations for enabling prometheus to access the metrics endpoint                                                                                        | {`prometheus.io/scrape: "true",prometheus.io/port: "2379"`} |
 | `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                                                     |
 | `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                                                                  | `nil`                                                       |
 | `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)                   |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion scraping                                                                                        | `[]`                                                        |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before ingestion                                                                                                       | `[]`                                                        |
+| `metrics.serviceMonitor.scheme`                 | HTTP scheme to use for scraping                                                                                                                           | `""` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                                                   | `nil` (Prometheus Operator default value)                   |
 | `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                                                                       | `nil`                                                       |
+| `metrics.serviceMonitor.tlsConfig`              | TLS configuration used for scrape endpoints used by Prometheus                                                                                            | `nil`                                                       |
 | `startFromSnapshot.enabled`                     | Initialize new cluster recovering an existing snapshot                                                                                                    | `false`                                                     |
 | `startFromSnapshot.existingClaim`               | PVC containing the existing snapshot                                                                                                                      | `nil`                                                       |
 | `startFromSnapshot.snapshotFilename`            | Snapshot filename                                                                                                                                         | `nil`                                                       |
@@ -283,6 +304,12 @@ disasterRecovery.pvc.storageClassName=nfs
 
 > **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
@@ -298,14 +325,40 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
 
-### 4.4.14
-
-In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
-
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### 5.2.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 5.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 4.4.14
+
+In this release we addressed a vulnerability that showed the `ETCD_ROOT_PASSWORD` environment variable in the application logs. Users are advised to update immediately. More information in [this issue](https://github.com/bitnami/charts/issues/1901).
 
 ### To 3.0.0
 

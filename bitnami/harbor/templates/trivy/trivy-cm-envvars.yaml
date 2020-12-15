@@ -23,7 +23,11 @@ data:
   SCANNER_API_SERVER_ADDR: {{ printf ":%s" (include "harbor.trivy.containerPort" .) | quote }}
   {{- if .Values.internalTLS.enabled }}
   INTERNAL_TLS_ENABLED: "true"
-  SCANNER_API_SERVER_TLS_KEY: /bitnami/certs/tls.key
-  SCANNER_API_SERVER_TLS_CERTIFICATE: /bitnami/certs/tls.crt
-  SCANNER_API_SERVER_CLIENT_CAS: /bitnami/certs/ca.crt
+  SCANNER_API_SERVER_TLS_KEY: /etc/harbor/ssl/trivy/tls.key
+  SCANNER_API_SERVER_TLS_CERTIFICATE: /etc/harbor/ssl/trivy/tls.crt
+  {{- end }}
+  {{- if has "trivy" .Values.proxy.components }}
+  HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
+  HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
+  NO_PROXY: {{ include "harbor.noProxy" . | quote }}
   {{- end }}

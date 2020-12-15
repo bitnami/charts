@@ -24,6 +24,19 @@
         }
       }
     },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
+        }
+      }
+    },
     "replicaCount": {
       "type": "integer",
       "form": true,
@@ -61,6 +74,20 @@
               }
             }
           }
+        }
+      }
+    },
+    "pdb": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "minAvailable": {
+          "type": "integer"
+        },
+        "maxUnavailable": {
+          "type": "integer"
         }
       }
     }

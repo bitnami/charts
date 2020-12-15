@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 20.0.1-debian-10-r0
+  tag: 21.0.1-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -185,3 +185,62 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
+
+## An array to add extra env vars
+## For example:
+## extraEnvVars:
+##  - name: GF_DEFAULT_INSTANCE_NAME
+##    value: my-instance
+##
+extraEnvVars:
+
+## ConfigMap with extra env vars:
+##
+extraEnvVarsCM:
+
+## Secret with extra env vars:
+##
+extraEnvVarsSecret:
+
+## Add sidecar containers to the pod (evaluated as a template)
+##
+sidecars:
+## e.g.
+# - name: your-image-name
+#   image: your-image
+#   imagePullPolicy: Always
+#   ports:
+#     - name: portname
+#       containerPort: 1234
+
+## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes liveness probe
+## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Evaluated as a template
+##
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 120
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+## Customizable readinessProbe to attach to the Wildfly pod. Must be a valid Kubernetes readiness probe
+## See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Evaluated as a template
+##
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  timeoutSeconds: 3
+  periodSeconds: 5

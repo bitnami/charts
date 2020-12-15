@@ -2,7 +2,7 @@
 
 [Joomla!](http://www.joomla.org/) is a PHP content management system (CMS) for publishing web content. It includes features such as page caching, RSS feeds, printable versions of pages, news flashes, blogs, search, and support for language international.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -78,7 +78,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 
 | Parameter                            | Description                                                                                                           | Default                                     |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                        |
+| `affinity`                           | Affinity for pod assignment                                                                                           | `{}` (evaluated as a template)              |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                       |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                       |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                       |
@@ -90,7 +90,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                       |
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                       |
 | `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                       |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                       |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`  | `nil`                                       |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                       |
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                       |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                          |
@@ -99,6 +99,9 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `joomlaUsername`                     | User of the application                                                                                               | `user`                                      |
 | `joomlaPassword`                     | Application password                                                                                                  | _random 10 character alphanumeric string_   |
 | `joomlaEmail`                        | Admin email                                                                                                           | `user@example.com`                          |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                        |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                        |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                        |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template) |
 | `persistence.accessMode`             | PVC Access Mode for Joomla! volume                                                                                    | `ReadWriteOnce`                             |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                      |
@@ -106,10 +109,13 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `persistence.hostPath`               | Host mount path for Joomla! volume                                                                                    | `nil` (will not mount to a host path)       |
 | `persistence.size`                   | PVC Storage Request for Joomla! volume                                                                                | `8Gi`                                       |
 | `persistence.storageClass`           | PVC Storage Class for Joomla! volume                                                                                  | `nil` (uses alpha storage class annotation) |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                        |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                      |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                        |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                       |
 | `podSecurityContext.enabled`         | Enable Joomla! pods' Security Context                                                                                 | `true`                                      |
 | `podSecurityContext.fsGroup`         | Joomla! pods' group ID                                                                                                | `1001`                                      |
+| `priorityClassName`                  | Define the priority class name to use for the joomla pods here.                                                       | `""`                                        |
 | `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                    |
 | `replicaCount`                       | Number of Joomla! Pods to run                                                                                         | `1`                                         |
 | `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                |
@@ -119,7 +125,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                       |
 | `smtpUser`                           | SMTP user                                                                                                             | `nil`                                       |
 | `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                       |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template) |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (evaluated as a template)              |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                       |
 
 ### Traffic Exposure Parameters
@@ -146,25 +152,26 @@ The following table lists the configurable parameters of the Joomla! chart and t
 
 ### Database parameters
 
-| Parameter                                  | Description                              | Default                                        |
-|--------------------------------------------|------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart         | `true`                                         |
-| `mariadb.rootUser.password`                | MariaDB admin password                   | `nil`                                          |
-| `mariadb.db.name`                          | Database name to create                  | `bitnami_joomla`                               |
-| `mariadb.db.user`                          | Database user to create                  | `bn_joomla`                                    |
-| `mariadb.db.password`                      | Password for the database                | _random 10 character long alphanumeric string_ |
-| `mariadb.replication.enabled`              | MariaDB replication enabled              | `false`                                        |
-| `mariadb.master.persistence.enabled`       | Enable database persistence using PVC    | `true`                                         |
-| `mariadb.master.persistence.accessMode`    | Database Persistent Volume Access Modes  | `ReadWriteOnce`                                |
-| `mariadb.master.persistence.size`          | Database Persistent Volume Size          | `8Gi`                                          |
-| `mariadb.master.persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                          |
-| `mariadb.master.persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation)    |
-| `mariadb.master.persistence.hostPath`      | Host mount path for MariaDB volume       | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db     | `bn_joomla`                                    |
-| `externalDatabase.password`                | Password for the above username          | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database            | `bitnami_joomla`                               |
-| `externalDatabase.host`                    | Host of the existing database            | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database            | `3306`                                         |
+| Parameter                                  | Description                                           | Default                                        |
+|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
+| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
+| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                    | Database name to create                               | `bitnami_joomla`                                |
+| `mariadb.auth.username`                    | Database user to create                               | `bn_joomla`                                     |
+| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
+| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
+| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
+| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
+| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                    | Existing username in the external db                  | `bn_joomla`                                    |
+| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
+| `externalDatabase.database`                | Name of the existing database                         | `bitnami_joomla`                               |
+| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
+| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
+| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
 
 ### Metrics parameters
 
@@ -255,6 +262,12 @@ ingress:
         - joomla.domain.com
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Joomla!](https://github.com/bitnami/bitnami-docker-joomla) image stores the Joomla! data and configurations at the `/bitnami/joomla` and `/bitnami/apache` paths of the container.
@@ -263,7 +276,82 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/) and update as required. By default, it's set to delete, and when Joomla! is uninstalled, data is also removed.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
+
+### To 9.0.0
+
+In this major there were two main changes introduced:
+
+1. Adaptation to Helm v2 EOL
+2. Updated MariaDB dependency version
+
+Please read the update notes carefully.
+
+**1. Adaptation to Helm v2 EOL**
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+**2. Updated MariaDB dependency version**
+
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Joomla data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `joomla`):
+
+> NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Joomla data on your current release:
+
+```console
+export JOOMLA_PASSWORD=$(kubectl get secret --namespace default joomla -o jsonpath="{.data.joomla-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=joomla -o jsonpath="{.items[0].metadata.name}")
+```
+
+Upgrade your release (maintaining the version) disabling MariaDB and scaling Joomla replicas to 0:
+
+```console
+$ helm upgrade joomla bitnami/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
+```
+
+Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
+
+```console
+$ helm upgrade joomla bitnami/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
+```
+
+You should see the lines below in MariaDB container logs:
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=joomla,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+mariadb 12:13:24.98 INFO  ==> Using persisted data
+mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
+...
+```
 
 ### To 8.0.0
 
@@ -274,7 +362,7 @@ Consequences:
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed.
 
-To upgrade to `7.0.0`, backup Joomla data and the previous MariaDB databases, install a new Drupal chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+To upgrade to `7.0.0`, backup Joomla data and the previous MariaDB databases, install a new Joomla chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 

@@ -1,10 +1,15 @@
-apiVersion: v1
-name: dokuwiki
-version: 8.0.1
-appVersion: 20180422.4.0
-description: DokuWiki is a standards-compliant, simple to use wiki optimized for creating
-  documentation. It is targeted at developer teams, workgroups, and small companies.
-  All data is stored in plain text files, so no database is required.
+annotations:
+  category: Wiki
+apiVersion: v2
+appVersion: 20200729.0.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
+description: DokuWiki is a standards-compliant, simple to use wiki optimized for creating documentation. It is targeted at developer teams, workgroups, and small companies. All data is stored in plain text files, so no database is required.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/dokuwiki
+icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-110x117.png
 keywords:
   - dokuwiki
   - wiki
@@ -12,13 +17,11 @@ keywords:
   - web
   - application
   - php
-home: http://www.dokuwiki.org/
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: dokuwiki
 sources:
   - https://github.com/bitnami/bitnami-docker-dokuwiki
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-110x117.png
-annotations:
-  category: Wiki
+  - http://www.dokuwiki.org/
+version: 10.0.3

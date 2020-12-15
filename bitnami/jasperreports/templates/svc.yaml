@@ -9,10 +9,10 @@ metadata:
     {{- end }}
   {{- end }}
   labels:
-    app: "{{ template "jasperreports.fullname" . }}"
-    chart: "{{ template "jasperreports.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    app.kubernetes.io/name: "{{ include "jasperreports.fullname" . }}"
+    helm.sh/chart: "{{ include "jasperreports.chart" . }}"
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   type: {{ .Values.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
@@ -26,4 +26,5 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
   selector:
-    app: "{{ template "jasperreports.fullname" . }}"
+    app.kubernetes.io/name: {{ include "jasperreports.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}

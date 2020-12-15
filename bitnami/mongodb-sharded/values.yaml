@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.2.8-debian-10-r38
+  tag: 4.4.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -100,15 +100,46 @@ shardsvr:
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
     priorityClassName:
-    ## Node selector
-    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+    ## Pod affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
     ##
-    nodeSelector: {}
-    ## Affinity
+    podAffinityPreset: ""
+    ## Pod anti-affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ## Allowed values: soft, hard
+    ##
+    nodeAffinityPreset:
+      ## Node affinity type
+      ## Allowed values: soft, hard
+      type: ""
+      ## Node label key to match
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## Node label values to match
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## Affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: shardsvr.dataNode.podAffinityPreset, shardsvr.dataNode.podAntiAffinityPreset, and shardsvr.dataNode.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
-    ## Tolerations
+    ## Node labels for pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## Tolerations for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
@@ -116,7 +147,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -189,6 +220,17 @@ shardsvr:
       ## Use 0 to disable
       ##
       maxUnavailable: 1
+    ## K8s Service Account.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created for shardsvr.
+      ##
+      create: false
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the XXX.fullname template
+      ##
+      # name:
 
   ## Properties for arbiter nodes
   ## ref: https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
@@ -213,15 +255,46 @@ shardsvr:
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
     priorityClassName:
-    ## Node selector
-    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+    ## Pod affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
     ##
-    nodeSelector: {}
-    ## Affinity
+    podAffinityPreset: ""
+    ## Pod anti-affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ## Allowed values: soft, hard
+    ##
+    nodeAffinityPreset:
+      ## Node affinity type
+      ## Allowed values: soft, hard
+      type: ""
+      ## Node label key to match
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## Node label values to match
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## Affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: shardsvr.arbiter.podAffinityPreset, shardsvr.arbiter.podAntiAffinityPreset, and shardsvr.arbiter.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
-    ## Tolerations
+    ## Node labels for pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## Tolerations for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
@@ -229,7 +302,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -292,6 +365,17 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName:
+    ## K8s Service Account.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes.
+      ##
+      create: false
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the XXX.fullname template
+      ##
+      # name:
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -348,15 +432,46 @@ configsvr:
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName:
-  ## Node selector
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeSelector: {}
-  ## Affinity
+  podAffinityPreset: ""
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: configsvr.podAffinityPreset, configsvr.podAntiAffinityPreset, and configsvr.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## Tolerations
+  ## Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -364,7 +479,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -469,6 +584,17 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for configsvr.
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    # name:
 
   ## Use a external config server instead of deploying one
   ##
@@ -509,19 +635,54 @@ mongos:
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName:
-  ## Node selector
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeSelector: {}
-  ## Affinity
+  podAffinityPreset: ""
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: mongos.podAffinityPreset, mongos.podAntiAffinityPreset, and mongos.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## Tolerations
+  ## Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## podManagementPolicy for the statefulset, allows parallel startup of pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -584,6 +745,9 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Use StatefulSet instead of Deployment
+  ##
+  useStatefulSet: false
   ## Pod disruption budget
   ##
   pdb:
@@ -594,6 +758,17 @@ mongos:
     ## Use 0 to disable
     ##
     maxUnavailable: 1
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for mongos.
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    # name:
 
 ## Properties for all of the pods in the cluster (shards, config servers and mongos)
 ##
@@ -672,6 +847,17 @@ common:
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
+  ## K8s Service Account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created for all Pods.
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the XXX.fullname template
+    ##
+    # name:
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -712,7 +898,7 @@ service:
   ## Specify an explicit service name
   ##
   name:
-  ## Additional service annotations
+  ## Additional service annotations (evaluate as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   annotations: {}
@@ -727,7 +913,7 @@ service:
   ## MongoDB Service port and Container Port
   ##
   port: 27017
-  ## Set a fixed service ClusterIP addrress
+  ## Set a fixed service ClusterIP address
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
   ##
   clusterIP:
@@ -786,7 +972,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.0-debian-10-r88
+    tag: 0.11.2-debian-10-r44
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -829,15 +1015,24 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9216"
 
-  # Enable this if you're using https://github.com/coreos/prometheus-operator
-  serviceMonitor:
-    enabled: false
-    namespace: monitoring
-    # fallback to the prometheus default unless specified
-    # interval: 10s
-    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  podMonitor:
+    ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
     ##
-    selector:
-      prometheus: kube-prometheus
+    enabled: false
+    ## Specify the namespace in which the podMonitor resource will be created
+    ##
+    namespace: monitoring
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    ##
+    # scrapeTimeout: 30s
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}

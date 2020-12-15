@@ -1,16 +1,22 @@
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
-  name: {{ template "node.fullname" $ }}
-  labels: {{- include "node.labels" $ | nindent 4 }}
+  name: {{ include "common.names.fullname" $ }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     {{- if .certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
     {{- range $key, $value := .annotations }}
     {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:
@@ -19,7 +25,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "node.fullname" $ }}
+              serviceName: {{ include "common.names.fullname" $ }}
               servicePort: 80
   {{- if .tls }}
   tls:

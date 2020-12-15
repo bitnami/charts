@@ -165,21 +165,39 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
-Return the Thanos Querier Service Discovery configuration configmap.
+Return a YAML of either .Values.query or .Values.querier
+If .Values.querier is used, we merge in the defaults from .Values.query, giving preference to .Values.querier
 */}}
-{{- define "thanos.querier.SDConfigmapName" -}}
-{{- if .Values.querier.existingSDConfigmap -}}
-    {{- printf "%s" (tpl .Values.querier.existingSDConfigmap $) -}}
+{{- define "thanos.query.values" -}}
+{{- if .Values.querier -}}
+    {{- if .Values.query -}}
+        {{- mergeOverwrite .Values.query .Values.querier | toYaml -}}
+    {{- else -}}
+        {{- .Values.querier | toYaml -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s-querier-sd-configmap" (include "thanos.fullname" .) -}}
+    {{- .Values.query | toYaml -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos Query Service Discovery configuration configmap.
+*/}}
+{{- define "thanos.query.SDConfigmapName" -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.existingSDConfigmap -}}
+    {{- printf "%s" (tpl $query.existingSDConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-query-sd-configmap" (include "thanos.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return true if a configmap object should be created
 */}}
-{{- define "thanos.querier.createSDConfigmap" -}}
-{{- if and .Values.querier.sdConfig (not .Values.querier.existingSDConfigmap) }}
+{{- define "thanos.query.createSDConfigmap" -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.sdConfig (not $query.existingSDConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -201,6 +219,48 @@ Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}
 {{- if and .Values.ruler.config (not .Values.ruler.existingConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos storegateway configuration configmap.
+*/}}
+{{- define "thanos.storegateway.configmapName" -}}
+{{- if .Values.storegateway.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.storegateway.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-storegateway-configmap" (include "thanos.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos Query Frontend configuration configmap.
+*/}}
+{{- define "thanos.queryFrontend.configmapName" -}}
+{{- if .Values.queryFrontend.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.queryFrontend.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-query-frontend-configmap" (include "thanos.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "thanos.queryFrontend.createConfigmap" -}}
+{{- if and .Values.queryFrontend.config (not .Values.queryFrontend.existingConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "thanos.storegateway.createConfigmap" -}}
+{{- if and .Values.storegateway.config (not .Values.storegateway.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

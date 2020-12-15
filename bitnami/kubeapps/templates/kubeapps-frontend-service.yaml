@@ -13,7 +13,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.frontend.service.port }}
-      {{- if .Values.authProxy.enabled }}
+      {{- if and .Values.authProxy.enabled (not .Values.authProxy.external) }}
       targetPort: proxy
       {{- else }}
       targetPort: http

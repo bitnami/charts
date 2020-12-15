@@ -1,5 +1,8 @@
+{{- $secretName := include "odoo.secretName" . -}}
 
-** Please be patient while the chart is being deployed **
+*******************************************************************
+*** PLEASE BE PATIENT: Odoo may take a few minutes to install   ***
+*******************************************************************
 
 {{- if .Values.ingress.enabled }}
 
@@ -12,15 +15,15 @@
 
 {{- else }}
 
-1. Get the Odoo URL by runningg:
+1. Get the Odoo URL by running:
 
-{{- if contains "NodePort" .Values.service.type }}
+{{- if eq .Values.service.type "NodePort" }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "odoo.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Odoo URL: http://$NODE_IP:$NODE_PORT/"
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
 ** Please ensure an external IP is associated to the {{ template "odoo.fullname" . }} service before proceeding **
 ** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "odoo.fullname" . }} **
@@ -29,7 +32,7 @@
 
 {{- $port:=.Values.service.port | toString }}
   echo "Odoo URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
-{{- else if contains "ClusterIP"  .Values.service.type }}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Odoo URL: http://127.0.0.1:8080/"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "odoo.fullname" . }} 8080:{{ .Values.service.port }}
@@ -37,14 +40,25 @@
 {{- end }}
 {{- end }}
 
-2. Login with the following credentials
+2. Obtain the login credentials
 
-  echo Email   : {{ .Values.odooEmail }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "odoo.fullname" . }} -o jsonpath="{.data.odoo-password}" | base64 --decode)
+  export ODOO_EMAIL={{ .Values.odooEmail }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "odoo-password" "context" $) }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
+  echo Email   : $ODOO_EMAIL
+  echo Password: $ODOO_PASSWORD
 
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+{{- include "common.warnings.rollingTag" .Values.image }}
 
-{{- end }}
+{{- $passwordValidationErrors := list -}}
+{{- if not .Values.existingSecret -}}
+    {{- $requiredOdooPassword := dict "valueKey" "odooPassword" "secret" $secretName "field" "odoo-password" "context" $ -}}
+    {{- $requiredOdooPasswordError := include "common.validations.values.single.empty" $requiredOdooPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOdooPasswordError -}}
+{{- end -}}
+
+{{- $postgresqlSecretName := include "odoo.databaseSecretName" . -}}
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
