@@ -134,6 +134,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `podDisruptionBudget.create`               | If true, create a pod disruption budget for pods.                                                                    | `false`                                                 |
 | `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                     | `1`                                                     |
 | `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                     | `nil`                                                   |
+| `extraDeploy`                              | Array of extra objects to deploy with the release (evaluated as a template).                                         | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
