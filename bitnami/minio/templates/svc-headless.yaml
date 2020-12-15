@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "minio.fullname" . }}-headless
+  name: {{ include "common.names.fullname" . }}-headless
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "minio.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -12,5 +12,5 @@ spec:
     - name: minio
       port: {{ .Values.service.port }}
       targetPort: minio
-  selector: {{- include "minio.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

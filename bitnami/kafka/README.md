@@ -1,6 +1,6 @@
 # Kafka
 
-[Kafka](https://www.kafka.org/) is a distributed streaming platform used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
+[Kafka](https://kafka.apache.org/) is a distributed streaming platform used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
 
 ## TL;DR
 
@@ -119,41 +119,48 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.jaas.zookeeperUser`                         | Kafka Zookeeper user for SASL authentication                                                                                      | `nil`                                                   |
 | `auth.jaas.zookeeperPassword`                     | Kafka Zookeeper password for SASL authentication                                                                                  | `nil`                                                   |
 | `auth.jaas.existingSecret`                        | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                              | `nil`                                                   |
-| `auth.jaas.clientUsers`                           | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                   | `[]`                                                   |
-| `auth.jaas.clientPasswords`                       | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`        | `[]`                                                   |
+| `auth.jaas.clientUsers`                           | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                   | `[]`                                                    |
+| `auth.jaas.clientPasswords`                       | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`        | `[]`                                                    |
 | `listeners`                                       | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                          | `[]`                                                    |
 | `advertisedListeners`                             | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array  | `[]`                                                    |
 | `listenerSecurityProtocolMap`                     | The protocol->listener mapping. Auto-calculated it's set to nil                                                                   | `nil`                                                   |
 | `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
 | `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
+| `initContainers`                                  | Add extra init containers                                                                                                         | `[]`                                                    |
 
 ### Statefulset parameters
 
-| Parameter                                         | Description                                                                                                                       | Default                                                 |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                                    | Number of Kafka nodes                                                                                                             | `1`                                                     |
-| `updateStrategy`                                  | Update strategy for the stateful set                                                                                              | `RollingUpdate`                                         |
-| `rollingUpdatePartition`                          | Partition update strategy                                                                                                         | `nil`                                                   |
-| `podLabels`                                       | Kafka pod labels                                                                                                                  | `{}` (evaluated as a template)                          |
-| `podAnnotations`                                  | Kafka Pod annotations                                                                                                             | `{}` (evaluated as a template)                          |
-| `affinity`                                        | Affinity for pod assignment                                                                                                       | `{}` (evaluated as a template)                          |
-| `priorityClassName`                               | Name of the existing priority class to be used by kafka pods                                                                      |  `""`                                                   |
-| `nodeSelector`                                    | Node labels for pod assignment                                                                                                    | `{}` (evaluated as a template)                          |
-| `tolerations`                                     | Tolerations for pod assignment                                                                                                    | `[]` (evaluated as a template)                          |
-| `podSecurityContext`                              | Kafka pods' Security Context                                                                                                      | `{}`                                                    |
-| `containerSecurityContext`                        | Kafka containers' Security Context                                                                                                | `{}`                                                    |
-| `resources.limits`                                | The resources limits for Kafka containers                                                                                         | `{}`                                                    |
-| `resources.requests`                              | The requested resources for Kafka containers                                                                                      | `{}`                                                    |
-| `livenessProbe`                                   | Liveness probe configuration for Kafka                                                                                            | `Check values.yaml file`                                |
-| `readinessProbe`                                  | Readiness probe configuration for Kafka                                                                                           | `Check values.yaml file`                                |
-| `customLivenessProbe`                             | Custom Liveness probe configuration for Kafka                                                                                     | `{}`                                                    |
-| `customReadinessProbe`                            | Custom Readiness probe configuration for Kafka                                                                                    | `{}`                                                    |
-| `pdb.create`                                      | Enable/disable a Pod Disruption Budget creation                                                                                   | `false`                                                 |
-| `pdb.minAvailable`                                | Minimum number/percentage of pods that should remain scheduled                                                                    | `nil`                                                   |
-| `pdb.maxUnavailable`                              | Maximum number/percentage of pods that may be made unavailable                                                                    | `1`                                                     |
-| `command`                                         | Override kafka container command                                                                                                  | `['/scripts/setup.sh']`  (evaluated as a template)      |
-| `args`                                            | Override kafka container arguments                                                                                                | `[]` (evaluated as a template)                          |
-| `sidecars`                                        | Attach additional sidecar containers to the Kafka pod                                                                             | `{}`                                                    |
+| Parameter                             | Description                                                                               | Default                                            |
+|:--------------------------------------|:------------------------------------------------------------------------------------------|:---------------------------------------------------|
+| `replicaCount`                        | Number of Kafka nodes                                                                     | `1`                                                |
+| `minBrokerId`                         | Minimal broker.id value, nodes increment their `broker.id` respectively                   | `0`                                                |
+| `updateStrategy`                      | Update strategy for the stateful set                                                      | `RollingUpdate`                                    |
+| `rollingUpdatePartition`              | Partition update strategy                                                                 | `nil`                                              |
+| `podLabels`                           | Kafka pod labels                                                                          | `{}` (evaluated as a template)                     |
+| `podAnnotations`                      | Kafka Pod annotations                                                                     | `{}` (evaluated as a template)                     |
+| `priorityClassName`                   | Name of the existing priority class to be used by kafka pods                              | `""`                                               |
+| `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                               |
+| `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                             |
+| `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                               |
+| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                     | `""`                                               |
+| `nodeAffinityPreset.values`           | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                               |
+| `affinity`                            | Affinity for pod assignment                                                               | `{}` (evaluated as a template)                     |
+| `nodeSelector`                        | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                     |
+| `tolerations`                         | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                     |
+| `podSecurityContext`                  | Kafka pods' Security Context                                                              | `{}`                                               |
+| `containerSecurityContext`            | Kafka containers' Security Context                                                        | `{}`                                               |
+| `resources.limits`                    | The resources limits for Kafka containers                                                 | `{}`                                               |
+| `resources.requests`                  | The requested resources for Kafka containers                                              | `{}`                                               |
+| `livenessProbe`                       | Liveness probe configuration for Kafka                                                    | `Check values.yaml file`                           |
+| `readinessProbe`                      | Readiness probe configuration for Kafka                                                   | `Check values.yaml file`                           |
+| `customLivenessProbe`                 | Custom Liveness probe configuration for Kafka                                             | `{}`                                               |
+| `customReadinessProbe`                | Custom Readiness probe configuration for Kafka                                            | `{}`                                               |
+| `pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                           | `false`                                            |
+| `pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                            | `nil`                                              |
+| `pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                            | `1`                                                |
+| `command`                             | Override kafka container command                                                          | `['/scripts/setup.sh']`  (evaluated as a template) |
+| `args`                                | Override kafka container arguments                                                        | `[]` (evaluated as a template)                     |
+| `sidecars`                            | Attach additional sidecar containers to the Kafka pod                                     | `{}`                                               |
 
 ### Exposure parameters
 
@@ -176,7 +183,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                                                         | `Always`                                                |
 | `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                                                     | `{}`                                                    |
 | `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                                                   | `{}`                                                    |
-| `externalAccess.service.type`                     | Kubernetes Servive type for external access. It can be NodePort or LoadBalancer                                                   | `LoadBalancer`                                          |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                                                   | `LoadBalancer`                                          |
 | `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                                                             | `9094`                                                  |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for Kafka brokers                                                                                      | `[]`                                                    |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                         | `[]`                                                    |
@@ -556,9 +563,15 @@ sidecars:
        containerPort: 1234
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connnect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
@@ -654,6 +667,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 12.2.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
 ### To 12.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
@@ -679,22 +696,22 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 11.8.0
 
-External access to brokers can now be achived through the cluster's Kafka service.
+External access to brokers can now be achieved through the cluster's Kafka service.
 
 - `service.nodePort` -> deprecated  in favor of `service.nodePorts.client` and `service.nodePorts.external`
 
-### To 11.7.0
+### 11.7.0
 
 The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords.
 
 - `auth.jaas.clientUser` (string) -> deprecated  in favor of `auth.jaas.clientUsers` (array).
 - `auth.jaas.clientPassword` (string) -> deprecated  in favor of `auth.jaas.clientPasswords` (array).
 
-### To 11.0.0
+### 11.0.0
 
 The way to configure listeners and athentication on Kafka is totally refactored allowing users to configure different authentication protocols on different listeners. Please check the sections [Listeners Configuration](listeners-configuration) and [Listeners Configuration](enable-kafka-for-kafka-and-zookeeper) for more information.
 
-Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed or dissapeared in favor of new ones on this major version:
+Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed or disappeared in favor of new ones on this major version:
 
 - `auth.enabled` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.
 - `auth.ssl` -> deprecated in favor of `auth.clientProtocol` and `auth.interBrokerProtocol` parameters.
@@ -711,11 +728,11 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `metrics.kafka.extraFlag` -> new parameter
 - `metrics.kafka.certificatesSecret` -> new parameter
 
-### To 10.0.0
+### 10.0.0
 
 If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.
 
-### To 9.0.0
+### 9.0.0
 
 Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed on this major version:
 
@@ -737,11 +754,11 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 
 Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
 
-### To 8.0.0
+### 8.0.0
 
 There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
 
-### To 7.0.0
+### 7.0.0
 
 Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless you modify the labels used on the exporter deployments.
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
@@ -751,7 +768,7 @@ helm upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=fal
 helm upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
-### To 2.0.0
+### 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
@@ -761,7 +778,7 @@ kubectl delete statefulset kafka-kafka --cascade=false
 kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
-### To 1.0.0
+### 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is kafka:

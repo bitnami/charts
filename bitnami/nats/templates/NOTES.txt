@@ -22,21 +22,31 @@
 
 NATS can be accessed via port {{ .Values.client.service.port }} on the following DNS name from within your cluster:
 
-   {{ template "nats.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local
+   {{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local
 
 {{- if .Values.auth.enabled }}
 
 To get the authentication credentials, run:
 
-    export NATS_USER=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "nats.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 user | awk '{print $2}')
-    export NATS_PASS=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "nats.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 password | awk '{print $2}')
+    export NATS_USER=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 user | awk '{print $2}')
+    export NATS_PASS=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 password | awk '{print $2}')
     echo -e "Client credentials:\n\tUser: $NATS_USER\n\tPassword: $NATS_PASS"
 
 {{- end }}
 
 NATS monitoring service can be accessed via port {{ .Values.monitoring.service.port }} on the following DNS name from within your cluster:
 
-    {{ template "nats.fullname" . }}-monitoring.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "common.names.fullname" . }}-monitoring.{{ .Release.Namespace }}.svc.cluster.local
+
+You can create a Golang pod to be used as a NATS client:
+
+      kubectl run {{ include "common.names.fullname" . }}-client --restart='Never' --image docker.io/bitnami/golang --namespace {{ .Release.Namespace }} --command -- sleep infinity
+      kubectl exec --tty -i {{ include "common.names.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
+      go get github.com/nats-io/nats.go
+      cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-pub && go install && cd
+      cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-echo && go install && cd
+      nats-echo -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} SomeSubject
+      nats-pub -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} -reply Hi SomeSubject "Hi everyone"
 
 To access the Monitoring svc from outside the cluster, follow the steps below:
 
@@ -45,11 +55,8 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 1. Get the hostname indicated on the Ingress Rule and associate it to your cluster external IP:
 
     export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-    export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "nats.fullname" . }}-monitoring -o jsonpath='{.spec.rules[0].host}')
-    echo "Monitoring URL: http://$HOSTNAME/"
-    echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
-
-2. Open a browser and access the NATS monitoring browsing to the Monitoring URL
+    echo "Monitoring URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 
@@ -58,42 +65,37 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 {{- if contains "NodePort" .Values.monitoring.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "nats.fullname" . }}-monitoring)
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-monitoring" (include "common.names.fullname" .) }})
     echo "Monitoring URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.monitoring.service.type }}
 
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "nats.fullname" . }}-monitoring'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-monitoring" (include "common.names.fullname" .) }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "nats.fullname" . }}-monitoring --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-monitoring" (include "common.names.fullname" .) }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     echo "Monitoring URL: http://$SERVICE_IP/"
 
 {{- else if contains "ClusterIP" .Values.monitoring.service.type }}
 
     echo "Monitoring URL: http://127.0.0.1:{{ .Values.monitoring.service.port }}"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "nats.fullname" . }}-monitoring {{ .Values.monitoring.service.port }}:{{ .Values.monitoring.service.port }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-monitoring" (include "common.names.fullname" .) }} {{ .Values.monitoring.service.port }}:{{ .Values.monitoring.service.port }}
+{{- end }}
 {{- end }}
 
-2. Access NATS monitoring by opening the URL obtained in a browser.
-{{- end }}
+2. Open a browser and access the NATS monitoring browsing to the Monitoring URL
+
 
 {{- if .Values.metrics.enabled }}
 
 3. Get the NATS Prometheus Metrics URL by running:
 
-    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.port }}/metrics"
-    kubectl port-forward --namespace {{ .Release.Namespace }} {{ template "nats.fullname" . }}-0 {{ .Values.metrics.port }}:{{ .Values.metrics.port }}
+    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "common.names.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }}
 
 4. Access NATS Prometheus metrics by opening the URL obtained in a browser.
 
 {{- end }}
 
 {{- include "nats.validateValues" . -}}
-
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "nats.checkRollingTags" . -}}

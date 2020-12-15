@@ -93,7 +93,15 @@ The following table lists the configurable parameters of the JasperReports chart
 | `persistence.accessMode`         | PVC Access Mode for JasperReports volume                                                                   | `ReadWriteOnce`                                         |
 | `persistence.size`               | PVC Storage Request for JasperReports volume                                                               | `8Gi`                                                   |
 | `resources`                      | CPU/Memory resource requests/limits                                                                        | `{Memory: 512Mi, CPU: 300m}`                            |
-| `affinity`                       | Map of node/pod affinities                                                                                 | `{}`                                                    |
+| `podAffinityPreset`              | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                                                    |
+| `podAntiAffinityPreset`          | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `soft`                                                  |
+| `nodeAffinityPreset.type`        | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                                                    |
+| `nodeAffinityPreset.key`         | Node label key to match Ignored if `affinity` is set.                                                      | `""`                                                    |
+| `nodeAffinityPreset.values`      | Node label values to match. Ignored if `affinity` is set.                                                  | `[]`                                                    |
+| `affinity`                       | Affinity for pod assignment                                                                                | `{}` (evaluated as a template)                          |
+| `nodeSelector`                   | Node labels for pod assignment                                                                             | `{}` (evaluated as a template)                          |
+| `tolerations`                    | Tolerations for pod assignment                                                                             | `[]` (evaluated as a template)                          |
+
 
 ### Database parameters
 
@@ -145,6 +153,12 @@ $ helm install my-release -f values.yaml bitnami/jasperreports
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -244,7 +258,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 JasperReports 7.5.0 includes some new configuration options that are required to be added if you upgrade from previous versions. Please check the [official community guide](https://community.jaspersoft.com/documentation/tibco-jasperreports-server-upgrade-guide/v750/upgrading-72-75) to upgrade your previous JasperReports installation.
 
-### To 7.0.0
+### 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -252,7 +266,7 @@ In https://github.com/helm/charts/pull/17298 the `apiVersion` of the deployment 
 
 This major version signifies this change.
 
-### To 3.0.0
+### 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is jasperreports:

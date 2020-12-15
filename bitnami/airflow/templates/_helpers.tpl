@@ -200,35 +200,35 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
 {{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.user" -}}
 {{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.name" -}}
 {{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.configure.database" -}}
 - name: AIRFLOW_DATABASE_NAME
@@ -247,7 +247,7 @@ Add environmnet variables to configure database values
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure redis values
+Add environment variables to configure redis values
 */}}
 {{- define "airflow.configure.redis" -}}
 - name: REDIS_HOST
@@ -266,7 +266,7 @@ Add environmnet variables to configure redis values
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure airflow common values
+Add environment variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
 - name: AIRFLOW_EXECUTOR
@@ -276,10 +276,6 @@ Add environmnet variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernetKey
-- name: AIRFLOW_WEBSERVER_HOST
-  value: {{ include "common.names.fullname" . }}
-- name: AIRFLOW_WEBSERVER_PORT_NUMBER
-  value: {{ .Values.service.port | quote }}
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}
@@ -293,7 +289,7 @@ Add environmnet variables to configure airflow common values
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure airflow kubernetes executor
+Add environment variables to configure airflow kubernetes executor
 */}}
 {{- define "airflow.configure.airflow.kubernetesExecutor" -}}
 {{- if eq .Values.executor "KubernetesExecutor" }}
@@ -319,6 +315,39 @@ Add environmnet variables to configure airflow kubernetes executor
 {{- end -}}
 
 {{/*
+Get the user defined LoadBalancerIP for this release.
+Note, returns 127.0.0.1 if using ClusterIP.
+*/}}
+{{- define "airflow.serviceIP" -}}
+{{- if eq .Values.service.type "ClusterIP" -}}
+127.0.0.1
+{{- else -}}
+{{- .Values.service.loadBalancerIP | default "" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+*/}}
+{{- define "airflow.baseUrl" -}}
+{{- $host := include "airflow.serviceIP" . -}}
+
+{{- $port := "" -}}
+{{- $servicePortString := printf "%v" .Values.service.port -}}
+{{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+{{- end -}}
+
+{{- $defaultUrl := "" -}}
+{{- if $host -}}
+  {{- $defaultUrl = printf "http://%s%s" $host $port -}}
+{{- end -}}
+
+{{- default $defaultUrl .Values.web.baseUrl -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "airflow.validateValues" -}}
@@ -335,7 +364,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - Atleast one repository details must be provided when "git.dags.enabled" is "true" */}}
+{{/* Validate values of Airflow - At least one repository details must be provided when "git.dags.enabled" is "true" */}}
 {{- define "airflow.validateValues.dags.repositories" -}}
   {{- if and .Values.git.dags.enabled (empty .Values.git.dags.repositories) -}}
 airflow: git.dags.repositories

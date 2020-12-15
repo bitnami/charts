@@ -25,7 +25,7 @@ spec:
     - name: v1
       schema:
         openAPIV3Schema:
-          description: TLSCertificateDelegation is an TLS Certificate Delegation CRD specificiation. See design/tls-certificate-delegation.md for details.
+          description: TLSCertificateDelegation is an TLS Certificate Delegation CRD specification. See design/tls-certificate-delegation.md for details.
           properties:
             apiVersion:
               description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'

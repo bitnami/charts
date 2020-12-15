@@ -2,6 +2,12 @@ annotations:
   category: Infrastructure
 apiVersion: v2
 appVersion: 2.1.9
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: An open-source, cloud-native messaging system
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/nats
@@ -18,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 5.0.0
+version: 6.0.3

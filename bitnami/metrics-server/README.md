@@ -47,36 +47,46 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Metrics Server chart and their default values.
 
-| Parameter                 | Description                                                                                                                     | Default                                                 |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                                                                                                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`          | Metrics Server image registry                                                                                                   | `docker.io`                                             |
-| `image.repository`        | Metrics Server image name                                                                                                       | `bitnami/metrics-server`                                |
-| `image.tag`               | Metrics Server image tag                                                                                                        | `{TAG_NAME}`                                            |
-| `image.pullPolicy`        | Metrics Server image pull policy                                                                                                | `IfNotPresent`                                          |
-| `nameOverride`            | String to partially override metrics-server.fullname template with a string (will prepend the release name)                     | `nil`                                                   |
-| `replicas`                | Number of metrics-server nodes to deploy                                                                                        | `1`                                                     |
-| `fullnameOverride`        | String to fully override metrics-server.fullname template with a string                                                         | `nil`                                                   |
-| `securePort`              | Port where metrics-server will be running                                                                                       | `8443`                                                  |
-| `hostNetwork`             | Enable hostNetwork mode                                                                                                         | `false`                                                 |
-| `extraArgs`               | Extra arguments to pass to metrics-server on start up                                                                           | {}                                                      |
-| `rbac.create`             | Enable RBAC authentication                                                                                                      | `true`                                                  |
-| `serviceAccount.create`   | Specifies whether a ServiceAccount should be created                                                                            | `true`                                                  |
-| `serviceAccount.name`     | The name of the ServiceAccount to create                                                                                        | Generated using the fullname template                   |
-| `apiService.create`       | Specifies whether the v1beta1.metrics.k8s.io API service should be created (This should not be necessary in k8s version >= 1.8) | `false`                                                 |
-| `podAnnotations`          | Pod annotations                                                                                                                 | `{}`                                                    |
-| `priorityClassName`       | Priority class for pod scheduling                                                                                               | `nil`                                                   |
-| `affinity`                | Map of node/pod affinities                                                                                                      | `{}` (The value is evaluated as a template)             |
-| `nodeSelector`            | Node labels for pod assignment                                                                                                  | `{}` (The value is evaluated as a template)             |
-| `tolerations`             | Tolerations for pod assignment                                                                                                  | `[]` (The value is evaluated as a template)             |
-| `service.type`            | Kubernetes Service type                                                                                                         | `ClusterIP`                                             |
-| `service.port`            | Kubernetes Service port                                                                                                         | `443`                                                   |
-| `service.annotations`     | Annotations for the Service                                                                                                     | {}                                                      |
-| `service.labels`          | Labels for the Service                                                                                                     | {}                                                      |
-| `service.loadBalancerIP`  | LoadBalancer IP if Service type is `LoadBalancer`                                                                               | `nil`                                                   |
-| `service.nodePort`        | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                        | `nil`                                                   |
-| `resources`               | The [resources] to allocate for the container                                                                                   | `{}`                                                    |
+| Parameter                            | Description                                                                                                                     | Default                                                 |
+|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`               | Global Docker image registry                                                                                                    | `nil`                                                   |
+| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
+| `image.registry`                     | Metrics Server image registry                                                                                                   | `docker.io`                                             |
+| `image.repository`                   | Metrics Server image name                                                                                                       | `bitnami/metrics-server`                                |
+| `image.tag`                          | Metrics Server image tag                                                                                                        | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                   | Metrics Server image pull policy                                                                                                | `IfNotPresent`                                          |
+| `nameOverride`                       | String to partially override common.names.fullname template with a string (will prepend the release name)                       | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override common.names.fullname template with a string                                                           | `nil`                                                   |
+| `replicas`                           | Number of metrics-server nodes to deploy                                                                                        | `1`                                                     |
+| `securePort`                         | Port where metrics-server will be running                                                                                       | `8443`                                                  |
+| `hostNetwork`                        | Enable hostNetwork mode                                                                                                         | `false`                                                 |
+| `extraArgs`                          | Extra arguments to pass to metrics-server on start up                                                                           | {}                                                      |
+| `rbac.create`                        | Enable RBAC authentication                                                                                                      | `true`                                                  |
+| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                                                            | `true`                                                  |
+| `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                        | Generated using the fullname template                   |
+| `apiService.create`                  | Specifies whether the v1beta1.metrics.k8s.io API service should be created (This should not be necessary in k8s version >= 1.8) | `false`                                                 |
+| `podAnnotations`                     | Pod annotations                                                                                                                 | `{}`                                                    |
+| `priorityClassName`                  | Priority class for pod scheduling                                                                                               | `nil`                                                   |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                             | `""`                                                    |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                        | `soft`                                                  |
+| `podDisruptionBudget.enabled`        | Create a PodDisruptionBudget                                                                                                    | `false`                                                 |
+| `podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget                                                         | `nil`                                                   |
+| `podDisruptionBudget.maxUnavailable` | Maximum unavailable instances; ignored if there is no PodDisruptionBudget                                                       | `nil`                                                   |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                                                    |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                                                          | `""`                                                    |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                       | `[]`                                                    |
+| `affinity`                           | Affinity for pod assignment                                                                                                     | `{}` (evaluated as a template)                          |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                                  | `{}` (evaluated as a template)                          |
+| `tolerations`                        | Tolerations for pod assignment                                                                                                  | `[]` (evaluated as a template)                          |
+| `service.type`                       | Kubernetes Service type                                                                                                         | `ClusterIP`                                             |
+| `service.port`                       | Kubernetes Service port                                                                                                         | `443`                                                   |
+| `service.annotations`                | Annotations for the Service                                                                                                     | {}                                                      |
+| `service.labels`                     | Labels for the Service                                                                                                          | {}                                                      |
+| `service.loadBalancerIP`             | LoadBalancer IP if Service type is `LoadBalancer`                                                                               | `nil`                                                   |
+| `service.nodePort`                   | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                        | `nil`                                                   |
+| `resources`                          | The [resources] to allocate for the container                                                                                   | `{}`                                                    |
+| `extraVolumes`                       | Extra volumes                                                                                                                   | `nil`                                                   |
+| `extraVolumeMounts`                  | Mount extra volume(s)                                                                                                           | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -107,11 +117,21 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 In order to enable Role-based access control for Metrics Servier you can use the following parameter: `rbac.create=true`
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.2.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 

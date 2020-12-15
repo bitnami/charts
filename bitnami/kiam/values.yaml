@@ -49,7 +49,7 @@ image:
 server:
   enabled: true
 
-  ## Service configuratiom
+  ## Service configuration
   ##
   service:
     ## Service type.
@@ -395,7 +395,7 @@ server:
 agent:
   enabled: true
 
-  ## Service configuratiom (essentially for metrics)
+  ## Service configuration (essentially for metrics)
   ##
   service:
     ## Service type.

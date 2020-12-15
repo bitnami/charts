@@ -2,17 +2,19 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "magento.fullname" . }}-magento
-  labels:
-    app.kubernetes.io/name: {{ template "magento.fullname" . }}
-    helm.sh/chart: {{ template "magento.chart" . }}
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+  name: {{ printf "%s-magento" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
     - {{ .Values.persistence.magento.accessMode | quote }}
   resources:
     requests:
       storage: {{ .Values.persistence.magento.size | quote }}
-  {{ include "magento.storageClass" . }}
+  {{- include "common.storage.class" (dict "persistence" .Values.persistence.magento "global" .Values.global) | nindent 2 }}
 {{- end -}}

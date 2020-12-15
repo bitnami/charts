@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "mediawiki.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
-    helm.sh/chart: {{ include "mediawiki.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if .Values.service.loadBalancerIP }}
@@ -30,6 +32,4 @@ spec:
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
   {{- end }}
-  selector:
-    app.kubernetes.io/name: {{ include "mediawiki.fullname" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

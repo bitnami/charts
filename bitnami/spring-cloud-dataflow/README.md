@@ -95,9 +95,14 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                                      | `nil`                                                   |
 | `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                           | `1`                                                     |
 | `server.strategyType`                        | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `server.affinity`                            | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `server.nodeSelector`                        | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `server.tolerations`                         | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                          |
+| `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                        |
+| `server.nodeAffinityPreset.type`             | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                                          |
+| `server.nodeAffinityPreset.key`              | Dataflow server node label key to match Ignored if `server.affinity` is set.                                     | `""`                                          |
+| `server.nodeAffinityPreset.values`           | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                 | `[]`                                          |
+| `server.affinity`                            | Dataflow server affinity for pod assignment                                                                      | `{}` (evaluated as a template)                |
+| `server.nodeSelector`                        | Dataflow server node labels for pod assignment                                                                   | `{}` (evaluated as a template)                |
+| `server.tolerations`                         | Dataflow server tolerations for pod assignment                                                                   | `[]` (evaluated as a template)                |
 | `server.priorityClassName`                   | Controller priorityClassName                                                                           | `nil`                                                   |
 | `server.podSecurityContext`                  | Dataflow server pods' Security Context                                                                 | `{ fsGroup: "1001" }`                                   |
 | `server.containerSecurityContext`            | Dataflow server containers' Security Context                                                           | `{ runAsUser: "1001" }`                                 |
@@ -139,6 +144,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `server.jdwp.enabled`                        | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `server.jdwp.port`                           | JDWP TCP port                                                                                          | `5005`                                                  |
+| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                     | `nil`                                                   |
+| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                 | `nil`                                                   |
 
 ### Dataflow Skipper parameters
 
@@ -158,9 +165,14 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars                                                      | `nil`                                                   |
 | `skipper.replicaCount`                       | Number of Skipper server replicas to deploy                                                            | `1`                                                     |
 | `skipper.strategyType`                       | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `skipper.affinity`                           | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `skipper.nodeSelector`                       | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `skipper.tolerations`                        | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `skipper.podAffinityPreset`                  | Skipper pod affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                 |
+| `skipper.podAntiAffinityPreset`              | Skipper pod anti-affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                               |
+| `skipper.nodeAffinityPreset.type`            | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                 |
+| `skipper.nodeAffinityPreset.key`             | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                 |
+| `skipper.nodeAffinityPreset.values`          | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                 |
+| `skipper.affinity`                           | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                       |
+| `skipper.nodeSelector`                       | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                       |
+| `skipper.tolerations`                        | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                       |
 | `skipper.priorityClassName`                  | Controller priorityClassName                                                                           | `nil`                                                   |
 | `skipper.podSecurityContext`                 | Skipper server pods' Security Context                                                                  | `{ fsGroup: "1001" }`                                   |
 | `skipper.containerSecurityContext`           | Skipper server containers' Security Context                                                            | `{ runAsUser: "1001" }`                                 |
@@ -191,6 +203,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `skipper.jdwp.enabled`                       | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `skipper.jdwp.port`                          | JDWP TCP port                                                                                          | `5005`                                                  |
+| `skipper.extraVolumes`                       | Extra Volumes to be set on the Skipper Pod                                                             | `nil`                                                   |
+| `skipper.extraVolumeMounts`                  | Extra VolumeMounts to be set on the Skipper Container                                                  | `nil`                                                   |
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                      | `localhost`                                             |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                    | `7577`                                                  |
 
@@ -297,7 +311,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)
 
 ## Configuration and installation details
 
@@ -392,7 +406,7 @@ externalDatabase.dataflow.database=myskipperdatabase
 
 NOTE: When using the indidual propertes (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
 
-To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precendence over the individual attributes. As an example of configuring an external MS SQL Server database:
+To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. As an example of configuring an external MS SQL Server database:
 
 ```console
 mariadb.enabled=false
@@ -470,6 +484,12 @@ Most likely you will only want to have one hostname that maps to this Spring Clo
 For each host indicated at `server.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

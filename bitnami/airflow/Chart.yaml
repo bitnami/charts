@@ -1,7 +1,7 @@
 annotations:
   category: WorkFlow
 apiVersion: v2
-appVersion: 1.10.12
+appVersion: 1.10.14
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/bitnami-docker-airflow
   - https://airflow.apache.org/
-version: 7.0.1
+version: 7.0.5

@@ -47,17 +47,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the spark chart and their default values.
 
+
+### Global parameters
+
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                      | Global Docker image registry                                                                                                               | `nil`                                                   |
 | `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                                            | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `nameOverride`                              | String to partially override common.names.fullname template with a string (will prepend the release name)                                  | `nil`                                                   |
+| `fullnameOverride`                          | String to fully override common.names.fullname template with a string                                                                      | `nil`                                                   |
+
+### Spark parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `image.registry`                            | spark image registry                                                                                                                       | `docker.io`                                             |
 | `image.repository`                          | spark Image name                                                                                                                           | `bitnami/spark`                                         |
 | `image.tag`                                 | spark Image tag                                                                                                                            | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                          | spark image pull policy                                                                                                                    | `IfNotPresent`                                          |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                              | String to partially override common.names.fullname template with a string (will prepend the release name)                                  | `nil`                                                   |
-| `fullnameOverride`                          | String to fully override common.names.fullname template with a string                                                                      | `nil`                                                   |
+
+### Spark master parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `master.debug`                              | Specify if debug values should be set on the master                                                                                        | `false`                                                 |
 | `master.webPort`                            | Specify the port where the web interface will listen on the master                                                                         | `8080`                                                  |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                                                      | `7077`                                                  |
@@ -68,9 +86,14 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                                  |
 | `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}` (The value is evaluated as a template)             |
 | `master.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                       | `{}` (The value is evaluated as a template)             |
-| `master.nodeSelector`                       | Node affinity policy                                                                                                                       | `{}` (The value is evaluated as a template)             |
-| `master.tolerations`                        | Tolerations for pod assignment                                                                                                             | `[]` (The value is evaluated as a template)             |
-| `master.affinity`                           | Affinity for pod assignment                                                                                                                | `{}` (The value is evaluated as a template)             |
+| `master.podAffinityPreset`                  | Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                                    |
+| `master.podAntiAffinityPreset`              | Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                               | `soft`                                                  |
+| `master.nodeAffinityPreset.type`            | Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                                    |
+| `master.nodeAffinityPreset.key`             | Spark master node label key to match Ignored if `master.affinity` is set.                                                                  | `""`                                                    |
+| `master.nodeAffinityPreset.values`          | Spark master node label values to match. Ignored if `master.affinity` is set.                                                              | `[]`                                                    |
+| `master.affinity`                           | Spark master affinity for pod assignment                                                                                                   | `{}` (evaluated as a template)                          |
+| `master.nodeSelector`                       | Spark master node labels for pod assignment                                                                                                | `{}` (evaluated as a template)                          |
+| `master.tolerations`                        | Spark master tolerations for pod assignment                                                                                                | `[]` (evaluated as a template)                          |
 | `master.resources`                          | CPU/Memory resource requests/limits                                                                                                        | `{}`                                                    |
 | `master.extraEnvVars`                       | Extra environment variables to pass to the master container                                                                                | `{}`                                                    |
 | `master.extraVolumes`                       | Array of extra volumes to be added to the Spark master deployment (evaluated as template). Requires setting `master.extraVolumeMounts`     | `nil`                                                   |
@@ -87,6 +110,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                   | 5                                                       |
 | `master.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                 | 6                                                       |
 | `master.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                | 1                                                       |
+
+### Spark worker parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `worker.debug`                              | Specify if debug values should be set on workers                                                                                           | `false`                                                 |
 | `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                                                         | `8080`                                                  |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                                                   | `7077`                                                  |
@@ -105,9 +133,14 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                                  |
 | `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}`                                                    |
 | `worker.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                       | `{}` (The value is evaluated as a template)             |
-| `worker.nodeSelector`                       | Node labels for pod assignment. Used as a template from the values.                                                                        | `{}`                                                    |
-| `worker.tolerations`                        | Toleration labels for pod assignment                                                                                                       | `[]`                                                    |
-| `worker.affinity`                           | Affinity and AntiAffinity rules for pod assignment                                                                                         | `{}`                                                    |
+| `worker.podAffinityPreset`                  | Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                                    |
+| `worker.podAntiAffinityPreset`              | Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                               | `soft`                                                  |
+| `worker.nodeAffinityPreset.type`            | Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                                    |
+| `worker.nodeAffinityPreset.key`             | Spark worker node label key to match Ignored if `worker.affinity` is set.                                                                  | `""`                                                    |
+| `worker.nodeAffinityPreset.values`          | Spark worker node label values to match. Ignored if `worker.affinity` is set.                                                              | `[]`                                                    |
+| `worker.affinity`                           | Spark worker affinity for pod assignment                                                                                                   | `{}` (evaluated as a template)                          |
+| `worker.nodeSelector`                       | Spark worker node labels for pod assignment                                                                                                | `{}` (evaluated as a template)                          |
+| `worker.tolerations`                        | Spark worker tolerations for pod assignment                                                                                                | `[]` (evaluated as a template)                          |
 | `worker.resources`                          | CPU/Memory resource requests/limits                                                                                                        | Memory: `256Mi`, CPU: `250m`                            |
 | `worker.livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                             | `true`                                                  |
 | `worker.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                   | 10                                                      |
@@ -124,6 +157,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.extraEnvVars`                       | Extra environment variables to pass to the worker container                                                                                | `{}`                                                    |
 | `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`     | `nil`                                                   |
 | `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`. | `nil`                                                   |
+
+### Security parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `security.passwordsSecretName`              | Secret to use when using security configuration to set custom passwords                                                                    | No default                                              |
 | `security.rpc.authenticationEnabled`        | Enable the RPC authentication                                                                                                              | `false`                                                 |
 | `security.rpc.encryptionEnabled`            | Enable the encryption for RPC                                                                                                              | `false`                                                 |
@@ -132,6 +170,11 @@ The following tables lists the configurable parameters of the spark chart and th
 | `security.ssl.needClientAuth`               | Enable the client authentication                                                                                                           | `false`                                                 |
 | `security.ssl.protocol`                     | Set the SSL protocol                                                                                                                       | `TLSv1.2`                                               |
 | `security.certificatesSecretName`           | Set the name of the secret that contains the certificates                                                                                  | No default                                              |
+
+### Exposure parameters
+
+| Parameter                                   | Description                                                                                                                                | Default                                                 |
+|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                              | Kubernetes Service type                                                                                                                    | `ClusterIP`                                             |
 | `service.webPort`                           | Spark client port                                                                                                                          | `80`                                                    |
 | `service.clusterPort`                       | Spark cluster port                                                                                                                         | `7077`                                                  |
@@ -148,6 +191,25 @@ The following tables lists the configurable parameters of the spark chart and th
 | `ingress.hosts[0].tls`                      | Utilize TLS backend in ingress                                                                                                             | `false`                                                 |
 | `ingress.hosts[0].tlsHosts`                 | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                       | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`                | TLS Secret (certificates)                                                                                                                  | `spark.local-tls`                                       |
+
+### Metrics parameters
+
+| Parameter                                 | Description                                                                                                                                  | Default                                                      |
+|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                         | Start a side-car prometheus exporter                                                                                                         | `false`                                                      |
+| `metrics.masterAnnotations`               | Annotations for enabling prometheus to access the metrics endpoint of the master nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8080"}` |
+| `metrics.workerAnnotations`               | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
+| `metrics.resources.limits`                | The resources limits for the metrics exporter container                                                                                      | `{}`                                                         |
+| `metrics.resources.requests`              | The requested resources for the metrics exporter container                                                                                   | `{}`                                                         |
+| `metrics.podMonitor.enabled`              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                                     | `false`                                                      |
+| `metrics.podMonitor.namespace`            | Namespace where podmonitor resource should be created                                                                                        | `nil`                                                        |
+| `metrics.podMonitor.interval`             | Specify the interval at which metrics should be scraped                                                                                      | `30s`                                                        |
+| `metrics.podMonitor.scrapeTimeout`        | Specify the timeout after which the scrape is ended                                                                                          | `nil`                                                        |
+| `metrics.podMonitor.additionalLabels`     | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                                           | `{}`                                                         |
+| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus                                                                                    | `false`                                                      |
+| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                       | `{}`                                                         |
+| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                                                                                   | the same namespace as spark                                  |
+| `metrics.prometheusRule.rules`            | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.              | `[]`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -273,6 +335,12 @@ security.ssl.needClientAuth=true
 ```
 
 > Be aware that currently is not possible to submit an application to a standalone cluster if RPC authentication is configured. More info about the issue [here](https://issues.apache.org/jira/browse/SPARK-25078).
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

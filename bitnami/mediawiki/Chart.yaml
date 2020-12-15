@@ -3,6 +3,11 @@ annotations:
 apiVersion: v2
 appVersion: 1.35.0
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
   - http://www.mediawiki.org/
-version: 11.0.0
+version: 12.0.1

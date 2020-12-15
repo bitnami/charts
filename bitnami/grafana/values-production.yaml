@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 7.3.3-debian-10-r0
+  tag: 7.3.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -44,7 +44,7 @@ clusterDomain: cluster.local
 admin:
   ## Admin username
   ##
-  user: "admin"
+  user: 'admin'
   ## Admin password
   ## If a password is not provided a random password will be generated
   ##
@@ -64,6 +64,9 @@ smtp:
   ##
   user: user
   password: password
+  ## Custom host for the smtp server
+  ##
+  # host: mysmtphost.com
   ## Name of existing secret containing SMTP credentials (user and password)
   ##
   # existingSecret:
@@ -178,6 +181,45 @@ serviceAccount:
 ##
 podAnnotations: {}
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ''
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ''
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -187,11 +229,6 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
 
 ## SecurityContext configuration
 ##
@@ -333,7 +370,7 @@ ingress:
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   hosts:
     - name: grafana.local
-      paths: ["/"]
+      paths: ['/']
 
       ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
       extraPaths: []
@@ -364,26 +401,23 @@ metrics:
   ##
   service:
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "3000"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '3000'
+      prometheus.io/path: '/metrics'
 
   serviceMonitor:
     enabled: false
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -398,7 +432,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 2.0.0-debian-10-r126
+    tag: 2.0.0-debian-10-r146
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -448,9 +482,9 @@ imageRenderer:
     ## Prometheus annotations
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "8080"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8080'
+      prometheus.io/path: '/metrics'
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:

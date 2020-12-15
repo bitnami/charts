@@ -3,6 +3,9 @@ kind: StatefulSet
 metadata:
   name: {{ include "etcd.fullname" . }}
   labels: {{- include "etcd.labels" . | nindent 4 }}
+    {{- if .Values.statefulsetLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.statefulsetLabels "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   selector:
     matchLabels: {{- include "etcd.matchLabels" . | nindent 6 }}
@@ -20,6 +23,9 @@ spec:
   template:
     metadata:
       labels: {{- include "etcd.labels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations (not .Values.metrics.serviceMonitor.enabled)) }}
       annotations:
         {{- if .Values.podAnnotations }}
@@ -33,6 +39,11 @@ spec:
 {{- include "etcd.imagePullSecrets" . | indent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "etcd.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "etcd.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}

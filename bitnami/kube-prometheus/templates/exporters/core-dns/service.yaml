@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: {{ .Values.coreDns.namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
 spec:
   clusterIP: None

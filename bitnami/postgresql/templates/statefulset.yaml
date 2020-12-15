@@ -1,9 +1,9 @@
-apiVersion: {{ template "postgresql.statefulset.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "postgresql.primary.fullname" . }}
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: primary
   {{- with .Values.primary.labels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -15,7 +15,7 @@ metadata:
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ template "postgresql.fullname" . }}-headless
+  serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: 1
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
@@ -28,10 +28,11 @@ spec:
       role: primary
   template:
     metadata:
-      name: {{ template "postgresql.fullname" . }}
+      name: {{ template "common.names.fullname" . }}
       labels:
       {{- include "common.labels.standard" . | nindent 8 }}
         role: primary
+        app.kubernetes.io/component: primary
       {{- with .Values.primary.podLabels }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -43,14 +44,19 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
 {{- include "postgresql.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.primary.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.primary.nodeSelector | nindent 8 }}
-      {{- end }}
       {{- if .Values.primary.affinity }}
-      affinity: {{- toYaml .Values.primary.affinity | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.primary.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAffinityPreset "component" "primary" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAntiAffinityPreset "component" "primary" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.primary.nodeAffinityPreset.type "key" .Values.primary.nodeAffinityPreset.key "values" .Values.primary.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.primary.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.primary.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.primary.tolerations }}
-      tolerations: {{- toYaml .Values.primary.tolerations | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -59,7 +65,7 @@ spec:
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ default (include "postgresql.fullname" . ) .Values.serviceAccount.name }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       {{- if or .Values.primary.extraInitContainers (and .Values.volumePermissions.enabled (or .Values.persistence.enabled (and .Values.shmVolume.enabled .Values.shmVolume.chmod.enabled))) }}
       initContainers:
@@ -131,7 +137,7 @@ spec:
       priorityClassName: {{ .Values.primary.priorityClassName }}
       {{- end }}
       containers:
-        - name: {{ template "postgresql.fullname" . }}
+        - name: {{ template "common.names.fullname" . }}
           image: {{ template "postgresql.image" . }}
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           {{- if .Values.resources }}
@@ -201,7 +207,7 @@ spec:
             - name: POSTGRES_CLUSTER_APP_NAME
               value: {{ .Values.replication.applicationName }}
             {{- end }}
-            {{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
+            {{- if not (eq (include "postgresql.username" .) "postgres")  }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
@@ -576,7 +582,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{ include "postgresql.storageClass" . }}
+        {{ include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) }}
         {{- if .Values.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end -}}

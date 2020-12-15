@@ -12,16 +12,16 @@ host. To configure Mediawiki with the URL of your service:
 
   {{- if contains "NodePort" .Values.service.type }}
 
-  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
   export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
   {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "mediawiki.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
   export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)  {{- end }}
   export MARIADB_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 
@@ -43,12 +43,11 @@ host. To configure Mediawiki with the URL of your service:
 
 {{- if .Values.ingress.enabled }}
 
-1. Get the Mediawiki URL indicated on the Ingress Rule and associate it to your cluster external IP:
+1. Get the Mediawiki URL and associate its hostname to your cluster external IP:
 
-  export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-  export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
-  echo "Mediawiki URL: http://$HOSTNAME/"
-  echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Mediawiki URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 
@@ -56,16 +55,16 @@ host. To configure Mediawiki with the URL of your service:
 
 {{- if contains "NodePort" .Values.service.type }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "mediawiki.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Mediawiki URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "mediawiki.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "Mediawiki URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
@@ -73,7 +72,7 @@ host. To configure Mediawiki with the URL of your service:
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
   echo "Mediawiki URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "mediawiki.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- end }}
 {{- end }}
@@ -82,7 +81,7 @@ host. To configure Mediawiki with the URL of your service:
 2. Get your MediaWiki login credentials by running:
 
     echo Username: {{ .Values.mediawikiUser }}
-    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
+    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
 
 {{- else -}}
 
@@ -93,16 +92,21 @@ host. To configure Mediawiki with the URL of your service:
 This deployment will be incomplete until you configure MediaWiki with a resolvable database
 host. To configure MediaWiki to use and external database host:
 
-
 1. Complete your MediaWiki deployment by running:
 
   helm upgrade {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/mediawiki
 
 {{- end}}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
+{{- include "mediawiki.checkRollingTags" . }}
+{{- $passwordValidationErrors := list -}}
+{{- $secretName := include "common.names.fullname" . -}}
+{{- $requiredMediawikiPassword := dict "valueKey" "mediawikiPassword" "secret" $secretName "field" "mediawiki-password" "context" $ -}}
+{{- $requiredMediawikiPasswordError := include "common.validations.values.single.empty" $requiredMediawikiPassword -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $requiredMediawikiPasswordError -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbSecretName := include "mediawiki.databaseSecretName" . -}}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

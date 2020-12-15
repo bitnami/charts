@@ -2,13 +2,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "node-exporter.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   {{- if .Values.serviceMonitor.namespace }}
   namespace: {{ .Values.serviceMonitor.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels: {{- include "node-exporter.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- range $key, $value := .Values.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
@@ -17,7 +17,7 @@ spec:
   jobLabel: {{ .Values.serviceMonitor.jobLabel }}
   {{- end }}
   selector:
-    matchLabels: {{- include "node-exporter.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   endpoints:
     - port: metrics
       {{- if .Values.serviceMonitor.interval }}
@@ -27,10 +27,10 @@ spec:
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
       {{- if .Values.serviceMonitor.relabelings }}
-      relabelings: {{- include "node-exporter.tplValue" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- include "node-exporter.tplValue" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
   namespaceSelector:
     matchNames:

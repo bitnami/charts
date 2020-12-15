@@ -65,7 +65,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `extraEnvVars`                               | Extra environment variables to add to web, worker and scheduler pods                                                                                                                                                           | `nil`                                                   |
 | `extraEnvVarsCM`                             | ConfigMap containing extra env vars to add to web, worker and scheduler pods                                                                                                                                                   | `nil`                                                   |
 | `extraEnvVarsSecret`                         | Secret containing extra env vars to add to web, worker and scheduler pods                                                                                                                                                      | `nil`                                                   |
-| `fullnameOverride`                           | String to fully override ariflow.fullname template with a string                                                                                                                                                               | `nil`                                                   |
+| `fullnameOverride`                           | String to fully override airflow.fullname template with a string                                                                                                                                                               | `nil`                                                   |
 | `initContainers`                             | List of init containers to be added to the web, worker and scheduler pods                                                                                                                                                      | `nil`                                                   |
 | `nameOverride`                               | String to partially override airflow.fullname template with a string (will prepend the release name)                                                                                                                           | `nil`                                                   |
 | `networkPolicies.enabled`                    | Switch to enable network policies                                                                                                                                                                                              | `false`                                                 |
@@ -184,7 +184,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 |----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `worker.args`                                | Override default container args (useful when using custom images)                                                                                                                                                              | `nil`                                                   |
 | `worker.autoscaling.enabled`                 | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests`                                                         | `false`                                                 |
-| `worker.autoscaling.replicas.max`            | Maximun amount of replicas                                                                                                                                                                                                     | `3`                                                     |
+| `worker.autoscaling.replicas.max`            | Maximum amount of replicas                                                                                                                                                                                                     | `3`                                                     |
 | `worker.autoscaling.replicas.min`            | Minimum amount of replicas                                                                                                                                                                                                     | `1`                                                     |
 | `worker.autoscaling.targets.cpu`             | Target cpu that will trigger an scaling action (unit: %)                                                                                                                                                                       | `80`                                                    |
 | `worker.autoscaling.targets.memory`          | Target memory that will trigger an scaling action (unit: %)                                                                                                                                                                    | `80`                                                    |
@@ -293,7 +293,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `ldap.bindpw`                                | LDAP bind password                                                                                                                                                                                                             | `nil`                                                   |
 | `ldap.enabled`                               | Enable LDAP support                                                                                                                                                                                                            | `false`                                                 |
 | `ldap.tls.enabled`                           | Enable LDAP over TLS (LDAPS)                                                                                                                                                                                                   | `False`                                                 |
-| `ldap.tls.allowSelfSigned`                   | Allow self signed certicates for LDAPS                                                                                                                                                                                         | `True`                                                  |
+| `ldap.tls.allowSelfSigned`                   | Allow self signed certificates for LDAPS                                                                                                                                                                                         | `True`                                                  |
 | `ldap.tls.CAcertificateSecret`               | Name of the secret that contains the LDAPS CA cert file                                                                                                                                                                        | `uid`                                                   |
 | `ldap.tls.CAcertificateFilename`             | LDAPS CA cert filename                                                                                                                                                                                                         | `uid`                                                   |
 | `ldap.uidField`                              | LDAP field used for uid                                                                                                                                                                                                        | `uid`                                                   |
@@ -477,7 +477,7 @@ This is useful if you plan on using [Bitnami's sealed secrets](https://github.co
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -531,7 +531,7 @@ redis.enabled=false
 Sometime when using large workloads a fixed number of worker pods may make task to take a long time to be executed. This chart provide two ways for scaling worker pods.
 
 - If you are using `KubernetesExecutor` auto scaling pods would be done by the Scheduler without adding anything more.
-- If you are using `SequentialExecutor` you would have to enable `worker.autoscaling` to do so, please, set the following parameters. It will use autoscaling by defualt configuration that you can change using `worker.autoscaling.replicas.*` and `worker.autoscaling.targets.*`.
+- If you are using `SequentialExecutor` you would have to enable `worker.autoscaling` to do so, please, set the following parameters. It will use autoscaling by default configuration that you can change using `worker.autoscaling.replicas.*` and `worker.autoscaling.targets.*`.
 
 ```console
 worker.autoscaling.enabled=true
@@ -559,7 +559,7 @@ Find more information about how to deal with common errors related to Bitnami’
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*.
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts.
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The image objects have been moved to its corresponding component object, e.g: `workerImage.*` now is located at `worker.image.*`.
   - The prefix *airflow* has been removed. Therefore, parameters prefixed with `airflow` are now at root level, e.g. `airflow.loadExamples` now is `loadExamples` or `airflow.worker.resources` now is `worker.resources`.
   - Parameters related to the *git* features has completely been refactored, please see how to configure git for [dags](#loaddagfiles) and [plugins](#loadingplugins) sections for more details.
@@ -569,7 +569,7 @@ Find more information about how to deal with common errors related to Bitnami’
   - Liveness and rediness probe have been separated by components `airflow.livenessProbe.*` and `airflow.redinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.redinessProbe` and `worker.redinessProbe`.
   - `airflow.baseUrl` has been moved to `web.baseUrl`.
   - Security context has been migrated to the bitnami standard way so that `securityContext.*` has been divided into `podSecurityContext.*` that will define the `fsGroup` for all the containers in the pod and `containerSecurityContext.*` that will define the user id that will run the main containers.
-  - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `9.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)
+  - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `10.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1000) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)
   - `./files/dags/*.py` will not be include in the deployment any more.
 
 - Some new features:
@@ -602,6 +602,7 @@ $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o js
 $ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ##### Delete statefulsets
@@ -626,6 +627,7 @@ $ helm upgrade airflow bitnami/airflow \
     --set auth.password=$AIRFLOW_PASSWORD \
     --set auth.fernetKey=$AIRFLOW_FERNETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \
     --set redis.cluster.enabled=true
 ```

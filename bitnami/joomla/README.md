@@ -90,7 +90,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                       |
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                       |
 | `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                       |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                       |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`  | `nil`                                       |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                       |
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                       |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                          |
@@ -125,7 +125,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                       |
 | `smtpUser`                           | SMTP user                                                                                                             | `nil`                                       |
 | `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                       |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template) |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (evaluated as a template)              |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                       |
 
 ### Traffic Exposure Parameters
@@ -261,6 +261,12 @@ ingress:
       hosts:
         - joomla.domain.com
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
