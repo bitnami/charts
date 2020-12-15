@@ -26,7 +26,7 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
-        {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) }}
+        {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
         {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
@@ -263,7 +263,7 @@ spec:
                     if [[ -f /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh ]]; then
                         /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh -t {{ .Values.terminationGracePeriodSeconds | quote }} -d  {{ ternary "true" "false" .Values.image.debug | quote }}
                     else
-                        rabbitmq stop_app
+                        rabbitmqctl stop_app
                     fi
           volumeMounts:
             - name: configuration

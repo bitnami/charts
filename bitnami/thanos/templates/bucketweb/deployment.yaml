@@ -1,9 +1,9 @@
 {{- if .Values.bucketweb.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "thanos.fullname" . }}-bucketweb
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-bucketweb
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
 spec:
   replicas: {{ .Values.bucketweb.replicaCount }}
@@ -13,28 +13,33 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: bucketweb
   template:
     metadata:
-      labels: {{- include "thanos.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: bucketweb
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.bucketweb.podAnnotations }}
-        {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
       {{- if .Values.bucketweb.affinity }}
-      affinity: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.bucketweb.podAffinityPreset "component" "bucketweb" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.bucketweb.podAntiAffinityPreset "component" "bucketweb" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.bucketweb.nodeAffinityPreset.type "key" .Values.bucketweb.nodeAffinityPreset.key "values" .Values.bucketweb.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.bucketweb.nodeSelector }}
-      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.bucketweb.tolerations }}
-      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.bucketweb.priorityClassName }}
       priorityClassName: {{ .Values.bucketweb.priorityClassName | quote }}
@@ -69,10 +74,10 @@ spec:
               containerPort: 8080
               protocol: TCP
           {{- if .Values.bucketweb.livenessProbe }}
-          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.livenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.readinessProbe }}
-          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.readinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.resources }}
           resources: {{- toYaml .Values.bucketweb.resources | nindent 12 }}

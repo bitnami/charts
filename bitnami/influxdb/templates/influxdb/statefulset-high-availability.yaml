@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "influxdb.fullname" . }}
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 spec:
@@ -16,12 +16,12 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: 
+    matchLabels:
       {{- include "influxdb.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: influxdb
   template:
     metadata:
-      labels: 
+      labels:
         {{ include "influxdb.labels" . | nindent 8 }}
         app.kubernetes.io/component: influxdb
     spec:

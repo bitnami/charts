@@ -178,6 +178,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                | `[]`                                                         |
 | `service.loadBalancerIP`                  | LoadBalancerIP for the service                                                                                           | `nil`                                                        |
 | `service.externalIP`                      | ExternalIP for the service                                                                                               | `nil`                                                        |
+| `service.externalTrafficPolicy`           | Enable client source IP preservation                                                                                     | `Cluster`                                                    |
 | `service.labels`                          | Service labels                                                                                                           | `{}` (evaluated as a template)                               |
 | `service.annotations`                     | Service annotations                                                                                                      | `{}` (evaluated as a template)                               |
 | `ingress.enabled`                         | Enable ingress resource for Management console                                                                           | `false`                                                      |
@@ -281,7 +282,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -615,7 +616,7 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 
 ### To 7.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - `replicas` is renamed to `replicaCount`.
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
   - Authentication parameters were reorganized under the `auth.*` parameter:

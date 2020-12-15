@@ -2,27 +2,27 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   {{- if .Values.metrics.prometheusRule.namespace }}
   namespace: {{ .Values.metrics.prometheusRule.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
-    component: {{ .Values.name }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
-    {{- include "nginx-ingress.tplValue" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
-    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- with .Values.metrics.prometheusRule.rules }}
   groups:
-    - name: {{ template "nginx-ingress.name" $ }}
+    - name: {{ include "common.names.name" $ }}
       rules: {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}

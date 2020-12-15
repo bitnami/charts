@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.44.0-debian-10-r0
+    tag: 0.44.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -102,6 +102,18 @@ operator:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
 
     ## Provide any additional annotations which may be required.
     ##
@@ -233,7 +245,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.4.0-debian-10-r124
+      tag: 0.4.0-debian-10-r128
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -264,7 +276,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.23.0-debian-10-r2
+    tag: 2.23.0-debian-10-r6
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -326,6 +338,18 @@ prometheus:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
 
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
@@ -646,7 +670,7 @@ prometheus:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes
+  ## Volumes allows configuration of additional volumes
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ##
   volumes: []
@@ -736,7 +760,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.17.1-scratch-r0
+      tag: 0.17.2-scratch-r0
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -829,7 +853,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r156
+    tag: 0.21.0-debian-10-r161
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -887,6 +911,18 @@ alertmanager:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
 
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
@@ -1116,7 +1152,7 @@ alertmanager:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes. Evaluated as a template
+  ## Volumes allows configuration of additional volumes. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   ##
   volumes: []
