@@ -154,31 +154,6 @@ spec:
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $.Values.shardsvr.dataNode.mongodbExtraFlags | join " " | quote }}
             {{- end }}
-            {{- if $.Values.common.extraEnvVars }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
-            {{- end }}
-            {{- if $.Values.shardsvr.dataNode.extraEnvVars }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVars "context" $ ) | nindent 12 }}
-            {{- end }}
-          {{- if or $.Values.common.extraEnvVarsCM $.Values.common.extraEnvVarsSecret $.Values.shardsvr.dataNode.extraEnvVarsCM $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
-          envFrom:
-            {{- if $.Values.common.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
-            {{- end }}
-            {{- if $.Values.common.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
-            {{- end }}
-            {{- if $.Values.shardsvr.dataNode.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
-            {{- end }}
-            {{- if $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
-            - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
-            {{- end }}
-          {{- end }}
           command:
             - /bin/bash
             - /entrypoint/replicaset-entrypoint.sh
@@ -320,7 +295,7 @@ spec:
         {{- if $.Values.common.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ include "mongodb-sharded.initScriptsSecret" $ }}
+            name: {{ include "mongodb-sharded.initScriptsSecret" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}

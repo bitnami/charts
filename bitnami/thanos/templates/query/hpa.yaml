@@ -14,16 +14,16 @@ spec:
   minReplicas: {{ $query.autoscaling.minReplicas }}
   maxReplicas: {{ $query.autoscaling.maxReplicas }}
   metrics:
-    {{- if $query.autoscaling.targetMemory }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ $query.autoscaling.targetMemory  }}
-    {{- end }}
     {{- if $query.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         targetAverageUtilization: {{ $query.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if $query.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $query.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}    

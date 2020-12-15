@@ -101,7 +101,7 @@ spec:
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: generate-tls-certs
-          image: {{ include "mongodb.tls.image" . }}
+          image: {{ include "mongodb.tls.image" . }} 
           imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
           env:
             - name: MY_POD_NAMESPACE
@@ -149,7 +149,7 @@ spec:
               #Signing the server certificate with the CA cert and key
               openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
               rm /certs/mongo.csr
-              #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+              #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication. 
               cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
               cd /certs/
               shopt -s extglob
@@ -450,7 +450,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: {{ template "mongodb.caSecretName" . }}
+            secretName: ca-clients
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
@@ -477,9 +477,6 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- if .Values.persistence.volumeClaimTemplates.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
-        {{- end }}
         {{ include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) }}
   {{- end }}
 {{- end }}

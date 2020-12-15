@@ -467,7 +467,7 @@ ldapDaemon:
   ##
   customReadinessProbe: {}
 
-## Sidecar parameters
+## Sidecar paramaters
 ##
 # sidecars:
 #   - name: your-image-name
@@ -477,7 +477,7 @@ ldapDaemon:
 #       - name: portname
 #         containerPort: 1234
 sidecars:
-## Ingress parameters
+## Ingress paramaters
 ##
 ingress:
   ## Set to true to enable ingress record generation

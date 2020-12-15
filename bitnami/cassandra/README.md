@@ -120,7 +120,6 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `affinity`                                | Affinity for pod assignment                                                                                          | `{}` (evaluated as a template)                               |
 | `nodeSelector`                            | Node labels for pod assignment                                                                                       | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                                                       | `[]` (evaluated as a template)                               |
-| `topologySpreadConstraints`               | Topology Spread Constraints for pod assignment                                                                       | `[]` (evaluated as a template)                               |
 | `podSecurityContext.enabled`              | Enable security context for Cassandra pods                                                                           | `true`                                                       |
 | `podSecurityContext.fsGroup`              | Group ID for the volumes of the pod                                                                                  | `1001`                                                       |
 | `containerSecurityContext.enabled`        | Cassandra Container securityContext                                                                                  | `true`                                                       |
@@ -238,7 +237,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + cluster.seedCount: 2
 ```
 
-- Minimum number of instances that must be available in the cluster:
+- Minimum nuber of instances that must be available in the cluster:
 
 ```diff
 - cluster.minimumAvailable: 1
@@ -305,7 +304,7 @@ If the scripts contain sensitive information, you can use the `initDBSecret` par
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -364,7 +363,7 @@ $ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
 
 ### To 6.0.0
 
-- Several parameters were renamed or disappeared in favor of new ones on this major version:
+- Several parameters were renamed or dissapeared in favor of new ones on this major version:
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
   - Parameters prefixed with `statefulset.` were renamed removing the prefix. E.g. `statefulset.rollingUpdatePartition` -> renamed to `rollingUpdatePartition`.
   - `cluster.replicaCount` is renamed to `replicaCount`.

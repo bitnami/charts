@@ -44,9 +44,6 @@ spec:
       {{- if .Values.initJob.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.initJob.priorityClassName }}
-      priorityClassName: {{ .Values.initJob.priorityClassName }}
-      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.podSecurityContext.fsGroup }}

@@ -81,7 +81,7 @@ spec:
       {{- if .Values.pgpool.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      # Auxiliary vars to populate environment variables
+      # Auxiliar vars to populate environment variables
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
       {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}

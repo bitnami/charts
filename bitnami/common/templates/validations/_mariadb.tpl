@@ -41,7 +41,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for existingSecret.
+Auxiliar function to get the right value for existingSecret.
 
 Usage:
 {{ include "common.mariadb.values.auth.existingSecret" (dict "context" $) }}
@@ -57,7 +57,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for enabled mariadb.
+Auxiliar function to get the right value for enabled mariadb.
 
 Usage:
 {{ include "common.mariadb.values.enabled" (dict "context" $) }}
@@ -71,7 +71,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for architecture
+Auxiliar function to get the right value for architecture
 
 Usage:
 {{ include "common.mariadb.values.architecture" (dict "subchart" "true" "context" $) }}
@@ -87,7 +87,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for the key auth
+Auxiliar function to get the right value for the key auth
 
 Usage:
 {{ include "common.mariadb.values.key.auth" (dict "subchart" "true" "context" $) }}

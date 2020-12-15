@@ -118,9 +118,9 @@ spec:
               value: {{ .Values.auth.replicationUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_MASTER_ROOT_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mysql/secrets/mysql-root-password" .Values.auth.customPasswordFiles.root }}
+              value: "/opt/bitnami/mysql/secrets/mysql-root-password"
             - name: MYSQL_REPLICATION_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mysql/secrets/mysql-replication-password" .Values.auth.customPasswordFiles.replicator }}
+              value: "/opt/bitnami/mysql/secrets/mysql-replication-password"
             {{- else }}
             - name: MYSQL_MASTER_ROOT_PASSWORD
               valueFrom:
@@ -195,7 +195,7 @@ spec:
               mountPath: /opt/bitnami/mysql/conf/my.cnf
               subPath: my.cnf
             {{- end }}
-            {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysql/secrets/
             {{- end }}
@@ -209,7 +209,7 @@ spec:
           env:
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_ROOT_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mysql-root-password" .Values.auth.customPasswordFiles.root }}
+              value: "/opt/bitnami/mysqld-exporter/secrets/mysql-root-password"
             {{- else }}
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -244,7 +244,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
-          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
+          {{- if .Values.auth.usePasswordFiles }}
           volumeMounts:
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
@@ -259,7 +259,7 @@ spec:
           configMap:
             name: {{ include "mysql.secondary.configmapName" . }}
         {{- end }}
-        {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: mysql-credentials
           secret:
             secretName: {{ template "mysql.secretName" . }}
@@ -281,10 +281,6 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: secondary
-      {{- if .Values.secondary.persistence.annotations }}
-        annotations:
-          {{- toYaml .Values.secondary.persistence.annotations | nindent 10 }}
-      {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

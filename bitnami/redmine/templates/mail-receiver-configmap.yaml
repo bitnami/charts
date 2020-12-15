@@ -206,7 +206,7 @@ data:
 
     # Execute command
     eval $COMMAND
-    echo "Email receiving completed"
+    echo "Email receiveing completed"
 
     exit 0
 {{- end -}}

@@ -62,8 +62,8 @@ The following tables list the configurable parameters of the Phabricator chart a
 
 | Parameter                        | Description                                                                                              | Default                                                      |
 |----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `nameOverride`                   | String to partially override common.names.fullname template with a string (will prepend the release name)| `nil`                                                        |
-| `fullnameOverride`               | String to fully override common.names.fullname template with a string                                    | `nil`                                                        |
+| `nameOverride`                   | String to partially override phabricator.fullname template with a string (will prepend the release name) | `nil`                                                        |
+| `fullnameOverride`               | String to fully override phabricator.fullname template with a string                                     | `nil`                                                        |
 
 ### Phabricator parameters
 
@@ -87,14 +87,9 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `smtpUser`                       | SMTP user                                                                                                | `nil`                                                        |
 | `smtpPassword`                   | SMTP password                                                                                            | `nil`                                                        |
 | `smtpProtocol`                   | SMTP protocol [`ssl`, `tls`]                                                                             | `nil`                                                        |
-| `podAffinityPreset`              | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                         |
-| `podAntiAffinityPreset`          | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                       |
-| `nodeAffinityPreset.type`        | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                         |
-| `nodeAffinityPreset.key`         | Node label key to match. Ignored if `affinity` is set.                                                   | `""`                                                         |
-| `nodeAffinityPreset.values`      | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                                                         |
-| `affinity`                       | Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                               |
-| `nodeSelector`                   | Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                               |
-| `tolerations`                    | Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                               |
+| `nodeSelector`                   | Node labels for pod assignment                                                                           | `nil`                                                        |
+| `affinity`                       | Node/pod affinities                                                                                      | `nil`                                                        |
+| `tolerations`                    | List of node taints to tolerate                                                                          | `nil`                                                        |
 | `podAnnotations`                 | Pod annotations                                                                                          | `{}`                                                         |
 | `persistence.enabled`            | Enable persistence using PVC                                                                             | `true`                                                       |
 | `persistence.storageClass`       | PVC Storage Class for Phabricator volume                                                                 | `nil` (uses alpha storage class annotation)                  |
@@ -240,12 +235,6 @@ The [Bitnami Phabricator](https://github.com/bitnami/bitnami-docker-phabricator)
 Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

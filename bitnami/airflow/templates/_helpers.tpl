@@ -200,35 +200,35 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
+Add environmnet variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
 {{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
+Add environmnet variables to configure database values
 */}}
 {{- define "airflow.database.user" -}}
 {{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
+Add environmnet variables to configure database values
 */}}
 {{- define "airflow.database.name" -}}
 {{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
+Add environmnet variables to configure database values
 */}}
 {{- define "airflow.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environment variables to configure database values
+Add environmnet variables to configure database values
 */}}
 {{- define "airflow.configure.database" -}}
 - name: AIRFLOW_DATABASE_NAME
@@ -247,7 +247,7 @@ Add environment variables to configure database values
 {{- end -}}
 
 {{/*
-Add environment variables to configure redis values
+Add environmnet variables to configure redis values
 */}}
 {{- define "airflow.configure.redis" -}}
 - name: REDIS_HOST
@@ -266,7 +266,7 @@ Add environment variables to configure redis values
 {{- end -}}
 
 {{/*
-Add environment variables to configure airflow common values
+Add environmnet variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
 - name: AIRFLOW_EXECUTOR
@@ -289,7 +289,7 @@ Add environment variables to configure airflow common values
 {{- end -}}
 
 {{/*
-Add environment variables to configure airflow kubernetes executor
+Add environmnet variables to configure airflow kubernetes executor
 */}}
 {{- define "airflow.configure.airflow.kubernetesExecutor" -}}
 {{- if eq .Values.executor "KubernetesExecutor" }}
@@ -364,7 +364,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - At least one repository details must be provided when "git.dags.enabled" is "true" */}}
+{{/* Validate values of Airflow - Atleast one repository details must be provided when "git.dags.enabled" is "true" */}}
 {{- define "airflow.validateValues.dags.repositories" -}}
   {{- if and .Values.git.dags.enabled (empty .Values.git.dags.repositories) -}}
 airflow: git.dags.repositories

@@ -75,7 +75,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `auth.password`                           | RabbitMQ application password                                                                                            | _random 10 character long alphanumeric string_               |
 | `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                             | `nil` (evaluated as a template)                              |
 | `auth.erlangCookie`                       | Erlang cookie                                                                                                            | _random 32 character long alphanumeric string_               |
-| `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                      | `nil` (evaluated as a template)                                                        |
+| `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                      | `nil`                                                        |
 | `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                           | `false`                                                      |
 | `auth.tls.failIfNoPeerCert`               | When set to true, TLS connection will be rejected if client fails to provide a certificate                               | `true`                                                       |
 | `auth.tls.sslOptionsVerify`               | Should [peer verification](https://www.rabbitmq.com/ssl.html#peer-verification) be enabled?                              | `verify_peer`                                                |
@@ -126,15 +126,10 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `statefulsetLabels`                       | RabbitMQ statefulset labels                                                                                              | `{}` (evaluated as a template)                               |
 | `podLabels`                               | RabbitMQ pod labels                                                                                                      | `{}` (evaluated as a template)                               |
 | `podAnnotations`                          | RabbitMQ Pod annotations                                                                                                 | `{}` (evaluated as a template)                               |
-| `podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                                                         |
-| `podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                                                       |
-| `nodeAffinityPreset.type`                 | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                                                         |
-| `nodeAffinityPreset.key`                  | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                                                         |
-| `nodeAffinityPreset.values`               | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                                                         |
+| `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
+| `priorityClassName`                       | Name of the existing priority class to be used by kafka pods                                                             | `""`                                                         |
 | `nodeSelector`                            | Node labels for pod assignment                                                                                           | `{}` (evaluated as a template)                               |
 | `tolerations`                             | Tolerations for pod assignment                                                                                           | `[]` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
-| `priorityClassName`                       | Name of the existing priority class to be used by rabbitmq pods                                                          | `""`                                                         |
 | `podSecurityContext`                      | RabbitMQ pods' Security Context                                                                                          | `{}`                                                         |
 | `containerSecurityContext`                | RabbitMQ containers' Security Context                                                                                    | `{}`                                                         |
 | `resources.limits`                        | The resources limits for RabbitMQ containers                                                                             | `{}`                                                         |
@@ -178,7 +173,6 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                | `[]`                                                         |
 | `service.loadBalancerIP`                  | LoadBalancerIP for the service                                                                                           | `nil`                                                        |
 | `service.externalIP`                      | ExternalIP for the service                                                                                               | `nil`                                                        |
-| `service.externalTrafficPolicy`           | Enable client source IP preservation                                                                                     | `Cluster`                                                    |
 | `service.labels`                          | Service labels                                                                                                           | `{}` (evaluated as a template)                               |
 | `service.annotations`                     | Service annotations                                                                                                      | `{}` (evaluated as a template)                               |
 | `ingress.enabled`                         | Enable ingress resource for Management console                                                                           | `false`                                                      |
@@ -280,15 +274,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 ### Production configuration and horizontal scaling
 
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
+This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one. In case you want to spread the deployment accross nodes you should configure the affinity parameters.
 
 - Increase the number of replicas:
 
@@ -616,7 +604,7 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 
 ### To 7.0.0
 
-- Several parameters were renamed or disappeared in favor of new ones on this major version:
+- Several parameters were renamed or dissapeared in favor of new ones on this major version:
   - `replicas` is renamed to `replicaCount`.
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
   - Authentication parameters were reorganized under the `auth.*` parameter:

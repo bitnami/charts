@@ -36,7 +36,6 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ .Values.serviceAccountName }}
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:

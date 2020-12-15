@@ -1,15 +1,15 @@
 {{- if include "phabricator.host" . -}}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+apiVersion: {{ template "phabricator.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ template "phabricator.fullname" . }}
+  labels: {{- include "phabricator.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "phabricator.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "phabricator.labels" . | nindent 8 }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}
@@ -26,7 +26,7 @@ spec:
           hostnames:
             - "status.localhost"
       containers:
-        - name: {{ template "common.names.fullname" . }}
+        - name: {{ template "phabricator.fullname" . }}
           image: {{ template "phabricator.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
@@ -53,7 +53,7 @@ spec:
             - name: PHABRICATOR_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ template "phabricator.fullname" . }}
                   key: phabricator-password
             {{- if .Values.phabricatorEmail }}
             - name: PHABRICATOR_EMAIL
@@ -87,7 +87,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ template "phabricator.fullname" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
@@ -153,7 +153,7 @@ spec:
         - name: phabricator-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "common.names.fullname" . }}
+            claimName: {{ template "phabricator.fullname" . }}
         {{- else }}
           emptyDir: {}
         {{- end }}

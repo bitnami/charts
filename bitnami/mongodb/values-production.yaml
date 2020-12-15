@@ -92,15 +92,6 @@ auth:
 tls:
   ## Enable or disable MongoDB TLS Support
   enabled: false
-
-  ## Existing secret with MongoDB TLS certificates
-  ## NOTE: When it's set it will disable certificate creation
-  ##
-  # existingSecret: name-of-existing-secret
-
-  ## Add Custom CA certificate
-  # caCert: base64 encoded ca certificate
-  # caKey: base64 encoded private key
   ##
   ## Bitnami Nginx image
   ##
@@ -298,7 +289,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## Labels for MongoDB pods. Evaluated as a template.
+## Lables for MongoDB pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
@@ -460,11 +451,6 @@ persistence:
   ## and one PV for multiple services.
   ##
   subPath: ""
-  ## Fine tuning for volumeClaimTemplates
-  volumeClaimTemplates:
-    ## A label query over volumes to consider for binding (e.g. when using local volumes)
-    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
-    selector:
 
 ## Service parameters
 ##
@@ -690,7 +676,7 @@ arbiter:
   ##
   tolerations: []
 
-  ## Labels for MongoDB Arbiter pods. Evaluated as a template.
+  ## Lables for MongoDB Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
@@ -837,7 +823,7 @@ rbac:
   ##
   create: false
 
-## Init Container parameters
+## Init Container paramaters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##

@@ -7,13 +7,15 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
+name: controller
+
 ## Bitnami NGINX Ingress controller image version
 ## ref: https://hub.docker.com/r/bitnami/nginx-ingress-controller/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.41.2-debian-10-r22
+  tag: 0.41.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -22,11 +24,9 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
   ##
-  pullSecrets: []
+  # pullSecrets:
+  #   - myRegistryKeySecretName
 
 ## String to partially override nginx-ingress-controller.fullname template (will maintain the release name)
 ##
@@ -44,10 +44,6 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
 ## Custom configuration options for NGINX
 ## ref: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
 ##
@@ -62,6 +58,17 @@ proxySetHeaders: {}
 ## ref: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#add-headers
 ##
 addHeaders: {}
+
+## Required on CNI based K8s installations, since CNI and hostport don't mix yet.
+## Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920 is merged
+##
+hostNetwork: false
+
+## Optionally, change this to ClusterFirstWithHostNet in case you have 'hostNetwork: true'.
+## By default, while using host network, name resolution uses the host's DNS. If you wish nginx-controller
+## to keep resolving names inside the k8s network, use ClusterFirstWithHostNet.
+##
+dnsPolicy: ClusterFirst
 
 ## Required only if defaultBackend.enabled = false
 ## Must be <namespace>/<service_name>
@@ -116,6 +123,24 @@ udpConfigMapNamespace: ''
 ##
 maxmindLicenseKey: ''
 
+## Additional command line arguments to pass to nginx-ingress-controller
+## E.g. to specify the default SSL certificate you can use
+## extraArgs:
+##   default-ssl-certificate: "<namespace>/<secret_name>"
+##
+extraArgs: {}
+
+## Additional environment variables to set
+## E.g:
+## extraEnvs:
+##   - name: FOO
+##     valueFrom:
+##       secretKeyRef:
+##         key: FOO
+##         name: secret-resource
+##
+extraEnvs: []
+
 ## TCP service key:value pairs
 ## ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
 ##
@@ -148,78 +173,99 @@ daemonset:
 ## Number of replicas
 ##
 replicaCount: 1
+minAvailable: 1
 
-## Command and args for running the container (set to default if not set). Use array form
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
-command: []
-args: []
+podLabels: {}
 
-## Additional command line arguments to pass to nginx-ingress-controller
-## E.g. to specify the default SSL certificate you can use
-## extraArgs:
-##   default-ssl-certificate: "<namespace>/<secret_name>"
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-extraArgs: {}
+podAnnotations: {}
 
-## Additional environment variables to set
-## E.g:
-## extraEnvs:
-##   - name: FOO
-##     valueFrom:
-##       secretKeyRef:
-##         key: FOO
-##         name: secret-resource
+## Security Context policies for controller pods
+## See https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/ for
+## notes on enabling and using sysctls
 ##
-extraEnvVars: []
+podSecurityContext: {}
 
-## Name of a ConfigMap containing extra env vars
+## Kubernetes Security Context
+## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-extraEnvVarsCM:
-
-## Secret with extra environment variables
-##
-extraEnvVarsSecret:
-
-## Controller container ports to open
-##
-containerPorts:
-  http: 80
-  https: 443
-  metrics: 10254
+securityContext:
+  fsGroup: 1001
+  runAsUser: 1001
+  allowPrivilegeEscalation: true
 
 ## updateStrategy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy: {}
 
-## Rollback limit
-##
-revisionHistoryLimit: 10
-
-## Controller pods' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-
-## Controller containers' Security Context (only main container)
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: true
-  allowPrivilegeEscalation: true
-  runAsUser: 1001
-  capabilities:
-    drop: ["ALL"]
-    add: ["NET_BIND_SERVICE"]
-
 ## minReadySeconds to avoid killing pods before we are ready
 ##
 minReadySeconds: 0
 
-## Controller containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## terminationGracePeriodSeconds
+##
+terminationGracePeriodSeconds: 60
+
+## Container lifecycle
+##
+lifecycle: {}
+
+## priorityClassName
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+##
+priorityClassName: ''
+
+## Rollback limit
+##
+revisionHistoryLimit: 10
+
+## Configures the ports the NGINX Ingress controller listens on
+##
+containerPort:
+  http: 80
+  https: 443
+
+## Liveness and readiness probe values
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 10254
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 10254
+
+## Containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -233,154 +279,31 @@ resources:
   #   cpu: 250m
   #   memory: 256Mi
 
-## Controller containers' liveness and readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Additional containers to be added to the controller pod
+## See https://github.com/lemonldap-ng-controller/lemonldap-ng-controller as example.
 ##
-livenessProbe:
-  enabled: true
-  httpGet:
-    path: /healthz
-    port: http
-    scheme: HTTP
-  failureThreshold: 3
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 1
-readinessProbe:
-  enabled: true
-  httpGet:
-    path: /healthz
-    port: http
-    scheme: HTTP
-  failureThreshold: 3
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 1
+extraContainers: []
 
-## Custom Liveness probes for Controller
-##
-customLivenessProbe: {}
-
-## Custom Rediness probes Controller
-##
-customReadinessProbe: {}
-
-## Container lifecycle
-##
-lifecycle: {}
-
-## Pod extra labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## priorityClassName
-## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-##
-priorityClassName: ''
-
-## Required on CNI based K8s installations, since CNI and hostport don't mix yet.
-## Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920 is merged
-##
-hostNetwork: false
-
-## Optionally, change this to ClusterFirstWithHostNet in case you have 'hostNetwork: true'.
-## By default, while using host network, name resolution uses the host's DNS. If you wish nginx-controller
-## to keep resolving names inside the k8s network, use ClusterFirstWithHostNet.
-##
-dnsPolicy: ClusterFirst
-
-## terminationGracePeriodSeconds
-##
-terminationGracePeriodSeconds: 60
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Extra volumes to add to the deployment
-##
-extraVolumes: []
-
-## Extra volume mounts to add to the container
+## Additional volumeMounts to the controller main container.
+## extraVolumeMounts:
+##   - name: copy-portal-skins
+##     mountPath: /var/lib/lemonldap-ng/portal/skins
 ##
 extraVolumeMounts: []
 
-## Add init containers to the controller pods.
-## Example:
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
+## Additional volumes to the controller pod.
+## extraVolumes
+##   - name: copy-portal-skins
+##     emptyDir: {}
 ##
-initContainers: {}
+extraVolumes: []
 
-## Add sidecars to the controller pods.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars: {}
+## Containers, which are run before the app containers are started.
+## extraInitContainers:
+##   - name: init-myservice
+##     image: bitnami/minideb
+##     command: ['sh', '-c', 'install_packages dnsutils && until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+extraInitContainers: []
 
 ## Override NGINX template
 ##
@@ -441,122 +364,71 @@ service:
   externalTrafficPolicy: ''
   healthCheckNodePort: 0
 
-## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
-## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-##
-## topologySpreadConstraints:
-##   - maxSkew: 1
-##     topologyKey: failure-domain.beta.kubernetes.io/zone
-##     whenUnsatisfiable: DoNotSchedule
-##     labelSelector:
-##       matchLabels:
-##         app.kubernetes.io/instance: ingress-nginx-internal
-##
-topologySpreadConstraints: []
-
-## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac:
-  ## Specifies whether RBAC rules should be created
-  ##
-  create: true
-
-## Pods Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the metrics-server.fullname template
-  # name:
-
-  ## Annotations for service account. Evaluated as a template.
-  ## Only used if `create` is `true`.
-  ##
-  annotations: {}
-
-## Controller Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  create: false
-  ## Min number of pods that must still be available after the eviction
-  ##
-  minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
-  ##
-  # maxUnavailable: 1
-
-## Controller Autoscaling configuration
-##
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 11
-  # targetCPU: 50
-  # targetMemory: 50
-
-## If true, create & use Pod Security Policy resources
-## https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-##
-podSecurityPolicy:
-  enabled: false
-
 ## Default 404 backend
 ##
 defaultBackend:
   ## If false, defaultBackendService must be provided
   ##
   enabled: true
+  name: default-backend
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.5-debian-10-r15
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
+    tag: 1.19.4-debian-10-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## Example:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
     ##
-    pullSecrets: []
+    # pullSecrets:
+    #   - myRegistryKeySecretName
 
   ## Additional command line arguments to pass to NGINX backend
   ##
   extraArgs: {}
-  containerPort: 8080
+  port: 8080
 
   ## Number of replicas
   ##
   replicaCount: 1
+  minAvailable: 1
 
-  ## Default backend pods' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
+  podLabels: {}
 
-  ## Default backend containers' Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
+  podAnnotations: {}
 
-  ## Default backend containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources
+  ## Security Context policies for controller pods
+  ## See https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/ for
+  ## notes on enabling and using sysctls
+  ##
+  podSecurityContext: {}
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -570,97 +442,25 @@ defaultBackend:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Default backend containers' liveness and readiness probes. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Readiness and liveness probes for default backend
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
   livenessProbe:
-    enabled: true
-    httpGet:
-      path: /
-      port: http
-      scheme: HTTP
+    path: /
     failureThreshold: 3
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
   readinessProbe:
-    enabled: true
-    httpGet:
-      path: /
-      port: http
-      scheme: HTTP
+    path: /
     failureThreshold: 6
     initialDelaySeconds: 0
     periodSeconds: 5
     successThreshold: 1
     timeoutSeconds: 5
 
-  ## Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-
-  ## Pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-
-  ## priorityClassName
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-  ##
-  priorityClassName: ''
-
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: defaultBackend.podAffinityPreset, defaultBackend.podAntiAffinityPreset, and defaultBackend.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Default backend Service parameters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -669,18 +469,6 @@ defaultBackend:
     ## Service port
     ##
     port: 80
-
-  ## Default backend Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ##
-  pdb:
-    create: false
-    ## Min number of pods that must still be available after the eviction
-    ##
-    minAvailable: 1
-    ## Max number of pods that can be unavailable after the eviction
-    ##
-    # maxUnavailable: 1
 
 ## Prometheus exporter parameters
 ##
@@ -699,8 +487,8 @@ metrics:
     ## Annotations for the Prometheus exporter service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.port }}'
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -728,3 +516,55 @@ metrics:
     additionalLabels: {}
     namespace: ''
     rules: []
+
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: true
+
+## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+##
+## topologySpreadConstraints:
+##   - maxSkew: 1
+##     topologyKey: failure-domain.beta.kubernetes.io/zone
+##     whenUnsatisfiable: DoNotSchedule
+##     labelSelector:
+##       matchLabels:
+##         app.kubernetes.io/instance: ingress-nginx-internal
+##
+topologySpreadConstraints: []
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the metrics-server.fullname template
+  # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
+## If true, create & use Pod Security Policy resources
+## https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  enabled: false
+
+## Autoscaling parameters
+##
+autoscaling:
+  enabled: false
+  #  minReplicas: 1
+  #  maxReplicas: 11
+  #  targetCPUUtilizationPercentage: 50
+  #  targetMemoryUtilizationPercentage: 50

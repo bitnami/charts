@@ -48,7 +48,7 @@ Get the initialization scripts ConfigMap name.
 {{- if .Values.initdbScriptsConfigMap -}}
     {{- printf "%s" .Values.initdbScriptsConfigMap -}}
 {{- else -}}
-    {{- printf "%s-init-scripts" (include "mysql.primary.fullname" .) -}}
+    {{- printf "%s-init-scripts" (include "mysql.master.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -122,7 +122,7 @@ Return the secret with MySQL credentials
 Return true if a secret object should be created for MySQL
 */}}
 {{- define "mysql.createSecret" -}}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) }}
+{{- if not .Values.auth.existingSecret }}
     {{- true -}}
 {{- end -}}
 {{- end -}}

@@ -77,7 +77,6 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.port`                             | MariaDB service port                                                                                                                                                                                                                                                             | `3306`                                                            |
 | `service.clusterIP`                        | Specific cluster IP when service type is cluster IP. Use `None` for headless service                                                                                                                                                                                             | `nil`                                                             |
 | `service.nodePort`                         | Kubernetes Service nodePort                                                                                                                                                                                                                                                      | `nil`                                                             |
-| `service.externalIPs`                      | External IP list to use with ClusterIP service type                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.loadBalancerIP`                   | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                                                                                                               | `nil`                                                             |
 | `service.loadBalancerSourceRanges`         | Address that are allowed when svc is `LoadBalancer`                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.annotations`                      | Additional annotations for MariaDB Galera service                                                                                                                                                                                                                                | `{}`                                                              |
@@ -405,7 +404,7 @@ data-my-galera-mariadb-galera-1   Bound    pvc-00ba6121-9042-4760-af14-3b8a40de9
 data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909b05   8Gi        RWO            gp2            25h
 ```
 
-The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordingly with yours for each PVC.
+The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordinly with yours for each PVC.
 
 ```bash
 kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
@@ -465,7 +464,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
@@ -484,7 +483,7 @@ The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -556,3 +555,4 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+

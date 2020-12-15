@@ -649,7 +649,7 @@ That's all! Now you have Thanos fully integrated with Prometheus and Alertmanage
 
 The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX.persistence.existingClaim` if you have already existing persistent volumes to use.
 
-> Note: you need to substitute the XXX placeholders above with the actual component(s) you want to configure.
+> Note: you need to substitue the XXX placeholders above with the actual component(s) you want to configure.
 
 ### Adjust permissions of persistent volume mountpoint
 

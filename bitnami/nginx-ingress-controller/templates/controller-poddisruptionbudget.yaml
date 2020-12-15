@@ -1,25 +1,20 @@
-{{- if and .Values.pdb.create (eq .Values.kind "Deployment") }}
+{{- if gt (.Values.replicaCount | int) 1 }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "nginx-ingress.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: controller
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.name }}
     {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
-  {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
-  {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.standard" . | nindent 6 }}
-      app.kubernetes.io/component: controller
+    matchLabels: {{- include "nginx-ingress.labels" . | nindent 6 }}
+      component: {{ .Values.name }}
+  minAvailable: {{ .Values.minAvailable }}
 {{- end }}

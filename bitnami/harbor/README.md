@@ -6,7 +6,7 @@ For example, the following changes have been introduced:
 - Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
 - Redis and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
-- Uses new Helm chart labels formatting.
+- Uses new Helm chart labels formating.
 - Uses Bitnami container images:
   - non-root by default
   - published for debian-10 and ol-7
@@ -47,7 +47,7 @@ To uninstall/delete the `my-release` deployment:
 $ helm delete --purge my-release
 ```
 
-Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
+Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
 
 ## Parameters
 
@@ -881,7 +881,7 @@ Secrets and certificates must be setup to avoid changes on every Helm upgrade (s
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

@@ -49,7 +49,7 @@ replicaCount: 2
 # Cluster domain
 clusterDomain: cluster.local
 
-## Memcached architecture. Allowed values: standalone or high-availability
+## Memcahed architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
 

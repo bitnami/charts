@@ -30,7 +30,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.7.0-debian-10-r0
+    tag: 2.6.4-debian-10-r0
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -51,7 +51,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.7.0-debian-10-r3
+      tag: 2.6.3-debian-10-r50
 
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -188,7 +188,7 @@ server:
   ##
   customReadinessProbe: {}
 
-  ## Dataflow Server Service parameters.
+  ## Dataflow Server Service paramaters.
   ##
   service:
     ## Service type.
@@ -333,16 +333,6 @@ server:
     ##
     port: 5005
 
-  ## Extra volumes to mount
-  ##
-  # extraVolumes:
-  #   - name: sample
-  #     emptyDir: {}
-  #
-  # extraVolumeMounts:
-  #   - name: sample
-  #     mountPath: /temp/sample
-
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -358,7 +348,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.6.0-debian-10-r7
+    tag: 2.6.0-debian-10-r4
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -490,7 +480,7 @@ skipper:
   ##
   customReadinessProbe: {}
 
-  ## Skipper Service parameters.
+  ## Skipper Service paramaters.
   ##
   service:
     ## Service type.
@@ -578,16 +568,6 @@ skipper:
     ##
     port: 5005
 
-  ## Extra volumes to mount
-  ##
-  # extraVolumes:
-  #   - name: sample
-  #     emptyDir: {}
-  #
-  # extraVolumeMounts:
-  #   - name: sample
-  #     mountPath: /temp/sample
-
 ##
 ## External Skipper Configuration
 ##
@@ -644,7 +624,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.12-debian-10-r17
+    tag: 1.18.12-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -704,7 +684,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.3.0-debian-10-r1
+    tag: 1.2.1-debian-10-r89
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -790,6 +770,7 @@ mariadb:
 ## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
+
   ## Database server host and port
   ##
   host: localhost
@@ -807,7 +788,7 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
-    url: ''
+    url: ""
     database: dataflow
     user: dataflow
   ## Skipper and database
@@ -817,7 +798,7 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
-    url: ''
+    url: ""
     database: skipper
     user: skipper
   ## Hibernate Dialect

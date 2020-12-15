@@ -22,7 +22,7 @@ data:
     SVC_NAME="${MY_POD_NAME}-external"
 
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
-    # Auxiliary functions
+    # Auxiliar functions
     retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -84,9 +84,7 @@ data:
     {{- end }}
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.port }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
-    {{- if .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_IP="$(<${SHARED_FILE})"
-    {{- else if .Values.externalAccess.service.domain }}
+    {{- if .Values.externalAccess.service.domain }}
     export EXTERNAL_ACCESS_IP={{ .Values.externalAccess.service.domain }}
     {{- else }}
     export EXTERNAL_ACCESS_IP=$(curl -s https://ipinfo.io/ip)

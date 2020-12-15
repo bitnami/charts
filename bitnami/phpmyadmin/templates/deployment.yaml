@@ -1,81 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  name: {{ template "phpmyadmin.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+    helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
+  replicas: 1
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+    matchLabels:
+      app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name | quote }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      labels:
+        app.kubernetes.io/name: {{ include "phpmyadmin.fullname" . }}
+        helm.sh/chart: {{ include "phpmyadmin.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+  {{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+  {{- end }}
+{{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
-        {{- if .Values.podAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.metrics.podAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-    {{- end }}
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+  {{- end }}
+{{- end }}
     spec:
-      {{- include "phpmyadmin.imagePullSecrets" . | nindent 6 }}
+{{- include "phpmyadmin.imagePullSecrets" . | indent 6 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
-      {{- if .Values.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- else }}
-      affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ template "phpmyadmin.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           {{- end }}
           env:
             - name: DATABASE_PORT_NUMBER
               value: {{ .Values.db.port | quote }}
             {{- if .Values.db.chartName }}
             - name: DATABASE_HOST
-              value: {{ (include "phpmyadmin.dbfullnamee" .) | quote }}
+              value: "{{ template "phpmyadmin.dbfullname" . }}"
             {{- else if .Values.db.bundleTestDB }}
             - name: DATABASE_HOST
-              value: {{ (include "phpmyadmin.mariadb.fullname" .) | quote }}
+              value: "{{ template "mariadb.fullname" . }}"
             {{- else }}
             - name: DATABASE_HOST
               value: {{ .Values.db.host | quote }}
@@ -112,52 +101,43 @@ spec:
               value: {{ ternary "yes" "no" .Values.db.ssl.verify | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.extraEnvVarsCM }}
+          {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.extraEnvVarsSecret }}
+                name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsCM "context" $) | nindent 18 }}
+          {{- end }}
+          {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
-            {{- end }}
+                name: {{- include "phpmyadmin.tplValue" (dict "value" .Values.extraEnvVarsSecret "context" $) | nindent 18 }}
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPorts.http }}
+              containerPort: 8080
               protocol: TCP
             - name: https
-              containerPort: {{ .Values.containerPorts.https }}
+              containerPort: 8443
               protocol: TCP
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{- include "phpmyadmin.tplValue" (dict "value" .Values.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{- include "phpmyadmin.tplValue" (dict "value" .Values.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.db.enableSsl }}
           volumeMounts:
-            {{- if .Values.db.enableSsl }}
-            - name: ssl-certs
-              mountPath: /db_certs
-            {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-        {{- if .Values.metrics.enabled }}
+          - name: ssl-certs
+            mountPath: /db_certs
+          {{- end }}
+{{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "phpmyadmin.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
           ports:
             - name: metrics
               containerPort: 9117
@@ -174,17 +154,14 @@ spec:
             initialDelaySeconds: 5
             timeoutSeconds: 1
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
-        {{- end }}
-        {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
-        {{- end }}
+{{- end }}
+{{- if .Values.db.enableSsl }}
       volumes:
-        {{- if .Values.db.enableSsl }}
         - name: ssl-certs
           secret:
-            secretName: {{ printf "%s-certs" (include "common.names.fullname" .) }}
+            secretName: {{ template "phpmyadmin.fullname" . }}-certs
             items:
               {{- if not (empty .Values.db.ssl.clientKey) }}
               - key: server_key.pem
@@ -198,7 +175,4 @@ spec:
               - key: ca_certificate.pem
                 path: ca_certificate.pem
               {{- end }}
-        {{- end }}
-        {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-        {{- end }}
+{{- end }}

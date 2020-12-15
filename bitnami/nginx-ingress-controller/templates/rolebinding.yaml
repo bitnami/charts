@@ -1,22 +1,22 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "nginx-ingress.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "nginx-ingress.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "nginx-ingress-controller.serviceAccountName" . }}
+    name: {{ template "nginx-ingress.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end -}}

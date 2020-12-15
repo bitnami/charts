@@ -348,7 +348,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Ingress configuration
+## Ingress configuratiom
 ##
 ingress:
   ## Set to true to enable ingress record generation

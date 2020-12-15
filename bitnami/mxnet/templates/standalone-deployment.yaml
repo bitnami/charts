@@ -2,33 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  name: {{ include "mxnet.fullname" . }}
+  labels: {{- include "mxnet.labels" . | nindent 4 }}
     app.kubernetes.io/component: standalone
 spec:
   replicas: 1
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "mxnet.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: standalone
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "mxnet.labels" . | nindent 8 }}
         app.kubernetes.io/component: standalone
     spec:
-      {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
+{{- include "mxnet.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
-      {{- else }}
-      affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      affinity: {{- include "mxnet.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "mxnet.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "mxnet.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -69,7 +64,7 @@ spec:
               mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- include "mxnet.tplValue" ( dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -88,7 +83,7 @@ spec:
             {{- end }}
           ports:
             - name: mxnet
-              containerPort: {{ .Values.scheduler.port }}
+              containerPort: {{ .Values.schedulerPort }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -136,7 +131,7 @@ spec:
               mountPath: /secrets
             {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "mxnet.tplValue" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.existingSecret }}
@@ -151,7 +146,7 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ include "common.names.fullname" . }}-files
+            name: {{ include "mxnet.fullname" . }}-files
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}
@@ -159,7 +154,7 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" . }}
+            claimName: {{ include "mxnet.fullname" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}

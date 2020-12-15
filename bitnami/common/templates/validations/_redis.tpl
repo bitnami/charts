@@ -30,7 +30,7 @@ Params:
 {{- end -}}
 
 {{/*
-Redis Auxiliary function to get the right value for existingSecret.
+Redis Auxiliar function to get the right value for existingSecret.
 
 Usage:
 {{ include "common.redis.values.existingSecret" (dict "context" $) }}
@@ -46,7 +46,7 @@ Params:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right value for enabled redis.
+Auxiliar function to get the right value for enabled redis.
 
 Usage:
 {{ include "common.redis.values.enabled" (dict "context" $) }}
@@ -60,7 +60,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Auxiliary function to get the right prefix path for the values
+Auxiliar function to get the right prefix path for the values
 
 Usage:
 {{ include "common.redis.values.key.prefix" (dict "subchart" "true" "context" $) }}

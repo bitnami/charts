@@ -204,7 +204,6 @@ The following table lists the configurable parameters of the Redis chart and the
 | `initJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `initJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `initJob.affinity`                                      | Affinity settings for                      | {}                |
-| `initJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster update job parameters
 | Parameter                                       | Description                                                    | Default           |
@@ -225,7 +224,6 @@ The following table lists the configurable parameters of the Redis chart and the
 | `updateJob.tolerations`                                   | Toleration labels for Redis pod assignment                     | []                |
 | `updateJob.resources`                                     | Redis CPU/Memory resource requests/limits                      | `nil` |
 | `updateJob.affinity`                                      | Affinity settings for                      | {}                |
-| `updateJob.priorityClassName`                             | Priority class name                      | `nil`                |
 
 #### Cluster management parameters
 
@@ -351,7 +349,7 @@ Providing the values above, the cluster will have 3 masters and, each master, wi
 
 There is a job that will be executed using a `post-upgrade` hook that will allow you to add a new node. To use it, you should provide some parameters to the upgrade:
 
-- Pass as `password` the password used in the installation time. If you did not provide a password follow the instructions from the NOTES.txt to get the generated password.
+- Pass as `password` the password used in the installation time. If you did not provide a password follow the intructions from the NOTES.txt to get the generated password.
 - Set the desired number of nodes at `cluster.nodes`.
 - Set the number of current nodes at `cluster.update.currentNumberOfNodes`.
 - Set to true `cluster.update.addNodes`.

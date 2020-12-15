@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.9-debian-10-r58
+  tag: 3.8.9-debian-10-r37
 
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
@@ -106,8 +106,8 @@ memoryHighWatermark:
   ##
   type: 'relative'
   ## Memory high watermark value.
-  ## The default value of 0.4 stands for 40% of available RAM
-  ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
+  ## The default value of 0.4 stands for 40% of availalbe RAM
+  ## Note: the memory relative limit is applied to the resource.limits.memory to caculate the memory threshold
   ## You can also use an absolute value, e.g.: 256MB
   ##
   value: 0.4
@@ -156,7 +156,7 @@ loadDefinition:
 # args:
 
 ## Default duration in seconds k8s waits for container to exit before sending kill signal. Any time in excess of
-## 10 seconds will be spent waiting for any synchronization necessary for cluster not to lose data.
+## 10 seconds will be spent waiting for any synchronization neccessary for cluster not to lose data.
 terminationGracePeriodSeconds: 120
 
 ## Additional environment variables to set
@@ -240,7 +240,7 @@ extraConfiguration: |-
   #load_definitions = /app/load_definition.json
 
 ## Configuration file content: advanced configuration
-## Use this as additional configuration in classic config format (Erlang term configuration format)
+## Use this as additional configuraton in classic config format (Erlang term configuration format)
 ##
 ## If you set LDAP with TLS/SSL enabled and you are using self-signed certificates, uncomment these lines.
 ## advancedConfiguration: |-
@@ -348,42 +348,8 @@ statefulsetLabels: {}
 ##
 priorityClassName: ''
 
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
 ## Affinity for pod assignment. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -660,11 +626,6 @@ service:
   ##
   # externalIPs:
 
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-
   ## Set the LoadBalancerIP
   ##
   # loadBalancerIP:
@@ -856,7 +817,7 @@ metrics:
     #           VALUE = {{ "{{ $value }}" }}\n  LABELS: {{ "{{ $labels }}" }}
     rules: []
 
-## Init Container parameters
+## Init Container paramaters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##

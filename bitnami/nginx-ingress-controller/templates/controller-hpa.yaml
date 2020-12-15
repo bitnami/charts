@@ -1,35 +1,37 @@
-{{- if and .Values.autoscaling.enabled (eq .Values.kind "Deployment") }}
+{{- if eq .Values.kind "Deployment" }}
+{{- if .Values.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "nginx-ingress.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: controller
+  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+    component: {{ .Values.name }}
     {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "nginx-ingress.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.targetCPU }}
+{{- with .Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
-    {{- end }}
-    {{- if .Values.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ . }}
+{{- end }}
+{{- with .Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemory }}
-    {{- end }}
+        targetAverageUtilization: {{ . }}
+{{- end }}
+{{- end }}
 {{- end }}

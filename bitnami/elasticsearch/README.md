@@ -566,7 +566,7 @@ snapshotRepoPath: "/snapshots"
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -616,7 +616,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 12.0.0
 
-Several changes were introduced that breaks backwards compatibility:
+Several changes were introduced that breaks backwards compatibilty:
 
 - Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
 - Labels are adapted to follow the Helm charts best practices.
@@ -635,7 +635,7 @@ $ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
 
 ### TO 10.0.0
 
-In this version, Kibana was added as dependent chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
+In this version, Kibana was added as dependant chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
 
 ### To 9.0.0
 

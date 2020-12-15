@@ -166,7 +166,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `fullnameOverride`                            | String to fully override contour.fullname template with a string                                                                                                                                             | `nil`                                                   |
 | `prometheus.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                                                                                        | `true`                                                  |
 | `prometheus.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                                                                                                      | `contour`                                               |
-| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeIntervall                                                                                                                           | `""`                                                    |
+| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                                                                                                                           | `""`                                                    |
 | `prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                                                                                                    | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                                                                                                  | `[]`                                                    |
 
@@ -282,7 +282,7 @@ envoy:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

@@ -194,7 +194,7 @@ $ helm upgrade my-release bitnami/wildfly
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=false,image.tag=XXX
+$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=fase,image.tag=XXX
 ```
 
 ### To 1.0.0

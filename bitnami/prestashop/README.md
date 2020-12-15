@@ -88,7 +88,6 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `containerSecurityContext.runAsUser` | PrestaShop containers' Security Context                                                                               | `1001`                                         |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
 | `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
-| `customStartupProbe`                 | Override default startup probe                                                                                        | `nil`                                          |
 | `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
 | `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
@@ -133,7 +132,6 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                          |
 | `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
 | `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
-| `startupProbe`                       | Startup probe configuration                                                                                           | `Check values.yaml file`                       |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
 | `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
 
@@ -290,7 +288,7 @@ imagePullSecrets:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

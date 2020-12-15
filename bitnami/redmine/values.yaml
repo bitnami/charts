@@ -539,7 +539,7 @@ ingress:
   ##   key:
   ##   certificate:
 
-## Configure CronJob scheduler for receiving emails and converting them to tasks
+## Configure CronJob scheduler for receiveing emails and converting them to tasks
 ## ref: http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
 ##
 mailReceiver:
@@ -614,7 +614,7 @@ mailReceiver:
 
   ## Action to perform for unknown email sender
   ## ref: http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
-  unknownUserAction: ignore
+  unknownUserAction: ingore
 
   ## If set to 1 then redmine does not check task creator (source email) permissions for creating a new task
   ## If set to 0 then task creator must have permission to create a new task
@@ -649,8 +649,8 @@ mailReceiver:
   ## Defines a new task assignee
   assignedTo: ""
 
-  ## Defines a list of attributes which can be overridden by received email body
-  ## "all" means that all attributes can be overridden
+  ## Defines a list of attributes which can be overrided by received email body
+  ## "all" means that all attributes can be overrided
   allowOverride: ""
 
   ## An array to add extra env vars

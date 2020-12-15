@@ -139,8 +139,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `server.jdwp.enabled`                        | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `server.jdwp.port`                           | JDWP TCP port                                                                                          | `5005`                                                  |
-| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                     | `nil`                                                   |
-| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                 | `nil`                                                   |
+
 ### Dataflow Skipper parameters
 
 | Parameter                                    | Description                                                                                            | Default                                                 |
@@ -192,8 +191,6 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `skipper.jdwp.enabled`                       | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `skipper.jdwp.port`                          | JDWP TCP port                                                                                          | `5005`                                                  |
-| `skipper.extraVolumes`                       | Extra Volumes to be set on the Skipper Pod                                                             | `nil`                                                   |
-| `skipper.extraVolumeMounts`                  | Extra VolumeMounts to be set on the Skipper Container                                                  | `nil`                                                   |
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                      | `localhost`                                             |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                    | `7577`                                                  |
 
@@ -300,7 +297,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
 ```
 
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
 
@@ -395,7 +392,7 @@ externalDatabase.dataflow.database=myskipperdatabase
 
 NOTE: When using the indidual propertes (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
 
-To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. As an example of configuring an external MS SQL Server database:
+To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precendence over the individual attributes. As an example of configuring an external MS SQL Server database:
 
 ```console
 mariadb.enabled=false

@@ -101,7 +101,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier                                | Description                                                                                                                                                            | Expected Input                                                                                                                                                                                                                           |
 |--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.tplvalues.render`                        | Renders a value that contains template                                                                                                                                 | `dict "value" .Values.path.to.the.Value "context" $`, value is the value should rendered as template, context frequently is the chart context `$` or `.`                                                                                 |
+| `common.tplvalues.render`                        | Renders a value that contains template                                                                                                                                 | `dict "value" .Values.path.to.the.Value "context" $`, value is the value should rendered as template, context frecuently is the chart context `$` or `.`                                                                                 |
 
 ### Utils
 
@@ -227,7 +227,7 @@ keyMapping:
 
 #### Example of use
 
-When we store sensitive data for a deployment in a secret, some times we want to give to users the possibility of using theirs existing secrets.
+When we store sensitive data for a deployment in a secret, some times we want to give to users the possiblity of using theirs existing secrets.
 
 ```yaml
 # templates/secret.yaml

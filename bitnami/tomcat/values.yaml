@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 9.0.41-debian-10-r0
+  tag: 9.0.39-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -269,7 +269,3 @@ readinessProbe:
   periodSeconds: 51
   failureThreshold: 3
   timeoutSeconds: 3
-
-## Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
