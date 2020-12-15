@@ -37,7 +37,7 @@ spec:
       {{- end }}
       initContainers:
         - name: seed
-          image: {{ template "tensorflow-resnet.client.image" . }}
+          image: {{ include "tensorflow-resnet.client.image" . }}
           imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
           command:
             - "/bin/sh"
@@ -56,7 +56,7 @@ spec:
               mountPath: /seed
       containers:
         - name: tensorflow-serving
-          image: "{{ template "tensorflow-resnet.server.image" . }}"
+          image: {{ include "tensorflow-resnet.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
           ports:
             - name: tf-serving

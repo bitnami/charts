@@ -4,14 +4,14 @@
 Return the proper tensorflow-resnet server image name
 */}}
 {{- define "tensorflow-resnet.server.image" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image) "global" .Values.global) -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.server.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper tensorflow-resnet client image name
 */}}
 {{- define "tensorflow-resnet.client.image" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.client.image) "global" .Values.global) -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.client.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
