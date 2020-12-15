@@ -78,6 +78,7 @@ The following table lists the configurable parameters of the ownCloud chart and 
 | `image.tag`                             | ownCloud image tag                                                                       | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                      | Image pull policy                                                                        | `IfNotPresent`                                          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`                           | Specify if debug logs should be enabled                                                  | `false`                                                 |
 | `owncloudUsername`                      | User of the application                                                                  | `user`                                                  |
 | `owncloudPassword`                      | Application password                                                                     | `bitnami`                                               |
 | `owncloudEmail`                         | Admin email                                                                              | `user@example.com`                                      |
