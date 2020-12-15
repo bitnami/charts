@@ -658,6 +658,8 @@ persistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## Mount point for persistence
+  mountPath: /bitnami/kafka
 
 ## Log Persistence parameters
 ##
@@ -687,6 +689,9 @@ logPersistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## Mount path for persistent logs
+  mountPath: /opt/bitnami/kafka/logs
+
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -694,6 +699,9 @@ logPersistence:
 ##
 volumePermissions:
   enabled: false
+  ## The security context for the volumePermissions init container
+  securityContext:
+    runAsUser: 0
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##

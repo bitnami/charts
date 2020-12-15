@@ -91,23 +91,20 @@ spec:
         - name: volume-permissions
           image: {{ include "kafka.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
           args:
-            - -ec
+            - -cx
             - |
-              mkdir -p /bitnami/kafka
-              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/kafka"
-              mkdir -p /opt/bitnami/kafka/logs
-              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/opt/bitnami/kafka/logs"
-          securityContext:
-            runAsUser: 0
+              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
+              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.logPersistence.mountPath }}"
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/kafka
+              mountPath: {{ .Values.persistence.mountPath }}
+            - name: logs
+              mountPath: {{ .Values.logPersistence.mountPath }}
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
         - name: auto-discovery
@@ -129,7 +126,7 @@ spec:
             - name: shared
               mountPath: /shared
             - name: logs
-              mountPath: /opt/bitnami/kafka/logs
+              mountPath: {{ .Values.logPersistence.mountPath }}
             - name: scripts
               mountPath: /scripts/auto-discovery.sh
               subPath: auto-discovery.sh
@@ -334,17 +331,17 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/kafka
+              mountPath: {{ .Values.persistence.mountPath }}
             - name: logs
-              mountPath: /opt/bitnami/kafka/logs
+              mountPath: {{ .Values.logPersistence.mountPath }}
             {{- if or .Values.config .Values.existingConfigmap }}
             - name: kafka-config
-              mountPath: /bitnami/kafka/config/server.properties
+              mountPath: {{ .Values.persistence.mountPath }}/config/server.properties
               subPath: server.properties
             {{- end }}
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
             - name: log4j-config
-              mountPath: /bitnami/kafka/config/log4j.properties
+              mountPath: {{ .Values.persistence.mountPath }}/config/log4j.properties
               subPath: log4j.properties
             {{- end }}
             - name: scripts
