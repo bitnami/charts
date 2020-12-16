@@ -112,7 +112,7 @@ spec:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
             {{- if .Values.forwarder.persistence.enabled }}
-            - name: {{ include "fluentd.fullname" . }}-buffer
+            - name: fluentd-buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- else }}
             - name: buffer
@@ -151,7 +151,7 @@ spec:
           configMap:
             name: {{ template "fluentd.forwarder.configMap" . }}
         {{- if .Values.forwarder.persistence.enabled }}
-        - name: {{ include "fluentd.fullname" . }}-buffer
+        - name: fluentd-buffer
           hostPath:
             path: {{ .Values.forwarder.persistence.hostPath.path }}
             type: DirectoryOrCreate
