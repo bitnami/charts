@@ -116,6 +116,9 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
 | `prometheus.serviceMonitor.prometheusRule.enabled`    | Enable prometheus alertmanager basic alerts.                                                         | `true`                                                  |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                                 | `false`                                                 |
+| `networkPolicy.ingressNSMatchLabels`                  | Allow connections from other namespaces                                                              | `{}`                                                    |
+| `networkPolicy.ingressNSPodMatchLabels`               | For other namespaces match by pod labels and namespace labels                                        | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

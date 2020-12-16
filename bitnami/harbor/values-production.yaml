@@ -2703,7 +2703,7 @@ externalDatabase:
   port: 5432
   ## External database ssl mode
   ##
-  sslmode:
+  sslmode: disable
   ## External database name for core
   ##
   coreDatabase:

@@ -4,22 +4,22 @@ kind: Ingress
 metadata:
   name: {{ template "dokuwiki.fullname" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
-    {{- if .tls }}
+  {{- if .tls }}
     ingress.kubernetes.io/secure-backends: "true"
-    {{- end }}
-    {{- if .certManager }}
+  {{- end }}
+  {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
-    {{- end }}
-    {{- if .annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if $.Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- end }}
+  {{- if .Values.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   rules:
   {{- $tls := false }}

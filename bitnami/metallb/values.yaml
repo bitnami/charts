@@ -41,6 +41,18 @@ rbac:
   # create specifies whether to install and use RBAC rules.
   create: true
 
+networkPolicy:
+  ## Specifies whether a NetworkPolicy should be created.
+  ## Prometheus scraping of the controller
+  ##
+  enabled: false
+
+  ## Limit networkpolicy ingress (from)
+  ## Set label for namespace and pods (optional).
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
 prometheus:
   enabled: false
 

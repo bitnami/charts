@@ -712,7 +712,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `externalDatabase.notarySignerDatabase` | External database name for notary signer                                                                  | `nil`                            |
 | `externalDatabase.notarySignerUsername` | External database username for notary signer                                                                  | `nil`                            |
 | `externalDatabase.notarySignerPassword`        | External database password for notary signer                                                                          | `nil`                            |
-| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `nil`                            |
+| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`                        |
 
 ### Redis Parameters
 

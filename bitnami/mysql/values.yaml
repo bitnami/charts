@@ -97,10 +97,7 @@ auth:
   ##   user: /vault/secrets/mysql-user
   ##   replicator: /vault/secrets/mysql-replicator
   ##
-  customPasswordFiles:
-    root: ""
-    user: ""
-    replicator: ""
+  customPasswordFiles: {}
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
