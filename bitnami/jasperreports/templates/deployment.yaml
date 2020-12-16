@@ -49,6 +49,9 @@ spec:
         - name: jasperreports
           image: {{ template "jasperreports.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -73,7 +76,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jasperreports.databaseSecretName" . }}
-                  key: mariadb-password
+                  key: {{ include "jasperreports.databasePasswordKey" . }}
             - name: JASPERREPORTS_USERNAME
               value: {{ .Values.jasperreportsUsername | quote }}
             - name: JASPERREPORTS_PASSWORD
@@ -146,6 +149,9 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: jasperreports-data
           {{- if .Values.persistence.enabled }}

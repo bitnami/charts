@@ -236,6 +236,10 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## lifecycleHooks for JasperReports container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []

@@ -97,7 +97,6 @@ The following table lists the configurable parameters of the JasperReports chart
 
 | Parameter                               | Description                                                                              | Default                                                 |
 |-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                          | Specify number of Jasperreports replicas                                                 | `1`                                                     |
 | `containerPort`                         | HTTP port to expose at container level                                                   | `8080`                                                  |
 | `podSecurityContext`                    | Jasperreports pods' Security Context                                                     | Check `values.yaml` file                                |
 | `containerSecurityContext`              | Jasperreports containers' Security Context                                               | Check `values.yaml` file                                |
@@ -116,6 +115,7 @@ The following table lists the configurable parameters of the JasperReports chart
 | `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
 | `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
 | `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
+| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                               | `{}` (evaluated as a template)                          |
 | `podLabels`                             | Extra labels for Jasperreports pods                                                      | `{}` (evaluated as a template)                          |
 | `podAnnotations`                        | Annotations for Jasperreports pods                                                       | `{}` (evaluated as a template)                          |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)  | `[]`                                                    |

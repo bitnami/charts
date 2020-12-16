@@ -88,6 +88,17 @@ Return the MariaDB Secret Name
 {{- end -}}
 
 {{/*
+Return the database password key
+*/}}
+{{- define "jasperreports.databasePasswordKey" -}}
+{{- if .Values.mariadb.enabled -}}
+mariadb-password
+{{- else -}}
+db-password
+{{- end -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "jasperreports.checkRollingTags" -}}
