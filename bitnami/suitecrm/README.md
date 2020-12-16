@@ -288,10 +288,10 @@ If you configure the `image` value to one in a private registry, you will need t
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
 1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-```yaml
-imagePullSecrets:
-  - name: SECRET_NAME
-```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
 1. Install the chart
 
@@ -314,9 +314,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
-```
+    ```bash
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
+    ```
 
 ### Host path
 
@@ -347,9 +347,9 @@ Find more information about how to deal with common errors related to Bitnami’
 
 In this major there were three main changes introduced:
 
-1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
-3. Migration to non-root
+- Adaptation to Helm v2 EOL
+- Updated MariaDB dependency version
+- Migration to non-root
 
 Please read the update notes carefully.
 

@@ -131,8 +131,8 @@ spec:
               readOnly: true
         {{- end }}
       containers:
-        - name: {{ include "common.names.fullname" . }}
-          image: {{ template "suitecrm.image" . }}
+        - name: suitecrm
+          image: {{ include "suitecrm.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
