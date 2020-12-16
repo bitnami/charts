@@ -456,6 +456,11 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 
+## Custom Startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+##
+customStartupProbe: {}
+
 ## Add init containers to the pod
 ## Example:
 ## initContainers:
