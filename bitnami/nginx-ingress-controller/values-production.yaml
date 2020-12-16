@@ -240,7 +240,7 @@ livenessProbe:
   enabled: true
   httpGet:
     path: /healthz
-    port: http
+    port: "{{ .Values.containerPorts.metrics }}"
     scheme: HTTP
   failureThreshold: 3
   initialDelaySeconds: 10
@@ -251,7 +251,7 @@ readinessProbe:
   enabled: true
   httpGet:
     path: /healthz
-    port: http
+    port: "{{ .Values.containerPorts.metrics }}"
     scheme: HTTP
   failureThreshold: 3
   initialDelaySeconds: 10
