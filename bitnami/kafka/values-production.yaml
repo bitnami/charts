@@ -693,6 +693,9 @@ logPersistence:
 ##
 volumePermissions:
   enabled: false
+  ## The security context for the volumePermissions init container
+  securityContext:
+    runAsUser: 0
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##

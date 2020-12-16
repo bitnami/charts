@@ -247,7 +247,7 @@ spec:
               value: "5555"
             {{- end }}
             - name: KAFKA_VOLUME_DIR
-              value: {{ .Values.persistence.mountPath | quote}}
+              value: {{ .Values.persistence.mountPath | quote }}
             - name: KAFKA_LOG_DIR
               value: {{ .Values.logPersistence.mountPath | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
