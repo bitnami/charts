@@ -91,6 +91,8 @@ spec:
         - name: volume-permissions
           image: {{ include "kafka.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
           args:
             - -cx
             - |
@@ -244,6 +246,10 @@ spec:
             - name: JMX_PORT
               value: "5555"
             {{- end }}
+            - name: KAFKA_VOLUME_DIR
+              value: {{ .Values.persistence.mountPath | quote}}
+            - name: KAFKA_LOG_DIR
+              value: {{ .Values.logPersistence.mountPath | quote }}
             - name: KAFKA_CFG_DELETE_TOPIC_ENABLE
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
