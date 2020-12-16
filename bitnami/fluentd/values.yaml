@@ -300,9 +300,9 @@ forwarder:
     ## Example use case: mount host directory /tmp/buffer (if the directory doesn't exist, it creates it) into forwarder pod.
     ##   persistence:
     ##     enabled: true
-    ##     hostPath: 
+    ##     hostPath:
     ##       path: /tmp/buffer
-    hostPath: 
+    hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
 
   initContainers: []
