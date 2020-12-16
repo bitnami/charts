@@ -51,6 +51,20 @@ psp:
   create: false
 
 # Prometheus Operator alertmanager alerts
+networkPolicy:
+  ## Specifies whether a NetworkPolicy should be created.
+  ## Prometheus scraping of the controller
+  ##
+  enabled: false
+
+  ## Limit networkpolicy ingress (from)
+  ## Set label for namespace and pods (optional).
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
+## Prometheus Operator alertmanager alerts are created.
+## 
 prometheusRule:
   enabled: false
 

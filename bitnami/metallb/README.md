@@ -68,6 +68,9 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `prometheusRule.enabled`                                 | Enable for Prometheus alertmanager basic alerts.                                                     | `false`                                                 |
 | `commonLabels`                                           | Add common Labels to all Resources of the helmchart                                                  | `{}`                                                    |
 | `commonAnnotations`                                      | Add common Annotations to all Resources of the helmchart                                             | `{}`                                                    |
+| `networkPolicy.enabled`                                  | Enable NetworkPolicy                                                                                 | `false`                                                 |
+| `networkPolicy.ingressNSMatchLabels`                     | Allow connections from other namespaces                                                              | `{}`                                                    |
+| `networkPolicy.ingressNSPodMatchLabels`                  | For other namespaces match by pod labels and namespace labels                                        | `{}`                                                    |
 
 ### Controller parameters
 

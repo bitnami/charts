@@ -97,10 +97,7 @@ auth:
   ##   user: /vault/secrets/mariadb-user
   ##   replicator: /vault/secrets/mariadb-replicator
   ##
-  customPasswordFiles:
-    root: ""
-    user: ""
-    replicator: ""
+  customPasswordFiles: {}
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot

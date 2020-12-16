@@ -85,7 +85,10 @@ spec:
             - name: MIGRATIONS_PATH
               value: migrations/server/postgresql
             - name: DB_URL
-              value: {{ include "harbor.database.notaryServer" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.notary-server" . }}-envvars
+                  key: server_db_url
             {{- if .Values.notary.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -291,6 +291,20 @@ forwarder:
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
+
+  ## Persist data to a persistent volume
+  persistence:
+    enabled: false
+    ## If persistence enabled, a hostPath volume mounts a directory of your choice from the host node's filesystem into your Pod.
+    ## The host directory you chose is mounted into /opt/bitnami/fluentd/logs/buffers in your Pod
+    ## Example use case: mount host directory /tmp/buffer (if the directory doesn't exist, it creates it) into forwarder pod.
+    ##   persistence:
+    ##     enabled: true
+    ##     hostPath:
+    ##       path: /tmp/buffer
+    hostPath:
+      path: /opt/bitnami/fluentd/logs/buffers
+
   initContainers: []
 
   ## Add sidecars to forwarder pods
