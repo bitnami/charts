@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ .Values.networkPolicy.apiVersion | default "networking.k8s.io/v1" }}
+apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "metallb.fullname" . }}-controller
   labels:
