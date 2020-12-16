@@ -1,0 +1,50 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: {{ include "common.names.fullname" . }}-grafana
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  service:
+    labels: {{- include "common.labels.standard" . | nindent 4 }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+      {{- end }}
+    {{- if .Values.commonAnnotations }}
+    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  deployment:
+    labels: {{- include "common.labels.standard" . | nindent 4 }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+      {{- end }}
+    {{- if .Values.commonAnnotations }}
+    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    ## extraEnv extraSecret
+    envFrom: {{ | nindent 4 }}
+    - configMapRef:
+        name: bitnami-grafana-configmap
+    - secretRef:
+        name: grafana-admin-credentials
+  ingress:
+    enabled: True
+    hostname: {{ .Values.grafana.config.root_url }}
+    tlsEnabled: True
+    tlsSecretName: tls-secret
+    annotations:            # Additional annotations for the Ingress or Route
+      kubernetes.io/ingress.class: "management-system"
+    path: /
+  disableLoginForm: true
+  disableSignoutMenu: true
+  config: {{ .Values.grafana.config | nindent 4 }}
+  dashboardLabelSelector: {{ .Values.grafana.dashboardLabelSelector | nindent 2}}
+  jsonnet:
+    libraryLabelSelector:
+      matchLabels: {{ | nindent 8 }}
+        app.kubernetes.io/name: grafana
