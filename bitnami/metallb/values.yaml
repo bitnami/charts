@@ -64,7 +64,7 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
 ## Prometheus Operator alertmanager alerts are created.
-## 
+##
 prometheusRule:
   enabled: false
 
