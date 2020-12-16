@@ -24,4 +24,4 @@ name: dokuwiki
 sources:
   - https://github.com/bitnami/bitnami-docker-dokuwiki
   - http://www.dokuwiki.org/
-version: 10.0.3
+version: 10.0.4
