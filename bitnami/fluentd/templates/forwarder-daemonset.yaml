@@ -111,8 +111,13 @@ spec:
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
+            {{- if .Values.forwarder.persistence.enabled }}
+            - name: fluentd-buffer
+              mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- else }}
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/fluentd/certs
@@ -145,8 +150,15 @@ spec:
         - name: fluentd-config
           configMap:
             name: {{ template "fluentd.forwarder.configMap" . }}
+        {{- if .Values.forwarder.persistence.enabled }}
+        - name: fluentd-buffer
+          hostPath:
+            path: {{ .Values.forwarder.persistence.hostPath.path }}
+            type: DirectoryOrCreate
+        {{- else }}
         - name: buffer
           emptyDir: {}
+        {{- end }}
         - name: varlog
           hostPath:
             path: /var/log
