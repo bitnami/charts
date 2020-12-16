@@ -1,19 +1,19 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "zookeeper.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ template "zookeeper.namespace" . }}
-  labels: {{- include "zookeeper.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
     role: zookeeper
     {{- if .Values.commonLabels }}
-    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ template "zookeeper.fullname" . }}-headless
+  serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy:
@@ -25,18 +25,18 @@ spec:
       partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
   selector:
-    matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: zookeeper
   template:
     metadata:
-      name: {{ template "zookeeper.fullname" . }}
-      labels: {{- include "zookeeper.labels" . | nindent 8 }}
+      name: {{ template "common.names.fullname" . }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: zookeeper
         {{- if .Values.podLabels }}
-        {{- include "zookeeper.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -49,13 +49,18 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "zookeeper.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "apache.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "zookeeper" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "zookeeper" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "zookeeper.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "apache.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "zookeeper.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "apache.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
@@ -140,7 +145,7 @@ spec:
               {{- $followerPort := int .Values.service.followerPort }}
               {{- $electionPort := int .Values.service.electionPort }}
               {{- $releaseNamespace := include "zookeeper.namespace" . }}
-              {{- $zookeeperFullname := include "zookeeper.fullname" . }}
+              {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
               {{- $clusterDomain := .Values.clusterDomain }}
               value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $followerPort }}:{{ $electionPort }} {{ end }}
@@ -152,14 +157,14 @@ spec:
             - name: ZOO_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "zookeeper.fullname" . }}{{ end }}
+                  name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }}
                   key: client-password
             - name: ZOO_SERVER_USERS
               value: {{ .Values.auth.serverUsers | quote }}
             - name: ZOO_SERVER_PASSWORDS
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "zookeeper.fullname" . }}{{ end }}
+                  name: {{ if .Values.auth.existingSecret }}{{ .Values.auth.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }}
                   key: server-password
             {{- end }}
             - name: ZOO_HEAP_SIZE
@@ -274,7 +279,7 @@ spec:
         {{- if .Values.config }}
         - name: config
           configMap:
-            name: {{ template "zookeeper.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
         {{- end }}
         {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
@@ -297,7 +302,7 @@ spec:
         {{- end }}
   {{- if and .Values.persistence.enabled (not (and .Values.persistence.existingClaim .Values.persistence.dataLogDir.existingClaim) )}}
   volumeClaimTemplates:
-  {{- if not .Values.persistence.existingClaim }}
+    {{- if not .Values.persistence.existingClaim }}
     - metadata:
         name: data
         annotations:
@@ -312,7 +317,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "zookeeper.storageClass" . | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
     {{- end }}
     {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
     - metadata:
@@ -329,6 +334,6 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.dataLogDir.size | quote }}
-        {{- include "zookeeper.storageClass" . | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
     {{- end }}
   {{- end }}

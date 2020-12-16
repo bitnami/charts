@@ -2,6 +2,12 @@ annotations:
   category: ApplicationServer
 apiVersion: v2
 appVersion: 21.0.1
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Chart for Wildfly
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
@@ -20,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 6.0.2
+version: 7.0.0
