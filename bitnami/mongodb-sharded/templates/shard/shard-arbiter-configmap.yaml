@@ -7,5 +7,5 @@ metadata:
     app.kubernetes.io/component: shardsvr-arbiter
 data:
   mongodb.conf: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.shardsvr.arbiter.config "context" $) | indent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.shardsvr.arbiter.config "context" $) | nindent 4 }}
 {{- end }}

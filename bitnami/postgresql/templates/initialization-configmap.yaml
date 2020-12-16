@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "postgresql.fullname" . }}-init-scripts
+  name: {{ template "common.names.fullname" . }}-init-scripts
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}

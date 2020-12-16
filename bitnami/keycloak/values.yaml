@@ -67,7 +67,7 @@ auth:
   ##
   adminUser: user
   adminPassword: ""
-  ## Wildfly managemenet user and password
+  ## Wildfly management user and password
   ##
   managementUser: manager
   managementPassword: ""
@@ -133,7 +133,7 @@ cache:
 ## Keycloak Configuration
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
-## The standalone-ha.xml is auto-generated based on other parameters when this paremeter is not specified
+## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## configuration: |-
@@ -367,7 +367,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## Service configuratiom
+## Service configuration
 ##
 service:
   ## Service type.
@@ -407,7 +407,7 @@ service:
   ##
   annotations: {}
 
-## Ingress configuratiom
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -557,7 +557,7 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## HTTP managemenet port
+    ## HTTP management port
     ##
     port: 9990
     ## Annotations for the Prometheus exporter service

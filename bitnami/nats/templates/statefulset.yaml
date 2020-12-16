@@ -78,7 +78,7 @@ spec:
             # for the implementation inside Dockerfile:
             # - https://github.com/bitnami/bitnami-docker-nats#configuration
             {{- range $key, $value := .Values.extraFlags }}
-            --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
             {{- end }}
             {{- end }}
           {{- if .Values.extraEnvVars }}

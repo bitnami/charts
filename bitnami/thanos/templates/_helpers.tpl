@@ -1,146 +1,40 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "thanos.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
 {{/*
-Create a default fully qualified name for Thanos.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Fully qualified app name for PostgreSQL
 */}}
-{{- define "thanos.fullname" -}}
+{{- define "thanos.minio.fullname" -}}
 {{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-minio" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-minio" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-minio" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified name for MinIO.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "thanos.minio.fullname" -}}
-{{- if .Values.minio.fullnameOverride -}}
-{{- .Values.minio.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "minio" .Values.minio.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "thanos.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "thanos.labels" -}}
-app.kubernetes.io/name: {{ include "thanos.name" . }}
-helm.sh/chart: {{ include "thanos.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on {deploy|sts}.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "thanos.matchLabels" -}}
-app.kubernetes.io/name: {{ include "thanos.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Return the proper Thanos image name
 */}}
 {{- define "thanos.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper init container volume-permissions image name
 */}}
 {{- define "thanos.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "thanos.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-        {{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-        {{- end }}
-    {{- else if or .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-        {{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-        {{- end }}
-        {{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-        {{- end }}
-    {{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-    {{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-    {{- end }}
-    {{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-    {{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -150,7 +44,7 @@ Return the Thanos Objstore configuration secret.
 {{- if .Values.existingObjstoreSecret -}}
     {{- printf "%s" (tpl .Values.existingObjstoreSecret $) -}}
 {{- else -}}
-    {{- printf "%s-objstore-secret" (include "thanos.fullname" .) -}}
+    {{- printf "%s-objstore-secret" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -188,7 +82,7 @@ Return the Thanos Query Service Discovery configuration configmap.
 {{- if $query.existingSDConfigmap -}}
     {{- printf "%s" (tpl $query.existingSDConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-query-sd-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-query-sd-configmap" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -210,7 +104,7 @@ Return the Thanos Ruler configuration configmap.
 {{- if .Values.ruler.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.ruler.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-ruler-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-ruler-configmap" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -231,7 +125,7 @@ Return the Thanos storegateway configuration configmap.
 {{- if .Values.storegateway.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.storegateway.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-storegateway-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-storegateway-configmap" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -242,7 +136,7 @@ Return the Thanos Query Frontend configuration configmap.
 {{- if .Values.queryFrontend.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.queryFrontend.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s-query-frontend-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-query-frontend-configmap" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -273,136 +167,15 @@ Return the Thanos Compactor pvc name
 {{- if .Values.compactor.persistence.existingClaim -}}
     {{- printf "%s" (tpl .Values.compactor.persistence.existingClaim $) -}}
 {{- else -}}
-    {{- printf "%s-compactor" (include "thanos.fullname" .) -}}
+    {{- printf "%s-compactor" (include "common.names.fullname" .) -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class for Thanos Compactor
-*/}}
-{{- define "thanos.compactor.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.compactor.persistence.storageClass -}}
-              {{- if (eq "-" .Values.compactor.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.compactor.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.compactor.persistence.storageClass -}}
-        {{- if (eq "-" .Values.compactor.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.compactor.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class for Thanos Ruler
-*/}}
-{{- define "thanos.ruler.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.ruler.persistence.storageClass -}}
-              {{- if (eq "-" .Values.ruler.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.ruler.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.ruler.persistence.storageClass -}}
-        {{- if (eq "-" .Values.ruler.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.ruler.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class for Thanos Store Gateway
-*/}}
-{{- define "thanos.storegateway.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.storegateway.persistence.storageClass -}}
-              {{- if (eq "-" .Values.storegateway.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.storegateway.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.storegateway.persistence.storageClass -}}
-        {{- if (eq "-" .Values.storegateway.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.storegateway.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "thanos.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "thanos.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
 {{- end -}}
 
 {{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "thanos.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image -}}
 {{- end -}}
 
 {{/*
@@ -459,7 +232,7 @@ Usage:
 {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
 */}}
 {{- define "thanos.serviceaccount.name" -}}
-{{- $name := printf "%s-%s" (include "thanos.fullname" .context) .component -}}
+{{- $name := printf "%s-%s" (include "common.names.fullname" .context) .component -}}
 
 {{- if .context.Values.existingServiceAccount -}}
     {{- $name = .context.Values.existingServiceAccount -}}

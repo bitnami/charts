@@ -281,6 +281,10 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: secondary
+      {{- if .Values.secondary.persistence.annotations }}
+        annotations:
+          {{- toYaml .Values.secondary.persistence.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

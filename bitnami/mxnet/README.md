@@ -85,7 +85,7 @@ The following table lists the configurable parameters of the Mxnet chart and the
 | `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                    | `buster`                                                |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                            | `Always`                                                |
 | `volumePermissions.resources`           | Init container resource requests/limit                                                                         | `nil`                                                   |
-| `entrypoint.file`                       | Main entrypoint to your application. If not speficied, it will be a `sleep infinity` command                   | `''`                                                    |
+| `entrypoint.file`                       | Main entrypoint to your application. If not specified, it will be a `sleep infinity` command                   | `''`                                                    |
 | `entrypoint.args`                       | Args required by your entrypoint                                                                               | `nil`                                                   |
 | `entrypoint.workDir`                    | Working directory for launching the entrypoint                                                                 | `'/app'`                                                |
 | `podManagementPolicy`                   | StatefulSet (worker and server nodes) pod management policy                                                    | `Parallel`                                              |
@@ -357,7 +357,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -369,7 +369,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 2.1.0
 
-Some parameters dissapeared in favor of new ones:
+Some parameters disappeared in favor of new ones:
 
 - `schedulerExtraEnvVars` and `schedulerPort` -> deprecated in favor of `scheduler.extraEnvVars` and `scheduler.port`, respectively.
 - `serverExtraEnvVars` and `serverCount` -> deprecated in favor of `server.extraEnvVars` and `server.replicaCount`, respectively.

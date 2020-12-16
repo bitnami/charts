@@ -132,7 +132,7 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `mailReceiver.category`              | Defines a new task category                                                                                                                         | `""`                                                    |
 | `mailReceiver.priority`              | Defines a new task priority                                                                                                                         | `""`                                                    |
 | `mailReceiver.assignedTo`            | Defines a new task priority                                                                                                                         | `""`                                                    |
-| `mailReceiver.allowOverride`         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to alllow all attributes      | `""`                                                    |
+| `mailReceiver.allowOverride`         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes      | `""`                                                    |
 | `mailReceiver.podAnnotations`        | Additional pod annotations                                                                                                                          | `{}`                                                    |
 | `mailReceiver.podLabels`             | Additional pod labels                                                                                                                               | `{}`                                                    |
 | `mailReceiver.command`               | Override default container command (useful when using custom images)                                                                                | `["bash"]`                                              |
@@ -383,7 +383,7 @@ data:
 ```yaml
 ## Extra volumes to add to the deployment
 ##
-extraVolumes: 
+extraVolumes:
   - name: redmine-init-volume
     configMap:
       name: redmine-init-configmap

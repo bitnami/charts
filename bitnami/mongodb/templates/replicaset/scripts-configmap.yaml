@@ -15,7 +15,7 @@ data:
 
     SVC_NAME="${MY_POD_NAME}-external"
 
-    # Auxiliar functions
+    # Auxiliary functions
     retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"

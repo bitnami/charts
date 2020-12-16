@@ -258,7 +258,7 @@ persistence:
   ##
   size: 8Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -298,7 +298,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -364,7 +364,7 @@ ingress:
   ##
   secrets: []
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the podSecurityContext section of the component
 ##

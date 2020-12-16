@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.5.3-debian-10-r24
+  tag: 5.6.0-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -53,6 +53,10 @@ clusterDomain: cluster.local
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+
+## Use a service account for the WordPress pod
+##
+serviceAccountName: default
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -458,6 +462,7 @@ ingress:
   ##   backend:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -531,7 +536,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r221
+    tag: 0.8.0-debian-10-r239
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -673,4 +678,5 @@ externalDatabase:
 ##     ...
 ##
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
+##
 customPostInitScripts: {}

@@ -3,84 +3,97 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
-    component: {{ .Values.name }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
-    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations:
-    {{- range $key, $value := .Values.commonAnnotations }}
-    {{ $key }}: {{ include "nginx-ingress.tplValue" (dict "value" $value "context" $) | quote }}
-    {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "nginx-ingress.matchLabels" . | nindent 6 }}
-      component: {{ .Values.name }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   minReadySeconds: {{ .Values.minReadySeconds }}
   template:
     metadata:
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "nginx-ingress.annotations" (dict "annotations" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $ ) | nindent 8 }}
       {{- end }}
-      labels: {{- include "nginx-ingress.labels" . | nindent 8 }}
-        component: {{ .Values.name }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: controller
         {{- if .Values.podLabels }}
-        {{- include "nginx-ingress.tplValue" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "nginx-ingress-controller.imagePullSecrets" . | indent 6 }}
+      {{- include "nginx-ingress-controller.imagePullSecrets" . | nindent 6 }}
       dnsPolicy: {{ .Values.dnsPolicy }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "nginx-ingress.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "controller" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "controller" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "nginx-ingress.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "nginx-ingress.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext }}
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- if .Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{ toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
+      serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      {{- if .Values.extraInitContainers }}
-      initContainers: {{- toYaml .Values.extraInitContainers | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ template "nginx-ingress.name" . }}-{{ .Values.name }}
-          image: {{ template "nginx-ingress-controller.image" . }}
+        - name: controller
+          image: {{ include "nginx-ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.lifecycle }}
           lifecycle: {{- toYaml .Values.lifecycle | nindent 12 }}
           {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - /nginx-ingress-controller
-            - --default-backend-service={{ if .Values.defaultBackend.enabled }}{{ .Release.Namespace }}/{{ template "nginx-ingress.defaultBackend.fullname" . }}{{ else }}{{ .Values.defaultBackendService }}{{ end }}
+            - --default-backend-service={{ if .Values.defaultBackend.enabled }}{{ .Release.Namespace }}/{{ include "nginx-ingress-controller.defaultBackend.fullname" . }}{{ else }}{{ .Values.defaultBackendService }}{{ end }}
           {{- if .Values.publishService.enabled }}
-            - --publish-service={{ template "nginx-ingress.publishServicePath" . }}
+            - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.electionID }}
             - --ingress-class={{ .Values.ingressClass }}
-            - --configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}
+            - --configmap={{ .Release.Namespace }}/{{ include "common.names.fullname" . }}
           {{- if .Values.tcp }}
-            - --tcp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-tcp
+            - --tcp-services-configmap={{ .Release.Namespace }}/{{ include "common.names.fullname" . }}-tcp
           {{- end }}
           {{- if .Values.udp }}
-            - --udp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-udp
+            - --udp-services-configmap={{ .Release.Namespace }}/{{ include "common.names.fullname" . }}-udp
           {{- end }}
           {{- if .Values.scope.enabled }}
             - --watch-namespace={{ default .Release.Namespace .Values.scope.namespace }}
@@ -98,12 +111,7 @@ spec:
             - --{{ $key }}
             {{- end }}
           {{- end }}
-          securityContext:
-            capabilities:
-              drop: ["ALL"]
-              add: ["NET_BIND_SERVICE"]
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            allowPrivilegeEscalation: {{ .Values.image.allowPrivilegeEscalation }}
+          {{- end }}
           env:
             - name: POD_NAME
               valueFrom:
@@ -113,45 +121,46 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if .Values.extraEnvs }}
-            {{- toYaml .Values.extraEnvs | nindent 12 }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: {{ .Values.livenessProbe.port }}
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: {{ .Values.readinessProbe.port }}
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPort.http }}
+              containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
-              {{- if .Values.daemonset.useHostPort }}
+              {{- if $useHostPort }}
               hostPort: {{ .Values.daemonset.hostPorts.http }}
               {{- end }}
             - name: https
-              containerPort: {{ .Values.containerPort.https }}
+              containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
-              {{- if .Values.daemonset.useHostPort }}
+              {{- if $useHostPort }}
               hostPort: {{ .Values.daemonset.hostPorts.https }}
               {{- end }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: 10254
+              containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
             {{- end }}
             {{- range $key, $value := .Values.tcp }}
@@ -173,7 +182,7 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if (or .Values.customTemplate.configMapName .Values.extraVolumeMounts) }}
+          {{- if or .Values.customTemplate.configMapName .Values.extraVolumeMounts }}
           volumeMounts:
             {{- if .Values.customTemplate.configMapName }}
             - mountPath: /etc/nginx/template
@@ -181,11 +190,11 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
-        {{- if .Values.extraContainers }}
-        {{- toYaml .Values.extraContainers | nindent 8 }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       {{- if (or .Values.customTemplate.configMapName .Values.extraVolumes) }}
       volumes:
@@ -198,7 +207,7 @@ spec:
                 path: nginx.tmpl
         {{- end }}
         {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
 {{- end }}

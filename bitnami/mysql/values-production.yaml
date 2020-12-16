@@ -91,14 +91,16 @@ auth:
   ##
   usePasswordFiles: true
   ## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
-  ##
-  customPasswordFiles:
   ## Example:
   ## customPasswordFiles:
-  ##   root: /vault/secrets/mariadb-root
-  ##   user: /vault/secrets/mariadb-user
-  ##   replicator: /vault/secrets/mariadb-replicator
+  ##   root: /vault/secrets/mysql-root
+  ##   user: /vault/secrets/mysql-user
+  ##   replicator: /vault/secrets/mysql-replicator
   ##
+  customPasswordFiles:
+    root: ""
+    user: ""
+    replicator: ""
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
@@ -352,7 +354,7 @@ primary:
   ##
   sidecars: []
 
-  ## MySQL Primary Service paramaters
+  ## MySQL Primary Service parameters
   ##
   service:
     ## Service type
@@ -632,7 +634,7 @@ secondary:
   ##
   sidecars: []
 
-  ## MySQL Secondary Service paramaters
+  ## MySQL Secondary Service parameters
   ##
   service:
     ## Service type
@@ -717,7 +719,7 @@ volumePermissions:
     #   - myRegistryKeySecretName
   resources: {}
 
-## Mysqld Prometheus exporter paramters
+## Mysqld Prometheus exporter parameters
 ##
 metrics:
   enabled: true
