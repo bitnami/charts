@@ -33,7 +33,7 @@ spec:
       {{- include "kiam.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kiam.server.serviceAccountName" . }}
       dnsPolicy: {{ .Values.server.dnsPolicy }}
-      hostNetwork: {{ .Values.server.hostNetwork }}
+      hostNetwork: {{ .Values.server.useHostNetwork }}
       {{- if .Values.server.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.server.affinity "context" $) | nindent 8 }}
       {{- else }}

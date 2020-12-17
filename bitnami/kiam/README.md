@@ -88,7 +88,6 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.resourceType`                       | Specify how to deploy the server (allowed values: `daemonset` and `deployment`)             | `daemonset`                              |
 | `server.replicaCount`                       | Number of replicas to deploy (when `server.resourceType` is `daemonset`)                    | `1`                                      |
 | `server.logJsonOutput`                      | Use JSON format for logs                                                                    | `true`                                   |
-| `server.hostNetwork`                        | Use hostNetwork for the pods                                                                | `false`                                  |
 | `server.extraArgs`                          | Extra arguments to add to the default kiam command                                          | `[]`                                     |
 | `server.command`                            | Override kiam default command                                                               | `[]`                                     |
 | `server.args`                               | Override kiam default args                                                                  | `[]`                                     |

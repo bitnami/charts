@@ -93,7 +93,7 @@ server:
 
   ## Whether the kiam server should use host network
   ##
-  hostNetwork: false
+  useHostNetwork: false
 
   ## Number of nodes
   ##
@@ -499,10 +499,10 @@ agent:
   ##
   tlsSecret:
 
-  ## Use hostNetwork for server
+  ## Use hostNetwork for agent
   ## Set this to true when running the servers on the same nodes as the agents
   ##
-  hostNetwork: false
+  useHostNetwork: false
 
   ## Agent TLS Certificate filenames
   ##
