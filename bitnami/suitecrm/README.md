@@ -48,165 +48,192 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the SuiteCRM chart and their default values.
+The following table lists the configurable parameters of the SuiteCRM chart and their default values per section/component:
 
 ### Global parameters
 
-| Parameter                                   | Description                                                                                           | Default                                                      |
-|---------------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                      | Global Docker image registry                                                                          | `nil`                                                        |
-| `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)                                                        |
-| `global.storageClass`                       | Global storage class for dynamic provisioning                                                         | `nil`                                                        |
-
-### SuiteCRM parameters
-
-| Parameter                                 | Description    | Default                                                                                |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `suitecrmHost`                              | SuiteCRM host to create application URLs                                                              | `nil`                                                        |
-| `suitecrmUsername`                          | User of the application                                                                               | `user`                                                       |
-| `suitecrmPassword`                          | Application password                                                                                  | _random 10 character alphanumeric string_                                                      |
-| `suitecrmEmail`                             | Admin email                                                                                           | `user@example.com`                                           |
-| `suitecrmLastName`                          | Last name                                                                                             | `Last`                                                       |
-| `suitecrmSmtpHost`                          | SMTP host                                                                                             | `nil`                                                        |
-| `suitecrmSmtpPort`                          | SMTP port                                                                                             | `nil`                                                        |
-| `suitecrmSmtpUser`                          | SMTP user                                                                                             | `nil`                                                        |
-| `suitecrmSmtpPassword`                      | SMTP password                                                                                         | `nil`                                                        |
-| `suitecrmSmtpProtocol`                      | SMTP protocol [`ssl`, `tls`]                                                                          | `nil`                                                        |
-| `suitecrmValidateUserIP`                    | Whether to validate the user IP address or not                                                        | `no`                                                         |
-| `allowEmptyPassword`                        | Allow DB blank passwords                                                                              | `yes`                                                        |
-| `resources`                                 | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                                       |
-| `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `[]`                                                        |
-| `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `[]`                                                        |
-| `extraEnvVars`                              | Extra environment variables                                                                                           | `[]`                                                        |
-| `extraVolumeMounts`                         | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                                                        |
-| `extraVolumes`                              | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                                                        |
-| `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                                                        |
-| `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                                                        |
-
-### MariaDB parameters
-
-| Parameter                                 | Description    | Default                                                                                |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                      | `true`                                                       |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                  | `standalone`                                                 |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                  | _random 10 character alphanumeric string_                                                      |
-| `mariadb.auth.database`                     | Database name to create                                                                               | `bitnami_suitecrm`                                         |
-| `mariadb.auth.username`                     | Database user to create                                                                               | `bn_suitecrm`                                              |
-| `mariadb.auth.password`                     | Password for the database                                                                             | _random 10 character long alphanumeric string_                                                      |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                 | `true`                                                       |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                              | `nil`                                                        |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                               | `[ReadWriteOnce]`                                            |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                       | `8Gi`                                                        |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)              | `nil`                                                        |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                       | `nil`                                                        |
-| `externalDatabase.user`                     | Existing username in the external db                                                                  | `bn_suitecrm`                                              |
-| `externalDatabase.password`                 | Password for the above username                                                                       | `""`                                                         |
-| `externalDatabase.database`                 | Name of the existing database                                                                         | `bitnami_suitecrm`                                         |
-| `externalDatabase.host`                     | Host of the existing database                                                                         | `nil`                                                        |
-| `externalDatabase.port`                     | Port of the existing database                                                                         | `3306`                                                       |
-
-### Persistence parameters
-
-| Parameter                                   | Description    | Default                                                                                |
-|---------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| `persistence.enabled`                       | Enable persistence using PVC                                                                          | `true`                                                         |
-| `persistence.storageClass`                  | PVC Storage Class for SuiteCRM volume                                                                 | `nil` (uses alpha storage class annotation)                                |
-| `persistence.existingClaim`                 | An Existing PVC name for SuiteCRM volume                                                              | `nil` (uses alpha storage class annotation)                                |
-| `persistence.accessMode`                    | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                                |
-| `persistence.size`                          | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                          |
-| `volumePermissions.enabled`                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) |                                          `false`                                                      |
-| `volumePermissions.image.registry`          | Init container volume-permissions image registry                                                      | `docker.io`                                                    |
-| `volumePermissions.image.repository`        | Init container volume-permissions image name                                                          | `bitnami/minideb`                                                       |
-| `volumePermissions.image.tag`               | Init container volume-permissions image tag                                                           | `buster`                                                       |
-| `volumePermissions.image.pullSecrets`       | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)                       |
-| `volumePermissions.image.pullPolicy`        | Init container volume-permissions image pull policy                                                   | `Always`                                                       |
-| `volumePermissions.resources`               | Init container resource requests/limit                                                                | `nil`                                                          |
-
-### Exposure parameters
-
-| Parameter                                 | Description    | Default                                                                                |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `service.type`                              | Kubernetes Service type                                                                               | `LoadBalancer`                                               |
-| `service.port`                              | Service HTTP port                                                                                     | `8080`                                                       |
-| `service.httpsPort`                         | Service HTTPS port                                                                                    | `8443`                                                       |
-| `service.nodePorts.http`                    | Kubernetes http node port                                                                             | `""`                                                         |
-| `service.nodePorts.https`                   | Kubernetes https node port                                                                            | `""`                                                         |
-| `service.externalTrafficPolicy              | Enable client source IP preservation                                                                  | `Cluster`                                                    |
-| `service.loadBalancerIP`                    | `loadBalancerIP` for the SuiteCRM Service                                                             | `nil`                                                        |
-| `ingress.enabled`                           | Enable ingress controller resource                                                                    | `false`                                                      |
-| `ingress.annotations`                       | Ingress annotations                                                                                   | `[]`                                                         |
-| `ingress.certManager`                       | Add annotations for cert-manager                                                                      | `false`                                                      |
-| `ingress.hosts[0].name`                     | Hostname to your SuiteCRM installation                                                                | `suitecrm.local`                                             |
-| `ingress.hosts[0].path`                     | Path within the url structure                                                                         | `/`                                                            |
-| `ingress.hosts[0].tls`                      | Utilize TLS backend in ingress                                                                        | `false`                                                      |
-| `ingress.hosts[0].tlsHosts`                 | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                  | `nil`                                                        |
-| `ingress.hosts[0].tlsSecret`                | TLS Secret (certificates)                                                                             | `suitecrm.local-tls-secret`                                                      |
-| `ingress.secrets[0].name`                   | TLS Secret Name                                                                                       | `nil`                                                        |
-| `ingress.secrets[0].certificate`            | TLS Secret Certificate                                                                                | `nil`                                                        |
-| `ingress.secrets[0].key`                    | TLS Secret Key                                                                                        | `nil`                                                        |
-
-### Metrics Parameters
-
-| Parameter                                 | Description    | Default                                                                                |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `metrics.enabled`                           | Start a side-car prometheus exporter                                                                  | `false`                                                      |
-| `metrics.image.registry`                    | Apache exporter image registry                                                                        | `docker.io`                                                  |
-| `metrics.image.repository`                  | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                                    |
-| `metrics.image.tag`                         | Apache exporter image tag                                                                             | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`                  | Image pull policy                                                                                     | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                      | `nil`                                                        |
-| `metrics.podAnnotations`                    | Additional annotations for Metrics exporter pod                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                         | Exporter resource requests/limit                                                                      | {}                                                           |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                                 | Description    | Default                                                                                |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `commonAnnotations`                         | Annotations to be added to all deployed resources                                                     | `{}` (evaluated as a template)                                                    |
-| `commonLabels`                              | Labels to be added to all deployed resources                                                          | `{}` (evaluated as a template)                                                    |
-| `nameOverride`                              | String to partially override suitecrm.fullname template with a string (will prepend the release name) | `nil`                                                        |
-| `fullnameOverride`                          | String to fully override suitecrm.fullname template with a string                                     | `nil`                                                        |
-| `image.registry`                            | SuiteCRM image registry                                                                               | `docker.io`                                                  |
-| `image.repository`                          | SuiteCRM image name                                                                                   | `bitnami/suitecrm`                                                    |
-| `image.tag`                                 | SuiteCRM image tag                                                                                    | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                          | Image pull policy                                                                                     | `IfNotPresent`                                               |
-| `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)                                                        |
-| `replicaCount`                              | Number of SuiteCRM replicas                                                                           | `1`                                                          |
-| `podAnnotations`                            | Pod annotations                                                                                       | `{}`                                                         |
-| `podAffinityPreset`                         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                                         |
-| `podAntiAffinityPreset`                     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                                                       |
-| `nodeAffinityPreset.type`                   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                         |
-| `nodeAffinityPreset.key`                    | Node label key to match Ignored if `affinity` is set.                                                 | `""`                                                         |
-| `nodeAffinityPreset.values`                 | Node label values to match. Ignored if `affinity` is set.                                             | `[]`                                                         |
-| `affinity`                                  | Map of node/pod affinities                                                                            | `{}`                                                         |
-| `podSecurityContext.enabled`                | Enable securityContext on for SuiteCRM deployment                                                     | `true`                                                       |
-| `podSecurityContext.fsGroup`                | Group to configure permissions for volumes                                                            | `1001`                                                       |
-| `containerSecurityContext.enabled`          | Enable securityContext on for SuiteCRM deployment                                                     | `true`                                                       |
-| `containerSecurityContext.runAsUser`        | User for the securityContext                                                                          | `1001`                                                       |
-| `extraDeploy`                               | Array of extra objects to deploy with the release 	                                                  | `[]` (evaluated as a template)                               |
+| Parameter           | Description                                                                  | Default                                                 |
+|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | SuiteCRM image registry                                                      | `docker.io`                                             |
+| `image.repository`  | SuiteCRM Image name                                                          | `bitnami/suitecrm`                                      |
+| `image.tag`         | SuiteCRM Image tag                                                           | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | SuiteCRM image pull policy                                                   | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
+| `nameOverride`      | String to partially override suitecrm.fullname template                      | `nil`                                                   |
+| `fullnameOverride`  | String to fully override suitecrm.fullname template                          | `nil`                                                   |
+| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+
+### SuiteCRM parameters
+
+| Parameter                            | Description                                                                                                           | Default                                        |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
+| `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
+| `containerPorts.https`               | Sets https port inside NGINX container                                                                                | `8443`                                         |
+| `containerSecurityContext.enabled`   | Enable SuiteCRM containers' Security Context                                                                          | `true`                                         |
+| `containerSecurityContext.runAsUser` | SuiteCRM containers' Security Context                                                                                 | `1001`                                         |
+| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
+| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
+| `customStartupProbe`                 | Override default startup probe                                                                                        | `nil`                                          |
+| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
+| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                          |
+| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                          |
+| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
+| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
+| `suitecrmHost`                       | SuiteCRM host to create application URLs (when ingress, it will be ignored)                                           | `nil`                                          |
+| `suitecrmUsername`                   | User of the application                                                                                               | `user`                                         |
+| `suitecrmPassword`                   | Application password                                                                                                  | _random 10 character alphanumeric string_      |
+| `suitecrmEmail`                      | Admin email                                                                                                           | `user@example.com`                             |
+| `suitecrmLastName`                   | Last name                                                                                                             | `Last`                                         |
+| `suitecrmSmtpHost`                   | SMTP host                                                                                                             | `nil`                                          |
+| `suitecrmSmtpPort`                   | SMTP port                                                                                                             | `nil`                                          |
+| `suitecrmSmtpUser`                   | SMTP user                                                                                                             | `nil`                                          |
+| `suitecrmSmtpPassword`               | SMTP password                                                                                                         | `nil`                                          |
+| `suitecrmSmtpProtocol`               | SMTP protocol [`ssl`, `tls`]                                                                                          | `nil`                                          |
+| `suitecrmValidateUserIP`             | Whether to validate the user IP address or not                                                                        | `no`                                           |
+| `suitecrmSkipInstall`                | Skip SuiteCRM installation wizard (`no` / `yes`)                                                                      | `false`                                        |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
+| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
+| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
+| `podSecurityContext.enabled`         | Enable SuiteCRM pods' Security Context                                                                                | `true`                                         |
+| `podSecurityContext.fsGroup`         | SuiteCRM pods' group ID                                                                                               | `1001`                                         |
+| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
+| `replicaCount`                       | Number of SuiteCRM Pods to run                                                                                        | `1`                                            |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
+| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
+| `smtpHost`                           | SMTP host                                                                                                             | `nil`                                          |
+| `smtpPort`                           | SMTP port                                                                                                             | `nil` (but suitecrm internal default is 25)  |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                          |
+| `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
+| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
+| `startupProbe`                       | Startup probe configuration                                                                                           | `Check values.yaml file`                       |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
+| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
 
 ### Database parameters
 
-| Parameter                                  | Description                                           | Default                                        |
-|--------------------------------------------|-------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart                      | `true`                                         |
-| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)  | `standalone`                                   |
-| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                  | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                    | Database name to create                               | `bitnami_suitecrm`                             |
-| `mariadb.auth.username`                    | Database user to create                               | `bn_suitecrm`                                  |
-| `mariadb.auth.password`                    | Password for the database                             | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                 | `true`                                         |
-| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes               | `ReadWriteOnce`                                |
-| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                       | `8Gi`                                          |
-| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC              | `nil`                                          |
-| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                     | `nil` (uses alpha storage class annotation)    |
-| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                    | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db                  | `bn_suitecrm`                                  |
-| `externalDatabase.password`                | Password for the above username                       | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database                         | `bitnami_suitecrm`                             |
-| `externalDatabase.host`                    | Host of the existing database                         | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database                         | `3306`                                         |
-| `externalDatabase.existingSecret`          | Name of the database existing Secret Object           | `nil`                                          |
+| Parameter                                   | Description                                                                              | Default                                        |
+|---------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_suitecrm`                             |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_suitecrm`                                  |
+| `mariadb.auth.password`                     | Password for the database                                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                                          |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                                          |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_suitecrm`                                  |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                                           |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_suitecrm`                             |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                                         |
+
+### Persistence parameters
+
+| Parameter                                   | Description                                                                                           | Default                                                        |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
+| `persistence.enabled`                       | Enable persistence using PVC                                                                          | `true`                                                         |
+| `persistence.storageClass`                  | PVC Storage Class for SuiteCRM volume                                                                 | `nil` (uses alpha storage class annotation)                    |
+| `persistence.existingClaim`                 | An Existing PVC name for SuiteCRM volume                                                              | `nil` (uses alpha storage class annotation)                    |
+| `persistence.hostPath`                      | Host mount path for SuiteCRM volume                                                                   | `nil` (will not mount to a host path)                          |
+| `persistence.accessMode`                    | PVC Access Mode for SuiteCRM volume                                                                   | `ReadWriteOnce`                                                |
+| `persistence.size`                          | PVC Storage Request for SuiteCRM volume                                                               | `8Gi`                                                          |
+
+### Volume Permissions parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
+| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
+| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
+| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
+| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+
+### Traffic Exposure Parameters
+
+| Parameter                        | Description                           | Default            |
+|----------------------------------|---------------------------------------|--------------------|
+| `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
+| `service.port`                   | Service HTTP port                     | `80`               |
+| `service.httpsPort`              | Service HTTPS port                    | `443`              |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
+| `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
+| `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
+| `ingress.enabled`                | Enable ingress controller resource    | `false`            |
+| `ingress.certManager`            | Add annotations for cert-manager      | `false`            |
+| `ingress.hostname`               | Default host for the ingress resource | `suitecrm.local`   |
+| `ingress.annotations`            | Ingress annotations                   | `{}`               |
+| `ingress.hosts[0].name`          | Hostname to your SuiteCRM installation  | `nil`            |
+| `ingress.hosts[0].path`          | Path within the url structure         | `nil`              |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`              |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`              |
+| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`              |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`              |
+| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`              |
+
+### Metrics parameters
+
+| Parameter                   | Description                                      | Default                                                      |
+|-----------------------------|--------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                      |
+| `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`                                                  |
+| `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`         | Exporter resource requests/limit                 | {}                                                           |
+
+### Certificate injection parameters
+
+| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
+| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
+| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
+| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
+| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](http://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 
@@ -228,7 +255,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.mariadbRootPassword=secretpassword \
+  --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.auth.rootPassword=secretpassword \
     bitnami/suitecrm
 ```
 
@@ -250,12 +277,65 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Image
+
+The `image` parameter allows specifying which image will be pulled for the chart.
+
+#### Private registry
+
+If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
+
+1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
+1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
+
+1. Install the chart
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaim
+
+1. Create the PersistentVolume
+1. Create the PersistentVolumeClaim
+1. Install the chart
+
+    ```bash
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
+    ```
+
+### Host path
+
+#### System compatibility
+
+- The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
+- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://github.com/kubernetes/minikube/blob/master/docs/host_folder_mount.md) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
+
+#### Mounting steps
+
+1. The specified `hostPath` directory must already exist (create one if it does not).
+1. Install the chart
+
+    ```bash
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/suitecrm
+    ```
+
+    This will mount the `suitecrm-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+1. Because the container cannot control the host machine's directory permissions, you must set the SuiteCRM file directory permissions yourself and disable or clear SuiteCRM cache.
 
 ## Troubleshooting
 
@@ -267,9 +347,9 @@ Find more information about how to deal with common errors related to Bitnami’
 
 In this major there were three main changes introduced:
 
-1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
-3. Migration to non-root
+- Adaptation to Helm v2 EOL
+- Updated MariaDB dependency version
+- Migration to non-root
 
 Please read the update notes carefully.
 

@@ -24,28 +24,39 @@ image:
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  # pullSecrets:
+  pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## ref: https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
 
 ## String to partially override suitecrm.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
 ## String to fully override suitecrm.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
 
+## Number of replicas (requires ReadWriteMany PVC support)
+##
 replicaCount: 1
 
-## SuiteCRM host to create application URLs
+## Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-# suitecrmHost:
+suitecrmSkipInstall: false
 
 ## SuiteCRM validate user IP
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmValidateUserIP: false
+
+## SuiteCRM host to create application URLs
+## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
+##
+suitecrmHost:
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
@@ -56,7 +67,7 @@ suitecrmUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-# suitecrmPassword:
+suitecrmPassword:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
@@ -65,32 +76,95 @@ suitecrmEmail: user@example.com
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#environment-variables
-allowEmptyPassword: "no"
+##
+allowEmptyPassword: false
+
+## Container command (using container default if not set)
+##
+command:
+## Container args (using container default if ot set)
+##
+args:
+
+## Common annotations to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Use existing secret for the application password
+##
+existingSecret:
 
 ##
 ## External database configuration
 ##
 externalDatabase:
-  ## Use existing secret (ignores previous password)
-  ## must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  # existingSecret:
-
   ## Database host
+  ##
   host:
 
   ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_suitecrm
 
   ## Database password
+  ##
   password:
 
   ## Database name
+  ##
   database: bitnami_suitecrm
-
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm/#smtp-configuration
@@ -155,15 +229,27 @@ mariadb:
       ##
       existingClaim:
 
+## Container ports
+##
+containerPorts:
+  http: 8080
+  https: 8443
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
 service:
   type: LoadBalancer
   # HTTP Port
   port: 8080
   # HTTPS Port
   httpsPort: 8443
+  ## clusterIP: ""
+  ## Control hosts connecting to "LoadBalancer" only
+  ## loadBalancerSourceRanges:
+  ##   - 0.0.0.0/0
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
   ## loadBalancerIP:
   ##
   ## nodePorts:
@@ -177,46 +263,22 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  enabled: true
-  ## suitecrm data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
-
-  accessMode: ReadWriteOnce
-  size: 8Gi
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources: {}
-# requests:
-#   memory: 512Mi
-#   cpu: 300m
-
 ## Configure the ingress resource that allows you to access the
 ## SuiteCRM installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: suitecrm.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -224,27 +286,26 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
+  ##
+  annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## hosts:
+  ## - name: suitecrm.local
+  ##   path: /
+  ##
   hosts:
-    - name: suitecrm.local
-      path: /
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
 
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
-
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      # - www.suitecrm.local
-      # - suitecrm.local
-
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: suitecrm.local-tls
+  ## tls:
+  ## - hosts:
+  ##     - suitecrm.local
+  ##   secretName: suitecrm.local-tls
+  ##
+  tls:
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -256,21 +317,55 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
+  ##
   # - name: suitecrm.local-tls
   #   key:
   #   certificate:
 
+## Control where client requests go, to the same pod or round-robin
+## Values: ClientIP or None
+## ref: https://kubernetes.io/docs/user-guide/services/
+sessionAffinity: "None"
 
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
-podAnnotations: {}
+persistence:
+  enabled: true
+  ## SuiteCRM Data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the suitecrm-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -285,12 +380,13 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ''
+  ##
+  type: ""
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## Node label values to match
   ## E.g.
   ## values:
@@ -301,43 +397,22 @@ nodeAffinityPreset:
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## SecurityContext configuration for the pods
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
+nodeSelector: {}
 
-## SecurityContext configuration for the container
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-
-## Configure extra options for Redis liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 5
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 1
-  successThreshold: 1
-  failureThreshold: 5
+resources: {}
+#  requests:
+#    memory: 512Mi
+#    cpu: 300m
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -373,36 +448,72 @@ volumePermissions:
     ##   memory: 128Mi
     ##
 
-## An array to add extra env vars
-## For example:
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-extraEnvVars: []
-#  - name: BEARER_AUTH
-#    value: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
-## ConfigMap with extra environment variables
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
-extraEnvVarsCM:
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
-## Secret with extra environment variables
-##
-extraEnvVarsSecret:
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+livenessProbe:
+  enabled: true
+  path: /index.php
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: /index.php
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+startupProbe:
+  enabled: false
+  path: /index.php
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 60
+  successThreshold: 1
 
-## Extra volumes to add to the deployment
+## Custom Liveness probe
 ##
-extraVolumes: []
+customLivenessProbe: {}
 
-## Extra volume mounts to add to the container
+## Custom Readiness probe
 ##
-extraVolumeMounts: []
+customReadinessProbe: {}
 
-## Extra init containers to add to the deployment
+## Custom Startup probe
 ##
-initContainers: []
+customStartupProbe: {}
 
-## Extra sidecar containers to add to the deployment
+## lifecycleHooks for the container to automate configuration before or after startup.
 ##
-sidecars: []
+lifecycleHooks:
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Prometheus Exporter / Metrics
 ##
@@ -417,15 +528,62 @@ metrics:
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
+    pullSecrets:
     #   - myRegistryKeySecretName
-
+  ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  # resources: {}
   ## Metrics exporter pod Annotation and Labels
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
 
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+# Add custom certificates and certificate authorities to SuiteCRM container
+certificates:
+  customCertificate:
+    certificateSecret: ""
+    chainSecret: {}
+    # name: secret-name
+    # key: secret-key
+    certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
+    keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
+    chainLocation: /etc/ssl/certs/mychain.pem
+  customCAs: []
+  ## Override container command
   ##
-  resources: {}
+  command:
+  ## Override container args
+  ##
+  args:
+  # - secret: custom-CA
+  # - secret: more-custom-CAs
+  ## An array to add extra env vars
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    # pullPolicy:
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
