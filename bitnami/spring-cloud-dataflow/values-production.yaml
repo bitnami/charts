@@ -76,10 +76,13 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
-    ## Endpoint to the grafana instance
+    ## Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
     ##
     grafanaInfo:
-
+    ## Endpoint to the metricsDashboard instance
+    ##
+    metricsDashboard:
+       
   ## ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
