@@ -500,9 +500,9 @@ agent:
   tlsSecret:
 
   ## Use hostNetwork for agent
-  ## Set this to true when running the servers on the same nodes as the agents
+  ## This is necessary for intercepting the metadata URL for nodes.
   ##
-  useHostNetwork: false
+  useHostNetwork: true
 
   ## Agent TLS Certificate filenames
   ##

@@ -175,7 +175,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.extraEnvVarsSecret`                  | Secret containing extra env vars to configure kiam agent (in case of sensitive data)       | `nil`                                    |
 | `agent.containerSecurityContext`            | Container security podSecurityContext                                                      | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `agent.podSecurityContext`                  | Pod security context                                                                       | `{}`                                     |
-| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `false`                                  |
+| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `true`                                   |
 | `agent.resources.limits`                    | The resources limits for the kiam container                                                | `{}`                                     |
 | `agent.resources.requests`                  | The requested resources for the kiam container                                             | `{}`                                     |
 | `agent.lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)           |
