@@ -104,14 +104,20 @@ spec:
             - bash
             - -ec
             - |
-                # Execute entrypoint as usual after obtaining ZOO_SERVER_ID based on POD hostname
-                HOSTNAME=`hostname -s`
-                if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-                  ORD=${BASH_REMATCH[2]}
-                  export ZOO_SERVER_ID=$((ORD+1))
+                # Execute entrypoint as usual after obtaining ZOO_SERVER_ID
+                # check ZOO_SERVER_ID in persistent volume via myid
+                # if not present, set based on POD hostname
+                if [[ -f "/bitnami/zookeeper/data/myid" ]]; then
+                  export ZOO_SERVER_ID="$(cat /bitnami/zookeeper/data/myid)"
                 else
-                  echo "Failed to get index from hostname $HOST"
-                  exit 1
+                  HOSTNAME=`hostname -s`
+                  if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                    ORD=${BASH_REMATCH[2]}
+                    export ZOO_SERVER_ID=$((ORD + {{ .Values.minServerId }} ))
+                  else
+                    echo "Failed to get index from hostname $HOST"
+                    exit 1
+                  fi
                 fi
                 exec /entrypoint.sh /run.sh
           {{- if .Values.resources }}
@@ -142,13 +148,14 @@ spec:
               value: {{ .Values.maxSessionTimeout | quote }}
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
+              {{- $minServerId := int .Values.minServerId }}
               {{- $followerPort := int .Values.service.followerPort }}
               {{- $electionPort := int .Values.service.electionPort }}
               {{- $releaseNamespace := include "zookeeper.namespace" . }}
               {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
               {{- $clusterDomain := .Values.clusterDomain }}
-              value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $followerPort }}:{{ $electionPort }} {{ end }}
+              value: {{ range $i, $e := until $replicaCount }}{{ $zookeeperFullname }}-{{ $e }}.{{ $zookeeperHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $followerPort }}:{{ $electionPort }}::{{ add $e $minServerId }} {{ end }}
             - name: ZOO_ENABLE_AUTH
               value: {{ ternary "yes" "no" .Values.auth.enabled | quote }}
             {{- if .Values.auth.enabled }}
