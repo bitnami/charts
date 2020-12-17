@@ -16,7 +16,7 @@ spec:
   {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs:
-    {{ toYaml .Values.serviceTCP.externalIPs | indent 4 }}
+    {{ toYaml .Values.service.externalIPs | indent 4 }}
   {{- end }}
   ports:
     {{- if .Values.auth.client.clientPortNameOverride }}
