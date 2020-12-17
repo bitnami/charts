@@ -88,6 +88,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.resourceType`                       | Specify how to deploy the server (allowed values: `daemonset` and `deployment`)             | `daemonset`                              |
 | `server.replicaCount`                       | Number of replicas to deploy (when `server.resourceType` is `daemonset`)                    | `1`                                      |
 | `server.logJsonOutput`                      | Use JSON format for logs                                                                    | `true`                                   |
+| `server.hostNetwork`                        | Use hostNetwork for the pods                                                                | `false`                                  |
 | `server.extraArgs`                          | Extra arguments to add to the default kiam command                                          | `[]`                                     |
 | `server.command`                            | Override kiam default command                                                               | `[]`                                     |
 | `server.args`                               | Override kiam default args                                                                  | `[]`                                     |
@@ -103,11 +104,11 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.podSecurityPolicy.create`           | Create a PodSecurityPolicy resources                                                        | `true`                                   |
 | `server.podSecurityPolicy.allowedHostPaths` | Extra host paths to allow in the PodSecurityPolicy                                          | `[]`                                     |
 | `server.tlsSecret`                          | Name of a secret with TLS certificates for the container                                    | `nil`                                    |
-| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `ClusterFirstWithHostNet`                |
+| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `Default`                                |
 | `server.extraEnvVars`                       | Array containing extra env vars to configure kiam server                                    | `nil`                                    |
 | `server.extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure kiam server                                | `nil`                                    |
 | `server.extraEnvVarsSecret`                 | Secret containing extra env vars to configure kiam server (in case of sensitive data)       | `nil`                                    |
-| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `ClusterFirstWithHostNet`                |
+| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `null`                                   |
 | `server.cacheSyncInterval`                  | Cache synchronization interval                                                              | `1m`                                     |
 | `server.containerSecurityContext`           | Container security podSecurityContext                                                       | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `server.podSecurityContext`                 | Pod security context                                                                        | `{}`                                     |
@@ -206,7 +207,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                 | Description                                           | Default                        |
 |-------------------------------------------|-------------------------------------------------------|--------------------------------|
 | `server.service.type`                     | Kubernetes service type                               | `ClusterIP`                    |
-| `server.service.port`                     | Service HTTPS port                                    | `443`                          |
+| `server.service.port`                     | Service HTTPS port                                    | `8443`                         |
 | `server.service.nodePorts.http`           | Service HTTPS NodePort                                | `nil`                          |
 | `server.service.nodePorts.metrics`        | Service metrics NodePort                              | `nil`                          |
 | `server.service.clusterIP`                | kiam service clusterIP IP                             | `None`                         |
