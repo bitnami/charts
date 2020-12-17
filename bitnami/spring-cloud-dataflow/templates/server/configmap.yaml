@@ -7,6 +7,19 @@ metadata:
     app.kubernetes.io/component: server
 data:
   application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}     
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}     
     spring:
       cloud:
         dataflow:
@@ -51,37 +64,11 @@ data:
           container:
             registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
           {{- end }}
-          {{- if .Values.metrics.enabled }}
-          {{- $fullname := include "scdf.fullname" . }}
-          {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
-          applicationProperties:
-            {{- if .Values.server.configuration.streamingEnabled }}
-            stream:
-              management:
-                metrics:
-                  export:
-                    prometheus:
-                      enabled: true
-                      rsocket:
-                        enabled: true
-                        host: {{ $fullname }}-prometheus-proxy
-                        port: {{ $rsocketPort }}
-            {{- end }}
-            {{- if .Values.server.configuration.batchEnabled }}
-            task:
-              management:
-                metrics:
-                  export:
-                    prometheus:
-                      enabled: true
-                      rsocket:
-                        enabled: true
-                        host: {{ $fullname }}-prometheus-proxy
-                        port: {{ $rsocketPort }}
-            {{- end }}
-          {{- end }}
-          {{- if .Values.server.configuration.grafanaInfo }}
-          grafana-info:
+          {{- if .Values.server.configuration.metricsDashboard }}
+          metrics.dashboard:
+            url: {{ .Values.server.configuration.metricsDashboard }}
+          {{- else if .Values.server.configuration.grafanaInfo }}
+          metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}

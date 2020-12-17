@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.6.0-debian-10-r78
+  tag: 2.6.0-debian-10-r106
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,7 +55,7 @@ commonAnnotations: {}
 ## Kafka Configuration
 ## Specify content for server.properties
 ## NOTE: This will override any KAFKA_CFG_ environment variables (including those set by the chart)
-## The server.properties is auto-generated based on other parameters when this paremeter is not specified
+## The server.properties is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## config: |-
@@ -348,6 +348,12 @@ interBrokerListenerName: INTERNAL
 ##
 replicaCount: 1
 
+## Minimal broker.id value
+## Brokers increment their ID starting at this minimal value.
+## E.g., with `minBrokerId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
+##
+minBrokerId: 0
+
 ## StrategyType, can be set to RollingUpdate or OnDelete by default.
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
@@ -559,7 +565,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.13-debian-10-r21
+      tag: 1.17.15-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -626,7 +632,7 @@ externalAccess:
     ##
     annotations: {}
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -682,7 +688,7 @@ logPersistence:
   ##
   annotations: {}
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
@@ -758,7 +764,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r277
+      tag: 1.2.0-debian-10-r305
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -846,7 +852,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.14.0-debian-10-r64
+      tag: 0.14.0-debian-10-r92
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

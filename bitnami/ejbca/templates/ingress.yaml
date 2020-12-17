@@ -9,6 +9,7 @@ metadata:
     {{- end }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     {{- if .Values.ingress.annotations }}
     {{- include "ejbca.tplValue" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}

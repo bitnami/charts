@@ -2,18 +2,18 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "zookeeper.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ template "zookeeper.namespace" . }}
-  labels: {{- include "zookeeper.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
-    {{- include "zookeeper.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "zookeeper.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   podSelector:
-    matchLabels: {{- include "zookeeper.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections to zookeeper
     - ports:
@@ -22,9 +22,9 @@ spec:
       {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:
             matchLabels:
-              {{ include "zookeeper.fullname" . }}-client: "true"
+              {{ include "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels: {{- include "zookeeper.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
       {{- else }}
         - podSelector:
             matchLabels: {}
@@ -35,7 +35,7 @@ spec:
         - port: {{ .Values.service.electionPort }}
       from:
         - podSelector:
-            matchLabels: {{- include "zookeeper.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
   egress:
     - ports: *intranodes_ports
     # Allow outbound connections from zookeeper nodes

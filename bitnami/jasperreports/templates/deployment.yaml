@@ -1,23 +1,28 @@
-apiVersion: {{ template "jasperreports.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "jasperreports.fullname" . }}
-  labels:
-    app.kubernetes.io/name: "{{ include "jasperreports.fullname" . }}"
-    helm.sh/chart: "{{ include "jasperreports.chart" . }}"
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: "{{ include "jasperreports.fullname" . }}"
-      app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: "{{ include "jasperreports.fullname" . }}"
-        helm.sh/chart: "{{ include "jasperreports.chart" . }}"
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "jasperreports.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
@@ -34,10 +39,28 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
-        - name: {{ template "jasperreports.fullname" . }}
+        - name: jasperreports
           image: {{ template "jasperreports.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ .Values.allowEmptyPassword | quote }}
@@ -53,13 +76,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jasperreports.databaseSecretName" . }}
-                  key: mariadb-password
+                  key: {{ include "jasperreports.databasePasswordKey" . }}
             - name: JASPERREPORTS_USERNAME
               value: {{ .Values.jasperreportsUsername | quote }}
             - name: JASPERREPORTS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "jasperreports.fullname" . }}
+                  name: {{ template "common.names.fullname" . }}
                   key: jasperreports-password
             - name: JASPERREPORTS_EMAIL
               value: {{ .Values.jasperreportsEmail | quote }}
@@ -83,41 +106,60 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "jasperreports.fullname" . }}
+                  name: {{ template "common.names.fullname" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /jasperserver/login.html
-              port: http
-            initialDelaySeconds: 300
-            timeoutSeconds: 5
-            failureThreshold: 6
-          readinessProbe:
-            httpGet:
-              path: /jasperserver/login.html
-              port: http
-            initialDelaySeconds: 30
-            timeoutSeconds: 3
-            periodSeconds: 5
+              containerPort: {{ .Values.containerPort }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jasperreports-data
               mountPath: /bitnami/jasperreports
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: jasperreports-data
-        {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "jasperreports.fullname" . }}
-        {{- else }}
+            claimName: {{ template "common.names.fullname" . }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

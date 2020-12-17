@@ -108,14 +108,17 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `livenessProbe.failureThreshold`                      | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `6`                                                     |
 | `existingConfigMap`                                   | Specify an existing configMapName to use. (this is mutually exclusive with the configInline option)  | `nil`                                                   |
 | `configInline`                                        | Specify the config for metallb as a new configMap inline.                                            | `{}` (does not create configMap)                        |
-| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessarry Rolebindings.                 | `true`                                                  |
+| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessary Rolebindings.                 | `true`                                                  |
 | `prometheus.enabled`                                  | Enable for Prometheus alertmanager basic alerts.                                                     | `false`                                                 |
 | `prometheus.serviceMonitor.enabled`                   | Specify if a servicemonitor will be deployed for prometheus-operator.                                | `true`                                                  |
 | `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                              | `app.kubernetes.io/name"`                               |
-| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
+| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use default prometheus scrapeIntervall                   | `""`                                                    |
 | `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
 | `prometheus.serviceMonitor.prometheusRule.enabled`    | Enable prometheus alertmanager basic alerts.                                                         | `true`                                                  |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                                 | `false`                                                 |
+| `networkPolicy.ingressNSMatchLabels`                  | Allow connections from other namespaces                                                              | `{}`                                                    |
+| `networkPolicy.ingressNSPodMatchLabels`               | For other namespaces match by pod labels and namespace labels                                        | `{}`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

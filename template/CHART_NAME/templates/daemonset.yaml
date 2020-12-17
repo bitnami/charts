@@ -34,8 +34,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAffinityPreset "component" %%COMPONENT_NAME%% "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.podAntiAffinityPreset "component" %%COMPONENT_NAME%% "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.type "key" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.key "values" .Values.%%MAIN_OBJECT_BLOCK%%.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.nodeSelector }}
@@ -48,7 +48,7 @@ spec:
       priorityClassName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -107,25 +107,12 @@ spec:
           resources: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            %%httpGet || command || etc%%
-            initialDelaySeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.failureThreshold }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled") "context" $) | nindent 12 }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            %%httpGet || command || etc%%
-            initialDelaySeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.failureThreshold }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

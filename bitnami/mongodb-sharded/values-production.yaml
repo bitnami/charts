@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.2-debian-10-r0
+  tag: 4.4.2-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -167,7 +167,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -322,7 +322,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -499,7 +499,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -698,7 +698,11 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## updateStrategy for MongoDB Primary, Secondary and Arbitrer statefulsets
+  ## podManagementPolicy for the statefulset, allows parallel startup of pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -761,6 +765,9 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
+  ## Use StatefulSet instead of Deployment
+  ##
+  useStatefulSet: false
   ## Pod disruption budget
   ##
   pdb:
@@ -926,7 +933,7 @@ service:
   ## MongoDB Service port and Container Port
   ##
   port: 27017
-  ## Set a fixed service ClusterIP addrress
+  ## Set a fixed service ClusterIP address
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
   ##
   clusterIP:
@@ -985,7 +992,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r44
+    tag: 0.20.1-debian-10-r12
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

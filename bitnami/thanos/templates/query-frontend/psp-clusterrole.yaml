@@ -2,11 +2,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "thanos.fullname" . }}-query-frontend
+  name: {{ include "common.names.fullname" . }}-query-frontend
 rules:
 - apiGroups: ['policy']
   resources: ['podsecuritypolicies']
   verbs:     ['use']
   resourceNames:
-  - {{ include "thanos.fullname" . }}-query-frontend
+  - {{ include "common.names.fullname" . }}-query-frontend
 {{- end -}}

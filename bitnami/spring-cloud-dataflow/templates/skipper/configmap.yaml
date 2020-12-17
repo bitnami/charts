@@ -7,6 +7,19 @@ metadata:
     app.kubernetes.io/component: skipper
 data:
   application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}     
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}          
     spring:
       cloud:
         skipper:

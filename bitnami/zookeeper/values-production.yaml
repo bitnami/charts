@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.2-debian-10-r85
+  tag: 3.6.2-debian-10-r89
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -33,10 +33,10 @@ image:
   ##
   debug: false
 
-## String to partially override zookeeper.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 # nameOverride:
 
-## String to fully override zookeeper.fullname template
+## String to fully override common.names.fullname template
 # fullnameOverride:
 
 ## Kubernetes Cluster Domain
@@ -115,6 +115,12 @@ podManagementPolicy: Parallel
 ## Number of ZooKeeper nodes
 ##
 replicaCount: 3
+
+## Minimal server ID (ZooKeeper myid) value
+## servers increment their ID starting at this minimal value.
+## E.g., with `minServerId=10` and 3 replicas, server IDs will be 10, 11, 12 for z-0, z-1 and z-2 respectively.
+##
+minServerId: 1
 
 ## Basic time unit in milliseconds used by ZooKeeper for heartbeats
 ##
@@ -243,7 +249,7 @@ serviceAccount:
   ##
   create: false
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the zookeeper.fullname template
+  ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
 
 ## Zookeeper Pod Security Context
@@ -280,6 +286,45 @@ persistence:
     ##
     # existingClaim:
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -301,11 +346,6 @@ podAnnotations: {}
 ## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 priorityClassName: ""
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
 
 ## Scheduler name
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
