@@ -172,9 +172,16 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+                - sh
+                - -ec
+                - |-
+                  #!/bin/sh
+                  {{- if $.Values.usePasswordFile }}
+                  export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
+                  {{- else }}
+                  export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$(echo "${MONGODB_ROOT_PASSWORD}")"
+                  {{- end }}
+                  mongo -u root -p "$(echo "${MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD}")" --eval "db.adminCommand('ping')" || mongo --eval "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -185,9 +192,16 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+                - sh
+                - -ec
+                - |-
+                  #!/bin/sh
+                  {{- if $.Values.usePasswordFile }}
+                  export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
+                  {{- else }}
+                  export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$(echo "${MONGODB_ROOT_PASSWORD}")"
+                  {{- end }}
+                  mongo -u root -p "$(echo "${MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD}")" --eval "db.adminCommand('ping')" || mongo --eval "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
