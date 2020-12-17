@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 10.5.0
+appVersion: 10.6.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -24,4 +24,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 9.0.0
+version: 9.0.1
