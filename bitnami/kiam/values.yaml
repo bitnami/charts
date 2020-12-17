@@ -136,7 +136,7 @@ server:
 
   ## Additional kiam arguments
   ##
-  extraArgs: []
+  extraArgs: {}
 
   ## Specifies whether a ServiceAccount should be created
   ##
@@ -502,7 +502,7 @@ agent:
   ## Use hostNetwork for server
   ## Set this to true when running the servers on the same nodes as the agents
   ##
-  useHostNetwork: false
+  hostNetwork: false
 
   ## Agent TLS Certificate filenames
   ##
@@ -532,7 +532,7 @@ agent:
 
   ## Additional kiam arguments
   ##
-  extraArgs: []
+  extraArgs: {}
 
   ## Timeout when creating the kiam gateway
   ##
