@@ -403,7 +403,12 @@ replicaCount: 3
 updateStrategy:
   type: RollingUpdate
 
-## Additional pod annotations for MariaDB Galera pods
+## Additional labels for MariaDB Galera pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Additional annotations for MariaDB Galera pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -492,11 +497,6 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
-
-## Additional pod labels
-##
-# podLabels:
-#   extraLabel: extraValue
 
 ## Priority Class Name
 #
