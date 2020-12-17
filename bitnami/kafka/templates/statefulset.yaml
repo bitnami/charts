@@ -94,7 +94,7 @@ spec:
           command:
             - /bin/bash
           args:
-            - -cx
+            - -ec
             - |
               chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
               chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.logPersistence.mountPath }}"
