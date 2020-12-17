@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}-ruler-headless
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-ruler-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ruler
 spec:
   type: ClusterIP
@@ -17,6 +17,6 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: rcp
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
 {{- end }}

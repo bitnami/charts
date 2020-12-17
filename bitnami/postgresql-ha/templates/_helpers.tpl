@@ -1,39 +1,51 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "postgresql-ha.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "postgresql-ha.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
 
 {{/*
 Fully qualified app name for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresql" -}}
-{{- printf "%s-postgresql" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-postgresql" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-postgresql" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for Pgpool
 */}}
 {{- define "postgresql-ha.pgpool" -}}
-{{- printf "%s-pgpool" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-pgpool" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-pgpool" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-pgpool" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for LDAP
 */}}
 {{- define "postgresql-ha.ldap" -}}
-{{- printf "%s-ldap" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-ldap" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-ldap" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-ldap" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -513,20 +525,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
-*/}}
-{{- define "postgresql-ha.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
-{{- end -}}
-
-{{/* Check if there are rolling tags in the images */}}
-{{- define "postgresql-ha.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
-{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
-{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
-{{- end -}}
-
-{{/*
 Return the appropriate apiVersion for networkPolicy
 */}}
 {{- define "postgresql-ha.networkPolicy.apiVersion" -}}
@@ -535,6 +533,13 @@ Return the appropriate apiVersion for networkPolicy
 {{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
 "networking.k8s.io/v1"
 {{- end -}}
+{{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "postgresql-ha.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
+{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
+{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
 {{- end -}}
 
 {{/*

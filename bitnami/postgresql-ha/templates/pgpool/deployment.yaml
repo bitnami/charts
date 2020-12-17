@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
@@ -38,15 +38,20 @@ spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.pgpool.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAntiAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.pgpool.nodeAffinityPreset.type "key" .Values.pgpool.nodeAffinityPreset.key "values" .Values.pgpool.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.pgpool.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.pgpool.priorityClassName }}
-      priorityClassName: {{ .Values.pgpool.priorityClassName }}
-      {{- end }}
       {{- if .Values.pgpool.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pgpool.priorityClassName }}
+      priorityClassName: {{ .Values.pgpool.priorityClassName }}
       {{- end }}
       {{- if .Values.pgpool.securityContext.enabled }}
       securityContext: {{- omit .Values.pgpool.securityContext "enabled" | toYaml | nindent 8 }}

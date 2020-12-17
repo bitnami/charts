@@ -1,4 +1,5 @@
 {{- /* vim: set filetype=mustache: */}}
+
 {{/*
 Return the proper Spark image name
 */}}

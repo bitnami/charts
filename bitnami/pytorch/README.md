@@ -65,8 +65,8 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `git.tag`                            | Git image tag                                                                                                                                             | `{TAG_NAME}`                                            |
 | `git.pullPolicy`                     | Git image pull policy                                                                                                                                     | `IfNotPresent`                                          |
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `nameOverride`                       | String to partially override pytorch.fullname template with a string (will prepend the release name)                                                      | `nil`                                                   |
-| `fullnameOverride`                   | String to fully override pytorch.fullname template with a string                                                                                          | `nil`                                                   |
+| `nameOverride`                       | String to partially override common.names.fullname template with a string (will prepend the release name)                                                 | `nil`                                                   |
+| `fullnameOverride`                   | String to fully override common.names.fullname template with a string                                                                                     | `nil`                                                   |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
@@ -84,9 +84,14 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `cloneFilesFromGit.repository`       | Repository that holds the files                                                                                                                           | `nil`                                                   |
 | `cloneFilesFromGit.revision`         | Revision from the repository to checkout                                                                                                                  | `master`                                                |
 | `extraEnvVars`                       | Extra environment variables to add to master and workers pods                                                                                             | `nil`                                                   |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}`                                                    |
-| `tolerations`                        | Toleration labels for pod assignment                                                                                                                      | `[]`                                                    |
-| `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                                    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                    |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                  |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                    |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                    |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                    |
+| `affinity`                           | Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                          |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                          |
+| `tolerations`                        | Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                          |
 | `resources`                          | Pod resources                                                                                                                                             | `{}`                                                    |
 | `securityContext.enabled`            | Enable security context                                                                                                                                   | `true`                                                  |
 | `securityContext.fsGroup`            | Group ID for the container                                                                                                                                | `1001`                                                  |
@@ -190,11 +195,21 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### 2.1.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 2.0.0
 
