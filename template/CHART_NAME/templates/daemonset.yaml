@@ -48,7 +48,7 @@ spec:
       priorityClassName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}

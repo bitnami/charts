@@ -51,7 +51,7 @@ spec:
       priorityClassName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -60,8 +60,9 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - %%commands%%
-          securityContext:
-            runAsUser: 0
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
