@@ -64,13 +64,12 @@ data:
           container:
             registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
           {{- end }}
-          {{- if .Values.server.configuration.grafanaInfo }}
-          metrics.dashboard:
-            url: {{ .Values.server.configuration.grafanaInfo }}
-          {{- end }}
           {{- if .Values.server.configuration.metricsDashboard }}
           metrics.dashboard:
             url: {{ .Values.server.configuration.metricsDashboard }}
+          {{- else if .Values.server.configuration.grafanaInfo }}
+          metrics.dashboard:
+            url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
