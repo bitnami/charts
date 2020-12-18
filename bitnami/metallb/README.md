@@ -228,11 +228,18 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 2.0.0
 
 **What changes were introduced in this major version?**
+
 - The `.Values.prometheus` section was moved into the components `.Values.controller.prometheus` and `.Values.speaker.prometheus`
 - The `prometheus.prometheusRule` which is used to toggle the deployment of the metallb alerts is moved under the root of the `.Values.prometheusRule`
 - A globel `.Values.psp.create` and `.Values.rbac.create` was introduced together with the option of toggeling for each component. (global option overwrites component options)
   - `Values.controller.rbac.create` and `Values.controller.psp.create`
   - `Values.speaker.rbac.create` and `Values.speaker.psp.create`
+
+**Considerations when upgrading to this version**
+
+- Check if you used the `prometheus` section in you deployment.
+- If you do so, place the configuration you made into the sections `controller.prometheus` and `speaker.prometheus`.
+- `prometheusRule` should stay under the root of your values.
 
 ### To 1.0.0
 
