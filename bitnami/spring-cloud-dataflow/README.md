@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                       | `default`                                               |
 | `server.configuration.trustK8sCerts`         | Trust K8s certificates when querying the Kubernetes API                                                | `false`                                                 |
 | `server.configuration.containerRegistries`   | Container registries configuration                                                                     | `{}` (check `values.yaml` for more information)         |
+| `server.configuration.metricsDashboard`      | Endpoint to the metricsDashboard instance                                                              | `nil`                                                   |
 | `server.existingConfigmap`                   | Name of existing ConfigMap with Dataflow server configuration                                          | `nil`                                                   |
 | `server.extraEnvVars`                        | Extra environment variables to be set on Dataflow server container                                     | `{}`                                                    |
 | `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                   | `nil`                                                   |

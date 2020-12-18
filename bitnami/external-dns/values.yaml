@@ -491,6 +491,10 @@ podLabels: {}
 ##
 priorityClassName: ""
 
+## Annotations for the secret
+##
+secretAnnotations: {}
+
 ## Options for the source type "crd"
 ##
 crd:

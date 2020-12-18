@@ -33,9 +33,9 @@ spec:
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http
+    - name: grpclb
       port: {{ .Values.server.service.port }}
-      targetPort: http
+      targetPort: {{ .Values.server.containerPort }}
       protocol: TCP
       {{- if (and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePorts.http))) }}
       nodePort: {{ .Values.server.service.nodePorts.http }}

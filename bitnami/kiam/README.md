@@ -103,11 +103,11 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.podSecurityPolicy.create`           | Create a PodSecurityPolicy resources                                                        | `true`                                   |
 | `server.podSecurityPolicy.allowedHostPaths` | Extra host paths to allow in the PodSecurityPolicy                                          | `[]`                                     |
 | `server.tlsSecret`                          | Name of a secret with TLS certificates for the container                                    | `nil`                                    |
-| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `ClusterFirstWithHostNet`                |
+| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `Default`                                |
 | `server.extraEnvVars`                       | Array containing extra env vars to configure kiam server                                    | `nil`                                    |
 | `server.extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure kiam server                                | `nil`                                    |
 | `server.extraEnvVarsSecret`                 | Secret containing extra env vars to configure kiam server (in case of sensitive data)       | `nil`                                    |
-| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `ClusterFirstWithHostNet`                |
+| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `null`                                   |
 | `server.cacheSyncInterval`                  | Cache synchronization interval                                                              | `1m`                                     |
 | `server.containerSecurityContext`           | Container security podSecurityContext                                                       | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `server.podSecurityContext`                 | Pod security context                                                                        | `{}`                                     |
@@ -175,7 +175,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.extraEnvVarsSecret`                  | Secret containing extra env vars to configure kiam agent (in case of sensitive data)       | `nil`                                    |
 | `agent.containerSecurityContext`            | Container security podSecurityContext                                                      | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `agent.podSecurityContext`                  | Pod security context                                                                       | `{}`                                     |
-| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `false`                                  |
+| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `true`                                   |
 | `agent.resources.limits`                    | The resources limits for the kiam container                                                | `{}`                                     |
 | `agent.resources.requests`                  | The requested resources for the kiam container                                             | `{}`                                     |
 | `agent.lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)           |
@@ -206,7 +206,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                 | Description                                           | Default                        |
 |-------------------------------------------|-------------------------------------------------------|--------------------------------|
 | `server.service.type`                     | Kubernetes service type                               | `ClusterIP`                    |
-| `server.service.port`                     | Service HTTPS port                                    | `443`                          |
+| `server.service.port`                     | Service HTTPS port                                    | `8443`                         |
 | `server.service.nodePorts.http`           | Service HTTPS NodePort                                | `nil`                          |
 | `server.service.nodePorts.metrics`        | Service metrics NodePort                              | `nil`                          |
 | `server.service.clusterIP`                | kiam service clusterIP IP                             | `None`                         |

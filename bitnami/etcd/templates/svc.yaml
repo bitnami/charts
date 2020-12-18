@@ -14,6 +14,10 @@ spec:
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.service.externalIPs }}
+  externalIPs:
+    {{ toYaml .Values.service.externalIPs | indent 4 }}
+  {{- end }}
   ports:
     {{- if .Values.auth.client.clientPortNameOverride }}
     - name: {{ .Values.service.clientPortNameOverride }}
