@@ -47,7 +47,8 @@ rbac:
 ## PSP creation for controller and speaker
 ##
 psp:
-  # create specifies whether to install Pod Security Policies.
+  ## create specifies whether to install Pod Security Policies.
+  ##
   create: false
 
 # Prometheus Operator alertmanager alerts

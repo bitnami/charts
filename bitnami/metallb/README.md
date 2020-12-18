@@ -224,6 +224,16 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+
+### To 2.0.0
+
+**What changes were introduced in this major version?**
+- The `.Values.prometheus` section was moved into the components `.Values.controller.prometheus` and `.Values.speaker.prometheus`
+- The `prometheus.prometheusRule` which is used to toggle the deployment of the metallb alerts is moved under the root of the `.Values.prometheusRule`
+- A globel `.Values.psp.create` and `.Values.rbac.create` was introduced together with the option of toggeling for each component. (global option overwrites component options)
+  - `Values.controller.rbac.create` and `Values.controller.psp.create`
+  - `Values.speaker.rbac.create` and `Values.speaker.psp.create`
+
 ### To 1.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
