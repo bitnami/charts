@@ -14,14 +14,14 @@ spec:
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
       containers:
-      - name: create-topics
+      - name: kafka-provisioning
         image: {{ include "kafka.provisioning.image" . }}
         imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
         command:
         - /bin/bash
         - -c
         - >-
-        {{- $bootstrapServer := printf "%s.%s:%s" (include "kafka.fullname" .) .Release.Namespace .Values.service.port }}
+        {{- $bootstrapServer := printf "%s:%s" (include "kafka.fullname" .) .Values.service.port }}
         {{- range $topic := .Values.provisioning.topics }}
           /opt/bitnami/kafka/bin/kafka-topics.sh \
             --create \
