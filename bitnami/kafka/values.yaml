@@ -753,7 +753,7 @@ rbac:
 ## Kafka provisioning
 ##
 provisioning:
-  enabled: true
+  enabled: false
 
   image:
     registry: docker.io
@@ -776,14 +776,14 @@ provisioning:
     ##
     debug: false
 
-  topics:
-  - name: my-topic
-    partitions: 1
-    replicationFactor: 1
-    # https://kafka.apache.org/documentation/#topicconfigs
-    config:
-      max.message.bytes: 64000
-      flush.messages: 1
+  topics: []
+  # - name: topic-name
+  #   partitions: 1
+  #   replicationFactor: 1
+  #   # https://kafka.apache.org/documentation/#topicconfigs
+  #   config:
+  #     max.message.bytes: 64000
+  #     flush.messages: 1
 
 ## Prometheus Exporters / Metrics
 ##
