@@ -1,0 +1,40 @@
+{{- if .Values.provisioning.enabled }}
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: {{ include "kafka.fullname" . }}-provisioning
+  labels:
+  annotations:
+spec:
+  template:
+    metadata:
+      labels:
+      annotations:
+    spec:
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: create-topics
+        image: {{ include "kafka.provisioning.image" . }}
+        imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        - -c
+        - >-
+        {{- $bootstrapServer := printf "%s.%s:%s" (include "kafka.fullname" .) .Release.Namespace .Values.service.port }}
+        {{- range $topic := .Values.provisioning.topics }}
+          /opt/bitnami/kafka/bin/kafka-topics.sh \
+            --create \
+            --if-not-exists \
+            --bootstrap-server {{ $bootstrapServer }} \
+            --replication-factor {{ $topic.replicationFactor }} \
+            --partitions {{ $topic.partitions }} \
+            {{- range $name, $value := $topic.config }}
+            --config {{ $name }}={{ $value }} \
+            {{- end }}
+            --topic {{ $topic.name }};
+        {{- end }}
+        env:
+        - name: BITNAMI_DEBUG
+          value: {{ ternary "true" "false" .Values.provisioning.image.debug | quote }}
+{{- end }}
