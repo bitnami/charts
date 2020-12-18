@@ -1,10 +1,11 @@
-{{- if and .Values.rbac.create (or .Values.controller.rbac.create .Values.speaker.rbac.create ) -}}
+{{- if and .Values.rbac.create .Values.controller.rbac.create -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  name: {{ include "common.names.fullname" . }}-controller
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -15,17 +16,41 @@ rules:
   - apiGroups:
       - ''
     resources:
-      - configmaps
+      - services
     verbs:
       - get
       - list
       - watch
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - services/status
+    verbs:
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - policy
+    resourceNames:
+      - {{ include "common.names.fullname" . }}-controller
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 ---
+## Role bindings
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  name: {{ include "common.names.fullname" . }}-controller
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -33,16 +58,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 subjects:
-{{- if .Values.controller.rbac.create }}
 - kind: ServiceAccount
   name: {{ include "metallb.controllerServiceAccountName" . }}
-{{- end }}
-{{- if .Values.speaker.rbac.create }}
-- kind: ServiceAccount
-  name: {{ include "metallb.speakerServiceAccountName" . }}
-{{- end }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  kind: ClusterRole
+  name: {{ include "common.names.fullname" . }}-controller
 {{- end -}}
