@@ -21,7 +21,7 @@ spec:
         - /bin/bash
         - -c
         - >-
-        {{- $bootstrapServer := printf "%s:%s" (include "kafka.fullname" .) .Values.service.port }}
+        {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port) }}
         {{- range $topic := .Values.provisioning.topics }}
           /opt/bitnami/kafka/bin/kafka-topics.sh \
             --create \
