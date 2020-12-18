@@ -220,6 +220,7 @@ service:
   ##
   # loadBalancerIP:
   # loadBalancerSourceRanges: ["10.0.0.0/8"]
+  externalIPs: []
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
