@@ -2,8 +2,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "thanos.fullname" . }}-bucketweb
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-bucketweb
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if .Values.bucketweb.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -19,7 +19,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "thanos.fullname" . }}-bucketweb
+              serviceName: {{ template "common.names.fullname" . }}-bucketweb
               servicePort: http
     {{- end }}
     {{- range .Values.bucketweb.ingress.extraHosts }}
@@ -28,7 +28,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "thanos.fullname" $ }}-bucketweb
+              serviceName: {{ template "common.names.fullname" $ }}-bucketweb
               servicePort: http
     {{- end }}
   {{- if or .Values.bucketweb.ingress.tls .Values.bucketweb.ingress.extraTls .Values.bucketweb.ingress.hosts }}

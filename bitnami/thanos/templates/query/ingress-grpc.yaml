@@ -3,8 +3,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "thanos.fullname" . }}-grpc
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-grpc
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if $query.ingress.grpc.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -20,7 +20,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "thanos.fullname" . }}-query
+              serviceName: {{ template "common.names.fullname" . }}-query
               servicePort: grpc
     {{- end }}
     {{- range $query.ingress.grpc.extraHosts }}
@@ -29,7 +29,7 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ template "thanos.fullname" $ }}-query
+              serviceName: {{ template "common.names.fullname" $ }}-query
               servicePort: grpc
     {{- end }}
   {{- if or $query.ingress.grpc.tls $query.ingress.grpc.extraTls $query.ingress.grpc.hosts }}

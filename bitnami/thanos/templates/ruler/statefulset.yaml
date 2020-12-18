@@ -1,44 +1,49 @@
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if .Values.ruler.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "thanos.fullname" . }}-ruler
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-ruler
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ruler
 spec:
   replicas: {{ .Values.ruler.replicaCount }}
   podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
-  serviceName: {{ include "thanos.fullname" . }}-ruler-headless
+  serviceName: {{ include "common.names.fullname" . }}-ruler-headless
   updateStrategy:
     type: {{ .Values.ruler.updateStrategyType }}
     {{- if (eq "OnDelete" .Values.ruler.updateStrategyType) }}
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: ruler
   template:
     metadata:
-      labels: {{- include "thanos.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: ruler
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         checksum/ruler-configuration: {{ include (print $.Template.BasePath "/ruler/configmap.yaml") . | sha256sum }}
         {{- if .Values.ruler.podAnnotations }}
-        {{- include "thanos.tplValue" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "ruler" "context" $) }}
       {{- if .Values.ruler.affinity }}
-      affinity: {{- include "thanos.tplValue" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAffinityPreset "component" "ruler" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ruler.podAntiAffinityPreset "component" "ruler" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ruler.nodeAffinityPreset.type "key" .Values.ruler.nodeAffinityPreset.key "values" .Values.ruler.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.ruler.nodeSelector }}
-      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.ruler.tolerations }}
-      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.ruler.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.ruler.priorityClassName }}
       priorityClassName: {{ .Values.ruler.priorityClassName | quote }}
@@ -83,7 +88,7 @@ spec:
             - --alertmanagers.url={{ . }}
             {{- end }}
             {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
-            - --query=dnssrv+_http._tcp.{{ include "thanos.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --query=dnssrv+_http._tcp.{{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             - --label=replica="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
@@ -109,10 +114,10 @@ spec:
               containerPort: 10901
               protocol: TCP
           {{- if .Values.ruler.livenessProbe }}
-          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.livenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.readinessProbe }}
-          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.ruler.readinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
@@ -153,6 +158,6 @@ spec:
         resources:
           requests:
             storage: {{ .Values.ruler.persistence.size | quote }}
-        {{- include "thanos.ruler.storageClass" . | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.ruler.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
 {{- end }}

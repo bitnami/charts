@@ -2,12 +2,12 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "node-exporter.fullname" . }}-psp
-  labels: {{- include "node-exporter.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-psp
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups: ['extensions']
     resources: ['podsecuritypolicies']
     verbs: ['use']
     resourceNames:
-      - {{ template "node-exporter.fullname" . }}
+      - {{ template "common.names.fullname" . }}
 {{- end }}

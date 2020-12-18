@@ -17,13 +17,24 @@ spec:
         {{- if .Values.master.extraPodLabels }}
           {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPodLabels "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.master.podAnnotations .Values.metrics.enabled }}
+      annotations:
       {{- if .Values.master.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.metrics.enabled }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.masterAnnotations "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
     spec:
 {{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.master.nodeAffinityPreset.type "key" .Values.master.nodeAffinityPreset.key "values" .Values.master.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.master.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.master.nodeSelector "context" $) | nindent 8 }}
@@ -66,6 +77,10 @@ spec:
             - name: BASH_DEBUG
               value: {{ ternary "1" "0" .Values.image.debug | quote }}
             {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - name: SPARK_METRICS_ENABLED
+              value: "true"
+            {{- end}}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
             {{- if .Values.master.clusterPort }}

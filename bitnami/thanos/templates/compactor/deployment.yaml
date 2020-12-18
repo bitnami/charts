@@ -1,9 +1,9 @@
 {{- if .Values.compactor.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "thanos.fullname" . }}-compactor
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-compactor
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
 spec:
   replicas: 1
@@ -13,28 +13,33 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: compactor
   template:
     metadata:
-      labels: {{- include "thanos.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: compactor
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.compactor.podAnnotations }}
-        {{- include "thanos.tplValue" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
 {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "compactor" "context" $) }}
       {{- if .Values.compactor.affinity }}
-      affinity: {{- include "thanos.tplValue" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAntiAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.compactor.nodeAffinityPreset.type "key" .Values.compactor.nodeAffinityPreset.key "values" .Values.compactor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.compactor.nodeSelector }}
-      nodeSelector: {{- include "thanos.tplValue" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.compactor.tolerations }}
-      tolerations: {{- include "thanos.tplValue" (dict "value" .Values.compactor.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.compactor.priorityClassName }}
       priorityClassName: {{ .Values.compactor.priorityClassName | quote }}
@@ -87,10 +92,10 @@ spec:
               containerPort: 10902
               protocol: TCP
           {{- if .Values.compactor.livenessProbe }}
-          livenessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.livenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.livenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.readinessProbe }}
-          readinessProbe: {{- include "thanos.tplValue" (dict "value" .Values.compactor.readinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.readinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}

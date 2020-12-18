@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.0.1-debian-10-r65
+  tag: 3.0.1-debian-10-r87
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,20 +83,54 @@ master:
   ##
   extraPodLabels: {}
 
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Spark master pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Spark master pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Spark master node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Spark master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: master.podAffinityPreset, master.podAntiAffinityPreset, and master.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Spark master pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Tolerations for Spark master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -151,7 +185,7 @@ worker:
   ##
   # memoryLimit:
 
-  ## Set the maximun number of cores
+  ## Set the maximum number of cores
   ##
   # coreLimit:
 
@@ -163,7 +197,7 @@ worker:
   ##
   # javaOptions:
 
-  ## Configuraion options in the form "-Dx=y"
+  ## Configuration options in the form "-Dx=y"
   ##
   # configOptions:
 
@@ -196,20 +230,54 @@ worker:
   ##
   extraPodLabels: {}
 
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Spark worker pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Spark worker pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Spark worker node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Spark worker pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: worker.podAffinityPreset, worker.podAntiAffinityPreset, and worker.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Spark worker pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Tolerations for Spark master worker assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -276,17 +344,17 @@ security:
   ##
   storageEncryptionEnabled: true
 
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
+  ##
+  certificatesSecretName: my-certificates-secret
+
   ## SSL configuration
   ##
   ssl:
     enabled: true
     needClientAuth: true
     protocol: TLSv1.2
-
-  ## Name of the secret that contains the certificates
-  ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
-  ##
-  certificatesSecretName: my-certificates-secret
 
 ## Service parameters
 ##
@@ -321,7 +389,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -346,3 +414,65 @@ ingress:
     - hosts:
         - spark.domain.com
       secretName: spark.local-tls
+
+## Metrics configuration
+##
+metrics:
+  enabled: enabled
+
+  ## Annotations for the Prometheus metrics on master nodes
+  ##
+  masterAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics/"
+    prometheus.io/port: "{{ .Values.master.webPort }}"
+  ## Annotations for the Prometheus metrics on worker nodes
+  ##
+  workerAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics/"
+    prometheus.io/port: "{{ .Values.worker.webPort }}"
+
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  podMonitor:
+    ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
+    ##
+    enabled: false
+    ## Specify the namespace in which the podMonitor resource will be created
+    ##
+    # namespace: ""
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    ##
+    # scrapeTimeout: 30s
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
+
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    enabled: false
+    additionalLabels: {}
+    namespace: ''
+    ## These are just examples rules, please adapt them to your needs.
+    ## Make sure to constraint the rules to the current postgresql service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: pg_replication_lag{service="{{ template "postgresql.fullname" . }}-metrics"} / 3600 > 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
+    ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
+    ##
+    rules: []

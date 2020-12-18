@@ -1,28 +1,33 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
-  labels: {{- include "pytorch.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
 spec:
   replicas: 1
   selector:
-    matchLabels: {{- include "pytorch.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: master
   template:
     metadata:
-      labels: {{- include "pytorch.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: master
     spec:
 {{- include "pytorch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "pytorch.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "pytorch.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "pytorch.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -142,7 +147,7 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ include "pytorch.fullname" . }}-files
+            name: {{ include "common.names.fullname" . }}-files
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}
@@ -150,7 +155,7 @@ spec:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "pytorch.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
+            claimName: {{ include "common.names.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
         {{- else }}
           emptyDir: {}
         {{- end }}

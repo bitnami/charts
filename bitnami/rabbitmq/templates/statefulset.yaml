@@ -26,7 +26,7 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
-        {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) }}
+        {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
         {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
@@ -43,6 +43,11 @@ spec:
       serviceAccountName: {{ template "rabbitmq.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
@@ -208,7 +213,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - rabbitmq-diagnostics -q check_running
+                - rabbitmq-diagnostics -q ping
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -223,7 +228,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - rabbitmq-diagnostics -q check_running
+                - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -231,6 +236,9 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -258,7 +266,7 @@ spec:
                     if [[ -f /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh ]]; then
                         /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh -t {{ .Values.terminationGracePeriodSeconds | quote }} -d  {{ ternary "true" "false" .Values.image.debug | quote }}
                     else
-                        rabbitmq stop_app
+                        rabbitmqctl stop_app
                     fi
           volumeMounts:
             - name: configuration

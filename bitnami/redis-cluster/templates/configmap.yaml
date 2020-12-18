@@ -481,7 +481,7 @@ data:
     #
     # Replica can load the RDB it reads from the replication link directly from the
     # socket, or store the RDB to a file and read that file after it was completely
-    # recived from the master.
+    # received from the master.
     #
     # In many cases the disk is slower than the network, and storing and loading
     # the RDB file may increase replication time (and even increase the master's
@@ -712,7 +712,7 @@ data:
     #               It is possible to specify multiple patterns.
     #  allkeys      Alias for ~*
     #  resetkeys    Flush the list of allowed keys patterns.
-    #  ><password>  Add this passowrd to the list of valid password for the user.
+    #  ><password>  Add this password to the list of valid password for the user.
     #               For example >mypass will add "mypass" to the list.
     #               This directive clears the "nopass" flag (see later).
     #  <<password>  Remove this password from the list of valid passwords.
@@ -775,7 +775,7 @@ data:
     #
     # aclfile /etc/redis/users.acl
 
-    # IMPORTANT NOTE: starting with Redis 6 "requirepass" is just a compatiblity
+    # IMPORTANT NOTE: starting with Redis 6 "requirepass" is just a compatibility
     # layer on top of the new ACL system. The option effect will be just setting
     # the password for the default user. Clients will still authenticate using
     # AUTH <password> as usually, or more explicitly with AUTH default <password>
@@ -923,7 +923,7 @@ data:
     # "1", to a greater value, up to the value "10". At its maximum value the
     # system will use more CPU, longer cycles (and technically may introduce
     # more latency), and will tollerate less already expired keys still present
-    # in the system. It's a tradeoff betweeen memory, CPU and latecy.
+    # in the system. It's a tradeoff between memory, CPU and latecy.
     #
     # active-expire-effort 1
 
@@ -1559,7 +1559,7 @@ data:
     # maximum number of items it may contain before switching to a new node when
     # appending new stream entries. If any of the following settings are set to
     # zero, the limit is ignored, so for instance it is possible to set just a
-    # max entires limit by setting max-bytes to 0 and max-entries to the desired
+    # max entries limit by setting max-bytes to 0 and max-entries to the desired
     # value.
     stream-node-max-bytes 4096
     stream-node-max-entries 100
@@ -1630,7 +1630,7 @@ data:
     # client-query-buffer-limit 1gb
 
     # In the Redis protocol, bulk requests, that are, elements representing single
-    # strings, are normally limited ot 512 mb. However you can change this limit
+    # strings, are normally limited to 512 mb. However you can change this limit
     # here.
     #
     # proto-max-bulk-len 512mb

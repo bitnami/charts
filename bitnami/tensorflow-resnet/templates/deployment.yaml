@@ -1,38 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "tensorflow-resnet.fullname" . }}
-  labels: {{- include "tensorflow-resnet.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   selector:
-    matchLabels: {{- include "tensorflow-resnet.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels: {{- include "tensorflow-resnet.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
-        {{- include "tensorflow-resnet.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-        {{- include "tensorflow-resnet.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
-{{- include "tensorflow-resnet.imagePullSecrets" . | indent 6 }}
+      {{- include "tensorflow-resnet.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "tensorflow-resnet.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "tensorflow-resnet.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "tensorflow-resnet.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       initContainers:
         - name: seed
-          image: {{ template "tensorflow-resnet.client.image" . }}
+          image: {{ include "tensorflow-resnet.client.image" . }}
           imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
           command:
             - "/bin/sh"
@@ -51,7 +56,7 @@ spec:
               mountPath: /seed
       containers:
         - name: tensorflow-serving
-          image: "{{ template "tensorflow-resnet.server.image" . }}"
+          image: {{ include "tensorflow-resnet.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
           ports:
             - name: tf-serving

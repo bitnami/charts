@@ -83,8 +83,8 @@ The following table lists the configurable parameters of the Node chart and thei
 | `extraEnvVars`                          | Extra environment variables to be set on Node container                     | `{}`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                        | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                           | `nil`                                                   |
-| `mongodb.enabled`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
-| `mongodb.auth.enabled`                  | Wheter to enable auth or not for the MongoDB chart                          | `true`                                                  |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB chart                                  | `true`                                                  |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB chart                          | `true`                                                  |
 | `mongodb.auth.rootPassword`             | MongoDB admin password                                                      | `nil`                                                   |
 | `mongodb.auth.username`                 | MongoDB custom user                                                         | `user`                                                  |
 | `mongodb.auth.database`                 | MongoDB custom database                                                     | `test_db`                                               |

@@ -18,7 +18,7 @@
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 1.8.3-debian-10-r32
+  tag: 1.8.3-debian-10-r60
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -246,7 +246,7 @@ influxdb:
     http: 8086
     rpc: 8088
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -290,7 +290,7 @@ relay:
   image:
     registry: docker.io
     repository: bitnami/influxdb-relay
-    tag: 0.20200717.0-scratch-r6
+    tag: 0.20200717.0-scratch-r7
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -434,7 +434,7 @@ relay:
   containerPorts:
     http: 9096
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -464,7 +464,7 @@ relay:
     ##
     annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -569,7 +569,7 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: true
@@ -581,7 +581,7 @@ networkPolicy:
   ##
   allowExternal: false
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -605,7 +605,7 @@ persistence:
   ##
   size: 8Gi
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume mountpoint to 'runAsUser:fsGroup'
 ## values from the securityContext section.
 ##
@@ -689,7 +689,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.318.0-debian-10-r0
+        tag: 0.320.0-debian-10-r1
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -714,7 +714,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.14.2-debian-10-r1
+        tag: 2.16.0-debian-10-r2
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

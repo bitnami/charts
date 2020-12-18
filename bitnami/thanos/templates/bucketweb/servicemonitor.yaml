@@ -2,18 +2,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "thanos.fullname" . }}-bucketweb
+  name: {{ include "common.names.fullname" . }}-bucketweb
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
 {{- if .Values.metrics.serviceMonitor.labels }}
 {{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
 {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: bucketweb
   endpoints:
     - port: http

@@ -2,23 +2,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}-metrics
+  name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
-    component: {{ .Values.name }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
     {{- if .Values.metrics.service.labels }}
-    {{- include "nginx-ingress.tplValue" (dict "value" .Values.metrics.service.labels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
-    {{- include "nginx-ingress.tplValue" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.commonAnnotations }}
-    {{- include "nginx-ingress.annotations" (dict "annotations" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.metrics.service.annotations }}
-    {{- include "nginx-ingress.annotations" (dict "annotations" .Values.metrics.service.annotations "context" $) | trim | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -27,6 +27,6 @@ spec:
     - name: metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
-  selector: {{- include "nginx-ingress.matchLabels" . | nindent 4 }}
-    component: {{ .Values.name }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: controller
 {{- end }}
