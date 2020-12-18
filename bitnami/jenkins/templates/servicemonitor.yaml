@@ -2,17 +2,26 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "jenkins.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels: {{- include "jenkins.labels" . | nindent 4 }}
-    {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
-    {{ $key }}: {{ $value | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{ include "jenkins.matchLabels" . | nindent 6 }}
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
   endpoints:
     - port: http
       path: "/metrics"

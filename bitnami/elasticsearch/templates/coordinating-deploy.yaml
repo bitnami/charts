@@ -59,6 +59,9 @@ spec:
             - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: initcontainer-script
               mountPath: /scripts/sysctl.sh

@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.8-debian-10-r0
+  tag: 6.0.9-debian-10-r38
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ sentinel:
     ## Bitnami Redis image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 6.0.8-debian-10-r1
+    tag: 6.0.9-debian-10-r38
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -162,6 +162,9 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the fullname template
   name:
+  ## Add annotations to service account
+  # annotations:
+  #   iam.gke.io/gcp-service-account: "sa@project.iam.gserviceaccount.com"
 
 rbac:
   ## Specifies whether RBAC resources should be created
@@ -185,7 +188,6 @@ rbac:
 securityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
   ## sysctl settings for master and slave pods
   ##
   ## Uncomment the setting below to increase the net.core.somaxconn value
@@ -193,6 +195,13 @@ securityContext:
   # sysctls:
   # - name: net.core.somaxconn
   #   value: "10000"
+
+## Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
 ## Use password authentication
 usePassword: true
@@ -402,6 +411,8 @@ master:
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
+    labels: {}
+    annotations: {}
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -409,7 +420,7 @@ master:
 
   ## Redis Master pod priorityClassName
   ##
-  priorityClassName: {}
+  priorityClassName: ''
 
   ## An array to add extra env vars
   ## For example:
@@ -556,7 +567,7 @@ slave:
   podAnnotations: {}
 
   ## Redis slave pod priorityClassName
-  # priorityClassName: {}
+  # priorityClassName: ''
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -588,6 +599,8 @@ slave:
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   statefulset:
+    labels: {}
+    annotations: {}
     updateStrategy: RollingUpdate
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -621,7 +634,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.11.1-debian-10-r12
+    tag: 1.13.1-debian-10-r32
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -683,7 +696,7 @@ metrics:
     #        redis_memory_used_bytes{service="{{ template "redis.fullname" . }}-metrics"} * 100
     #        /
     #        redis_memory_max_bytes{service="{{ template "redis.fullname" . }}-metrics"}
-    #        > 90 =< 100
+    #        > 90
     #      for: 2m
     #      labels:
     #        severity: error
@@ -704,7 +717,7 @@ metrics:
     rules: []
 
   ## Metrics exporter pod priorityClassName
-  # priorityClassName: {}
+  # priorityClassName: ''
   service:
     type: ClusterIP
     ## Use serviceLoadBalancerIP to request a specific static IP,
@@ -735,6 +748,18 @@ volumePermissions:
   #   requests:
   #     memory: 128Mi
   #     cpu: 100m
+
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0
 
 ## Redis config file
 ## ref: https://redis.io/topics/config

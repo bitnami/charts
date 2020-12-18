@@ -28,6 +28,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.caBundleVolume" -}}
+- name: ca-bundle-certs
+  secret:
+    secretName: {{ .Values.caBundleSecretName }}
+{{- end -}}
+
+{{- define "harbor.caBundleVolumeMount" -}}
+- name: ca-bundle-certs
+  mountPath: /harbor_cust_cert/custom-ca.crt
+  subPath: ca.crt
+{{- end -}}
+
 {{/* Scheme for all components except notary because it only support http mode */}}
 {{- define "harbor.component.scheme" -}}
   {{- if .Values.internalTLS.enabled -}}
@@ -462,6 +474,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "harbor.redis.coreDatabaseIndex" -}}
+  {{- if eq .Values.redis.enabled true -}}
+    {{- printf "%s" "0" }}
+  {{- else -}}
+    {{- .Values.externalRedis.coreDatabaseIndex -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "harbor.redis.jobserviceDatabaseIndex" -}}
   {{- if eq .Values.redis.enabled true -}}
     {{- printf "%s" "1" }}
@@ -552,12 +572,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{/*
-host:port,pool_size,password
-100 is the default value of pool size
-*/}}
 {{- define "harbor.redisForCore" -}}
-  {{- printf "%s:%s,100,%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.rawPassword" . ) -}}
+  {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+    {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+  {{- else -}}
+    {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+  {{- end -}}
 {{- end -}}
 
 {{- define "harbor.portal" -}}
@@ -787,17 +807,6 @@ Return the proper Storage Class for trivy
 */}}
 {{- define "harbor.trivy.storageClass" -}}
 {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.trivy "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for deployment.
-*/}}
-{{- define "deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*

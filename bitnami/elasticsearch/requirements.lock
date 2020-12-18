@@ -1,9 +1,0 @@
-dependencies:
-- name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 0.7.1
-- name: kibana
-  repository: https://charts.bitnami.com/bitnami
-  version: 5.3.11
-digest: sha256:158237c9524d2d1a389dc12192d332e0a95d621b7a2f62694cffc2294b029c61
-generated: "2020-09-23T16:57:03.453932+02:00"

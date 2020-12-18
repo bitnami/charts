@@ -41,6 +41,18 @@ rbac:
   # create specifies whether to install and use RBAC rules.
   create: true
 
+networkPolicy:
+  ## Specifies whether a NetworkPolicy should be created.
+  ## Prometheus scraping of the controller
+  ##
+  enabled: false
+
+  ## Limit networkpolicy ingress (from)
+  ## Set label for namespace and pods (optional).
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
 prometheus:
   enabled: false
 
@@ -65,7 +77,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.9.3-debian-10-r156
+    tag: 0.9.5-debian-10-r32
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -173,7 +185,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.9.3-debian-10-r166
+    tag: 0.9.5-debian-10-r31
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

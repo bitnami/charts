@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "redis.fullname" . }}-health
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -15,15 +15,10 @@ data:
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
-{{- if .Values.usePassword }}
-    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
-{{- end }}
+    export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
       redis-cli \
-{{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD $no_auth_warning \
-{{- end }}
         -h localhost \
 {{- if .Values.tls.enabled }}
         -p $REDIS_TLS_PORT \
@@ -48,15 +43,10 @@ data:
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
-{{- if .Values.usePassword }}
-    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
-{{- end }}
+    export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
       redis-cli \
-{{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD $no_auth_warning \
-{{- end }}
         -h localhost \
 {{- if .Values.tls.enabled }}
         -p $REDIS_TLS_PORT \
@@ -82,15 +72,10 @@ data:
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
-{{- if .Values.usePassword }}
-    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
-{{- end }}
-     response=$(
+    export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
       timeout -s 3 $1 \
       redis-cli \
-{{- if .Values.usePassword }}
-        -a $REDIS_PASSWORD $no_auth_warning \
-{{- end }}
         -h localhost \
 {{- if .Values.tls.enabled }}
         -p $REDIS_SENTINEL_TLS_PORT_NUMBER \
@@ -131,15 +116,10 @@ data:
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
 {{- end }}
-{{- if .Values.usePassword }}
-    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
-{{- end }}
-     response=$(
+    export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
+    response=$(
       timeout -s 3 $1 \
       redis-cli \
-{{- if .Values.usePassword }}
-        -a $REDIS_MASTER_PASSWORD $no_auth_warning \
-{{- end }}
         -h $REDIS_MASTER_HOST \
         -p $REDIS_MASTER_PORT_NUMBER \
 {{- if .Values.tls.enabled }}
@@ -162,15 +142,10 @@ data:
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
 {{- end }}
-{{- if .Values.usePassword }}
-    no_auth_warning=$([[ "$(redis-cli --version)" =~ (redis-cli 5.*) ]] && echo --no-auth-warning)
-{{- end }}
+    export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
     response=$(
       timeout -s 3 $1 \
       redis-cli \
-{{- if .Values.usePassword }}
-        -a $REDIS_MASTER_PASSWORD $no_auth_warning \
-{{- end }}
         -h $REDIS_MASTER_HOST \
         -p $REDIS_MASTER_PORT_NUMBER \
 {{- if .Values.tls.enabled }}

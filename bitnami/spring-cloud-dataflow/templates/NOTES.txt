@@ -76,7 +76,7 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 {{- $secretNameExternalRabbitmq := printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
 
 {{/* Mysql required password */}}
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" $secretNameMariadb "context" $) -}}
+{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $secretNameMariadb "subchart" true "context" $) -}}
 {{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
 
 {{/* Rabbitmq required password */}}

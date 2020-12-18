@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "tensorflow-resnet.fullname" . }}
-  labels: {{- include "tensorflow-resnet.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.service.annotations }}
-  annotations: {{- include "tensorflow-resnet.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -28,4 +28,4 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "tensorflow-resnet.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

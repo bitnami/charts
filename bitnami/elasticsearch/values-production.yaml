@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.9.1-debian-10-r10
+  tag: 7.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -63,6 +63,20 @@ sysctlImage:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -762,7 +776,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r221
+    tag: 5.8.3-debian-10-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -981,7 +995,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r219
+    tag: 1.1.0-debian-10-r301
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1069,7 +1083,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    prometheus.io/port: "9114"
 
   ## Extra labels to add to Pod
   podLabels: {}

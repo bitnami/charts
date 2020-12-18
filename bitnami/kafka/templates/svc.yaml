@@ -2,18 +2,18 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kafka.fullname" . }}
-  labels: {{- include "kafka.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka
     {{- if .Values.commonLabels }}
-    {{- include "kafka.tplValue" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.service.annotations }}
-    {{ include "kafka.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
-    {{- include "kafka.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -45,5 +45,5 @@ spec:
       nodePort: {{ .Values.service.nodePorts.external }}
       {{- end }}
     {{- end }}
-  selector: {{- include "kafka.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kafka

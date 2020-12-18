@@ -1,8 +1,17 @@
-apiVersion: v1
-name: nginx-ingress-controller
-version: 5.6.8
-appVersion: 0.40.1
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.41.2
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Chart for the nginx Ingress controller
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
+icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 keywords:
   - ingress
   - nginx
@@ -10,14 +19,11 @@ keywords:
   - web
   - www
   - reverse proxy
-home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
-icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Infrastructure
+version: 7.0.5

@@ -1,4 +1,4 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
@@ -44,6 +44,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.core.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAntiAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.core.nodeAffinityPreset.type "key" .Values.core.nodeAffinityPreset.key "values" .Values.core.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.core.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.core.nodeSelector "context" $) | nindent 8 }}
@@ -56,6 +61,9 @@ spec:
       {{- end }}
       {{- if .Values.core.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.core.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: core
@@ -168,6 +176,9 @@ spec:
             {{- end }}
             - name: psc
               mountPath: /etc/core/token
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if .Values.core.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -190,6 +201,9 @@ spec:
             items:
               - key: secretKey
                 path: key
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- end }}
         - name: token-service-private-key
           secret:
             {{- if .Values.core.secretName }}

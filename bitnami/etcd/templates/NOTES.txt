@@ -63,11 +63,11 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- if .Values.auth.client.secureTransport }}
 {{- if .Values.auth.client.useAutoTLS }}
 
- * As TLS is enabled you should add the flag `--cert-file {{ template "etcd.dataDir" . }}/fixtures/client/cert.pem --key-file {{ template "etcd.dataDir" .}}/fixtures/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file /bitnami/etcd/data/fixtures/client/cert.pem --key-file /bitnami/etcd/data/fixtures/client/key.pem` to the etcdctl commands.
 
 {{- else }}
 
- * As TLS is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/cert.pem --key-file /opt/bitnami/etcd/certs/client/key.pem` to the etcdctl commands.
+ * As TLS is enabled you should add the flag `--cert-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }} --key-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}` to the etcdctl commands.
 
 {{- end }}
 
@@ -78,7 +78,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- end }}
 {{- if .Values.auth.client.enableAuthentication }}
 
- * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/ca.crt` to the etcdctl commands.
+ * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}` to the etcdctl commands.
 
 {{- end }}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}

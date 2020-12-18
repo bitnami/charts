@@ -13,132 +13,43 @@
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.1.8-debian-10-r13
+  tag: 2.1.9-debian-10-r35
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
+  ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - name: myRegistryKeySecretName
+  pullSecrets: []
 
-## String to partially override nats.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override nats.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
-## NATS replicas
-replicaCount: 3
-
-## NATS Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## Add labels to all the deployed resources
 ##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
+commonLabels: {}
 
-## NATS Node selector and tolerations for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
+## Add annotations to all the deployed resources
 ##
-# nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
-# tolerations: []
+commonAnnotations: {}
 
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+## Kubernetes Cluster Domain
 ##
-# schedulerName:
+clusterDomain: cluster.local
 
-## Pods anti-affinity
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Extra objects to deploy (value evaluated as a template)
 ##
-antiAffinity: soft
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Additional pod labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Pod disruption budget
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  ## Specifies whether a Pod disruption budget should be created
-  ##
-  create: true
-  ## Minimum number / percentage of pods that should remain scheduled
-  ##
-  minAvailable: 1
-  ## Maximum number / percentage of pods that may be made unavailable
-  ##
-  maxUnavailable: ""
-
-## Pod Priority Class
-## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-##
-# priorityClassName: ""
-
-## NATS cluster resource type under Kubernetes. Allowed values: statefulset (default) or deployment
-## ref:
-## - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
-## - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-resourceType: "statefulset"
-
-## Update strategy for statefulset, can be set to RollingUpdate or OnDelete by default.
-## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
-statefulset:
-  updateStrategy: OnDelete
-  ## Partition update strategy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-  # rollingUpdatePartition:
-
-## Update strategy for deployment, can be set to RollingUpdate or OnDelete by default.
-## https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-deployment:
-  updateType: RollingUpdate
-  # maxSurge: 25%
-  # maxUnavailable: 25%
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources: {}
-# limits:
-#   cpu: 500m
-#   memory: 512Mi
-# requests:
-#   cpu: 100m
-#   memory: 256Mi
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
+extraDeploy: []
 
 ## Client Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
@@ -174,19 +85,224 @@ maxControlLine: 512
 maxPayload: 65536
 writeDeadline: "2s"
 
-## Network pullPolicy
-## https://kubernetes.io/docs/concepts/services-networking/network-policies/
+## Nats filenames:
+##  - For Nats 1.x.x version, some filenames (binary, configuration file, pid file) uses `gnatsd` as part of the name.
+##  - For Nats 2.x.x version, those filenames now uses `nats-server`
+## In order to make the chart compatible with NATS versions 1.0.0 and 2.0.0 we have parametrized the following value
+## to specify the proper filename according to the image version.
 ##
-networkPolicy:
-  ## Enable creation of NetworkPolicy resources.
-  enabled: true
+natsFilename: nats-server
 
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client labels will have network access to the port NATS is listening
-  ## on. When true, NATS will accept connections from any source
-  ## (with the correct destination port).
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## Extra flags to be passed to NATS
+## Example:
+## extraFlags:
+##   tls.insecure-skip-tls-verify: ""
+##   web.telemetry-path: "/metrics"
+##
+extraFlags: {}
+
+## An array to add extra env vars
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## NATS cluster resource type under Kubernetes. Allowed values: statefulset (default) or deployment
+## ref:
+## - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+## - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+##
+resourceType: "statefulset"
+
+## Number of NATS replicas to deploy
+##
+replicaCount: 3
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## Pod Priority Class
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## Strategy to use to update Pods
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
   ##
-  allowExternal: false
+  type: RollingUpdate
+
+## NATS pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+podSecurityContext:
+  enabled: false
+  ## fsGroup: 1001
+
+## NATS containers' SecurityContext
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+containerSecurityContext:
+  enabled: false
+  ## runAsUser: 1001
+  ## runAsNonRoot: true
+
+## NATS resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+
+## NATS containers' liveness and readiness probes.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /
+    port: monitoring
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  httpGet:
+    path: /
+    port: monitoring
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+## Custom Liveness probes for NATS
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes NATS
+##
+customReadinessProbe: {}
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Annotations for server pods.
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Add init containers to the NATS pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the NATS pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## NATS svc used for client connections
 ## ref: https://github.com/nats-io/gnatsd#running
@@ -258,59 +374,109 @@ monitoring:
     ##
     loadBalancerIP:
 
-## Configure the ingress resource that allows you to access the
-## NATS Monitoring. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## Ingress configuration
 ##
 ingress:
+  ## Set to true to enable ingress record generation
+  ##
   enabled: true
-  # The list of hostnames to be covered with this ingress record.
-  # Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-  - name: nats.local
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: nats.local-tls
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: nats.local
 
-    ## Ingress annotations done as key:value pairs
-    ## If you're using kube-lego, you will want to add:
-    ## kubernetes.io/tls-acme: true
-    ##
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    annotations:
-    #  kubernetes.io/ingress.class: nginx
-    #  kubernetes.io/tls-acme: true
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
 
-  secrets:
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
+  ##
+  tls: false
+
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## Example:
+  ## extraHosts:
+  ##   - name: nats.local
+  ##     path: /
+  ##
+  extraHosts: []
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## Example:
+  ## extraTls:
+  ## - hosts:
+  ##     - nats.local
+  ##   secretName: nats.local-tls
+  ##
+  extraTls: []
+
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
   ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using kube-lego, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: nats.local-tls
-  #   key:
-  #   certificate:
+  ##
+  ## Example
+  ## secrets:
+  ##   - name: nats.local-tls
+  ##     key: ""
+  ##     certificate: ""
+  ##
+  secrets: []
 
-# Optional additional arguments
-extraArgs: []
-
-## Nats filenames:
-##  - For Nats 1.x.x version, some filenames (binary, configuration file, pid file) uses `gnatsd` as part of the name.
-##  - For Nats 2.x.x version, those filenames now uses `nats-server`
-## In order to make the chart compatible with NATS versions 1.0.0 and 2.0.0 we have parametrized the following value
-## to specify the proper filename according to the image version.
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
-natsFilename: nats-server
+networkPolicy:
+  ## Enable creation of NetworkPolicy resources
+  ##
+  enabled: true
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the ports Keycloak is listening
+  ## on. When true, Keycloak will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: false
+  ## Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
+  ## Example:
+  ## additionalRules:
+  ##   - matchLabels:
+  ##       - role: frontend
+  ##   - matchExpressions:
+  ##       - key: role
+  ##         operator: In
+  ##         values:
+  ##           - frontend
+  ##
+  additionalRules: {}
+
+## NATS Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  create: true
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
 
 ## Metrics / Prometheus NATS Exporter
 ##
@@ -320,7 +486,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.6.2-debian-10-r124
+    tag: 0.6.2-debian-10-r198
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -331,20 +497,31 @@ metrics:
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  # resources: {}
+  resources: {}
   ## Metrics exporter port
-  port: 7777
-  ## Metrics exporter annotations
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "7777"
+  ##
+  containerPort: 7777
   ## Metrics exporter flags
-  args:
+  ##
+  flags:
     - -connz
     - -routez
     - -subz
     - -varz
-  # Enable this if you're using https://github.com/coreos/prometheus-operator
+  ## Metrics service configuration
+  ##
+  service:
+    type: ClusterIP
+    port: 7777
+    ## Use serviceLoadBalancerIP to request a specific static IP,
+    ## otherwise leave blank
+    # loadBalancerIP:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+    labels: {}
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
   serviceMonitor:
     enabled: false
     ## Specify a namespace if needed
@@ -356,20 +533,3 @@ metrics:
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     selector:
       prometheus: kube-prometheus
-  service:
-    type: ClusterIP
-    ## Use serviceLoadBalancerIP to request a specific static IP,
-    ## otherwise leave blank
-    # loadBalancerIP:
-    annotations: {}
-    labels: {}
-
-sidecars:
-## Add sidecars to the pod.
-## e.g.
-# - name: your-image-name
-  # image: your-image
-  # imagePullPolicy: Always
-  # ports:
-  # - name: portname
-  #   containerPort: 1234

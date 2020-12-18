@@ -95,17 +95,6 @@ Return the proper etcd client protocol
 {{- end -}}
 
 {{/*
-Return the proper etcd data dir
-*/}}
-{{- define "etcd.dataDir" -}}
-{{- if .Values.persistence.enabled -}}
-{{- print "/bitnami/etcd/data" -}}
-{{- else -}}
-{{- print "/opt/bitnami/etcd/data" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}

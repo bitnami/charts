@@ -3,12 +3,19 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "redis.fullname" . }}-slave
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  {{- if .Values.slave.statefulset.labels }}
+  {{- toYaml .Values.slave.statefulset.labels | nindent 4 }}
+  {{- end }}
+{{- if .Values.slave.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.slave.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
 {{- if .Values.slave.updateStrategy }}
   strategy: {{- toYaml .Values.slave.updateStrategy | nindent 4 }}
@@ -46,11 +53,7 @@ spec:
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        {{- if .Values.securityContext.sysctls }}
-        sysctls: {{- toYaml .Values.securityContext.sysctls | nindent 8 }}
-        {{- end }}
+      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.slave.priorityClassName }}
@@ -78,9 +81,8 @@ spec:
         - name: {{ template "redis.name" . }}
           image: {{ template "redis.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -208,6 +210,9 @@ spec:
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -c
@@ -227,10 +232,14 @@ spec:
                   key: {{ template "redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: REDIS_ADDR
+              value: rediss://localhost:{{ .Values.redisPort }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis.tlsCACert" . }}
             {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
@@ -247,16 +256,25 @@ spec:
               containerPort: 9121
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
   {{- end }}
-      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and .Values.slave.persistence.enabled .Values.securityContext.enabled) }}
+      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled .Values.containerSecurityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
         {{- if $needsVolumePermissions }}
         - name: volume-permissions
           image: {{ template "redis.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["/bin/chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.slave.persistence.path }}"]
-          securityContext:
-            runAsUser: 0
+          command:
+            - |
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.slave.persistence.path }}
+              {{- else }}
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.slave.persistence.path }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto "}}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- end }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: redis-data

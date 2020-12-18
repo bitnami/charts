@@ -7,6 +7,19 @@ metadata:
     app.kubernetes.io/component: skipper
 data:
   application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}     
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}          
     spring:
       cloud:
         skipper:
@@ -53,6 +66,9 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -61,12 +77,7 @@ data:
             dialect: {{ $hibernateDialect }}
       {{- end }}
       datasource:
-        {{- $databaseScheme := include "scdf.database.scheme" .  }}
-        {{- $databaseHost := include "scdf.database.host" .  }}
-        {{- $databasePort := include "scdf.database.port" .  }}
-        {{- $databaseName := include "scdf.database.skipper.name" .  }}
-        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
+        url: '{{ include "scdf.database.skipper.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
         {{ if .Values.externalDatabase.existingPasswordSecret }}

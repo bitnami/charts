@@ -1,8 +1,17 @@
-apiVersion: v1
-name: apache
-version: 7.4.0
+annotations:
+  category: Infrastructure
+apiVersion: v2
 appVersion: 2.4.46
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Chart for Apache HTTP Server
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/apache
+icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
   - apache
   - http
@@ -10,14 +19,11 @@ keywords:
   - www
   - web
   - reverse proxy
-home: https://github.com/bitnami/charts/tree/master/bitnami/apache
-icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: apache
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-annotations:
-  category: Infrastructure
+version: 8.0.3

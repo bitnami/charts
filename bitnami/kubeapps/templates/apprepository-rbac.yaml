@@ -141,5 +141,20 @@ rules:
     resources:
       - secrets
     verbs:
-      - create
+      - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-refresh"
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+    app: {{ template "kubeapps.apprepository.fullname" . }}
+rules:
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - get
+      - update
 {{- end -}}

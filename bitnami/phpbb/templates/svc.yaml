@@ -1,16 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "phpbb.fullname" . }}"
-  labels:
-    app: "{{ template "phpbb.fullname" . }}"
-    chart: "{{ template "phpbb.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: phpbb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if eq .Values.service.type "LoadBalancer" }}
-  loadBalancerIP: {{ default "" .Values.service.loadBalancerIP }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
@@ -28,5 +31,4 @@ spec:
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https)))}}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- end }}
-  selector:
-    app: "{{ template "phpbb.fullname" . }}"
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

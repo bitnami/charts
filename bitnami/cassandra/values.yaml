@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.8-debian-10-r20
+  tag: 3.11.9-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -111,6 +111,9 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  ## The path the volume will be mounted at
+  ##
+  mountPath: /bitnami/cassandra
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -142,6 +145,17 @@ volumePermissions:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to securityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0
 
 ## Secret with keystore, keystore password, truststore, truststore password
 ##
@@ -193,7 +207,19 @@ dbUser:
   user: cassandra
   forcePassword: false
   # password:
+
+  ## Use an existing secrets which already stores your password data.
+  ## for backwards compatibility, existingSecret can be a simple string,
+  ## referencing the secret by name.
   # existingSecret:
+  #   ## Name of the existing secret
+  #   ##
+  #   name: mySecret
+  #   ## Key mapping where <key> is the value which the deployment is expecting and
+  #   ## <value> is the name of the key in the existing secret.
+  #   ##
+  #   keyMapping:
+  #     cassandra-password: myCassandraPasswordKey
 
 ## ConfigMap with cql scripts. Useful for creating a keyspace
 ## and pre-populating data
@@ -248,7 +274,7 @@ replicaCount: 1
 ## updateStrategy for Cassandra statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-updateStrategy: OnDelete
+updateStrategy: RollingUpdate
 
 ## Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
@@ -293,6 +319,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -322,6 +349,12 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Pod topology spread constraints
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -417,7 +450,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r184
+    tag: 2.3.4-debian-10-r266
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

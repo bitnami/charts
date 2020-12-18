@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.7-debian-10-r12
+  tag: 1.6.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,21 +35,21 @@ image:
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
 extraEnv: []
 
-## String to partially override memcached.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
 ## Number of containers to run
 replicaCount: 1
 
-## String to fully override memcached.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
 # Cluster domain
 clusterDomain: cluster.local
 
-## Memcahed architecture. Allowed values: standalone or high-availability
+## Memcached architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
 
@@ -114,25 +114,64 @@ securityContext:
 ##
 podAnnotations: {}
 
-## Affinity for pod assignment
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
 ## Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
 ## Tolerations for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
+
+## Pod priority
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 persistence:
-  enabled: true
+  enabled: false
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -171,7 +210,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.7.0-debian-10-r45
+    tag: 0.7.0-debian-10-r104
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

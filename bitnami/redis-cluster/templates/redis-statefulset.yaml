@@ -1,5 +1,5 @@
 {{- if (include "redis-cluster.createStatefulSet" .) }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -13,9 +13,6 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  {{- if .Values.updateStrategy }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- end }}
   replicas: {{ .Values.cluster.nodes }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: "Parallel"
@@ -54,9 +51,20 @@ spec:
       {{- if .Values.redis.priorityClassName }}
       priorityClassName: {{ .Values.redis.priorityClassName }}
       {{- end }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.affinity "context" $ ) | nindent 8 }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.nodeSelector "context" $ ) | nindent 8 }}
-      tolerations: {{- include "common.tplvalues.render" ( dict "value" .Values.redis.tolerations "context" $ ) | nindent 8 }}
+      {{- if .Values.redis.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.redis.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.redis.nodeAffinityPreset.type "key" .Values.redis.nodeAffinityPreset.key "values" .Values.redis.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.redis.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.redis.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.redis.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.redis.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
@@ -162,6 +170,7 @@ spec:
             {{- if .Values.redis.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.redis.extraEnvVarsCM .Values.redis.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}
             - configMapRef:
@@ -171,6 +180,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redis.port }}
@@ -249,7 +259,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
-              value: {{ printf "127.0.0.1:%g" .Values.redis.port | quote }}
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.port | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -266,7 +276,10 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis-cluster.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
+          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
@@ -277,6 +290,7 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+          {{- end }}
           ports:
             - name: http-metrics
               containerPort: 9121
@@ -372,7 +386,8 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "redis-cluster.storageClass" . | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+        {{- if or .Values.persistence.matchLabels .Values.persistence.matchExpressions }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:
@@ -382,6 +397,7 @@ spec:
           matchExpressions:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+        {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}

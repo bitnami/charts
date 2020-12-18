@@ -3,6 +3,9 @@ kind: StatefulSet
 metadata:
   name: {{ include "etcd.fullname" . }}
   labels: {{- include "etcd.labels" . | nindent 4 }}
+    {{- if .Values.statefulsetLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.statefulsetLabels "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   selector:
     matchLabels: {{- include "etcd.matchLabels" . | nindent 6 }}
@@ -20,12 +23,15 @@ spec:
   template:
     metadata:
       labels: {{- include "etcd.labels" . | nindent 8 }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations (not .Values.metrics.serviceMonitor.enabled)) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "etcd.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.metrics.podAnnotations }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations (not .Values.metrics.serviceMonitor.enabled) }}
         {{- include "etcd.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
@@ -33,6 +39,11 @@ spec:
 {{- include "etcd.imagePullSecrets" . | indent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "etcd.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "etcd.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -112,7 +123,7 @@ spec:
             - name: ETCD_NAME
               value: "$(MY_POD_NAME)"
             - name: ETCD_DATA_DIR
-              value: {{ include "etcd.dataDir" . }}
+              value: /bitnami/etcd/data
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS
@@ -157,14 +168,17 @@ spec:
               value: "true"
             {{- else if .Values.auth.client.secureTransport }}
             - name: ETCD_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/client/cert.pem"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
             - name: ETCD_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/client/key.pem"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
             {{- if .Values.auth.client.enableAuthentication }}
             - name: ETCD_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/ca.crt"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+            {{- else if .Values.auth.client.caFilename }}
+            - name: ETCD_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
             {{- end }}
             {{- end }}
             {{- if and .Values.auth.peer.secureTransport .Values.auth.peer.useAutoTLS }}
@@ -172,14 +186,17 @@ spec:
               value: "true"
             {{- else if .Values.auth.peer.secureTransport }}
             - name: ETCD_PEER_CERT_FILE
-              value: "/opt/bitnami/etcd/certs/peer/cert.pem"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certFilename }}"
             - name: ETCD_PEER_KEY_FILE
-              value: "/opt/bitnami/etcd/certs/peer/key.pem"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.certKeyFilename }}"
             {{- if .Values.auth.peer.enableAuthentication }}
             - name: ETCD_PEER_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/ca.crt"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
+            {{- else if .Values.auth.peer.caFilename }}
+            - name: ETCD_PEER_TRUSTED_CA_FILE
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
             {{- end }}
             {{- end }}
           ports:

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "redis.fullname" . }}-scripts
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -23,21 +23,21 @@ data:
         fi
     }
 
+    HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
     export REDIS_REPLICATION_MODE="slave"
-    if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-      if [[ ${BASH_REMATCH[2]} == "0" ]]; then
-        if [[ ! -f /data/redisboot.lock ]]; then
-          export REDIS_REPLICATION_MODE="master"
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
+      if [[ ! -f /data/redisboot.lock ]]; then
+        export REDIS_REPLICATION_MODE="master"
+      else
+        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+          sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
         else
-          if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} info"
-          else
-            sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
-          fi
-          if [[ ! ($($sentinel_info_command)) ]]; then
-             export REDIS_REPLICATION_MODE="master"
-             rm /data/redisboot.lock
-          fi
+          sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} info"
+        fi
+        if [[ ! ($($sentinel_info_command)) ]]; then
+           export REDIS_REPLICATION_MODE="master"
+           rm /data/redisboot.lock
         fi
       fi
     fi
@@ -68,13 +68,30 @@ data:
       fi
 
       if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       else
-        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+
+      # Immediately attempt to connect to the reported master. If it doesn't exist the connection attempt will either hang
+      # or fail with "port unreachable" and give no data. The liveness check will then timeout waiting for the redis
+      # container to be ready and restart the it. By then the new master will likely have been elected
+      if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+      else
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+      fi
+
+      if [[ ! ($($sentinel_info_command)) ]]; then
+        # master doesn't actually exist, this probably means the remaining pods haven't elected a new one yet
+        # and are reporting the old one still. Once this happens the container will get stuck and never see the new
+        # master. We stop here to allow the container to not pass the liveness check and be restarted.
+        exit 1
+      fi
     fi
 
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
@@ -159,6 +176,9 @@ data:
 
         replace_in_file "/opt/bitnami/redis-sentinel/etc/sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
     }
+    sentinel_conf_add() {
+        echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
+    }
     is_boolean_yes() {
         local -r bool="${1:-}"
         # comparison is performed without regard to the case of alphabetic characters
@@ -169,6 +189,11 @@ data:
             false
         fi
     }
+    host_id() {
+      echo "$1" | openssl sha1 | awk '{print $2}'
+    }
+
+    HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
     if [[ -n $REDIS_PASSWORD_FILE ]]; then
       password_aux=`cat ${REDIS_PASSWORD_FILE}`
@@ -178,49 +203,85 @@ data:
     if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
       cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
       {{- if .Values.usePassword }}
-      printf "\nsentinel auth-pass {{ .Values.sentinel.masterSet }} $REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+      printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
       {{- if .Values.sentinel.usePassword }}
-      printf "\nrequirepass $REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+      printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
       {{- end }}
       {{- end }}
       {{- if .Values.sentinel.staticID }}
-      printf "\nsentinel myid $(echo $HOSTNAME | openssl sha1 | awk '{ print $2 }')" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+      printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
       {{- end }}
     fi
 
     export REDIS_REPLICATION_MODE="slave"
-    if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
-      if [[ ${BASH_REMATCH[2]} == "0" ]]; then
-        if [[ ! -f /data/sentinelboot.lock ]]; then
-          export REDIS_REPLICATION_MODE="master"
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
+      if [[ ! -f /data/sentinelboot.lock ]]; then
+        export REDIS_REPLICATION_MODE="master"
+      else
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+          sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} info"
         else
-          if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} info"
-          else
-            sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} info"
-          fi
-          if [[ ! ($($sentinel_info_command)) ]]; then
-             export REDIS_REPLICATION_MODE="master"
-             rm /data/sentinelboot.lock
-          fi
+          sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} info"
+        fi
+        if [[ ! ($($sentinel_info_command)) ]]; then
+           export REDIS_REPLICATION_MODE="master"
+           rm /data/sentinelboot.lock
         fi
       fi
     fi
 
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
-      sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-node-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}"
+      REDIS_MASTER_HOST="$(hostname -i)"
+      REDIS_MASTER_PORT_NUMBER="{{ .Values.redisPort }}"
     else
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli -a $REDIS_PASSWORD -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       else
-        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h {{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $HEADLESS_SERVICE -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
       REDIS_SENTINEL_INFO=($($sentinel_info_command))
       REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
       REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
 
-      sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+      # Immediately attempt to connect to the reported master. If it doesn't exist the connection attempt will either hang
+      # or fail with "port unreachable" and give no data. The liveness check will then timeout waiting for the sentinel
+      # container to be ready and restart the it. By then the new master will likely have been elected
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+      else
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_MASTER_HOST -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+      fi
+
+      if [[ ! ($($sentinel_info_command)) ]]; then
+        # master doesn't actually exist, this probably means the remaining pods haven't elected a new one yet
+        # and are reporting the old one still. Once this happens the container will get stuck and never see the new
+        # master. We stop here to allow the container to not pass the liveness check and be restarted.
+        exit 1
+      fi
     fi
+    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+
+    add_replica() {
+      if [[ "$1" != "$REDIS_MASTER_HOST" ]]; then
+        sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $1 {{ .Values.redisPort }}"
+      fi
+    }
+
+    {{- if .Values.sentinel.staticID }}
+    # remove generated known sentinels and replicas
+    tmp="$(sed -e '/^sentinel known-/d' -e '/^$/d' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
+    echo "$tmp" > /opt/bitnami/redis-sentinel/etc/sentinel.conf
+
+    for node in $(seq 0 {{ .Values.cluster.slaveCount }}); do
+      NAME="{{ template "redis.fullname" . }}-node-$node"
+      IP="$(getent hosts "$NAME.$HEADLESS_SERVICE" | awk ' {print $1 }')"
+      if [[ "$NAME" != "$HOSTNAME" && -n "$IP" ]]; then
+        sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $IP {{ .Values.sentinel.port }} $(host_id "$NAME")"
+        add_replica "$IP"
+      fi
+    done
+    add_replica "$(hostname -i)"
+    {{- end }}
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")

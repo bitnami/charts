@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "moodle.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -14,27 +14,29 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .certManager }}
+    {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
 spec:
   rules:
-  - host: {{ .Values.ingress.hostname }}
-    http:
-      paths:
+    {{- if .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: "{{ include "common.names.fullname" $ }}"
+            servicePort: http
+    {{- end }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
         - path: {{ default "/" .path }}
           backend:
-            serviceName: {{ include "moodle.fullname" $ }}
-            servicePort: 80
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .name }}
-    http:
-      paths:
-      - path: {{ default "/" .path }}
-        backend:
-          serviceName: {{ include "moodle.fullname" $ }}
-          servicePort: http
-  {{- end }}
+            serviceName: "{{ include "common.names.fullname" $ }}"
+            servicePort: http
+    {{- end }}
   {{- if .Values.ingress.tls }}
   tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
   {{- end }}

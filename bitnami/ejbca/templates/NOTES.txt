@@ -17,7 +17,6 @@ To access your EJBCA site from outside the cluster follow the steps below:
    echo "EJBCA Admin URL: https://$NODE_IP:$NODE_PORT/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$NODE_IP:$NODE_PORT/ejbca/enrol/keystore.jsp"
 
-
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
@@ -27,7 +26,6 @@ To access your EJBCA site from outside the cluster follow the steps below:
    echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
    echo "EJBCA Admin URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
-
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
@@ -57,14 +55,8 @@ To access your EJBCA site from outside the cluster follow the steps below:
   {{- $passwordErrors =  append $passwordErrors $requiredEJBCAPasswordError -}}
 {{- end -}}
 
-{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secretName" $databaseSecretName "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+{{- $mariadbSecretName := include "ejbca.databaseSecretName" . -}}
+{{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $mariadbPasswordValidationErrors -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
-
-{{- if and (not .Values.mariadb.enabled) .Release.IsUpgrade -}}
-  {{- $requiredExternalPassword := dict "valueKey" "externalDatabase.password" "secret" $databaseSecretName "field" "mariadb-password" -}}
-
-WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
-  {{- include "common.validations.values.multiple.empty" (dict "required" (list $requiredExternalPassword) "context" $) -}}
-{{- end -}}

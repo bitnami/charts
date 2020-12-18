@@ -12,12 +12,12 @@ data:
   wait-for-backends.sh: |-
     #!/bin/bash
 
-    # Auxiliar functions
+    # Auxiliary functions
     k8s_wait_for_statefulset() {
         namespace=${1:?namespace is missing}
         statefulset=${2:?statefulset name is missing}
         local -i return_code=0
-    
+
         echo "Waiting for statefulset ${statefulset} to be successfully rolled out..."
         kubectl rollout status --namespace "$namespace" statefulset "$statefulset" >/dev/null 2>&1 || return_code=$?
         echo "Rollout exit code: '${return_code}'"
@@ -28,7 +28,7 @@ data:
     {{- end }}
     {{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
     {{- if .Values.rabbitmq.enabled }}
-    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }} 
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }}
     {{- else if .Values.kafka.enabled }}
     k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}
     {{- end }}

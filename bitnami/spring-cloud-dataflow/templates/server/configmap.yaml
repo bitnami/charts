@@ -7,6 +7,19 @@ metadata:
     app.kubernetes.io/component: server
 data:
   application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}     
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}     
     spring:
       cloud:
         dataflow:
@@ -43,42 +56,19 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.podSecurityContext }}
+                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
             registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
           {{- end }}
-          {{- if .Values.metrics.enabled }}
-          {{- $fullname := include "scdf.fullname" . }}
-          {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
-          applicationProperties:
-            {{- if .Values.server.configuration.streamingEnabled }}
-            stream:
-              management:
-                metrics:
-                  export:
-                    prometheus:
-                      enabled: true
-                      rsocket:
-                        enabled: true
-                        host: {{ $fullname }}-prometheus-proxy
-                        port: {{ $rsocketPort }}
-            {{- end }}
-            {{- if .Values.server.configuration.batchEnabled }}
-            task:
-              management:
-                metrics:
-                  export:
-                    prometheus:
-                      enabled: true
-                      rsocket:
-                        enabled: true
-                        host: {{ $fullname }}-prometheus-proxy
-                        port: {{ $rsocketPort }}
-            {{- end }}
-          {{- end }}
-          {{- if .Values.server.configuration.grafanaInfo }}
-          grafana-info:
+          {{- if .Values.server.configuration.metricsDashboard }}
+          metrics.dashboard:
+            url: {{ .Values.server.configuration.metricsDashboard }}
+          {{- else if .Values.server.configuration.grafanaInfo }}
+          metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
@@ -89,12 +79,7 @@ data:
             dialect: {{ $hibernateDialect }}
       {{- end }}
       datasource:
-        {{- $databaseScheme := include "scdf.database.scheme" .  }}
-        {{- $databaseHost := include "scdf.database.host" .  }}
-        {{- $databasePort := include "scdf.database.port" .  }}
-        {{- $databaseName := include "scdf.database.server.name" .  }}
-        {{- $jdbcParameters := include "scdf.database.jdbc.parameters" .  }}
-        url: 'jdbc:{{ $databaseScheme }}://{{ $databaseHost }}:{{ $databasePort }}/{{ $databaseName }}{{ $jdbcParameters }}'
+        url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
         {{ if .Values.externalDatabase.existingPasswordSecret }}

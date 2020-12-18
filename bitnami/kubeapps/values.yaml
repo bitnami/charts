@@ -32,8 +32,8 @@ enableIPv6: false
 #   apiServiceURL: https://second-cluster:6443
 #   # certificateAuthorityData is required for secure communication with the additional API server.
 #   certificateAuthorityData: LS0tLS1CRUdJ...
-#   # serviceToken is an optional token configured to allow LIST namespaces only on the additional cluster
-#   # so that the UI can present a list of (only) those namespaces to which the user has access.
+#   # serviceToken is an optional token configured to allow LIST namespaces and packagemanifests (operators) only on the additional cluster
+#   # so that the UI can present a list of (only) those namespaces to which the user has access and the available operators.
 #   serviceToken: ...
 clusters:
   - name: default
@@ -117,7 +117,7 @@ ingress:
   #     ##
   #     tlsSecret: kubeapps.local-tls
 
-## Frontend paramters
+## Frontend parameters
 ##
 frontend:
   replicaCount: 2
@@ -219,7 +219,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.0.0-scratch-r1
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -231,7 +231,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.0.0-scratch-r1
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -288,6 +288,10 @@ apprepository:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: {}
+  ## The controller watches all namespaces by default to support separate AppRepositories per namespace.
+  ## Switch this off only if you require running multiple instances of Kubeapps in different namespaces
+  ## without each instance watching AppRepositories of each other.
+  watchAllNamespaces: true
 
 ## Hooks are used to perform actions like populating apprepositories
 ## or creating required resources during installation or upgrade
@@ -324,7 +328,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.0.0-scratch-r1
+    tag: 2.0.1-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -368,7 +372,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.0.0-scratch-r1
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -433,7 +437,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.0.0-beta.2-debian-10-r0
+    tag: 2.0.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -516,7 +520,7 @@ postgresql:
       memory: 256Mi
       cpu: 250m
 
-## RBAC paramters
+## RBAC parameters
 ##
 rbac:
   ## Perform creation of RBAC resources
@@ -555,6 +559,11 @@ authProxy:
   ##
   oauthLoginURI: /oauth2/start
   oauthLogoutURI: /oauth2/sign_out
+
+  ## Skip the Kubeapps login page when using OIDC and directly redirect to the IdP
+  ##
+  skipKubeappsLoginPage: false
+
   ## The remaining auth proxy values are relevant only if an internal auth-proxy is
   ## being configured by Kubeapps.
   ## Bitnami OAuth2 Proxy image

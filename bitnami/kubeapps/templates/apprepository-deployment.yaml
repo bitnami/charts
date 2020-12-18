@@ -43,6 +43,13 @@ spec:
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
             - --repo-sync-image={{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
+           {{- if .Values.global }}
+             {{- if.Values.global.imagePullSecrets }}
+               {{- range $key, $value := .Values.global.imagePullSecrets }}
+            -  --repo-sync-image-pullsecrets={{ $value | quote }}
+               {{- end }}
+             {{- end }}
+           {{- end }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
             - --database-secret-name={{ .Values.postgresql.existingSecret }}
@@ -53,7 +60,7 @@ spec:
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
-            - --repos-per-namespace
+            - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces}}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

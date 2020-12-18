@@ -82,13 +82,13 @@ spec:
             - name: EJBCA_ADMIN_USERNAME
               value: {{ .Values.ejbcaAdminUsername | quote }}
             - name: EJBCA_DATABASE_HOST
-              value: {{ template "ejbca.databaseHost" . }}
+              value: {{ include "ejbca.databaseHost" . | quote }}
             - name: EJBCA_DATABASE_PORT
-              value: {{ template "ejbca.databasePort" . }}
+              value: {{ include "ejbca.databasePort" . | quote }}
             - name: EJBCA_DATABASE_NAME
-              value: {{ template "ejbca.databaseName" . }}
+              value: {{ include "ejbca.databaseName" . | quote }}
             - name: EJBCA_DATABASE_USERNAME
-              value: {{ template "ejbca.databaseUsername" . }}
+              value: {{ include "ejbca.databaseUsername" . | quote }}
             - name: EJBCA_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: EJBCA_HTTPS_PORT_NUMBER

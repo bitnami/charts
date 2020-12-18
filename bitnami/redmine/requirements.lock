@@ -1,9 +1,0 @@
-dependencies:
-- name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 7.10.1
-- name: postgresql
-  repository: https://charts.bitnami.com/bitnami
-  version: 8.10.14
-digest: sha256:0f76d0f0d2e84829255413391663003e699ede2fe91dab42da80ac768170af04
-generated: "2020-09-21T01:47:19.700538289Z"

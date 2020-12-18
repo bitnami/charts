@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -27,12 +27,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-      {{- if .Values.podAnnotations }}
-      {{- toYaml .Values.podAnnotations | nindent 8 }}
-      {{- end }}
-      {{- if .Values.metrics.podAnnotations }}
-      {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "prestashop.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
@@ -40,6 +40,11 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -51,6 +56,80 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
+      initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "prestashop.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/prestashop"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/prestashop"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: prestashop-data
+              mountPath: /bitnami/prestashop
+              subPath: prestashop
+        {{- end }}
+        {{- if .Values.certificates.customCAs }}
+        - name: certificates
+          image: {{ template "certificates.image" . }}
+          imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+          imagePullSecrets:
+          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
+            - name: {{ . }}
+          {{- end }}
+          command:
+          {{- if .Values.certificates.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
+          {{- else if .Values.certificates.customCertificate.certificateSecret }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          {{- else }}
+          - sh
+          - -c
+          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+            else apt-get update && apt-get install -y ca-certificates openssl; fi
+            && openssl req -new -x509 -days 3650 -nodes -sha256
+              -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+              -out {{ .Values.certificates.customCertificate.certificateLocation }}
+              -keyout {{ .Values.certificates.customCertificate.keyLocation }} -extensions v3_req
+          {{- end }}
+          {{- if .Values.certificates.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
+          {{- end }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
+          envFrom:
+            {{- if .Values.certificates.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.certificates.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          volumeMounts:
+            - name: etc-ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: false
+            - name: etc-ssl-private
+              mountPath: /etc/ssl/private
+              readOnly: false
+            - name: custom-ca-certificates
+              mountPath: /usr/local/share/ca-certificates
+              readOnly: true
+        {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ template "prestashop.image" . }}
@@ -68,7 +147,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
-              value: {{ .Values.allowEmptyPassword | quote }}
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
             - name: APACHE_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
@@ -85,36 +164,22 @@ spec:
             - name: PRESTASHOP_LANGUAGE
               value: {{ .Values.prestashopLanguage | quote }}
             {{- end }}
-            {{- if .Values.mariadb.enabled }}
-            - name: MARIADB_HOST
-              value: {{ template "prestashop.mariadb.fullname" . }}
-            - name: MARIADB_PORT_NUMBER
-              value: "3306"
+            - name: PRESTASHOP_DATABASE_HOST
+              value: {{ include "prestashop.databaseHost" . | quote }}
+            - name: PRESTASHOP_DATABASE_PORT_NUMBER
+              value: {{ include "prestashop.databasePort" . | quote }}
             - name: PRESTASHOP_DATABASE_NAME
-              value: {{ .Values.mariadb.db.name | quote }}
+              value: {{ include "prestashop.databaseName" . | quote }}
             - name: PRESTASHOP_DATABASE_USER
-              value: {{ .Values.mariadb.db.user | quote }}
+              value: {{ include "prestashop.databaseUser" . | quote }}
             - name: PRESTASHOP_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "prestashop.mariadb.fullname" . }}
-                  key: mariadb-password
-            {{- else }}
-            - name: MARIADB_HOST
-              value: {{ .Values.externalDatabase.host | quote }}
-            - name: MARIADB_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            - name: PRESTASHOP_DATABASE_NAME
-              value: {{ .Values.externalDatabase.database | quote }}
-            - name: PRESTASHOP_DATABASE_USER
-              value: {{ .Values.externalDatabase.user | quote }}
-            - name: PRESTASHOP_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-                  key: db-password
-            {{- end }}
-    {{- $port:=.Values.service.port | toString }}
+                  name: {{ include "prestashop.databaseSecretName" . }}
+                  key: {{ include "prestashop.databasePasswordKey" . }}
+            - name: PRESTASHOP_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.prestashopSkipInstall | quote }}
+            {{- $port:=.Values.service.port | toString }}
             - name: PRESTASHOP_HOST
               value: "{{ include "prestashop.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
             - name: PRESTASHOP_USERNAME
@@ -205,8 +270,24 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "prestashop.host" . | quote }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: prestashop-data
@@ -219,7 +300,7 @@ spec:
         - name: metrics
           image: {{ template "prestashop.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
           ports:
             - name: metrics
               containerPort: 9117
@@ -235,7 +316,7 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
-          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
@@ -244,11 +325,11 @@ spec:
         - name: prestashop-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "common.names.fullname" . }}-prestashop{{- end }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-prestashop" (include "common.names.fullname" .)) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
-          {{- if .Values.extraVolumes }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-          {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end -}}

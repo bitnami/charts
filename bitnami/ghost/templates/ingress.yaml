@@ -1,15 +1,22 @@
 {{- if .Values.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "ghost.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ghost
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
+  {{- if .Values.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+  {{- end }}
   {{- if .Values.ingress.annotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+  {{- if $.Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   rules:
@@ -19,21 +26,21 @@ spec:
         paths:
           - path: {{ default "/" .path }}
             backend:
-              serviceName: {{ include "ghost.fullname" $ }}
+              serviceName: "{{ include "common.names.fullname" $ }}"
               servicePort: http
   {{- end }}
   tls:
   {{- range .Values.ingress.hosts }}
     {{- if .tls }}
     - hosts:
-    {{- if .tlsHosts }}
-    {{- range $host := .tlsHosts }}
-      - {{ $host }}
-    {{- end }}
-    {{- else }}
-      - {{ .name }}
-    {{- end }}
-      secretName: {{ .tlsSecret }}
+      {{- if .tlsHosts }}
+      {{- range $host := .tlsHosts }}
+        - {{ $host }}
+      {{- end }}
+      {{- else }}
+        - {{ .name }}
+      {{- end }}
+      secretName: {{ default (printf "%s-tls" .name) .tlsSecret }}
     {{- end }}
   {{- end }}
 {{- end }}

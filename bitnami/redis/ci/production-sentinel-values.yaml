@@ -589,7 +589,7 @@ metrics:
     #        redis_memory_used_bytes{service="{{ template "redis.fullname" . }}-metrics"} * 100
     #        /
     #        redis_memory_max_bytes{service="{{ template "redis.fullname" . }}-metrics"}
-    #        > 90 =< 100
+    #        > 90
     #      for: 2m
     #      labels:
     #        severity: error

@@ -78,6 +78,9 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.extraEnvVars }}
+              {{- include "apache.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -122,6 +125,9 @@ spec:
               mountPath: /opt/bitnami/apache/conf/httpd.conf
               subPath: httpd.conf
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "apache.metrics.image" . }}
@@ -161,3 +167,7 @@ spec:
           configMap:
             name: {{ include "apache.httpdConfConfigMap" . }}
         {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+

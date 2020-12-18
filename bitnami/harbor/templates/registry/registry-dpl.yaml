@@ -1,4 +1,4 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.registry" . }}
@@ -43,6 +43,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.registry.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.registry.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.registry.podAffinityPreset "component" "registry" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.registry.podAntiAffinityPreset "component" "registry" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.registry.nodeAffinityPreset.type "key" .Values.registry.nodeAffinityPreset.key "values" .Values.registry.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.registry.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.registry.nodeSelector "context" $) | nindent 8 }}
@@ -76,6 +81,9 @@ spec:
       {{- end }}
       {{- if .Values.registry.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.registry.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.registry.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.registry.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: registry
@@ -180,6 +188,9 @@ spec:
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/registry
+            {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
             {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
@@ -306,6 +317,9 @@ spec:
               mountPath: /harbor_cust_cert/custom-ca-bundle.crt
               subPath: ca.crt
             {{- end }}
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
@@ -345,6 +359,9 @@ spec:
             claimName: {{ .Values.persistence.persistentVolumeClaim.registry.existingClaim | default (include "harbor.registry" .) }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
         {{- end }}
         {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
         - name: gcs-key

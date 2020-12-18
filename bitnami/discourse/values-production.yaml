@@ -19,7 +19,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.5.2-debian-10-r0
+  tag: 2.6.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,7 +75,7 @@ discourse:
   ## Custom command to override image cmd
   ##
   # command: []
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   # args: []
 
   containerSecurityContext: {}
@@ -174,7 +174,7 @@ sidekiq:
   ##
   command: ['/app-entrypoint.sh']
 
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   ##
   args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
 
@@ -351,7 +351,7 @@ service:
   nodePorts:
     http: ''
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -403,6 +403,19 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+## Only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+## Example:
+# updateStrategy:
+#  type: RollingUpdate
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+updateStrategy:
+  type: RollingUpdate
 
 ## Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

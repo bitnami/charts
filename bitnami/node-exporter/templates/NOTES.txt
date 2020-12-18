@@ -2,32 +2,32 @@
 
 Watch the Node Exporter DaemonSet status using the command:
 
-    kubectl get ds -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ template "node-exporter.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+    kubectl get ds -w --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}
 
 Node Exporter can be accessed via port "{{ .Values.service.port }}" on the following DNS name from within your cluster:
 
-    {{ template "node-exporter.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 To access Node Exporter from outside the cluster execute the following commands:
 
 {{- if contains "LoadBalancer" .Values.service.type }}
 
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-    Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "node-exporter.fullname" . }}'
+    Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
 {{- $port:=.Values.service.port | toString }}
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "node-exporter.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     echo "URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
     echo "URL: http://127.0.0.1:9100/"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "node-exporter.fullname" . }} 9100:{{ .Values.service.port }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9100:{{ .Values.service.port }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "node-exporter.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "URL: http://$NODE_IP:$NODE_PORT/"
 

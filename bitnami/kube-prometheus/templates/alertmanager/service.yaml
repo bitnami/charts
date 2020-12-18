@@ -21,6 +21,12 @@ spec:
   loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") .Values.alertmanager.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.alertmanager.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (eq .Values.alertmanager.service.externalTrafficPolicy "Local") .Values.alertmanager.service.healthCheckNodePort }}
+  healthCheckNodePort: {{ .Values.alertmanager.service.healthCheckNodePort }}
+  {{- end }}
   {{- if and (eq .Values.alertmanager.service.type "ClusterIP") .Values.alertmanager.service.clusterIP }}
   clusterIP: {{ .Values.alertmanager.service.clusterIP }}
   {{- end }}

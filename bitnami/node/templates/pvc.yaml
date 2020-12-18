@@ -2,8 +2,14 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "node.fullname" . }}-binding
-  labels: {{- include "node.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-binding
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
     volume.alpha.kubernetes.io/storage-class: {{ ternary "default" (trimPrefix "storageClassName: " (include "node.storageClass" .)) (empty (include "node.storageClass" .)) }}
 spec:

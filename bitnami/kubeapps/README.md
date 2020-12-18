@@ -79,7 +79,7 @@ Since v1.9.0 (and by default since v2.0), Kubeapps supports to deploy and manage
 
 ### Exposing Externally
 
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. If you explicitly [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) (recommended), then only the configured users trusted by your Identity Provider will be able to reach the Kubernetes API. See [#1111](https://github.com/kubeapps/kubeapps/issues/1111) for more details.
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
 
 #### LoadBalancer Service
 
@@ -103,7 +103,7 @@ Most likely you will only want to have one hostname that maps to this Kubeapps i
 
 ##### Annotations
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
+For annotations, please see [this document](https://github.com/kubeapps/kubeapps/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
 
 ##### TLS
 
@@ -147,7 +147,7 @@ The first command removes most of the Kubernetes components associated with the 
 
 > **NOTE**: If you delete the CRD for `apprepositories.kubeapps.com` it will delete the repositories for **all** the installed instances of `kubeapps`. This will break existing installations of `kubeapps` if they exist.
 
-If you have dedicated a namespace only for Kubeapps you can completely clean remaining completed/failed jobs or any stale resources by deleting the namespace
+If you have dedicated a namespace only for Kubeapps you can completely clean the remaining completed/failed jobs or any stale resources by deleting the namespace
 
 ```bash
 kubectl delete namespace kubeapps
@@ -179,7 +179,7 @@ Or:
 Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
 ```
 
-It is possible, though uncommon, that your cluster does not have Role Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
 
 ```bash
 kubectl api-versions
@@ -195,7 +195,7 @@ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.cr
 
 It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
 
-> Note: This steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
+> Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
 
 > Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-2-0).
 
@@ -242,13 +242,43 @@ kubectl apply -f <repo name>.yaml
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/kubeapps/kubeapps/issues/new).
 
+### Upgrading to 2.0.1 (Chart 5.0.0)
+
+[On November 13, 2020, Helm 2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm 3 and to be consistent with the Helm project itself regarding the Helm 2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- In the case of PostgreSQL subchart, apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version using Helm 2, this scenario is not supported as this version doesn't support Helm 2 anymore
+- If you installed the previous version with Helm 2 and wants to upgrade to this version with Helm 3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm 2 to 3
+- If you want to upgrade to this version from a previous one installed with Helm 3, you shouldn't face any issues related to the new `apiVersion`. Due to the PostgreSQL major version bump, it's necessary to remove the existing statefulsets:
+
+> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that's not the case, adapt the command accordingly.
+
+```console
+$ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+```
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
 ### Upgrading to 2.0
 
 Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 
  - Helm 2 is no longer supported. If you are still using some Helm 2 charts, [migrate them with the available tools](https://helm.sh/docs/topics/v2_v3_migration/). Note that some charts (but not all of them) may require to be migrated to the [new Chart specification (v2)](https://helm.sh/docs/topics/charts/#the-apiversion-field). If you are facing any issue managing this migration and Kubeapps, please open a new issue!
- - MongoDB is not longer supported. Since 2.0, the only database supported is PostgreSQL.
- - PosgreSQL chart dependency has been upgraded to a new major version.
+ - MongoDB is no longer supported. Since 2.0, the only database supported is PostgreSQL.
+ - PostgreSQL chart dependency has been upgraded to a new major version.
 
 Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:
 

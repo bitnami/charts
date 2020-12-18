@@ -1,212 +1,86 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "postgresql-ha.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "postgresql-ha.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "postgresql-ha.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "postgresql-ha.labels" -}}
-app.kubernetes.io/name: {{ template "postgresql-ha.name" . }}
-helm.sh/chart: {{ template "postgresql-ha.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "postgresql-ha.matchLabels" -}}
-app.kubernetes.io/name: {{ template "postgresql-ha.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
 
 {{/*
 Fully qualified app name for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresql" -}}
-{{- printf "%s-postgresql" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-postgresql" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-postgresql" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for Pgpool
 */}}
 {{- define "postgresql-ha.pgpool" -}}
-{{- printf "%s-pgpool" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-pgpool" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-pgpool" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-pgpool" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for LDAP
 */}}
 {{- define "postgresql-ha.ldap" -}}
-{{- printf "%s-ldap" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-ldap" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-ldap" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-ldap" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Return the proper PostgreSQL image name
 */}}
 {{- define "postgresql-ha.postgresqlImage" -}}
-{{- $registryName := .Values.postgresqlImage.registry -}}
-{{- $repositoryName := .Values.postgresqlImage.repository -}}
-{{- $tag := .Values.postgresqlImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.postgresqlImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Pgpool image name
 */}}
 {{- define "postgresql-ha.pgpoolImage" -}}
-{{- $registryName := .Values.pgpoolImage.registry -}}
-{{- $repositoryName := .Values.pgpoolImage.repository -}}
-{{- $tag := .Values.pgpoolImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.pgpoolImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper PostgreSQL Prometheus exporter image name
 */}}
 {{- define "postgresql-ha.volumePermissionsImage" -}}
-{{- $registryName := .Values.volumePermissionsImage.registry -}}
-{{- $repositoryName := .Values.volumePermissionsImage.repository -}}
-{{- $tag := .Values.volumePermissionsImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissionsImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper PostgreSQL Prometheus exporter image name
 */}}
 {{- define "postgresql-ha.metricsImage" -}}
-{{- $registryName := .Values.metricsImage.registry -}}
-{{- $repositoryName := .Values.metricsImage.repository -}}
-{{- $tag := .Values.metricsImage.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.metricsImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "postgresql-ha.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- else if or .Values.postgresqlImage.pullSecrets .Values.pgpoolImage.pullSecrets .Values.volumePermissionsImage.pullSecrets .Values.metricsImage.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.postgresqlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.pgpoolImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.volumePermissionsImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.metricsImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- end -}}
-{{- else if or .Values.postgresqlImage.pullSecrets .Values.pgpoolImage.pullSecrets .Values.volumePermissionsImage.pullSecrets .Values.metricsImage.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.postgresqlImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.pgpoolImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.volumePermissionsImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- range .Values.metricsImage.pullSecrets }}
-  - name: {{ . }}
-{{- end -}}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.postgresqlImage .Values.pgpoolImage .Values.volumePermissionsImage .Values.metricsImage) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -570,7 +444,7 @@ Get the initialization scripts Secret name.
 */}}
 {{- define "postgresql-ha.postgresqlInitdbScriptsSecret" -}}
 {{- if .Values.postgresql.initdbScriptsSecret -}}
-{{- include "postgresql-ha.tplValue" (dict "value" .Values.postgresql.initdbScriptsSecret "context" $) -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.postgresql.initdbScriptsSecret "context" $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -590,7 +464,7 @@ Get the pgpool initialization scripts Secret name.
 */}}
 {{- define "postgresql-ha.pgpoolInitdbScriptsSecret" -}}
 {{- if .Values.pgpool.initdbScriptsSecret -}}
-{{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.initdbScriptsSecret "context" $) -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initdbScriptsSecret "context" $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -651,57 +525,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
-*/}}
-{{- define "postgresql-ha.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Check if there are rolling tags in the images */}}
-{{- define "postgresql-ha.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.postgresqlImage.repository) (not (.Values.postgresqlImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.postgresqlImage.repository }}:{{ .Values.postgresqlImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.pgpoolImage.repository) (not (.Values.pgpoolImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.pgpoolImage.repository }}:{{ .Values.pgpoolImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.metricsImage.repository) (not (.Values.metricsImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.metricsImage.repository }}:{{ .Values.metricsImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- end -}}
-
-{{/*
 Return the appropriate apiVersion for networkPolicy
 */}}
 {{- define "postgresql-ha.networkPolicy.apiVersion" -}}
@@ -712,17 +535,11 @@ Return the appropriate apiVersion for networkPolicy
 {{- end -}}
 {{- end -}}
 
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "postgresql-ha.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "postgresql-ha.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{/* Check if there are rolling tags in the images */}}
+{{- define "postgresql-ha.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
+{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
+{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
 {{- end -}}
 
 {{/*
@@ -756,7 +573,7 @@ postgresql-ha: Nodes hostnames
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP paremeters when LDAP is enabled */}}
+{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "postgresql-ha.validateValues.ldap" -}}
 {{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
 postgresql-ha: LDAP

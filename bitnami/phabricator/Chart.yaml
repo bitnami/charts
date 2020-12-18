@@ -1,8 +1,16 @@
-apiVersion: v1
-name: phabricator
-version: 9.1.16
-appVersion: 2020.37.0
+annotations:
+  category: ProjectManagement
+apiVersion: v2
+appVersion: 2020.42.0
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
 description: Collection of open source web applications that help software companies build better software.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/phabricator
+icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-110x117.png
 keywords:
   - phabricator
   - http
@@ -17,14 +25,11 @@ keywords:
   - git
   - mercurial
   - subversion
-home: https://github.com/bitnami/charts/tree/master/bitnami/phabricator
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-110x117.png
-annotations:
-  category: ProjectManagement
+version: 10.2.1

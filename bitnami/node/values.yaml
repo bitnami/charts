@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.22.1-debian-10-r12
+  tag: 14.15.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,16 +70,24 @@ volumePermissions:
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
 git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.28.0-debian-10-r48
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Bitnami git image version
+  ## ref: https://hub.docker.com/r/bitnami/git/tags/
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.29.2-debian-10-r46
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
 
 ## Enable to download app from external git repository.
 ## Disable it if your docker image already includes your application at /app
@@ -95,17 +103,46 @@ revision: master
 
 ## Specify the number of replicas for the application
 ##
-replicas: 1
+replicaCount: 1
 
 ## Specify the port where your application will be running
 ##
 applicationPort: 3000
 
-## Define custom environment variables to pass to the image here
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
 ##
-extraEnv: {}
+podAffinityPreset: ''
 
-## Affinity for pod assignment
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ''
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
@@ -120,13 +157,127 @@ nodeSelector: {}
 ##
 tolerations: {}
 
-## Pod Security Context
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+livenessProbe:
+  enabled: true
+  path: '/'
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: '/'
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+  successThreshold: 1
+
+## Custom Liveness probes for Node
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes Node
+##
+customReadinessProbe: {}
+
+## Node pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## lifecycleHooks for the Node container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
+## Add sidecars to the Node pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## Add init containers to the Node pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: ['/bin/bash', '-ec', 'npm start']
+args: []
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+
+podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 
 ## Node conatiners' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -160,7 +311,7 @@ persistence:
   accessMode: ReadWriteOnce
   size: 1Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -169,6 +320,16 @@ service:
   ## HTTP Port
   ##
   port: 80
+
+  ## clusterIP: ""
+  ## loadBalancerIP for the Node Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  sessionAffinity: 'None'
+
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -183,7 +344,7 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -229,27 +390,48 @@ ingress:
   #   key:
   #   certificate:
 
+##
 ## MongoDB chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
+  ## Whether to deploy a MongoDB server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
-  install: true
-  ## MongoDB custom user and database
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+  ##
+  enabled: true
+
+  ## MongoDB Authentication parameters
   ##
   auth:
+    ## Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+
+    ## MongoDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ''
+
+    ## MongoDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
     username: user
     database: test_db
     password: secret_password
 
-## Provision an external database (Only if mongodb.install is false)
-## You can:
+##
+## External Database Configuration
+##
+## Provision an external database
+## You have two alternatives:
 ##    1) Pass an already existing Secret with your database credentials
 ##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
 ##
 externaldb:
+  ## Enables or disables external database
+  ##
+  enabled: false
   ## Set to true if your external database has ssl enabled
   ##
   ssl: false
