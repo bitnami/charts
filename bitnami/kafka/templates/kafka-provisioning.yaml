@@ -35,19 +35,19 @@ spec:
             - /bin/bash
             - -c
             - >-
-              {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
-              {{- range $topic := .Values.provisioning.topics }}
-                /opt/bitnami/kafka/bin/kafka-topics.sh \
-                  --create \
-                  --if-not-exists \
-                  --bootstrap-server {{ $bootstrapServer }} \
-                  --replication-factor {{ $topic.replicationFactor }} \
-                  --partitions {{ $topic.partitions }} \
-                  {{- range $name, $value := $topic.config }}
-                  --config {{ $name }}={{ $value }} \
-                  {{- end }}
-                  --topic {{ $topic.name }};
-              {{- end }}
+            {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
+            {{- range $topic := .Values.provisioning.topics }}
+              /opt/bitnami/kafka/bin/kafka-topics.sh \
+                --create \
+                --if-not-exists \
+                --bootstrap-server {{ $bootstrapServer }} \
+                --replication-factor {{ $topic.replicationFactor }} \
+                --partitions {{ $topic.partitions }} \
+                {{- range $name, $value := $topic.config }}
+                --config {{ $name }}={{ $value }} \
+                {{- end }}
+                --topic {{ $topic.name }};
+            {{- end }}
               echo "Success provisioning"
           env:
             - name: BITNAMI_DEBUG
