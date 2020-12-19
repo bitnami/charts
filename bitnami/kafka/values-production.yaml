@@ -771,7 +771,7 @@ provisioning:
     ##
     debug: false
 
-  topics:
+  topics: []
   # - name: topic-name
   #   partitions: 3
   #   replicationFactor: 3
