@@ -68,6 +68,9 @@ spec:
             {{- if .Values.ingressClass }}
             - --ingress-class-name={{ .Values.ingressClass }}
             {{- end }}
+            {{- if .Values.contour.extraArgs }}
+            {{ toYaml .Values.contour.extraArgs | indent 12 | trim }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: contour
