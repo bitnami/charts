@@ -197,7 +197,7 @@ grafana:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  
+
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -265,8 +265,8 @@ grafana:
 
   ## This loads extra configmaps and secrets into the created deployment.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
-  ## 
-  # envFrom: 
+  ##
+  # envFrom:
   ## Examples for a configmap or secret
   ##
   # - configMapRef:
@@ -279,7 +279,7 @@ grafana:
   ##
   client:
     timeout: 5
-    preferService: True
+    preferService: true
 
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
@@ -287,7 +287,7 @@ grafana:
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
   ##
   ingress:
-    enabled: False
+    enabled: false
     hostname: grafana.local
     path: /
 
@@ -345,13 +345,13 @@ grafana:
       mode: "console"
       level: "warn"
     security:
-      disable_initial_admin_creation: False
-      disable_gravatar: False
+      disable_initial_admin_creation: false
+      disable_gravatar: false
     # ## OIDC configuration
     # ##
     # auth:
-    #   disable_login_form: False
-    #   disable_signout_menu: False
+    #   disable_login_form: false
+    #   disable_signout_menu: false
     # auth.generic_oauth:
     #   enabled: True
     #   client_id: grafana
@@ -361,7 +361,7 @@ grafana:
     #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
     #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
     #   ## Automatic role handling with OIDC
-    #   ## 
+    #   ##
     #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
     #   # allowed_domains: example.com
     #   allow_sign_up: True
@@ -380,7 +380,7 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: '{{ .Release.Name }}'
-  
+
   ## Grafana containers' liveness and readiness probes
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
