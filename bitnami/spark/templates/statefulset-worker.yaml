@@ -55,10 +55,13 @@ spec:
             - name: http
               containerPort: {{ .Values.worker.webPort }}
               protocol: TCP
-            {{- if .Values.worker.clusterPort }}
+          {{- if .Values.worker.clusterPort }}
             - name: cluster
               containerPort: {{ .Values.worker.clusterPort }}
-            {{- end }}
+          {{- end }}
+          {{- if .Values.worker.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraPorts "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.worker.configurationConfigMap }}
             - name: config

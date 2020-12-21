@@ -1,22 +1,31 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "metallb.fullname" . }}-speaker
-  labels: {{- include "metallb.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-speaker
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: speaker
   template:
     metadata:
-      labels: {{- include "metallb.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: speaker
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.speaker.podAnnotations }}
-      annotations: {{- toYaml .Values.speaker.podAnnotations | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-    spec:
-      {{- include "metallb.speaker.imagePullSecrets" . | nindent 6 }}
+    spec: 
+      {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
@@ -25,7 +34,7 @@ spec:
       hostNetwork: true
       containers:
       - name: metallb-speaker
-        image: {{ include "metallb.speaker.image" . }}
+        image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.image "global" .Values.global) }}
         imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
         args:
         - --port={{ .Values.speaker.daemonset.hostPorts.metrics }}
@@ -44,7 +53,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: METALLB_ML_LABELS
-          value: "app.kubernetes.io/name=metallb,app.kubernetes.io/component=speaker"
+          value: "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=speaker"
         - name: METALLB_ML_NAMESPACE
           valueFrom:
             fieldRef:
@@ -52,13 +61,13 @@ spec:
         - name: METALLB_ML_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ include "metallb.secretName" . }}
-              key: {{ include "metallb.secretKey" . }}
+              name: {{ include "metallb.speaker.secretName" . }}
+              key: {{ include "metallb.speaker.secretKey" . }}
         {{- if .Values.speaker.extraEnvVars }}
         {{- include "metallb.tplValue" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 8 }}
         {{- end }}
-        envFrom:
         {{- if .Values.extraEnvVarsSecret }}
+        envFrom:
         - secretRef:
             name: {{ include "metallb.tplValue" ( dict "value" .Values.speaker.extraEnvVarsSecret "context" $ ) }}
         {{- end }}

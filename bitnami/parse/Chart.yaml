@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 4.5.0
+appVersion: 4.9.3
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-parse
   - https://github.com/bitnami/bitnami-docker-parse-dashboard
   - https://parse.com/
-version: 13.2.2
+version: 13.2.3
