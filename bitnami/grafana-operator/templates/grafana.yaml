@@ -12,12 +12,6 @@ metadata:
   {{- end }}
 spec:
   baseImage: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
-  {{- if .Values.grafana.disableLoginForm }}
-  disableLoginForm: {{ .Values.grafana.disableLoginForm }}
-  {{- end }}
-  {{- if .Values.grafana.disableSignoutMenu }}
-  disableSignoutMenu: {{ .Values.grafana.disableSignoutMenu }}
-  {{- end }}
   client:
     timeout: {{ .Values.grafana.client.timeout }}
     preferService: {{ .Values.grafana.client.preferService }}
@@ -98,7 +92,7 @@ spec:
     {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}
-    hostname: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+    hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}

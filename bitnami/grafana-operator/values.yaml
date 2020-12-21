@@ -328,30 +328,30 @@ grafana:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 10Gi
-  ## Disable LoginForm and SignOutMenu for OIDC
-  ## Ref: 
-  ##
-  disableLoginForm: False
-  disableSignoutMenu: False
-  
+
   ## This is the configuration from the grafana pod itself.
   ## every toml section is a root key
   ## Ref:
   ##
   config:
     server:
-      root_url: '{{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.grafana.ingress.hostname }}'
+      root_url: |-
+        {{- if .Values.grafana.ingress.enabled }}
+        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.grafana.ingress.hostname }}
+        {{- else }}
+        http://localhost:3000
+        {{- end }}
     log:
       mode: "console"
       level: "warn"
     security:
-      diables_initial_admin_creation: False
+      disable_initial_admin_creation: False
       disable_gravatar: False
-    auth:
-      disable_login_form: '{{ .Values.grafana.disableLoginForm }}'
-      disable_signout_menu: '{{ .Values.grafana.disableSignoutMenu }}'
-    ## OIDC configuration
-    ##
+    # ## OIDC configuration
+    # ##
+    # auth:
+    #   disable_login_form: False
+    #   disable_signout_menu: False
     # auth.generic_oauth:
     #   enabled: True
     #   client_id: grafana
