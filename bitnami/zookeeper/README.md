@@ -101,8 +101,9 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 ### Statefulset parameters
 
 | Parameter                                         | Description                                                                                                                       | Default                                                 |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+|:--------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------|
 | `replicaCount`                                    | Number of ZooKeeper nodes                                                                                                         | `1`                                                     |
+| `minServerId`                                     | Minimal SERVER_ID value, nodes increment their IDs respectively                                                                   | `1`                            |
 | `updateStrategy`                                  | Update strategy for the statefulset                                                                                               | `RollingUpdate`                                         |
 | `rollingUpdatePartition`                          | Partition update strategy                                                                                                         | `nil`                                                   |
 | `podManagementPolicy`                             | Pod management policy                                                                                                             | `Parallel`                                              |

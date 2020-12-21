@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 14.15.2
+appVersion: 14.15.3
 dependencies:
   - condition: mongodb.enabled
     name: mongodb
@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 14.0.3
+version: 14.0.4
