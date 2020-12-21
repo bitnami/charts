@@ -90,6 +90,9 @@ spec:
       successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
       failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
     {{- end }}
+  {{- if .Values.grafana.resources }}
+  resources: {{- toYaml .Values.grafana.resources | nindent 12 }}
+  {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}

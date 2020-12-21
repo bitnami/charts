@@ -209,6 +209,21 @@ grafana:
     fsGroup: 1001
     supplementalGroups: []
 
+  ## Grafana containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 500m
+    #   memory: 1Gi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
   ## The amount of pods scheduled by the created deployment
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
