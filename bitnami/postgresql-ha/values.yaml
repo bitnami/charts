@@ -513,6 +513,10 @@ pgpool:
   ##
   podLabels: {}
 
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
+
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -1004,6 +1008,9 @@ service:
   ## Provide any additional annotations which may be required
   ##
   annotations: {}
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
 ## NetworkPolicy parameters
 ##

@@ -32,4 +32,4 @@ name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-version: 10.2.1
+version: 10.2.2

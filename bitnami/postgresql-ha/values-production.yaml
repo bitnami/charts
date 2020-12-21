@@ -513,6 +513,10 @@ pgpool:
   ##
   podLabels: {}
 
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
+
   ## Number of replicas to deploy
   ##
   replicaCount: 1
@@ -1001,6 +1005,9 @@ service:
   ## Provide any additional annotations which may be required
   ##
   annotations: {}
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
 ## NetworkPolicy parameters
 ##
