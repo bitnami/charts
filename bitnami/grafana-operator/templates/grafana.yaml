@@ -65,9 +65,9 @@ spec:
     {{- end }}
     {{- if .Values.grafana.containerSecurityContext.enabled }}
     containerSecurityContext:
-      runAsUser: {{ .Values.grafana.containerSecurityContext,runAsUser }}
-      runAsGroup: {{ .Values.grafana.containerSecurityContext,runAsGroup }}
-      fsGroup: {{ .Values.grafana.containerSecurityContext,fsGroup }}
+      runAsUser: {{ .Values.grafana.containerSecurityContext.runAsUser }}
+      runAsGroup: {{ .Values.grafana.containerSecurityContext.runAsGroup }}
+      fsGroup: {{ .Values.grafana.containerSecurityContext.fsGroup }}
       allowPrivilegeEscalation: {{ .Values.grafana.containerSecurityContext.allowPrivilegeEscalation }}
     {{- end }}
     {{- if .Values.grafana.tolerations }}
