@@ -542,6 +542,8 @@ envoy:
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
+    # namespace for the service monitor
+    namespace:
     # enable support for Prometheus Operator
     enabled: false
     # Job label for scrape target
