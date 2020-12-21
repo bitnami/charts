@@ -48,10 +48,10 @@ Also, we can't use a single if because lazy evaluation is not an option
 Create the name of the grafana-operator service account to use
 */}}
 {{- define "grafana-operator.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+{{- if .Values.operator.serviceAccount.create -}}
+    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.operator.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" .Values.operator.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
