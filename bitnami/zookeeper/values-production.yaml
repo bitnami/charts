@@ -89,7 +89,6 @@ volumePermissions:
 #   mountPath: /certs/truststore
 #   readOnly: true
 
-
 ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
@@ -195,7 +194,7 @@ logLevel: ERROR
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
-dataLogDir: ""
+dataLogDir: ''
 
 ## Default JVMFLAGS for the ZooKeeper process
 ##
@@ -229,14 +228,14 @@ service:
     client_port: 3181
 
     client_keystore_path: /tls_key_store/key_store_file
-    client_keystore_password: ""
+    client_keystore_password: ''
     client_truststore_path: /tls_trust_store/trust_store_file
-    client_truststore_password: ""
+    client_truststore_password: ''
 
     quorum_keystore_path: /tls_key_store/key_store_file
-    quorum_keystore_password: ""
+    quorum_keystore_password: ''
     quorum_truststore_path: /tls_trust_store/trust_store_file
-    quorum_truststore_password: ""
+    quorum_truststore_password: ''
   annotations: {}
   headless:
     annotations: {}
@@ -257,6 +256,18 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Add initContainers to the web pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers:
 
 ## Zookeeper data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
@@ -290,7 +301,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ""
+podAffinityPreset: ''
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -305,12 +316,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ""
+  type: ''
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ""
+  key: ''
   ## Node label values to match
   ## E.g.
   ## values:
@@ -345,7 +356,7 @@ podAnnotations: {}
 
 ## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-priorityClassName: ""
+priorityClassName: ''
 
 ## Scheduler name
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -417,9 +428,9 @@ metrics:
     ## Annotations for the Zookeeper Prometheus Exporter metrics service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.port }}'
+      prometheus.io/path: '/metrics'
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -433,12 +444,10 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##

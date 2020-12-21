@@ -257,6 +257,18 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 
+## Add initContainers to the web pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers:
+
 ## Zookeeper data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
 ## If set to "-", storageClassName: "", which disables dynamic provisioning

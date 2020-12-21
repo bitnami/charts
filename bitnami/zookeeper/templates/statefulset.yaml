@@ -65,8 +65,8 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
+      initContainers: {{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-      initContainers:
         - name: volume-permissions
           image: {{ template "zookeeper.volumePermissions.image" . }}
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
