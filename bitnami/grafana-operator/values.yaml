@@ -24,16 +24,16 @@ commonLabels: {}
 commonAnnotations: {}
 
 ## This all configuration for the Grafana Operator.
-## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
+## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
 ## Constants it is using for creating instances:
-## ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
+## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
 operator:
   ## Number of grafana-operator Pod replicas
   ##
   replicaCount: 1
 
   ## Set up update strategy for Grafana installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## Example:
   ## updateStrategy:
   ##  type: RollingUpdate
@@ -50,12 +50,12 @@ operator:
     tag: 3.6.0-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
@@ -101,7 +101,7 @@ operator:
     #   memory: 128Mi
 
   ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ''
@@ -130,12 +130,12 @@ operator:
     values: []
 
   ## Pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
   ## Additional pod labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
 
@@ -193,7 +193,7 @@ grafana:
     tag: 7.3.4-debian-10-r1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
@@ -210,12 +210,12 @@ grafana:
     supplementalGroups: []
 
   ## The amount of pods scheduled by the created deployment
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   replicaCount: 1
 
   ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
@@ -264,7 +264,7 @@ grafana:
   tolerations: []
 
   ## This loads extra configmaps and secrets into the created deployment.
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## 
   # envFrom: 
   ## Examples for a configmap or secret
@@ -275,7 +275,7 @@ grafana:
   #   name: grafana-secrets
 
   ## The grafana-operator client-configuration for this grafana instance
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-grafana-api-access
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-grafana-api-access
   ##
   client:
     timeout: 5
@@ -283,8 +283,8 @@ grafana:
 
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
+  ## Ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
   ##
   ingress:
     enabled: False
@@ -297,7 +297,7 @@ grafana:
 
     ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
@@ -313,7 +313,7 @@ grafana:
     tlsSecret: grafana.local-tls
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   ##
   persistence:
@@ -329,14 +329,14 @@ grafana:
     accessMode: ReadWriteOnce
     size: 10Gi
   ## Disable LoginForm and SignOutMenu for OIDC
-  ## ref: 
+  ## Ref: 
   ##
   disableLoginForm: False
   disableSignoutMenu: False
   
   ## This is the configuration from the grafana pod itself.
   ## every toml section is a root key
-  ## ref:
+  ## Ref:
   ##
   config:
     server:
@@ -367,7 +367,7 @@ grafana:
     #   allow_sign_up: True
 
   ## Configuring the read for jsonnetLibraries to pull in.
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
   jsonnetLibrarySelector:
     matchLabels:
@@ -375,14 +375,14 @@ grafana:
 
   ## This selects dashboards on the label.
   ## A cachall is not possible so you need to define at least one label selector here.
-  ## ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
   ##
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: '{{ .Release.Name }}'
   
   ## Grafana containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
     enabled: true
@@ -406,7 +406,7 @@ grafanaPluginInit:
     tag: 7.3.4-debian-10-r1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
