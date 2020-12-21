@@ -63,6 +63,13 @@ spec:
       {{- end }}
       {{- end }}
     {{- end }}
+    {{- if .Values.grafana.containerSecurityContext.enabled }}
+    containerSecurityContext:
+      runAsUser: {{ .Values.grafana.containerSecurityContext,runAsUser }}
+      runAsGroup: {{ .Values.grafana.containerSecurityContext,runAsGroup }}
+      fsGroup: {{ .Values.grafana.containerSecurityContext,fsGroup }}
+      allowPrivilegeEscalation: {{ .Values.grafana.containerSecurityContext.allowPrivilegeEscalation }}
+    {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 8 }}
     {{- end }}

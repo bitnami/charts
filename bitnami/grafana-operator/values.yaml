@@ -87,7 +87,7 @@ operator:
     runAsGroup: 1001
     runAsNonRoot: true
     fsGroup: 1001
-    supplementalGroups: []
+    # supplementalGroups: []
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -209,7 +209,17 @@ grafana:
     runAsGroup: 1001
     runAsNonRoot: true
     fsGroup: 1001
-    supplementalGroups: []
+    # supplementalGroups: []
+
+  ## Container securityContext
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    allowPrivilegeEscalation: false
 
   ## Grafana containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
