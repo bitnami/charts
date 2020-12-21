@@ -28,6 +28,7 @@ commonAnnotations: {}
 ## Constants it is using for creating instances:
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
 operator:
+  enabled: true
   ## Number of grafana-operator Pod replicas
   ##
   replicaCount: 1
@@ -187,6 +188,7 @@ operator:
 
 
 grafana:
+  enabled: true
   image:
     registry: docker.io
     repository: bitnami/grafana

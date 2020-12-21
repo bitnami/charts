@@ -44,7 +44,7 @@ $ helm uninstall my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-## Parameters
+## Global parameters
 
 The following tables lists the configurable parameters of the grafana-operator chart and their default values.
 
@@ -52,64 +52,137 @@ The following tables lists the configurable parameters of the grafana-operator c
 |-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                                | Global Docker image registry                                                                         | `nil`                                                   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods) |
-| `image.registry`                                      | Grafana Operator image registry                                                                      | `docker.io`                                             |
-| `image.repository`                                    | Grafana Operator image name                                                                          | `bitnami/grafana-operator`                              |
-| `image.tag`                                           | Grafana Operator image tag                                                                           | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                                    | Grafana Operator image pull policy                                                                   | `IfNotPresent`                                          |
-| `image.pullSecrets`                                   | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `replicaCount`                                        | Specify the amount of replicas running                                                               | `1`                                                     |
-| `updateStrategy`                                      | Specify the updateStrategy of the containers                                                         | `{"type": "RollingUpdate"}`                             |
-| `args.scanAllNamespaces`                              | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)     | `false`                                                 |
-| `args.scanNamespaces`                                 | Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)  | `[]` (does not add ClusterRole or Namespaces)           |
-| `podAffinityPreset`                                   | Set podAffinity preset from Helm Chart                                                               | `nil`                                                   |
-| `podAntiAffinityPreset`                               | Set podAntiAffinity preset from Helm Chart                                                           | `soft`                                                  |
-| `nodeAffinityPreset.type`                             | Set nodeAffinity preset type                                                                         | `nil`                                                   |
-| `nodeAffinityPreset.key`                              | Set nodeAffinity preset key                                                                          | `nil`                                                   |
-| `nodeAffinityPreset.values`                           | Set nodeAffinity preset values                                                                       | `nil`                                                   |
+
+## Common parameters
+
+| Parameter                                             | Description                                                                                          | Default                                                 |
+|-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `nameOverride`                                        | String to partially override metallb.fullname template with a string (will prepend the release name) | `nil`                                                   |
+| `fullnameOverride`                                    | String to fully override metallb.fullname template with a string                                     | `nil`                                                   |
+| `commonAnnotations`                                   | Common Annotations which are applied to every ressource deployed                                     | `{}`                                                    |
+| `commonLabels`                                        | Common Labels which are applied to every ressource deployed                                          | `{}`                                                    |
+
+## Grafana-Operator parameters
+
+| Parameter                                             | Description                                                                                          | Default                                                 |
+|-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `operator.enabled`                                    | Enable the deployment of the grafana-operator                                                        | `true`                                                  |
+| `operator.image.registry`                             | Grafana Operator image registry                                                                      | `docker.io`                                             |
+| `operator.image.repository`                           | Grafana Operator image name                                                                          | `bitnami/grafana-operator`                              |
+| `operator.image.tag`                                  | Grafana Operator image tag                                                                           | `{TAG_NAME}`                                            |
+| `operator.image.pullPolicy`                           | Grafana Operator image pull policy                                                                   | `IfNotPresent`                                          |
+| `operator.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `operator.replicaCount`                               | Specify the amount of replicas running                                                               | `1`                                                     |
+| `operator.updateStrategy`                             | Specify the updateStrategy of the containers                                                         | `{"type": "RollingUpdate"}`                             |
+| `operator.args.scanAllNamespaces`                     | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)     | `false`                                                 |
+| `operator.args.scanNamespaces`                        | Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)  | `[]` (does not add ClusterRole or Namespaces)           |
+| `operator.podAffinityPreset`                          | Set podAffinity preset from Helm Chart                                                               | `nil`                                                   |
+| `operator.podAntiAffinityPreset`                      | Set podAntiAffinity preset from Helm Chart                                                           | `soft`                                                  |
+| `operator.nodeAffinityPreset.type`                    | Set nodeAffinity preset type                                                                         | `nil`                                                   |
+| `operator.nodeAffinityPreset.key`                     | Set nodeAffinity preset key                                                                          | `nil`                                                   |
+| `operator.nodeAffinityPreset.values`                  | Set nodeAffinity preset values                                                                       | `nil`                                                   |
+| `operator.resources.limits`                           | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
+| `operator.resources.requests`                         | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
+| `operator.nodeSelector`                               | Node labels for controller pod assignment                                                            | `{}`                                                    |
+| `operator.tolerations`                                | Tolerations for controller pod assignment                                                            | `[]`                                                    |
+| `operator.affinity`                                   | Affinity for controller pod assignment                                                               | `{}`                                                    |
+| `operator.podAnnotations`                             | Pod annotations                                                                                      | `{}`                                                    |
+| `operator.podLabels`                                  | Pod labels                                                                                           | `{}`                                                    |
+| `operator.serviceAccount.create`                      | create a serviceAccount for the deployment                                                           | `true`                                                  |
+| `operator.serviceAccount.name`                        | use the serviceAccount with the specified name                                                       | ``                                                      |
+| `operator.podSecurityContext.enabled`                 | Enable pods security context                                                                         | `true`                                                  |
+| `operator.podSecurityContext.runAsNonRoot`            | Grafana-Operator must runs as nonRoot.                                                               | `true`                                                  |
+| `operator.podSecurityContext.runAsUser`               | User ID for the pods.                                                                                | `1001`                                                  |
+| `operator.podSecurityContext.runAsGroup`              | User ID for the pods.                                                                                | `1001`                                                  |
+| `operator.podSecurityContext.fsGroup`                 | Group ID for the pods.                                                                               | `1001`                                                  |
+| `operator.podSecurityContext.supplementalGroups`      | Drop capabilities for the securityContext                                                            | `[]`                                                    |
+| `operator.livenessProbe.enabled`                      | Enable/disable the Liveness probe                                                                    | `true`                                                  |
+| `operator.livenessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated                                                             | `3`                                                     |
+| `operator.livenessProbe.periodSeconds`                | How often to perform the probe                                                                       | `10`                                                    |
+| `operator.livenessProbe.timeoutSeconds`               | When the probe times out                                                                             | `10`                                                    |
+| `operator.livenessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
+| `operator.livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
+| `operator.readinessProbe.enabled`                     | Enable/disable the Liveness probe                                                                    | `true`                                                  |
+| `operator.readinessProbe.initialDelaySeconds`         | Delay before liveness probe is initiated                                                             | `3`                                                     |
+| `operator.readinessProbe.periodSeconds`               | How often to perform the probe                                                                       | `10`                                                    |
+| `operator.readinessProbe.timeoutSeconds`              | When the probe times out                                                                             | `10`                                                    |
+| `operator.readinessProbe.successThreshold`            | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
+| `operator.readinessProbe.failureThreshold`            | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
+| `operator.rbac.create`                                | Specify if an rbac authorization should be created with the necessarry Rolebindings.                 | `true`                                                  |
+| `operator.prometheus.serviceMonitor.enabled`          | Specify if a servicemonitor will be deployed for prometheus-operator.                                | `true`                                                  |
+| `operator.prometheus.serviceMonitor.jobLabel`         | Specify the jobLabel to use for the prometheus-operator                                              | `app.kubernetes.io/name`                                |
+| `operator.prometheus.serviceMonitor.interval`         | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
+| `operator.prometheus.serviceMonitor.metricRelabelings`| Specify additional relabeling of metrics.                                                            | `[]`                                                    |
+| `operator.prometheus.serviceMonitor.relabelings`      | Specify general relabeling.                                                                          | `[]`                                                    |
+
+## Grafana parameters
+
+| Parameter                                             | Description                                                                                          | Default                                                 |
+|-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `grafana.enabled`                                     | Enabled the deployment of the Grafana CRD object into the cluster                                    | `true`                                                  |
 | `grafana.image.registry`                              | Grafana image registry                                                                               | `docker.io`                                             |
 | `grafana.image.repository`                            | Grafana image name                                                                                   | `bitnami/grafana`                                       |
 | `grafana.image.tag`                                   | Grafana image tag                                                                                    | `{TAG_NAME}`                                            |
+| `grafana.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `grafana.envFrom`                                     | Extra environment variable to pass to the running container.                                         | `[]`                                                    |
+| `grafana.client.timeout`                              | The timeout in seconds for the Grafana Rest API on that instance                                     | `5`                                                     |
+| `grafana.client.preferService`                        | If the API should be used via Ingress or via the internal service                                    | `true`                                                  |
+| `grafana.replicaCount`                                | Specify the amount of replicas running                                                               | `1`                                                     |
+| `grafana.ingress.enabled`                             | If an ingress or OpenShift Route should be created                                                   | `false`                                                 |
+| `grafana.ingress.hostname`                            | The hostname under which the grafana instance should be reachable                                    | `grafana.local`                                         |
+| `grafana.ingress.path`                                | The path for the ingress instance to forward to the grafana app                                      | `/`                                                     |
+| `grafana.ingress.labels`                              | Additional Labels for the ingress resource                                                           | `nil`                                                   |
+| `grafana.ingress.annotations`                         | Additional Annotations for the ingress resource                                                      | `nil`                                                   |
+| `grafana.ingress.tls`                                 | This enables tls support for the ingress resource                                                    | `false`                                                 |
+| `grafana.ingress.tlsSecret`                           | The name for the secret to use for the tls termination                                               | `grafana.local-tls`                                     |
+| `grafana.persistence.enabled`                         | Enable persistent storage for the grafana deployment                                                 | `false`                                                 |
+| `grafana.persistence.storageClass`                    | Define the storageClass for the persistent storage if not defined default is used                    | `nil`                                                   |
+| `grafana.persistence.accessMode`                      | Define the accessMode for the persistent storage                                                     | `ReadWriteOnce`                                         |
+| `grafana.persistence.size`                            | Define the size of the PersistentVolumeClaim to request for                                          | `10Gi`                                                  |
+| `grafana.config`                                      | grafana.ini configuration for the instance for this to configure please look at upstream docs        | `{}`                                                    |
+| `grafana.jsonnetLibrarySelector`                      | The LabelSelector to grab for jsonnet lib resources.                                                 | `{}`                                                    |
+| `grafana.dashboardLabelSelectors`                     | The LabelSelector to grab for dashboard resources.                                                   | `[]`                                                    |
+| `grafana.podAffinityPreset`                           | Set podAffinity preset from Helm Chart                                                               | `nil`                                                   |
+| `grafana.podAntiAffinityPreset`                       | Set podAntiAffinity preset from Helm Chart                                                           | `soft`                                                  |
+| `grafana.nodeAffinityPreset.type`                     | Set nodeAffinity preset type                                                                         | `nil`                                                   |
+| `grafana.nodeAffinityPreset.key`                      | Set nodeAffinity preset key                                                                          | `nil`                                                   |
+| `grafana.nodeAffinityPreset.values`                   | Set nodeAffinity preset values                                                                       | `nil`                                                   |
+| `grafana.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
+| `grafana.resources.requests`                          | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
+| `grafana.nodeSelector`                                | Node labels for controller pod assignment                                                            | `{}`                                                    |
+| `grafana.tolerations`                                 | Tolerations for controller pod assignment                                                            | `[]`                                                    |
+| `grafana.affinity`                                    | Affinity for controller pod assignment                                                               | `{}`                                                    |
+| `grafana.podAnnotations`                              | Pod annotations                                                                                      | `{}`                                                    |
+| `grafana.podLabels`                                   | Pod labels                                                                                           | `{}`                                                    |
+| `grafana.podSecurityContext.enabled`                  | Enable pods  security context                                                                        | `true`                                                  |
+| `grafana.podSecurityContext.runAsNonRoot`             | Grafana-Operator must runs as nonRoot.                                                               | `true`                                                  |
+| `grafana.podSecurityContext.runAsUser`                | User ID for the pods.                                                                                | `1001`                                                  |
+| `grafana.podSecurityContext.runAsGroup`               | User ID for the pods.                                                                                | `1001`                                                  |
+| `grafana.podSecurityContext.fsGroup`                  | Group ID for the pods.                                                                               | `1001`                                                  |
+| `grafana.podSecurityContext.supplementalGroups`       | Drop capabilities for the securityContext                                                            | `[]`                                                    |
+| `grafana.speaker.extraEnvVars`                        | Extra environment variable to pass to the running container.                                         | `[]`                                                    |
+| `grafana.livenessProbe.enabled`                       | Enable/disable the Liveness probe                                                                    | `true`                                                  |
+| `grafana.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated                                                             | `3`                                                     |
+| `grafana.livenessProbe.periodSeconds`                 | How often to perform the probe                                                                       | `10`                                                    |
+| `grafana.livenessProbe.timeoutSeconds`                | When the probe times out                                                                             | `10`                                                    |
+| `grafana.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
+| `grafana.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
+| `grafana.readinessProbe.enabled`                      | Enable/disable the Liveness probe                                                                    | `true`                                                  |
+| `grafana.readinessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated                                                             | `3`                                                     |
+| `grafana.readinessProbe.periodSeconds`                | How often to perform the probe                                                                       | `10`                                                    |
+| `grafana.readinessProbe.timeoutSeconds`               | When the probe times out                                                                             | `10`                                                    |
+| `grafana.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
+| `grafana.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
+
+
+## PluginInit parameters
+
+| Parameter                                             | Description                                                                                          | Default                                                 |
+|-------------------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `grafanaPluginInit.image.registry`                    | Grafana Plugin Init image registry                                                                   | `quay.io`                                               |
 | `grafanaPluginInit.image.repository`                  | Grafana Plugin Init image name                                                                       | `integreatly/grafana_plugins_init`                      |
 | `grafanaPluginInit.image.tag`                         | Grafana Plugin Init image tag                                                                        | `{TAG_NAME}`                                            |
-| `resources.limits`                                    | Specify resource limits which the container is not allowed to succeed.                               | `{}` (does not add resource limits to deployed pods)    |
-| `resources.requests`                                  | Specify resource requests which the container needs to spawn.                                        | `{}` (does not add resource limits to deployed pods)    |
-| `nodeSelector`                                        | Node labels for controller pod assignment                                                            | `{}`                                                    |
-| `tolerations`                                         | Tolerations for controller pod assignment                                                            | `[]`                                                    |
-| `affinity`                                            | Affinity for controller pod assignment                                                               | `{}`                                                    |
-| `podAnnotations`                                      | Pod annotations                                                                                      | `{}`                                                    |
-| `podLabels`                                           | Pod labels                                                                                           | `{}`                                                    |
-| `commonAnnotations`                                   | Common Annotations which are applied to every ressource deployed                                     | `{}`                                                    |
-| `commonLabels`                                        | Common Labels which are applied to every ressource deployed                                          | `{}`                                                    |
-| `serviceAccount.create`                               | create a serviceAccount for the deployment                                                           | `true`                                                  |
-| `serviceAccount.name`                                 | use the serviceAccount with the specified name                                                       | ``                                                      |
-| `podSecurityContext.enabled`                          | Enable pods  security context                                                                        | `true`                                                  |
-| `podSecurityContext.runAsNonRoot`                     | Grafana-Operator must runs as nonRoot.                                                               | `true`                                                  |
-| `podSecurityContext.runAsUser`                        | User ID for the pods.                                                                                | `1001`                                                  |
-| `podSecurityContext.runAsGroup`                       | User ID for the pods.                                                                                | `1001`                                                  |
-| `podSecurityContext.fsGroup`                          | Group ID for the pods.                                                                               | `1001`                                                  |
-| `podSecurityContext.supplementalGroups`               | Drop capabilities for the securityContext                                                            | `[]`                                                    |
-| `speaker.extraEnvVars`                                | Extra environment variable to pass to the running container.                                         | `[]`                                                    |
-| `nameOverride`                                        | String to partially override common.names.name template with a string                                | `nil`                                                   |
-| `fullnameOverride`                                    | String to fully override ommon.names.fullname template with a string                                     | `nil`                                                   |
-| `livenessProbe.enabled`                               | Enable/disable the Liveness probe                                                                    | `true`                                                  |
-| `livenessProbe.initialDelaySeconds`                   | Delay before liveness probe is initiated                                                             | `3`                                                     |
-| `livenessProbe.periodSeconds`                         | How often to perform the probe                                                                       | `10`                                                    |
-| `livenessProbe.timeoutSeconds`                        | When the probe times out                                                                             | `10`                                                    |
-| `livenessProbe.successThreshold`                      | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
-| `livenessProbe.failureThreshold`                      | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
-| `readinessProbe.enabled`                              | Enable/disable the Liveness probe                                                                    | `true`                                                  |
-| `readinessProbe.initialDelaySeconds`                  | Delay before liveness probe is initiated                                                             | `3`                                                     |
-| `readinessProbe.periodSeconds`                        | How often to perform the probe                                                                       | `10`                                                    |
-| `readinessProbe.timeoutSeconds`                       | When the probe times out                                                                             | `10`                                                    |
-| `readinessProbe.successThreshold`                     | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                                                     |
-| `readinessProbe.failureThreshold`                     | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `1`                                                     |
-| `rbac.create`                                         | Specify if an rbac authorization should be created with the necessarry Rolebindings.                 | `true`                                                  |
-| `prometheus.serviceMonitor.enabled`                   | Specify if a servicemonitor will be deployed for prometheus-operator.                                | `true`                                                  |
-| `prometheus.serviceMonitor.jobLabel`                  | Specify the jobLabel to use for the prometheus-operator                                              | `app.kubernetes.io/name`                                |
-| `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
-| `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
-| `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
+| `grafanaPluginInit.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                     | `[]` (does not add image pull secrets to deployed pods) |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

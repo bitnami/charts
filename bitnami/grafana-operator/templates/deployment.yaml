@@ -1,3 +1,4 @@
+{{- if .Values.operator.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -118,3 +119,4 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: {{ include "common.names.fullname" . }}
+{{- end }}
