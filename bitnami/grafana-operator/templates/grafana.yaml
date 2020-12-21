@@ -31,7 +31,7 @@ spec:
     {{- end }}
   {{- end }}
   service:
-    labels: {{- include "common.labels.standard" . | nindent 4 }}
+    labels: {{- include "common.labels.standard" . | nindent 6 }}
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- end }}
@@ -39,7 +39,7 @@ spec:
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
   deployment:
-    labels: {{- include "common.labels.standard" . | nindent 4 }}
+    labels: {{- include "common.labels.standard" . | nindent 6 }}
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- end }}
@@ -47,7 +47,7 @@ spec:
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
     {{- if .Values.grafana.envFrom }}
-    envFrom: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.envFrom "context" $ ) | nindent 4 }}
+    envFrom: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.envFrom "context" $ ) | nindent 6 }}
     {{- end }}
     replicas: {{ .Values.grafana.replicaCount }}
     {{- if .Values.grafana.podSecurityContext.enabled }}
