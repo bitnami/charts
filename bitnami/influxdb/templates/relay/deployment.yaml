@@ -51,7 +51,7 @@ spec:
             runAsUser: {{ .Values.relay.securityContext.runAsUser }}
           {{- end }}
           command:
-            - /influxdb_relay
+            - /influxdb-relay
           args:
             - -config
             - /conf/relay.toml
