@@ -82,7 +82,7 @@ server:
     ## Endpoint to the metricsDashboard instance
     ##
     metricsDashboard:
-       
+
   ## ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
@@ -871,6 +871,7 @@ externalDatabase:
   # scheme:
   password: ''
   # existingPasswordSecret: name-of-existing-secret
+  # existingPasswordKey: key in existingPasswordSecret, defaults to "datasource-password"
   ## Data Flow user and database
   ##
   dataflow:

@@ -83,7 +83,7 @@ data:
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
         {{ if .Values.externalDatabase.existingPasswordSecret }}
-        password: ${datasource-password}
+        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
         {{- else -}}
         password: ${mariadb-password}
         {{- end }}
