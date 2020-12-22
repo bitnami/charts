@@ -1,7 +1,7 @@
 apiVersion: v2
 name: metallb
 description: The Metal LB for Kubernetes
-version: 2.0.0
+version: 2.0.1
 appVersion: 0.9.5
 home: https://github.com/bitnami/charts/tree/master/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
