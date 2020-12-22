@@ -267,7 +267,7 @@ securityContext:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers:
+initContainers: []
 
 ## Zookeeper data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
