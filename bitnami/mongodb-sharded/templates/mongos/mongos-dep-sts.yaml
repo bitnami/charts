@@ -60,7 +60,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" . | nindent 6 }}
-      {{- if or (ge (len $.Values.mongos.initContainers) 1) (ge (len $.Values.common.initContainers) 1) }}
+      {{- if or $.Values.mongos.initContainers $.Values.common.initContainers }}
       initContainers:
         {{- with $.Values.mongos.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
