@@ -1,8 +1,8 @@
-annotations:
-  category: Infrastructure
 apiVersion: v2
-appVersion: 0.9.5
+name: metallb
 description: The Metal LB for Kubernetes
+version: 2.0.0
+appVersion: 0.9.5
 home: https://github.com/bitnami/charts/tree/master/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
 keywords:
@@ -13,14 +13,19 @@ keywords:
   - arp
   - vrrp
   - vip
-maintainers:
-  - email: cellebyte@gmail.com
-    name: cellebyte
-  - email: containers@bitnami.com
-    name: Bitnami
-name: metallb
 sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 1.1.0
+maintainers:
+  - name: cellebyte
+    email: cellebyte@gmail.com
+  - name: Bitnami
+    email: containers@bitnami.com
+annotations:
+  category: Infrastructure
+
+dependencies:
+  - name: common
+    version: 1.x.x
+    repository: https://charts.bitnami.com/bitnami

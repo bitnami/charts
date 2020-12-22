@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.1-debian-10-r24
+  tag: 2.4.1-debian-10-r50
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
@@ -421,7 +421,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r217
+    tag: 0.8.0-debian-10-r244
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -487,7 +487,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.17-debian-10-r7
+    tag: 10.4.17-debian-10-r35
 
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
