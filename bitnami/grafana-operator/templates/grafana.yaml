@@ -50,6 +50,27 @@ spec:
     envFrom: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.envFrom "context" $ ) | nindent 6 }}
     {{- end }}
     replicas: {{ .Values.grafana.replicaCount }}
+    {{- if and .Values.grafana.enabled .Values.volumePermissions.enabled }}
+    initContainers:
+      - name: volume-permissions
+        image: {{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+        imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+        command:
+          - sh
+          - -c
+          - |
+            mkdir -p "/var/lib/grafana/plugins"
+            chown -R "{{ .Values.grafana.containerSecurityContext.runAsUser }}:{{ .Values.grafana.podSecurityContext.fsGroup }}" "/var/lib/grafana/plugins"
+        securityContext:
+          # this needs to run as root to correct the fs context for the containers.
+          runAsUser: 0
+        {{- if .Values.volumePermissions.resources }}
+        resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+        {{- end }}
+        volumeMounts:
+          - name: grafana-plugins
+            mountPath: /var/lib/grafana/plugins
+    {{- end }}
     {{- if .Values.grafana.podSecurityContext.enabled }}
     securityContext:
       runAsUser: {{ .Values.grafana.podSecurityContext.runAsUser }}
