@@ -51,6 +51,9 @@ spec:
       securityContext:
         fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
+      {{- end }}
       {{- if .Values.cloneStaticSiteFromGit.enabled }}
       initContainers:
         - name: git-clone-repository

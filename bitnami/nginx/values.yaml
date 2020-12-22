@@ -694,3 +694,20 @@ pdb:
   ## Max number of pods that can be unavailable after the eviction
   ##
   # maxUnavailable: 1
+
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  enabled: true
+  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  # name:
+
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+psp:
+  create: true
+
+## Creates role for ServiceAccount
+## Required for PSP
+rbac:
+  create: true

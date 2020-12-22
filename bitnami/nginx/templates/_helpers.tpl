@@ -87,6 +87,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nginx.validateValues.cloneStaticSiteFromGit" .) -}}
 {{- $messages := append $messages (include "nginx.validateValues.extraVolumes" .) -}}
+{{- $messages := append $messages (include "nginx.validateValues.psp" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -110,5 +111,27 @@ nginx: cloneStaticSiteFromGit
 nginx: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
     the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of NGINX - If PSP is enabled RBAC should be enabled too
+*/}}
+{{- define "nginx.validateValues.psp" -}}
+{{- if and .Values.psp.create (not .Values.rbac.create) }}
+nginx: psp.create, rbac.create
+    RBAC should be enabled if PSP is enabled in order for PSP to work.
+    More info at https://kubernetes.io/docs/concepts/policy/pod-security-policy/#authorizing-policies
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for podsecuritypolicy.
+*/}}
+{{- define "podsecuritypolicy.apiVersion" -}}
+{{- if semverCompare "<1.10-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1beta1" -}}
 {{- end -}}
 {{- end -}}
