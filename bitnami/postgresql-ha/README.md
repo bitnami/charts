@@ -362,9 +362,9 @@ When working with huge databeses, `/dev/shm` can run out of space. A way to fix 
 postgresql:
   extraVolumes:
     - name: dshm
-      emptyDir: {}
-      medium: Memory
-      sizeLimit: 512Mi
+      emptyDir:
+        medium: Memory
+        sizeLimit: 512Mi
   extraVolumeMounts:
     - name: dshm
       mountPath: /dev/shm
