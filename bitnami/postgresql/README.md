@@ -589,13 +589,13 @@ Now the upgrade works:
 $ helm upgrade postgresql bitnami/postgresql --set postgresqlPassword=$POSTGRESQL_PASSWORD --set persistence.existingClaim=$POSTGRESQL_PVC
 ```
 
-You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
+You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
 
 ```console
 $ kubectl delete pod postgresql-postgresql-0
 ```
 
-Finally, you should see the lines below in MariaDB container logs:
+Finally, you should see the lines below in PostgreSQL container logs:
 
 ```console
 $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
