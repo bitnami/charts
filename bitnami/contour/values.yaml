@@ -146,6 +146,10 @@ contour:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Extra arguments passed to Contour container
+  ##
+  extraArgs: []
+
   ## Contour container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## ref: https://projectcontour.io/guides/resource-limits/
