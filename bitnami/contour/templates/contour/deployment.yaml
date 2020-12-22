@@ -68,6 +68,9 @@ spec:
             {{- if .Values.ingressClass }}
             - --ingress-class-name={{ .Values.ingressClass }}
             {{- end }}
+            {{- if .Values.contour.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: contour

@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 4.4.2
+appVersion: 4.4.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: mongodb
 sources:
   - https://github.com/bitnami/bitnami-docker-mongodb
   - https://mongodb.org
-version: 10.3.1
+version: 10.3.2
