@@ -276,7 +276,7 @@ data:
 {{- else }}
   start-master.sh: |
     #!/bin/bash
-    {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
+    {{- if and .Values.securityContext.runAsUser (eq (.Values.securityContext.runAsUser | int) 0) }}
     useradd redis
     chown -R redis {{ .Values.master.persistence.path }}
     {{- end }}
@@ -327,7 +327,7 @@ data:
   {{- if .Values.cluster.enabled }}
   start-slave.sh: |
     #!/bin/bash
-    {{- if (eq (.Values.securityContext.runAsUser | int) 0) }}
+    {{- if and .Values.securityContext.runAsUser (eq (.Values.securityContext.runAsUser | int) 0) }}
     useradd redis
     chown -R redis {{ .Values.slave.persistence.path }}
     {{- end }}
