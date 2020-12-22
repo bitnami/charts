@@ -1,13 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "mongodb-sharded.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
-
-{{/*
 Returns a ServiceAccount name for specified path or falls back to `common.serviceAccount.name`
 if `common.serviceAccount.create` is set to true. Falls back to Chart's fullname otherwise.
 Usage:

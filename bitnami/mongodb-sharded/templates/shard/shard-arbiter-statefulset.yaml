@@ -69,7 +69,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - name: {{ include "mongodb-sharded.name" $ }}-arbiter
+        - name: {{ include "common.names.fullname" $ }}-arbiter
           image: {{ include "mongodb-sharded.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.securityContext.enabled }}
