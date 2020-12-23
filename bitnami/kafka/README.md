@@ -551,7 +551,7 @@ Following the aforementioned steps will also allow to connect the brokers from t
 
 #### Name resolution with External-DNS
 
-You can use the following values to generate External-DNS annotations which automatically creating DNS records for each ReplicaSet pod:
+You can use the following values to generate External-DNS annotations which automatically creates DNS records for each ReplicaSet pod:
 
 ```yaml
 externalAccess:
