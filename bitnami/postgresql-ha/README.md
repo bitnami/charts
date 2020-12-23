@@ -282,6 +282,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `service.port`                                  | PostgreSQL port                                                                                                                                                                                 | `5432`                                                       |
 | `service.nodePort`                              | Kubernetes service nodePort                                                                                                                                                                     | `nil`                                                        |
 | `service.annotations`                           | Annotations for PostgreSQL service                                                                                                                                                              | `{}`                                                         |
+| `service.serviceLabels`                         | Labels for PostgreSQL service                                                                                                                                                                   | `{}`                                                         |
 | `service.loadBalancerIP`                        | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                | `nil`                                                        |
 | `service.loadBalancerSourceRanges`              | Address that are allowed when service is LoadBalancer                                                                                                                                           | `[]`                                                         |
 | `service.clusterIP`                             | Static clusterIP or None for headless services                                                                                                                                                  | `nil`                                                        |
@@ -361,9 +362,9 @@ When working with huge databeses, `/dev/shm` can run out of space. A way to fix 
 postgresql:
   extraVolumes:
     - name: dshm
-      emptyDir: {}
-      medium: Memory
-      sizeLimit: 512Mi
+      emptyDir:
+        medium: Memory
+        sizeLimit: 512Mi
   extraVolumeMounts:
     - name: dshm
       mountPath: /dev/shm

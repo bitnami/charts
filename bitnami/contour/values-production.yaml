@@ -148,6 +148,10 @@ contour:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Extra arguments passed to Contour container
+  ##
+  extraArgs: []
+
   ## Contour container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## ref: https://projectcontour.io/guides/resource-limits/
@@ -542,6 +546,8 @@ envoy:
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
+    # namespace for the service monitor
+    namespace:
     # enable support for Prometheus Operator
     enabled: false
     # Job label for scrape target

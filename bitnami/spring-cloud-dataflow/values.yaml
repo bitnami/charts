@@ -872,6 +872,7 @@ externalDatabase:
   # scheme:
   password: ''
   # existingPasswordSecret: name-of-existing-secret
+  # existingPasswordKey: key in existingPasswordSecret, defaults to "datasource-password"
   ## Data Flow user and database
   ##
   dataflow:
