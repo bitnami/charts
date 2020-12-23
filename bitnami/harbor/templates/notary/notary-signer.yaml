@@ -84,7 +84,10 @@ spec:
             - name: MIGRATIONS_PATH
               value: migrations/signer/postgresql
             - name: DB_URL
-              value: {{ include "harbor.database.notarySigner" . | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.notary-server" . }}-envvars
+                  key: signer_db_url
             - name: NOTARY_SIGNER_DEFAULTALIAS
               value: defaultalias
             {{- if .Values.notary.signer.extraEnvVars }}

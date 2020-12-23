@@ -202,7 +202,10 @@ spec:
             - name: SCANNER_STORE_REDIS_URL
               value: {{ include "harbor.redisForClairAdapter" . }}
             - name: SCANNER_CLAIR_DATABASE_URL
-              value: {{ include "harbor.database.clair" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "harbor.clair" . }}
+                  key: database
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"

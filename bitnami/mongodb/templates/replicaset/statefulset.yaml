@@ -388,13 +388,9 @@ spec:
               containerPort: 9216
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
-                  --test
+            httpGet:
+              path: /
+              port: metrics
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
@@ -403,13 +399,9 @@ spec:
           {{- end }}
           {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
-                  --test
+            httpGet:
+              path: /
+              port: metrics
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}

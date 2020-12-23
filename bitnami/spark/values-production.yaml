@@ -49,6 +49,14 @@ master:
   webPort: 8080
   clusterPort: 7077
 
+  ## Add ports for exposing jobs running inside the worker nodes
+  ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
+  ##
+  extraPorts: []
+  # - name: myapp
+  #   containerPort: 8000
+  #   protocol: TCP
+
   ## Set the master daemon memory limit.
   ##
   # daemonMemoryLimit:
@@ -87,7 +95,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ""
+  podAffinityPreset: ''
 
   ## Spark master pod anti-affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -102,12 +110,12 @@ master:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
-    type: ""
+    type: ''
     ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ""
+    key: ''
     ## Node label values to match
     ## E.g.
     ## values:
@@ -234,7 +242,7 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ""
+  podAffinityPreset: ''
 
   ## Spark worker pod anti-affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -249,12 +257,12 @@ worker:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
-    type: ""
+    type: ''
     ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ""
+    key: ''
     ## Node label values to match
     ## E.g.
     ## values:
@@ -375,8 +383,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    cluster: ""
-    web: ""
+    cluster: ''
+    web: ''
 
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -423,15 +431,15 @@ metrics:
   ## Annotations for the Prometheus metrics on master nodes
   ##
   masterAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics/"
-    prometheus.io/port: "{{ .Values.master.webPort }}"
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: '/metrics/'
+    prometheus.io/port: '{{ .Values.master.webPort }}'
   ## Annotations for the Prometheus metrics on worker nodes
   ##
   workerAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics/"
-    prometheus.io/port: "{{ .Values.worker.webPort }}"
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: '/metrics/'
+    prometheus.io/port: '{{ .Values.worker.webPort }}'
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
@@ -441,6 +449,12 @@ metrics:
     ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
     ##
     enabled: false
+    ## Add metrics endpoints for monitoring the jobs running in the worker nodes
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    ##
+    extraMetricsEndpoints: []
+    # - port: myapp
+    #   path: /metrics/
     ## Specify the namespace in which the podMonitor resource will be created
     ##
     # namespace: ""

@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                       | `default`                                               |
 | `server.configuration.trustK8sCerts`         | Trust K8s certificates when querying the Kubernetes API                                                | `false`                                                 |
 | `server.configuration.containerRegistries`   | Container registries configuration                                                                     | `{}` (check `values.yaml` for more information)         |
+| `server.configuration.metricsDashboard`      | Endpoint to the metricsDashboard instance                                                              | `nil`                                                   |
 | `server.existingConfigmap`                   | Name of existing ConfigMap with Dataflow server configuration                                          | `nil`                                                   |
 | `server.extraEnvVars`                        | Extra environment variables to be set on Dataflow server container                                     | `{}`                                                    |
 | `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                   | `nil`                                                   |
@@ -264,6 +265,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalDatabase.port`                      | External database port number                                                                          | `3306`                                                  |
 | `externalDatabase.password`                  | Password for the above username                                                                        | `""`                                                    |
 | `externalDatabase.existingPasswordSecret`    | Existing secret with database password                                                                 | `""`                                                    |
+| `externalDatabase.existingPasswordKey`       | Key of the existing secret with database password                                                      | `datasource-password`                                   |
 | `externalDatabase.dataflow.url`              | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.    | `""`                                                    |
 | `externalDatabase.dataflow.username`         | Existing username in the external db to be used by Dataflow server                                     | `dataflow`                                              |
 | `externalDatabase.dataflow.database`         | Name of the existing database to be used by Dataflow server                                            | `dataflow`                                              |

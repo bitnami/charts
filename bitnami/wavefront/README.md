@@ -58,7 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Wavefront chart and their default values.
 
-#### Global parameters
+### Global parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -66,7 +66,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                                                        | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                      | Global storage class for dynamic provisioning                                                                          | `nil`                                                   |
 
-#### Common parameters
+### Common parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -80,10 +80,10 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `rbac.create`                              | Create RBAC resources                                                                                                  | `true`                                                  |
 | `serviceAccount.create`                    | Create Wavefront service account                                                                                       | `true`                                                  |
 | `serviceAccount.name`                      | Name of Wavefront service account                                                                                      | `nil`                                                   |
-| `podSecurityPolicy.create`                 | Create a PodSecurityPolicy resources                                                                                   | `false`                                                   |
+| `podSecurityPolicy.create`                 | Create a PodSecurityPolicy resources                                                                                   | `false`                                                 |
 | `projectPacific.enabled`                   | Enable and create role binding for Tanzu kubernetes cluster                                                            | `false`                                                 |
 
-#### Collector parameters
+### Collector parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -98,7 +98,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.logLevel`                       | Min logging level (info, debug, trace)                                                                                 | `info`                                                  |
 | `collector.interval`                       | Default metrics collection interval                                                                                    | `60s`                                                   |
 | `collector.flushInterval`                  | How often to force a metrics flush                                                                                     | `10s`                                                   |
-| `collector.sinkDelay`                      | Timeout for exporting data                                                                                              | `10s`                                                   |
+| `collector.sinkDelay`                      | Timeout for exporting data                                                                                             | `10s`                                                   |
 | `collector.useReadOnlyPort`                | Use un-authenticated port for kubelet                                                                                  | `false`                                                 |
 | `collector.useProxy`                       | Use a Wavefront Proxy to send metrics through                                                                          | `true`                                                  |
 | `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false                           | `nil`                                                   |
@@ -117,9 +117,14 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.resources.requests`             | The requested resources for the collector container                                                                    | `{}`                                                    |
 | `collector.containerSecurityContext`       | Container security podSecurityContext                                                                                  | `{ runAsUser: 1001, runAsNonRoot: true }`               |
 | `collector.podSecurityContext`             | Pod security                                                                                                           | `{ fsGroup: 1001 }`                                     |
-| `collector.affinity`                       | Affinity for pod assignment                                                                                            | `{}` (evaluated as a template)                          |
-| `collector.nodeSelector`                   | Node labels for pod assignment                                                                                         | `{}` (evaluated as a template)                          |
-| `collector.tolerations`                    | Tolerations for pod assignment                                                                                         | `[]` (evaluated as a template)                          |
+| `collector.podAffinityPreset`              | Wavefront collector pod affinity preset. Ignored if `collector.affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
+| `collector.podAntiAffinityPreset`          | Wavefront collector pod anti-affinity preset. Ignored if `collector.affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
+| `collector.nodeAffinityPreset.type`        | Wavefront collector node affinity preset type. Ignored if `collector.affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
+| `collector.nodeAffinityPreset.key`         | Wavefront collector node label key to match Ignored if `collector.affinity` is set.                                    | `""`                                                    |
+| `collector.nodeAffinityPreset.values`      | Wavefront collector node label values to match. Ignored if `collector.affinity` is set.                                | `[]`                                                    |
+| `collector.affinity`                       | Wavefront collector affinity for pod assignment                                                                        | `{}` (evaluated as a template)                          |
+| `collector.nodeSelector`                   | Wavefront collector node labels for pod assignment                                                                     | `{}` (evaluated as a template)                          |
+| `collector.tolerations`                    | Wavefront collector tolerations for pod assignment                                                                     | `[]` (evaluated as a template)                          |
 | `collector.podLabels`                      | Add additional labels to the pod (evaluated as a template)                                                             | `nil`                                                   |
 | `collector.podAnnotations`                 | Annotations for Wavefront collector pods                                                                               | `{}`                                                    |
 | `collector.priorityClassName`              | Collector priorityClassName                                                                                            | `nil`                                                   |
@@ -135,7 +140,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.initContainers`                 | Add additional init containers to the collector pods                                                                   | `{}` (evaluated as a template)                          |
 | `collector.sidecars`                       | Add additional sidecar containers to the collector pods                                                                | `{}` (evaluated as a template)                          |
 
-#### Proxy parameters
+### Proxy parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -150,9 +155,14 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.resources.requests`                 | The requested resources for the proxy container                                                                        | `{}`                                                    |
 | `proxy.containerSecurityContext`           | Container security podSecurityContext                                                                                  | `{ runAsUser: 1001, runAsNonRoot: true }`               |
 | `proxy.podSecurityContext`                 | Pod security                                                                                                           | `{ fsGroup: 1001 }`                                     |
-| `proxy.affinity`                           | Affinity for pod assignment                                                                                            | `{}` (evaluated as a template)                          |
-| `proxy.nodeSelector`                       | Node labels for pod assignment                                                                                         | `{}` (evaluated as a template)                          |
-| `proxy.tolerations`                        | Tolerations for pod assignment                                                                                         | `[]` (evaluated as a template)                          |
+| `proxy.podAffinityPreset`                  | Wavefront proxy pod affinity preset. Ignored if `proxy.affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                    |
+| `proxy.podAntiAffinityPreset`              | Wavefront proxy pod anti-affinity preset. Ignored if `proxy.affinity` is set. Allowed values: `soft` or `hard`         | `soft`                                                  |
+| `proxy.nodeAffinityPreset.type`            | Wavefront proxy node affinity preset type. Ignored if `proxy.affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
+| `proxy.nodeAffinityPreset.key`             | Wavefront proxy node label key to match Ignored if `proxy.affinity` is set.                                            | `""`                                                    |
+| `proxy.nodeAffinityPreset.values`          | Wavefront proxy node label values to match. Ignored if `proxy.affinity` is set.                                        | `[]`                                                    |
+| `proxy.affinity`                           | Wavefront proxy affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
+| `proxy.nodeSelector`                       | Wavefront proxy node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
+| `proxy.tolerations`                        | Wavefront proxy tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
 | `proxy.podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                             | `nil`                                                   |
 | `proxy.podAnnotations`                     | Annotations for Wavefront proxy pods                                                                                   | `{}`                                                    |
 | `proxy.priorityClassName`                  | Proxy priorityClassName                                                                                                | `nil`                                                   |
@@ -173,7 +183,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.tracePort`                          | Port for distributed tracing data (usually 30000)                                                                      | `nil`                                                   |
 | `proxy.jaegerPort`                         | Port for Jaeger format distributed tracing data (usually 30001)                                                        | `nil`                                                   |
 | `proxy.traceJaegerHttpListenerPort`        | Port for Jaeger Thrift format data (usually 30080)                                                                     | `nil`                                                   |
-| `proxy.zipkinPort`                         | Port for Zipkin format distributed tracing data (usually 9411)                                                          | `nil`                                                   |
+| `proxy.zipkinPort`                         | Port for Zipkin format distributed tracing data (usually 9411)                                                         | `nil`                                                   |
 | `proxy.traceSamplingRate`                  | Distributed tracing data sampling rate (0 to 1)                                                                        | `nil`                                                   |
 | `proxy.traceSamplingDuration`              | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                        | `nil`                                                   |
 | `proxy.histogramPort`                      | Port for histogram distribution format data (usually 40000)                                                            | `nil`                                                   |
@@ -186,7 +196,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.existingConfigmap`                  | Name of existing ConfigMap with Proxy preprocessor configuration                                                       | `nil`                                                   |
 | `proxy.preprocessor.rules.yaml`            | YAML configuration for Wavefront proxy preprocessor rules                                                              | `nil`                                                   |
 
-#### Kube State Metrics parameters
+### Kube State Metrics parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -267,6 +277,12 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
