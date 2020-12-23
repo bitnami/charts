@@ -59,7 +59,7 @@ spec:
         fsGroup: {{ $.Values.securityContext.fsGroup }}
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" $ | nindent 6 }}
-      {{- if or (ge (len $.Values.shardsvr.arbiter.initContainers) 1) (ge (len $.Values.common.initContainers) 1) }}
+      {{- if or $.Values.shardsvr.arbiter.initContainers $.Values.common.initContainers }}
       initContainers:
         {{- with $.Values.shardsvr.arbiter.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
@@ -69,7 +69,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - name: {{ include "mongodb-sharded.name" $ }}-arbiter
+        - name: {{ include "common.names.fullname" $ }}-arbiter
           image: {{ include "mongodb-sharded.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.securityContext.enabled }}
