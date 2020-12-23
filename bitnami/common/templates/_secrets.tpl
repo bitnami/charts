@@ -55,3 +55,46 @@ Params:
 
 {{- printf "%s" $key -}}
 {{- end -}}
+
+{{/*
+Generate secret password or retrieve one if already created.
+
+Usage:
+{{ include "common.secrets.manage.password" (dict "secret" "secret-name" "key" "keyName" "customValues" (list .Values.path.to.the.password1 .Values.path.to.the.password2) "length" "password-length" "strong" false "context" $) }}
+
+Params:
+  - secret - String - Required - Name of the 'Secret' resource where the password is stored.
+  - key - String - Required - Name of the key in the secret.
+  - customValues - Optional - List of parameters that can be used by the user to define the password. Will pick first parameter with a defined value.
+  - length - int - Optional - Length of the generated random password
+  - strong - Boolean - Optional - Whether to add "_" symbols to the generated random password
+  - context - Context - Required - Parent context.
+*/}}
+{{- define "common.secrets.manage.password" -}}
+
+{{- $password := "" }}
+{{- $providedPassword := "" }}
+{{- $passwordLength := default 10 .length}}
+{{- if .customValues }}
+  {{- $passwordList := compact .customValues }}
+  {{- $providedPassword = first $passwordList }}
+{{- end }}
+{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
+
+{{- if $secret }}
+  {{- if index $secret.data .key }}
+  {{- $password = index $secret.data .key }}
+  {{- end -}}
+{{- else if $providedPassword }}
+  {{- $password = $providedPassword | b64enc | quote }}
+{{- else }}
+  {{- if .strong }}
+    {{- $password = randAscii $passwordLength }}
+    {{- $password = regexReplaceAllLiteral "\\W+" $password "_" | b64enc | quote }}
+  {{- else }}
+    {{- $password = randAlphaNum $passwordLength | b64enc | quote }}
+  {{- end }}
+{{- end -}}
+
+{{- printf "%s" $password -}}
+{{- end -}}
