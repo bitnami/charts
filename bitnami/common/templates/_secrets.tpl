@@ -89,8 +89,10 @@ Params:
   {{- $password = $providedPassword | b64enc | quote }}
 {{- else }}
   {{- if .strong }}
+    {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}
-    {{- $password = regexReplaceAllLiteral "\\W+" $password "_" | b64enc | quote }}
+    {{- $password = regexReplaceAllLiteral "\\W+" $password "@" | substr 5 $passwordLength }}
+    {{- $password = cat $subStr $password | nospace | shuffle | b64enc | quote }}
   {{- else }}
     {{- $password = randAlphaNum $passwordLength | b64enc | quote }}
   {{- end }}
