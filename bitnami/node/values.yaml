@@ -342,6 +342,10 @@ service:
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
+  # loadBalancerSourceRanges:
+  ## In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
+  ##
   annotations: {}
 
 ## Ingress parameters

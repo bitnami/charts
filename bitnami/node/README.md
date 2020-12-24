@@ -167,6 +167,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `service.annotations`                   | Annotations for the Service                                                 | {}                                                      |
 | `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`                           | `nil`                                                   |
 | `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`                    | `nil`                                                   |
+| `service.loadBalancerSourceRanges`      | Limits which client IP's can access the Network Load Balancer               | `0.0.0.0/0`                                         	  |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                                                 |
 | `ingress.hosts[0].name`                 | Hostname to your Node installation                                          | `node.local`                                            |
 | `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                                     |
