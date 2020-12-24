@@ -79,8 +79,8 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "kafka.serviceAccountName" . }}
