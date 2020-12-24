@@ -549,6 +549,16 @@ The pod will try to get the external ip of the node using `curl -s https://ipinf
 
 Following the aforementioned steps will also allow to connect the brokers from the outside using the cluster's default service (when `service.type` is `LoadBalancer` or `NodePort`). Use the property `service.externalPort` to specify the port used for external connections.
 
+#### Name resolution with External-DNS
+
+You can use the following values to generate External-DNS annotations which automatically creates DNS records for each ReplicaSet pod:
+
+```yaml
+externalAccess:
+  service:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
+```
 ### Sidecars
 
 If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
