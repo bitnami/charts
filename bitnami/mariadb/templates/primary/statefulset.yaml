@@ -60,7 +60,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      priorityClassName: {{ .Values.primary.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.primary.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
