@@ -186,7 +186,7 @@ shardsvr:
     ##  - name: KIBANA_ELASTICSEARCH_URL
     ##    value: test
     ##
-    extraEnvVars:
+    extraEnvVars: []
     ## Name of a ConfigMap containing extra env vars
     ##
     extraEnvVarsCM:
@@ -203,7 +203,7 @@ shardsvr:
     ##       - name: portname
     ##         containerPort: 1234
     ##
-    sidecars:
+    sidecars: []
     ## Add init containers to the pod
     ## For example:
     ## initcontainers:
@@ -211,21 +211,21 @@ shardsvr:
     ##     image: your-image
     ##     imagePullPolicy: Always
     ##
-    initContainers:
+    initContainers: []
     ## Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
-    podAnnotations:
+    podAnnotations: {}
     ## Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
-    podLabels:
+    podLabels: {}
     ## Array to add extra volumes
     ##
-    extraVolumes:
+    extraVolumes: []
     ## Array to add extra mounts (normally used with extraVolumes)
     ##
-    extraVolumeMounts:
+    extraVolumeMounts: []
     ## Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
@@ -244,7 +244,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
     ##
     serviceAccount:
-      ## Specifies whether a ServiceAccount should be created.
+      ## Specifies whether a ServiceAccount should be created for shardsvr.
       ##
       create: true
       ## The name of the ServiceAccount to use.
@@ -358,7 +358,7 @@ shardsvr:
     ##       - name: portname
     ##         containerPort: 1234
     ##
-    sidecars:
+    sidecars: []
     ## Add init containers to the pod
     ## For example:
     ## initcontainers:
@@ -366,21 +366,21 @@ shardsvr:
     ##     image: your-image
     ##     imagePullPolicy: Always
     ##
-    initContainers:
+    initContainers: []
     ## Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
-    podAnnotations:
+    podAnnotations: {}
     ## Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
-    podLabels:
+    podLabels: {}
     ## Array to add extra volumes
     ##
-    extraVolumes:
+    extraVolumes: []
     ## Array to add extra mounts (normally used with extraVolumes)
     ##
-    extraVolumeMounts:
+    extraVolumeMounts: []
     ## Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
@@ -389,7 +389,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
     ##
     serviceAccount:
-      ## Specifies whether a ServiceAccount should be created.
+      ## Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes.
       ##
       create: true
       ## The name of the ServiceAccount to use.
@@ -495,7 +495,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## podManagementPolicy for the Statefulset, allows parallel startup of pods
+  ## podManagementPolicy for the statefulset, allows parallel startup of pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
@@ -535,7 +535,7 @@ configsvr:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars:
+  sidecars: []
   ## Add init containers to the pod
   ## For example:
   ## initcontainers:
@@ -543,21 +543,21 @@ configsvr:
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
-  initContainers:
+  initContainers: []
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
+  podAnnotations: {}
   ## Additional pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podLabels:
+  podLabels: {}
   ## Array to add extra volumes
   ##
-  extraVolumes:
+  extraVolumes: []
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
-  extraVolumeMounts:
+  extraVolumeMounts: []
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -608,7 +608,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created.
+    ## Specifies whether a ServiceAccount should be created for configsvr.
     ##
     create: true
     ## The name of the ServiceAccount to use.
@@ -738,7 +738,7 @@ mongos:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars:
+  sidecars: []
   ## Add init containers to the pod
   ## For example:
   ## initcontainers:
@@ -746,21 +746,21 @@ mongos:
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
-  initContainers:
+  initContainers: []
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
+  podAnnotations: {}
   ## Additional pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podLabels:
+  podLabels: {}
   ## Array to add extra volumes
   ##
-  extraVolumes:
+  extraVolumes: []
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
-  extraVolumeMounts:
+  extraVolumeMounts: []
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -844,7 +844,7 @@ common:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars:
+  sidecars: []
   ## Add init containers to the pod
   ## For example:
   ## initcontainers:
@@ -852,26 +852,26 @@ common:
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
-  initContainers:
+  initContainers: []
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
+  podAnnotations: {}
   ## Additional pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podLabels:
+  podLabels: {}
   ## Array to add extra volumes
   ##
-  extraVolumes:
+  extraVolumes: []
   ## Array to add extra mounts (normally used with extraVolumes)
   ##
-  extraVolumeMounts:
+  extraVolumeMounts: []
   ## K8s Service Account.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created.
+    ## Specifies whether a ServiceAccount should be created for all Pods.
     ##
     create: false
     ## The name of the ServiceAccount to use.
@@ -958,7 +958,7 @@ service:
   loadBalancerSourceRanges: []
   ## Extra ports to expose (normally used with the `sidecar` value)
   ##
-  extraPorts:
+  extraPorts: []
   ## Specify the sessionAffinity setting for the service. Can be "None" or "ClientIP".
   ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
