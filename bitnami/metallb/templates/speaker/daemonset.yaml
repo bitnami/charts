@@ -26,9 +26,9 @@ spec:
       {{- end }}
     spec: 
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
+      {{- if .Values.speaker.tolerations}}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
       hostNetwork: true
