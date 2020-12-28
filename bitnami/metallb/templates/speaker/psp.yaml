@@ -1,0 +1,41 @@
+{{- if and .Values.psp.create .Values.speaker.psp.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "common.names.fullname" . }}-speaker
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: speaker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  allowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
+  allowedCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
+  allowedHostPaths: []
+  defaultAddCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 2 }}
+  defaultAllowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
+  fsGroup:
+    rule: RunAsAny
+  hostIPC: false
+  hostNetwork: true
+  hostPID: false
+  hostPorts:
+  - max: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+    min: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+  privileged: true
+  readOnlyRootFilesystem: {{ .Values.speaker.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.speaker.securityContext.capabilities.drop | nindent 2 }}
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - configMap
+  - secret
+  - emptyDir
+{{- end -}}

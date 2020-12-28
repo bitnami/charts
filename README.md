@@ -12,17 +12,11 @@ $ helm install my-release bitnami/<chart>
 
 ![Installing a chart](demo.gif)
 
-## Important notice: Helm v2 EOL :warning:
-
-[On November 13, 2020, Helm v2 support will formally end](https://github.com/helm/charts#status-of-the-project), Bitnami Helm Charts are going to be adapted to support the ability to implement the incorporation of different features added in Helm v3 and also to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-All the Bitnami Helm Charts are going to be updated in a major version applying the required changes, being the main one the update of the `apiVersion`. The current version of Bitnami Helm Charts use `apiVersion: v1` (installable by both Helm 2 and 3), charts are going to be updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-
-We will start moving the Bitnami Helm Charts (and deprecating Helm v2) on November 13th and we plan to have the whole catalog migrated before the 1st of December.
-
-In the "Upgrade" section of every Helm Chart README, you will find the upgrade notes and instructions when a major version including those changes appeared.
-
 ## Before you begin
+
+### Prerequisites
+- Kubernetes 1.12+
+- Helm 3.0-beta3+
 
 ### Setup a Kubernetes Cluster
 

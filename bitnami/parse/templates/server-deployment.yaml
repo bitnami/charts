@@ -1,27 +1,32 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "parse.fullname" . }}-server
-  labels: {{ include "parse.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-server
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
 spec:
   selector:
-    matchLabels: {{ include "parse.matchLabels" . | nindent 6 }}
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
   replicas: 1
   template:
     metadata:
-      labels: {{ include "parse.labels" . | nindent 8 }}
+      labels: {{ include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: server
     spec:
       {{- if .Values.server.affinity }}
-      affinity: {{- include "parse.tplValue" (dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.server.nodeSelector }}
-      nodeSelector: {{- include "parse.tplValue" (dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.tolerations }}
-      tolerations: {{- include "parse.tplValue" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.securityContext.enabled }}
       securityContext:
@@ -58,7 +63,7 @@ spec:
             - name: PARSE_MASTER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "parse.fullname" . }}
+                  name: {{ include "common.names.fullname" . }}
                   key: master-key
             - name: PARSE_ENABLE_CLOUD_CODE
               value: {{ ternary "yes" "no" .Values.server.enableCloudCode | quote }}
@@ -74,17 +79,17 @@ spec:
                   key: mongodb-root-password
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
-              {{- include "parse.tplValue" ( dict "value" .Values.server.extraEnvVars "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.server.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or .Values.server.extraEnvVarsCM .Values.server.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.server.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "parse.tplValue" ( dict "value" .Values.server.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.server.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.server.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "parse.tplValue" ( dict "value" .Values.server.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.server.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:
@@ -137,7 +142,7 @@ spec:
         - name: parse-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "parse.fullname" . }}
+            claimName: {{ include "common.names.fullname" . }}
         {{- else }}
           emptyDir: {}
         {{- end }}

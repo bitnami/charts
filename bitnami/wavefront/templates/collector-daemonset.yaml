@@ -32,10 +32,15 @@ spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       {{- include "wavefront.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.collector.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.collector.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.collector.podAffinityPreset "component" "collector" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.collector.podAntiAffinityPreset "component" "collector" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.collector.nodeAffinityPreset.type "key" .Values.collector.nodeAffinityPreset.key "values" .Values.collector.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.collector.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.collector.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       tolerations:
         - effect: NoSchedule

@@ -23,8 +23,7 @@ spec:
               {{ template "rabbitmq.fullname" . }}-client: "true"
         - podSelector:
             matchLabels:
-              app: {{ template "rabbitmq.name" . }}
-              release: {{ .Release.Name }}
+              {{- include "common.labels.matchLabels" . | nindent 14 }}
         {{- if .Values.networkPolicy.additionalRules }}
         {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.additionalRules "context" $) | nindent 8 }}
         {{- end }}

@@ -66,6 +66,9 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `pdb.create`                            | Created a PodDisruptionBudget                              | `false`                                                 |
+| `pdb.minAvailable`                      | Set PDB minAvailable value                                 | `1`                                                     |
+| `pdb.maxUnavailable`                    | Set PDB maxUnavailable value                               | `nil`                                                   |
 
 ### NGINX parameters
 
@@ -116,6 +119,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                     | `nil`                                                   |
 | `extraVolumes`                          | Array to add extra volumes                                                               | `[]` (evaluated as a template)                          |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                 | `[]` (evaluated as a template)                          |
+| `sidecars`                              | Attach additional containers to nginx pods                                               | `nil`
 
 ### Custom NGINX application parameters
 
@@ -299,7 +303,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

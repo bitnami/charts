@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "thanos.fullname" . }}-query-frontend-configmap
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query-frontend-configmap
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
 data:
   config.yml: |-
-    {{- include "thanos.tplValue" (dict "value" .Values.queryFrontend.config "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.config "context" $) | nindent 4 }}
 {{ end }}

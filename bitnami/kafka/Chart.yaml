@@ -1,8 +1,13 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.0
+appVersion: 2.7.0
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
-version: 12.0.0
+version: 12.4.3

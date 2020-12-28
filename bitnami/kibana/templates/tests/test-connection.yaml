@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "kibana.fullname" . }}-test-connection"
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  name: "{{ include "common.names.fullname" . }}-test-connection"
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: test-connection
   annotations:
     "helm.sh/hook": test-success
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: bitnami/minideb
       command: ['wget']
-      args: ['{{ include "kibana.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

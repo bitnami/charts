@@ -25,5 +25,6 @@ spec:
       protocol: TCP
       targetPort: https
     {{- end }}
+  publishNotReadyAddresses: true
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak

@@ -4,12 +4,12 @@
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:
-  name: {{ printf "%s-shard%d-data" (include "mongodb-sharded.fullname" $ ) $i }}
-  labels: {{- include "mongodb-sharded.labels" $ | nindent 4 }}
+  name: {{ printf "%s-shard%d-data" (include "common.names.fullname" $ ) $i }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: shardsvr
 spec:
   selector:
-    matchLabels: {{- include "mongodb-sharded.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: shardsvr
       shard: {{ $i | quote }}
   {{- if $.Values.shardsvr.dataNode.pdb.minAvailable }}

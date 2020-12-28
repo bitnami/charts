@@ -1,13 +1,13 @@
-{{- $serviceAnnotations := coalesce .Values.master.service.annotations .Values.service.annotations -}}
-{{- $serviceType := coalesce .Values.master.service.type .Values.service.type -}}
-{{- $serviceLoadBalancerIP := coalesce .Values.master.service.loadBalancerIP .Values.service.loadBalancerIP -}}
-{{- $serviceLoadBalancerSourceRanges := coalesce .Values.master.service.loadBalancerSourceRanges .Values.service.loadBalancerSourceRanges -}}
-{{- $serviceClusterIP := coalesce .Values.master.service.clusterIP .Values.service.clusterIP -}}
-{{- $serviceNodePort := coalesce .Values.master.service.nodePort .Values.service.nodePort -}}
+{{- $serviceAnnotations := coalesce .Values.primary.service.annotations .Values.service.annotations -}}
+{{- $serviceType := coalesce .Values.primary.service.type .Values.service.type -}}
+{{- $serviceLoadBalancerIP := coalesce .Values.primary.service.loadBalancerIP .Values.service.loadBalancerIP -}}
+{{- $serviceLoadBalancerSourceRanges := coalesce .Values.primary.service.loadBalancerSourceRanges .Values.service.loadBalancerSourceRanges -}}
+{{- $serviceClusterIP := coalesce .Values.primary.service.clusterIP .Values.service.clusterIP -}}
+{{- $serviceNodePort := coalesce .Values.primary.service.nodePort .Values.service.nodePort -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
@@ -37,4 +37,4 @@ spec:
       {{- end }}
   selector:
   {{- include "common.labels.matchLabels" . | nindent 4 }}
-    role: master
+    role: primary

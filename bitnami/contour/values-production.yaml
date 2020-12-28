@@ -135,7 +135,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.10.0-debian-10-r4
+    tag: 1.11.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -147,6 +147,10 @@ contour:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Extra arguments passed to Contour container
+  ##
+  extraArgs: []
 
   ## Contour container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -315,7 +319,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.15.2-debian-10-r30
+    tag: 1.16.2-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -542,6 +546,8 @@ envoy:
 prometheus:
   # Prometheus Operator service monitors
   serviceMonitor:
+    # namespace for the service monitor
+    namespace:
     # enable support for Prometheus Operator
     enabled: false
     # Job label for scrape target

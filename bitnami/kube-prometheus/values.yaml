@@ -20,7 +20,7 @@ global:
 # fullnameOverride:
 
 ## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
   create: true
@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.43.2-debian-10-r3
+    tag: 0.44.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -103,22 +103,27 @@ operator:
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
+
     ## Provide any additional annotations which may be required.
     ##
     annotations: {}
-
-  ## Create Prometheus Operator CRDs
-  createCustomResource: true
-
-  ## Prometheus Operator CRD deletion policy
-  ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
-  ##
-  # customResourceDeletePolicy: before-hook-creation
 
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
     ## Creates a ServiceMonitor to monitor Prometheus Operator
+    ##
     enabled: true
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
@@ -141,33 +146,53 @@ operator:
   ##
   resources: {}
 
-  ## Pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAnnotations: {}
+  podAffinityPreset: ""
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAntiAffinityPreset: soft
 
-  ## Pod AntiAffinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: operator.podAffinityPreset, operator.podAntiAffinityPreset, and operator.nodeAffinityPreset will be ignored when it's set
   ##
-  podAntiAffinity: soft
-
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  podAffinity: {}
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -220,7 +245,7 @@ operator:
     image:
       registry: docker.io
       repository: bitnami/configmap-reload
-      tag: 0.4.0-debian-10-r103
+      tag: 0.4.0-debian-10-r128
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -251,7 +276,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.22.1-debian-10-r6
+    tag: 2.23.0-debian-10-r6
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -314,6 +339,18 @@ prometheus:
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
+
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
     # stickySessions: true
@@ -324,6 +361,7 @@ prometheus:
 
   serviceMonitor:
     ## Creates a ServiceMonitor to monitor Prometheus itself
+    ##
     enabled: true
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
@@ -347,9 +385,11 @@ prometheus:
   ##
   ingress:
     ## Set to true to enable ingress record generation
+    ##
     enabled: false
 
     ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
     certManager: false
 
     ## Ingress annotations done as key:value pairs
@@ -358,11 +398,13 @@ prometheus:
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
     annotations: {}
     #  kubernetes.io/ingress.class: nginx
 
     ## The list of hostnames to be covered with this ingress record.
     ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+    ##
     hosts:
       - name: prometheus.local
         path: /
@@ -373,6 +415,7 @@ prometheus:
     ## - hosts:
     ##     - prometheus.local
     ##   secretName: prometheus.local-tls
+    ##
     tls: {}
 
   ## If not creating an ingress but still exposing the service some other way (like a proxy)
@@ -385,29 +428,53 @@ prometheus:
   ##
   resources: {}
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAffinityPreset: ""
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAntiAffinity: soft
-  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
+  podAntiAffinityPreset: soft
 
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  podAffinity: {}
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: prometheus.podAffinityPreset, prometheus.podAntiAffinityPreset, and prometheus.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -603,12 +670,14 @@ prometheus:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## Volumes allows configuration of additional volumes
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ##
   volumes: []
 
   ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+  ##
   volumeMounts: []
 
   ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
@@ -691,7 +760,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.16.0-scratch-r1
+      tag: 0.17.2-scratch-r0
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -710,6 +779,7 @@ prometheus:
 
     ## Support mounting a Secret for the objectStorageConfig of the sideCar container.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
+    ##
     objectStorageConfig: {}
     #   secretName: thanos-objstore-config
     #   secretKey: thanos.yaml
@@ -722,6 +792,7 @@ prometheus:
       ## choice for the user. This also increases chances charts run on environments with little
       ## resources, such as Minikube. If you do want to specify resources, uncomment the following
       ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
       limits: {}
       #   cpu: 100m
       #   memory: 128Mi
@@ -782,7 +853,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r136
+    tag: 0.21.0-debian-10-r161
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -841,6 +912,18 @@ alertmanager:
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    ## There are two available options: Cluster (default) and Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+    ## Specifies the health check node port (numeric port number) for the service
+    ## if externalTrafficPolicy is set to Local.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # healthCheckNodePort:
+
     ## Session Affinity
     ## Set stickySessions to true to enable Session Affinity
     # stickySessions: true
@@ -853,6 +936,7 @@ alertmanager:
   ##
   serviceMonitor:
     ## Creates a ServiceMonitor to monitor Alertmanager
+    ##
     enabled: true
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
@@ -876,9 +960,11 @@ alertmanager:
   ##
   ingress:
     ## Set to true to enable ingress record generation
+    ##
     enabled: false
 
     ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
     certManager: false
 
     ## Ingress annotations done as key:value pairs
@@ -887,11 +973,13 @@ alertmanager:
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
     annotations: {}
     #  kubernetes.io/ingress.class: nginx
 
     ## The list of hostnames to be covered with this ingress record.
     ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+    ##
     hosts:
       - name: alertmanager.local
         path: /
@@ -902,6 +990,7 @@ alertmanager:
     ## - hosts:
     ##     - alertmanager.local
     ##   secretName: alertmanager.local-tls
+    ##
     tls: {}
 
   ## If not creating an ingress but still exposing the service some other way (like a proxy)
@@ -914,29 +1003,53 @@ alertmanager:
   ##
   resources: {}
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAffinityPreset: ""
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  podAntiAffinity: soft
-  podAntiAffinityTopologyKey: "kubernetes.io/hostname"
+  podAntiAffinityPreset: soft
 
-  ## Pod Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  podAffinity: {}
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: alertmanager.podAffinityPreset, alertmanager.podAntiAffinityPreset, and alertmanager.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
   ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
@@ -1039,12 +1152,14 @@ alertmanager:
   ##
   containers: []
 
-  ## Volumes allows configuration of additonal volumes. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  ## Volumes allows configuration of additional volumes. Evaluated as a template
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+  ##
   volumes: []
 
   ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
-  ## Ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/pi.md#alertmanagerspec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/pi.md#alertmanagerspec
+  ##
   volumeMounts: []
 
   ## Priority class assigned to the Pods
@@ -1056,16 +1171,20 @@ alertmanager:
   additionalPeers: []
 
 ## Exporters
+##
 exporters:
   node-exporter:
     ## Enable node-exporter
+    ##
     enabled: true
 
   kube-state-metrics:
     ## Enable kube-state-metrics
+    ##
     enabled: true
 
 ## Node Exporter deployment configuration
+##
 node-exporter:
   service:
     labels:
@@ -1084,8 +1203,10 @@ kube-state-metrics:
     enabled: true
 
 ## Component scraping the kube-apiserver
+##
 kubeApiServer:
   ## Create a ServiceMonitor to scrape kube-apiserver service
+  ##
   enabled: true
 
   serviceMonitor:
@@ -1105,8 +1226,10 @@ kubeApiServer:
     relabelings: []
 
 ## Component scraping the kube-controller-manager
+##
 kubeControllerManager:
   ## Create a ServiceMonitor to scrape kube-controller-manager service
+  ##
   enabled: true
 
   ## If your kube controller manager is not deployed as a pod, specify IPs it can be found on
@@ -1117,9 +1240,11 @@ kubeControllerManager:
   # - 10.141.4.24
 
   ## Namespace where kube-controller-manager service is deployed
+  ##
   namespace: kube-system
 
   ## Service ports and selector information
+  ##
   service:
     enabled: true
     port: 10252
@@ -1158,6 +1283,7 @@ kubeControllerManager:
 ##
 kubeScheduler:
   ## Create a ServiceMonitor to scrape kube-scheduler service
+  ##
   enabled: true
 
   ## If your kube scheduler is not deployed as a pod, specify IPs it can be found on
@@ -1168,6 +1294,7 @@ kubeScheduler:
   # - 10.141.4.24
 
   ## Namespace where kube-scheduler service is deployed
+  ##
   namespace: kube-system
 
   ## If using kubeScheduler.endpoints only the port and targetPort are used
@@ -1189,9 +1316,11 @@ kubeScheduler:
     https: false
 
     ## Skip TLS certificate validation when scraping
+    ##
     insecureSkipVerify: null
 
     ## Name of the server to use when validating TLS certificate
+    ##
     serverName: null
 
     ##  metric relabel configs to apply to samples before ingestion.
@@ -1217,9 +1346,11 @@ coreDns:
   enabled: true
 
   ## Namespace where coreDns service is deployed
+  ##
   namespace: kube-system
 
   ## Create a ServiceMonitor to scrape coredns service
+  ##
   service:
     enabled: true
     port: 9153
@@ -1250,20 +1381,25 @@ coreDns:
     #   action: replace
 
 ## Component scraping the kube-proxy
+##
 kubeProxy:
   ## Create a ServiceMonitor to scrape kube-proxy service
+  ##
   enabled: true
 
   ## If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  ##
   endpoints: []
   # - 10.141.4.22
   # - 10.141.4.23
   # - 10.141.4.24
 
   ## Namespace where kube-proxy service is deployed
+  ##
   namespace: kube-system
 
   ## Service ports and selector information
+  ##
   service:
     enabled: true
     port: 10249
@@ -1295,13 +1431,16 @@ kubeProxy:
 # Component scraping for kubelet and kubelet hosted cAdvisor
 kubelet:
   ## Create a ServiceMonitor to scrape kubelet service
+  ##
   enabled: true
 
   ## Namespace where kubelet service is deployed
+  ##
   namespace: kube-system
 
   serviceMonitor:
     ## Scrape kubelet over https
+    ##
     https: true
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.

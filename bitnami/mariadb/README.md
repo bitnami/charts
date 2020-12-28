@@ -86,6 +86,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `auth.replicationPassword`                  | MariaDB replication user password. Ignored if existing secret is provided                                            | _random 10 character long alphanumeric string_               |
 | `auth.forcePassword`                        | Force users to specify required passwords                                                                            | `false`                                                      |
 | `auth.usePasswordFiles`                     | Mount credentials as a files instead of using an environment variable                                                | `false`                                                      |
+| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`  |
 | `auth.existingSecret`                       | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `nil` |
 | `initdbScripts`                             | Dictionary of initdb scripts                                                                                         | `nil`                                                        |
 | `initdbScriptsConfigMap`                    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                  | `nil`                                                        |
@@ -337,7 +338,7 @@ initdbScripts:
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MariaDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -415,7 +416,7 @@ $ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD
 
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - `securityContext.*` is deprecated in favor of `primary.podSecurityContext`, `primary.containerSecurityContext`, `secondary.podSecurityContext`, and `secondary.containerSecurityContext`.
   - Credentials parameter are reorganized under the `auth` parameter.

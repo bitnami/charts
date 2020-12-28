@@ -2,6 +2,12 @@ annotations:
   category: Database
 apiVersion: v2
 appVersion: 10.5.8
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: MariaDB Galera is a multi-master database cluster solution for synchronous replication and high availability.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/mariadb-galera
@@ -22,4 +28,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-mariadb-galera
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 5.0.1
+version: 5.3.4

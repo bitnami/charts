@@ -56,11 +56,11 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `image.tag`                              | Memcached Image tag                                                                                    | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                       | Memcached image pull policy                                                                            | `IfNotPresent`                                               |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                           | String to partially override memcached.fullname template with a string (will prepend the release name) | `nil`                                                        |
-| `fullnameOverride`                       | String to fully override memcached.fullname template with a string                                     | `nil`                                                        |
+| `nameOverride`                           | String to partially override common.names.fullname template with a string                              | `nil`                                                        |
+| `fullnameOverride`                       | String to fully override common.names.fullname template with a string                                  | `nil`                                                        |
 | `clusterDomain`                          | Kubernetes cluster domain                                                                              | `cluster.local`                                              |
-| `architecture`                           | Memcahed architecture. Allowed values: standalone or high-availability                                 | `standalone`                                                 |
-| `replicaCount`                            | Number of containers                                                                                   | `1`                                                          |
+| `architecture`                           | Memcached architecture. Allowed values: standalone or high-availability                                 | `standalone`                                                 |
+| `replicaCount`                           | Number of containers                                                                                   | `1`                                                          |
 | `extraEnv`                               | Additional env vars to pass                                                                            | `{}`                                                         |
 | `arguments`                              | Arguments to pass                                                                                      | `["/run.sh"]`                                                |
 | `memcachedUsername`                      | Memcached admin user                                                                                   | `nil`                                                        |
@@ -74,17 +74,23 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `resources.requests`                     | CPU/Memory resource requests                                                                           | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`                       | CPU/Memory resource limits                                                                             | `{}`                                                         |
 | `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                              | `true`                                                       |
-| `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                                   | `nil` (uses alpha storage class annotation)                  |
-| `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                                     | `ReadWriteOnce`                                              |
-| `persistence.size`                       | PVC Storage Request for Memcached volume                                                                 | `8Gi`                                                        |
+| `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                                 | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                                   | `ReadWriteOnce`                                              |
+| `persistence.size`                       | PVC Storage Request for Memcached volume                                                               | `8Gi`                                                        |
 | `securityContext.enabled`                | Enable security context                                                                                | `true`                                                       |
 | `securityContext.fsGroup`                | Group ID for the container                                                                             | `1001`                                                       |
 | `securityContext.runAsUser`              | User ID for the container                                                                              | `1001`                                                       |
 | `securityContext.readOnlyRootFilesystem` | Enable read-only filesystem                                                                            | `false`                                                      |
 | `podAnnotations`                         | Pod annotations                                                                                        | `{}`                                                         |
-| `affinity`                               | Map of node/pod affinities                                                                             | `{}` (The value is evaluated as a template)                  |
-| `nodeSelector`                           | Node labels for pod assignment                                                                         | `{}` (The value is evaluated as a template)                  |
-| `tolerations`                            | Tolerations for pod assignment                                                                         | `[]` (The value is evaluated as a template)                  |
+| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                                                         |
+| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `soft`                                                       |
+| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                         |
+| `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                                 | `""`                                                         |
+| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                              | `[]`                                                         |
+| `affinity`                               | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                               |
+| `nodeSelector`                           | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                               |
+| `tolerations`                            | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                               |
+| `priorityClassName`                      | Controller priorityClassName                                                                           | `nil`                                                        |
 | `metrics.enabled`                        | Start a side-car prometheus exporter                                                                   | `false`                                                      |
 | `metrics.image.registry`                 | Memcached exporter image registry                                                                      | `docker.io`                                                  |
 | `metrics.image.repository`               | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                                 |
@@ -148,6 +154,16 @@ When using `architecture: "high-availability"` the [Bitnami Memcached](https://g
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Notable changes
 
 ### 4.0.0
@@ -164,11 +180,11 @@ $ helm upgrade memcached bitnami/memcached
 
 This release uses the new bash based `bitnami/memcached` container which uses bash scripts for the start up logic of the container and is smaller in size.
 
-## Troubleshooting
-
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
 ## Upgrading
+
+### To 5.3.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 

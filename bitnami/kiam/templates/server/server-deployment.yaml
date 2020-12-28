@@ -33,7 +33,7 @@ spec:
       {{- include "kiam.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kiam.server.serviceAccountName" . }}
       dnsPolicy: {{ .Values.server.dnsPolicy }}
-      hostNetwork: true
+      hostNetwork: {{ .Values.server.useHostNetwork }}
       {{- if .Values.server.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.server.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -109,7 +109,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: http
+            - name: grpclb
               containerPort: {{ .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.metrics.enabled }}

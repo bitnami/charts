@@ -18,7 +18,7 @@
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 1.8.3-debian-10-r32
+  tag: 1.8.3-debian-10-r60
 
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -151,25 +151,54 @@ influxdb:
   ##
   podManagementPolicy: OrderedReady
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  antiAffinity: soft
+  podAffinityPreset: ""
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAntiAffinityPreset: soft
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## K8s Security Context for InfluxDB pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -218,7 +247,7 @@ influxdb:
     http: 8086
     rpc: 8088
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -262,7 +291,7 @@ relay:
   image:
     registry: docker.io
     repository: bitnami/influxdb-relay
-    tag: 0.20200717.0-scratch-r6
+    tag: 0.20200717.0-scratch-r7
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -311,25 +340,54 @@ relay:
   ##
   updateStrategy: RollingUpdate
 
-  ## Pod AntiAffinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  antiAffinity: soft
+  podAffinityPreset: ""
 
-  ## Node Affinity. The value is evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  nodeAffinity: {}
+  podAntiAffinityPreset: soft
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations: {}
+  tolerations: []
 
   ## K8s Security Context for InfluxDB pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -377,7 +435,7 @@ relay:
   containerPorts:
     http: 9096
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
@@ -407,7 +465,7 @@ relay:
     ##
     annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -512,7 +570,7 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: false
@@ -524,7 +582,7 @@ networkPolicy:
   ##
   allowExternal: true
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -548,7 +606,7 @@ persistence:
   ##
   size: 8Gi
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume mountpoint to 'runAsUser:fsGroup'
 ## values from the securityContext section.
 ##
@@ -631,7 +689,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.318.0-debian-10-r0
+        tag: 0.320.0-debian-10-r1
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -656,7 +714,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.14.2-debian-10-r1
+        tag: 2.16.0-debian-10-r2
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

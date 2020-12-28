@@ -84,6 +84,8 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                        | `[]`                                                                                                    |
 | `forwarder.service.clusterIP`                   | Static clusterIP or None for headless services                                                                 | `nil`                                                                                                   |
 | `forwarder.service.annotations`                 | Annotations for the forwarder service                                                                          | `{}`                                                                                                    |
+| `forwarder.persistence.enabled`                 | Enable persistence volume for the forwarder                                                                          | `false`                                                                                                    |
+| `forwarder.persistence.hostPath.path`                 | Directory from the host node's filesystem to mount as hostPath volume for persistence.                                                                         | `false`                                                                                                    |
 | `forwarder.livenessProbe.enabled`               | Enable liveness probes for the forwarder                                                                       | `true`                                                                                                  |
 | `forwarder.livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                                       | `60`                                                                                                    |
 | `forwarder.livenessProbe.periodSeconds`         | How often to perform the probe                                                                                 | `10`                                                                                                    |
@@ -98,10 +100,14 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.readinessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed.                   | `1`                                                                                                     |
 | `forwarder.updateStrategy`                      | Update strategy for the forwarder DaemonSet                                                                    | `RollingUpdate`                                                                                         |
 | `forwarder.resources`                           | Configure resource requests and limits                                                                         | `nil`                                                                                                   |
-| `forwarder.nodeSelector`                        | Node labels for pod assignment                                                                                 | `{}`                                                                                                    |
-| `forwarder.tolerations`                         | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
-| `forwarder.affinity`                            | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
-| `forwarder.annotations`                         | Daemonset annotations                                                                                          | `{}`                                                                                                    |
+| `forwarder.podAffinityPreset`                   | Forwarder Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                                                                                                    |
+| `forwarder.podAntiAffinityPreset`               | Forwarder Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                                                                    |
+| `forwarder.nodeAffinityPreset.type`             | Forwarder Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`                                                                                                    |
+| `forwarder.nodeAffinityPreset.key`              | Forwarder Node label key to match Ignored if `affinity` is set.                                                | `""`                                                                                                    |
+| `forwarder.nodeAffinityPreset.values`           | Forwarder Node label values to match. Ignored if `affinity` is set.                                            | `[]`                                                                                                    |
+| `forwarder.affinity`                            | Forwarder Affinity for pod assignment                                                                          | `{}` (evaluated as a template)                                                                          |
+| `forwarder.nodeSelector`                        | Forwarder Node labels for pod assignment                                                                       | `{}` (evaluated as a template)                                                                          |
+| `forwarder.tolerations`                         | Forwarder Tolerations for pod assignment                                                                       | `[]` (evaluated as a template)                                                                          |
 | `forwarder.podAnnotations`                      | Pod annotations                                                                                                | `{}`                                                                                                    |
 | `forwarder.serviceAccount.create`               | Specify whether a ServiceAccount should be created.                                                            | `true`                                                                                                  |
 | `forwarder.serviceAccount.name`                 | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
@@ -151,10 +157,14 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.                   | `1`                                                                                                     |
 | `aggregator.updateStrategy`                     | Update strategy for the aggregator DaemonSet                                                                   | `RollingUpdate`                                                                                         |
 | `aggregator.resources`                          | Configure resource requests and limits                                                                         | `nil`                                                                                                   |
-| `aggregator.nodeSelector`                       | Node labels for pod assignment                                                                                 | `{}`                                                                                                    |
-| `aggregator.tolerations`                        | Tolerations for pod assignment                                                                                 | `[]`                                                                                                    |
-| `aggregator.affinity`                           | Affinity for pod assignment                                                                                    | `{}`                                                                                                    |
-| `aggregator.annotations`                        | Statefulset annotations                                                                                        | `{}`                                                                                                    |
+| `aggregator.podAffinityPreset`                  | Aggregator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `""`                                                                                                    |
+| `aggregator.podAntiAffinityPreset`              | Aggregator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `soft`                                                                                                  |
+| `aggregator.nodeAffinityPreset.type`            | Aggregator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `""`                                                                                                    |
+| `aggregator.nodeAffinityPreset.key`             | Aggregator Node label key to match Ignored if `affinity` is set.                                               | `""`                                                                                                    |
+| `aggregator.nodeAffinityPreset.values`          | Aggregator Node label values to match. Ignored if `affinity` is set.                                           | `[]`                                                                                                    |
+| `aggregator.affinity`                           | Aggregator Affinity for pod assignment                                                                         | `{}` (evaluated as a template)                                                                          |
+| `aggregator.nodeSelector`                       | Aggregator Node labels for pod assignment                                                                      | `{}` (evaluated as a template)                                                                          |
+| `aggregator.tolerations`                        | Aggregator Tolerations for pod assignment                                                                      | `[]` (evaluated as a template)                                                                          |
 | `aggregator.podAnnotations`                     | Pod annotations                                                                                                | `{}`                                                                                                    |
 | `aggregator.serviceAccount.create`              | Specify whether a ServiceAccount should be created.                                                            | `false`                                                                                                 |
 | `aggregator.serviceAccount.name`                | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
@@ -178,6 +188,7 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `tls.serverCertificate`                         | Server certificate                                                                                             | Server certificate content                                                                              |
 | `tls.serverKey`                                 | Server Key                                                                                                     | Server private key content                                                                              |
 | `tls.existingSecret`                            | Existing secret with certificate content                                                                       | `nil`                                                                                                   |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -208,18 +219,21 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
 
 - Number of aggregator nodes:
+
 ```diff
 - aggregator.replicaCount: 1
 + aggregator.replicaCount: 2
 ```
 
 - Enable prometheus to access fluentd metrics endpoint:
+
 ```diff
 - metrics.enabled: false
 + metrics.enabled: true
 ```
 
 - Recommendation to run with [PodSecurityPolicy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) created by the chart:
+
 ```diff
 - forwarder.rbac.pspEnabled: false
 + forwarder.rbac.pspEnabled: true
@@ -318,7 +332,8 @@ aggregator.extraEnv[1].value=your-port-here
 
 By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
 
-The default behaviour is to run as `root` because
+The default behaviour is to run as `root` because:
+
 - the forwarder needs to mount `hostPath` volumes from the underlying node to read Docker container (& potentially other) logs
 - in many Kubernetes node distributions, these log files are not readable by anyone other than `root`
 - `fsGroup` doesn't work with `hostPath` volumes to allow the process to run non-root with alternate file system permissions
@@ -329,7 +344,8 @@ If you enable the forwarder's [bundled PodSecurityPolicy](templates/forwarder-ps
 
 #### Running as non-root
 
-You can run as the `fluentd` user/group (non-root) with the below overrides if
+You can run as the `fluentd` user/group (non-root) with the below overrides if:
+
 - you have control of the `hostPath` filesystem permissions on your nodes sufficient to allow the fluentd user to read from them
 - don't need to write to the `hostPath`s
 
@@ -350,11 +366,21 @@ forwarder:
 
 Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.1.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.0.0
 
@@ -407,7 +433,7 @@ forwarder:
     create: true
 ```
 
-### To 1.0.0
+### 1.0.0
 
 In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
 

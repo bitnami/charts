@@ -177,5 +177,8 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- end }}
 
-{{- include "kafka.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "kafka.validateValues" . }}
