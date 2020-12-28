@@ -58,12 +58,12 @@ spec:
           volumeMounts:
             {{- if or .Values.config .Values.existingConfigmap }}
             - name: kafka-config
-              mountPath: /bitnami/kafka/config/server.properties
+              mountPath: {{ .Values.persistence.mountPath }}/config/server.properties
               subPath: server.properties
             {{- end }}
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
             - name: log4j-config
-              mountPath: /bitnami/kafka/config/log4j.properties
+              mountPath: {{ .Values.persistence.mountPath }}/config/log4j.properties
               subPath: log4j.properties
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
