@@ -201,11 +201,14 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `persistence.accessMode`                          | PVC Access Mode for Kafka data volume                                                                                             | `ReadWriteOnce`                                         |
 | `persistence.size`                                | PVC Storage Request for Kafka data volume                                                                                         | `8Gi`                                                   |
 | `persistence.annotations`                         | Annotations for the PVC                                                                                                           | `{}`(evaluated as a template)                           |
+| `persistence.mountPath`                           | Mount path of the Kafka data volume                                                                                               | `/bitnami/kafka`                                        |
 | `logPersistence.enabled`                          | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected                                            | `false`                                                 |
 | `logPersistence.existingClaim`                    | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                 | `nil`                                                   |
 | `logPersistence.accessMode`                       | PVC Access Mode for Kafka logs volume                                                                                             | `ReadWriteOnce`                                         |
 | `logPersistence.size`                             | PVC Storage Request for Kafka logs volume                                                                                         | `8Gi`                                                   |
 | `logPersistence.annotations`                      | Annotations for the PVC                                                                                                           | `{}`(evaluated as a template)                           |
+| `logPersistence.mountPath`                        | Mount path of the Kafka logs volume                                                                                               | `/opt/bitnami/kafka/logs`                               |
+
 
 ### RBAC parameters
 
@@ -227,6 +230,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `volumePermissions.image.pullSecrets`             | Specify docker-registry secret names as an array                                                                                  | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.resources.limits`              | Init container volume-permissions resource  limits                                                                                | `{}`                                                    |
 | `volumePermissions.resources.requests`            | Init container volume-permissions resource  requests                                                                              | `{}`                                                    |
+| `volumePermissions.securityContext`               | Init container volume-permissions security context                                                                                | `{runAsUser: 0}` (interpreted as YAML)                  |
 
 ### Metrics parameters
 

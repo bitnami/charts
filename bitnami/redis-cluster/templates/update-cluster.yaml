@@ -160,6 +160,7 @@ spec:
                 {{- end }}
                   echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
                   sleep 5
+                  firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
                 done
               done
               {{- end }}

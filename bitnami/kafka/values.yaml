@@ -432,6 +432,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 
@@ -658,6 +659,8 @@ persistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## Mount point for persistence
+  mountPath: /bitnami/kafka
 
 ## Log Persistence parameters
 ##
@@ -687,6 +690,9 @@ logPersistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## Mount path for persistent logs
+  mountPath: /opt/bitnami/kafka/logs
+
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -694,6 +700,9 @@ logPersistence:
 ##
 volumePermissions:
   enabled: false
+  ## The security context for the volumePermissions init container
+  securityContext:
+    runAsUser: 0
   ## Bitnami Minideb image
   ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
   ##
