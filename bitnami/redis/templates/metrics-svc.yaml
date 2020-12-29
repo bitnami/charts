@@ -18,6 +18,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
+  {{ if eq .Values.metrics.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.metrics.service.externalTrafficPolicy }}
+  {{- end }}
   {{ if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
