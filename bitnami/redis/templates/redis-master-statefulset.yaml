@@ -298,9 +298,9 @@ spec:
         - name: "redis-data"
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim }}
-        {{- else if .Values.master.persistence.volumes }}
-        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
         {{- end }}
+        {{- if .Values.master.persistence.volumes }}
+        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
         {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
         - name: host-sys
