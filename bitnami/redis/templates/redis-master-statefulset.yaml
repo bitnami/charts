@@ -271,6 +271,9 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
+        {{- if .Values.master.persistence.volumes }}
+        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
+        {{- end }}
         - name: start-scripts
           configMap:
             name: {{ include "redis.fullname" . }}-scripts
