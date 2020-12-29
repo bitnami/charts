@@ -322,6 +322,7 @@ spec:
             secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
             defaultMode: 256
     {{- end }}
+    {{- if not (contains "redis-data" (quote .Values.slave.persistence.volumes)) }}
     {{- if not .Values.slave.persistence.enabled }}
         - name: redis-data
           emptyDir: {}
@@ -350,6 +351,7 @@ spec:
         {{- if .Values.slave.persistence.matchExpressions }}
           matchExpressions: {{- toYaml .Values.slave.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+  {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.slave.statefulset.updateStrategy }}

@@ -293,6 +293,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "redis.fullname" . }}
+        {{- if not (contains "redis-data" (quote .Values.master.persistence.volumes)) }}
         {{- if not .Values.master.persistence.enabled }}
         - name: "redis-data"
           emptyDir: {}
@@ -341,6 +342,7 @@ spec:
         {{- if .Values.master.persistence.matchExpressions }}
           matchExpressions: {{- toYaml .Values.master.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+  {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.master.statefulset.updateStrategy }}
