@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -141,7 +142,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
-                  key: owncloud-smtp-password
+                  key: smtp-password
             {{- end }}
             - name: OWNCLOUD_SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
@@ -220,7 +221,7 @@ spec:
             - name: owncloud-data
               mountPath: /bitnami/owncloud
               subPath: owncloud
-            {{- include "certificates.volumeMount" . | nindent 12 }}
+            {{- include "certificates.volumeMounts" . | nindent 12 }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -228,7 +229,7 @@ spec:
         - name: metrics
           image: {{ include "owncloud.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' ]
+          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto']
           ports:
             - name: metrics
               containerPort: 9117
