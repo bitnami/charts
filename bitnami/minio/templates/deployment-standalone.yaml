@@ -28,6 +28,7 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
+      replicas: {{ .Values.deployment.replicaCount }}
       {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
