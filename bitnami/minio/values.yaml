@@ -120,6 +120,10 @@ deployment:
   ##
   updateStrategy:
     type: Recreate
+  ## Number of replicas
+  ##
+  replicaCount: 1
+
 
 ## MinIO statefulset parameters
 ## Only when mode is 'distributed'
