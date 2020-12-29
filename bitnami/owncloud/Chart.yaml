@@ -7,6 +7,11 @@ dependencies:
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: A file sharing server that puts the control and security of your own data back into your hands.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/owncloud
@@ -24,4 +29,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 9.0.1
+version: 10.0.0
