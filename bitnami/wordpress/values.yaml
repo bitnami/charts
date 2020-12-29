@@ -433,6 +433,13 @@ ingress:
   ## with ALB ingress controllers.
   ##
   path: /
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -450,18 +457,22 @@ ingress:
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ##
   ## extraHosts:
-  ## - name: wordpress.local
-  ##   path: /
+  ##   - name: wordpress.local
+  ##     path: /
   ##
 
   ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
+  ##   pathType: ImplementationSpecific
   ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
+  ##     service:
+  ##       name: ssl-redirect
+  ##       port:
+  ##         name: use-annotation
   ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
