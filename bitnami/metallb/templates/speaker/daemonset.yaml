@@ -116,5 +116,5 @@ spec:
       affinity: {{- include "metallb.tplValue" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.speaker.tolerations}}
-      tolerations: {{- include "metallb.tplValue" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
       {{- end }}
