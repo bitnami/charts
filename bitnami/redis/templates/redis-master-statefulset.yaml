@@ -271,9 +271,6 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
-        {{- if .Values.master.persistence.volumes }}
-        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
-        {{- end }}
         - name: start-scripts
           configMap:
             name: {{ include "redis.fullname" . }}-scripts
@@ -293,7 +290,6 @@ spec:
         - name: config
           configMap:
             name: {{ template "redis.fullname" . }}
-        {{- if not (contains "redis-data" (quote .Values.master.persistence.volumes)) }}
         {{- if not .Values.master.persistence.enabled }}
         - name: "redis-data"
           emptyDir: {}
@@ -302,6 +298,8 @@ spec:
         - name: "redis-data"
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim }}
+        {{- else if .Values.master.persistence.volumes }}
+        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
         {{- end }}
         {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
@@ -342,7 +340,6 @@ spec:
         {{- if .Values.master.persistence.matchExpressions }}
           matchExpressions: {{- toYaml .Values.master.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
-  {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.master.statefulset.updateStrategy }}
