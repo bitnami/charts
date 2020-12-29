@@ -35,6 +35,7 @@ spec:
             - /bin/bash
             - -c
             - >-
+              set -e;
             {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
             {{- range $topic := .Values.provisioning.topics }}
               /opt/bitnami/kafka/bin/kafka-topics.sh \
@@ -48,7 +49,7 @@ spec:
                 {{- end }}
                 --topic {{ $topic.name }};
             {{- end }}
-              echo "Success provisioning"
+              echo "Success provisioning";
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.provisioning.image.debug | quote }}
