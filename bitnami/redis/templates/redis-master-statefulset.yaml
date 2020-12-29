@@ -302,6 +302,7 @@ spec:
         {{- if .Values.master.persistence.volumes }}
         {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
         {{- end }}
+        {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
         - name: host-sys
           hostPath:
