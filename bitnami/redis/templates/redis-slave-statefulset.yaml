@@ -12,6 +12,10 @@ metadata:
   {{- if .Values.slave.statefulset.labels }}
   {{- toYaml .Values.slave.statefulset.labels | nindent 4 }}
   {{- end }}
+{{- if .Values.slave.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.slave.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
 {{- if .Values.slave.updateStrategy }}
   strategy: {{- toYaml .Values.slave.updateStrategy | nindent 4 }}
@@ -206,6 +210,9 @@ spec:
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -c
@@ -225,10 +232,14 @@ spec:
                   key: {{ template "redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: REDIS_ADDR
+              value: rediss://localhost:{{ .Values.redisPort }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis.tlsCACert" . }}
             {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
