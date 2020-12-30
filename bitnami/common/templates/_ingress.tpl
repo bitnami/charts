@@ -8,7 +8,7 @@ Usage:
 
 Params:
   - path - String. Path inside the service
-  - pathType - String. Path typo
+  - pathType - String. Path type
   - serviceName - String. Name of an existing service backend
   - servicePort - String/Int. Port name (or number) of the service. It will be translated to different yaml depending if it is a string or an integer.
   - context - Dict - Required. The context for the template evaluation.
