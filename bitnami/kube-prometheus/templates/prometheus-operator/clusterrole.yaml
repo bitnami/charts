@@ -31,6 +31,7 @@ rules:
     resources:
       - alertmanagers
       - alertmanagers/finalizers
+      - alertmanagerconfigs
       - prometheuses
       - prometheuses/finalizers
       - thanosrulers
@@ -83,6 +84,14 @@ rules:
       - ""
     resources:
       - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
     verbs:
       - get
       - list

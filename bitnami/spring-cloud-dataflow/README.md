@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -89,15 +89,21 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                       | `default`                                               |
 | `server.configuration.trustK8sCerts`         | Trust K8s certificates when querying the Kubernetes API                                                | `false`                                                 |
 | `server.configuration.containerRegistries`   | Container registries configuration                                                                     | `{}` (check `values.yaml` for more information)         |
+| `server.configuration.metricsDashboard`      | Endpoint to the metricsDashboard instance                                                              | `nil`                                                   |
 | `server.existingConfigmap`                   | Name of existing ConfigMap with Dataflow server configuration                                          | `nil`                                                   |
 | `server.extraEnvVars`                        | Extra environment variables to be set on Dataflow server container                                     | `{}`                                                    |
 | `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                   | `nil`                                                   |
 | `server.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                                      | `nil`                                                   |
 | `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                           | `1`                                                     |
 | `server.strategyType`                        | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `server.affinity`                            | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `server.nodeSelector`                        | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `server.tolerations`                         | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                          |
+| `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                        |
+| `server.nodeAffinityPreset.type`             | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                                          |
+| `server.nodeAffinityPreset.key`              | Dataflow server node label key to match Ignored if `server.affinity` is set.                                     | `""`                                          |
+| `server.nodeAffinityPreset.values`           | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                 | `[]`                                          |
+| `server.affinity`                            | Dataflow server affinity for pod assignment                                                                      | `{}` (evaluated as a template)                |
+| `server.nodeSelector`                        | Dataflow server node labels for pod assignment                                                                   | `{}` (evaluated as a template)                |
+| `server.tolerations`                         | Dataflow server tolerations for pod assignment                                                                   | `[]` (evaluated as a template)                |
 | `server.priorityClassName`                   | Controller priorityClassName                                                                           | `nil`                                                   |
 | `server.podSecurityContext`                  | Dataflow server pods' Security Context                                                                 | `{ fsGroup: "1001" }`                                   |
 | `server.containerSecurityContext`            | Dataflow server containers' Security Context                                                           | `{ runAsUser: "1001" }`                                 |
@@ -139,6 +145,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `server.jdwp.enabled`                        | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `server.jdwp.port`                           | JDWP TCP port                                                                                          | `5005`                                                  |
+| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                     | `nil`                                                   |
+| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                 | `nil`                                                   |
 
 ### Dataflow Skipper parameters
 
@@ -158,9 +166,14 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars                                                      | `nil`                                                   |
 | `skipper.replicaCount`                       | Number of Skipper server replicas to deploy                                                            | `1`                                                     |
 | `skipper.strategyType`                       | Deployment Strategy Type                                                                               | `RollingUpdate`                                         |
-| `skipper.affinity`                           | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                          |
-| `skipper.nodeSelector`                       | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `skipper.tolerations`                        | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                          |
+| `skipper.podAffinityPreset`                  | Skipper pod affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                 |
+| `skipper.podAntiAffinityPreset`              | Skipper pod anti-affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                               |
+| `skipper.nodeAffinityPreset.type`            | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                 |
+| `skipper.nodeAffinityPreset.key`             | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                 |
+| `skipper.nodeAffinityPreset.values`          | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                 |
+| `skipper.affinity`                           | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                       |
+| `skipper.nodeSelector`                       | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                       |
+| `skipper.tolerations`                        | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                       |
 | `skipper.priorityClassName`                  | Controller priorityClassName                                                                           | `nil`                                                   |
 | `skipper.podSecurityContext`                 | Skipper server pods' Security Context                                                                  | `{ fsGroup: "1001" }`                                   |
 | `skipper.containerSecurityContext`           | Skipper server containers' Security Context                                                            | `{ runAsUser: "1001" }`                                 |
@@ -191,6 +204,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                   | `nil`                                                   |
 | `skipper.jdwp.enabled`                       | Enable Java Debug Wire Protocol (JDWP)                                                                 | `false`                                                 |
 | `skipper.jdwp.port`                          | JDWP TCP port                                                                                          | `5005`                                                  |
+| `skipper.extraVolumes`                       | Extra Volumes to be set on the Skipper Pod                                                             | `nil`                                                   |
+| `skipper.extraVolumeMounts`                  | Extra VolumeMounts to be set on the Skipper Container                                                  | `nil`                                                   |
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                      | `localhost`                                             |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                    | `7577`                                                  |
 
@@ -250,6 +265,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalDatabase.port`                      | External database port number                                                                          | `3306`                                                  |
 | `externalDatabase.password`                  | Password for the above username                                                                        | `""`                                                    |
 | `externalDatabase.existingPasswordSecret`    | Existing secret with database password                                                                 | `""`                                                    |
+| `externalDatabase.existingPasswordKey`       | Key of the existing secret with database password                                                      | `datasource-password`                                   |
 | `externalDatabase.dataflow.url`              | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.    | `""`                                                    |
 | `externalDatabase.dataflow.username`         | Existing username in the external db to be used by Dataflow server                                     | `dataflow`                                              |
 | `externalDatabase.dataflow.database`         | Name of the existing database to be used by Dataflow server                                            | `dataflow`                                              |
@@ -297,7 +313,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)
 
 ## Configuration and installation details
 
@@ -392,7 +408,7 @@ externalDatabase.dataflow.database=myskipperdatabase
 
 NOTE: When using the indidual propertes (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
 
-To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precendence over the individual attributes. As an example of configuring an external MS SQL Server database:
+To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. As an example of configuring an external MS SQL Server database:
 
 ```console
 mariadb.enabled=false
@@ -471,31 +487,50 @@ For each host indicated at `server.ingress.extraHosts`, please indicate a `name`
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
-
-It's necessary to set the root user parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, unless you indicate set this parameter, a random value will be generated. Inspect the MariaDB secret to obtain the root password, then you can upgrade your chart using the command below:
-
-#### v0.x.x
-
-```bash
-helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD]
-```
-
-#### v1.x.x
-
-```bash
-helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD]
-```
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
-#### v0.x.x
+### To 2.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### v0.x.x
 
 ```bash
 helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
-#### v1.x.x
+### v1.x.x
 
 ```bash
 helm upgrade my-release bitnami/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]

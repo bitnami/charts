@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -70,26 +70,28 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `image.pullPolicy`                         | MariaDB Galera image pull policy                                                                                                                                                                                                                                                 | `IfNotPresent`                                                    |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                                                                                                                                                 | `[]` (does not add image pull secrets to deployed pods)           |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                                                                                                                                                                                          | `false`                                                           |
-| `nameOverride`                             | String to partially override mariadb-galera.fullname template with a string (will prepend the release name)                                                                                                                                                                      | `nil`                                                             |
-| `fullnameOverride`                         | String to fully override mariadb-galera.fullname template with a string                                                                                                                                                                                                          | `nil`                                                             |
+| `nameOverride`                             | String to partially override common.names.fullname template with a string (will prepend the release name)                                                                                                                                                                        | `nil`                                                             |
+| `fullnameOverride`                         | String to fully override common.names.fullname template with a string                                                                                                                                                                                                            | `nil`                                                             |
 | `schedulerName`                            | Name of the k8s scheduler (other than default)                                                                                                                                                                                                                                   | `nil`                                                             |
 | `service.type`                             | Kubernetes service type                                                                                                                                                                                                                                                          | `ClusterIP`                                                       |
 | `service.port`                             | MariaDB service port                                                                                                                                                                                                                                                             | `3306`                                                            |
 | `service.clusterIP`                        | Specific cluster IP when service type is cluster IP. Use `None` for headless service                                                                                                                                                                                             | `nil`                                                             |
 | `service.nodePort`                         | Kubernetes Service nodePort                                                                                                                                                                                                                                                      | `nil`                                                             |
+| `service.externalIPs`                      | External IP list to use with ClusterIP service type                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.loadBalancerIP`                   | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                                                                                                               | `nil`                                                             |
 | `service.loadBalancerSourceRanges`         | Address that are allowed when svc is `LoadBalancer`                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.annotations`                      | Additional annotations for MariaDB Galera service                                                                                                                                                                                                                                | `{}`                                                              |
 | `service.headless.annotations`             | Annotations for the headless service. May be useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.                                                                                                                          | `{}`                                                              |
 | `clusterDomain`                            | Kubernetes DNS Domain name to use                                                                                                                                                                                                                                                | `cluster.local`                                                   |
 | `serviceAccount.create`                    | Specify whether a ServiceAccount should be created                                                                                                                                                                                                                               | `false`                                                           |
-| `serviceAccount.name`                      | The name of the ServiceAccount to create                                                                                                                                                                                                                                         | Generated using the mariadb-galera.fullname template              |
+| `serviceAccount.name`                      | The name of the ServiceAccount to create                                                                                                                                                                                                                                         | Generated using the common.names.fullname template                |
 | `rbac.create`                              | Specify whether RBAC resources should be created and used                                                                                                                                                                                                                        | `false`                                                           |
 | `securityContext.enabled`                  | Enable security context                                                                                                                                                                                                                                                          | `true`                                                            |
 | `securityContext.fsGroup`                  | Group ID for the container filesystem                                                                                                                                                                                                                                            | `1001`                                                            |
 | `securityContext.runAsUser`                | User ID for the container                                                                                                                                                                                                                                                        | `1001`                                                            |
 | `existingSecret`                           | Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-galera-mariabackup-password and mariadb-password. | `nil`                                                             |
-| `rootUser.password`                        | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                            | _random 10 character alphanumeric string_                         |
+| `rootUser.user`                            | Username for the admin user.                                                                                                                                                                                                                                                     | `root`                                                            |
+| `rootUser.password`                        | Password for the admin user. Ignored if existing secret is provided.                                                                                                                                                                                                             | _random 10 character alphanumeric string_                         |
 | `rootUser.forcePassword`                   | Force users to specify a password                                                                                                                                                                                                                                                | `false`                                                           |
 | `db.user`                                  | Username of new user to create                                                                                                                                                                                                                                                   | `nil`                                                             |
 | `db.password`                              | Password for the new user. Ignored if existing secret is provided.                                                                                                                                                                                                               | _random 10 character alphanumeric string if `db.user` is defined_ |
@@ -127,9 +129,14 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `annotations[].value`                      | value for the the annotation list item                                                                                                                                                                                                                                           | `nil`                                                             |
 | `replicaCount`                             | Desired number of cluster nodes                                                                                                                                                                                                                                                  | `3`                                                               |
 | `updateStrategy`                           | Statefulset update strategy policy                                                                                                                                                                                                                                               | `RollingUpdate`                                                   |
-| `affinity`                                 | Map of node/pod affinities                                                                                                                                                                                                                                                       | `{}` (The value is evaluated as a template)                       |
-| `nodeSelector`                             | Node labels for pod assignment (this value is evaluated as a template)                                                                                                                                                                                                           | `{}`                                                              |
-| `tolerations`                              | List of node taints to tolerate (this value is evaluated as a template)                                                                                                                                                                                                          | `[]`                                                              |
+| `podAffinityPreset`                        | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                                              | `""`                                                              |
+| `podAntiAffinityPreset`                    | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                                         | `soft`                                                            |
+| `nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                                        | `""`                                                              |
+| `nodeAffinityPreset.key`                   | Node label key to match. Ignored if `affinity` is set.                                                                                                                                                                                                                           | `""`                                                              |
+| `nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                                                                                        | `[]`                                                              |
+| `affinity`                                 | Affinity for pod assignment                                                                                                                                                                                                                                                      | `{}` (evaluated as a template)                                    |
+| `nodeSelector`                             | Node labels for pod assignment                                                                                                                                                                                                                                                   | `{}` (evaluated as a template)                                    |
+| `tolerations`                              | Tolerations for pod assignment                                                                                                                                                                                                                                                   | `[]` (evaluated as a template)                                    |
 | `persistence.enabled`                      | Enable persistence using PVC                                                                                                                                                                                                                                                     | `true`                                                            |
 | `persistence.existingClaim`                | Provide an existing `PersistentVolumeClaim`                                                                                                                                                                                                                                      | `nil`                                                             |
 | `persistence.subPath`                      | Subdirectory of the volume to mount                                                                                                                                                                                                                                              | `nil`                                                             |
@@ -139,7 +146,8 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.accessModes`                  | Persistent Volume Access Modes                                                                                                                                                                                                                                                   | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                         | Persistent Volume Size                                                                                                                                                                                                                                                           | `8Gi`                                                             |
 | `persistence.selector`                     | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                                                                                                                                          | `{}`                                                              |
-| `podLabels`                                | Additional pod labels                                                                                                                                                                                                                                                            | `{}`                                                              |
+| `podLabels`                                | Extra labels for MariaDB Galera pods                                                                                                                                                                                                                                             | `{}` (evaluated as a template)                                    |
+| `podAnnotations`                           | Annotations for MariaDB Galera  pods                                                                                                                                                                                                                                             | `{}` (evaluated as a template)                                    |
 | `priorityClassName`                        | Priority Class Name for Statefulset                                                                                                                                                                                                                                              | ``                                                                |
 | `extraInitContainers`                      | Additional init containers (this value is evaluated as a template)                                                                                                                                                                                                               | `[]`                                                              |
 | `extraContainers`                          | Additional containers (this value is evaluated as a template)                                                                                                                                                                                                                    | `[]`                                                              |
@@ -361,15 +369,15 @@ extraContainers:
   image: 'image:tag'
   env:
   - name: SERVICE_NAME
-    value: '{{ template "mariadb-galera.fullname" . }}'
+    value: '{{ template "common.names.fullname" . }}'
   - name: EUREKA_APP_NAME
-    value: '{{ template "mariadb-galera.name" . }}'
+    value: '{{ template "common.names.name" . }}'
   - name: MARIADB_USER
     value: '{{ .Values.db.user }}'
   - name: MARIADB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: '{{ template "mariadb-galera.fullname" . }}'
+        name: '{{ template "common.names.fullname" . }}'
         key: mariadb-password
   resources:
     limits:
@@ -398,7 +406,7 @@ data-my-galera-mariadb-galera-1   Bound    pvc-00ba6121-9042-4760-af14-3b8a40de9
 data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909b05   8Gi        RWO            gp2            25h
 ```
 
-The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordinly with yours for each PVC.
+The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordingly with yours for each PVC.
 
 ```bash
 kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
@@ -458,7 +466,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### All the nodes with `safe_to_bootstrap: 0`
 
-In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be choosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
+In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
@@ -475,6 +483,16 @@ The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-g
 
 The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
@@ -487,6 +505,31 @@ $ helm upgrade my-release bitnami/mariadb-galera \
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 5.2.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 5.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 2.0.0
 
@@ -514,4 +557,3 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
-

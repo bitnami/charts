@@ -44,6 +44,13 @@ Return the proper image name (for the init container auto-discovery image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the TLS Certs image)
+*/}}
+{{- define "mongodb.tls.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb.imagePullSecrets" -}}
@@ -131,6 +138,17 @@ Return true if a secret object should be created for MongoDB
 {{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
     {{- true -}}
 {{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MongoDB
+*/}}
+{{- define "mongodb.caSecretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{ .Values.tls.existingSecret }}
+{{- else -}}
+    {{ include "mongodb.fullname" . }}-ca
 {{- end -}}
 {{- end -}}
 
@@ -224,7 +242,7 @@ Validate values of MongoDB - service type for external access
 {{- define "mongodb.validateValues.externalAccessServiceType" -}}
 {{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
 mongodb: externalAccess.service.type
-    Available servive type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort or LoadBalancer.
 {{- end -}}
 {{- end -}}
 
@@ -263,4 +281,14 @@ mongodb: rbac.create
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
 {{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
+*/}}
+{{- define "mongodb.mongodb_exporter.uri" -}}
+    {{- $uriTlsArgs := ternary "tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
+    {{- $uriAuth := ternary "root:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+
+    {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
 {{- end -}}

@@ -1,30 +1,43 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "jenkins.fullname" . }}
-  labels: {{- include "jenkins.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.service.annotations }}
-  annotations: {{ include "jenkins.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
+  {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
+  {{ if eq .Values.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
       port: {{ .Values.service.port }}
+      protocol: TCP
       targetPort: http
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
+      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
       nodePort: {{ .Values.service.nodePorts.http }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
     - name: https
       port: {{ .Values.service.httpsPort }}
+      protocol: TCP
       targetPort: https
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
+      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https))) }}
       nodePort: {{ .Values.service.nodePorts.https }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
-  selector: {{- include "jenkins.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

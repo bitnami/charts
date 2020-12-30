@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.5.1-debian-10-r58
+  tag: 5.6.0-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -30,17 +30,17 @@ image:
   ##
   debug: false
 
-## String to partially override wordpress.fullname template (will maintain the release name)
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override wordpress.fullname template
+## String to fully override aspnet-core.fullname template
 ##
 # fullnameOverride:
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
 
 ## Add labels to all the deployed resources
 ##
@@ -50,10 +50,17 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Use existing secret (does not create the WordPress Secret object)
-## Must contain key `wordpress-secret`
-## NOTE: When it's set, the `wordpressPassword` parameter is ignored
-# existingSecret:
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Use a service account for the WordPress pod
+##
+serviceAccountName: default
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -65,6 +72,12 @@ wordpressUsername: user
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 # wordpressPassword:
+
+## Use existing secret (does not create the WordPress Secret object)
+## Must contain key `wordpress-secret`
+## NOTE: When it's set, the `wordpressPassword` parameter is ignored
+##
+# existingSecret:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -150,64 +163,117 @@ updateStrategy:
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/#smtp-configuration
 ##
+# smtpHost:
+# smtpPort:
+# smtpUser:
+# smtpPassword:
+# smtpProtocol:
 
 ## Use an existing secret for the SMTP Password
 ## Can be the same secret as existingSecret
 ## Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
+##
 # smtpExistingSecret:
 
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpUsername:
-# smtpProtocol:
-
+## Number of replicas (requires ReadWriteMany PVC support)
+##
 replicaCount: 1
 
-## Additional container environment variables
-## Example: Configure SSL for database
-## extraEnv:
-##   - name: WORDPRESS_DATABASE_SSL_CA_FILE
-##     value: /path/to/ca_cert
+## An array to add extra env vars
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
 ##
-extraEnv: []
+extraEnvVars: []
 
-## Additional volume mounts
-## Example: Mount CA file
-## extraVolumeMounts
-##   - name: ca-cert
-##     subPath: ca_cert
-##     mountPath: /path/to/ca_cert
+## ConfigMap with extra environment variables
 ##
-extraVolumeMounts: []
+extraEnvVarsCM:
 
-## Additional volumes
-## Example: Add secret volume
-## extraVolumes:
-##  - name: ca-cert
-##    secret:
-##      secretName: ca-cert
-##      items:
-##        - key: ca-cert
-##          path: ca_cert
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
 ##
 extraVolumes: []
 
-## WordPress containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## Extra volume mounts to add to the container
 ##
-resources:
-  limits: {}
-  #   cpu: 500m
-  #   memory: 1Gi
-  requests:
-    memory: 512Mi
-    cpu: 300m
+extraVolumeMounts: []
+
+## Add sidecars to the pod.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## Add init containers to the pod.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## Example:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-content. Should work with extraVolumeMounts and extraVolumes']
+##
+initContainers: {}
+
+## Pod Labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -221,29 +287,48 @@ nodeSelector: {}
 ##
 tolerations: {}
 
-## Pod Labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+## WordPress containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-podLabels: {}
+resources:
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
 
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-podAnnotations: {}
-
-## K8s Security Context for WordPress pods
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
 
-## WordPress pod extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## WordPress containers' liveness and readiness probes.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ##
 livenessProbe:
   enabled: true
+  httpGet:
+    path: /wp-admin/install.php
+    port: http
+    scheme: HTTP
+    ## If using an HTTPS-terminating load-balancer, the probes may need to behave
+    ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
+    ## docs, 302 should be considered "successful", but this issue on GitHub
+    ## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
+    ##
+    ## httpHeaders:
+    ## - name: X-Forwarded-Proto
+    ##   value: https
+    ##
+    httpHeaders: []
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -251,34 +336,36 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
+  httpGet:
+    path: /wp-login.php
+    port: http
+    scheme: HTTP
+    ## If using an HTTPS-terminating load-balancer, the probes may need to behave
+    ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
+    ## docs, 302 should be considered "successful", but this issue on GitHub
+    ## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
+    ##
+    ## httpHeaders:
+    ## - name: X-Forwarded-Proto
+    ##   value: https
+    ##
+    httpHeaders: []
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
 
-## Allow health checks to be pointed at the https port
-##
-healthcheckHttps: false
-
 ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
 ##
 customLivenessProbe: {}
 customReadinessProbe: {}
 
-## If using an HTTPS-terminating load-balancer, the probes may need to behave
-## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
-## docs, 302 should be considered "successful", but this issue on GitHub
-## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
+## Container ports
 ##
-# livenessProbeHeaders:
-# - name: X-Forwarded-Proto
-#   value: https
-# readinessProbeHeaders:
-# - name: X-Forwarded-Proto
-#   value: https
-livenessProbeHeaders: {}
-readinessProbeHeaders: {}
+containerPorts:
+  http: 8080
+  https: 8443
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
@@ -296,29 +383,37 @@ service:
   ## if you want the target port to be "http" or "80" you can specify that here.
   ##
   httpsTargetPort: https
-  ## Metrics Port
-  ##
-  metricsPort: 9117
   ## Node Ports to expose
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
-  ##   metrics: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
     http: ""
     https: ""
-    metrics: ""
+  ## Service clusterIP.
+  ##
+  # clusterIP: None
+  ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
+  ## Load Balancer sources
+  ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## Example:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  annotations: {}
-  ## Limits which cidr blocks can connect to service's load balancer
-  ## Only valid if service.type: LoadBalancer
+  ## Provide any additional annotations which may be required (evaluated as a template).
   ##
-  loadBalancerSourceRanges: []
+  annotations: {}
   ## Extra ports to expose (normally used with the `sidecar` value)
+  ##
   # extraPorts:
 
 ## Configure the ingress resource that allows you to access the
@@ -333,6 +428,14 @@ ingress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
@@ -362,6 +465,15 @@ ingress:
   ## extraHosts:
   ## - name: wordpress.local
   ##   path: /
+  ##
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
   ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
@@ -408,84 +520,26 @@ persistence:
   accessMode: ReadWriteOnce
   size: 10Gi
 
+## Wordpress Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
-## MariaDB chart configuration
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
+## Wordpress Autoscaling configuration
 ##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-##
-mariadb:
-  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
-  ##
-  enabled: true
-  ## Disable MariaDB replication
-  ##
-  replication:
-    enabled: false
-
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
-  db:
-    name: bitnami_wordpress
-    user: bn_wordpress
-    ## If the password is not specified, mariadb will generates a random password
-    ##
-    # password:
-
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
-    persistence:
-      enabled: true
-      ## mariadb data Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      # storageClass: "-"
-      accessModes:
-        - ReadWriteOnce
-      size: 8Gi
-
-##
-## External Database Configuration
-##
-## All of these values are only used when mariadb.enabled is set to false
-##
-externalDatabase:
-  ## Use existing secret (ignores previous password)
-  ## must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  # existingSecret:
-
-  ## Database host
-  ##
-  host: localhost
-
-  ## non-root Username for Wordpress Database
-  ##
-  user: bn_wordpress
-
-  ## Database password
-  ##
-  password: ""
-
-  ## Database name
-  ##
-  database: bitnami_wordpress
-
-  ## Database port number
-  ##
-  port: 3306
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  # targetCPU: 50
+  # targetMemory: 50
 
 ## Prometheus Exporter / Metrics
 ##
@@ -494,7 +548,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r190
+    tag: 0.8.0-debian-10-r246
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -502,11 +556,18 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  ## Metrics exporter pod Annotation and Labels
+
+  ## Prometheus expoter service parameters
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
+  service:
+    ## Metrics port
+    ##
+    port: 9117
+    ## Annotations for the Prometheus exporter service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
   ## Metrics exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -540,25 +601,94 @@ metrics:
     ##
     additionalLabels: {}
 
-## Add sidecars to the pod.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
 ##
-sidecars: {}
+## MariaDB chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+##
+mariadb:
+  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
+  enabled: true
+  ## MariaDB architecture. Allowed values: standalone or replication
+  ##
+  architecture: standalone
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_wordpress
+    username: bn_wordpress
+    password: ""
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    persistence:
+      enabled: true
+      ## mariadb data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
 
-## Add init containers to the pod.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-## Example:
-## initContainers:
-##  - name: your-image-name
-##    image: your-image
-##    imagePullPolicy: Always
-##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-conntent. Should work with extraVolumeMounts and extraVolumes']
 ##
-initContainers: {}
+## External Database Configuration
+##
+## All of these values are only used when mariadb.enabled is set to false
+##
+externalDatabase:
+  ## Database host
+  ##
+  host: localhost
+  ## non-root Username for Wordpress Database
+  ##
+  user: bn_wordpress
+  ## Database password
+  ##
+  password: ""
+  ## Database name
+  ##
+  database: bitnami_wordpress
+  ## Database port number
+  ##
+  port: 3306
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  # existingSecret:
+
+## Make use of custom post-init.d user scripts functionality inside the bitnami/wordpress image
+## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
+##
+## The logic of the post-init.d user scripts is that all is all files with extensions .sh, .sql or .php are executed for one time only, at the very first initialization of the pod as the very last step of entrypoint.sh.
+## Example:
+## customPostInitScripts:
+##   enable-multisite.sh: |
+##     #!/bin/bash
+##     chmod +w /bitnami/wordpress/wp-config.php
+##     wp core multisite-install --url=example.com --title="Welcome to the WordPress Multisite" --admin_user="doesntmatternotreallyused" --admin_password="doesntmatternotreallyused" --admin_email="user@example.com"
+##     cat /docker-entrypoint-init.d/.htaccess > /bitnami/wordpress/.htaccess
+##     chmod -w bitnami/wordpress/wp-config.php
+##   .htaccess: |
+##     RewriteEngine On
+##     RewriteBase /
+##     ...
+##
+## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
+##
+customPostInitScripts: {}

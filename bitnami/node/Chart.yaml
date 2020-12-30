@@ -1,21 +1,31 @@
-apiVersion: v1
-name: node
-version: 13.1.1
-appVersion: 10.22.1
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 14.15.3
+dependencies:
+  - condition: mongodb.enabled
+    name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Event-driven I/O server-side JavaScript environment based on V8
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/node
+icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
 keywords:
   - node
   - javascript
   - nodejs
   - git
-home: https://github.com/bitnami/charts/tree/master/bitnami/node
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
-annotations:
-  category: Infrastructure
+version: 14.1.0

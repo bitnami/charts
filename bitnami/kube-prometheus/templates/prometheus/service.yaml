@@ -21,6 +21,12 @@ spec:
   loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "LoadBalancer") .Values.prometheus.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.operator.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (eq .Values.prometheus.service.externalTrafficPolicy "Local") .Values.prometheus.service.healthCheckNodePort }}
+  healthCheckNodePort: {{ .Values.prometheus.service.healthCheckNodePort }}
+  {{- end }}
   {{- if and (eq .Values.prometheus.service.type "ClusterIP") .Values.prometheus.service.clusterIP }}
   clusterIP: {{ .Values.prometheus.service.clusterIP }}
   {{- end }}

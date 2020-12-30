@@ -1,9 +1,10 @@
 {{- if .Values.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "joomla.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: joomla
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -24,7 +25,7 @@ spec:
       paths:
         - path: {{ default "/" .path }}
           backend:
-            serviceName: {{ include "joomla.fullname" $ }}
+            serviceName: {{ include "common.names.fullname" $ }}
             servicePort: 80
   {{- range .Values.ingress.hosts }}
   - host: {{ .name }}
@@ -32,7 +33,7 @@ spec:
       paths:
       - path: {{ default "/" .path }}
         backend:
-          serviceName: {{ include "joomla.fullname" $ }}
+          serviceName: {{ include "common.names.fullname" $ }}
           servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}

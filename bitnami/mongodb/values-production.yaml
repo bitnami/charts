@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.1-debian-10-r39
+  tag: 4.4.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -89,6 +89,27 @@ auth:
   ##
   # existingSecret: name-of-existing-secret
 
+tls:
+  ## Enable or disable MongoDB TLS Support
+  enabled: false
+
+  ## Existing secret with MongoDB TLS certificates
+  ## NOTE: When it's set it will disable certificate creation
+  ##
+  # existingSecret: name-of-existing-secret
+
+  ## Add Custom CA certificate
+  # caCert: base64 encoded ca certificate
+  # caKey: base64 encoded private key
+  ##
+  ## Bitnami Nginx image
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.19.6-debian-10-r6
+    pullPolicy: IfNotPresent
+
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
 ##
@@ -119,7 +140,7 @@ disableSystemLog: false
 ## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
-## configuration:
+## configuration: |-
 ##   # where and how to store data.
 ##   storage:
 ##     dbPath: /bitnami/mongodb/data/db
@@ -228,8 +249,42 @@ strategyType: RollingUpdate
 ##
 podManagementPolicy: OrderedReady
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -243,7 +298,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## Lables for MongoDB pods. Evaluated as a template.
+## Labels for MongoDB pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
@@ -405,6 +460,11 @@ persistence:
   ## and one PV for multiple services.
   ##
   subPath: ""
+  ## Fine tuning for volumeClaimTemplates
+  volumeClaimTemplates:
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+    selector:
 
 ## Service parameters
 ##
@@ -461,7 +521,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.9-debian-10-r30
+      tag: 1.18.13-debian-10-r12
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -581,22 +641,56 @@ arbiter:
   ##
   labels: {}
 
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: arbiter.podAffinityPreset, arbiter.podAntiAffinityPreset, and arbiter.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
-  ## Lables for MongoDB Arbiter pods. Evaluated as a template.
+  ## Labels for MongoDB Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
@@ -743,7 +837,7 @@ rbac:
   ##
   create: false
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
@@ -804,7 +898,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r18
+    tag: 0.20.1-debian-10-r18
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -901,8 +995,20 @@ metrics:
     ## Specify the namespace where Prometheus Operator is running
     ##
     # namespace: monitoring
+
     ## Define individual alerting rules as required
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    ##
+    ## This is an example of a rule, you should add the below code block under the "rules" param, removing the brackets
+    ## - name: example
+    ##   rules:
+    ##   - alert: HighRequestLatency
+    ##     expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    ##     for: 10m
+    ##     labels:
+    ##       severity: page
+    ##     annotations:
+    ##       summary: High request latency
     ##
     rules: {}

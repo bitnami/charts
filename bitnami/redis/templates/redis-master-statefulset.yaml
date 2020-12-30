@@ -12,6 +12,10 @@ metadata:
   {{- if .Values.master.statefulset.labels }}
   {{- toYaml .Values.master.statefulset.labels | nindent 4 }}
   {{- end }}
+{{- if .Values.master.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.master.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
   selector:
     matchLabels:
@@ -190,6 +194,9 @@ spec:
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
             - -c
@@ -209,10 +216,14 @@ spec:
                   key: {{ template "redis.secretPasswordKey" . }}
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: REDIS_ADDR
+              value: rediss://localhost:{{ .Values.redisPort }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis.tlsCACert" . }}
             {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
@@ -237,6 +248,8 @@ spec:
         image: "{{ template "redis.volumePermissions.image" . }}"
         imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
         command:
+          - /bin/sh
+          - -cx
           - |
             {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
             chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.master.persistence.path }}
@@ -297,7 +310,7 @@ spec:
         {{- if .Values.persistence.existingClaim }}
         - name: "redis-data"
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
+            claimName: {{ include "redis.tplValue" (dict "value" .Values.persistence.existingClaim "context" $) }}
         {{- end }}
         {{- if .Values.master.persistence.volumes }}
         {{- toYaml .Values.master.persistence.volumes | nindent 8 }}

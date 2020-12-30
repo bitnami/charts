@@ -7,6 +7,47 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
+## String to partially override aspnet-core.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override aspnet-core.fullname template
+##
+# fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Bitnami Kubewatch image version
+## ref: https://hub.docker.com/r/bitnami/kubewatch/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/kubewatch
+  tag: 0.1.0-debian-10-r133
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
 slack:
   enabled: true
   # Slack channel to notify
@@ -62,58 +103,188 @@ resourcesToWatch:
   job: false
   persistentvolume: false
 
-image:
-  registry: docker.io
-  repository: bitnami/kubewatch
-  tag: 0.1.0-debian-10-r89
-  pullPolicy: Always
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## An array to add extra env vars
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Number of Kubewatch replicas to deploy
+##
+replicaCount: 1
+
+## Kubewatch containers' SecurityContext
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: false
+  ## fsGroup: 1001
+
+## Kubewatch pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: false
+  ## runAsUser: 1001
+  ## runAsNonRoot: true
+
+## Kubewatch resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 200m
+  #   memory: 10Mi
+
+## Kubewatch containers' liveness and readiness probes.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+
+## Custom Liveness probes for Kubewatch
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes Kubewatch
+##
+customReadinessProbe: {}
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
 
-## String to partially override kubewatch.fullname template (will maintain the release name)
+## Affinity for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
-# nameOverride:
+affinity: {}
 
-## String to fully override kubewatch.fullname template
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-# fullnameOverride:
-
-rbac:
-  # If true, create & use RBAC resources
-  #
-  create: true
-
-serviceAccount:
-  # Specifies whether a ServiceAccount should be created
-  create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
-
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 300Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 300Mi
-
-# Affinity for pod assignment
-# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-# affinity: {}
-
-# Tolerations for pod assignment
-# Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: []
-
-# Node labels for pod assignment
-# Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
-podAnnotations: {}
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
 podLabels: {}
-replicaCount: 1
+
+## Annotations for server pods.
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Add init containers to the Kubewatch pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the Kubewatch pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## Specifies whether RBAC resources should be created
+##
+rbac:
+  create: false
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name: ""

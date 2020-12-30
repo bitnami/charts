@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.1.0-debian-10-r23
+  tag: 2.1.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.1.0-debian-10-r16
+  tag: 2.1.2-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -65,7 +65,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.1.0-debian-10-r30
+  tag: 2.1.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r182
+  tag: 0.12.0-debian-10-r237
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,7 +115,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.1.0-debian-10-r29
+  tag: 2.1.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,7 +140,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.1.0-debian-10-r29
+  tag: 2.1.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -165,7 +165,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.1.0-debian-10-r34
+  tag: 2.1.2-debian-10-r11
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -190,7 +190,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.1.0-debian-10-r30
+  tag: 2.1.2-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.1.0-debian-10-r29
+  tag: 2.1.2-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -241,7 +241,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.1.0-debian-10-r29
+  tag: 2.1.2-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -266,7 +266,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.1.0-debian-10-r29
+  tag: 2.1.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -291,7 +291,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.3-debian-10-r18
+  tag: 1.19.6-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -471,7 +471,7 @@ podSecurityContext:
   fsGroup: 1001
 
 ## The persistence is enabled by default and a default StorageClass
-## is needed in the k8s cluster to provision volumes dynamicly.
+## is needed in the k8s cluster to provision volumes dynamically.
 ## Specify another StorageClass in the "storageClass" or set "existingClaim"
 ## if you have already existing persistent volumes to use
 ##
@@ -531,7 +531,7 @@ persistence:
   ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
   ##
   imageChartStorage:
-    ## Name of a secret contaning the CA bundle
+    ## Name of a secret containing the CA bundle
     ##
     caBundleSecretName:
     ## Specify whether to disable `redirect` for images and chart storage, for
@@ -647,12 +647,13 @@ proxy:
     - core
     - jobservice
     - clair
+    - trivy
 
 nginx:
   ## NGINX container command (using container default if not set)
   ##
   command:
-  ## NGINX container args (using container default if ot set)
+  ## NGINX container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -694,6 +695,10 @@ nginx:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -719,26 +724,66 @@ nginx:
     ##   memory: 256Mi
     ##
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## Tolerations for pod assignment. Evaluated as a template.
+
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
+
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
+
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
   ## When setting up Harbor behind another reverse proxy, such as a nginx instance, set this value to true
   ## if the reverse proxy already provides the 'X-Forwarded-Proto' header field.
   ## This is, for example, the case for the OpenShift HAProxy router.
@@ -771,7 +816,7 @@ portal:
   ## Harbor portal container command (using container default if not set)
   ##
   command:
-  ## Harbor portal container args (using container default if ot set)
+  ## Harbor portal container args (using container default if not set)
   ##
   args:
 
@@ -827,6 +872,10 @@ portal:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -853,20 +902,55 @@ portal:
     ##   memory: 256Mi
     ##
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -902,7 +986,7 @@ core:
   ## Harbor core container command (using container default if not set)
   ##
   command:
-  ## Harbor core container args (using container default if ot set)
+  ## Harbor core container args (using container default if not set)
   ##
   args:
 
@@ -968,6 +1052,10 @@ core:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -992,20 +1080,55 @@ core:
     #  cpu: 250m
     #  memory: 256Mi
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1061,7 +1184,7 @@ jobservice:
   ## Harbor Jobservice container command (using container default if not set)
   ##
   command:
-  ## Harbor Jobservice container args (using container default if ot set)
+  ## Harbor Jobservice container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -1121,6 +1244,10 @@ jobservice:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1147,20 +1274,55 @@ jobservice:
     ##   memory: 256Mi
     ##
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1220,7 +1382,7 @@ registry:
     ## Container command (using container default if not set)
     ##
     command:
-    ## Container args (using container default if ot set)
+    ## Container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1291,7 +1453,7 @@ registry:
     ## Container command (using container default if not set)
     ##
     command:
-    ## Container args (using container default if ot set)
+    ## Container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1360,6 +1522,10 @@ registry:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1368,20 +1534,55 @@ registry:
   ##
   sidecars: []
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1431,7 +1632,7 @@ chartmuseum:
   ## Chartmuseum container command (using container default if not set)
   ##
   command:
-  ## Chartmuseum container args (using container default if ot set)
+  ## Chartmuseum container args (using container default if not set)
   ##
   args:
   replicas: 1
@@ -1514,6 +1715,10 @@ chartmuseum:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1538,20 +1743,55 @@ chartmuseum:
     #  cpu: 250m
     #  memory: 256Mi
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1614,13 +1854,13 @@ clair:
   ##
   updatersInterval: 12
 
-  ## Harbor needs Clair adapter to comunicate with Clair API.
+  ## Harbor needs Clair adapter to communicate with Clair API.
   ##
   adapter:
     ## Clair adapter container command (using container default if not set)
     ##
     command:
-    ## Clair adapter container args (using container default if ot set)
+    ## Clair adapter container args (using container default if not set)
     ##
     args:
     ## An array to add extra env vars
@@ -1691,7 +1931,7 @@ clair:
     ## Clair container command (using container default if not set)
     ##
     command:
-    ## Clair container args (using container default if ot set)
+    ## Clair container args (using container default if not set)
     ##
     args:
 
@@ -1763,6 +2003,10 @@ clair:
   ##
   extraVolumes: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1771,20 +2015,55 @@ clair:
   ##
   sidecars: []
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1809,7 +2088,7 @@ trivy:
   ## Harbor Trivy container command (using container default if not set)
   ##
   command:
-  ## Harbor Trivy container args (using container default if ot set)
+  ## Harbor Trivy container args (using container default if not set)
   ##
   args:
 
@@ -1898,6 +2177,10 @@ trivy:
   ##
   extraVolumeMounts: []
 
+  ## HostAliases to add to the deployment
+  ##
+  hostAliases: []
+
   ## Extra init containers to add to the deployment
   ##
   initContainers: []
@@ -1935,20 +2218,56 @@ trivy:
   ## Custom Rediness probe
   ##
   customReadinessProbe: {}
-  ## Node labels for pod assignment. Evaluated as a template.
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1968,7 +2287,7 @@ notary:
     ## Notary server container command (using container default if not set)
     ##
     command:
-    ## Notary server container args (using container default if ot set)
+    ## Notary server container args (using container default if not set)
     ##
     args:
     replicas: 1
@@ -2000,6 +2319,10 @@ notary:
     ## Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
+
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
 
     ## lifecycleHooks for the container to automate configuration before or after startup.
     ##
@@ -2056,20 +2379,55 @@ notary:
     ##
     sidecars: []
 
-    ## Node labels for pod assignment. Evaluated as a template.
+    ## Pod affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAffinityPreset: ""
+
+    ## Pod anti-affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAntiAffinityPreset: soft
+
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ## Allowed values: soft, hard
+    ##
+    nodeAffinityPreset:
+      ## Node affinity type
+      ## Allowed values: soft, hard
+      ##
+      type: ""
+      ## Node label key to match
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## Node label values to match
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+
+    ## Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
 
-    ## Tolerations for pod assignment. Evaluated as a template.
+    ## Tolerations for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-
-    ## Affinity for pod assignment. Evaluated as a template.
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ##
-    affinity: {}
 
     ## Pod extra labels. Evaluated as a template.
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -2085,7 +2443,7 @@ notary:
     ## Notary signer container command (using container default if not set)
     ##
     command:
-    ## Notary signer container args (using container default if ot set)
+    ## Notary signer container args (using container default if not set)
     ##
     args:
     replicas: 1
@@ -2135,6 +2493,10 @@ notary:
     ##
     extraVolumes: []
 
+    ## HostAliases to add to the deployment
+    ##
+    hostAliases: []
+
     ## Extra init containers to add to the deployment
     ##
     initContainers: []
@@ -2143,20 +2505,55 @@ notary:
     ##
     sidecars: []
 
-    ## Node labels for pod assignment. Evaluated as a template.
+    ## Pod affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAffinityPreset: ""
+
+    ## Pod anti-affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAntiAffinityPreset: soft
+
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ## Allowed values: soft, hard
+    ##
+    nodeAffinityPreset:
+      ## Node affinity type
+      ## Allowed values: soft, hard
+      ##
+      type: ""
+      ## Node label key to match
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## Node label values to match
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+
+    ## Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
 
-    ## Tolerations for pod assignment. Evaluated as a template.
+    ## Tolerations for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-
-    ## Affinity for pod assignment. Evaluated as a template.
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ##
-    affinity: {}
 
     ## Pod extra labels. Evaluated as a template.
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -2248,6 +2645,7 @@ externalRedis:
   ## Redis password
   ##
   password: ''
+  coreDatabaseIndex: '0'
   jobserviceDatabaseIndex: '1'
   registryDatabaseIndex: '2'
   chartmuseumDatabaseIndex: '3'
@@ -2304,7 +2702,7 @@ externalDatabase:
   port: 5432
   ## External database ssl mode
   ##
-  sslmode:
+  sslmode: disable
   ## External database name for core
   ##
   coreDatabase:

@@ -92,7 +92,7 @@ security.protocol={{ $clientProtocol }}
 sasl.mechanism=SCRAM-SHA-256
 {{- else if  .Values.auth.saslMechanisms | regexFind "scram-sha-512" }}
 sasl.mechanism=SCRAM-SHA-512
-{{- else -}}
+{{- else }}
 sasl.mechanism=PLAIN
 {{- end }}
 {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
@@ -177,5 +177,8 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- end }}
 
-{{- include "kafka.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "kafka.validateValues" . }}

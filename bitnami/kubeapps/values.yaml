@@ -117,7 +117,7 @@ ingress:
   #     ##
   #     tlsSecret: kubeapps.local-tls
 
-## Frontend paramters
+## Frontend parameters
 ##
 frontend:
   replicaCount: 2
@@ -219,7 +219,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.0.0-scratch-r2
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -231,7 +231,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.0.0-scratch-r2
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -328,7 +328,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.0.0-scratch-r2
+    tag: 2.0.1-scratch-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -372,7 +372,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.0.0-scratch-r2
+    tag: 2.0.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -437,7 +437,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.0.0-debian-10-r5
+    tag: 2.0.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -520,7 +520,7 @@ postgresql:
       memory: 256Mi
       cpu: 250m
 
-## RBAC paramters
+## RBAC parameters
 ##
 rbac:
   ## Perform creation of RBAC resources
@@ -559,6 +559,11 @@ authProxy:
   ##
   oauthLoginURI: /oauth2/start
   oauthLogoutURI: /oauth2/sign_out
+
+  ## Skip the Kubeapps login page when using OIDC and directly redirect to the IdP
+  ##
+  skipKubeappsLoginPage: false
+
   ## The remaining auth proxy values are relevant only if an internal auth-proxy is
   ## being configured by Kubeapps.
   ## Bitnami OAuth2 Proxy image

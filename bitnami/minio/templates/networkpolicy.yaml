@@ -2,14 +2,12 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "minio.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels: {{- include "minio.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   podSelector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "minio.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -18,6 +16,6 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ include "minio.fullname" . }}-client: "true"
+              {{ include "common.names.fullname" . }}-client: "true"
       {{- end }}
 {{- end }}

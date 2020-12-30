@@ -1,0 +1,749 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Release name override
+##
+nameOverride:
+
+## Release full name override
+##
+fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+image:
+  registry: docker.io
+  repository: bitnami/kiam
+  tag: 3.6.0-debian-10-r64
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  pullSecrets: []
+  #   - myRegistryKeySecretName
+
+## kiam server properties
+##
+server:
+  enabled: true
+
+  ## Service configuration
+  ##
+  service:
+    ## Service type.
+    ##
+    type: ClusterIP
+    ## HTTPS Port
+    ##
+    port: 8443
+    ## Specify the nodePort values for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http:
+      metrics:
+    ## Service clusterIP.
+    ##
+    clusterIP: None
+    ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## Example:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## Provide any additional annotations which may be required (evaluated as a template).
+    ##
+    annotations: {}
+
+  containerPort: 8443
+  ## Use a deployment instead of a daemonset
+  ##
+  resourceType: daemonset
+
+  ## Whether the kiam server should use host network
+  ##
+  useHostNetwork: false
+
+  ## Number of nodes
+  ##
+  replicaCount: 1
+
+  ## Logging settings
+  ##
+  logJsonOutput: true
+  logLevel: info
+
+  # Location of SSL certs on host
+  sslCertHostPath: /etc/ssl/certs
+
+  podSecurityPolicy:
+    create: true
+    allowedHostPaths: []
+
+  ## Used to assign priority to server pods
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+  ## Additional kiam arguments
+  ##
+  extraArgs: {}
+
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  serviceAccount:
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
+
+  ## Override command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## Base64-encoded PEM values for server's CA certificate(s), certificate and private key
+  ##
+  tlsFiles:
+    ca:
+    cert:
+    key:
+
+  ## Timeout when creating the kiam gateway
+  ##
+  gatewayTimeoutCreation: 1s
+
+  ## Secret name of server's TLS certificates
+  ##
+  tlsSecret:
+
+  ## Pod DNS policy
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods-dns-policy
+  ##
+  dnsPolicy: Default
+
+  ## Base ARN for IAM roles
+  ## If not specified use EC2 metadata service to detect ARN prefix
+  ##
+  roleBaseArn: null
+
+  ## Pod cache settings
+  ##
+  cacheSyncInterval: 1m
+
+  ## IAM role for the server to assume
+  ##
+  assumeRoleArn: null
+  ## Session duration for STS tokens
+  ##
+  sessionDuration: 15m
+
+  ## Agent TLS Certificate filenames
+  ##
+  tlsCerts:
+    certFileName: cert.pem
+    keyFileName: key.pem
+    caFileName: ca.pem
+
+  ## kiam server resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## SecurityContext configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    seLinuxOptions:
+
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## lifecycleHooks for the kiam server container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
+
+  ## Custom Liveness probes for kiam server
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes kiam server
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the kiam server pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+
+  ## Add sidecars to the kiam server pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  metrics:
+    enabled: false
+    port: 9621
+    syncInterval: 5s
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: '{{ .Values.server.metrics.port }}'
+
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      enabled: false
+      ## Namespace in which Prometheus is running
+      ##
+      namespace:
+
+      ## Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+
+      ## MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+      ##
+      metricRelabelings: []
+
+      ## RelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+      ##
+      relabelings: []
+
+      ## Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout:
+
+      ## ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      selector:
+
+## kiam agent properties
+##
+agent:
+  enabled: true
+
+  ## Service configuration (essentially for metrics)
+  ##
+  service:
+    ## Service type.
+    ##
+    type: ClusterIP
+    ## Specify the nodePort values for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      metrics:
+    ## Service clusterIP.
+    ##
+    clusterIP:
+    ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## Example:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## Provide any additional annotations which may be required (evaluated as a template).
+    ##
+    annotations: {}
+
+  ## Logging settings
+  ##
+
+  logJsonOutput: true
+  logLevel: info
+
+  ## Used to assign priority to server pods
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
+  ## agent permits only request paths matching this reg-ex
+  ##
+  allowRouteRegExp:
+
+  ## Host networking settings
+  ##
+  containerPort: 8183
+  iptables: false
+  # do not remove iptables forwarding rules when kiam-agent terminates
+  # needed for RollingUpdate strategy and for security reeasons
+  iptablesRemoveOnShutdown: false
+  hostInterface: cali+
+
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  serviceAccount:
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name:
+
+  ## gRPC keepalive variables
+  ##
+  keepaliveParams:
+    time:
+    timeout:
+    ## gRPC keepalive ping even with no RPC
+    ##
+    permitWithoutStream: false
+
+  ## if true, liveness probe will fail if the agent is not
+  ## able to communicate with servers, which may happen on
+  ## certificate change
+  ##
+  enableDeepProbe: false
+
+  ## Pod DNS policy
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods-dns-policy
+  ##
+  dnsPolicy: ClusterFirstWithHostNet
+
+  # Location of SSL certs on host
+  sslCertHostPath: /etc/ssl/certs
+
+  ## Base64-encoded PEM values for server's CA certificate(s), certificate and private key
+  ##
+  tlsFiles:
+    ca:
+    cert:
+    key:
+
+  podSecurityPolicy:
+    create: true
+    allowedHostPaths:
+
+  ## Secret name of server's TLS certificates
+  ##
+  tlsSecret:
+
+  ## Use hostNetwork for agent
+  ## This is necessary for intercepting the metadata URL for nodes.
+  ##
+  useHostNetwork: true
+
+  ## Agent TLS Certificate filenames
+  ##
+  tlsCerts:
+    certFileName: cert.pem
+    keyFileName: key.pem
+    caFileName: ca.pem
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+  ## Additional kiam arguments
+  ##
+  extraArgs: {}
+
+  ## Timeout when creating the kiam gateway
+  ##
+  gatewayTimeoutCreation: 1s
+
+  ## Override command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## kiam agent resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## SecurityContext configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    seLinuxOptions:
+
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Annotations for agent pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## kiam agent pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## lifecycleHooks for the kiam agent container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
+
+  ## Custom Liveness probes for kiam agent
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes kiam agent
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the kiam agent pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+
+  ## Add sidecars to the kiam agent pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  metrics:
+    enabled: false
+    port: 9620
+    syncInterval: 5s
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: '{{ .Values.agent.metrics.port }}'
+
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      enabled: false
+      ## Namespace in which Prometheus is running
+      ##
+      namespace:
+
+      ## Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+
+      ## MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+      ##
+      metricRelabelings: []
+
+      ## RelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+      ##
+      relabelings: []
+
+      ## Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout:
+
+      ## ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      selector:
+
+## Specifies whether RBAC resources should be created
+##
+rbac:
+  create: true

@@ -55,7 +55,7 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- if .Values.initContainers -}}{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}{{- end -}}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "moodle.volumePermissions.image" . }}
@@ -173,6 +173,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "common.names.fullname" . }}
                   key: moodle-password
+            {{- if .Values.moodleSiteName }}
+            - name: MOODLE_SITE_NAME
+              value: {{ .Values.moodleSiteName| quote }}
+            {{- end }}
             - name: MOODLE_EMAIL
               value: {{ .Values.moodleEmail | quote }}
             {{- if .Values.smtpHost }}

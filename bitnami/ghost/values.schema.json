@@ -54,7 +54,7 @@
           "form": true,
           "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database parameters"
         },
-        "master": {
+        "primary": {
           "type": "object",
           "properties": {
             "persistence": {
