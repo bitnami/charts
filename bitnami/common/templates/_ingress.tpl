@@ -4,7 +4,7 @@
 Generate path entry that is compatible with all Kubernetes API versions.
 
 Usage:
-{{ include "common.ingress.backend" (dict "path" "pathPrefix" "pathType" "pathType" "serviceName" "backendName" "servicePort" "backendPort" "context" $) }}
+{{ include "common.ingress.path" (dict "path" "pathPrefix" "pathType" "pathType" "serviceName" "backendName" "servicePort" "backendPort" "context" $) }}
 
 Params:
   - path - String. Path inside the service
