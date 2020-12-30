@@ -73,6 +73,7 @@ data:
 
     if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
         export KAFKA_CFG_BROKER_ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+        ID="$((KAFKA_CFG_BROKER_ID - {{ .Values.minBrokerId }}))"
     else
         ID="${MY_POD_NAME#"{{ $fullname }}-"}"
         export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
