@@ -112,6 +112,17 @@ Return the MariaDB Secret Name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database password key
+*/}}
+{{- define "drupal.databasePasswordKey" -}}
+{{- if .Values.mariadb.enabled -}}
+mariadb-password
+{{- else -}}
+db-password
 {{- end -}}
 {{- end -}}

@@ -19,7 +19,7 @@ run_helm_lint_chart() {
     printf '\033\033[0;34m- Running helm template in %s \n\033[0m' "$chart_name"
 
     for values_file in "$chart_path"/values.yaml $(< "$ci_values_file_list"); do
-        if [[ ! -f "$values_file" ]];then
+        if [[ ! -f "$values_file" ]] || [[ "$values_file" = */bitnami/common/* ]];then
             continue
         fi
         values_file_display=${values_file#$chart_path/}

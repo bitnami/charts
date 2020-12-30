@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $architecture := .Values.architecture }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "influxdb.fullname" . }}
@@ -18,16 +18,16 @@ spec:
     - host: {{ .name }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ include "influxdb.fullname" $ }}
-              servicePort: http
           {{- if eq $architecture "high-availability" }}
           - path: /write
             backend:
               serviceName: {{ include "influxdb.fullname" $ }}-relay
               servicePort: http
-          {{- end }}
+          {{- end }}        
+          - path: /*
+            backend:
+              serviceName: {{ include "influxdb.fullname" $ }}
+              servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:

@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 3.1.9-debian-10-r0
+  tag: 3.1.9-debian-10-r53
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -58,7 +58,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.28.0-debian-10-r70
+      tag: 2.29.2-debian-10-r39
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,7 +83,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 3.1.401-debian-10-r61
+      tag: 3.1.404-debian-10-r27
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -337,7 +337,7 @@ autoscaling:
   # targetCPU: 50
   # targetMemory: 50
 
-## ASP.NET Core Service paramaters.
+## ASP.NET Core Service parameters.
 ##
 service:
   ## Service type.

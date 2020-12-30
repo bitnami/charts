@@ -39,5 +39,5 @@ When submitting a PR make sure that it:
 
 There are only three major requirements to add a new chart in our catalog:
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
-- Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`templates` directory](https://github.com/bitnami/charts/tree/master/templates)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
+- Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/master/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.

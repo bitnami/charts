@@ -1,0 +1,94 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-controller
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: controller
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.controller.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.controller.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec: 
+      {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
+      serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
+      nodeSelector:
+      {{- if .Values.controller.nodeSelector }} {{- include "common.tplvalues.render" (dict "value" .Values.controller.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+        "kubernetes.io/os": linux
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAffinityPreset "component" "controller" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAntiAffinityPreset "component" "controller" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.controller.nodeAffinityPreset.type "key" .Values.controller.nodeAffinityPreset.key "values" .Values.controller.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.controller.tolerations}}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: metallb-controller
+        image: {{ include "common.images.image" (dict "imageRoot" .Values.controller.image "global" .Values.global) }}
+        imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+        args:
+        - --port={{ .Values.controller.containerPort.metrics }}
+        - --config={{ include "metallb.configMapName" . }}
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.controller.containerPort.metrics }}
+      {{- if .Values.controller.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
+      {{- end }}
+      {{- if .Values.controller.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
+      {{- end }}
+      {{- if .Values.controller.securityContext.enabled }}
+        securityContext:
+          allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 12 }}
+      {{- end }}
+      {{- if .Values.controller.resources }}
+        resources: {{- toYaml .Values.controller.resources | nindent 10 }}
+      {{- end }}
+      {{- if .Values.controller.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.controller.securityContext.runAsUser }}
+        fsGroup: {{ .Values.controller.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.controller.securityContext.runAsNonRoot }}
+      {{- end }}

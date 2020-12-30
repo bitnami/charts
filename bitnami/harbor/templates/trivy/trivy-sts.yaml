@@ -42,6 +42,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.trivy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAffinityPreset "component" "trivy" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAntiAffinityPreset "component" "trivy" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.trivy.nodeAffinityPreset.type "key" .Values.trivy.nodeAffinityPreset.key "values" .Values.trivy.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.trivy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.nodeSelector "context" $) | nindent 8 }}
@@ -78,6 +83,9 @@ spec:
       {{- end }}
       {{- if .Values.trivy.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.trivy.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: trivy

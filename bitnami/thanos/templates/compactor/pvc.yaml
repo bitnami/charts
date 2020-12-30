@@ -2,8 +2,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "thanos.fullname" . }}-compactor
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-compactor
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
 spec:
   accessModes:
@@ -13,5 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.compactor.persistence.size | quote }}
-  {{- include "thanos.compactor.storageClass" . | nindent 2 }}
+  {{- include "common.storage.class" (dict "persistence" .Values.compactor.persistence "global" .Values.global) | nindent 2 }}
 {{- end }}

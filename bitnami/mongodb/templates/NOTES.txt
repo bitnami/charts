@@ -4,6 +4,10 @@
 {{- $releaseNamespace := include "mongodb.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+{{- $mongoList := list }}
+{{- range $e, $i := until $replicaCount }}
+{{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
+{{- end }}
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
@@ -52,14 +56,10 @@ IPs for MongoDB nodes. To complete your deployment follow the steps below:
 
 ** Please be patient while the chart is being deployed **
 
-MongoDB can be accessed via port {{ .Values.service.port }} on the following DNS name(s) from within your cluster:
+MongoDB can be accessed on the following DNS name(s) and ports from within your cluster:
 
 {{- if eq .Values.architecture "replicaset" }}
-
-    {{ range $e, $i := until $replicaCount }}
-    {{- $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
-    {{ end }}
-
+{{ join "\n" $mongoList | nindent 4 }}
 {{- else }}
 
     {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ .Values.clusterDomain }}
@@ -83,12 +83,12 @@ To get the password for "{{ .Values.auth.username }}" run:
 
 To connect to your database, create a MongoDB client container:
 
-    kubectl run --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "mongodb.image" . }} --command -- bash
+    kubectl run --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }}-client --rm --tty -i --restart='Never' --env="MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" --image {{ template "mongodb.image" . }} --command -- bash
 
 Then, run the following command:
 
     {{- if eq .Values.architecture "replicaset" }}
-    mongo admin --host "{{- range $e, $i := until $replicaCount }}{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},{{ end }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- else }}
     mongo admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- end }}
@@ -143,11 +143,11 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    mongo --host $SERVICE_IP --port {{ .Values.service.port }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongo --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.fullname" . }} {{ $portNumber }}:{{ $portNumber }} &
     mongo --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- end }}
@@ -170,24 +170,5 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "mongodb.validateValues" . }}
 {{- $secretName := include "mongodb.fullname" . -}}
-{{- $requiredPasswords := list -}}
-
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
-
-{{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mongodb-root-password" "context" $ -}}
-{{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-
-{{- if and .Values.auth.username .Values.auth.database }}
-  {{- $requiredDBPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mongodb-password" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredDBPassword -}}
-{{- end -}}
-
-
-{{- if eq .Values.architecture "replicaset" }}
-  {{- $requiredReplicaSetKey := dict "valueKey" "auth.replicaSetKey" "secret" $secretName "field" "mongodb-replica-set-key" "context" $ -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
-{{- end -}}
-
-{{- $requiredPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordValidationErrors) "context" $) -}}
-{{- end }}
+{{- $passwordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $secretName "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}

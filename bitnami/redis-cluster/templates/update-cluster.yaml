@@ -37,12 +37,20 @@ spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.updateJob.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.updateJob.nodeAffinityPreset.type "key" .Values.updateJob.nodeAffinityPreset.key "values" .Values.updateJob.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.updateJob.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.updateJob.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.priorityClassName }}
+      priorityClassName: {{ .Values.updateJob.priorityClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
@@ -97,7 +105,11 @@ spec:
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
                   [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
                   slave+=("--cluster-master-id $masterID")
                   echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as slave of ${masterID}"
                 else
@@ -130,7 +142,11 @@ spec:
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( new_node_index % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
                   [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
                   slave+=("--cluster-master-id $masterID")
                   echo "Adding Node $new_node_index ${new_node_ip} as slave of ${masterID}"
                 else
@@ -144,6 +160,7 @@ spec:
                 {{- end }}
                   echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
                   sleep 5
+                  firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
                 done
               done
               {{- end }}
@@ -176,6 +193,7 @@ spec:
             {{- if .Values.updateJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.updateJob.extraEnvVarsCM .Values.updateJob.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.updateJob.extraEnvVarsCM }}
             - configMapRef:
@@ -185,6 +203,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
           {{- end }}
@@ -200,6 +219,7 @@ spec:
             {{- end }}
           {{- end }}
       restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
@@ -208,5 +228,6 @@ spec:
       {{- end }}
       {{- if .Values.updateJob.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
       {{- end }}
 {{- end }}

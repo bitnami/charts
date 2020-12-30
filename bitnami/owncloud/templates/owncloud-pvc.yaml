@@ -3,6 +3,11 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "owncloud.fullname" . }}-owncloud
+  labels:
+    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
+    helm.sh/chart: {{ include "owncloud.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 spec:
   accessModes:
     - {{ .Values.persistence.owncloud.accessMode | quote }}

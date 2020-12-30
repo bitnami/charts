@@ -36,6 +36,9 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: primary
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
@@ -56,7 +59,9 @@ spec:
       {{- if .Values.primary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.priorityClassName }}
+      {{- if .Values.primary.priorityClassName }}
+      priorityClassName: {{ .Values.primary.priorityClassName | quote }}
+      {{- else if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.primary.podSecurityContext.enabled }}
@@ -104,7 +109,7 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.auth.customPasswordFiles.root }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -117,7 +122,7 @@ spec:
               value: {{ .Values.auth.username | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-password" .Values.auth.customPasswordFiles.user }}
             {{- else }}
             - name: MARIADB_PASSWORD
               valueFrom:
@@ -135,7 +140,7 @@ spec:
               value: {{ .Values.auth.replicationUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-replication-password"
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-replication-password" .Values.auth.customPasswordFiles.replicator }}
             {{- else }}
             - name: MARIADB_REPLICATION_PASSWORD
               valueFrom:
@@ -210,7 +215,7 @@ spec:
               mountPath: /opt/bitnami/mariadb/conf/my.cnf
               subPath: my.cnf
             {{- end }}
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mariadb/secrets/
             {{- end }}
@@ -224,7 +229,7 @@ spec:
           env:
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password"
+              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password" .Values.auth.customPasswordFiles.root }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -259,7 +264,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.auth.usePasswordFiles }}
+          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
           volumeMounts:
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
@@ -279,7 +284,7 @@ spec:
           configMap:
             name: {{ template "mariadb.initdbScriptsCM" . }}
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+        {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
         - name: mariadb-credentials
           secret:
             secretName: {{ template "mariadb.secretName" . }}

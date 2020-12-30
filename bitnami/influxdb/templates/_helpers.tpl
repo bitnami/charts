@@ -359,14 +359,12 @@ influxdb: replicaCount
 {{- end -}}
 
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "influxdb.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+Return the appropriate apiVersion for ingress.
 */}}
-{{- define "influxdb.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{- define "ingress.apiVersion" -}}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "extensions/v1beta1" -}}
+{{- end -}}
 {{- end -}}

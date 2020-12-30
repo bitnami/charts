@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "influxdb.fullname" . }}
-  labels: 
+  labels:
     {{- include "influxdb.labels" . | nindent 4 }}
 spec:
   accessModes:

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 3.9.2-debian-10-r25
+  tag: 3.10.0-debian-10-r45
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -49,6 +49,10 @@ replicaCount: 1
 ##
 moodleSkipInstall: false
 
+## Site name
+## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+moodleSiteName: ""
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
@@ -72,7 +76,7 @@ allowEmptyPassword: true
 ## Container command (using container default if not set)
 ##
 command:
-## Container args (using container default if ot set)
+## Container args (using container default if not set)
 ##
 args:
 
@@ -146,7 +150,7 @@ externalDatabase:
 
   ## Database user
   ##
-  username: bn_moodle
+  user: bn_moodle
 
   ## Database password
   ##
@@ -502,7 +506,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r177
+    tag: 0.8.0-debian-10-r253
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -510,6 +514,22 @@ metrics:
     ##
     pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Prometheus Exporter service configuration
+  ##
+  service:
+    type: LoadBalancer
+    port: 9117
+    ## Annotations for Prometheus Exporter pods. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    ##
+    ## Use serviceLoadBalancerIP to request a specific static IP,
+    ## otherwise leave blank
+    # loadBalancerIP:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -518,7 +538,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
+    prometheus.io/port: "{{ .Values.metrics.service.port }}"
 
 # Add custom certificates and certificate authorities to redmine container
 certificates:

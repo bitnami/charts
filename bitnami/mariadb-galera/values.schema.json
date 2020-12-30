@@ -39,6 +39,12 @@
             "value": true,
             "path": "existingSecret"
           }
+        },
+        "user": {
+          "type": "string",
+          "title": "MariaDB admin user",
+          "description": "Name of the admin user to be created during the 1st initialization of MariaDB.",
+          "form": true
         }
       }
     },

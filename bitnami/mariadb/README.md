@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -86,6 +86,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `auth.replicationPassword`                  | MariaDB replication user password. Ignored if existing secret is provided                                            | _random 10 character long alphanumeric string_               |
 | `auth.forcePassword`                        | Force users to specify required passwords                                                                            | `false`                                                      |
 | `auth.usePasswordFiles`                     | Mount credentials as a files instead of using an environment variable                                                | `false`                                                      |
+| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`  |
 | `auth.existingSecret`                       | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `nil` |
 | `initdbScripts`                             | Dictionary of initdb scripts                                                                                         | `nil`                                                        |
 | `initdbScriptsConfigMap`                    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                  | `nil`                                                        |
@@ -109,6 +110,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.affinity`                           | Affinity for MariaDB primary pods assignment                                                                         | `{}` (evaluated as a template)                               |
 | `primary.nodeSelector`                       | Node labels for MariaDB primary pods assignment                                                                      | `{}` (evaluated as a template)                               |
 | `primary.tolerations`                        | Tolerations for MariaDB primary pods assignment                                                                      | `[]` (evaluated as a template)                               |
+| `primary.priorityClassName`                  | Priority class for MariaDB primary pods assignment                                                                      | `nil` |
 | `primary.podSecurityContext.enabled`         | Enable security context for MariaDB primary pods                                                                     | `true`                                                       |
 | `primary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                         | `1001`                                                       |
 | `primary.containerSecurityContext.enabled`   | MariaDB primary container securityContext                                                                            | `true`                                                       |
@@ -164,6 +166,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.affinity`                           | Affinity for MariaDB secondary pods assignment                                                                        | `{}` (evaluated as a template)                               |
 | `secondary.nodeSelector`                       | Node labels for MariaDB secondary pods assignment                                                                     | `{}` (evaluated as a template)                               |
 | `secondary.tolerations`                        | Tolerations for MariaDB secondary pods assignment                                                                     | `[]` (evaluated as a template)                               |
+| `secondary.priorityClassName`                  | Priority class for MariaDB secondary pods assignment                                                                     | `nil` |
 | `secondary.podSecurityContext.enabled`         | Enable security context for MariaDB secondary pods                                                                    | `true`                                                       |
 | `secondary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                          | `1001`                                                       |
 | `secondary.containerSecurityContext.enabled`   | MariaDB secondary container securityContext                                                                           | `true`                                                       |
@@ -337,7 +340,7 @@ initdbScripts:
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MariaDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -376,6 +379,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
@@ -386,9 +393,32 @@ $ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
 
+### To 9.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - `securityContext.*` is deprecated in favor of `primary.podSecurityContext`, `primary.containerSecurityContext`, `secondary.podSecurityContext`, and `secondary.containerSecurityContext`.
   - Credentials parameter are reorganized under the `auth` parameter.

@@ -37,12 +37,20 @@ spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.initJob.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.initJob.nodeAffinityPreset.type "key" .Values.initJob.nodeAffinityPreset.key "values" .Values.initJob.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.initJob.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.initJob.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initJob.priorityClassName }}
+      priorityClassName: {{ .Values.initJob.priorityClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
@@ -138,6 +146,7 @@ spec:
             {{- if .Values.initJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.initJob.extraEnvVarsCM }}
             - configMapRef:
@@ -147,9 +156,11 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.tls.enabled .Values.initJob.extraVolumeMounts }}
           volumeMounts:
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
@@ -159,7 +170,9 @@ spec:
             {{- if .Values.initJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
       restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.initJob.extraVolumes }}
       volumes:
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
@@ -168,5 +181,6 @@ spec:
       {{- end }}
       {{- if .Values.initJob.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
       {{- end }}
 {{- end }}

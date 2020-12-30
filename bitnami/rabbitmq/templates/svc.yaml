@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
@@ -20,11 +20,14 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
   ports:
-    - name: amqp
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: amqp
       {{- if (eq .Values.service.type "ClusterIP") }}
@@ -33,7 +36,7 @@ spec:
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
     {{- if .Values.auth.tls.enabled }}
-    - name: amqp-ssl
+    - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
       targetPort: amqp-ssl
       {{- if (eq .Values.service.type "ClusterIP") }}
@@ -42,7 +45,7 @@ spec:
       nodePort: {{ .Values.service.tlsNodePort }}
       {{- end }}
     {{- end }}
-    - name: epmd
+    - name: {{ .Values.service.epmdPortName }}
       port: 4369
       targetPort: epmd
       {{- if (eq .Values.service.type "ClusterIP") }}
@@ -50,7 +53,7 @@ spec:
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.epmdNodePort))) }}
       nodePort: {{ .Values.service.epmdNodePort }}
       {{- end }}
-    - name: dist
+    - name: {{ .Values.service.distPortName }}
       port: {{ .Values.service.distPort }}
       targetPort: dist
       {{- if eq .Values.service.type "ClusterIP" }}
@@ -58,7 +61,7 @@ spec:
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
       nodePort: {{ .Values.service.distNodePort }}
       {{- end }}
-    - name: http-stats
+    - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
       {{- if eq .Values.service.type "ClusterIP" }}
@@ -67,7 +70,7 @@ spec:
       nodePort: {{ .Values.service.managerNodePort }}
       {{- end }}
     {{- if .Values.metrics.enabled }}
-    - name: metrics
+    - name: {{ .Values.service.metricsPortName }}
       port: {{ .Values.service.metricsPort }}
       targetPort: metrics
       {{- if eq .Values.service.type "ClusterIP" }}

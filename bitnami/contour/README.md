@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - An Operator for `ServiceType: LoadBalancer` like [MetalLB](../metallb/README.md)
 
 ## Installing the Chart
@@ -65,6 +65,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.image.tag`                           | Contour image tag                                                                                                                                                                                            | `{TAG_NAME}`                                            |
 | `contour.pullPolicy`                          | Contour image pull policy                                                                                                                                                                                    | `IfNotPresent`                                          |
 | `contour.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                             | `[]` (does not add image pull secrets to deployed pods) |
+| `contour.extraArgs`                           | Extra arguments passed to Contour container                                                                                                                                                                  | `[]`                                                    |
 | `contour.resources.limits`                    | Specify resource limits which the container is not allowed to succeed.                                                                                                                                       | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                  | Specify resource requests which the container needs to spawn.                                                                                                                                                | `{}` (does not add resource limits to deployed pods)    |
 | `contour.installCRDs`                         | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)                                                                                                                 | `true`                                                  |
@@ -165,8 +166,9 @@ The following tables lists the configurable parameters of the contour chart and 
 | `nameOverride`                                | String to partially override contour.fullname template with a string (will prepend the release name)                                                                                                         | `nil`                                                   |
 | `fullnameOverride`                            | String to fully override contour.fullname template with a string                                                                                                                                             | `nil`                                                   |
 | `prometheus.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                                                                                        | `true`                                                  |
+| `prometheus.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)                                                                                      | `nil`                                                   |
 | `prometheus.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                                                                                                      | `contour`                                               |
-| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                                                                                                                           | `""`                                                    |
+| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeIntervall                                                                                                                          | `""`                                                    |
 | `prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                                                                                                    | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                                                                                                  | `[]`                                                    |
 
@@ -282,13 +284,40 @@ envoy:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
+
+### To 3.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
 ### To 2.0.0
 

@@ -27,4 +27,3 @@ spec:
       protocol: bar
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
-  type: ClusterIP

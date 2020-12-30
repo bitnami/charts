@@ -32,13 +32,18 @@ spec:
     spec:
       {{- include "wavefront.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.proxy.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAffinityPreset "component" "proxy" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAntiAffinityPreset "component" "proxy" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.proxy.nodeAffinityPreset.type "key" .Values.proxy.nodeAffinityPreset.key "values" .Values.proxy.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.proxy.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}

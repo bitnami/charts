@@ -159,7 +159,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "drupal.databaseSecretName" . }}
-                  key: mariadb-password
+                  key: {{ include "drupal.databasePasswordKey" . | quote }}
             - name: DRUPAL_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.drupalSkipInstall | quote }}
             - name: DRUPAL_PROFILE

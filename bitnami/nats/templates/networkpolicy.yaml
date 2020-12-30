@@ -2,29 +2,30 @@
 kind: NetworkPolicy
 apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "nats.fullname" . }}
-  labels:
-    app: "{{ template "nats.name" . }}"
-    chart: "{{ template "nats.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
-    matchLabels:
-      app: "{{ template "nats.name" . }}"
-      release: {{ .Release.Name | quote }}
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
     - ports:
-      - port: {{ .Values.client.service.port }}
+        - port: {{ .Values.client.service.port }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "nats.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
       {{- end }}
     - ports:
-      - port: {{ .Values.cluster.service.port }}
+        - port: {{ .Values.cluster.service.port }}
     - ports:
-      - port: {{ .Values.monitoring.service.port }}
+        - port: {{ .Values.monitoring.service.port }}
 {{- end }}

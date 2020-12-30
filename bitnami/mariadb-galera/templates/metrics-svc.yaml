@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "mariadb-galera.fullname" . }}-metrics
-  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
+  name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{- include "mariadb-galera.tplValue" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -13,5 +13,5 @@ spec:
     - name: metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
-  selector: {{- include "mariadb-galera.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

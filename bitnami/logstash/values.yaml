@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.9.2-debian-10-r22
+  tag: 7.10.1-debian-10-r9
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -102,12 +102,17 @@ output: |-
 ##
 # existingConfiguration:
 
+## Allows user to use multiple pipelines
+## ref: https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html
+##
+enableMultiplePipelines: false
 
 ## Array to add extra volumes (evaluated as a template)
 ## extraVolumes:
 ##   - name: myvolume
 ##     configMap:
 ##       name: myconfigmap
+##
 extraVolumes: []
 
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
@@ -116,6 +121,7 @@ extraVolumes: []
 ##   - mountPath: /opt/bitnami/desired-path
 ##     name: myvolume
 ##     readOnly: true
+##
 extraVolumeMounts: []
 
 containerPorts:
@@ -151,8 +157,43 @@ podManagementPolicy: OrderedReady
 ##
 podAnnotations: {}
 
-## Affinity for pod assignment
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -164,7 +205,7 @@ nodeSelector: {}
 ## Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 
 ## Pod priority
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -216,7 +257,7 @@ readinessProbe:
   # successThreshold: 1
   # failureThreshold: 6
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -251,13 +292,15 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
   ## Ingress annotations done as key:value pairs
@@ -266,11 +309,13 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
   ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ##
   hosts:
     - name: logstash.local
       path: /
@@ -306,7 +351,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 0.1.2-debian-10-r250
+    tag: 7.3.0-debian-10-r47
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -418,3 +463,7 @@ podDisruptionBudget:
   create: false
   minAvailable: 1
   # maxUnavailable: 1
+
+## Array of extra objects to deploy
+##
+extraDeploy:

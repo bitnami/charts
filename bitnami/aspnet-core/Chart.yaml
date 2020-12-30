@@ -1,18 +1,24 @@
-apiVersion: v1
-name: aspnet-core
-version: 0.3.2
+annotations:
+  category: DeveloperTools
+apiVersion: v2
 appVersion: 3.1.9
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: ASP.NET Core is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
+home: https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core
+icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
   - asp.net
   - dotnet
-home: https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core
-icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: aspnet-core
 sources:
   - https://github.com/bitnami/bitnami-docker-aspnet-core
   - https://dotnet.microsoft.com/apps/aspnet
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-annotations:
-  category: DeveloperTools
+version: 1.0.2
