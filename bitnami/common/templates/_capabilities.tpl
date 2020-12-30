@@ -3,7 +3,7 @@
 {{/*
 Return the target Kubernetes version
 */}}
-{{- define "common.capabilities.kubeVersion" -}}x
+{{- define "common.capabilities.kubeVersion" -}}
 {{- if .Values.global }}
     {{- if .Values.global.kubeVersion }}
     {{- .Values.global.kubeVersion -}}
