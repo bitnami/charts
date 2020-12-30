@@ -50,11 +50,12 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Capabilities
 
-| Helper identifier                            | Description                                        | Expected Input    |
-|----------------------------------------------|----------------------------------------------------|-------------------|
-| `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.  | `.` Chart context |
-| `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset. | `.` Chart context |
-| `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.     | `.` Chart context |
+| Helper identifier                            | Description                                                                                    | Expected Input    |
+|----------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
+| `common.capabilities.kubeVersion`            | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
+| `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
+| `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
+| `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
 
 ### Errors
 
