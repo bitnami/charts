@@ -34,8 +34,7 @@ Usage:
 {{ include "common.ingress.supportsPathType" . }}
 */}}
 {{- define "common.ingress.supportsPathType" -}}
-{{- $apiVersion := (include "common.capabilities.ingress.apiVersion" .) -}}
-{{- if (semverCompare "<1.18-0" .Capabilities.KubeVersion.Version) -}}
+{{- if (semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .)) -}}
 {{- print "false" -}}
 {{- else -}}
 {{- print "true" -}}
