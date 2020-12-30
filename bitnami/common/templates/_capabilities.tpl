@@ -4,7 +4,7 @@
 Return the target kubernetes version
 */}}
 {{- define "common.capabilities.kubeVersion" -}}
-{{- default .Values.kubeVersion .Capabilities.KubeVersion.Version }}
+{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion }}
 {{- end -}}
 
 {{/*
