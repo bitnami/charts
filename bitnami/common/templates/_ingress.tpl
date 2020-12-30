@@ -56,7 +56,7 @@ Usage:
 */}}
 {{- define "common.ingress.supportsPathType" -}}
 {{- $apiVersion := (include "common.capabilities.ingress.apiVersion" .) -}}
-{{- if or (eq $apiVersion "extensions/v1beta1") (semverCompare "<1.18-0" .Capabilities.KubeVersion.Version) -}}
+{{- if (semverCompare "<1.18-0" .Capabilities.KubeVersion.Version) -}}
 {{- print "false" -}}
 {{- else -}}
 {{- print "true" -}}
