@@ -26,3 +26,17 @@ service:
     {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Print "true" if the API pathType field is supported
+Usage:
+{{ include "common.ingress.supportsPathType" . }}
+*/}}
+{{- define "common.ingress.supportsPathType" -}}
+{{- $apiVersion := (include "common.capabilities.ingress.apiVersion" .) -}}
+{{- if (eq $apiVersion "extensions/v1beta1") -}}
+{{- print "false" -}}
+{{- else -}}
+{{- print "true" -}}
+{{- end -}}
+{{- end -}}
