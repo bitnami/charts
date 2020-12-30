@@ -1,4 +1,26 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/*
+Generate path entry that is compatible with all Kubernetes API versions.
+
+Usage:
+{{ include "common.ingress.backend" (dict "path" "pathPrefix" "pathType" "pathType" "serviceName" "backendName" "servicePort" "backendPort" "context" $) }}
+
+Params:
+  - path - String. Path inside the service
+  - pathType - String. Path typo
+  - serviceName - String. Name of an existing service backend
+  - servicePort - String/Int. Port name (or number) of the service. It will be translated to different yaml depending if it is a string or an integer.
+  - context - Dict - Required. The context for the template evaluation.
+*/}}
+{{- define "common.ingress.path" -}}
+- path: {{ .path }}
+  {{- if eq "true" (include "common.ingress.supportsPathType" .context) }}
+  pathType: {{ .pathType }}
+  {{- end }}
+  backend: {{- include "common.ingress.backend" (dict "serviceName" .serviceName "servicePort" .servicePort "context" .context)  | nindent 4 }}
+{{- end -}}
+
 {{/*
 Generate backend entry that is compatible with all Kubernetes API versions.
 
