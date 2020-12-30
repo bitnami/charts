@@ -79,7 +79,6 @@ spec:
           volumeMounts:
             - name: owncloud-data
               mountPath: /bitnami/owncloud
-              subPath: owncloud
         {{- end }}
         {{- include "certificates.initContainer" . | nindent 8 }}
       containers:
