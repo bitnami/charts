@@ -334,7 +334,7 @@ spec:
         - name: redis-data
           emptyDir: {}
     {{- else if and .Values.slave.persistence.enabled (contains "redis-data" (quote .Values.slave.persistence.volumes)) }}
-    {{- toYaml .Values.slave.persistence.volumes | nindent 12 }}
+    {{- toYaml .Values.slave.persistence.volumes | nindent 8 }}
     {{- else }}
   volumeClaimTemplates:
     - metadata:
