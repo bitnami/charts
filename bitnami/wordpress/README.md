@@ -180,6 +180,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
+| `persistence.dataSource`    | PVC data source                          | `nul`                                       |
 
 ### Database parameters
 
