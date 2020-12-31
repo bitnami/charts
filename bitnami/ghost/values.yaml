@@ -27,6 +27,9 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Number of ghost replicas to deploy
+replicaCount: 1
+
 ## Command and args for running the Ghost container (set to default if not set). Use array form
 ##
 command: []
