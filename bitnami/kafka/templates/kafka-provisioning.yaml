@@ -27,6 +27,21 @@ spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: wait-for-available-kafka
+          image: {{ include "kafka.provisioning.image" . }}
+          imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -c
+            - >-
+              set -e;
+              wait-for-port \
+                --host={{ include "kafka.fullname" . }} \
+                --state=inuse \
+                --timeout=120 \
+                {{ .Values.service.port | int64 }};
+              echo "Kafka is available";
       containers:
         - name: kafka-provisioning
           image: {{ include "kafka.provisioning.image" . }}
@@ -49,12 +64,12 @@ spec:
                 {{- end }}
                 --topic {{ $topic.name }};
             {{- end }}
-              echo "Success provisioning";
+              echo "Provisioning succeeded";
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.provisioning.image.debug | quote }}
           {{- if .Values.provisioning.resources }}
-          resources: {{- toYaml .Values.provisioning.resources | nindent 10 }}
+          resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.config .Values.existingConfigmap }}
