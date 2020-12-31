@@ -24,9 +24,10 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ include "common.names.fullname" $ }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
   {{- end }}
   tls:
   {{- range .Values.ingress.hosts }}
