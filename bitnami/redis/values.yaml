@@ -120,6 +120,10 @@ sentinel:
     sentinelPort: 26379
     redisPort: 6379
 
+    ## External traffic policy (when service type is LoadBalancer)
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    externalTrafficPolicy: Cluster
+
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -368,6 +372,10 @@ master:
     type: ClusterIP
     port: 6379
 
+    ## External traffic policy (when service type is LoadBalancer)
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    externalTrafficPolicy: Cluster
+
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -455,6 +463,11 @@ slave:
     type: ClusterIP
     ## Redis port
     port: 6379
+
+    ## External traffic policy (when service type is LoadBalancer)
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    externalTrafficPolicy: Cluster
+
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -721,6 +734,11 @@ metrics:
   # priorityClassName: ''
   service:
     type: ClusterIP
+
+    ## External traffic policy (when service type is LoadBalancer)
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    externalTrafficPolicy: Cluster
+
     ## Use serviceLoadBalancerIP to request a specific static IP,
     ## otherwise leave blank
     # loadBalancerIP:
