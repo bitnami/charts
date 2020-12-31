@@ -233,6 +233,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
@@ -253,6 +254,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
