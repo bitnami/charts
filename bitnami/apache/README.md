@@ -55,6 +55,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 |----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `global.imageRegistry`           | Global Docker image registry                                                              | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil`                                                        |
 | `image.registry`                 | Apache Docker image registry                                                              | `docker.io`                                                  |
 | `image.repository`               | Apache Docker image name                                                                  | `bitnami/apache`                                             |
 | `image.tag`                      | Apache Docker image tag                                                                   | `{TAG_NAME}`                                                 |
@@ -89,6 +90,9 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `readinessProbe.enabled`         | Enable readiness probe                                                                    | `true`                                                       |
 | `readinessProbe.path`            | Path to access on the HTTP server                                                         | `/`                                                          |
 | `ingress.enabled`                | Enable ingress controller resource                                                        | `false`                                                      |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                             | ``                                                           |
+| `ingress.path`                   | Ingress path                                                                              | `/`                                                          |
+| `ingress.pathType`               | Ingress path type                                                                         | `ImplementationSpecific`                                     |
 | `ingress.hostname`               | Default host for the ingress resource                                                     | `example.local`                                              |
 | `ingress.certManager`            | Add annotations for cert-manager                                                          | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                                                       | `[]`                                                         |

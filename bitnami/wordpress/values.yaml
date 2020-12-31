@@ -30,6 +30,10 @@ image:
   ##
   debug: false
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -424,6 +428,14 @@ ingress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
