@@ -60,14 +60,15 @@ The following table lists the configurable parameters of the WordPress chart and
 
 ### Common parameters
 
-| Parameter           | Description                                        | Default                        |
-|---------------------|----------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                          |
-| `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                           |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]` (evaluated as a template) |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
 
 ### WordPress parameters
 

@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 0.42.0
+appVersion: 0.43.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 7.0.7
+version: 7.0.9
