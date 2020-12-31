@@ -17,6 +17,9 @@ metadata:
 {{- end }}
 spec:
   type: {{ .Values.sentinel.service.type }}
+  {{ if eq .Values.sentinel.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy }}
+  {{- end }}
   {{ if eq .Values.sentinel.service.type "LoadBalancer" -}} {{ if .Values.sentinel.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
   {{ end -}}
