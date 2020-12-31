@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -710,6 +714,14 @@ ingress:
   ##
   enabled: false
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -779,6 +791,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ''
   ## Node label key to match
   ## E.g.

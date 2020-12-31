@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -18,7 +22,7 @@ fullnameOverride:
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ## valid values: ['SequentialExecutor', 'Local Executor', 'CeleryExecutor', 'KubernetesExecutor']
 ##
-executor: 'CeleryExecutor'
+executor: "CeleryExecutor"
 ## Name of an existing config map containing the Airflow config file
 ##
 configurationConfigMap:
@@ -186,7 +190,7 @@ web:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Scheculer component related properties
 ##
@@ -296,7 +300,7 @@ scheduler:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Worker component related properties
 ##
@@ -458,7 +462,7 @@ worker:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Add labels to all the deployed resources
 ##
@@ -606,19 +610,19 @@ ldap:
   enabled: false
   ## Server URI, eg. ldap://ldap_server:389
   ##
-  uri: 'ldap://ldap_server:389'
+  uri: "ldap://ldap_server:389"
   ## Base of the search, eg. ou=example,o=org
   ##
-  base: 'ou=example,o=org'
+  base: "ou=example,o=org"
   ## Bind DN
   ##
-  binddn: 'cn=user,ou=example,o=org'
+  binddn: "cn=user,ou=example,o=org"
   ## Bind Password
   ##
-  bindpw: ''
+  bindpw: ""
   ## Field used for uid
   ##
-  uidField: 'uid'
+  uidField: "uid"
   ## SSL/TLS parameters for LDAP
   ##
   tls:
@@ -631,11 +635,11 @@ ldap:
     ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
     ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
     ##
-    CAcertificateSecret: ''
+    CAcertificateSecret: ""
     ## LDAP CA cert filename
     ## eg. ca.pem
     ##
-    CAcertificateFilename: ''
+    CAcertificateFilename: ""
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -710,6 +714,10 @@ ingress:
   ##
   enabled: true
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -764,7 +772,7 @@ ingress:
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -779,12 +787,13 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ''
+  ##
+  type: ""
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## Node label values to match
   ## E.g.
   ## values:
@@ -911,8 +920,8 @@ metrics:
   podLabels: {}
 
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '9112'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9112"
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##

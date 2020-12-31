@@ -7,6 +7,10 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami Apache image version
 ## ref: https://hub.docker.com/r/bitnami/apache/tags/
 ##
@@ -76,6 +80,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -180,6 +185,18 @@ ingress:
   ##
   enabled: false
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -194,6 +211,7 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
@@ -202,6 +220,7 @@ ingress:
   ## hosts:
   ## - name: example.local
   ##   path: /
+  ##
 
   ## The tls configuration for the ingress
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
