@@ -36,18 +36,20 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ template "common.names.fullname" . }}
-              servicePort: http
+          - path: {{ .Values.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ template "common.names.fullname" $ }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
 {{- end }}
