@@ -180,6 +180,41 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.extraEnvVarsConfigMap`                 | ConfigMap containing extra env vars to be added to all envoy containers (evaluated as a template)                                                                                                            | `""`                                                    |
 | `envoy.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all envoy containers (evaluated as a template)                                                                                                               | `""`                                                    |
 
+### Default backend parameters
+
+| Parameter                                  | Description                                                                              | Default                                                 |
+|--------------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `defaultBackend.enabled`                   | Enable a default backend based on NGINX                                                  | `false`                                                  |
+| `defaultBackend.image.registry`            | Default backend image registry                                                           | `docker.io`                                             |
+| `defaultBackend.image.repository`          | Default backend image name                                                               | `bitnami/nginx`                                         |
+| `defaultBackend.image.tag`                 | Default backend image tag                                                                | `{TAG_NAME}`                                            |
+| `defaultBackend.image.pullPolicy`          | Image pull policy                                                                        | `IfNotPresent`                                          |
+| `defaultBackend.image.pullSecrets`         | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `defaultBackend.extraArgs`                 | Additional command line arguments to pass to NGINX container                             | `{}`                                                    |
+| `defaultBackend.containerPort`             | HTTP container port number                                                               | `8080`                                                  |
+| `defaultBackend.replicaCount`              | Desired number of default backend pods                                                   | `1`                                                     |
+| `defaultBackend.podSecurityContext`        | Default backend pods' Security Context                                                   | Check `values.yaml` file                                |
+| `defaultBackend.containerSecurityContext`  | Default backend containers' Security Context                                             | Check `values.yaml` file                                |
+| `defaultBackend.resources.limits`          | The resources limits for the Default backend container                                   | `{}`                                                    |
+| `defaultBackend.resources.requests`        | The requested resources for the Default backend container                                | `{}`                                                    |
+| `defaultBackend.leavinessProbe`            | Leaviness probe configuration for Default backend                                        | Check `values.yaml` file                                |
+| `defaultBackend.readinessProbe`            | Readiness probe configuration for Default backend                                        | Check `values.yaml` file                                |
+| `defaultBackend.customLivenessProbe`       | Override default liveness probe                                                          | `nil`                                                   |
+| `defaultBackend.customReadinessProbe`      | Override default readiness probe                                                         | `nil`                                                   |
+| `defaultBackend.podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
+| `defaultBackend.podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
+| `defaultBackend.nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
+| `defaultBackend.nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                   | `""`                                                    |
+| `defaultBackend.nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                | `[]`                                                    |
+| `defaultBackend.affinity`                  | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
+| `defaultBackend.nodeSelector`              | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
+| `defaultBackend.tolerations`               | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
+| `defaultBackend.podLabels`                 | Extra labels for Controller pods                                                         | `{}` (evaluated as a template)                          |
+| `defaultBackend.podAnnotations`            | Annotations for Controller pods                                                          | `{}` (evaluated as a template)                          |
+| `defaultBackend.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Default backend                      | `false`                                                 |
+| `defaultBackend.pdb.minAvailable`          | Minimum number/percentage of Default backend pods that should remain scheduled           | `1`                                                     |
+| `defaultBackend.pdb.maxUnavailable`        | Maximum number/percentage of Default backend pods that may be made unavailable           | `nil`                                                   |
+
 ### Other parameters
 
 | Parameter           | Description                                                                                                          | Default |
