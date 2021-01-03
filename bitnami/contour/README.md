@@ -54,11 +54,25 @@ $ kubectl delete crd httpproxies.projectcontour.io tlscertificatedelegations.pro
 
 The following tables lists the configurable parameters of the contour chart and their default values.
 
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common parameters
+
+| Parameter          | Description                                                                                          | Default |
+|--------------------|------------------------------------------------------------------------------------------------------|---------|
+| `nameOverride`     | String to partially override contour.fullname template with a string (will prepend the release name) | `nil`   |
+| `fullnameOverride` | String to fully override contour.fullname template with a string                                     | `nil`   |
+
+## Contour parameters
+
 | Parameter                                     | Description                                                                                                                                                                                                  | Default                                                 |
 |-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                        | Global Docker image registry                                                                                                                                                                                 | `nil`                                                   |
-| `global.imagePullSecrets`                     | Global Docker registry secret names as an array                                                                                                                                                              | `[]` (does not add image pull secrets to deployed pods) |
-| `rbac.create`                                 | create the RBAC roles for API accessibility                                                                                                                                                                  | `true`                                                  |
+| `configInline`                                | Specify the config for contour as a new configMap inline.                                                                                                                                                    | `{Quickstart Config}` (evaluated as a template)         |
 | `contour.enabled`                             | Contour Deployment creation.                                                                                                                                                                                 | `true`                                                  |
 | `contour.image.registry`                      | Contour image registry                                                                                                                                                                                       | `docker.io`                                             |
 | `contour.image.repository`                    | Contour image name                                                                                                                                                                                           | `bitnami/contour`                                       |
@@ -107,6 +121,12 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.extraEnvVars`                        | Array containing extra env vars to be added to all contour containers (evaluated as a template)                                                                                                              | `[]`                                                    |
 | `contour.extraEnvVarsConfigMap`               | ConfigMap containing extra env vars to be added to all contour containers (evaluated as a template)                                                                                                          | `""`                                                    |
 | `contour.extraEnvVarsSecret`                  | Secret containing extra env vars to be added to all contour containers (evaluated as a template)                                                                                                             | `""`                                                    |
+| `ingressClass`                                | Name of the ingress class to route through this controller (defaults to `contour` if `nil`)                                                                                                                  | `nil`                                                   |
+
+## Envoy parameters
+
+| Parameter                                     | Description                                                                                                                                                                                                  | Default                                                 |
+|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `envoy.enabled`                               | Envoy Proxy Daemonset creation.                                                                                                                                                                              | `true`                                                  |
 | `envoy.image.registry`                        | Envoy Proxy image registry                                                                                                                                                                                   | `docker.io`                                             |
 | `envoy.image.repository`                      | Envoy Proxy image name                                                                                                                                                                                       | `bitnami/envoy`                                         |
@@ -159,18 +179,25 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.extraEnvVars`                          | Array containing extra env vars to be added to all envoy containers (evaluated as a template)                                                                                                                | `[]`                                                    |
 | `envoy.extraEnvVarsConfigMap`                 | ConfigMap containing extra env vars to be added to all envoy containers (evaluated as a template)                                                                                                            | `""`                                                    |
 | `envoy.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all envoy containers (evaluated as a template)                                                                                                               | `""`                                                    |
-| `existingConfigMap`                           | Specify an existing configMapName to use. (this mutually exclusive with existingConfigMap)                                                                                                                   | `nil`                                                   |
-| `tlsExistingSecret`                           | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.                                                                                         | `nil`                                                   |
-| `configInline`                                | Specify the config for contour as a new configMap inline.                                                                                                                                                    | `{Quickstart Config}` (evaluated as a template)         |
-| `ingressClass`                                | Name of the ingress class to route through this controller (defaults to `contour` if `nil`)                                                                                                                  | `nil`                                                   |
-| `nameOverride`                                | String to partially override contour.fullname template with a string (will prepend the release name)                                                                                                         | `nil`                                                   |
-| `fullnameOverride`                            | String to fully override contour.fullname template with a string                                                                                                                                             | `nil`                                                   |
-| `prometheus.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                                                                                        | `true`                                                  |
-| `prometheus.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)                                                                                      | `nil`                                                   |
-| `prometheus.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                                                                                                      | `contour`                                               |
-| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeIntervall                                                                                                                          | `""`                                                    |
-| `prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                                                                                                    | `[]`                                                    |
-| `prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                                                                                                  | `[]`                                                    |
+
+### Other parameters
+
+| Parameter           | Description                                                                                                          | Default |
+|---------------------|----------------------------------------------------------------------------------------------------------------------|---------|
+| `existingConfigMap` | Specify an existing configMapName to use. (this mutually exclusive with existingConfigMap)                           | `nil`   |
+| `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `nil`   |
+| `rbac.create`       | create the RBAC roles for API accessibility                                                                          | `true`  |
+
+### Metrics parameters
+
+| Parameter                                     | Description                                                                                                             | Default   |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|-----------|
+| `prometheus.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                   | `true`    |
+| `prometheus.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart) | `nil`     |
+| `prometheus.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                 | `contour` |
+| `prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeIntervall                                     | `""`      |
+| `prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                               | `[]`      |
+| `prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                             | `[]`      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
