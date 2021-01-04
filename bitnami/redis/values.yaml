@@ -416,6 +416,9 @@ master:
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
     matchLabels: {}
     matchExpressions: {}
+    volumes:
+    #  - name: volume_name
+    #    emptyDir: {}
 
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
