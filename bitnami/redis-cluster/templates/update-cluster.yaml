@@ -37,12 +37,20 @@ spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.updateJob.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.updateJob.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.updateJob.nodeAffinityPreset.type "key" .Values.updateJob.nodeAffinityPreset.key "values" .Values.updateJob.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.updateJob.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.updateJob.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.updateJob.priorityClassName }}
+      priorityClassName: {{ .Values.updateJob.priorityClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
@@ -52,6 +60,7 @@ spec:
           {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
         {{- end }}
       {{- end }}
+      serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       {{- if .Values.updateJob.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -79,7 +88,10 @@ spec:
               if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
                   cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
               fi
+              previousNodeIp=""
+              firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
               {{- if .Values.cluster.externalAccess.enabled }}
+              newNodeCounter=0
               for nodeIp in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
                 {{- if .Values.tls.enabled }}
                 while [[ $(redis-cli -h "$nodeIp" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
@@ -89,11 +101,30 @@ spec:
                   echo "Node $nodeIp not ready, waiting for all the nodes to be ready..."
                   sleep 5
                 done
+                slave=()
+                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
+                  slave+=("--cluster-slave")
+                  [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
+                  slave+=("--cluster-master-id $masterID")
+                  echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as slave of ${masterID}"
+                else
+                  previousNodeIp=$nodeIp
+                  echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as master"
+                fi
                 {{- if .Values.tls.enabled }}
-                redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${nodeIp}:${REDIS_TLS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}"
+                while ! redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${nodeIp}:${REDIS_TLS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" ${slave[@]}; do
                 {{- else }}
-                redis-cli --cluster add-node "${nodeIp}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}"
+                while ! redis-cli --cluster add-node "${nodeIp}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" ${slave[@]}; do
                 {{- end }}
+                  echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
+                  sleep 5
+                done
+                ((newNodeCounter += 1))
               done
               {{- else }}
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
@@ -107,12 +138,30 @@ spec:
                   echo "Node $new_node_ip not ready, waiting for all the nodes to be ready..."
                   sleep 5
                 done
-                firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+                slave=()
+                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( new_node_index % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
+                  slave+=("--cluster-slave")
+                  [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
+                  if [ -z "$REDISCLI_AUTH" ]; then
+                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  else
+                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  fi
+                  slave+=("--cluster-master-id $masterID")
+                  echo "Adding Node $new_node_index ${new_node_ip} as slave of ${masterID}"
+                else
+                  previousNodeIp=$new_node_ip
+                  echo "Adding Node $new_node_index ${new_node_ip} as master"
+                fi
                 {{- if .Values.tls.enabled }}
-                redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${new_node_ip}:${REDIS_TLS_PORT}" "${firstNodeIp}:${REDIS_TLS_PORT}"
+                while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${new_node_ip}:${REDIS_TLS_PORT}" "${firstNodeIp}:${REDIS_TLS_PORT}" ${slave[@]}; do
                 {{- else }}
-                redis-cli --cluster add-node "${new_node_ip}:${REDIS_PORT}" "${firstNodeIp}:${REDIS_PORT}"
+                while ! redis-cli --cluster add-node "${new_node_ip}:${REDIS_PORT}" "${firstNodeIp}:${REDIS_PORT}" ${slave[@]}; do
                 {{- end }}
+                  echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
+                  sleep 5
+                  firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+                done
               done
               {{- end }}
           {{- end }}
@@ -132,6 +181,8 @@ spec:
             {{- end }}
               value: {{ .Values.redis.port | quote }}
             {{- end }}
+            - name: REDIS_CLUSTER_REPLICAS
+              value: {{ .Values.cluster.replicas | quote }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
               valueFrom:
@@ -142,6 +193,7 @@ spec:
             {{- if .Values.updateJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.updateJob.extraEnvVarsCM .Values.updateJob.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.updateJob.extraEnvVarsCM }}
             - configMapRef:
@@ -151,17 +203,23 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.updateJob.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
+            {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
             {{- if .Values.updateJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
       restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
@@ -170,5 +228,6 @@ spec:
       {{- end }}
       {{- if .Values.updateJob.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
       {{- end }}
 {{- end }}

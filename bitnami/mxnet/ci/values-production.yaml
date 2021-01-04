@@ -6,9 +6,11 @@ volumePermissions:
 
 mode: distributed
 
-serverCount: 2
+server:
+  replicaCount: 2
 
-workerCount: 4
+worker:
+  replicaCount: 4
 
 persistence:
   enabled: true

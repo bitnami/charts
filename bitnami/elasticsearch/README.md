@@ -2,7 +2,7 @@
 
 [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -88,6 +88,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.service.loadBalancerIP`                   | loadBalancerIP if master-eligible nodes service type is `LoadBalancer`                                                                                    | `nil`                                                                                   |
 | `master.resources`                                | CPU/Memory resource requests/limits for master-eligible nodes pods                                                                                        | `requests: { cpu: "25m", memory: "256Mi" }`                                             |
 | `master.podAnnotations`                           | Annotations for master pods.                                                                                                                              | `{}`                                                                                    |
+| `master.podAffinityPreset`                        | Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                                                                                    |
+| `master.podAntiAffinityPreset`                    | Master-eligible Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                                                                                  |
+| `master.nodeAffinityPreset.type`                  | Master-eligible Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                                                                                    |
+| `master.nodeAffinityPreset.key`                   | Master-eligible Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                                                                                    |
+| `master.nodeAffinityPreset.values`                | Master-eligible Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                                                                                    |
+| `master.affinity`                                 | Master-eligible Affinity for pod assignment                                                                                                               | `{}` (evaluated as a template)                                                          |
+| `master.nodeSelector`                             | Master-eligible Node labels for pod assignment                                                                                                            | `{}` (evaluated as a template)                                                          |
+| `master.tolerations`                              | Master-eligible Tolerations for pod assignment                                                                                                            | `[]` (evaluated as a template)                                                          |
 | `master.persistence.enabled`                      | Enable persistence using a `PersistentVolumeClaim`                                                                                                        | `true`                                                                                  |
 | `master.persistence.annotations`                  | Persistent Volume Claim annotations                                                                                                                       | `{}`                                                                                    |
 | `master.persistence.storageClass`                 | Persistent Volume Storage Class                                                                                                                           | ``                                                                                      |
@@ -117,6 +125,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                                                               | `RollingUpdate`                                                                         |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                          | `128m`                                                                                  |
 | `coordinating.podAnnotations`                     | Annotations for coordniating pods.                                                                                                                        | `{}`                                                                                    |
+| `coordinating.podAffinityPreset`                  | Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                                                                                    |
+| `coordinating.podAntiAffinityPreset`              | Coordinating Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                     | `soft`                                                                                  |
+| `coordinating.nodeAffinityPreset.type`            | Coordinating Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                                                                                    |
+| `coordinating.nodeAffinityPreset.key`             | Coordinating Node label key to match Ignored if `affinity` is set.                                                                                        | `""`                                                                                    |
+| `coordinating.nodeAffinityPreset.values`          | Coordinating Node label values to match. Ignored if `affinity` is set.                                                                                    | `[]`                                                                                    |
+| `coordinating.affinity`                           | Coordinating Affinity for pod assignment                                                                                                                  | `{}` (evaluated as a template)                                                          |
+| `coordinating.nodeSelector`                       | Coordinating Node labels for pod assignment                                                                                                               | `{}` (evaluated as a template)                                                          |
+| `coordinating.tolerations`                        | Coordinating Tolerations for pod assignment                                                                                                               | `[]` (evaluated as a template)                                                          |
 | `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                                                         | `ClusterIP`                                                                             |
 | `coordinating.service.port`                       | Kubernetes Service port for REST API (coordinating-only nodes)                                                                                            | `9200`                                                                                  |
 | `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                                                     | `nil`                                                                                   |
@@ -163,6 +179,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `data.livenessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                              | `1`                                                                                     |
 | `data.livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                 | `5`                                                                                     |
 | `data.podAnnotations`                             | Annotations for data pods.                                                                                                                                | `{}`                                                                                    |
+| `data.podAffinityPreset`                          | Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `""`                                                                                    |
+| `data.podAntiAffinityPreset`                      | Data Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                             | `soft`                                                                                  |
+| `data.nodeAffinityPreset.type`                    | Data Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                            | `""`                                                                                    |
+| `data.nodeAffinityPreset.key`                     | Data Node label key to match Ignored if `affinity` is set.                                                                                                | `""`                                                                                    |
+| `data.nodeAffinityPreset.values`                  | Data Node label values to match. Ignored if `affinity` is set.                                                                                            | `[]`                                                                                    |
+| `data.affinity`                                   | Data Affinity for pod assignment                                                                                                                          | `{}` (evaluated as a template)                                                          |
+| `data.nodeSelector`                               | Data Node labels for pod assignment                                                                                                                       | `{}` (evaluated as a template)                                                          |
+| `data.tolerations`                                | Data Tolerations for pod assignment                                                                                                                       | `[]` (evaluated as a template)                                                          |
 | `data.readinessProbe.enabled`                     | Enable/disable the readiness probe (data nodes pod)                                                                                                       | `true`                                                                                  |
 | `data.readinessProbe.initialDelaySeconds`         | Delay before readiness probe is initiated (data nodes pod)                                                                                                | `90`                                                                                    |
 | `data.readinessProbe.periodSeconds`               | How often to perform the probe (data nodes pod)                                                                                                           | `10`                                                                                    |
@@ -191,6 +215,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)                                            | `1`                                                                                     |
 | `ingest.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                 | `5`                                                                                     |
 | `ingest.podAnnotations`                           | Annotations for ingest pods.                                                                                                                              | `{}`                                                                                    |
+| `ingest.podAffinityPreset`                        | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                | `""`                                                                                    |
+| `ingest.podAntiAffinityPreset`                    | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `soft`                                                                                  |
+| `ingest.nodeAffinityPreset.type`                  | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                                                                                    |
+| `ingest.nodeAffinityPreset.key`                   | Ingest Node label key to match Ignored if `affinity` is set.                                                                                              | `""`                                                                                    |
+| `ingest.nodeAffinityPreset.values`                | Ingest Node label values to match. Ignored if `affinity` is set.                                                                                          | `[]`                                                                                    |
+| `ingest.affinity`                                 | Ingest Affinity for pod assignment                                                                                                                        | `{}` (evaluated as a template)                                                          |
+| `ingest.nodeSelector`                             | Ingest Node labels for pod assignment                                                                                                                     | `{}` (evaluated as a template)                                                          |
+| `ingest.tolerations`                              | Ingest Tolerations for pod assignment                                                                                                                     | `[]` (evaluated as a template)                                                          |
 | `ingest.readinessProbe.enabled`                   | Enable/disable the readiness probe (ingest nodes pod)                                                                                                     | `true`                                                                                  |
 | `ingest.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (ingest nodes pod)                                                                                              | `90`                                                                                    |
 | `ingest.readinessProbe.periodSeconds`             | How often to perform the probe (ingest nodes pod)                                                                                                         | `10`                                                                                    |
@@ -210,6 +242,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `curator.cronjob.successfulJobsHistoryLimit`      | Specify the number of completed Jobs to keep                                                                                                              | `nil`                                                                                   |
 | `curator.cronjob.jobRestartPolicy`                | Control the Job restartPolicy                                                                                                                             | `Never`                                                                                 |
 | `curator.podAnnotations`                          | Annotations to add to the pod                                                                                                                             | `{}`                                                                                    |
+| `curator.podAffinityPreset`                       | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                               | `""`                                                                                    |
+| `curator.podAntiAffinityPreset`                   | Curator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `soft`                                                                                  |
+| `curator.nodeAffinityPreset.type`                 | Curator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                                                                                    |
+| `curator.nodeAffinityPreset.key`                  | Curator Node label key to match Ignored if `affinity` is set.                                                                                             | `""`                                                                                    |
+| `curator.nodeAffinityPreset.values`               | Curator Node label values to match. Ignored if `affinity` is set.                                                                                         | `[]`                                                                                    |
+| `curator.affinity`                                | Curator Affinity for pod assignment                                                                                                                       | `{}` (evaluated as a template)                                                          |
+| `curator.nodeSelector`                            | Curator Node labels for pod assignment                                                                                                                    | `{}` (evaluated as a template)                                                          |
+| `curator.tolerations`                             | Curator Tolerations for pod assignment                                                                                                                    | `[]` (evaluated as a template)                                                          |
 | `curator.rbac.enabled`                            | Enable RBAC resources                                                                                                                                     | `false`                                                                                 |
 | `curator.serviceAccount.create`                   | Create a default serviceaccount for elasticsearch curator                                                                                                 | `true`                                                                                  |
 | `curator.serviceAccount.name`                     | Name for elasticsearch curator serviceaccount                                                                                                             | `""`                                                                                    |
@@ -238,6 +278,14 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `metrics.service.annotations`                     | Annotations for metrics service.                                                                                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}`                            |
 | `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                                                  | `requests: { cpu: "25m" }`                                                              |
 | `metrics.podAnnotations`                          | Annotations for metrics pods.                                                                                                                             | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}`                            |
+| `metrics.podAffinityPreset`                       | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                               | `""`                                                                                    |
+| `metrics.podAntiAffinityPreset`                   | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `soft`                                                                                  |
+| `metrics.nodeAffinityPreset.type`                 | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                                                                                    |
+| `metrics.nodeAffinityPreset.key`                  | Metrics Node label key to match Ignored if `affinity` is set.                                                                                             | `""`                                                                                    |
+| `metrics.nodeAffinityPreset.values`               | Metrics Node label values to match. Ignored if `affinity` is set.                                                                                         | `[]`                                                                                    |
+| `metrics.affinity`                                | Metrics Affinity for pod assignment                                                                                                                       | `{}` (evaluated as a template)                                                          |
+| `metrics.nodeSelector`                            | Metrics Node labels for pod assignment                                                                                                                    | `{}` (evaluated as a template)                                                          |
+| `metrics.tolerations`                             | Metrics Tolerations for pod assignment                                                                                                                    | `[]` (evaluated as a template)                                                          |
 | `metrics.serviceMonitor.enabled`                  | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                                                                                 |
 | `metrics.serviceMonitor.namespace`                | Namespace in which Prometheus is running                                                                                                                  | `nil`                                                                                   |
 | `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped.                                                                                                              | `nil` (Prometheus Operator default value)                                               |
@@ -248,12 +296,13 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                 | `bitnami/minideb`                                                                       |
 | `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                        | `buster`                                                                                |
 | `sysctlImage.pullPolicy`                          | Kernel settings modifier image pull policy                                                                                                                | `Always`                                                                                |
+| `sysctlImage.resources`                           | Init container resource requests/limit                                                                                                                    | `requests: {}, limits: {}`                                                                                   |
 | `volumePermissions.enabled`                       | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                                                 |
 | `volumePermissions.image.registry`                | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                                             |
 | `volumePermissions.image.repository`              | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                                                       |
 | `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                               | `buster`                                                                                |
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                                                |
-| `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `nil`                                                                                   |
+| `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                    | `requests: {}, limits: {}`                                                                                   |
 
 ### Kibana Parameters
 
@@ -515,6 +564,12 @@ extraVolumeMounts:
 snapshotRepoPath: "/snapshots"
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
 ## Persistence
 
 The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
@@ -530,17 +585,44 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
 
-### 12.0.0
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-Several changes were introduced that breaks backwards compatibilty:
+## Upgrading
+
+### To 13.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 12.0.0
+
+Several changes were introduced that breaks backwards compatibility:
 
 - Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
 - Labels are adapted to follow the Helm charts best practices.
 - Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
-### 11.0.0
+### To 11.0.0
 
 Elasticsearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
@@ -551,11 +633,11 @@ $ kubectl delete statefulset elasticsearch-master
 $ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
 ```
 
-### 10.0.0
+### TO 10.0.0
 
-In this version, Kibana was added as dependant chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
+In this version, Kibana was added as dependent chart. More info about how to enable and work with this bundled Kibana in the ["Enable bundled Kibana"](#enable-bundled-kibana) section.
 
-### 9.0.0
+### To 9.0.0
 
 Elasticsearch master nodes store the cluster status at `/bitnami/elasticsearch/data`. Among other things this includes the UUID of the elasticsearch cluster. Without a persistent data store for this data, the UUID of a cluster could change if k8s node(s) hosting the es master nodes go down and are scheduled on some other master node. In the event that this happens, the data nodes will no longer be able to join a cluster as the uuid changed resulting in a broken cluster.
 
@@ -567,12 +649,14 @@ Helm performs a lookup for the object based on its group (apps), version (v1), a
 
 In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/commit/4dfac075aacf74405e31ae5b27df4369e84eb0b0) the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
-### 7.0.0
+### To 7.4.0
+
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 7.0.0
 
 This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
-
-## Upgrading
 
 ### To 3.0.0
 

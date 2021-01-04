@@ -1,0 +1,42 @@
+{{- if .Values.contour.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  ports:
+    - port: 8001
+      name: xds
+      protocol: TCP
+      targetPort: 8001
+    {{- if .Values.contour.service.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+  type: ClusterIP
+{{- if .Values.prometheus.serviceMonitor.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-contour-metrics
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+  ports:
+    - name: metrics
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+{{- end }}
+{{- end }}

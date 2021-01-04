@@ -1,0 +1,40 @@
+{{- if .Values.kubeControllerManager.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+spec:
+  jobLabel: component
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.kubeControllerManager.namespace }}
+  endpoints:
+    - port: http-metrics
+      {{- if .Values.kubeControllerManager.serviceMonitor.interval }}
+      interval: {{ .Values.kubeControllerManager.serviceMonitor.interval }}
+      {{- end }}
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- if .Values.kubeControllerManager.serviceMonitor.https }}
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        {{- if .Values.kubeControllerManager.serviceMonitor.insecureSkipVerify }}
+        insecureSkipVerify: {{ .Values.kubeControllerManager.serviceMonitor.insecureSkipVerify }}
+        {{- end }}
+        {{- if .Values.kubeControllerManager.serviceMonitor.serverName }}
+        serverName: {{ .Values.kubeControllerManager.serviceMonitor.serverName }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.kubeControllerManager.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeControllerManager.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.kubeControllerManager.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeControllerManager.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+{{- end }}

@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Number of Discourse & Sidekiq replicas
 ## (Note that you will need ReadWriteMany PVCs for this to work properly)
 ##
@@ -19,7 +23,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.5.0-debian-10-r1
+  tag: 2.6.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,24 +54,23 @@ discourse:
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ''
-
   ## Discourse site name
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   siteName: 'My Site!'
-
   ## User of the application
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   username: user
-
   ## Application password
   ## WARNING: Minimum length of 10 characters
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   # password:
-
+  ## Name of an existing secret containing the password (ignores previous password)
+  ##
+  # existingSecret: my-secret
   ## Admin email
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
@@ -77,7 +80,7 @@ discourse:
   ##
   # command: []
 
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   # args: []
 
   containerSecurityContext: {}
@@ -176,7 +179,7 @@ sidekiq:
   ##
   command: ['/app-entrypoint.sh']
 
-  ## Custom args for the custom commad:
+  ## Custom args for the custom command:
   ##
   args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
 
@@ -348,7 +351,7 @@ service:
   nodePorts:
     http: ''
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -360,6 +363,18 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: discourse.local
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -401,6 +416,19 @@ ingress:
   ##   certificate:
   ##
 
+## Only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+## Example:
+# updateStrategy:
+#  type: RollingUpdate
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+updateStrategy:
+  type: RollingUpdate
+
 ## Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -419,20 +447,55 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
 ##
-nodeSelector: {}
+podAffinityPreset: ""
 
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
 ##
-tolerations: []
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
 
 ##
 ## PostgreSQL chart configuration
@@ -447,24 +510,25 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   postgresqlUsername: bn_discourse
-
   ## PostgreSQL password
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  ## postgresqlPassword:
-  ##
-
+  # postgresqlPassword:
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
   postgresqlPostgresPassword: 'bitnami'
-
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_application
-
   ## PostgreSQL data Persistent Volume Storage Class
   ##
   persistence:
@@ -486,9 +550,18 @@ externalDatabase:
   ## Database password
   ##
   password: ''
-  ## Root "postgres" password (used in the installation stage)
+  ## PostgreSQL admin user (used in the installation stage)
+  ##
+  postgresqlPostgresUser: ''
+  ## PostgreSQL admin password (used in the installation stage)
   ##
   postgresqlPostgresPassword: ''
+  ## Name of existing secret object
+  ## The secret should contain the following keys:
+  ## postgresql-postgres-password (for the unprivileged user)
+  ## postgresql-password (for root user)
+  ##
+  # existingSecret: my-secret
   ## Database name
   ##
   database: bitnami_application
@@ -505,11 +578,20 @@ redis:
   ##
   usePassword: false
   ## Redis password (both master and slave)
-  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
-  ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
-  ##
+  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
+  ## It should always be set using the password value or in the existingSecret to avoid issues
+  ## with Discourse.
+  ## The password value is ignored if existingSecret is set
   # password:
-
+  ##
+  ## Name of existing secret object containing the password
+  ##
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  ##
+  existingSecretPasswordKey: 'redis-password'
+  ##
   ## Cluster settings
   ##
   cluster:
@@ -533,5 +615,14 @@ externalRedis:
   ##
   port: 6379
   ## Redis password for authentication
+  ## Ignored if existingSecret is set
   ##
   password: ''
+  ##
+  ## Name of existing secret object containing the password
+  ##
+  existingSecret:
+  ##
+  ## Password key to be retrieved from Redis secret
+  ##
+  existingSecretPasswordKey: 'redis-password'

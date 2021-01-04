@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.1-debian-10-r24
+  tag: 1.11.5-debian-10-r44
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -56,7 +56,20 @@ forwarder:
   securityContext:
     enabled: true
     runAsUser: 0
+    runAsGroup: 0
     fsGroup: 0
+
+  ## K8s Security Context for forwarder container
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    ##
+    # readOnlyRootFilesystem: true
+    capabilities:
+      drop: ['ALL']
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -189,6 +202,50 @@ forwarder:
     #   cpu: 300m
     #   memory: 512Mi
 
+  ## Set Priority Class Name to allow priority control over other pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: ""
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -199,11 +256,6 @@ forwarder:
   ##
   tolerations: []
 
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -211,6 +263,62 @@ forwarder:
 
   ## Extra labels to add to Pod
   podLabels: {}
+
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
+
+  ## Role Based Access
+  ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+  ##
+  rbac:
+    create: true
+    pspEnabled: false
+
+  ## Add init containers to forwarder pods
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+
+  ## Persist data to a persistent volume
+  persistence:
+    enabled: false
+    ## If persistence enabled, a hostPath volume mounts a directory of your choice from the host node's filesystem into your Pod.
+    ## The host directory you chose is mounted into /opt/bitnami/fluentd/logs/buffers in your Pod
+    ## Example use case: mount host directory /tmp/buffer (if the directory doesn't exist, it creates it) into forwarder pod.
+    ##   persistence:
+    ##     enabled: true
+    ##     hostPath:
+    ##       path: /tmp/buffer
+    hostPath:
+      path: /opt/bitnami/fluentd/logs/buffers
+
+  initContainers: []
+
+  ## Add sidecars to forwarder pods
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
 
   ## Extra volumes to mount
   ## Example Use Case: mount systemd journal volume
@@ -223,7 +331,7 @@ forwarder:
   #   - name: systemd
   #     mountPath: /run/log/journal/
 
-## Agregator parameters
+## Aggregator parameters
 ##
 aggregator:
   ## Enable Aggregator daemonset
@@ -239,7 +347,20 @@ aggregator:
   securityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
     fsGroup: 1001
+
+  ## K8s Security Context for Aggregator containers
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
+    ##
+    # readOnlyRootFilesystem: true
+    capabilities:
+      drop: ['ALL']
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -361,6 +482,45 @@ aggregator:
     #   cpu: 300m
     #   memory: 512Mi
 
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
   ## Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -371,11 +531,6 @@ aggregator:
   ##
   tolerations: []
 
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
   ## Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -383,6 +538,19 @@ aggregator:
 
   ## Extra labels to add to Pod
   podLabels: {}
+
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    # name:
+    ## Annotations for the Service Account (evaluated as a template)
+    ##
+    annotations: {}
 
   ## Persist data to a persistent volume
   persistence:
@@ -397,22 +565,52 @@ aggregator:
     accessMode: ReadWriteOnce
     size: 10Gi
 
+  ## Add init containers to aggregator pods
+  ## Example
+  ##
+  ## initContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  initContainers: []
+
+  ## Add sidecars to aggregator pods
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  ## Extra volumes to mount
+  ## Example Use Case: mount an emptyDir into /tmp to support running with readOnlyRootFileSystem
+  # extraVolumes:
+  #   - name: tmpDir
+  #       emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: tmpDir
+  #     mountPath: /tmp
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fluentd.fullname template
-  # name:
+## This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead. Only the
+## forwarder was affected by the historical usage here.
+serviceAccount: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-rbac:
-  create: true
+## This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead. Only the
+## forwarder was affected by the historical usage here.
+rbac: {}
 
 ## Prometheus Exporter / Metrics
 ##

@@ -1,42 +1,60 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "nginx.fullname" . }}
-  labels: {{- include "nginx.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  selector:
-    matchLabels: {{- include "nginx.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "nginx.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (and .Values.serverBlock (not .Values.existingServerBlockConfigmap)) }}
       annotations:
         {{- if .Values.podAnnotations }}
-        {{- include "nginx.tplValue" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-        {{- include "nginx.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
       {{- end }}
     spec:
-{{- include "nginx.imagePullSecrets" . | indent 6 }}
+      {{- include "nginx.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
-      affinity: {{- include "nginx.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "nginx.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "nginx.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
       {{- end }}
       {{- if .Values.cloneStaticSiteFromGit.enabled }}
       initContainers:
         - name: git-clone-repository
-          image: {{ include "cloneStaticSiteFromGit.image" . }}
+          image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
           command:
             - /bin/bash
@@ -48,7 +66,7 @@ spec:
               mountPath: /app
       containers:
         - name: git-repo-syncer
-          image: {{ include "cloneStaticSiteFromGit.image" . }}
+          image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
           command:
             - /bin/bash
@@ -65,20 +83,65 @@ spec:
       containers:
       {{- end }}
         - name: nginx
-          image: {{ template "nginx.image" . }}
+          image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+            runAsNonRoot: {{ .Values.containerSecurityContext.runAsNonRoot }}
+          {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPort }}
-            {{ if .Values.containerTlsPort }}
+              containerPort: {{ .Values.containerPorts.http }}
+            {{- if .Values.containerPorts.https }}
             - name: https
-              containerPort: {{ .Values.containerTlsPort }}
-            {{ end }}
-          {{- if .Values.livenessProbe }}
-          livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
+              containerPort: {{ .Values.containerPorts.https }}
+            {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
-          readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -99,21 +162,12 @@ spec:
               mountPath: /app
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.ldapDaemon.enabled }}
         - name: ldap-daemon
-          image: {{ template "nginx.ldapDaemon.image" . }}
+          image: {{ include "nginx.ldapDaemon.image" . }}
           imagePullPolicy: {{ .Values.ldapDaemon.image.pullPolicy | quote }}
-          ports:
-            - name: ldap-daemon
-              containerPort: {{ .Values.ldapDaemon.port }}
-        {{- if .Values.ldapDaemon.livenessProbe }}
-          livenessProbe: {{- toYaml .Values.ldapDaemon.livenessProbe | nindent 12 }}
-        {{- end }}
-        {{- if .Values.ldapDaemon.readinessProbe }}
-          readinessProbe: {{- toYaml .Values.ldapDaemon.readinessProbe | nindent 12 }}
-        {{- end }}
           env:
             - name: NGINXLDAP_PORT_NUMBER
               value: {{ .Values.ldapDaemon.port | quote}}
@@ -126,7 +180,7 @@ spec:
             - name: NGINXLDAP_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "nginx.fullname" . }}-ldap-daemon
+                  name: {{ template "common.names.fullname" . }}-ldap-daemon
                   key: ldap-daemon-ldap-bind-password
             - name: NGINXLDAP_LDAP_FILTER
               value: {{ .Values.ldapDaemon.ldapConfig.filter | quote }}
@@ -134,10 +188,36 @@ spec:
               value: {{ .Values.ldapDaemon.ldapConfig.httpRealm | quote }}
             - name: NGINXLDAP_HTTP_COOKIE_NAME
               value: {{ .Values.ldapDaemon.ldapConfig.httpCookieName | quote }}
+          ports:
+            - name: ldap-daemon
+              containerPort: {{ .Values.ldapDaemon.port }}
+          {{- if .Values.ldapDaemon.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: ldap-daemon
+            periodSeconds: {{ .Values.ldapDaemon.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ldapDaemon.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.ldapDaemon.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ldapDaemon.livenessProbe.failureThreshold }}
+          {{- else if .Values.ldapDaemon.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ldapDaemon.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ldapDaemon.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: ldap-daemon
+            initialDelaySeconds: {{ .Values.ldapDaemon.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ldapDaemon.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.ldapDaemon.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.ldapDaemon.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ldapDaemon.readinessProbe.failureThreshold }}
+          {{- else if .Values.ldapDaemon.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ldapDaemon.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          image: {{ template "nginx.metrics.image" . }}
+          image: {{ include "nginx.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
           ports:
@@ -159,14 +239,17 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- with .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
       volumes:
         - name: nginx-server-block-paths
           configMap:
-            name: {{ template "nginx.fullname" . }}-server-block
+            name: {{ template "common.names.fullname" . }}-server-block
             items:
               - key: server-blocks-paths.conf
                 path: server-blocks-paths.conf
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
+        {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
@@ -181,12 +264,12 @@ spec:
         - name: staticsite
           {{- include "nginx.staticSiteVolume" . | nindent 10 }}
         {{- end }}
-      {{- if .Values.extraVolumes }}
-      {{- include "nginx.tplValue" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
-      {{- end }}
-      {{- if .Values.ldapDaemon.enabled }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.ldapDaemon.enabled }}
         - name: nginx-server-block-ldap
           secret:
             secretName: {{ include "ldap.nginxServerBlockSecret" . }}
-      {{- end }}
+        {{- end }}

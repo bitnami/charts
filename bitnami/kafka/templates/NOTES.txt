@@ -68,30 +68,43 @@ Each Kafka broker can be accessed by producers via port {{ $servicePort }} on th
 
 {{- if (include "kafka.client.saslAuthentication" .) }}
 
-You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files with the content below:
+You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files by executing these commands:
 
     - kafka_jaas.conf:
 
-        KafkaClient {
-            org.apache.kafka.common.security.plain.PlainLoginModule required
-            username="{{ .Values.auth.jaas.clientUser }}"
-            password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-password}' | base64 --decode)";
-        };
+cat > kafka_jaas.conf <<EOF
+KafkaClient {
+{{- if .Values.auth.saslMechanisms | regexFind "scram" }}
+org.apache.kafka.common.security.scram.ScramLoginModule required
+{{- else }}
+org.apache.kafka.common.security.plain.PlainLoginModule required
+{{- end }}
+username="{{ index .Values.auth.jaas.clientUsers 0 }}"
+password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+};
+EOF
 
     - client.properties:
 
-        security.protocol={{ $clientProtocol }}
-        sasl.mechanism=PLAIN
-        {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
-        ssl.truststore.location=/tmp/kafka.truststore.jks
-        {{- if .Values.auth.jksPassword }}
-        ssl.truststore.password={{ .Values.auth.jksPassword }}
-        {{- end }}
-        {{- end }}
-        {{- if eq .Values.auth.tlsEndpointIdentificationAlgorithm "" }}
-        ssl.endpoint.identification.algorithm=
-        {{- end }}
-
+cat > client.properties <<EOF
+security.protocol={{ $clientProtocol }}
+{{- if .Values.auth.saslMechanisms | regexFind "scram-sha-256" }}
+sasl.mechanism=SCRAM-SHA-256
+{{- else if  .Values.auth.saslMechanisms | regexFind "scram-sha-512" }}
+sasl.mechanism=SCRAM-SHA-512
+{{- else }}
+sasl.mechanism=PLAIN
+{{- end }}
+{{- if eq .Values.auth.clientProtocol "sasl_tls" }}
+ssl.truststore.location=/tmp/kafka.truststore.jks
+{{- if .Values.auth.jksPassword }}
+ssl.truststore.password={{ .Values.auth.jksPassword }}
+{{- end }}
+{{- end }}
+{{- if eq .Values.auth.tlsEndpointIdentificationAlgorithm "" }}
+ssl.endpoint.identification.algorithm=
+{{- end }}
+EOF
 {{- end }}
 
 To create a pod that you can use as a Kafka client run the following commands:
@@ -164,5 +177,8 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- end }}
 
-{{- include "kafka.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "kafka.validateValues" . }}

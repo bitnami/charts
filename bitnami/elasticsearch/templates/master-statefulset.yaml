@@ -34,6 +34,11 @@ spec:
 {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.master.nodeAffinityPreset.type "key" .Values.master.nodeAffinityPreset.key "values" .Values.master.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.master.nodeSelector }}
       nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.nodeSelector "context" $) | nindent 8 }}
@@ -57,6 +62,9 @@ spec:
             - /scripts/sysctl.sh
           securityContext:
             privileged: true
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: initcontainer-script
               mountPath: /scripts/sysctl.sh
@@ -73,7 +81,7 @@ spec:
               chown -R {{ .Values.master.securityContext.runAsUser }}:{{ .Values.master.securityContext.fsGroup }} //bitnami/elasticsearch/data
           securityContext:
             runAsUser: 0
-          {{- if .Values.volumePermissions.resource }}
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
@@ -237,9 +245,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
-          {{- if .Values.master.persistence.existingVolume }}
-          selector:
-            matchLabels:
-              volume: {{ .Values.master.persistence.existingVolume }}
-          {{- end }}
+        {{- if .Values.master.persistence.existingVolume }}
+        selector:
+          matchLabels:
+            volume: {{ .Values.master.persistence.existingVolume }}
+        {{- end }}
 {{- end }}

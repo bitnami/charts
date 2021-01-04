@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "redis.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "redis.name" . }}
     chart: {{ template "redis.chart" . }}
@@ -17,6 +17,9 @@ metadata:
 {{- end }}
 spec:
   type: {{ .Values.sentinel.service.type }}
+  {{ if eq .Values.sentinel.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy }}
+  {{- end }}
   {{ if eq .Values.sentinel.service.type "LoadBalancer" -}} {{ if .Values.sentinel.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
   {{ end -}}

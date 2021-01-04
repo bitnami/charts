@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.8.0-debian-10-r61
+  tag: 11.10.0-debian-10-r38
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.1.2-debian-10-r66
+  tag: 4.2.0-debian-10-r20
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r180
+  tag: 0.8.0-debian-10-r304
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -106,17 +106,25 @@ metricsImage:
   ##
   debug: false
 
-## String to partially override postgresql-ha.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override postgresql-ha.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
 
 ## PostgreSQL parameters
 ##
@@ -143,25 +151,59 @@ postgresql:
   ##
   podAnnotations: {}
 
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
   ## Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
 
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## PostgreSQL pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  tolerations: {}
+  podAffinityPreset: ""
+
+  ## PostgreSQL pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## PostgreSQL node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for PostgreSQL pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: postgresql.podAffinityPreset, postgresql.podAntiAffinityPreset, and postgresql.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for PostgreSQL pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for PostgreSQL pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
 
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -169,7 +211,64 @@ postgresql:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
+
+  ## Container command (using container default if not set)
+  ##
+  command:
+
+  ## Container args (using container default if not set)
+  ##
+  args:
+
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
 
   ## PostgreSQL containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -251,6 +350,82 @@ postgresql:
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
 
+  ## Audit settings
+  ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
+  ##
+  audit:
+    ## Log client hostnames
+    ##
+    logHostname: true
+    ## Log connections to the server
+    ##
+    logConnections: true
+    ## Log disconnections
+    ##
+    logDisconnections: true
+    ## Operation to audit using pgAudit (default if not set)
+    ##
+    pgAuditLog: ""
+    ## Log catalog using pgAudit
+    ##
+    pgAuditLogCatalog: "off"
+    ## Log level for clients
+    ##
+    clientMinMessages: error
+    ## Template for log line prefix (default if not set)
+    ##
+    logLinePrefix: ""
+    ## Log timezone
+    ##
+    logTimezone: ""
+
+  ## Shared preload libraries
+  ##
+  sharedPreloadLibraries: "pgaudit, repmgr"
+
+  ## Maximum total connections
+  ##
+  maxConnections:
+
+  ## Maximum connections for the postgres user
+  ##
+  postgresConnectionLimit:
+
+  ## Maximum connections for the created user
+  ##
+  dbUserConnectionLimit:
+
+  ## TCP keepalives interval
+  ##
+  tcpKeepalivesInterval:
+
+  ## TCP keepalives idle
+  ##
+  tcpKeepalivesIdle:
+
+  ## TCP keepalives count
+  ##
+  tcpKeepalivesCount:
+
+  ## Statement timeout
+  ##
+  statementTimeout:
+
+  ## Remove pg_hba.conf lines with the following comma-separated patterns
+  ## (cannot be used with custom pg_hba.conf)
+  ##
+  pghbaRemoveFilters:
+
+  ## Extra init containers
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+
   ## Repmgr configuration
   ## Specify content for repmgr.conf
   ## Default: do not create repmgr.conf
@@ -309,13 +484,12 @@ postgresql:
 ## Pgpool parameters
 ##
 pgpool:
-
   ## Additional users that will be performing connections to the database using
   ## pgpool. Use this property in order to create new user/password entries that
   ## will be appended to the "pgpool_passwd" file
   ##
   customUsers: {}
-  ##  Comma or semicolon separeted list of postgres usernames
+  ##  Comma or semicolon separated list of postgres usernames
   #   usernames: 'user01;user02'
 
   ##  Comma or semicolon separated list of the associated passwords for the
@@ -327,6 +501,10 @@ pgpool:
   ##
   customUsersSecret:
 
+  ## Database to perform streaming replication checks
+  ##
+  srCheckDatabase: postgres
+
   ## Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -334,6 +512,10 @@ pgpool:
   ## Labels to add to the pods. Evaluated as template
   ##
   podLabels: {}
+
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
   ## Number of replicas to deploy
   ##
@@ -344,25 +526,59 @@ pgpool:
   ##
   podAnnotations: {}
 
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
   ## Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
 
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Pgpool pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
   ##
-  tolerations: {}
+  podAffinityPreset: ""
+
+  ## Pgpool pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Pgpool node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Pgpool pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: pgpool.podAffinityPreset, pgpool.podAntiAffinityPreset, and pgpool.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Pgpool pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Pgpool pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
 
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -370,6 +586,12 @@ pgpool:
   securityContext:
     enabled: true
     fsGroup: 1001
+
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
 
   ## Pgpool containers' resource requests and limits
@@ -413,6 +635,56 @@ pgpool:
     create: false
     minAvailable: 1
     # maxUnavailable: 1
+    ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
+
+  ## Container command (using container default if not set)
+  ##
+  command:
+
+  ## Container args (using container default if not set)
+  ##
+  args:
+
+  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks:
+
+  ## An array to add extra env vars
+  ## For example:
+  ##
+  extraEnvVars: []
+  #  - name: BEARER_AUTH
+  #    value: true
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the deployment
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
 
   ## strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -423,19 +695,71 @@ pgpool:
   ##
   # minReadySeconds: 0
 
-  ## Pgpool configuration parameters
+  ## Credentials for the pgpool administrator
   ##
   adminUsername: admin
   # adminPassword:
 
-  ## The number of preforked Pgpool-II server processes.  It is also the concurrent
+  ## Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  logConnections: true
+
+  ## Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  logHostname: true
+
+  ## Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  logPerNodeStatement: true
+
+  ## Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-config-logging.html
+  ##
+  logLinePrefix:
+
+  ## Log level for clients
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  clientMinMessages: error
+
+  ## The number of preforked Pgpool-II server processes. It is also the concurrent
   ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  # numInitChildren:
+  ##
+  numInitChildren:
 
   ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  # maxPools:
+  ##
+  maxPool:
+
+  ## The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  childMaxConnections:
+
+  ## The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  childLifeTime:
+
+  ## The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  clientIdleLimit:
+
+  ## The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  connectionLifeTime:
+
+  ## Use Pgpool Load-Balancing
+  ##
+  useLoadBalancing: true
 
   ## Pgpool configuration
   ## Specify content for pgpool.conf
@@ -450,7 +774,7 @@ pgpool:
   # configurationCM:
 
   ## initdb scripts
-  ## Specify dictionary of scripts to be run everytime Pgpool container is initialized
+  ## Specify dictionary of scripts to be run every time Pgpool container is initialized
   ## Alternatively, you can put your scripts under the files/pgpool-entrypoint-initdb.d directory
   ##
   # initdbScripts:
@@ -458,7 +782,7 @@ pgpool:
   #      #!/bin/sh
   #      echo "Do something."
 
-  ## ConfigMap with scripts to be run everytime Pgpool container is initialized
+  ## ConfigMap with scripts to be run every time Pgpool container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
   # initdbScriptsCM:
@@ -468,9 +792,35 @@ pgpool:
   ##
   # initdbScriptsSecret:
 
-  ## Use Pgpool Load-Balancing
   ##
-  useLoadBalancing: true
+  ## TLS configuration
+  ##
+  tls:
+    ## Enable TLS traffic
+    ##
+    enabled: false
+    ##
+    ## Whether to use the server's TLS cipher preferences rather than the client's.
+    ##
+    preferServerCiphers: true
+    ##
+    ## Name of the Secret that contains the certificates
+    ##
+    certificatesSecret: ""
+    ##
+    ## Certificate filename
+    ##
+    certFilename: ""
+    ##
+    ## Certificate Key filename
+    ##
+    certKeyFilename: ""
+    ##
+    ## CA Certificate filename
+    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
+    ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
+    ##
+    certCAFilename:
 
 ## LDAP parameters
 ##
@@ -488,7 +838,7 @@ ldap:
   tlsReqcert:
   nssInitgroupsIgnoreusers: root,nslcd
 
-## Init Container paramaters
+## Init Container parameters
 ##
 volumePermissions:
   enabled: false
@@ -590,7 +940,7 @@ metrics:
     ##
     metricRelabelings: []
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -620,8 +970,13 @@ persistence:
   ## Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
 
-## PgPool service paramaters
+## PgPool service parameters
 ##
 service:
   ## Service type
@@ -650,8 +1005,11 @@ service:
   ## Provide any additional annotations which may be required
   ##
   annotations: {}
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: true
@@ -662,3 +1020,7 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   allowExternal: false
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

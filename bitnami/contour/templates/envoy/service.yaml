@@ -1,0 +1,87 @@
+{{- if .Values.envoy.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-envoy
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+    {{- if .Values.envoy.service.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if (ne (index .Values.envoy.service.annotations "service.beta.kubernetes.io/aws-load-balancer-type" | toString ) "nlb") }}
+    # This annotation puts the AWS ELB into "TCP" mode so that it does not
+    # do HTTP negotiation for HTTPS connections at the ELB edge.
+    # The downside of this is the remote IP address of all connections will
+    # appear to be the internal address of the ELB. See docs/proxy-proto.md
+    # for information about enabling the PROXY protocol on the ELB to recover
+    # the original remote IP address.
+    # We don't set this for nlb, per the contour docs.
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    {{- end }}
+    {{- if .Values.envoy.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.envoy.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.envoy.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if not (empty .Values.envoy.service.clusterIP) }}
+  clusterIP: {{ .Values.envoy.service.clusterIP | quote }}
+  {{- end }}
+  {{- if .Values.envoy.service.externalIPs }}
+  externalIPs: {{- toYaml .Values.envoy.service.externalIPs | nindent 4 }}
+  {{- end }}
+  {{- if .Values.envoy.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.envoy.service.loadBalancerIP | quote }}
+  {{- end }}
+  {{- if .Values.envoy.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.envoy.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.envoy.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+      {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.http)) }}
+      nodePort: {{ .Values.envoy.service.nodePorts.http }}
+      {{- else if eq .Values.envoy.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: https
+      port: {{ .Values.envoy.service.ports.https }}
+      protocol: TCP
+      targetPort: https
+      {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.https)) }}
+      nodePort: {{ .Values.envoy.service.nodePorts.https }}
+      {{- else if eq .Values.envoy.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.envoy.service.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  type: {{ .Values.envoy.service.type }}
+{{- if .Values.prometheus.serviceMonitor.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-envoy-metrics
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  ports:
+    - name: metrics
+      port: 8002
+      protocol: TCP
+      targetPort: 8002
+{{- end }}
+{{- end }}

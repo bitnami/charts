@@ -1,4 +1,4 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
@@ -39,6 +39,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.portal.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAffinityPreset "component" "portal" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.portal.podAntiAffinityPreset "component" "portal" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.portal.nodeAffinityPreset.type "key" .Values.portal.nodeAffinityPreset.key "values" .Values.portal.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.portal.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.portal.nodeSelector "context" $) | nindent 8 }}
@@ -51,6 +56,9 @@ spec:
       {{- end }}
       {{- if .Values.portal.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.portal.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.portal.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: portal
@@ -117,29 +125,29 @@ spec:
           ports:
             - containerPort: {{ include "harbor.portal.containerPort" . }}
               name: http
-          {{- if .Values.portal.extraVolumeMounts }}
           volumeMounts:
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
             {{- if .Values.internalTLS.enabled }}
-            - name: portal-internal-certs
-              mountPath: /bitnami/certs/
+            - name: internal-tls-certs
+              mountPath: /etc/harbor/ssl/portal
             {{- end }}
+          {{- if .Values.portal.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.portal.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.portal.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.portal.extraVolumes }}
       volumes:
         - name: portal-config
           configMap:
             name: {{ include "harbor.portal" . }}
         {{- if .Values.internalTLS.enabled }}
-        - name: portal-internal-certs
+        - name: internal-tls-certs
           secret:
             secretName: {{ include "harbor.portal.tls.secretName" . }}
         {{- end }}
+      {{- if .Values.portal.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

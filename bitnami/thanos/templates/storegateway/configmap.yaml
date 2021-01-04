@@ -1,0 +1,11 @@
+{{- if (include "thanos.storegateway.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-storegateway-configmap
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+data:
+  config.yml: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 4 }}
+{{ end }}

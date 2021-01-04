@@ -1,20 +1,35 @@
-apiVersion: v1
-name: discourse
+annotations:
+  category: Forum
+apiVersion: v2
+appVersion: 2.6.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.X.X
+  - condition: redis.enabled
+    name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.X.X
 description: A Helm chart for deploying Discourse to Kubernetes
-version: 0.1.7
-appVersion: 2.5.0
 engine: gotpl
-home: https://www.discourse.org/
+home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+  - email: username.taken@gmail.com
+    name: paulczar
+  - email: preteluca@gmail.com
+    name: lucaprete
+name: discourse
 sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-  - name: paulczar
-    email: username.taken@gmail.com
-  - name: lucaprete
-    email: preteluca@gmail.com
-annotations:
-  category: Forum
+  - https://www.discourse.org/
+version: 2.1.1

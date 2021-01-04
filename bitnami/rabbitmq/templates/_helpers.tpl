@@ -64,7 +64,7 @@ Get the password secret.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
     {{- if .Values.auth.existingPasswordSecret -}}
-        {{- printf "%s" .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}
@@ -75,7 +75,7 @@ Get the erlang secret.
 */}}
 {{- define "rabbitmq.secretErlangName" -}}
     {{- if .Values.auth.existingErlangSecret -}}
-        {{- printf "%s" .Values.auth.existingErlangSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingErlangSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}

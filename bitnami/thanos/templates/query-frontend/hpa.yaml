@@ -1,0 +1,28 @@
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "common.names.fullname" . }}-query-frontend
+  minReplicas: {{ .Values.queryFrontend.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.queryFrontend.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.queryFrontend.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.queryFrontend.autoscaling.targetMemory  }}
+    {{- end }}
+    {{- if .Values.queryFrontend.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.queryFrontend.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}

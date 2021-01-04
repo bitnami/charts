@@ -1,0 +1,26 @@
+{{- if and .Values.operator.enabled .Values.operator.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+spec:
+  endpoints:
+    - port: http
+      honorLabels: true
+      {{- if .Values.operator.serviceMonitor.interval }}
+      interval: {{ .Values.operator.serviceMonitor.interval }}
+      {{- end }}
+  {{- if .Values.operator.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+  {{- end }}
+  {{- if .Values.operator.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml .Values.operator.serviceMonitor.relabelings | nindent 8 }}
+{{- end }}
+  selector:
+    matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

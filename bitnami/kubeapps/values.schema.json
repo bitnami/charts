@@ -38,18 +38,6 @@
         }
       }
     },
-    "tillerProxy": {
-      "type": "object",
-      "title": "Tiller Proxy configuration",
-      "form": true,
-      "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "title": "Number of replicas",
-          "form": true
-        }
-      }
-    },
     "ingress": {
       "type": "object",
       "form": true,

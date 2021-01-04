@@ -4,13 +4,13 @@ The provided file {{ .Values.entrypoint.file }} is being executed. You can see t
     kubectl logs [POD_NAME]
 
 and the list of pods:
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "pytorch.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 {{- else }}
 You didn't specify any entrypoint to your code.
 To run it, you can either deploy again using the `pytorch.entrypoint.file` option to specify your entrypoint, or execute it manually by jumping into the pods:
 
 1. Get the running pods
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "pytorch.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 2. Get into a pod
     kubectl exec -ti [POD_NAME] bash
@@ -21,7 +21,7 @@ To run it, you can either deploy again using the `pytorch.entrypoint.file` optio
 WARNING: You haven't loaded any file. You can access the Python REPL by jumping into the pods:
 
 1. Get the running pods
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "pytorch.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 2. Run the Python REPL
     kubectl exec -ti [POD_NAME] python

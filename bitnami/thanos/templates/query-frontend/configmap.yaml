@@ -1,0 +1,11 @@
+{{- if (include "thanos.queryFrontend.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend-configmap
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+data:
+  config.yml: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.config "context" $) | nindent 4 }}
+{{ end }}

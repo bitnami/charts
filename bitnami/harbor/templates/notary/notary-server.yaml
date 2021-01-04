@@ -39,6 +39,11 @@ spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.notary.server.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.server.podAffinityPreset "component" "notary-server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.server.podAntiAffinityPreset "component" "notary-server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notary.server.nodeAffinityPreset.type "key" .Values.notary.server.nodeAffinityPreset.key "values" .Values.notary.server.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.notary.server.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.nodeSelector "context" $) | nindent 8 }}
@@ -51,6 +56,9 @@ spec:
       {{- end }}
       {{- if .Values.notary.server.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notary.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: notary-server
@@ -77,7 +85,10 @@ spec:
             - name: MIGRATIONS_PATH
               value: migrations/server/postgresql
             - name: DB_URL
-              value: {{ include "harbor.database.notaryServer" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.notary-server" . }}-envvars
+                  key: server_db_url
             {{- if .Values.notary.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -99,7 +110,7 @@ spec:
             {{- if .Values.notary.secretName }}
             - name: notary-ca
               mountPath: /etc/ssl/notary/cert/notary-signer-ca.crt
-              subPath: ca
+              subPath: notary-signer-ca.crt
             {{- end }}
             {{- if .Values.notary.server.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraVolumeMounts "context" $) | nindent 12 }}

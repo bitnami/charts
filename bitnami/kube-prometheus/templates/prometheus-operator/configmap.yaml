@@ -1,0 +1,11 @@
+{{- if .Values.operator.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+data:
+  config-reloader-image: {{ template "kube-prometheus.configmapReload.image" . }}
+  prometheus-config-reloader: {{ template "kube-prometheus.prometheusConfigReloader.image" . }}
+{{- end }}

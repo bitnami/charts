@@ -44,3 +44,23 @@
 
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
+
+{{- $passwordErrors := list -}}
+
+{{- $harborSecretName := printf "%s-envvars" (include "harbor.core" .) -}}
+{{- $requiredAdminPassword := dict "valueKey" "harborAdminPassword" "secret" $harborSecretName "field" "HARBOR_ADMIN_PASSWORD" -}}
+{{- $requiredHarborErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $requiredHarborErrors -}}
+
+{{- $postgresqlSecretName := include "harbor.postgresql.fullname" . -}}
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
+
+{{- if .Values.redis.usePassword -}}
+  {{- $redisSecretName := printf "%s-%s" .Release.Name "redis" -}}
+  {{- $requiredRedisPassword := dict "valueKey" "redis.password" "secret" $redisSecretName "field" "redis-password" -}}
+  {{- $redisPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRedisPassword) "context" $) -}}
+  {{- $passwordErrors = append $passwordErrors $redisPasswordValidationErrors -}}
+{{- end -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

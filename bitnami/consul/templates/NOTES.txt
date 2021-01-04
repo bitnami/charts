@@ -1,54 +1,60 @@
   ** Please be patient while the chart is being deployed **
 
-  Consul can be accessed within the cluster on port {{ .Values.service.serverPort }} at {{ template "consul.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+  Consul can be accessed within the cluster on port {{ .Values.containerPorts.rpcServer }} at {{ printf "%s-headless" (include "common.names.fullname" .) }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
-{{- if .Values.ui.service.enabled }}
+{{- if .Values.service.enabled }}
 
 In order to access to the Consul Web UI:
 
 {{- if .Values.ingress.enabled }}
 
-  {{- range .Values.ingress.hosts }}
-  {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/admin
-  {{- end }}
+1. Get the Consul URL and associate its hostname to your cluster external IP:
 
-{{- else  if contains "NodePort" .Values.ui.service.type }}
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Consul URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Consul URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "consul.fullname" . }}-ui)
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-ui" (include "common.names.fullname" .) }})
     echo "Consul URL: http://$NODE_IP:$NODE_PORT/"
 
-{{- else if contains "LoadBalancer" .Values.ui.service.type }}
+{{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "consul.fullname" . }}-ui'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-ui" (include "common.names.fullname" .) }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "consul.fullname" . }}-ui --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-ui" (include "common.names.fullname" .) }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
-    echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.uiPort }}/"
+    echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.port }}/"
 
-{{- else if contains "ClusterIP"  .Values.ui.service.type }}
+{{- else if contains "ClusterIP"  .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "consul.fullname" . }}-ui {{ .Values.service.uiPort }}:{{ .Values.service.uiPort }}
-    echo "Consul URL: http://127.0.0.1:{{ .Values.service.uiPort }}"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-ui" (include "common.names.fullname" .) }} {{ .Values.service.port }}:{{ .Values.service.port }}
+    echo "Consul URL: http://127.0.0.1:{{ .Values.service.port }}"
 
 {{- end }}
+{{- end }}
+
+2. Access ASP.NET Core using the obtained URL.
 
 Please take into account that you need to wait until a cluster leader is elected before using the Consul Web UI.
 
 In order to check the status of the cluster you can run the following command:
 
-    kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul members
+    kubectl exec -it {{ template "common.names.fullname" . }}-0 -- consul members
 
 Furthermore, to know which Consul node is the cluster leader run this other command:
 
-    kubectl exec -it {{ template "consul.fullname" . }}-0 -- consul operator raft list-peers
+    kubectl exec -it {{ template "common.names.fullname" . }}-0 -- consul operator raft list-peers
 
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}

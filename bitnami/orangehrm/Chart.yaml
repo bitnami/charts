@@ -1,24 +1,34 @@
-apiVersion: v1
-name: orangehrm
-version: 7.0.20
-appVersion: 4.4.0-0
-description: OrangeHRM is a free HR management system that offers a wealth of modules
-  to suit the needs of your business.
-keywords:
-- orangehrm
-- http
-- https
-- web
-- application
-- php
-- human resources
-home: https://www.orangehrm.com
-sources:
-- https://github.com/bitnami/bitnami-docker-orangehrm
-maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
-engine: gotpl
-icon: https://bitnami.com/assets/stacks/orangehrm/img/orangehrm-stack-110x117.png
 annotations:
   category: HumanResourceManagement
+apiVersion: v2
+appVersion: 4.6.0-1
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: OrangeHRM is a free HR management system that offers a wealth of modules to suit the needs of your business.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/orangehrm
+icon: https://bitnami.com/assets/stacks/orangehrm/img/orangehrm-stack-110x117.png
+keywords:
+  - orangehrm
+  - http
+  - https
+  - web
+  - application
+  - php
+  - human resources
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: orangehrm
+sources:
+  - https://github.com/bitnami/bitnami-docker-orangehrm
+  - https://www.orangehrm.com
+version: 9.0.2

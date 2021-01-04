@@ -5,11 +5,13 @@
 
 {{- range $i, $e := until $replicaCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ $fullName }}-{{ $i }}-external
+  namespace: {{ include "mongodb.namespace" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
     pod: {{ $targetPod }}

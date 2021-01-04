@@ -1,22 +1,29 @@
-apiVersion: v1
-name: contour
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.11.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Contour Ingress controller for Kubernetes
-version: 1.1.1
-appVersion: 1.6.1
+home: https://github.com/bitnami/charts/tree/master/bitnami/contour
+icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
 keywords:
   - ingress
   - envoy
   - contour
-home: https://projectcontour.io
-icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
+maintainers:
+  - name: cellebyte
+    url: https://github.com/Cellebyte
+  - email: containers@bitnami.com
+    name: Bitnami
+name: contour
 sources:
   - https://github.com/projectcontour/contour
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
-maintainers:
-  - name: cellebyte
-    url: https://github.com/Cellebyte
-  - name: Bitnami
-    email: containers@bitnami.com
-annotations:
-  category: Infrastructure
+  - https://projectcontour.io
+version: 3.2.0

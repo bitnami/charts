@@ -65,6 +65,11 @@ spec:
           {{- end }}
           {{- if .Values.curator.affinity }}
           affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.affinity "context" $) | nindent 12 }}
+          {{- else }}
+          affinity:
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.curator.podAffinityPreset "component" "curator" "context" $) | nindent 14 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.curator.podAntiAffinityPreset "component" "curator" "context" $) | nindent 14 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.curator.nodeAffinityPreset.type "key" .Values.curator.nodeAffinityPreset.key "values" .Values.curator.nodeAffinityPreset.values) | nindent 14 }}
           {{- end }}
           {{- if .Values.curator.nodeSelector }}
           nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.nodeSelector "context" $) | nindent 12 }}

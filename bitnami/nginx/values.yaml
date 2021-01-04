@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.1-debian-10-r0
+  tag: 1.19.6-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -22,9 +22,14 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## E.g.:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 
 ## String to partially override nginx.fullname template (will maintain the release name)
 ##
@@ -34,14 +39,42 @@ image:
 ##
 # fullnameOverride:
 
-## Name of existing ConfigMap with the server static site content
+## Kubernetes Cluster Domain
 ##
-# staticSiteConfigmap
+clusterDomain: cluster.local
 
-## Name of existing PVC with the server static site content
-## NOTE: This will override staticSiteConfigmap
+## Extra objects to deploy (value evaluated as a template)
 ##
-# staticSitePVC
+extraDeploy: []
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+# command:
+# args:
+
+## Additional environment variables to set
+## E.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+##
+# extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+# extraEnvVarsSecret:
 
 ## Get the server static content from a git repository
 ## NOTE: This will override staticSiteConfigmap and staticSitePVC
@@ -54,7 +87,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.27.0-debian-10-r32
+    tag: 2.29.2-debian-10-r44
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -99,26 +132,65 @@ cloneStaticSiteFromGit:
 ##
 # existingServerBlockConfigmap:
 
+## Name of existing ConfigMap with the server static site content
+##
+# staticSiteConfigmap
+
+## Name of existing PVC with the server static site content
+## NOTE: This will override staticSiteConfigmap
+##
+# staticSitePVC
+
 ## Number of replicas to deploy
 ##
 replicaCount: 1
 
-## Deployment Container Port
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
-containerPort: 8080
-
-## If you would like to serve tls in the cluster set containerTlsPort
-##   This is required for extra serverBlocks that serve https.
-##
-## containerTlsPort: 8443
+podLabels: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -131,6 +203,34 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: {}
+
+## NGINX pods' Security Context.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
+  ## sysctl settings
+  ## Example:
+  ## sysctls:
+  ## - name: net.core.somaxconn
+  ##   value: "10000"
+  ##
+  sysctls: {}
+
+## NGINX Core containers' Security Context (only main container).
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: false
+  fsGroup: 1001
+
+## Configures the ports NGINX listens on
+##
+containerPorts:
+  http: 8080
+  # https: 8443
 
 ## NGINX containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -147,21 +247,48 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
-## NGINX containers' liveness and readiness probes
+## NGINX containers' liveness and readiness probes.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  tcpSocket:
-    port: http
+  enabled: true
   initialDelaySeconds: 30
   timeoutSeconds: 5
+  periodSeconds: 10
   failureThreshold: 6
+  successThreshold: 1
 readinessProbe:
-  tcpSocket:
-    port: http
+  enabled: true
   initialDelaySeconds: 5
   timeoutSeconds: 3
   periodSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Rediness probe
+##
+customReadinessProbe: {}
+
+## Autoscaling parameters
+##
+autoscaling:
+  enabled: false
+  # minReplicas: 1
+  # maxReplicas: 10
+  # targetCPU: 50
+  # targetMemory: 50
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
 
 ## NGINX Service properties
 ##
@@ -185,6 +312,13 @@ service:
     http: ""
     https: ""
 
+  ## Target port reference value for the Loadbalancer service types can be specified explicitly.
+  ## Listeners for the Loadbalancer can be custom mapped to the http or https service.
+  ## Example: Mapping the https listener to targetPort http [http: https]
+  targetPort:
+    http: http
+    https: https
+
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -201,7 +335,6 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-
 ## LDAP Auth Daemon Properties
 ##
 ## Daemon that will proxy LDAP requests
@@ -217,7 +350,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r60
+    tag: 0.20200116.0-debian-10-r199
     pullPolicy: IfNotPresent
 
   ## LDAP Daemon port
@@ -271,7 +404,7 @@ ldapDaemon:
 
   nginxServerBlock: |-
     server {
-    listen 0.0.0.0:{{ .Values.containerPort }};
+    listen 0.0.0.0:{{ .Values.containerPorts.http }};
 
     # You can provide a special subPath or the root
     location = / {
@@ -308,24 +441,43 @@ ldapDaemon:
   ##
   existingNginxServerBlockSecret:
 
-  ## LDAP Auth Daemon's liveness and readiness probes
+  ## LDAP Auth Daemon containers' liveness and readiness probes.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    tcpSocket:
-      port: ldap-daemon
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 5
+    periodSeconds: 10
     failureThreshold: 6
-
+    successThreshold: 1
   readinessProbe:
-    tcpSocket:
-      port: ldap-daemon
+    enabled: true
     initialDelaySeconds: 5
     timeoutSeconds: 3
     periodSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
 
-## Ingress paramaters
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probe
+  ##
+  customReadinessProbe: {}
+
+## Sidecar parameters
+##
+# sidecars:
+#   - name: your-image-name
+#     image: your-image
+#     imagePullPolicy: Always
+#     ports:
+#       - name: portname
+#         containerPort: 1234
+sidecars:
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -338,32 +490,60 @@ ingress:
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  # hostname: example.local
-
-  ## The list of hosts and paths to be covered into ingress rules if more than one hosts
-  ## or only a host with a path is needed, this is an array
-  ## hosts:
-  ## - name: example.local
-  ##   path: /
+  hostname: example.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations: {}
-  #  kubernetes.io/ingress.class: nginx
-
-  ## The tls configuration for the ingress
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
+  annotations: {}
 
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
+  ##
+  tls: false
 
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## E.g.
+  ## extraHosts:
+  ##   - name: example.local
+  ##     path: /
+  ##
+  extraHosts: []
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## E.g.
+  ## extraTls:
+  ##   - hosts:
+  ##       - example.local
+  ##     secretName: example.local-tls
+  ##
+  extraTls: []
+
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  ## E.g.
+  ## secrets:
+  ##   - name: example.local-tls
+  ##     key:
+  ##     certificate:
+  ##
+  secrets: []
+
+## Health Ingress parameters
+##
 healthIngress:
   ## Set to true to enable health ingress record generation
   ##
@@ -381,38 +561,51 @@ healthIngress:
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
+
+  ## Enable TLS configuration for the hostname defined at healthIngress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.healthIngress.hostname }}
+  ## You can use the healthIngress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
+  ##
+  tls: false
 
   ## The list of additional hostnames to be covered with this health ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: example.local
-  ##   path: /
-
-  ## The tls configuration for the health ingress
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## E.g.
+  ## extraHosts:
+  ##   - name: example.local
+  ##     path: /
   ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
+  extraHosts: []
 
-  secrets:
+  ## The tls configuration for additional hostnames to be covered with this health ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## E.g.
+  ## extraTls:
+  ##   - hosts:
+  ##       - example.local
+  ##     secretName: example.local-tls
+  ##
+  extraTls: []
+
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: example.local-tls
-  #   key:
-  #   certificate:
+  ##
+  ## E.g.
+  ## secrets:
+  ##   - name: example.local-tls
+  ##     key:
+  ##     certificate:
+  ##
+  secrets: []
 
 ## Prometheus Exporter / Metrics
 ##
@@ -425,7 +618,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.8.0-debian-10-r18
+    tag: 0.8.0-debian-10-r168
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -437,9 +630,7 @@ metrics:
   ## Prometheus exporter pods' annotation and labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9113"
+  podAnnotations: {}
 
   ## Prometheus exporter service parameters
   ##
@@ -492,19 +683,14 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## Autoscaling parameters
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
-autoscaling:
-  enabled: false
-  # minReplicas: 1
-  # maxReplicas: 10
-  # targetCPU: 50
-  # targetMemory: 50
-
-## Array to add extra volumes (evaluated as a template)
-##
-extraVolumes: []
-
-## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
-##
-extraVolumeMounts: []
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1

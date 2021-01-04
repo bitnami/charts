@@ -95,17 +95,6 @@ Return the proper etcd client protocol
 {{- end -}}
 
 {{/*
-Return the proper etcd data dir
-*/}}
-{{- define "etcd.dataDir" -}}
-{{- if .Values.persistence.enabled -}}
-{{- print "/bitnami/etcd/data" -}}
-{{- else -}}
-{{- print "/opt/bitnami/etcd/data" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}
@@ -123,9 +112,9 @@ Return the proper etcdctl authentication options
 */}}
 {{- define "etcd.authOptions" -}}
 {{- $rbacOption := "--user root:$ETCD_ROOT_PASSWORD" -}}
-{{- $certsOption := " --cert=\"$ETCD_CERT_FILE\" --key=\"$ETCD_KEY_FILE\"" -}}
-{{- $autoCertsOption := " --cert=\"/bitnami/etcd/data/fixtures/client/cert.pem\" --key=\"/bitnami/etcd/data/fixtures/client/key.pem\"" -}}
-{{- $caOption := " --cacert=\"$ETCD_TRUSTED_CA_FILE\"" -}}
+{{- $certsOption := " --cert $ETCD_CERT_FILE --key $ETCD_KEY_FILE" -}}
+{{- $autoCertsOption := " --cert /bitnami/etcd/data/fixtures/client/cert.pem --key /bitnami/etcd/data/fixtures/client/key.pem" -}}
+{{- $caOption := " --cacert $ETCD_TRUSTED_CA_FILE" -}}
 {{- if .Values.auth.rbac.enabled -}}
 {{- printf "%s" $rbacOption -}}
 {{- end -}}

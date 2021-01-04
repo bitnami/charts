@@ -28,6 +28,11 @@ spec:
 {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.ingest.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAntiAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingest.nodeAffinityPreset.type "key" .Values.ingest.nodeAffinityPreset.key "values" .Values.ingest.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.ingest.nodeSelector }}
       nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.ingest.nodeSelector "context" $) | nindent 8 }}
@@ -110,7 +115,6 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
-            initialDelaySeconds: 90
           {{- end }}
           {{- if .Values.ingest.readinessProbe.enabled}}
           readinessProbe:
@@ -122,7 +126,6 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
-            initialDelaySeconds: 5
           {{- end}}
           {{- if .Values.ingest.resources }}
           resources: {{- toYaml .Values.ingest.resources | nindent 12 }}

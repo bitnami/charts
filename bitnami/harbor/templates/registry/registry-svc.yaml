@@ -12,8 +12,8 @@ metadata:
 spec:
   ports:
     - name: registry
-      port: 5000
+      port: {{ include "harbor.registry.servicePort" . }}
     - name: controller
-      port: 8080
+      port: {{ include "harbor.registryctl.servicePort" . }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: registry

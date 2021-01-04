@@ -2,7 +2,7 @@
 
 [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
 
-## TL;DR;
+## TL;DR
 
 ```console
   helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
+- Helm 3.0-beta3+
 
 ## Installing the Chart
 
@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                    | `nil`                          |
 
 ### ASP.NET Core parameters
 
@@ -85,37 +86,41 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 
 ### ASP.NET Core deployment parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                          | Number of ASP.NET Core replicas to deploy                                                | `1`                                                     |
-| `strategyType`                          | Deployment Strategy Type                                                                 | `RollingUpdate`                                         |
-| `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
-| `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
-| `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
-| `priorityClassName`                     | Controller priorityClassName                                                             | `nil`                                                   |
-| `podSecurityContext`                    | ASP.NET Core pods' Security Context                                                      | Check `values.yaml` file                                |
-| `containerSecurityContext`              | ASP.NET Corecontainers' Security Context                                                 | Check `values.yaml` file                                |
-| `containerPort`                         | Port to expose at container level                                                        | `8080`                                                  |
-| `resources.limits`                      | The resources limits for the ASP.NET Core container                                      | `{}`                                                    |
-| `resources.requests`                    | The requested resources for the ASP.NET Core container                                   | `{}`                                                    |
-| `podAnnotations`                        | Annotations for ASP.NET Core pods                                                        | `{}`                                                    |
-| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                               | `{}` (evaluated as a template)                          |
-| `livenessProbe`                         | Liveness probe configuration for ASP.NET Core                                            | Check `values.yaml` file                                |
-| `readinessProbe`                        | Readiness probe configuration for ASP.NET Core                                           | Check `values.yaml` file                                |
-| `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)   | `[]`                                                    |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for ASP.NET Core statefulset         | `[]`                                                    |
-| `initContainers`                        | Add additional init containers to the ASP.NET Core pods                                  | `{}` (evaluated as a template)                          |
-| `sidecars`                              | Add additional sidecar containers to the ASP.NET Core pods                               | `{}` (evaluated as a template)                          |
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                          | `false`                                                 |
-| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                           | `1`                                                     |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                           | `nil`                                                   |
-| `autoscaling.enabled`                   | Enable autoscaling for ASP.NET Core                                                      | `false`                                                 |
-| `autoscaling.minReplicas`               | Minimum number of ASP.NET Core replicas                                                  | `nil`                                                   |
-| `autoscaling.maxReplicas`               | Maximum number of ASP.NET Core replicas                                                  | `nil`                                                   |
-| `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                        | `nil`                                                   |
-| `autoscaling.targetMemory`              | Target Memory utilization percentage                                                     | `nil`                                                   |
+| Parameter                             | Description                                                                                | Default                                                 |
+|---------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `replicaCount`                        | Number of ASP.NET Core replicas to deploy                                                  | `1`                                                     |
+| `strategyType`                        | Deployment Strategy Type                                                                   | `RollingUpdate`                                         |
+| `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
+| `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                  |
+| `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                                    |
+| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                      | `""`                                                    |
+| `affinity`                            | Affinity for pod assignment                                                                | `{}` (evaluated as a template)                          |
+| `nodeSelector`                        | Node labels for pod assignment                                                             | `{}` (evaluated as a template)                          |
+| `tolerations`                         | Tolerations for pod assignment                                                             | `[]` (evaluated as a template)                          |
+| `priorityClassName`                   | Controller priorityClassName                                                               | `nil`                                                   |
+| `podSecurityContext`                  | ASP.NET Core pods' Security Context                                                        | Check `values.yaml` file                                |
+| `containerSecurityContext`            | ASP.NET Corecontainers' Security Context                                                   | Check `values.yaml` file                                |
+| `containerPort`                       | Port to expose at container level                                                          | `8080`                                                  |
+| `resources.limits`                    | The resources limits for the ASP.NET Core container                                        | `{}`                                                    |
+| `resources.requests`                  | The requested resources for the ASP.NET Core container                                     | `{}`                                                    |
+| `podAnnotations`                      | Annotations for ASP.NET Core pods                                                          | `{}`                                                    |
+| `lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)                          |
+| `livenessProbe`                       | Liveness probe configuration for ASP.NET Core                                              | Check `values.yaml` file                                |
+| `readinessProbe`                      | Readiness probe configuration for ASP.NET Core                                             | Check `values.yaml` file                                |
+| `customLivenessProbe`                 | Override default liveness probe                                                            | `nil`                                                   |
+| `customReadinessProbe`                | Override default readiness probe                                                           | `nil`                                                   |
+| `extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)     | `[]`                                                    |
+| `extraVolumes`                        | Optionally specify extra list of additional volumes for ASP.NET Core statefulset           | `[]`                                                    |
+| `initContainers`                      | Add additional init containers to the ASP.NET Core pods                                    | `{}` (evaluated as a template)                          |
+| `sidecars`                            | Add additional sidecar containers to the ASP.NET Core pods                                 | `{}` (evaluated as a template)                          |
+| `pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                            | `false`                                                 |
+| `pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                             | `1`                                                     |
+| `pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                             | `nil`                                                   |
+| `autoscaling.enabled`                 | Enable autoscaling for ASP.NET Core                                                        | `false`                                                 |
+| `autoscaling.minReplicas`             | Minimum number of ASP.NET Core replicas                                                    | `nil`                                                   |
+| `autoscaling.maxReplicas`             | Maximum number of ASP.NET Core replicas                                                    | `nil`                                                   |
+| `autoscaling.targetCPU`               | Target CPU utilization percentage                                                          | `nil`                                                   |
+| `autoscaling.targetMemory`            | Target Memory utilization percentage                                                       | `nil`                                                   |
 
 ### Custom ASP.NET Core application parameters
 
@@ -153,6 +158,9 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
 | `service.annotations`                   | Annotations for ASP.NET Core service                                                     | `{}`                                                    |
 | `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
+| `ingress.path`                   | Ingress path                                                  | `/`                            |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
 | `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
 | `ingress.hostname`                      | Default host for the ingress resource                                                    | `aspnet-core.local`                                     |
 | `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
@@ -164,6 +172,18 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
 | `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
 | `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
+| `healthIngress.enabled`                 | Enable healthIngress controller resource                                                 | `false`                                                 |
+| `healthIngress.certManager`             | Add annotations for cert-manager                                                         | `false`                                                 |
+| `healthIngress.hostname`                | Default host for the healthIngress resource                                              | `aspnet-core.local`                                     |
+| `healthIngress.tls`                     | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter  | `false`                                                 |
+| `healthIngress.annotations`             | Ingress annotations                                                                      | `[]`                                                    |
+| `healthIngress.extraHosts[0].name`      | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `healthIngress.extraHosts[0].path`      | Additional hostnames to be covered                                                       | `nil`                                                   |
+| `healthIngress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `healthIngress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
+| `healthIngress.secrets[0].name`         | TLS Secret Name                                                                          | `nil`                                                   |
+| `healthIngress.secrets[0].certificate`  | TLS Secret Certificate                                                                   | `nil`                                                   |
+| `healthIngress.secrets[0].key`          | TLS Secret Key                                                                           | `nil`                                                   |
 
 ### RBAC parameters
 
@@ -264,9 +284,9 @@ appFromExternalRepo.startCommand[1]=KestrelSample.dll
 
 #### Mounting your ASP.NET Core application from an existing PVC
 
-If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of yur existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
+If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of your existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
 
-For example, if you created a PVC named `my-custom-apsnet-core-app` containing your applicaiton, use the parameters below:
+For example, if you created a PVC named `my-custom-apsnet-core-app` containing your application, use the parameters below:
 
 ```console
 appFromExistingPVC.enabled=true
@@ -344,6 +364,12 @@ extraVolumes:
       name: aspnet-core-configuration
 ```
 
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ### Ingress
 
 This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your ASP.NET Core application.
@@ -357,3 +383,32 @@ Most likely you will only want to have one hostname that maps to this ASP.NET Co
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+**What changes were introduced in this major version?**
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+
+**Considerations when upgrading to this version**
+
+- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+
+**Useful links**
+
+- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
+- https://helm.sh/docs/topics/v2_v3_migration/
+- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
