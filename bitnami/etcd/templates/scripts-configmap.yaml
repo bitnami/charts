@@ -12,7 +12,7 @@
 {{- $snapshotHistoryLimit := .Values.disasterRecovery.cronjob.snapshotHistoryLimit }}
 {{- $endpoints := list }}
 {{- range $e, $i := until $replicaCount }}
-{{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+{{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $clientPort) }}
 {{- end }}
 apiVersion: v1
 kind: ConfigMap
