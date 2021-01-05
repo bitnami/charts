@@ -108,6 +108,15 @@ configInline:
 ##
 # ingressClass: contour
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Force Ingress API version (automatically detected if not set)
+##
+ingress:
+  apiVersion:
+
 ## String to partially override contour.fullname include (will maintain the release name)
 ##
 # nameOverride:
@@ -639,6 +648,11 @@ defaultBackend:
     periodSeconds: 5
     successThreshold: 1
     timeoutSeconds: 5
+
+  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
+  ##
+  customLivenessProbe: {}
+  customReadinessProbe: {}
 
   ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/

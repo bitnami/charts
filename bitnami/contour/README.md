@@ -63,10 +63,12 @@ The following tables lists the configurable parameters of the contour chart and 
 
 ### Common parameters
 
-| Parameter          | Description                                                                                          | Default |
-|--------------------|------------------------------------------------------------------------------------------------------|---------|
-| `nameOverride`     | String to partially override contour.fullname template with a string (will prepend the release name) | `nil`   |
-| `fullnameOverride` | String to fully override contour.fullname template with a string                                     | `nil`   |
+| Parameter            | Description                                                                                          | Default |
+|----------------------|------------------------------------------------------------------------------------------------------|---------|
+| `nameOverride`       | String to partially override contour.fullname template with a string (will prepend the release name) | `nil`   |
+| `fullnameOverride`   | String to fully override contour.fullname template with a string                                     | `nil`   |
+| `ingress.apiVersion` | Force Ingress API version (automatically detected if not set)                                        | `nil`   |
+| `kubeVersion`        | Force target Kubernetes version (using Helm capabilities if not set)                                 | `nil`   |
 
 ## Contour parameters
 
@@ -199,8 +201,8 @@ The following tables lists the configurable parameters of the contour chart and 
 | `defaultBackend.resources.requests`        | The requested resources for the Default backend container                                | `{}`                                                    |
 | `defaultBackend.leavinessProbe`            | Leaviness probe configuration for Default backend                                        | Check `values.yaml` file                                |
 | `defaultBackend.readinessProbe`            | Readiness probe configuration for Default backend                                        | Check `values.yaml` file                                |
-| `defaultBackend.customLivenessProbe`       | Override default liveness probe                                                          | `nil`                                                   |
-| `defaultBackend.customReadinessProbe`      | Override default readiness probe                                                         | `nil`                                                   |
+| `defaultBackend.customLivenessProbe`       | Override default liveness probe                                                          | `{}` (evaluated as a template)                          |
+| `defaultBackend.customReadinessProbe`      | Override default readiness probe                                                         | `{}` (evaluated as a template)                          |
 | `defaultBackend.podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
 | `defaultBackend.podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
 | `defaultBackend.nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
