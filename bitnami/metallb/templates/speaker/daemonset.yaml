@@ -64,12 +64,12 @@ spec:
               name: {{ include "metallb.speaker.secretName" . }}
               key: {{ include "metallb.speaker.secretKey" . }}
         {{- if .Values.speaker.extraEnvVars }}
-        {{- include "metallb.tplValue" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.extraEnvVarsSecret }}
         envFrom:
         - secretRef:
-            name: {{ include "metallb.tplValue" ( dict "value" .Values.speaker.extraEnvVarsSecret "context" $ ) }}
+            name: {{ include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVarsSecret "context" $ ) }}
         {{- end }}
         ports:
         - name: metrics
@@ -109,11 +109,11 @@ spec:
             add: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 12 }}
       {{- end }}
       nodeSelector:
-      {{- if .Values.speaker.nodeSelector }} {{- include "metallb.tplValue" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.speaker.nodeSelector }} {{- include "common.tplvalues.render" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
         "kubernetes.io/os": linux
       {{- if .Values.speaker.affinity }}
-      affinity: {{- include "metallb.tplValue" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.speaker.tolerations}}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
