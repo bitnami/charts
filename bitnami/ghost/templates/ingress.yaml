@@ -25,9 +25,8 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: "{{ include "common.names.fullname" $ }}"
-              servicePort: http
+            pathType: Prefix
+            backend: {{ include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
   {{- end }}
   tls:
   {{- range .Values.ingress.hosts }}
