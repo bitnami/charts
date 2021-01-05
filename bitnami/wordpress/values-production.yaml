@@ -519,6 +519,8 @@ persistence:
   # existingClaim: your-claim
   accessMode: ReadWriteMany
   size: 10Gi
+  ## Custom dataSource
+  dataSource: {}
 
 ## Wordpress Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
