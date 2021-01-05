@@ -1,143 +1,264 @@
 {{- if include "owncloud.host" . -}}
-apiVersion: {{ template "owncloud.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "owncloud.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
-    helm.sh/chart: {{ include "owncloud.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name | quote }}
-  replicas: 1
-{{- if .Values.updateStrategy }}
-  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-{{- end }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "owncloud.fullname" . }}
-        helm.sh/chart: {{ include "owncloud.chart" . }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
-      annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
-    spec:
-{{- include "owncloud.imagePullSecrets" . | indent 6 }}
-      hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
-      initContainers:
-      {{- include "certificates.initContainer" . | indent 8 }}
-      containers:
-      - name: {{ template "owncloud.fullname" . }}
-        image: {{ template "owncloud.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword | quote }}
-        - name: MARIADB_HOST
-          value: {{ include "owncloud.databaseHost" . | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ include "owncloud.databasePort" . | quote }}
-        - name: OWNCLOUD_DATABASE_NAME
-          value: {{ include "owncloud.databaseName" . | quote }}
-        - name: OWNCLOUD_DATABASE_USER
-          value: {{ include "owncloud.databaseUser" . | quote }}
-        - name: OWNCLOUD_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "owncloud.databaseSecretName" . }}
-              key: mariadb-password
-{{- $port:=.Values.service.port | toString }}
-        - name: OWNCLOUD_HOST
-          value: "{{ include "owncloud.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
-        - name: OWNCLOUD_USERNAME
-          value: {{ default "" .Values.owncloudUsername | quote }}
-        - name: OWNCLOUD_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "owncloud.fullname" . }}
-              key: owncloud-password
-        - name: OWNCLOUD_EMAIL
-          value: {{ default "" .Values.owncloudEmail | quote }}
-        {{- if .Values.extraEnvVars }}
-        {{- include "owncloud.tplValues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
-        ports:
-        - name: http
-          containerPort: 80
-        livenessProbe:
-          httpGet:
-            path: /status.php
-            port: http
-            httpHeaders:
-            - name: Host
-              value: {{ include "owncloud.host" . | quote }}
-          initialDelaySeconds: 120
-          timeoutSeconds: 5
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /status.php
-            port: http
-            httpHeaders:
-            - name: Host
-              value: {{ include "owncloud.host" . | quote }}
-          initialDelaySeconds: 30
-          timeoutSeconds: 3
-          periodSeconds: 5
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        {{- include "certificates.volumeMount" . | indent 8 }}
-        - name: owncloud-data
-          mountPath: /bitnami/owncloud
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "owncloud.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
-        ports:
-        - name: metrics
-          containerPort: 9117
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-  {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
-      volumes:
-      {{- include "certificates.volumes" . | indent 6 }}
-      - name: owncloud-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.owncloud.existingClaim }}{{ .Values.persistence.owncloud.existingClaim }}{{- else }}{{ template "owncloud.fullname" . }}-owncloud{{- end }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "owncloud.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
-        emptyDir: {}
-      {{- end }}
-      {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "status.localhost"
+      initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "owncloud.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/owncloud"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/owncloud"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: owncloud-data
+              mountPath: /bitnami/owncloud
+        {{- end }}
+        {{- include "certificates.initContainer" . | nindent 8 }}
+      containers:
+        - name: owncloud
+          image: {{ include "owncloud.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: OWNCLOUD_DATABASE_HOST
+              value: {{ include "owncloud.databaseHost" . | quote }}
+            - name: OWNCLOUD_DATABASE_PORT_NUMBER
+              value: {{ include "owncloud.databasePort" . | quote }}
+            - name: OWNCLOUD_DATABASE_NAME
+              value: {{ include "owncloud.databaseName" . | quote }}
+            - name: OWNCLOUD_DATABASE_USER
+              value: {{ include "owncloud.databaseUser" . | quote }}
+            - name: OWNCLOUD_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "owncloud.databaseSecretName" . }}
+                  key: mariadb-password
+            - name: OWNCLOUD_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.owncloudSkipInstall | quote }}
+            {{- $port:=.Values.service.port | toString }}
+            - name: OWNCLOUD_HOST
+              value: {{ include "owncloud.host" . }}
+            - name: OWNCLOUD_USERNAME
+              value: {{ .Values.owncloudUsername | quote }}
+            - name: OWNCLOUD_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.names.fullname" . }}
+                  key: owncloud-password
+            - name: OWNCLOUD_EMAIL
+              value: {{ .Values.owncloudEmail | quote }}
+            - name: OWNCLOUD_SMTP_HOST
+              value: {{ .Values.smtpHost | quote }}
+            - name: OWNCLOUD_SMTP_PORT_NUMBER
+              value: {{ .Values.smtpPort | quote }}
+            - name: OWNCLOUD_SMTP_USER
+              value: {{ .Values.smtpUser | quote }}
+            {{- if .Values.smtpPassword }}
+            - name: OWNCLOUD_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.names.fullname" . }}
+                  key: smtp-password
+            {{- end }}
+            - name: OWNCLOUD_SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.containerPorts.https }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "owncloud.host" . | quote }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "owncloud.host" . | quote }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "owncloud.host" . | quote }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: owncloud-data
+              mountPath: /bitnami/owncloud
+              subPath: owncloud
+            {{- include "certificates.volumeMounts" . | nindent 12 }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "owncloud.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto']
+          ports:
+            - name: metrics
+              containerPort: 9117
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: owncloud-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-owncloud" (include "common.names.fullname" .)) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- include "certificates.volumes" . | indent 8 }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end -}}
