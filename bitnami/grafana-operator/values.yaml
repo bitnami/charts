@@ -43,7 +43,7 @@ operator:
   ##    maxUnavailable: 25%
   ##
   updateStrategy:
-    type: RollingUpdate
+    type: Recreate
 
   image:
     registry: docker.io
