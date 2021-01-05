@@ -299,3 +299,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MinIO(TM) is run and maintained by MinIO, which is a completely separate project from Bitnami.
