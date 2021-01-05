@@ -213,9 +213,12 @@ The following tables lists the configurable parameters of the contour chart and 
 | `defaultBackend.tolerations`               | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
 | `defaultBackend.podLabels`                 | Extra labels for Controller pods                                                         | `{}` (evaluated as a template)                          |
 | `defaultBackend.podAnnotations`            | Annotations for Controller pods                                                          | `{}` (evaluated as a template)                          |
+| `defaultBackend.priorityClassName`         | Priority class assigned to the pods                                                      | `""`                                                    |
 | `defaultBackend.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Default backend                      | `false`                                                 |
 | `defaultBackend.pdb.minAvailable`          | Minimum number/percentage of Default backend pods that should remain scheduled           | `1`                                                     |
 | `defaultBackend.pdb.maxUnavailable`        | Maximum number/percentage of Default backend pods that may be made unavailable           | `nil`                                                   |
+| `defaultBackend.service.type`              | Service type                                                                             | `ClusterIP`                                             |
+| `defaultBackend.service.port`              | Service port                                                                             | `80`                                                    |
 
 ### Other parameters
 
