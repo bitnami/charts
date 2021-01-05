@@ -371,6 +371,11 @@ grafana:
     log:
       mode: "console"
       level: "warn"
+    alerting:
+      enabled: false
+    analytics:
+      reporting_enabled: false
+      check_for_updates: false
     security:
       disable_initial_admin_creation: false
       disable_gravatar: false
