@@ -7,6 +7,10 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami ASP.NET Core image
 ## ref: https://hub.docker.com/r/bitnami/aspnet-core/tags/
 ##
@@ -168,6 +172,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -378,6 +383,18 @@ ingress:
   ##
   enabled: false
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -406,6 +423,7 @@ ingress:
   ## extraHosts:
   ## - name: aspnet-core.local
   ##   path: /
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -413,6 +431,7 @@ ingress:
   ## - hosts:
   ##     - aspnet-core.local
   ##   secretName: aspnet-core.local-tls
+  ##
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
@@ -427,6 +446,7 @@ ingress:
   ## - name: aspnet-core.local-tls
   ##   key:
   ##   certificate:
+  ##
 
 healthIngress:
   ## Set to true to enable heallth ingress record generation
@@ -461,6 +481,7 @@ healthIngress:
   ## extraHosts:
   ## - name: aspnet-core.local
   ##   path: /
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this heallth ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -468,6 +489,7 @@ healthIngress:
   ## - hosts:
   ##     - aspnet-core.local
   ##   secretName: aspnet-core.local-tls
+  ##
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
@@ -482,6 +504,7 @@ healthIngress:
   ## - name: aspnet-core.local-tls
   ##   key:
   ##   certificate:
+  ##
 
 ## K8s Service Account.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

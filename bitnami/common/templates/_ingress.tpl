@@ -13,7 +13,7 @@ Params:
 */}}
 {{- define "common.ingress.backend" -}}
 {{- $apiVersion := (include "common.capabilities.ingress.apiVersion" .context) -}}
-{{- if (eq $apiVersion "extensions/v1beta1") -}}
+{{- if or (eq $apiVersion "extensions/v1beta1") (eq $apiVersion "networking.k8s.io/v1beta1") -}}
 serviceName: {{ .serviceName }}
 servicePort: {{ .servicePort }}
 {{- else -}}
