@@ -1,7 +1,7 @@
 annotations:
   category: CRM
 apiVersion: v2
-appVersion: 7.11.18
+appVersion: 7.11.19
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
