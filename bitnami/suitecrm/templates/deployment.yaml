@@ -187,11 +187,11 @@ spec:
               value: {{ .Values.suitecrmNotifyAddress | quote }}
             - name: SUITECRM_SMTP_HOST
               value: {{ .Values.suitecrmSmtpHost | quote }}
-            - name: SUITECRM_SMTP_PORT_NUMBER
+            - name: SUITECRM_SMTP_PORT
               value: {{ .Values.suitecrmSmtpPort | quote }}
             - name: SUITECRM_SMTP_USER
               value: {{ .Values.suitecrmSmtpUser | quote }}
-            {{- if .Values.smtpPassword }}
+            {{- if .Values.suitecrmSmtpPassword }}
             - name: SUITECRM_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
