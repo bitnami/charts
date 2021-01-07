@@ -341,7 +341,38 @@ spec:
             - name: metrics
               containerPort: 9121
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
-  {{- end }}
+        {{- end }}
+        {{- if .Values.sentinel.metrics.enabled }}
+        - name: sentinel-metrics
+          image: {{ template "sentinel.metrics.image" . }}
+          imagePullPolicy: {{ .Values.sentinel.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /go/bin/redis_sentinel_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          env:
+            {{- if and .Values.sentinel.usePassword (and .Values.usePassword (not .Values.usePasswordFile)) }}
+            - name: SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "redis.secretName" . }}
+                  key: {{ template "redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if and .Values.sentinel.usePassword (and .Values.usePassword .Values.usePasswordFile) }}
+            - name: SENTINEL_PASSWORD_FILE
+              value: /secrets/redis-password
+            {{- end }}
+          volumeMounts:
+            {{- if and .Values.sentinel.usePassword (and .Values.usePassword .Values.usePasswordFile) }}
+            - name: redis-password
+              mountPath: /secrets/
+            {{- end }}
+          ports:
+            - name: sentinelmetrics
+              containerPort: 9355
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled .Values.containerSecurityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
