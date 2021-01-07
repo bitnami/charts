@@ -92,7 +92,7 @@ security.protocol={{ $clientProtocol }}
 sasl.mechanism=SCRAM-SHA-256
 {{- else if  .Values.auth.saslMechanisms | regexFind "scram-sha-512" }}
 sasl.mechanism=SCRAM-SHA-512
-{{- else -}}
+{{- else }}
 sasl.mechanism=PLAIN
 {{- end }}
 {{- if eq .Values.auth.clientProtocol "sasl_tls" }}

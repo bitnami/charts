@@ -353,7 +353,7 @@ This helm chart also supports to customize the whole configuration file.
 
 Add your custom file to "files/postgresql.conf" in your working directory. This file will be mounted as configMap to the containers and it will be used for configuring the PostgreSQL server.
 
-Alternatively, you can specify PostgreSQL configuration parameters using the `postgresqlConfiguration` parameter as a dict, using camelCase, e.g. {"sharedBuffers": "500MB"}.
+Alternatively, you can add additional PostgreSQL configuration parameters using the `postgresqlExtendedConf` parameter as a dict, using camelCase, e.g. {"sharedBuffers": "500MB"}. Alternatively, to replace the entire default configuration use `postgresqlConfiguration`.
 
 In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `configurationConfigMap` parameter. Note that this will override the two previous options.
 

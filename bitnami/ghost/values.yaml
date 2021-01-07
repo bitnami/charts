@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.40.2-debian-10-r0
+  tag: 3.40.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -26,6 +26,9 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## Number of ghost replicas to deploy
+replicaCount: 1
 
 ## Command and args for running the Ghost container (set to default if not set). Use array form
 ##

@@ -19,7 +19,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.6.0-debian-10-r0
+  tag: 2.6.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -49,11 +49,11 @@ discourse:
   ## Discourse host to create application URLs. The port will be automatilly included.
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
-  host: ''
+  host: ""
   ## Discourse site name
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
-  siteName: 'My Site!'
+  siteName: "My Site!"
   ## User of the application
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
@@ -172,11 +172,11 @@ sidekiq:
 
   ## Custom command to override image cmd
   ##
-  command: ['/app-entrypoint.sh']
+  command: ["/app-entrypoint.sh"]
 
   ## Custom args for the custom command:
   ##
-  args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
+  args: ["nami", "start", "--foreground", "discourse-sidekiq"]
 
   ## Sidekiq resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -349,7 +349,7 @@ service:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
-    http: ''
+    http: ""
 
 ## Ingress parameters
 ##
@@ -363,6 +363,19 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: discourse.local
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -454,6 +467,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -505,7 +519,7 @@ postgresql:
   ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
-  postgresqlPostgresPassword: 'bitnami'
+  postgresqlPostgresPassword: "bitnami"
   ## Name of existing secret object
   ## The secret should contain the following keys:
   ## postgresql-postgres-password (for the unprivileged user)
@@ -528,7 +542,7 @@ postgresql:
 externalDatabase:
   ## Database host
   ##
-  host: ''
+  host: ""
   ## Database port
   ##
   port: 5432
@@ -537,13 +551,13 @@ externalDatabase:
   user: bn_discourse
   ## Database password
   ##
-  password: ''
+  password: ""
   ## PostgreSQL admin user (used in the installation stage)
   ##
   postgresqlPostgresUser: postgres
   ## PostgreSQL admin password (used in the installation stage)
   ##
-  postgresqlPostgresPassword: ''
+  postgresqlPostgresPassword: ""
   ## Name of existing secret object
   ## The secret should contain the following keys:
   ## postgresql-postgres-password (for the unprivileged user)
@@ -573,10 +587,12 @@ redis:
   # password:
   ##
   ## Name of existing secret object containing the password
+  ##
   existingSecret:
   ##
   ## Password key to be retrieved from Redis secret
-  existingSecretPasswordKey: 'redis-password'
+  ##
+  existingSecretPasswordKey: "redis-password"
   ##
   ## Cluster settings
   ##
@@ -595,17 +611,19 @@ redis:
 externalRedis:
   ## Redis host
   ##
-  host: ''
+  host: ""
   ## Redis port
   ##
   port: 6379
   ## Redis password for authentication
   ## Ignored if existingSecret is set
   ##
-  password: ''
+  password: ""
   ##
   ## Name of existing secret object containing the password
+  ##
   existingSecret:
   ##
   ## Password key to be retrieved from Redis secret
-  existingSecretPasswordKey: 'redis-password'
+  ##
+  existingSecretPasswordKey: "redis-password"
