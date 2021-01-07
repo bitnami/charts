@@ -137,7 +137,7 @@ sentinel:
     annotations: {}
     labels: {}
     loadBalancerIP:
-  
+
   ## Prometheus Exporter / Metrics for Redis Sentinel
   ##
   metrics:
