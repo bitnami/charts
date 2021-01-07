@@ -1659,21 +1659,21 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-## Minio Chart configuration
+## MinIO(TM) Chart configuration
 ##
 minio:
-  ## Set to true to deploy a MinIO chart
+  ## Set to true to deploy a MinIO(TM) chart
   ## to be used as an objstore for Thanos
   ##
   enabled: false
 
-  ## MinIO credentials
+  ## MinIO(TM) credentials
   ##
   accessKey:
     password: ''
   secretKey:
     password: ''
 
-  ## Default MinIO buckets
+  ## Default MinIO(TM) buckets
   ##
   defaultBuckets: 'thanos'
