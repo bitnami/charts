@@ -100,3 +100,20 @@ Params:
 
 {{- printf "%s" $password -}}
 {{- end -}}
+
+{{/*
+Returns whether a previous generated secret was already exists
+
+Usage:
+{{ include "common.secrets.exists" (dict "secret" "secret-name" "context" $) }}
+
+Params:
+  - secret - String - Required - Name of the 'Secret' resource where the password is stored.
+  - context - Context - Required - Parent context.
+*/}}
+{{- define "common.secrets.exists" -}}
+{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
+{{- if $secret }}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
