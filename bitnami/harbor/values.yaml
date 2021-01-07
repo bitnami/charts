@@ -1679,6 +1679,7 @@ chartmuseum:
   provPostFormFieldName:
   maxStorageObjects:
   maxUploadSize:
+  storageTimestampTolerance: "1s"
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
