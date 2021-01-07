@@ -62,12 +62,12 @@ host. To configure OrangeHRM to use and external database host:
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 
 {{- $passwordValidationErrors := list -}}
-{{- $secretName := include "orangehrm.secretName" . -}}	
+{{- $secretName := include "orangehrm.secretName" . -}}
 
-{{- if and (not .Values.existingSecret) (not (include "common.secrets.exists" (dict "secret" $secretName "context" $))) -}}	
-  {{- $requiredOrangeHRMPassword := dict "valueKey" "orangehrmPassword" "secret" $secretName "field" "orangehrm-password" "context" $ -}}	
-  {{- $requiredOrangeHRMPasswordError := include "common.validations.values.single.empty" $requiredOrangeHRMPassword -}}	
-  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOrangeHRMPasswordError -}}	
+{{- if and (not .Values.existingSecret) (not (include "common.secrets.exists" (dict "secret" $secretName "context" $))) -}}
+  {{- $requiredOrangeHRMPassword := dict "valueKey" "orangehrmPassword" "secret" $secretName "field" "orangehrm-password" "context" $ -}}
+  {{- $requiredOrangeHRMPasswordError := include "common.validations.values.single.empty" $requiredOrangeHRMPassword -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOrangeHRMPasswordError -}}
 {{- end -}}
 
 {{- $databaseSecretName := include "orangehrm.databaseSecretName" . -}}
