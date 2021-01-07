@@ -2,6 +2,8 @@
 
 [InfluxDB<sup>TM</sup>](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
 
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> are run and maintained by InfluxData, which is a completely separate project from Bitnami.
+
 ## TL;DR
 
 ```console
@@ -422,8 +424,6 @@ $ helm upgrade my-release bitnami/influxdb \
 ```
 
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
-
-InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this product.
 
 ## Upgrading
 
