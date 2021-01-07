@@ -1,6 +1,6 @@
 # Moodle<sup>TM</sup> LMS
 
-[Moodle](https://www.moodle.org)<sup>TM</sup> LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.
+[Moodle<sup>TM</sup>](https://www.moodle.org) LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. Bitnami does not provide commercial license of any of these products. This listing has an open source license. Moodle<sup>TM</sup> LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
@@ -13,7 +13,7 @@ $ helm install my-release bitnami/moodle
 
 ## Introduction
 
-This chart bootstraps a [Moodle](https://github.com/bitnami/bitnami-docker-moodle)<sup>TM</sup> deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Moodle<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle<sup>TM</sup> application.
 
@@ -64,10 +64,10 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 
 | Parameter                                   | Description                                                                                                           | Default                                                      |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                            | Moodle image registry                                                                                                 | `docker.io`                                                  |
-| `image.repository`                          | Moodle Image name                                                                                                     | `bitnami/moodle`                                             |
-| `image.tag`                                 | Moodle Image tag                                                                                                      | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                          | Moodle image pull policy                                                                                              | `IfNotPresent`                                               |
+| `image.registry`                            | Moodle<sup>TM</sup> image registry                                                                                    | `docker.io`                                                  |
+| `image.repository`                          | Moodle<sup>TM</sup> Image name                                                                                        | `bitnami/moodle`                                             |
+| `image.tag`                                 | Moodle<sup>TM</sup> Image tag                                                                                         | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                          | Moodle<sup>TM</sup> image pull policy                                                                                 | `IfNotPresent`                                               |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.debug`                               | Specify if debug logs should be enabled                                                                               | `false`                                                      |
 | `nameOverride`                              | String to partially override moodle.fullname template                                                                 | `nil`                                                        |
@@ -84,10 +84,10 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `allowEmptyPassword`                        | Allow DB blank passwords                                                                                              | true                                                         |
 | `args`                                      | Override default container args (useful when using custom images)                                                     | `nil`                                                        |
 | `command`                                   | Override default container command (useful when using custom images)                                                  | `nil`                                                        |
-| `containerPorts.http`                       | Sets http port inside Moodle container                                                                                | `8080`                                                       |
-| `containerPorts.https`                      | Sets https port inside Moodle container                                                                               | `8443`                                                       |
-| `containerSecurityContext.enabled`          | Enable Moodle containers' Security Context                                                                            | `true`                                                       |
-| `containerSecurityContext.runAsUser`        | Moodle containers' Security Context                                                                                   | `1001`                                                       |
+| `containerPorts.http`                       | Sets http port inside Moodle<sup>TM</sup> container                                                                   | `8080`                                                       |
+| `containerPorts.https`                      | Sets https port inside Moodle<sup>TM</sup> container                                                                  | `8443`                                                       |
+| `containerSecurityContext.enabled`          | Enable Moodle<sup>TM</sup> containers' Security Context                                                               | `true`                                                       |
+| `containerSecurityContext.runAsUser`        | Moodle<sup>TM</sup> containers' Security Context                                                                      | `1001`                                                       |
 | `customLivenessProbe`                       | Override default liveness probe                                                                                       | `nil`                                                        |
 | `customReadinessProbe`                      | Override default readiness probe                                                                                      | `nil`                                                        |
 | `existingSecret`                            | Name of a secret with the application password                                                                        | `nil`                                                        |
@@ -99,28 +99,28 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                        |
 | `lifecycleHooks`                            | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                                           |
 | `livenessProbe`                             | Liveness probe configuration                                                                                          | `Check values.yaml file`                                     |
-| `moodleSkipInstall`                         | Skip moodle installation wizard (true / false)                                                                        | `false`                                                      |
+| `moodleSkipInstall`                         | Skip Moodle<sup>TM</sup> installation wizard (true / false)                                                           | `false`                                                      |
 | `moodleSiteName`                            | Site Name                                                                                                             | `""`                                                         |
 | `moodleUsername`                            | User of the application                                                                                               | `user`                                                       |
 | `moodlePassword`                            | Application password                                                                                                  | _random 10 character alphanumeric string_                    |
 | `moodleEmail`                               | Admin email                                                                                                           | `user@example.com`                                           |
 | `nodeSelector`                              | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)                  |
-| `persistence.accessMode`                    | PVC Access Mode for Moodle volume                                                                                     | `ReadWriteOnce`                                              |
+| `persistence.accessMode`                    | PVC Access Mode for Moodle<sup>TM</sup> volume                                                                        | `ReadWriteOnce`                                              |
 | `persistence.enabled`                       | Enable persistence using PVC                                                                                          | `true`                                                       |
 | `persistence.existingClaim`                 | An Existing PVC name                                                                                                  | `nil`                                                        |
-| `persistence.hostPath`                      | Host mount path for Moodle volume                                                                                     | `nil` (will not mount to a host path)                        |
-| `persistence.size`                          | PVC Storage Request for Moodle volume                                                                                 | `8Gi`                                                        |
-| `persistence.storageClass`                  | PVC Storage Class for Moodle volume                                                                                   | `nil` (uses alpha storage class annotation)                  |
+| `persistence.hostPath`                      | Host mount path for Moodle<sup>TM</sup> volume                                                                        | `nil` (will not mount to a host path)                        |
+| `persistence.size`                          | PVC Storage Request for Moodle<sup>TM</sup> volume                                                                    | `8Gi`                                                        |
+| `persistence.storageClass`                  | PVC Storage Class for Moodle<sup>TM</sup> volume                                                                      | `nil` (uses alpha storage class annotation)                  |
 | `podAnnotations`                            | Pod annotations                                                                                                       | `{}`                                                         |
 | `podLabels`                                 | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                        |
-| `podSecurityContext.enabled`                | Enable Moodle pods' Security Context                                                                                  | `true`                                                       |
-| `podSecurityContext.fsGroup`                | Moodle pods' group ID                                                                                                 | `1001`                                                       |
+| `podSecurityContext.enabled`                | Enable Moodle<sup>TM</sup> pods' Security Context                                                                     | `true`                                                       |
+| `podSecurityContext.fsGroup`                | Moodle<sup>TM</sup> pods' group ID                                                                                    | `1001`                                                       |
 | `readinessProbe`                            | Readiness probe configuration                                                                                         | `Check values.yaml file`                                     |
-| `replicaCount`                              | Number of Moodle Pods to run                                                                                          | `1`                                                          |
+| `replicaCount`                              | Number of Moodle<sup>TM</sup> Pods to run                                                                             | `1`                                                          |
 | `resources`                                 | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                        |
 | `smtpHost`                                  | SMTP host                                                                                                             | `nil`                                                        |
-| `smtpPort`                                  | SMTP port                                                                                                             | `nil` (but moodle internal default is 25)                    |
+| `smtpPort`                                  | SMTP port                                                                                                             | `nil` (but Moodle<sup>TM</sup> internal default is 25)       |
 | `smtpProtocol`                              | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                                        |
 | `smtpUser`                                  | SMTP user                                                                                                             | `nil`                                                        |
 | `smtpPassword`                              | SMTP password                                                                                                         | `nil`                                                        |
@@ -141,7 +141,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `ingress.certManager`                       | Add annotations for cert-manager                                                                                      | `false`                                                      |
 | `ingress.hostname`                          | Default host for the ingress resource                                                                                 | `moodle.local`                                               |
 | `ingress.annotations`                       | Ingress annotations                                                                                                   | `{}`                                                         |
-| `ingress.hosts[0].name`                     | Hostname to your Moodle installation                                                                                  | `nil`                                                        |
+| `ingress.hosts[0].name`                     | Hostname to your Moodle<sup>TM</sup> installation                                                                     | `nil`                                                        |
 | `ingress.hosts[0].path`                     | Path within the url structure                                                                                         | `nil`                                                        |
 | `ingress.tls[0].hosts[0]`                   | TLS hosts                                                                                                             | `nil`                                                        |
 | `ingress.tls[0].secretName`                 | TLS Secret (certificates)                                                                                             | `nil`                                                        |
@@ -202,7 +202,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
+| Parameter                                            | Description                                                                                                  | Default                                                      |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                             | `""`                                                         |
 | `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                          | `""`                                                         |
@@ -274,11 +274,11 @@ To manually configure TLS, first create/retrieve a key & certificate pair for th
 
 ```yaml
 ingress:
-  ## If true, Moodle server Ingress will be created
+  ## If true, Moodle(TM) server Ingress will be created
   ##
   enabled: true
 
-  ## Moodle server Ingress annotations
+  ## Moodle(TM) server Ingress annotations
   ##
   annotations: {}
   #   kubernetes.io/ingress.class: nginx
@@ -290,7 +290,7 @@ ingress:
   hosts:
     - moodle.domain.com
 
-  ## Moodle server Ingress TLS configuration
+  ## Moodle(TM) server Ingress TLS configuration
   ## Secrets must be manually created in the namespace
   ##
   tls:
@@ -344,7 +344,7 @@ To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the 
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
-Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Moodle data on your current release:
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Moodle<sup>TM</sup> data on your current release:
 
 ```console
 export MOODLE_PASSWORD=$(kubectl get secret --namespace default moodle -o jsonpath="{.data.moodle-password}" | base64 --decode)

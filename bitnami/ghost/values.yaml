@@ -297,7 +297,7 @@ persistence:
   ##
   # existingClaim:
 
-  ## If defined, the moodle-data volume will mount to the specified path.
+  ## If defined, the ghost-data volume will mount to the specified path.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
