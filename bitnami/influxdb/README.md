@@ -1,6 +1,6 @@
-# InfluxDB(TM)
+# InfluxDB<sup>TM</sup>
 
-[InfluxDB(TM)](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
+[InfluxDB<sup>TM</sup>](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
 
 ## TL;DR
 
@@ -47,105 +47,105 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the InfluxDB(TM) chart and their default values.
+The following tables lists the configurable parameters of the InfluxDB<sup>TM</sup> chart and their default values.
 
 | Parameter                                         | Description                                                                                                                         | Default                                                 |
 |---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                            | Global Docker image registry                                                                                                        | `nil`                                                   |
 | `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                             | Global storage class for dynamic provisioning                                                                                       | `nil`                                                   |
-| `image.registry`                                  | InfluxDB(TM) image registry                                                                                                         | `docker.io`                                             |
-| `image.repository`                                | InfluxDB(TM) image name                                                                                                             | `bitnami/influxdb`                                      |
-| `image.tag`                                       | InfluxDB(TM) image tag                                                                                                              | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                                | InfluxDB(TM) image pull policy                                                                                                      | `IfNotPresent`                                          |
+| `image.registry`                                  | InfluxDB<sup>TM</sup> image registry                                                                                                | `docker.io`                                             |
+| `image.repository`                                | InfluxDB<sup>TM</sup> image name                                                                                                    | `bitnami/influxdb`                                      |
+| `image.tag`                                       | InfluxDB<sup>TM</sup> image tag                                                                                                     | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                                | InfluxDB<sup>TM</sup> image pull policy                                                                                             | `IfNotPresent`                                          |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                                     | Specify if debug logs should be enabled                                                                                             | `false`                                                 |
 | `nameOverride`                                    | String to partially override influxdb.fullname template with a string (will prepend the release name)                               | `nil`                                                   |
 | `fullnameOverride`                                | String to fully override influxdb.fullname template with a string                                                                   | `nil`                                                   |
 | `clusterDomain`                                   | Default Kubernetes cluster domain                                                                                                   | `cluster.local`                                         |
-| `architecture`                                    | InfluxDB(TM) architecture (`standalone` or `high-availability`)                                                                     | `standalone`                                            |
+| `architecture`                                    | InfluxDB<sup>TM</sup> architecture (`standalone` or `high-availability`)                                                            | `standalone`                                            |
 | `database`                                        | Database to be created on first run                                                                                                 | `my_database`                                           |
 | `authEnabled`                                     | Enable/disable authentication                                                                                                       | `true`                                                  |
-| `adminUser.name`                                  | InfluxDB(TM) admin user name                                                                                                        | `admin`                                                 |
-| `adminUser.pwd`                                   | InfluxDB(TM) admin user's password                                                                                                  | `nil`                                                   |
+| `adminUser.name`                                  | InfluxDB<sup>TM</sup> admin user name                                                                                               | `admin`                                                 |
+| `adminUser.pwd`                                   | InfluxDB<sup>TM</sup> admin user's password                                                                                         | `nil`                                                   |
 | `adminUser.usePasswordFile`                       | Mount admin user's password as file instead of environment variable                                                                 | `false`                                                 |
-| `user.name`                                       | Name for InfluxDB(TM) user with 'admin' privileges on the db specified at `database`                                                | `nil`                                                   |
-| `user.pwd`                                        | InfluxDB(TM) password for `user.name` user                                                                                          | `nil`                                                   |
+| `user.name`                                       | Name for InfluxDB<sup>TM</sup> user with 'admin' privileges on the db specified at `database`                                       | `nil`                                                   |
+| `user.pwd`                                        | InfluxDB<sup>TM</sup> password for `user.name` user                                                                                 | `nil`                                                   |
 | `user.usePasswordFile`                            | Mount `user.name` user's password as file instead of environment variable                                                           | `nil`                                                   |
-| `readUser.name`                                   | Name for InfluxDB(TM) user with 'read' privileges on the db specified at `database`                                                 | `nil`                                                   |
-| `readUser.pwd`                                    | InfluxDB(TM) password for `readUser.name` user                                                                                      | `nil`                                                   |
+| `readUser.name`                                   | Name for InfluxDB<sup>TM</sup> user with 'read' privileges on the db specified at `database`                                        | `nil`                                                   |
+| `readUser.pwd`                                    | InfluxDB<sup>TM</sup> password for `readUser.name` user                                                                             | `nil`                                                   |
 | `readUser.usePasswordFile`                        | Mount `readUser.name` user's password as file instead of environment variable                                                       | `nil`                                                   |
-| `writeUser.name`                                  | Name for InfluxDB(TM) user with 'write' privileges on the db specified at `database`                                                | `nil`                                                   |
-| `writeUser.pwd`                                   | InfluxDB(TM) password for `writeUser.name` user                                                                                     | `nil`                                                   |
+| `writeUser.name`                                  | Name for InfluxDB<sup>TM</sup> user with 'write' privileges on the db specified at `database`                                       | `nil`                                                   |
+| `writeUser.pwd`                                   | InfluxDB<sup>TM</sup> password for `writeUser.name` user                                                                            | `nil`                                                   |
 | `writeUser.usePasswordFile`                       | Mount `writeUser.name` user's password as file instead of environment variable                                                      | `nil`                                                   |
-| `existingSecret`                                  | Name of existing Secret object with InfluxDB(TM) credentials (`adminUser.password`, `user.password`, `readUser.password`, and `writeUser.pwd` will be ignored and picked up from this secret) | `nil`|
+| `existingSecret`                                  | Name of existing Secret object with InfluxDB<sup>TM</sup> credentials (`adminUser.password`, `user.password`, `readUser.password`, and `writeUser.pwd` will be ignored and picked up from this secret) | `nil`|
 | `influxdb.configuration`                          | Specify content for influxdb.conf                                                                                                   | `nil (do not create influxdb.conf)`                     |
-| `influxdb.existingConfiguration`                  | Name of existing ConfigMap object with the InfluxDB(TM) configuration (`influxdb.configuration` will be ignored).                   | `nil`                                                   |
+| `influxdb.existingConfiguration`                  | Name of existing ConfigMap object with the InfluxDB<sup>TM</sup> configuration (`influxdb.configuration` will be ignored).          | `nil`                                                   |
 | `influxdb.initdbScripts`                          | Dictionary of initdb scripts                                                                                                        | `nil`                                                   |
 | `influxdb.initdbScriptsCM`                        | Name of existing ConfigMap object with the initdb scripts (`influxdb.initdbScripts` will be ignored).                               | `nil`                                                   |
 | `influxdb.initdbScriptsSecret`                    | Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)  | `nil`                                                   |
-| `influxdb.extraEnvVars`                           | Array containing extra env vars to configure InfluxDB(TM)                                                                           | `nil`                                                   |
-| `influxdb.replicaCount`                           | The number of InfluxDB(TM) replicas to deploy                                                                                       | `1`                                                     |
-| `influxdb.podAffinityPreset`                      | InfluxDB(TM) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                                    |
-| `influxdb.podAntiAffinityPreset`                  | InfluxDB(TM) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                                                    |
-| `influxdb.nodeAffinityPreset.type`                | InfluxDB(TM) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                                    |
-| `influxdb.nodeAffinityPreset.key`                 | InfluxDB(TM) Node label key to match Ignored if `affinity` is set.                                                                  | `""`                                                    |
-| `influxdb.nodeAffinityPreset.values`              | InfluxDB(TM) Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                                                    |
-| `influxdb.affinity`                               | InfluxDB(TM) Affinity for pod assignment                                                                                            | `{}` (evaluated as a template)                          |
-| `influxdb.nodeSelector`                           | InfluxDB(TM) Node labels for pod assignment                                                                                         | `{}` (evaluated as a template)                          |
-| `influxdb.tolerations`                            | InfluxDB(TM) Tolerations for pod assignment                                                                                         | `[]` (evaluated as a template)                          |
+| `influxdb.extraEnvVars`                           | Array containing extra env vars to configure InfluxDB<sup>TM</sup>                                                                  | `nil`                                                   |
+| `influxdb.replicaCount`                           | The number of InfluxDB<sup>TM</sup> replicas to deploy                                                                              | `1`                                                     |
+| `influxdb.podAffinityPreset`                      | InfluxDB<sup>TM</sup> Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                    |
+| `influxdb.podAntiAffinityPreset`                  | InfluxDB<sup>TM</sup> Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                    |
+| `influxdb.nodeAffinityPreset.type`                | InfluxDB<sup>TM</sup> Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                    |
+| `influxdb.nodeAffinityPreset.key`                 | InfluxDB<sup>TM</sup> Node label key to match Ignored if `affinity` is set.                                                         | `""`                                                    |
+| `influxdb.nodeAffinityPreset.values`              | InfluxDB<sup>TM</sup> Node label values to match. Ignored if `affinity` is set.                                                     | `[]`                                                    |
+| `influxdb.affinity`                               | InfluxDB<sup>TM</sup> Affinity for pod assignment                                                                                   | `{}` (evaluated as a template)                          |
+| `influxdb.nodeSelector`                           | InfluxDB<sup>TM</sup> Node labels for pod assignment                                                                                | `{}` (evaluated as a template)                          |
+| `influxdb.tolerations`                            | InfluxDB<sup>TM</sup> Tolerations for pod assignment                                                                                | `[]` (evaluated as a template)                          |
 | `infludb.podManagementPolicy`                     | Pod Management Policy [`OrderedReady` or `Parallel`]                                                                                | `OrderedReady`                                          |
-| `influxdb.securityContext.enabled`                | Enable security context for InfluxDB(TM)                                                                                            | `true`                                                  |
-| `influxdb.securityContext.fsGroup`                | Group ID for the InfluxDB(TM) filesystem                                                                                            | `1001`                                                  |
-| `influxdb.securityContext.runAsUser`              | User ID for the InfluxDB(TM) container                                                                                              | `1001`                                                  |
+| `influxdb.securityContext.enabled`                | Enable security context for InfluxDB<sup>TM</sup>                                                                                   | `true`                                                  |
+| `influxdb.securityContext.fsGroup`                | Group ID for the InfluxDB<sup>TM</sup> filesystem                                                                                   | `1001`                                                  |
+| `influxdb.securityContext.runAsUser`              | User ID for the InfluxDB<sup>TM</sup> container                                                                                     | `1001`                                                  |
 | `influxdb.resources`                              | The [resources] to allocate for container                                                                                           | `{}`                                                    |
-| `influxdb.livenessProbe`                          | Liveness probe configuration for InfluxDB(TM)                                                                                       | `Check values.yaml file`                                |
-| `influxdb.readinessProbe`                         | Readiness probe configuration for InfluxDB(TM)                                                                                      | `Check values.yaml file`                                |
-| `influxdb.containerPorts.http`                    | InfluxDB(TM) container HTTP port                                                                                                    | `8086`                                                  |
-| `influxdb.containerPorts.rpc`                     | InfluxDB(TM) container RPC port                                                                                                     | `8088`                                                  |
+| `influxdb.livenessProbe`                          | Liveness probe configuration for InfluxDB<sup>TM</sup>                                                                              | `Check values.yaml file`                                |
+| `influxdb.readinessProbe`                         | Readiness probe configuration for InfluxDB<sup>TM</sup>                                                                             | `Check values.yaml file`                                |
+| `influxdb.containerPorts.http`                    | InfluxDB<sup>TM</sup> container HTTP port                                                                                           | `8086`                                                  |
+| `influxdb.containerPorts.rpc`                     | InfluxDB<sup>TM</sup> container RPC port                                                                                            | `8088`                                                  |
 | `influxdb.service.type`                           | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                 | `ClusterIP`                                             |
-| `influxdb.service.port`                           | InfluxDB(TM) HTTP port                                                                                                              | `8086`                                                  |
-| `influxdb.service.rpcPort`                        | InfluxDB(TM) RPC port                                                                                                               | `8088`                                                  |
+| `influxdb.service.port`                           | InfluxDB<sup>TM</sup> HTTP port                                                                                                     | `8086`                                                  |
+| `influxdb.service.rpcPort`                        | InfluxDB<sup>TM</sup> RPC port                                                                                                      | `8088`                                                  |
 | `influxdb.service.nodePorts.http`                 | Kubernetes HTTP node port                                                                                                           | `""`                                                    |
 | `influxdb.service.nodePorts.rpc`                  | Kubernetes RPC node port                                                                                                            | `""`                                                    |
-| `influxdb.service.annotations`                    | Annotations for InfluxDB(TM) service                                                                                                | `{}`                                                    |
+| `influxdb.service.annotations`                    | Annotations for InfluxDB<sup>TM</sup> service                                                                                       | `{}`                                                    |
 | `influxdb.service.loadBalancerIP`                 | loadBalancerIP if service type is `LoadBalancer`                                                                                    | `nil`                                                   |
 | `influxdb.service.loadBalancerSourceRanges`       | Address that are allowed when service is LoadBalancer                                                                               | `[]`                                                    |
 | `influxdb.service.clusterIP`                      | Static clusterIP or None for headless services                                                                                      | `nil`                                                   |
-| `relay.image.registry`                            | InfluxDB Relay(TM) image registry                                                                                                   | `docker.io`                                             |
-| `relay.image.repository`                          | InfluxDB Relay(TM) image name                                                                                                       | `bitnami/influxdb-relay`                                |
-| `relay.image.tag`                                 | InfluxDB Relay(TM) image tag                                                                                                        | `{TAG_NAME}`                                            |
-| `relay.image.pullPolicy`                          | InfluxDB Relay(TM) image pull policy                                                                                                | `IfNotPresent`                                          |
+| `relay.image.registry`                            | InfluxDB Relay<sup>TM</sup> image registry                                                                                          | `docker.io`                                             |
+| `relay.image.repository`                          | InfluxDB Relay<sup>TM</sup> image name                                                                                              | `bitnami/influxdb-relay`                                |
+| `relay.image.tag`                                 | InfluxDB Relay<sup>TM</sup> image tag                                                                                               | `{TAG_NAME}`                                            |
+| `relay.image.pullPolicy`                          | InfluxDB Relay<sup>TM</sup> image pull policy                                                                                       | `IfNotPresent`                                          |
 | `relay.image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
 | `relay.configuration`                             | Specify content for relay.toml                                                                                                      | `Check values.yaml file`                                |
-| `relay.existingConfiguration`                     | Name of existing ConfigMap object with the InfluxDB Relay(TM) configuration (`relay.configuration` will be ignored)                 | `nil`                                                   |
-| `relay.replicaCount`                              | The number of InfluxDB Relay(TM) replicas to deploy                                                                                 | `1`                                                     |
-| `relay.podAffinityPreset`                         | InfluxDB Relay(TM) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                                    |
-| `relay.podAntiAffinityPreset`                     | InfluxDB Relay(TM) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                                                    |
-| `relay.nodeAffinityPreset.type`                   | InfluxDB Relay(TM) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                                                    |
-| `relay.nodeAffinityPreset.key`                    | InfluxDB Relay(TM) Node label key to match Ignored if `affinity` is set.                                                            | `""`                                                    |
-| `relay.nodeAffinityPreset.values`                 | InfluxDB Relay(TM) Node label values to match. Ignored if `affinity` is set.                                                        | `[]`                                                    |
-| `relay.affinity`                                  | InfluxDB Relay(TM) Affinity for pod assignment                                                                                      | `{}` (evaluated as a template)                          |
-| `relay.nodeSelector`                              | InfluxDB Relay(TM) Node labels for pod assignment                                                                                   | `{}` (evaluated as a template)                          |
-| `relay.tolerations`                               | InfluxDB Relay(TM) Tolerations for pod assignment                                                                                   | `[]` (evaluated as a template)                          |
-| `relay.securityContext.enabled`                   | Enable security context for InfluxDB Relay(TM)                                                                                      | `true`                                                  |
-| `relay.securityContext.fsGroup`                   | Group ID for the InfluxDB Relay(TM) filesystem                                                                                      | `1001`                                                  |
-| `relay.securityContext.runAsUser`                 | User ID for the InfluxDB Relay(TM) container                                                                                        | `1001`                                                  |
+| `relay.existingConfiguration`                     | Name of existing ConfigMap object with the InfluxDB Relay<sup>TM</sup> configuration (`relay.configuration` will be ignored)        | `nil`                                                   |
+| `relay.replicaCount`                              | The number of InfluxDB Relay<sup>TM</sup> replicas to deploy                                                                        | `1`                                                     |
+| `relay.podAffinityPreset`                         | InfluxDB Relay<sup>TM</sup> Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                    |
+| `relay.podAntiAffinityPreset`                     | InfluxDB Relay<sup>TM</sup> Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                    |
+| `relay.nodeAffinityPreset.type`                   | InfluxDB Relay<sup>TM</sup> Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                                                    |
+| `relay.nodeAffinityPreset.key`                    | InfluxDB Relay<sup>TM</sup> Node label key to match Ignored if `affinity` is set.                                                   | `""`                                                    |
+| `relay.nodeAffinityPreset.values`                 | InfluxDB Relay<sup>TM</sup> Node label values to match. Ignored if `affinity` is set.                                               | `[]`                                                    |
+| `relay.affinity`                                  | InfluxDB Relay<sup>TM</sup> Affinity for pod assignment                                                                             | `{}` (evaluated as a template)                          |
+| `relay.nodeSelector`                              | InfluxDB Relay<sup>TM</sup> Node labels for pod assignment                                                                          | `{}` (evaluated as a template)                          |
+| `relay.tolerations`                               | InfluxDB Relay<sup>TM</sup> Tolerations for pod assignment                                                                          | `[]` (evaluated as a template)                          |
+| `relay.securityContext.enabled`                   | Enable security context for InfluxDB Relay<sup>TM</sup>                                                                             | `true`                                                  |
+| `relay.securityContext.fsGroup`                   | Group ID for the InfluxDB Relay<sup>TM</sup> filesystem                                                                             | `1001`                                                  |
+| `relay.securityContext.runAsUser`                 | User ID for the InfluxDB Relay<sup>TM</sup> container                                                                               | `1001`                                                  |
 | `relay.resources`                                 | The [resources] to allocate for container                                                                                           | `{}`                                                    |
-| `relay.livenessProbe`                             | Liveness probe configuration for InfluxDB Relay(TM)                                                                                 | `Check values.yaml file`                                |
-| `relay.readinessProbe`                            | Readiness probe configuration for InfluxDB Relay(TM)                                                                                | `Check values.yaml file`                                |
-| `relay.containerPorts.http`                       | InfluxDB Relay(TM) container HTTP port                                                                                              | `9096`                                                  |
+| `relay.livenessProbe`                             | Liveness probe configuration for InfluxDB Relay<sup>TM</sup>                                                                        | `Check values.yaml file`                                |
+| `relay.readinessProbe`                            | Readiness probe configuration for InfluxDB Relay<sup>TM</sup>                                                                       | `Check values.yaml file`                                |
+| `relay.containerPorts.http`                       | InfluxDB Relay<sup>TM</sup> container HTTP port                                                                                     | `9096`                                                  |
 | `relay.service.type`                              | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                 | `ClusterIP`                                             |
-| `relay.service.port`                              | InfluxDB Relay(TM) HTTP port                                                                                                        | `9096`                                                  |
+| `relay.service.port`                              | InfluxDB Relay<sup>TM</sup> HTTP port                                                                                               | `9096`                                                  |
 | `relay.service.nodePort`                          | Kubernetes HTTP node port                                                                                                           | `""`                                                    |
-| `relay.service.annotations`                       | Annotations for InfluxDB Relay(TM) service                                                                                          | `{}`                                                    |
+| `relay.service.annotations`                       | Annotations for InfluxDB Relay<sup>TM</sup> service                                                                                 | `{}`                                                    |
 | `relay.service.loadBalancerIP`                    | loadBalancerIP if service type is `LoadBalancer`                                                                                    | `nil`                                                   |
 | `relay.service.loadBalancerSourceRanges`          | Address that are allowed when service is LoadBalancer                                                                               | `[]`                                                    |
 | `relay.service.clusterIP`                         | Static clusterIP or None for headless services                                                                                      | `nil`                                                   |
 | `ingress.enabled`                                 | Enable ingress controller resource                                                                                                  | `false`                                                 |
 | `ingress.certManager`                             | Add annotations for cert-manager                                                                                                    | `false`                                                 |
 | `ingress.annotations`                             | Ingress annotations                                                                                                                 | `[]`                                                    |
-| `ingress.hosts[0].name`                           | Hostname for InfluxDB(TM) service                                                                                                   | `influxdb.local`                                        |
+| `ingress.hosts[0].name`                           | Hostname for InfluxDB<sup>TM</sup> service                                                                                          | `influxdb.local`                                        |
 | `ingress.hosts[0].path`                           | Path within the url structure                                                                                                       | `/`                                                     |
 | `ingress.tls[0].hosts[0]`                         | TLS hosts                                                                                                                           | `influxdb.local`                                        |
 | `ingress.tls[0].secretName`                       | TLS Secret (certificates)                                                                                                           | `influxdb.local-tls`                                    |
@@ -154,7 +154,7 @@ The following tables lists the configurable parameters of the InfluxDB(TM) chart
 | `ingress.secrets[0].key`                          | TLS Secret Key                                                                                                                      | `nil`                                                   |
 | `metrics.enabled`                                 | Enable the export of Prometheus metrics                                                                                             | `false`                                                 |
 | `metrics.service.type`                            | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                 | `ClusterIP`                                             |
-| `metrics.service.port`                            | InfluxDB(TM) Prometheus port                                                                                                        | `9122`                                                  |
+| `metrics.service.port`                            | InfluxDB<sup>TM</sup> Prometheus port                                                                                               | `9122`                                                  |
 | `metrics.service.nodePort`                        | Kubernetes HTTP node port                                                                                                           | `""`                                                    |
 | `metrics.service.annotations`                     | Annotations for Prometheus metrics service                                                                                          | `Check values.yaml file`                                |
 | `metrics.service.loadBalancerIP`                  | loadBalancerIP if service type is `LoadBalancer`                                                                                    | `nil`                                                   |
@@ -179,7 +179,7 @@ The following tables lists the configurable parameters of the InfluxDB(TM) chart
 | `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                 | `Always`                                                |
 | `volumePermissions.image.pullSecrets`             | Specify docker-registry secret names as an array                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.securityContext.runAsUser`     | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                   | `0`                                                     |
-| `backup.enabled`                                  | enable InfluxDB(TM) backup                                                                                                          | `false`                                                 |
+| `backup.enabled`                                  | enable InfluxDB<sup>TM</sup> backup                                                                                                 | `false`                                                 |
 | `backup.directory`                                | directory where backups are stored in                                                                                               | `"/backups"`                                            |
 | `backup.retentionDays`                            | retention time in days for backups (older backups are deleted)                                                                      | `10`                                                    |
 | `backup.cronjob.schedule`                         | crontab style time schedule for backup execution                                                                                    | `"0 2 * * *"`                                           |
@@ -214,7 +214,7 @@ $ helm install my-release \
   --set adminUser.name=admin-user bitnami/influxdb
 ```
 
-The above command sets the InfluxDB(TM) admin user to `admin-user`.
+The above command sets the InfluxDB<sup>TM</sup> admin user to `admin-user`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -243,7 +243,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + architecture: high-availability
 ```
 
-- Increase the number of InfluxDB(TM) and InfluxDB Relay(TM) replicas:
+- Increase the number of InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> replicas:
 
 ```diff
 - influxdb.replicaCount: 1
@@ -277,14 +277,14 @@ relay.replicaCount=2
 
 ## Standalone vs High Availability architecture
 
-You can install the InfluxDB(TM) chart with two different architecture setups: "standalone" or "high-availability", you can use the `architecture` parameter:
+You can install the InfluxDB<sup>TM</sup> chart with two different architecture setups: "standalone" or "high-availability", you can use the `architecture` parameter:
 
 ```console
 architecture="standalone"
 architecture="high-availability"
 ```
 
-The standalone architecture installs a deployment with one InfluxDB(TM) server (it cannot be scaled):
+The standalone architecture installs a deployment with one InfluxDB<sup>TM</sup> server (it cannot be scaled):
 
 ```
                ┌──────────────────┐
@@ -308,7 +308,7 @@ The standalone architecture installs a deployment with one InfluxDB(TM) server (
                  └──────────────┘
 ```
 
-The high availability install a statefulset with N InfluxDB(TM) servers and M InfluxDB Relay(TM) instances:
+The high availability install a statefulset with N InfluxDB<sup>TM</sup> servers and M InfluxDB Relay<sup>TM</sup> instances:
 
 ```
                    ┌──────────────────┐
@@ -347,9 +347,9 @@ The high availability install a statefulset with N InfluxDB(TM) servers and M In
       └───────────────────────────────────┘
 ```
 
-### Configure the way how to expose InfluxDB(TM)
+### Configure the way how to expose InfluxDB<sup>TM</sup>
 
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB(TM) through Ingress.
+- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB<sup>TM</sup> through Ingress.
 - **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
 - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
 - **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
@@ -358,9 +358,9 @@ The high availability install a statefulset with N InfluxDB(TM) servers and M In
 
 This helm chart supports to customize the whole configuration file.
 
-Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB(TM).
+Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB<sup>TM</sup>.
 
-Alternatively, you can specify the InfluxDB(TM) configuration using the `influxdb.configuration` parameter.
+Alternatively, you can specify the InfluxDB<sup>TM</sup> configuration using the `influxdb.configuration` parameter.
 
 In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `influxdb.existingConfiguration` parameter. Note that this will override the two previous options.
 
@@ -376,7 +376,7 @@ extraEnvVars:
 
 ### Initialize a fresh instance
 
-The [Bitnami InfluxDB(TM)](https://github.com/bitnami/bitnami-docker-influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami InfluxDB<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
 Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
 
@@ -423,7 +423,7 @@ $ helm upgrade my-release bitnami/influxdb \
 
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
-InfluxDB(TM) and InfluxDB Relay(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this product.
+InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this product.
 
 ## Upgrading
 
