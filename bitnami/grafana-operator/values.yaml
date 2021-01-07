@@ -89,17 +89,17 @@ operator:
     fsGroup: 1001
     # supplementalGroups: []
 
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## limits:
+  ##   cpu: 100m
+  ##   memory: 128Mi
+  ## requests:
+  ##   cpu: 100m
+  ##   memory: 128Mi
   resources: {}
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
 
   ## Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -379,24 +379,24 @@ grafana:
     security:
       disable_initial_admin_creation: false
       disable_gravatar: false
-    # ## OIDC configuration
-    # ##
-    # auth:
-    #   disable_login_form: false
-    #   disable_signout_menu: false
-    # auth.generic_oauth:
-    #   enabled: True
-    #   client_id: grafana
-    #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
-    #   scopes: profile email
-    #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
-    #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
-    #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
-    #   ## Automatic role handling with OIDC
-    #   ##
-    #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
-    #   # allowed_domains: example.com
-    #   allow_sign_up: True
+      # ## OIDC configuration
+      # ##
+      # auth:
+      #   disable_login_form: false
+      #   disable_signout_menu: false
+      # auth.generic_oauth:
+      #   enabled: True
+      #   client_id: grafana
+      #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
+      #   scopes: profile email
+      #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
+      #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
+      #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
+      #   ## Automatic role handling with OIDC
+      #   ##
+      #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
+      #   # allowed_domains: example.com
+      #   allow_sign_up: True
 
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery

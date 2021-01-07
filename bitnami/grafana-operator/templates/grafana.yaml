@@ -71,15 +71,15 @@ spec:
       allowPrivilegeEscalation: {{ .Values.grafana.containerSecurityContext.allowPrivilegeEscalation }}
     {{- end }}
     {{- if .Values.grafana.tolerations }}
-    tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 8 }}
+    tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.affinity }}
-    affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 8 }}
+    affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
     {{- else }}
     affinity:
-      podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
-      podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
-      nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 10 }}
+      podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
+      podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
+      nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 8 }}
     {{- end }}
     {{- if .Values.grafana.livenessProbe.enabled }}
     livenessProbeSpec:
@@ -98,7 +98,7 @@ spec:
       failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
     {{- end }}
   {{- if .Values.grafana.resources }}
-  resources: {{- toYaml .Values.grafana.resources | nindent 12 }}
+  resources: {{- toYaml .Values.grafana.resources | nindent 4 }}
   {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}

@@ -61,20 +61,20 @@ spec:
           image: {{ include "common.images.image" (dict "imageRoot" .Values.operator.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           ports:
-          - containerPort: 8080
-            name: metrics
+            - containerPort: 8080
+              name: metrics
           command:
-          - grafana-operator
+            - grafana-operator
           args:
-          - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-          - -grafana-image-tag={{ .Values.grafana.image.tag | trim }}
-          - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
-          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | trim }}
-          {{- if (and .Values.operator.args.scanAllNamespaces (not .Values.operator.args.scanNamespaces)) }}
-          - --scan-all=True
-          {{- else if .Values.operator.args.scanNamespaces }}
-          - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.args.scanNamespaces }}
-          {{- end }}
+            - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
+            - -grafana-image-tag={{ .Values.grafana.image.tag | trim }}
+            - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
+            - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | trim }}
+            {{- if (and .Values.operator.args.scanAllNamespaces (not .Values.operator.args.scanNamespaces)) }}
+            - --scan-all=True
+            {{- else if .Values.operator.args.scanNamespaces }}
+            - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.args.scanNamespaces }}
+            {{- end }}
         {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
         {{- end }}
