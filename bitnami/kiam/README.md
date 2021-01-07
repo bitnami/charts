@@ -9,7 +9,7 @@
   helm install my-release bitnami/kiam
 ```
 
-> NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS even it is possible to deploy it in other environments.
+> NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
 
 ## Introduction
 
