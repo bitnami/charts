@@ -369,10 +369,12 @@ readinessProbe:
   successThreshold: 1
 
 ## Custom Liveness probes for MongoDB pods
+## Ignored when livenessProbe.enabled=true
 ##
 customLivenessProbe: {}
 
 ## Custom Rediness probes MongoDB pods
+## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
 
@@ -760,10 +762,12 @@ arbiter:
     successThreshold: 1
 
   ## Custom Liveness probes for MongoDB Arbiter pods
+  ## Ignored when arbiter.livenessProbe.enabled=true
   ##
   customLivenessProbe: {}
 
   ## Custom Rediness probes MongoDB Arbiter pods
+  ## Ignored when arbiter.readinessProbe.enabled=true
   ##
   customReadinessProbe: {}
 
