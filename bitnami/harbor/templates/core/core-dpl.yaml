@@ -110,6 +110,20 @@ spec:
           {{- else if .Values.core.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.core.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
+              port: http
+            initialDelaySeconds: {{ .Values.core.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.core.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.core.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.core.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.core.startupProbe.failureThreshold }}
+          {{- else if .Values.core.startupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "harbor.core" . }}-envvars
