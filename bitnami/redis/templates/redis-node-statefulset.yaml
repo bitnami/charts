@@ -185,7 +185,8 @@ spec:
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
             - name: redis-data
-              mountPath: /data
+              mountPath: {{ .Values.slave.persistence.path }}
+              subPath: {{ .Values.slave.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
@@ -287,8 +288,8 @@ spec:
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
             - name: redis-data
-              mountPath: {{ .Values.master.persistence.path }}
-              subPath: {{ .Values.master.persistence.subPath }}
+              mountPath: {{ .Values.slave.persistence.path }}
+              subPath: {{ .Values.slave.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
             - name: sentinel-tmp-conf
