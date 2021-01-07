@@ -8,7 +8,7 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami Moodle image version
+## Bitnami Moodle(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/moodle/tags/
 ##
 image:
@@ -44,7 +44,7 @@ fullnameOverride:
 ##
 replicaCount: 1
 
-## Skip Moodle installation wizard. Useful for migrations and restoring from SQL dump
+## Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
 moodleSkipInstall: false
@@ -240,7 +240,7 @@ service:
   ## Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0
-  ## loadBalancerIP for the Moodle Service (optional, cloud specific)
+  ## loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## loadBalancerIP:
   ##
@@ -256,7 +256,7 @@ service:
   externalTrafficPolicy: Cluster
 
 ## Configure the ingress resource that allows you to access the
-## Moodle installation. Set up the URL
+## Moodle(TM) installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -324,7 +324,7 @@ sessionAffinity: "None"
 ##
 persistence:
   enabled: true
-  ## Moodle Data Persistent Volume Storage Class
+  ## Moodle(TM) Data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
@@ -455,10 +455,10 @@ containerSecurityContext:
   runAsUser: 1001
 
 ## Configure extra options for liveness and readiness probes
-## Moodle core exposes /user/login to unauthenticated requests, making it a good
+## Moodle(TM) core exposes /user/login to unauthenticated requests, making it a good
 ## default liveness and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Moodle.
+## module that alters that route, or an image that does not auto-install Moodle(TM).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 livenessProbe:
   enabled: true
