@@ -312,6 +312,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "redis.tplValue" (dict "value" .Values.persistence.existingClaim "context" $) }}
         {{- end }}
+        {{- if .Values.master.persistence.volumes }}
+        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
+        {{- end }}
         {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
         - name: host-sys
@@ -326,7 +329,7 @@ spec:
             secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
             defaultMode: 256
         {{- end }}
-  {{- if and .Values.master.persistence.enabled (not .Values.persistence.existingClaim) }}
+  {{- if and .Values.master.persistence.enabled (not .Values.persistence.existingClaim) (not .Values.master.persistence.volumes) }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data

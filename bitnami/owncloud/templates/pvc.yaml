@@ -1,8 +1,8 @@
-{{- if not .Values.existingSecret }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
 apiVersion: v1
-kind: Secret
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}-owncloud
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -11,14 +11,14 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
-data:
-  {{- if .Values.owncloudPassword }}
-  owncloud-password: {{ .Values.owncloudPassword | b64enc | quote }}
-  {{- else }}
-  owncloud-password: {{ randAlphaNum 10 | b64enc | quote }}
+spec:
+  {{- if .Values.persistence.hostPath }}
+  storageClassName: ""
   {{- end }}
-  {{- if .Values.smtpPassword }}
-  smtp-password: {{ .Values.smtpPassword | b64enc | quote }}
-  {{- end }}
-{{- end }}
+  accessModes:
+    - {{ .Values.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+  {{- include "owncloud.storageClass" . | nindent 2 }}
+{{- end -}}
