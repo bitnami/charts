@@ -242,8 +242,8 @@ spec:
         resources:
           requests:
             storage: {{ .Values.data.persistence.size | quote }}
-        {{- if .Values.data.persistence.existingVolumeSelector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.data.persistence.existingVolumeSelector "context" $) | nindent 10 }}
+        {{- if .Values.data.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.data.persistence.selector "context" $) | nindent 10 }}
         {{- else if .Values.data.persistence.existingVolume }}
         selector:
           matchLabels:
