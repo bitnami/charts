@@ -66,10 +66,10 @@ spec:
           command:
             - grafana-operator
           args:
-            - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-            - -grafana-image-tag={{ .Values.grafana.image.tag | trim }}
-            - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
-            - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | trim }}
+            - --grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
+            - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
+            - --grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
+            - --grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | trim }}
             {{- if (and .Values.operator.args.scanAllNamespaces (not .Values.operator.args.scanNamespaces)) }}
             - --scan-all=True
             {{- else if .Values.operator.args.scanNamespaces }}
