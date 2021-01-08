@@ -358,7 +358,7 @@ grafana:
 
   ## This is the configuration from the grafana pod itself.
   ## every toml section is a root key
-  ## Ref:
+  ## Ref: https://grafana.com/docs/grafana/latest/administration/configuration/
   ##
   config:
     server:
