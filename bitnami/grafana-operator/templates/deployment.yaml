@@ -12,7 +12,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.operator.replicaCount }}
-  selector: 
+  selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.operator.updateStrategy }}
   strategy: {{ toYaml .Values.operator.updateStrategy | nindent 4 }}
@@ -26,7 +26,7 @@ spec:
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-    spec: 
+    spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafanaPluginInit.image ) "global" .Values.global) | nindent 6 }}
       {{- if .Values.operator.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.operator.nodeSelector "context" $) | nindent 8 }}

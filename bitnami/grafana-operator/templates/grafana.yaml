@@ -106,7 +106,7 @@ spec:
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}
-    labels: 
+    labels:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- end }}
@@ -115,7 +115,7 @@ spec:
       {{- end }}
     {{- end }}
     {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
-    annotations: 
+    annotations:
       {{- if .Values.commonAnnotations }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
       {{- end }}

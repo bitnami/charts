@@ -11,7 +11,7 @@ spec:
     singular: grafana
   scope: Namespaced
   subresources:
-    status: { }
+    status: {}
   version: v1alpha1
   validation:
     openAPIV3Schema:
