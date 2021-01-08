@@ -187,7 +187,7 @@ spec:
               value: {{ .Values.suitecrmNotifyAddress | quote }}
             - name: SUITECRM_SMTP_HOST
               value: {{ .Values.suitecrmSmtpHost | quote }}
-            - name: SUITECRM_SMTP_PORT
+            - name: SUITECRM_SMTP_PORT_NUMBER
               value: {{ .Values.suitecrmSmtpPort | quote }}
             - name: SUITECRM_SMTP_USER
               value: {{ .Values.suitecrmSmtpUser | quote }}
