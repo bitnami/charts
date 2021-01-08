@@ -89,7 +89,7 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 | `containerSecurityContext`              | PhpMyAdmin containers' Security Context                                                  | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the PhpMyAdmin container                                        | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the PhpMyAdmin container                                     | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for PhpMyAdmin                                              | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |

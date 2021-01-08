@@ -121,7 +121,7 @@ The following tables lists the configurable parameters of the Kubewatch chart an
 | `containerSecurityContext`            | Kubewatch containers' Security Context                                                     | Check `values.yaml` file                                |
 | `resources.limits`                    | The resources limits for the Kubewatch container                                           | `{}`                                                    |
 | `resources.requests`                  | The requested resources for the Kubewatch container                                        | `{}`                                                    |
-| `leavinessProbe`                      | Leaviness probe configuration for Kubewatch                                                | Check `values.yaml` file                                |
+| `livenessProbe`                       | Liveness probe configuration for Kubewatch                                                 | Check `values.yaml` file                                |
 | `readinessProbe`                      | Readiness probe configuration for Kubewatch                                                | Check `values.yaml` file                                |
 | `customLivenessProbe`                 | Override default liveness probe                                                            | `nil`                                                   |
 | `customReadinessProbe`                | Override default readiness probe                                                           | `nil`                                                   |
