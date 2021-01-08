@@ -60,12 +60,12 @@ Params:
 Generate secret password or retrieve one if already created.
 
 Usage:
-{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "customValues" (list .Values.path.to.the.password1 .Values.path.to.the.password2) "length" "password-length" "strong" false "context" $) }}
+{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" "password-length" "strong" false "context" $) }}
 
 Params:
   - secret - String - Required - Name of the 'Secret' resource where the password is stored.
   - key - String - Required - Name of the key in the secret.
-  - customValues - Optional - List of parameters that can be used by the user to define the password. Will pick first parameter with a defined value.
+  - providedValues - List<String> - Required - The path to the validating value in the values.yaml, e.g: "mysql.password". Will pick first parameter with a defined value.
   - length - int - Optional - Length of the generated random password.
   - strong - Boolean - Optional - Whether to add symbols to the generated random password.
   - context - Context - Required - Parent context.
@@ -73,21 +73,23 @@ Params:
 {{- define "common.secrets.passwords.manage" -}}
 
 {{- $password := "" }}
-{{- $providedPassword := "" }}
-{{- $passwordLength := default 10 .length}}
-{{- if .customValues }}
-  {{- $passwordList := compact .customValues }}
-  {{- $providedPassword = first $passwordList }}
-{{- end }}
+{{- $passwordLength := default 10 .length }}
+{{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
+{{- $providedPasswordValue := include "common.utils.getValueFromKey" (dict "key" $providedPasswordKey "context" $.context) }}
 {{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
-
 {{- if $secret }}
   {{- if index $secret.data .key }}
   {{- $password = index $secret.data .key }}
   {{- end -}}
-{{- else if $providedPassword }}
-  {{- $password = $providedPassword | toString | b64enc | quote }}
+{{- else if $providedPasswordValue }}
+  {{- $password = $providedPasswordValue | toString | b64enc | quote }}
 {{- else }}
+
+  {{- $requiredPassword := dict "valueKey" $providedPasswordKey "secret" .secret "field" .key "context" $.context -}}
+  {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
+  {{- $passwordValidationErrors := list $requiredPasswordError -}}
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $.context) -}}
+  
   {{- if .strong }}
     {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}
@@ -97,7 +99,6 @@ Params:
     {{- $password = randAlphaNum $passwordLength | b64enc | quote }}
   {{- end }}
 {{- end -}}
-
 {{- printf "%s" $password -}}
 {{- end -}}
 
