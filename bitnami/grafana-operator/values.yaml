@@ -7,11 +7,11 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
-## String to partially override metallb.fullname include (will maintain the release name)
+## String to partially override common.names.fullname include (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override metallb.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -185,7 +185,6 @@ operator:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
 
 grafana:
   enabled: true
