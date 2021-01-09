@@ -763,6 +763,8 @@ rbac:
 ##
 provisioning:
   enabled: false
+
+  ## Set to false for 'helm template' to add privisioning Job as part of chart
   runAsHook: true
 
   image:
