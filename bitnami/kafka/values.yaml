@@ -763,6 +763,7 @@ rbac:
 ##
 provisioning:
   enabled: false
+  runAsHook: true
 
   image:
     registry: docker.io
