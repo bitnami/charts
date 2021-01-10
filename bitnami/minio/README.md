@@ -264,6 +264,13 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+### Adjust persistent volume access mode for standalone mode with multiply replicas
+By default, the standalone mode is running with a single replica `deployment.replicaCount=1` and you shall use the distributed mode in most of the use cases to achieve a multi-pod solution.
+
+If you like to have standalone with multi replicas than you have 2 options:
+* Disable the persistence which is useful for gateway mode `persistence.enabled = false`.
+* Adjust the persistent volume access mode to allow multiply pods share the same volume. Find more information in [kubernetes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
