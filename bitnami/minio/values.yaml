@@ -13,13 +13,13 @@ global:
 #    - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami MinIO image version
+## Bitnami MinIO(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2020.12.26-debian-10-r0
+  tag: 2020.12.29-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,13 +61,13 @@ serviceAccount:
 ##
 clusterDomain: cluster.local
 
-## Bitnami MinIO Client image version
+## Bitnami MinIO(TM) Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ##
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2020.12.18-debian-10-r8
+  tag: 2020.12.18-debian-10-r20
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -100,12 +100,12 @@ volumePermissions:
     #   cpu: 100m
     #   memory: 128Mi
 
-## MinIO server mode. Allowed values: standalone or distributed.
+## MinIO(TM) server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
 
-## MinIO deployment parameters
+## MinIO(TM) deployment parameters
 ## Only when mode is 'standalone'
 ##
 deployment:
@@ -125,7 +125,7 @@ deployment:
   replicaCount: 1
 
 
-## MinIO statefulset parameters
+## MinIO(TM) statefulset parameters
 ## Only when mode is 'distributed'
 ##
 statefulset:
@@ -147,7 +147,7 @@ statefulset:
 ##
 # existingSecret:
 
-## Mount MinIO secret as a file instead of passing environment variable
+## Mount MinIO(TM) secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
 
@@ -155,10 +155,10 @@ useCredentialsFile: false
 ##
 forceNewKeys: false
 
-## MinIO credentials
+## MinIO(TM) credentials
 ##
 accessKey:
-  ## MinIO Access Key
+  ## MinIO(TM) Access Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
@@ -167,7 +167,7 @@ accessKey:
   ##
   forcePassword: false
 secretKey:
-  ## MinIO Secret Key
+  ## MinIO(TM) Secret Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
@@ -180,7 +180,7 @@ secretKey:
 ##
 # defaultBuckets: "my-bucket, my-second-bucket"
 
-## Disable MinIO Web UI
+## Disable MinIO(TM) Web UI
 ## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
 ##
 disableWebUI: false
@@ -254,7 +254,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## MinIO containers' resource requests and limits
+## MinIO(TM) containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
@@ -269,7 +269,7 @@ resources:
   #   cpu: 250m
   #   memory: 256Mi
 
-## MinIO containers' liveness and readiness probes
+## MinIO(TM) containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
@@ -325,14 +325,14 @@ persistence:
   ##
   annotations: {}
 
-## MinIO Service properties
+## MinIO(TM) Service properties
 ##
 service:
-  ## MinIO Service type
+  ## MinIO(TM) Service type
   ##
   type: ClusterIP
 
-  ## MinIO Service port
+  ## MinIO(TM) Service port
   ##
   port: 9000
 
@@ -353,7 +353,7 @@ service:
   # loadBalancerIP:
 
 ## Configure the ingress resource that allows you to access the
-## MinIO web browser. Set up the URL
+## MinIO(TM) web browser. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -416,12 +416,12 @@ networkPolicy:
   enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port MinIO is listening
-  ## on. When true, MinIO will accept connections from any source
+  ## client label will have network access to the port MinIO(TM) is listening
+  ## on. When true, MinIO(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
 
-## MinIO supports two authentication modes for Prometheus either jwt or public, by default MinIO runs in jwt mode.
+## MinIO(TM) supports two authentication modes for Prometheus either jwt or public, by default MinIO(TM) runs in jwt mode.
 ## To allow public access without authentication for prometheus metrics set environment as follows.
 prometheusAuthType: public

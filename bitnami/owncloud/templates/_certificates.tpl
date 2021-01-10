@@ -4,30 +4,14 @@
 Return the proper image name used for setting up Certificates
 */}}
 {{- define "certificates.image" -}}
-{{- $registryName := default .Values.certificates.image.registry .Values.image.registry -}}
-{{- $repositoryName := .Values.certificates.image.repository -}}
-{{- $tag := .Values.certificates.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.certificates.image "global" .Values.global) }}
 {{- end -}}
 
 {{- define "certificates.initContainer" -}}
 {{- if .Values.certificates.customCAs }}
 - name: certificates
-  image: {{ template "certificates.image" . }}
-  imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+  image: {{ include "certificates.image" . }}
+  imagePullPolicy: {{ .Values.certificates.image.pullPolicy }}
   {{- if .Values.image.pullSecrets}}
   imagePullSecrets:
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
@@ -35,25 +19,38 @@ Also, we can't use a single if because lazy evaluation is not an option
   {{- end }}
   {{- end }}
   command:
-  {{- if .Values.certificates.customCertificate.certificateSecret }}
-  - sh
-  - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
-  {{- else }}
-  - sh
-  - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
-    && openssl req -new -x509 -days 3650 -nodes -sha256
-       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
-       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
-       -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+    {{- if .Values.certificates.command }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
+    {{- else if .Values.certificates.customCertificate.certificateSecret }}
+    - sh
+    - -c
+    - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+      else apt-get update && apt-get install -y ca-certificates openssl; fi
+    {{- else }}
+    - sh
+    - -c
+    - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
+      else apt-get update && apt-get install -y ca-certificates openssl; fi
+      && openssl req -new -x509 -days 3650 -nodes -sha256
+        -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+        -out {{ .Values.certificates.customCertificate.certificateLocation }}
+        -keyout {{ .Values.certificates.customCertificate.keyLocation }} -extensions v3_req
+    {{- end }}
+  {{- if .Values.certificates.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.certificates.extraEnvVars }}
-  env:
-  {{- tpl (toYaml .Values.certificates.extraEnvVars) $ | nindent 2 }}
+  env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 4 }}
   {{- end }}
+  envFrom:
+    {{- if .Values.certificates.extraEnvVarsCM }}
+    - configMapRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+    {{- end }}
+    {{- if .Values.certificates.extraEnvVarsSecret }}
+    - secretRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+    {{- end }}
   volumeMounts:
     - name: etc-ssl-certs
       mountPath: /etc/ssl/certs
@@ -97,7 +94,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-{{- define "certificates.volumeMount" -}}
+{{- define "certificates.volumeMounts" -}}
 {{- if .Values.certificates.customCAs }}
 - name: etc-ssl-certs
   mountPath: /etc/ssl/certs/

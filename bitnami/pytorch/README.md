@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the MinIO chart and their default values.
+The following table lists the configurable parameters of the PyTorch chart and their default values.
 
 | Parameter                            | Description                                                                                                                                               | Default                                                 |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -73,7 +73,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
-| service.type                         | Kubernetes service type                                                                                                                                   | `ClusterIP`                                             |
+| `service.type`                       | Kubernetes service type                                                                                                                                   | `ClusterIP`                                             |
 | `entrypoint.file`                    | Main entrypoint to your application                                                                                                                       | `''`                                                    |
 | `entrypoint.args`                    | Args required by your entrypoint                                                                                                                          | `nil`                                                   |
 | `mode`                               | Run PyTorch in standalone or distributed mode (possible values: `standalone`, `distributed`)                                                              | `standalone`                                            |
