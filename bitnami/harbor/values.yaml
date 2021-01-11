@@ -1029,6 +1029,10 @@ core:
   ##
   customReadinessProbe: {}
 
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
+
   ## An array to add extra env vars
   ## For example:
   ##
@@ -1176,6 +1180,13 @@ core:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
+    successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
     successThreshold: 1
 
 ## Harbor Jobservice parameters
@@ -1679,6 +1690,7 @@ chartmuseum:
   provPostFormFieldName:
   maxStorageObjects:
   maxUploadSize:
+  storageTimestampTolerance: "1s"
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##

@@ -48,6 +48,9 @@ data:
   {{- if .Values.chartmuseum.maxUploadSize }}
   MAX_UPLOAD_SIZE: {{ .Values.chartmuseum.maxUploadSize | quote }}
   {{- end }}
+  {{- if .Values.chartmuseum.storageTimestampTolerance }}
+  STORAGE_TIMESTAMP_TOLERANCE: {{ .Values.chartmuseum.storageTimestampTolerance | quote }}
+  {{- end }}
   {{- if .Values.chartmuseum.maxStorageObjects }}
   MAX_STORAGE_OBJECTS: {{ .Values.chartmuseum.maxStorageObjects | quote }}
   {{- end }}
