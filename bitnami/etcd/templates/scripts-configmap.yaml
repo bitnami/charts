@@ -9,7 +9,7 @@
 {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
 {{- $initSnapshotPath := printf "/init-snapshot/%s" .Values.startFromSnapshot.snapshotFilename }}
-{{- if and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled }}
+{{- if and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.pvc.existingClaim) }}
 {{- $initSnapshotPath = printf "/snapshots/%s" .Values.startFromSnapshot.snapshotFilename }}
 {{- end }}
 {{- $snapshotHistoryLimit := .Values.disasterRecovery.cronjob.snapshotHistoryLimit }}
