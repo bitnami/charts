@@ -238,13 +238,12 @@ spec:
               subPath: probes.sh
             - name: data
               mountPath: /bitnami/etcd
-            {{- if .Values.startFromSnapshot.enabled }}
-            - name: init-snapshot-volume
-              mountPath: /init-snapshot
-            {{- end }}
-            {{- if .Values.disasterRecovery.enabled }}
+            {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
             - name: snapshot-volume
               mountPath: /snapshots
+            {{- else if .Values.startFromSnapshot.enabled }}
+            - name: init-snapshot-volume
+              mountPath: /init-snapshot
             {{- end }}
             {{- if .Values.configFileConfigMap }}
             - name: etcd-config
@@ -265,15 +264,14 @@ spec:
           configMap:
             name: {{ include "etcd.fullname" . }}-scripts
             defaultMode: 0755
-        {{- if .Values.startFromSnapshot.enabled }}
-        - name: init-snapshot-volume
-          persistentVolumeClaim:
-            claimName: {{ .Values.startFromSnapshot.existingClaim }}
-        {{- end }}
-        {{- if .Values.disasterRecovery.enabled }}
+        {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
         - name: snapshot-volume
           persistentVolumeClaim:
             claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}
+        {{- else if .Values.startFromSnapshot.enabled }}
+        - name: init-snapshot-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.startFromSnapshot.existingClaim }}
         {{- end }}
         {{- if .Values.configFileConfigMap }}
         - name: etcd-config

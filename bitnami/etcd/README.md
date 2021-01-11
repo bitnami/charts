@@ -303,6 +303,8 @@ disasterRecovery.pvc.size=2Gi
 disasterRecovery.pvc.storageClassName=nfs
 ```
 
+If `startFromSnapshot` is enabled at the same time than `disasterRecovery`, the PVC provided via `startFromSnapshot.existingClaim` will be used to store the periodical snapshots.
+
 > **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
 
 ### Setting Pod's affinity
