@@ -109,7 +109,7 @@ The following tables lists the configurable parameters of the NATS chart and the
 | `containerSecurityContext`              | NATS containers' Security Context                                                        | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the NATS container                                              | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the NATS container                                           | `{}`                                                    |
-| `leavinessProbe`                        | Leaviness probe configuration for NATS                                                   | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for NATS                                                    | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for NATS                                                   | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |

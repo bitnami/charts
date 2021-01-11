@@ -97,7 +97,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `containerSecurityContext`              | Wildfly containers' Security Context                                                     | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Wildfly container                                           | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the Wildfly container                                        | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for Wildfly                                                | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for Wildfly                                                 | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for Wildfly                                                | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |

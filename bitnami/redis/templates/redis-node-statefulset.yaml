@@ -9,6 +9,13 @@ metadata:
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  {{- if .Values.slave.statefulset.labels }}
+  {{- toYaml .Values.slave.statefulset.labels | nindent 4 }}
+  {{- end }}
+{{- if .Values.slave.statefulset.annotations }}
+  annotations:
+    {{- toYaml .Values.slave.statefulset.annotations | nindent 4 }}
+{{- end }}
 spec:
 {{- if .Values.slave.updateStrategy }}
   strategy: {{- toYaml .Values.slave.updateStrategy | nindent 4 }}
@@ -178,7 +185,8 @@ spec:
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
             - name: redis-data
-              mountPath: /data
+              mountPath: {{ .Values.slave.persistence.path }}
+              subPath: {{ .Values.slave.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
@@ -280,8 +288,8 @@ spec:
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
             - name: redis-data
-              mountPath: {{ .Values.master.persistence.path }}
-              subPath: {{ .Values.master.persistence.subPath }}
+              mountPath: {{ .Values.slave.persistence.path }}
+              subPath: {{ .Values.slave.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
             - name: sentinel-tmp-conf

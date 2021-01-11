@@ -199,7 +199,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `defaultBackend.containerSecurityContext`  | Default backend containers' Security Context                                             | Check `values.yaml` file                                |
 | `defaultBackend.resources.limits`          | The resources limits for the Default backend container                                   | `{}`                                                    |
 | `defaultBackend.resources.requests`        | The requested resources for the Default backend container                                | `{}`                                                    |
-| `defaultBackend.leavinessProbe`            | Leaviness probe configuration for Default backend                                        | Check `values.yaml` file                                |
+| `defaultBackend.livenessProbe`             | Liveness probe configuration for Default backend                                         | Check `values.yaml` file                                |
 | `defaultBackend.readinessProbe`            | Readiness probe configuration for Default backend                                        | Check `values.yaml` file                                |
 | `defaultBackend.customLivenessProbe`       | Override default liveness probe                                                          | `{}` (evaluated as a template)                          |
 | `defaultBackend.customReadinessProbe`      | Override default readiness probe                                                         | `{}` (evaluated as a template)                          |
