@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.3-debian-10-r20
+  tag: 4.4.3-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -152,6 +152,11 @@ shardsvr:
       values: []
     ## Affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+    ## affinity:
+    ##   matchLabels:
+    ##     shard: "{{ .dataNodeLoopId }}"
+    ##
     ## Note: shardsvr.dataNode.podAffinityPreset, shardsvr.dataNode.podAntiAffinityPreset, and shardsvr.dataNode.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
