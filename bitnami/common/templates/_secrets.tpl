@@ -60,7 +60,7 @@ Params:
 Generate secret password or retrieve one if already created.
 
 Usage:
-{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" "password-length" "strong" false "context" $) }}
+{{ include "common.secrets.passwords.manage" (dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" 10 "strong" false "context" $) }}
 
 Params:
   - secret - String - Required - Name of the 'Secret' resource where the password is stored.
@@ -93,7 +93,7 @@ Params:
   {{- if .strong }}
     {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}
-    {{- $password = regexReplaceAllLiteral "\\W+" $password "@" | substr 5 $passwordLength }}
+    {{- $password = regexReplaceAllLiteral "\\W" $password "@" | substr 5 $passwordLength }}
     {{- $password = printf "%s%s" $subStr $password | toString | shuffle | b64enc | quote }}
   {{- else }}
     {{- $password = randAlphaNum $passwordLength | b64enc | quote }}
@@ -103,7 +103,7 @@ Params:
 {{- end -}}
 
 {{/*
-Returns whether a previous generated secret was already exists
+Returns whether a previous generated secret already exists
 
 Usage:
 {{ include "common.secrets.exists" (dict "secret" "secret-name" "context" $) }}
