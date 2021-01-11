@@ -9,7 +9,7 @@ metadata:
     chart: {{ template "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    app.kubernetes.io/component: "metrics"
+    app.kubernetes.io/component: "sentinel-metrics"
     {{- if .Values.sentinel.metrics.service.labels -}}
     {{- toYaml .Values.sentinel.metrics.service.labels | nindent 4 }}
     {{- end -}}

@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "redis.fullname" . }}
+  name: {{ template "redis.fullname" . }}-sentinel-metrics
   {{- if .Values.sentinel.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.sentinel.metrics.serviceMonitor.namespace }}
   {{- else }}
@@ -26,7 +26,7 @@ spec:
     matchLabels:
       app: {{ template "redis.name" . }}
       release: {{ .Release.Name }}
-      app.kubernetes.io/component: "sentinelmetrics"
+      app.kubernetes.io/component: "sentinel-metrics"
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
