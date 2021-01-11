@@ -40,9 +40,9 @@ spec:
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- else }}
-      affinity:
+      iaffinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAntiAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.dataNode.nodeAffinityPreset.type "key" $.Values.shardsvr.dataNode.nodeAffinityPreset.key "values" $.Values.shardsvr.dataNode.nodeAffinityPreset.values) | nindent 10 }}
