@@ -312,15 +312,11 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
-              {{- if .Values.tls.enabled }}
-                - --tls
-                - --tlsCertificateKeyFile=/certs/mongodb.pem
-                - --tlsCAFile=/certs/mongodb-ca-cert
-              {{- end }}
-                - --eval
-                - "db.adminCommand('ping')"
+                - sh
+                - -ec
+                - |-
+                  {{- if .Values.tls.enabled }}OPTIONS="--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert"{{- end }}
+                  mongo --disableImplicitSessions $OPTIONS --eval "db.hello().isWritablePrimary || db.hello().secondary" | grep -q 'true'
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
