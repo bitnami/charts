@@ -5,6 +5,7 @@
 
 {{- range $i, $e := until $nodesCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "instance" $i }}
 
 ---
 apiVersion: v1
