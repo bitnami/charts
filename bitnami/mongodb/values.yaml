@@ -471,6 +471,9 @@ persistence:
 ## Service parameters
 ##
 service:
+  ## Service name
+  ##
+  servicename: ""
   ## Service type
   ##
   type: ClusterIP
