@@ -183,10 +183,15 @@ spec:
   {{- if .Values.prometheus.volumeMounts }}
   volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
+  {{- if .Values.prometheus.additionalScrapeConfigs.enabled }}
   additionalScrapeConfigs:
+    {{- if eq .Values.prometheus.additionalScrapeConfigs.type "external" }}
     name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
+    {{- else if eq .Values.prometheus.additionalScrapeConfigs.type "internal" }}
+    name: additional-scrape-jobs-{{ template "kube-prometheus.prometheus.fullname" . }}
+    key: scrape-jobs.yaml
+    {{- end }}
   {{- end }}
   {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
   additionalAlertRelabelConfigs:
