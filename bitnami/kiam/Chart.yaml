@@ -10,8 +10,8 @@ dependencies:
     version: 1.x.x
 description: kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
 engine: gotpl
-home: 'https://github.com/uswitch/kiam'
-icon: 'https://bitnami.com/assets/stacks/kiam/img/kiam-stack-110x117.png'
+home: https://github.com/uswitch/kiam
+icon: https://bitnami.com/assets/stacks/kiam/img/kiam-stack-110x117.png
 keywords:
   - aws
   - iam
@@ -21,6 +21,6 @@ maintainers:
     name: Bitnami
 name: kiam
 sources:
-  - 'https://github.com/bitnami/bitnami-docker-kiam'
-  - 'https://github.com/uswitch/kiam'
-version: 0.2.0
+  - https://github.com/bitnami/bitnami-docker-kiam
+  - https://github.com/uswitch/kiam
+version: 0.2.1
