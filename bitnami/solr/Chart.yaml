@@ -15,7 +15,7 @@ dependencies:
 description: Apache Solr is an open source enterprise search platform
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/solr
-#icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-110x117.png
 keywords:
   - solr
   - zookeeper
