@@ -16,6 +16,20 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create a default service name which can be overridden.
+*/}}
+{{- define "mongodb.servicename" -}}
+{{- if .Values.service -}}
+    {{- if .Values.service.servicename }}
+        {{- .Values.service.servicename -}}
+    {{- else -}}
+        {{ include "mongodb.fullname" . }}-headless
+    {{- end -}}
+{{- else -}}
+    {{ include "mongodb.fullname" . }}-headless
+{{- end }}
+
+{{/*
 Return the proper MongoDB image name
 */}}
 {{- define "mongodb.image" -}}
