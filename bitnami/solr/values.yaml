@@ -57,7 +57,7 @@ solr:
   # Number of solr instances to run
   replicaCount: 1  
   image:
-    registry: harbor-repo.vmware.com/dockerhub-proxy-cache   #docker.io
+    registry: docker.io
     repository: bitnami/solr
     tag: latest
     ## Specify a imagePullPolicy
