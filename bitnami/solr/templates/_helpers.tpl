@@ -25,7 +25,7 @@ Return the proper Docker Image Registry Secret Names
 
 
 {{/*
-Return the proper %%MAIN_OBJECT_BLOCK%% image name
+Return the proper Apache Solr image name
 */}}
 {{- define "solr.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.solr.image "global" .Values.global) }}
@@ -92,4 +92,3 @@ Compile all warnings into a single message.
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
 {{- end -}}
-
