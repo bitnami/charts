@@ -402,6 +402,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 
