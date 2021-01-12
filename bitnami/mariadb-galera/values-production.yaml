@@ -568,6 +568,16 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
+startupProbe:
+  enabled: false
+  ## Initializing the database could take some time
+  ##
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  ## Let's wait 600 seconds by default, it should give enough time in any cluster for mysql to init
+  failureThreshold: 48
 
 ## Pod disruption budget configuration
 ##
