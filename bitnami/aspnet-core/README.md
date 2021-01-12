@@ -66,6 +66,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                    | `nil`                          |
 
 ### ASP.NET Core parameters
 
@@ -157,6 +158,9 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
 | `service.annotations`                   | Annotations for ASP.NET Core service                                                     | `{}`                                                    |
 | `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
+| `ingress.path`                   | Ingress path                                                  | `/`                            |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
 | `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
 | `ingress.hostname`                      | Default host for the ingress resource                                                    | `aspnet-core.local`                                     |
 | `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
@@ -280,9 +284,9 @@ appFromExternalRepo.startCommand[1]=KestrelSample.dll
 
 #### Mounting your ASP.NET Core application from an existing PVC
 
-If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of yur existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
+If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of your existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
 
-For example, if you created a PVC named `my-custom-apsnet-core-app` containing your applicaiton, use the parameters below:
+For example, if you created a PVC named `my-custom-apsnet-core-app` containing your application, use the parameters below:
 
 ```console
 appFromExistingPVC.enabled=true
@@ -362,7 +366,7 @@ extraVolumes:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

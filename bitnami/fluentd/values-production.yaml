@@ -13,7 +13,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.11.5-debian-10-r4
+  tag: 1.12.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -284,6 +284,19 @@ forwarder:
     create: true
     pspEnabled: true
 
+  ## Persist data to a persistent volume
+  persistence:
+    enabled: true
+    ## If persistence enabled, a hostPath volume mounts a directory of your choice from the host node's filesystem into your Pod.
+    ## The host directory you chose is mounted into /opt/bitnami/fluentd/logs/buffers in your Pod
+    ## Example use case: mount host directory /tmp/buffer (if the directory doesn't exist, it creates it) into forwarder pod.
+    ##   persistence:
+    ##     enabled: true
+    ##     hostPath:
+    ##       path: /tmp/buffer
+    hostPath:
+      path: /opt/bitnami/fluentd/logs/buffers
+
   ## Add init containers to forwarder pods
   ## For example:
   ## initContainers:
@@ -317,7 +330,7 @@ forwarder:
   #   - name: systemd
   #     mountPath: /run/log/journal/
 
-## Agregator parameters
+## Aggregator parameters
 ##
 aggregator:
   ## Enable Aggregator daemonset

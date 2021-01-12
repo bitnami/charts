@@ -18,7 +18,7 @@ spec:
     status: {}
   validation:
     openAPIV3Schema:
-      description: TLSCertificateDelegation is an TLS Certificate Delegation CRD specificiation.
+      description: TLSCertificateDelegation is an TLS Certificate Delegation CRD specification.
         See design/tls-certificate-delegation.md for details.
       properties:
         apiVersion:

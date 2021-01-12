@@ -233,6 +233,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
@@ -253,6 +254,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
@@ -322,13 +324,9 @@ spec:
               containerPort: 9216
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
-                  --test
+            httpGet:
+              path: /
+              port: metrics
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
@@ -337,13 +335,9 @@ spec:
           {{- end }}
           {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - >-
-                  /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
-                  --test
+            httpGet:
+              path: /
+              port: metrics
             initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
@@ -376,7 +370,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: ca-clients
+            secretName: {{ template "mongodb.caSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
@@ -411,6 +405,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
+        {{- if .Values.persistence.volumeClaimTemplates.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
+        {{- end }}
         {{ include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) }}
   {{- end }}
 {{- end }}

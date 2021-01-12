@@ -127,7 +127,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.2-debian-10-r32
+    tag: 1.19.6-debian-10-r18
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -303,7 +303,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.9-debian-10-r5
+    tag: 1.18.14-debian-10-r12
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -328,7 +328,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.0.1-scratch-r1
+    tag: 2.0.1-scratch-r2
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -437,7 +437,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.0.1-debian-10-r0
+    tag: 2.0.1-debian-10-r50
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -540,7 +540,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.2-debian-10-r32
+  tag: 1.19.6-debian-10-r18
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -572,7 +572,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 6.1.1-debian-10-r12
+    tag: 6.1.1-debian-10-r113
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -598,6 +598,51 @@ authProxy:
   # - --cookie-secure=false
   # - --scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
   # - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
+  ## OAuth2 Proxy containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## Default values set based on usage data from running Kubeapps instances
+    ## ref: https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+    ##
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+
+# Pinniped Proxy configuration for converting user OIDC tokens to k8s client authorization certs.
+# NOTE: This component is alpha functionality in Kubeapps until we complete testing and documentation.
+pinnipedProxy:
+  ## Set to true if Kubeapps should configure pinniped-proxy on the frontend.
+  #
+  enabled: false
+
+  ## pinnipedProxy service parameters
+  ##
+  service:
+    ## HTTP Port
+    ##
+    port: 3333
+
+  image:
+    registry: docker.io
+    repository: kubeapps/pinniped-proxy
+    tag: latest
+    ## Specify a imagePullPolicy
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+
+  ## Specify the (default) namespace in which pinniped concierge is installed
+  ## on the cluster(s) as well as the default authenticator type and name for use by
+  ## Kubeapps. These default options are useful if all clusters use have a similar
+  ## pinniped-concierge setup, otherwise we need to specify these for each cluster.
+  defaultPinnipedNamespace: pinniped-concierge
+  defaultAuthenticatorType: JWTAuthenticator
+  defaultAuthenticatorName: jwt-authenticator
+
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.5.3-debian-10-r24
+  tag: 5.6.0-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -29,6 +29,10 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
 
 ## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
@@ -53,6 +57,10 @@ clusterDomain: cluster.local
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+
+## Use a service account for the WordPress pod
+##
+serviceAccountName: default
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
@@ -421,6 +429,14 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: wordpress.local
@@ -458,6 +474,7 @@ ingress:
   ##   backend:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -502,6 +519,8 @@ persistence:
   # existingClaim: your-claim
   accessMode: ReadWriteMany
   size: 10Gi
+  ## Custom dataSource
+  dataSource: {}
 
 ## Wordpress Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -531,7 +550,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r221
+    tag: 0.8.0-debian-10-r262
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -673,4 +692,46 @@ externalDatabase:
 ##     ...
 ##
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
+##
 customPostInitScripts: {}
+
+##
+## Init containers parameters:
+## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0

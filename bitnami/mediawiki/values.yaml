@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.35.0-debian-10-r57
+  tag: 1.35.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -320,7 +320,7 @@ service:
   # HTTPS Port
   ## Set this to any value (recommended: 443) to enable the https service port
   # httpsPort: 443
-  ## Use nodePorts to requets some specific ports when usin NodePort
+  ## Use nodePorts to requets some specific ports when using NodePort
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
@@ -333,7 +333,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Ingress configuratiom
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -406,7 +406,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r217
+    tag: 0.8.0-debian-10-r247
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

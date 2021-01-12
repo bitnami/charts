@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.10.0-debian-10-r3
+  tag: 7.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -309,8 +309,15 @@ master:
     ## If persistence is enable, and this value is defined, then
     ## accept the value as an existing Persistent Volume to which
     ## should be added as match label selector to the volumeClaimTemplate
+    ## Ignored if `selector` is set.
     ##
     # existingVolume: my-persistent-volume
+    ## Configure custom selector for volumeClaimTemplate.
+    ## Current example is equivalent to `existingVolume` setting.
+    ## Using this setting will overwrite `existingVolume`
+    # selector:
+    #   matchLabels:
+    #     volume:
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -621,8 +628,15 @@ data:
     ## If persistence is enable, and this value is defined, then
     ## accept the value as an existing Persistent Volume to which
     ## should be added as match label selector to the volumeClaimTemplate
+    ## Ignored if `selector` is set.
     ##
     # existingVolume: my-persistent-volume
+    ## Configure custom selector for volumeClaimTemplate.
+    ## Current example is equivalent to `existingVolume` setting.
+    ## Using this setting will overwrite `existingVolume`
+    # selector:
+    #   matchLabels:
+    #     volume:
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -776,7 +790,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.1-debian-10-r274
+    tag: 5.8.3-debian-10-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -995,7 +1009,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r271
+    tag: 1.1.0-debian-10-r301
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

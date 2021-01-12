@@ -89,7 +89,7 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 | `containerSecurityContext`              | PhpMyAdmin containers' Security Context                                                  | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the PhpMyAdmin container                                        | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the PhpMyAdmin container                                     | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for PhpMyAdmin                                              | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
@@ -296,7 +296,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `XpodAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

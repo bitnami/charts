@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -18,7 +22,7 @@ fullnameOverride:
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ## valid values: ['SequentialExecutor', 'Local Executor', 'CeleryExecutor', 'KubernetesExecutor']
 ##
-executor: 'CeleryExecutor'
+executor: "CeleryExecutor"
 ## Name of an existing config map containing the Airflow config file
 ##
 configurationConfigMap:
@@ -35,10 +39,10 @@ auth:
   ## If it is not forced, a random password will be generated.
   ##
   forcePassword: true
-  ## Specify username to acccess web UI
+  ## Specify username to access web UI
   ##
   username: user
-  ## Specify password to acccess web UI
+  ## Specify password to access web UI
   ##
   password:
   ## Specify a fernet key to secure airflow connections
@@ -61,7 +65,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 1.10.13-debian-10-r0
+    tag: 1.10.14-debian-10-r20
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -186,7 +190,7 @@ web:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Scheculer component related properties
 ##
@@ -197,7 +201,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 1.10.12-debian-10-r87
+    tag: 1.10.14-debian-10-r29
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -296,7 +300,7 @@ scheduler:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Worker component related properties
 ##
@@ -307,7 +311,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 1.10.12-debian-10-r76
+    tag: 1.10.14-debian-10-r31
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -415,7 +419,7 @@ worker:
     ## Whether enabled horizontal pod autoscale
     ##
     enabled: true
-    ## Configure a minimun/maximun amount of pods
+    ## Configure a minimum/maximum amount of pods
     ##
     replicas:
       min: 1
@@ -458,7 +462,7 @@ worker:
   ## Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
 
 ## Add labels to all the deployed resources
 ##
@@ -515,7 +519,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.29.2-debian-10-r25
+    tag: 2.30.0-debian-10-r11
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -606,19 +610,19 @@ ldap:
   enabled: false
   ## Server URI, eg. ldap://ldap_server:389
   ##
-  uri: 'ldap://ldap_server:389'
+  uri: "ldap://ldap_server:389"
   ## Base of the search, eg. ou=example,o=org
   ##
-  base: 'ou=example,o=org'
+  base: "ou=example,o=org"
   ## Bind DN
   ##
-  binddn: 'cn=user,ou=example,o=org'
+  binddn: "cn=user,ou=example,o=org"
   ## Bind Password
   ##
-  bindpw: ''
+  bindpw: ""
   ## Field used for uid
   ##
-  uidField: 'uid'
+  uidField: "uid"
   ## SSL/TLS parameters for LDAP
   ##
   tls:
@@ -631,11 +635,11 @@ ldap:
     ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
     ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
     ##
-    CAcertificateSecret: ''
+    CAcertificateSecret: ""
     ## LDAP CA cert filename
     ## eg. ca.pem
     ##
-    CAcertificateFilename: ''
+    CAcertificateFilename: ""
 
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -710,6 +714,10 @@ ingress:
   ##
   enabled: true
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -764,7 +772,7 @@ ingress:
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -779,12 +787,13 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ''
+  ##
+  type: ""
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## Node label values to match
   ## E.g.
   ## values:
@@ -888,7 +897,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r283
+    tag: 0.20180711.0-debian-10-r326
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -911,8 +920,8 @@ metrics:
   podLabels: {}
 
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '9112'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9112"
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##

@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "common.names.fullname" . }}-envoy
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
 spec:

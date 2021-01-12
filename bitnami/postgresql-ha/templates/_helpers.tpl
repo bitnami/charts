@@ -1,39 +1,51 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "postgresql-ha.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "postgresql-ha.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
 
 {{/*
 Fully qualified app name for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresql" -}}
-{{- printf "%s-postgresql" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-postgresql" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-postgresql" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for Pgpool
 */}}
 {{- define "postgresql-ha.pgpool" -}}
-{{- printf "%s-pgpool" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-pgpool" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-pgpool" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-pgpool" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for LDAP
 */}}
 {{- define "postgresql-ha.ldap" -}}
-{{- printf "%s-ldap" (include "postgresql-ha.fullname" .) -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-ldap" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-ldap" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-ldap" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -80,9 +92,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.username }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.username -}}
             {{- .Values.global.postgresql.username -}}
         {{- else -}}
             {{- .Values.postgresql.username -}}
@@ -99,9 +111,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return PostgreSQL postgres user password
 */}}
 {{- define "postgresql-ha.postgresqlPostgresPassword" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.postgresPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.postgresPassword -}}
             {{- .Values.global.postgresql.postgresPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
@@ -111,6 +123,23 @@ Return PostgreSQL postgres user password
     {{- end -}}
 {{- else -}}
     {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if PostgreSQL postgres user password has been provided
+*/}}
+{{- define "postgresql-ha.postgresqlPasswordProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.postgresql.postgresPassword -}}
+      {{- true -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -147,9 +176,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.adminUsername }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.adminUsername -}}
             {{- .Values.global.pgpool.adminUsername -}}
         {{- else -}}
             {{- .Values.pgpool.adminUsername -}}
@@ -171,9 +200,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.adminPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.adminPassword -}}
             {{- .Values.global.pgpool.adminPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.pgpool.adminPassword (empty .Values.pgpool.adminPassword) -}}
@@ -196,9 +225,9 @@ but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else l
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
 {{- $postgresqlDatabase := default "postgres" .Values.postgresql.database -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.database }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.database -}}
             {{- default "postgres" .Values.global.postgresql.database -}}
         {{- else -}}
             {{- $postgresqlDatabase -}}
@@ -220,9 +249,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrUsername }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrUsername -}}
             {{- .Values.global.postgresql.repmgrUsername -}}
         {{- else -}}
             {{- .Values.postgresql.repmgrUsername -}}
@@ -244,9 +273,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrPassword -}}
             {{- .Values.global.postgresql.repmgrPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.postgresql.repmgrPassword (empty .Values.postgresql.repmgrPassword) -}}
@@ -268,9 +297,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrDatabase }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrDatabase -}}
             {{- .Values.global.postgresql.repmgrDatabase -}}
         {{- else -}}
             {{- .Values.postgresql.repmgrDatabase -}}
@@ -287,9 +316,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
         {{- else if (not .Values.postgresql.existingSecret) -}}
             {{- true -}}
         {{- end -}}
@@ -310,9 +339,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
             {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
         {{- else if .Values.postgresql.existingSecret -}}
             {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
@@ -337,9 +366,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return true if a secret object should be created for Pgpool
 */}}
 {{- define "postgresql-ha.pgpoolCreateSecret" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
         {{- else if (not .Values.pgpool.existingSecret) -}}
             {{- true -}}
         {{- end -}}
@@ -360,9 +389,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
             {{- printf "%s" .Values.global.pgpool.existingSecret -}}
         {{- else if .Values.pgpool.existingSecret -}}
             {{- printf "%s" .Values.pgpool.existingSecret -}}
@@ -513,20 +542,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
-*/}}
-{{- define "postgresql-ha.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
-{{- end -}}
-
-{{/* Check if there are rolling tags in the images */}}
-{{- define "postgresql-ha.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
-{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
-{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
-{{- end -}}
-
-{{/*
 Return the appropriate apiVersion for networkPolicy
 */}}
 {{- define "postgresql-ha.networkPolicy.apiVersion" -}}
@@ -535,6 +550,13 @@ Return the appropriate apiVersion for networkPolicy
 {{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
 "networking.k8s.io/v1"
 {{- end -}}
+{{- end -}}
+
+{{/* Check if there are rolling tags in the images */}}
+{{- define "postgresql-ha.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
+{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
+{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
 {{- end -}}
 
 {{/*
@@ -568,7 +590,7 @@ postgresql-ha: Nodes hostnames
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP paremeters when LDAP is enabled */}}
+{{/* Validate values of PostgreSQL HA - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "postgresql-ha.validateValues.ldap" -}}
 {{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (empty .Values.ldap.bindpw)) -}}
 postgresql-ha: LDAP

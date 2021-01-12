@@ -194,6 +194,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
@@ -320,7 +321,7 @@ spec:
         {{- if .Values.common.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" . }}
+            secretName: {{ include "mongodb-sharded.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.common.extraVolumes }}

@@ -2,31 +2,42 @@
 
 The nginx-ingress controller has been installed.
 
-{{- if contains "NodePort" .Values.service.type }}
 Get the application URL by running these commands:
 
+{{- $httpPort := .Values.service.ports.http | toString }}
+{{- $httpsPort := .Values.service.ports.https | toString }}
+
+{{- if contains "NodePort" .Values.service.type }}
 {{- if (not (empty .Values.service.nodePorts.http)) }}
-  export HTTP_NODE_PORT={{ .Values.service.nodePorts.http }}
+    export HTTP_NODE_PORT={{ .Values.service.nodePorts.http }}
 {{- else }}
-  export HTTP_NODE_PORT=$(kubectl --namespace {{ .Release.Namespace }} get services -o jsonpath="{.spec.ports[0].nodePort}" {{ template "nginx-ingress.fullname" . }})
+    export HTTP_NODE_PORT=$(kubectl --namespace {{ .Release.Namespace }} get services -o jsonpath="{.spec.ports[0].nodePort}" {{ template "common.names.fullname" . }})
 {{- end }}
 {{- if (not (empty .Values.service.nodePorts.https)) }}
-  export HTTPS_NODE_PORT={{ .Values.service.nodePorts.https }}
+    export HTTPS_NODE_PORT={{ .Values.service.nodePorts.https }}
 {{- else }}
-  export HTTPS_NODE_PORT=$(kubectl --namespace {{ .Release.Namespace }} get services -o jsonpath="{.spec.ports[1].nodePort}" {{ template "nginx-ingress.fullname" . }})
+    export HTTPS_NODE_PORT=$(kubectl --namespace {{ .Release.Namespace }} get services -o jsonpath="{.spec.ports[1].nodePort}" {{ template "common.names.fullname" . }})
 {{- end }}
-  export NODE_IP=$(kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}")
+    export NODE_IP=$(kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}")
 
-  echo "Visit http://$NODE_IP:$HTTP_NODE_PORT to access your application via HTTP."
-  echo "Visit https://$NODE_IP:$HTTPS_NODE_PORT to access your application via HTTPS."
+    echo "Visit http://$NODE_IP:$HTTP_NODE_PORT to access your application via HTTP."
+    echo "Visit https://$NODE_IP:$HTTPS_NODE_PORT to access your application via HTTPS."
+
 {{- else if contains "LoadBalancer" .Values.service.type }}
-It may take a few minutes for the LoadBalancer IP to be available.
-You can watch the status by running 'kubectl --namespace {{ .Release.Namespace }} get services -o wide -w {{ template "nginx-ingress.fullname" . }}'
+
+ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "Visit http://${SERVICE_IP}{{- if ne $httpPort "80" }}:{{ $httpPort }}{{ end }} to access your application via HTTP."
+    echo "Visit https://${SERVICE_IP}{{- if ne $httpsPort "443" }}:{{ $httpsPort }}{{ end }} to access your application via HTTPS."
+
 {{- else if contains "ClusterIP"  .Values.service.type }}
-Get the application URL by running these commands:
-  export POD_NAME=$(kubectl --namespace {{ .Release.Namespace }} get pods -o jsonpath="{.items[0].metadata.name}" -l "app={{ template "nginx-ingress.name" . }},component={{ .Values.name }},release={{ .Release.Name }}")
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:80
-  echo "Visit http://127.0.0.1:8080 to access your application."
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
+    echo "Visit http://127.0.0.1:{{- if ne $httpPort "80" }}:{{ $httpPort }}{{ end }}to access your application via HTTP."
+    echo "Visit https://127.0.0.1:{{- if ne $httpsPort "443" }}:{{ $httpsPort }}{{ end }} to access your application via HTTPS."
+
 {{- end }}
 
 An example Ingress that makes use of the controller:
@@ -72,8 +83,5 @@ If TLS is enabled for the Ingress, a Secret containing the certificate and key m
 #################################################################################
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.defaultBackend.image }}

@@ -86,7 +86,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `auth.replicationPassword`                  | MariaDB replication user password. Ignored if existing secret is provided                                            | _random 10 character long alphanumeric string_               |
 | `auth.forcePassword`                        | Force users to specify required passwords                                                                            | `false`                                                      |
 | `auth.usePasswordFiles`                     | Mount credentials as a files instead of using an environment variable                                                | `false`                                                      |
-| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `nil` |
+| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`  |
 | `auth.existingSecret`                       | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `nil` |
 | `initdbScripts`                             | Dictionary of initdb scripts                                                                                         | `nil`                                                        |
 | `initdbScriptsConfigMap`                    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                  | `nil`                                                        |
@@ -110,6 +110,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.affinity`                           | Affinity for MariaDB primary pods assignment                                                                         | `{}` (evaluated as a template)                               |
 | `primary.nodeSelector`                       | Node labels for MariaDB primary pods assignment                                                                      | `{}` (evaluated as a template)                               |
 | `primary.tolerations`                        | Tolerations for MariaDB primary pods assignment                                                                      | `[]` (evaluated as a template)                               |
+| `primary.priorityClassName`                  | Priority class for MariaDB primary pods assignment                                                                      | `nil` |
 | `primary.podSecurityContext.enabled`         | Enable security context for MariaDB primary pods                                                                     | `true`                                                       |
 | `primary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                         | `1001`                                                       |
 | `primary.containerSecurityContext.enabled`   | MariaDB primary container securityContext                                                                            | `true`                                                       |
@@ -141,7 +142,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.service.nodePort`                   | MariaDB Primary K8s service node port                                                                                | `nil`                                                        |
 | `primary.service.loadBalancerIP`             | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                     | `nil`                                                        |
 | `primary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB Primary service is LoadBalancer                                                | `[]`                                                         |
-| `primary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                             | `false`                                                      |
+| `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                             | `false`                                                      |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB primary pods that should remain scheduled                                       | `1`                                                          |
 | `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that may be made unavailable                                       | `nil`                                                        |
 
@@ -165,6 +166,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.affinity`                           | Affinity for MariaDB secondary pods assignment                                                                        | `{}` (evaluated as a template)                               |
 | `secondary.nodeSelector`                       | Node labels for MariaDB secondary pods assignment                                                                     | `{}` (evaluated as a template)                               |
 | `secondary.tolerations`                        | Tolerations for MariaDB secondary pods assignment                                                                     | `[]` (evaluated as a template)                               |
+| `secondary.priorityClassName`                  | Priority class for MariaDB secondary pods assignment                                                                     | `nil` |
 | `secondary.podSecurityContext.enabled`         | Enable security context for MariaDB secondary pods                                                                    | `true`                                                       |
 | `secondary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                          | `1001`                                                       |
 | `secondary.containerSecurityContext.enabled`   | MariaDB secondary container securityContext                                                                           | `true`                                                       |
@@ -196,7 +198,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.service.nodePort`                   | MariaDB secondary K8s service node port                                                                               | `nil`                                                        |
 | `secondary.service.loadBalancerIP`             | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `nil`                                                        |
 | `secondary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB secondary service is LoadBalancer                                               | `[]`                                                         |
-| `secondary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                                                      |
+| `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                                                      |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                                                          |
 | `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `nil`                                                        |
 
@@ -416,7 +418,7 @@ $ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD
 
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - `securityContext.*` is deprecated in favor of `primary.podSecurityContext`, `primary.containerSecurityContext`, `secondary.podSecurityContext`, and `secondary.containerSecurityContext`.
   - Credentials parameter are reorganized under the `auth` parameter.

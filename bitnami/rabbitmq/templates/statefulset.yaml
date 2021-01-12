@@ -58,8 +58,8 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
@@ -213,7 +213,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - rabbitmq-diagnostics -q check_running
+                - rabbitmq-diagnostics -q ping
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -228,7 +228,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - rabbitmq-diagnostics -q ping
+                - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -236,6 +236,9 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}

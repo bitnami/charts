@@ -83,8 +83,8 @@ The following table lists the configurable parameters of the Node chart and thei
 | `extraEnvVars`                          | Extra environment variables to be set on Node container                     | `{}`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                        | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                           | `nil`                                                   |
-| `mongodb.enabled`                       | Wheter to install or not the MongoDB chart                                  | `true`                                                  |
-| `mongodb.auth.enabled`                  | Wheter to enable auth or not for the MongoDB chart                          | `true`                                                  |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB chart                                  | `true`                                                  |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB chart                          | `true`                                                  |
 | `mongodb.auth.rootPassword`             | MongoDB admin password                                                      | `nil`                                                   |
 | `mongodb.auth.username`                 | MongoDB custom user                                                         | `user`                                                  |
 | `mongodb.auth.database`                 | MongoDB custom database                                                     | `test_db`                                               |
@@ -167,6 +167,7 @@ The following table lists the configurable parameters of the Node chart and thei
 | `service.annotations`                   | Annotations for the Service                                                 | {}                                                      |
 | `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`                           | `nil`                                                   |
 | `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`                    | `nil`                                                   |
+| `service.loadBalancerSourceRanges`      | Limits which client IP's can access the Network Load Balancer               | `0.0.0.0/0`                                         	  |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                                                 |
 | `ingress.hosts[0].name`                 | Hostname to your Node installation                                          | `node.local`                                            |
 | `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                                     |

@@ -3,8 +3,8 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ include "thanos.fullname" . }}-query
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
 spec:
   fsGroup:

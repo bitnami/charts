@@ -2,7 +2,7 @@
 kind: NetworkPolicy
 apiVersion: {{ template "postgresql.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -20,7 +20,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "postgresql.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
           {{- if .Values.networkPolicy.explicitNamespacesSelector }}
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
