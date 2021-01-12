@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "grafana.fullname" . }}-envvars
+  name: {{ include "common.names.fullname" . }}-envvars
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: grafana
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
   {{- if .Values.imageRenderer.enabled }}
   {{- $domain := .Values.clusterDomain }}
   {{- $namespace := .Release.Namespace }}
-  GF_RENDERING_SERVER_URL: "http://{{ include "grafana.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.port }}/render"
-  GF_RENDERING_CALLBACK_URL: "http://{{ include "grafana.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.port }}/"
+  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.port }}/render"
+  GF_RENDERING_CALLBACK_URL: "http://{{ include "common.names.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.port }}/"
   {{- end }}
   {{- if .Values.plugins }}
   GF_INSTALL_PLUGINS: {{ .Values.plugins | quote }}
