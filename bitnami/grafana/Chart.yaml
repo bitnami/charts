@@ -24,4 +24,4 @@ name: grafana
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana
   - https://grafana.com/
-version: 4.2.5
+version: 5.0.0
