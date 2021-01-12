@@ -439,6 +439,7 @@ metrics:
 ## Properties for Elasticsearch
 ##
 elasticsearch:
+  tls: false
   hosts:
   # - elasticsearch-1
   # - elasticsearch-2
