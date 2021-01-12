@@ -59,7 +59,7 @@ solr:
   image:
     registry: docker.io
     repository: bitnami/solr
-    tag: latest
+    tag: 8.7.0-debian-10-r66
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -380,8 +380,12 @@ serviceAccount:
   ##
   name:
 
-## %%SUBCHART_CONTAINER/POD_DESCRIPTION%%
+
+##
+## Zookeeper chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
 ##
 zookeeper:
   enabled: true
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_SUBCHART%%
+  
