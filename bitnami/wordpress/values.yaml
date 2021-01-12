@@ -446,6 +446,13 @@ ingress:
   ##
   path: /
 
+  ## Alternative host names. This will add SANs (Subject Alternative Names) to the cert so
+  ## that one SSL certificate covers multiple names. The hosts here will map to ingress.path.
+  ##
+  ## If you want a separate certificate, use ingress.extraTls.hosts, ingress.extraTls.secretName
+  ## for the cert, and ingress.extraHosts.name and ingress.extraHosts.path for the ingress mapping
+  alternativeHostNames: []
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md

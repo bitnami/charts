@@ -159,6 +159,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `ingress.enabled`                  | Enable ingress controller resource                                            | `false`                        |
 | `ingress.certManager`              | Add annotations for cert-manager                                              | `false`                        |
 | `ingress.hostname`                 | Default host for the ingress resource                                         | `wordpress.local`              |
+| `ingress.alternativeHostNames`     | List of additional hosts to add to the SSL cert (SANs) | `[]`              |
 | `ingress.path`                     | Default path for the ingress resource                                         | `/`                            |
 | `ingress.tls`                      | Create TLS Secret                                                             | `false`                        |
 | `ingress.annotations`              | Ingress annotations                                                           | `[]` (evaluated as a template) |
