@@ -50,7 +50,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
-Return the proper InfluxDB image name
+Return the proper InfluxDB(TM) image name
 */}}
 {{- define "influxdb.image" -}}
 {{- $registryName := .Values.image.registry -}}
@@ -73,7 +73,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper InfluxDB Relay image name
+Return the proper InfluxDB Relay(TM) image name
 */}}
 {{- define "influxdb.relay.image" -}}
 {{- $registryName := .Values.relay.image.registry -}}
@@ -206,7 +206,7 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
-Return the InfluxDB credentials secret.
+Return the InfluxDB(TM) credentials secret.
 */}}
 {{- define "influxdb.secretName" -}}
 {{- if .Values.existingSecret -}}
@@ -217,7 +217,7 @@ Return the InfluxDB credentials secret.
 {{- end -}}
 
 {{/*
-Return the InfluxDB configuration configmap.
+Return the InfluxDB(TM) configuration configmap.
 */}}
 {{- define "influxdb.configmapName" -}}
 {{- if .Values.influxdb.existingConfiguration -}}
@@ -228,7 +228,7 @@ Return the InfluxDB configuration configmap.
 {{- end -}}
 
 {{/*
-Return the InfluxDB PVC name.
+Return the InfluxDB(TM) PVC name.
 */}}
 {{- define "influxdb.claimName" -}}
 {{- if .Values.persistence.existingClaim }}
@@ -239,7 +239,7 @@ Return the InfluxDB PVC name.
 {{- end -}}
 
 {{/*
-Return the InfluxDB initialization scripts configmap.
+Return the InfluxDB(TM) initialization scripts configmap.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}
 {{- if .Values.influxdb.initdbScriptsCM -}}
@@ -250,14 +250,14 @@ Return the InfluxDB initialization scripts configmap.
 {{- end -}}
 
 {{/*
-Get the InfluxDB initialization scripts secret.
+Get the InfluxDB(TM) initialization scripts secret.
 */}}
 {{- define "influxdb.initdbScriptsSecret" -}}
 {{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
 {{- end -}}
 
 {{/*
-Return the InfluxDB configuration configmap.
+Return the InfluxDB(TM) configuration configmap.
 */}}
 {{- define "influxdb.relay.configmapName" -}}
 {{- if .Values.relay.existingConfiguration -}}
@@ -268,7 +268,7 @@ Return the InfluxDB configuration configmap.
 {{- end -}}
 
 {{/*
-Return the proper Storage Class for InfluxDB
+Return the proper Storage Class for InfluxDB(TM)
 */}}
 {{- define "influxdb.storageClass" -}}
 {{/*
@@ -338,7 +338,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of InfluxDB - must provide a valid architecture */}}
+{{/* Validate values of InfluxDB(TM) - must provide a valid architecture */}}
 {{- define "influxdb.validateValues.architecture" -}}
 {{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "high-availability") -}}
 influxdb: architecture
@@ -347,7 +347,7 @@ influxdb: architecture
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of InfluxDB - number of replicas */}}
+{{/* Validate values of InfluxDB(TM) - number of replicas */}}
 {{- define "influxdb.validateValues.replicaCount" -}}
 {{- $replicaCount := int .Values.influxdb.replicaCount }}
 {{- if and (eq .Values.architecture "standalone") (gt $replicaCount 1) -}}

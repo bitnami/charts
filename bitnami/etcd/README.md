@@ -107,6 +107,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `service.annotations`                           | Annotations for etcd service                                                                                                                              | `{}`                                                        |
 | `service.loadBalancerIP`                        | loadBalancerIP if etcd service type is `LoadBalancer`                                                                                                     | `nil`                                                       |
 | `service.loadBalancerSourceRanges`              | loadBalancerSourceRanges if etcd service type is `LoadBalancer`                                                                                           | `nil`                                                       |
+| `service.externalIPs`                           | externalIPs for if etcd service                                                                                                                           | `nil`                                                       |
 | `persistence.enabled`                           | Enable persistence using PVC                                                                                                                              | `true`                                                      |
 | `persistence.storageClass`                      | PVC Storage Class for etcd volume                                                                                                                         | `nil`                                                       |
 | `persistence.accessMode`                        | PVC Access Mode for etcd volume                                                                                                                           | `ReadWriteOnce`                                             |
@@ -302,11 +303,13 @@ disasterRecovery.pvc.size=2Gi
 disasterRecovery.pvc.storageClassName=nfs
 ```
 
+If `startFromSnapshot` is enabled at the same time than `disasterRecovery`, the PVC provided via `startFromSnapshot.existingClaim` will be used to store the periodical snapshots.
+
 > **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

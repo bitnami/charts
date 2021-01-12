@@ -37,6 +37,11 @@ spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.initJob.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.initJob.nodeAffinityPreset.type "key" .Values.initJob.nodeAffinityPreset.key "values" .Values.initJob.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.initJob.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.nodeSelector "context" $) | nindent 8 }}

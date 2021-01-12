@@ -6,7 +6,7 @@ For example, the following changes have been introduced:
 - Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
 - Redis and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
-- Uses new Helm chart labels formating.
+- Uses new Helm chart labels formatting.
 - Uses Bitnami container images:
   - non-root by default
   - published for debian-10 and ol-7
@@ -47,7 +47,7 @@ To uninstall/delete the `my-release` deployment:
 $ helm delete --purge my-release
 ```
 
-Additionaly, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
+Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
 
 ## Parameters
 
@@ -140,7 +140,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `persistence.persistentVolumeClaim.trivy.storageClass`        | Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used(the default). Set it to `-` to disable dynamic provisioning                                                                                                                                                                                   | `nil`           |
 | `persistence.persistentVolumeClaim.trivy.accessMode`          | The access mode of the volume                                                                                                                                                                                                                                                                                                                   | `ReadWriteOnce` |
 | `persistence.persistentVolumeClaim.trivy.size`                | The size of the volume                                                                                                                                                                                                                                                                                                                          | `5Gi`           |
-| `persistence.imageChartStorage.disableredirect`               | The configuration for managing redirects from content backends. For backends which do not supported it (such as using minio for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail | `false`         |
+| `persistence.imageChartStorage.disableredirect`               | The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO<sup>TM</sup> for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail | `false`         |
 | `persistence.imageChartStorage.caBundleSecretName`            | Specify the `caBundleSecretName` if the storage service uses a self-signed certificate. The secret must contain keys named `ca.crt` which will be injected into the trust store  of registry's and chartmuseum's containers.                                                                                                                    |                 |
 | `persistence.imageChartStorage.type`                          | The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail | `filesystem`    |
 | `persistence.imageChartStorage.azure.accountname`             | Azure storage type setting: Name of the Azure account                                                                                                                                                                                                                                                                                           | `nil`           |
@@ -310,6 +310,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `core.secretName`           | Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set | `nil`                                                   |
 | `core.livenessProbe`        | Liveness probe configuration for Core                                                                                                                                                                                                                                                    | `Check values.yaml file`                                |
 | `core.readinessProbe`       | Readines probe configuration for Core                                                                                                                                                                                                                                                    | `Check values.yaml file`                                |
+| `core.startupProbe`       | Startup probe configuration for Core                                                                                                                                                                                                                                                    | `Check values.yaml file`                                |
 | `core.extraEnvVars`         | Array containing extra env vars                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `core.extraEnvVarsCM`       | ConfigMap containing extra env vars                                                                                                                                                                                                                                                      | `nil`                                                   |
 | `core.extraEnvVarsSecret`   | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                                                                             | `nil`                                                   |
@@ -318,6 +319,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `core.lifecycleHooks`       | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                                                                                                       | ``                                                      |
 | `core.customLivenessProbe`  | Override default liveness probe                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `core.customReadinessProbe` | Override default readiness probe                                                                                                                                                                                                                                                         | `nil`                                                   |
+| `core.customStartupProbe` | Override default Startup Probe probe                                                                                                                                                                                                                                                         | `nil`                                                   |
 | `core.updateStrategy`       | Deployment update strategy                                                                                                                                                                                                                                                               | `nil`                                                   |
 | `core.extraVolumes`         | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                                                                                       | `nil`                                                   |
 | `core.extraVolumeMounts`    | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                                                                    | `nil`                                                   |
@@ -459,6 +461,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `chartmuseum.absoluteUrl`            | Specify an absolute URL for ChartMuseum registry                                                                                                | `false`                                                 |
 | `chartmuseum.chartRepoName`          | Specify the endpoint for the chartmuseum registry. Only applicable if `chartmuseum.absoluteUrl` is `true`                                       | `chartsRepo`                                            |
 | `chartmuseum.maxUploadSize`          | Maximum upload size                                                                                                                             | `nil`                                                   |
+| `chartmuseum.storageTimestampTolerance`          | Timestamp tolerance size                                                                                                                             | `1s`                                                   |
 | `chartmuseum.maxStorageObjects`      | Maximum storage objects                                                                                                                         | `nil`                                                   |
 | `chartmuseum.tls.existingSecret`       | Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated    | `nil`                 |
 | `chartmuseum.depth`                  | Support for multitenancy. More info [here](https://chartmuseum.com/docs/#multitenancy)                                                          | `1`                                                     |
@@ -712,7 +715,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `externalDatabase.notarySignerDatabase` | External database name for notary signer                                                                  | `nil`                            |
 | `externalDatabase.notarySignerUsername` | External database username for notary signer                                                                  | `nil`                            |
 | `externalDatabase.notarySignerPassword`        | External database password for notary signer                                                                          | `nil`                            |
-| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `nil`                            |
+| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`                        |
 
 ### Redis Parameters
 
@@ -881,7 +884,7 @@ Secrets and certificates must be setup to avoid changes on every Helm upgrade (s
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 

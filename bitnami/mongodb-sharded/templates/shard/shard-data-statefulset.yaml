@@ -40,7 +40,7 @@ spec:
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
@@ -199,6 +199,7 @@ spec:
             exec:
               command:
                 - mongo
+                - --disableImplicitSessions
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
@@ -320,7 +321,7 @@ spec:
         {{- if $.Values.common.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            name: {{ include "mongodb-sharded.initScriptsSecret" $ }}
+            secretName: {{ include "mongodb-sharded.initScriptsSecret" $ }}
             defaultMode: 0755
         {{- end }}
         {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}

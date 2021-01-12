@@ -2,8 +2,8 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "thanos.fullname" . }}-bucketweb
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-bucketweb
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
 spec:
   {{- if .Values.bucketweb.pdb.minAvailable }}
@@ -13,6 +13,6 @@ spec:
   maxUnavailable: {{ .Values.bucketweb.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "thanos.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: bucketweb
 {{- end }}

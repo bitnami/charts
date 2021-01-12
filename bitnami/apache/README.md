@@ -55,6 +55,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 |----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `global.imageRegistry`           | Global Docker image registry                                                              | `nil`                                                        |
 | `global.imagePullSecrets`        | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil`                                                        |
 | `image.registry`                 | Apache Docker image registry                                                              | `docker.io`                                                  |
 | `image.repository`               | Apache Docker image name                                                                  | `bitnami/apache`                                             |
 | `image.tag`                      | Apache Docker image tag                                                                   | `{TAG_NAME}`                                                 |
@@ -89,6 +90,9 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `readinessProbe.enabled`         | Enable readiness probe                                                                    | `true`                                                       |
 | `readinessProbe.path`            | Path to access on the HTTP server                                                         | `/`                                                          |
 | `ingress.enabled`                | Enable ingress controller resource                                                        | `false`                                                      |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                             | ``                                                           |
+| `ingress.path`                   | Ingress path                                                                              | `/`                                                          |
+| `ingress.pathType`               | Ingress path type                                                                         | `ImplementationSpecific`                                     |
 | `ingress.hostname`               | Default host for the ingress resource                                                     | `example.local`                                              |
 | `ingress.certManager`            | Add annotations for cert-manager                                                          | `false`                                                      |
 | `ingress.annotations`            | Ingress annotations                                                                       | `[]`                                                         |
@@ -160,13 +164,13 @@ cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.g
 cloneHtdocsFromGit.branch=master
 ```
 
-To use your own `httpd.conf` file you can mount it using the `httpdConfConfigMap` parameter, which is the name of a Config Map with the contents of your `httpd.conf`. Additionaly, you can copy your `httpd.conf` to `/files/httpd.conf` in your current working directory to mount it to the container.
+To use your own `httpd.conf` file you can mount it using the `httpdConfConfigMap` parameter, which is the name of a Config Map with the contents of your `httpd.conf`. Additionally, you can copy your `httpd.conf` to `/files/httpd.conf` in your current working directory to mount it to the container.
 
 You may also want to mount different virtual host configurations. This can be done using the `vhostsConfigMap` value. This is a pointer to a ConfigMap with the desired Apache virtual host configurations. You can also copy your virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a Config Map to the container.
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -186,7 +190,7 @@ This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, whic
 
 ### 6.0.0
 
-This release allows you to use your custom static applicaton. In order to do so, check [this section](#deploying-your-custom-web-application).
+This release allows you to use your custom static application. In order to do so, check [this section](#deploying-your-custom-web-application).
 
 ## Upgrading
 

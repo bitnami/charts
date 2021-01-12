@@ -4,6 +4,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-contour
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
@@ -66,6 +67,9 @@ spec:
             - --config-path=/config/contour.yaml
             {{- if .Values.ingressClass }}
             - --ingress-class-name={{ .Values.ingressClass }}
+            {{- end }}
+            {{- if .Values.contour.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}

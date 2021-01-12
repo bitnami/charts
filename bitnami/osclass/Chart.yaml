@@ -3,9 +3,16 @@ annotations:
 apiVersion: v2
 appVersion: 3.9.0
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
+    tags:
+      - osclass-database
     version: 9.x.x
 description: Osclass is a php script that allows you to quickly create and manage your own free classifieds site.
 engine: gotpl
@@ -24,4 +31,4 @@ name: osclass
 sources:
   - https://github.com/bitnami/bitnami-docker-osclass
   - https://osclass.org/
-version: 8.0.0
+version: 9.0.3

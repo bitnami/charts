@@ -79,7 +79,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+          {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
             - name: configurations
               mountPath: /bitnami/logstash/config
           {{- end }}
@@ -111,7 +111,7 @@ spec:
           {{- end }}
         {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+        {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
         - name: configurations
           configMap:
             name: {{ include "logstash.configmapName" . }}

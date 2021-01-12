@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -38,7 +42,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r27
+  tag: 11.0.3-debian-10-r59
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,7 +71,7 @@ auth:
   ##
   adminUser: user
   adminPassword: ""
-  ## Wildfly managemenet user and password
+  ## Wildfly management user and password
   ##
   managementUser: manager
   managementPassword: ""
@@ -133,7 +137,7 @@ cache:
 ## Keycloak Configuration
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
-## The standalone-ha.xml is auto-generated based on other parameters when this paremeter is not specified
+## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## configuration: |-
@@ -367,7 +371,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## Service configuratiom
+## Service configuration
 ##
 service:
   ## Service type.
@@ -407,7 +411,7 @@ service:
   ##
   annotations: {}
 
-## Ingress configuratiom
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -421,6 +425,18 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: keycloak.local
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -557,7 +573,7 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## HTTP managemenet port
+    ## HTTP management port
     ##
     port: 9990
     ## Annotations for the Prometheus exporter service

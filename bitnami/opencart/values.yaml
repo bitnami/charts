@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/opencart
-  tag: 3.0.3-6-debian-10-r98
+  tag: 3.0.3-6-debian-10-r148
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -77,7 +77,7 @@ allowEmptyPassword: true
 ## Container command (using container default if not set)
 ##
 command:
-## Container args (using container default if ot set)
+## Container args (using container default if not set)
 ##
 args:
 
@@ -503,7 +503,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r209
+    tag: 0.8.0-debian-10-r265
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,11 +1,18 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 10.5.0
+appVersion: 10.6.0
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
+    tags:
+      - owncloud-database
     version: 9.x.x
 description: A file sharing server that puts the control and security of your own data back into your hands.
 engine: gotpl
@@ -24,4 +31,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 9.0.0
+version: 10.0.1

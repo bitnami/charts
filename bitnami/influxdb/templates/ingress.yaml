@@ -18,16 +18,16 @@ spec:
     - host: {{ .name }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ include "influxdb.fullname" $ }}
-              servicePort: http
           {{- if eq $architecture "high-availability" }}
           - path: /write
             backend:
               serviceName: {{ include "influxdb.fullname" $ }}-relay
               servicePort: http
-          {{- end }}
+          {{- end }}        
+          - path: /*
+            backend:
+              serviceName: {{ include "influxdb.fullname" $ }}
+              servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:

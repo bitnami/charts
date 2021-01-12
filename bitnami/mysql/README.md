@@ -85,7 +85,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `auth.replicationPassword`                  | MySQL replication user password. Ignored if existing secret is provided                                              | _random 10 character long alphanumeric string_               |
 | `auth.forcePassword`                        | Force users to specify required passwords                                                                            | `false`                                                      |
 | `auth.usePasswordFiles`                     | Mount credentials as a files instead of using an environment variable                                                | `false`                                                      |
-| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `nil` |
+| `auth.customPasswordFiles`                  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`  |
 | `auth.existingSecret`                       | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password` | `nil` |
 | `initdbScripts`                             | Dictionary of initdb scripts                                                                                         | `nil`                                                        |
 | `initdbScriptsConfigMap`                    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                  | `nil`                                                        |
@@ -379,7 +379,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -399,7 +399,7 @@ $ helm upgrade my-release bitnami/mysql --set auth.rootPassword=[ROOT_PASSWORD]
 
 ### To 8.0.0
 
-- Several parameters were renamed or dissapeared in favor of new ones on this major version:
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
   - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - Credentials parameters are reorganized under the `auth` parameter.
   - `replication.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.

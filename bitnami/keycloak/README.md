@@ -59,14 +59,15 @@ The following tables lists the configurable parameters of the Keycloak chart and
 
 ### Common parameters
 
-| Parameter           | Description                                       | Default                        |
-|---------------------|---------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override keycloak.fullname    | `nil`                          |
-| `fullnameOverride`  | String to fully override keycloak.fullname        | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects             | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                 | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release | `[]` (evaluated as a template) |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override keycloak.fullname                       | `nil`                          |
+| `fullnameOverride`  | String to fully override keycloak.fullname                           | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### Keycloak parameters
 
@@ -154,6 +155,9 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                             | `[]`                           |
 | `service.annotations`              | Annotations for Keycloak service                                                  | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress controller resource                                                | `false`                        |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                     | ``                             |
+| `ingress.path`                     | Ingress path                                                                      | `/`                            |
+| `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
 | `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
 | `ingress.hostname`                 | Default host for the ingress resource                                             | `keycloak.local`               |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
@@ -196,7 +200,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | Parameter                                 | Description                                                                         | Default                                                      |
 |-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                         | Enable exposing Keycloak statistics                                                 | `false`                                                      |
-| `metrics.service.port`                    | Service HTTP managemenet port                                                       | `9990`                                                       |
+| `metrics.service.port`                    | Service HTTP management port                                                       | `9990`                                                       |
 | `metrics.service.annotations`             | Annotations for enabling prometheus to access the metrics endpoints                 | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator        | `false`                                                      |
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                            | `nil`                                                        |
@@ -313,7 +317,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

@@ -12,13 +12,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-## Bitnami InfluxDB image
+## Bitnami InfluxDB(TM) image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 1.8.3-debian-10-r32
+  tag: 1.8.3-debian-10-r88
 
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -47,7 +47,7 @@ image:
 ##
 clusterDomain: cluster.local
 
-## InfluxDB architecture. Allowed values: standalone or high-availability
+## InfluxDB(TM) architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
 
@@ -61,40 +61,40 @@ database: my_database
 ##
 authEnabled: true
 
-## InfluxDB admin credentials
+## InfluxDB(TM) admin credentials
 ##
 adminUser:
   name: admin
   pwd:
   usePasswordFile: false
-## InfluxDB credentials for user with 'admin' privileges on the db specified at 'database' parameter
+## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
 ##
 user:
   name:
   pwd:
   usePasswordFile: false
-## InfluxDB credentials for user with 'read' privileges on the db specified at 'database' parameter
+## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
 ##
 readUser:
   name:
   pwd:
   usePasswordFile: false
-## InfluxDB credentials for user with 'write' privileges on the db specified at 'database' parameter
+## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
 ##
 writeUser:
   name:
   pwd:
   usePasswordFile: false
 
-## Secret with InfluxDB credentials
+## Secret with InfluxDB(TM) credentials
 ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
 ##
 # existingSecret:
 
-## InfluxDB backend parameters
+## InfluxDB(TM) backend parameters
 ##
 influxdb:
-  ## InfluxDB Configuration
+  ## InfluxDB(TM) Configuration
   ## Specify content for influxdb.conf
   ## Alternatively, you can put your influxdb.conf under the files/conf/ directory
   ##
@@ -105,7 +105,7 @@ influxdb:
   #   dir = "/bitnami/influxdb/meta"
   #   ...
 
-  ## ConfigMap with InfluxDB configuration
+  ## ConfigMap with InfluxDB(TM) configuration
   ## NOTE: This will override influxdb.configuration
   ##
   # existingConfiguration:
@@ -137,7 +137,7 @@ influxdb:
   ##
   # extraEnvVars:
 
-  ## Number of InfluxDB replicas to deploy
+  ## Number of InfluxDB(TM) replicas to deploy
   ##
   replicaCount: 1
 
@@ -200,7 +200,7 @@ influxdb:
   ##
   tolerations: []
 
-  ## K8s Security Context for InfluxDB pods
+  ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -208,7 +208,7 @@ influxdb:
     fsGroup: 1001
     runAsUser: 1001
 
-  ## InfluxDB pods' resource requests and limits
+  ## InfluxDB(TM) pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
@@ -223,7 +223,7 @@ influxdb:
     #   cpu: 100m
     #   memory: 128Mi
 
-  ## InfluxDB pods' liveness and readiness probes
+  ## InfluxDB(TM) pods' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -247,16 +247,16 @@ influxdb:
     http: 8086
     rpc: 8088
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
     ##
     type: ClusterIP
-    ## InfluxDB HTTP Port
+    ## InfluxDB(TM) HTTP Port
     ##
     port: 8086
-    ## InfluxDB RPC Port
+    ## InfluxDB(TM) RPC Port
     ##
     rpcPort: 8088
     ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
@@ -282,16 +282,16 @@ influxdb:
     ##
     annotations: {}
 
-## InfluxDB Relay parameters
+## InfluxDB Relay(TM) parameters
 ##
 relay:
-  ## Bitnami InfluxDB Relay image
+  ## Bitnami InfluxDB Relay(TM) image
   ## ref: https://hub.docker.com/r/bitnami/influxdb-relay/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/influxdb-relay
-    tag: 0.20200717.0-scratch-r6
+    tag: 0.20200717.0-scratch-r7
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -302,7 +302,7 @@ relay:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-  ## InfluxDB Relay Configuration
+  ## InfluxDB Relay(TM) Configuration
   ## Specify content for relay.toml
   ## Alternatively, you can put your relay.toml under the files/conf/ directory
   ##
@@ -314,7 +314,7 @@ relay:
     # TCP address to bind to, for HTTP server.
     bind-addr = "0.0.0.0:9096"
 
-    # Array of InfluxDB instances to use as backends for Relay.
+    # Array of InfluxDB(TM) instances to use as backends for Relay.
     output = [
         {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
         {{- $influxdbFullname := include "influxdb.fullname" . }}
@@ -326,12 +326,12 @@ relay:
         {{- end }}
     ]
 
-  ## ConfigMap with InfluxDB Relay configuration
+  ## ConfigMap with InfluxDB Relay(TM) configuration
   ## NOTE: This will override relay.configuration
   ##
   # existingConfiguration:
 
-  ## Number of InfluxDB Relay replicas to deploy
+  ## Number of InfluxDB Relay(TM) replicas to deploy
   ##
   replicaCount: 1
 
@@ -389,7 +389,7 @@ relay:
   ##
   tolerations: []
 
-  ## K8s Security Context for InfluxDB pods
+  ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -397,7 +397,7 @@ relay:
     fsGroup: 1001
     runAsUser: 1001
 
-  ## InfluxDB Relay pods' resource requests and limits
+  ## InfluxDB Relay(TM) pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
@@ -412,7 +412,7 @@ relay:
     #   cpu: 100m
     #   memory: 128Mi
 
-  ## InfluxDB Relay pods' liveness and readiness probes
+  ## InfluxDB Relay(TM) pods' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -435,13 +435,13 @@ relay:
   containerPorts:
     http: 9096
 
-  ## Service paramaters
+  ## Service parameters
   ##
   service:
     ## Service type
     ##
     type: ClusterIP
-    ## InfluxDB Relay HTTP port
+    ## InfluxDB Relay(TM) HTTP port
     ##
     port: 9096
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -465,7 +465,7 @@ relay:
     ##
     annotations: {}
 
-## Ingress paramaters
+## Ingress parameters
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -519,7 +519,7 @@ metrics:
     ## Service type
     ##
     type: ClusterIP
-    ## InfluxDB Prometheus port
+    ## InfluxDB(TM) Prometheus port
     ##
     port: 9122
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -570,19 +570,19 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
-## NetworkPolicy paramaters
+## NetworkPolicy parameters
 ##
 networkPolicy:
   enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client labels will have network access to the ports InfluxDB is listening
-  ## on. When true, InfluxDB will accept connections from any source
+  ## client labels will have network access to the ports InfluxDB(TM) is listening
+  ## on. When true, InfluxDB(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
 
-## Persistence paramaters
+## Persistence parameters
 ##
 persistence:
   enabled: true
@@ -606,7 +606,7 @@ persistence:
   ##
   size: 8Gi
 
-## Init Container paramaters
+## Init Container parameters
 ## Change the owner and group of the persistent volume mountpoint to 'runAsUser:fsGroup'
 ## values from the securityContext section.
 ##
@@ -640,7 +640,7 @@ volumePermissions:
   securityContext:
     runAsUser: 0
 
-## InfluxDB backup parameters
+## InfluxDB(TM) backup parameters
 ##
 backup:
   enabled: false
@@ -651,7 +651,7 @@ backup:
   ##
   retentionDays: 10
   ## Cronjob configuration
-  ## This cronjob is used to create InfluxDB backups
+  ## This cronjob is used to create InfluxDB(TM) backups
   ##
   cronjob:
     ## Schedule in Cron format to save snapshots
@@ -689,7 +689,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.318.0-debian-10-r0
+        tag: 0.322.0-debian-10-r1
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -714,7 +714,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.14.2-debian-10-r1
+        tag: 2.17.1-debian-10-r4
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

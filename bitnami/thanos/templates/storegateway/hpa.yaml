@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "thanos.fullname" . }}-storegateway
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-storegateway
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: {{ include "thanos.fullname" . }}-storegateway
+    name: {{ include "common.names.fullname" . }}-storegateway
   minReplicas: {{ .Values.storegateway.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.storegateway.autoscaling.maxReplicas }}
   metrics:

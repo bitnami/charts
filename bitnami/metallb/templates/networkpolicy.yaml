@@ -1,0 +1,34 @@
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ template "networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "metallb.fullname" . }}-controller
+  labels:
+    app.kubernetes.io/component: controller
+spec:
+  podSelector:
+    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow prometheus scrapes for metrics
+    - ports:
+        - port: {{ .Values.controller.containerPort.metrics }}
+          protocol: TCP
+      {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+      from:
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+      {{- end }}
+{{- end }}

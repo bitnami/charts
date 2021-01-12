@@ -11,6 +11,9 @@ metadata:
 spec:
   type: ClusterIP
   clusterIP: None
+  {{- if .Values.sentinel.enabled }}
+  publishNotReadyAddresses: true
+  {{- end }}
   ports:
     - name: redis
       port: {{ .Values.redisPort }}
