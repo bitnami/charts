@@ -51,136 +51,140 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 
 ### Global parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                 | Global Docker image registry                                                                                         | `nil`                                                        |
-| `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                  | Global storage class for dynamic provisioning                                                                        | `nil`                                                        |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `nameOverride`                         | String to partially override common.names.fullname template with a string (will prepend the release name)            | `nil`                                                        |
-| `fullnameOverride`                     | String to fully override common.names.fullname template with a string                                                | `nil`                                                        |
-| `clusterDomain`                        | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                              |
-| `commonLabels`                         | Labels to add to all deployed objects                                                                                | `{}`                                                         |
-| `commonAnnotations`                    | Annotations to add to all deployed objects                                                                           | `{}`                                                         |
-| `extraDeploy`                          | Array of extra objects to deploy with the release                                                                    | `[]` (evaluated as a template)                               |
+| Parameter           | Description                                                                                               | Default                        |
+|---------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                                                         | `cluster.local`                |
+| `commonLabels`      | Labels to add to all deployed objects                                                                     | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                                | `{}`                           |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `nil`                          |
 
 ### Jenkins parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                       | Jenkins image registry                                                                                               | `docker.io`                                                  |
-| `image.repository`                     | Jenkins Image name                                                                                                   | `bitnami/jenkins`                                            |
-| `image.tag`                            | Jenkins Image tag                                                                                                    | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                     | Jenkins image pull policy                                                                                            | `IfNotPresent`                                               |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `jenkinsUser`                          | User of the application                                                                                              | `user`                                                       |
-| `jenkinsPassword`                      | Application password                                                                                                 | _random 10 character alphanumeric string_                    |
-| `jenkinsHome`                          | Jenkins home directory                                                                                               | `/opt/bitnami/jenkins/jenkins_home`                          |
-| `disableInitialization`                | Allows to disable the initial Bitnami configuration for Jenkins                                                      | `no`                                                         |
-| `javaOpts`                             | Customize JVM parameters                                                                                             | `nil`                                                        |
-| `command`                              | Override default container command (useful when using custom images)                                                 | `nil`                                                        |
-| `args`                                 | Override default container args (useful when using custom images)                                                    | `nil`                                                        |
-| `extraEnvVars`                         | Extra environment variables to be set on Jenkins container                                                           | `{}`                                                         |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                                 | `nil`                                                        |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                    | `nil`                                                        |
+| Parameter               | Description                                                          | Default                                                 |
+|-------------------------|----------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`        | Jenkins image registry                                               | `docker.io`                                             |
+| `image.repository`      | Jenkins Image name                                                   | `bitnami/jenkins`                                       |
+| `image.tag`             | Jenkins Image tag                                                    | `{TAG_NAME}`                                            |
+| `image.pullPolicy`      | Jenkins image pull policy                                            | `IfNotPresent`                                          |
+| `image.pullSecrets`     | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
+| `jenkinsUser`           | User of the application                                              | `user`                                                  |
+| `jenkinsPassword`       | Application password                                                 | _random 10 character alphanumeric string_               |
+| `jenkinsHome`           | Jenkins home directory                                               | `/opt/bitnami/jenkins/jenkins_home`                     |
+| `disableInitialization` | Allows to disable the initial Bitnami configuration for Jenkins      | `no`                                                    |
+| `javaOpts`              | Customize JVM parameters                                             | `nil`                                                   |
+| `command`               | Override default container command (useful when using custom images) | `nil`                                                   |
+| `args`                  | Override default container args (useful when using custom images)    | `nil`                                                   |
+| `extraEnvVars`          | Extra environment variables to be set on Jenkins container           | `{}`                                                    |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `nil`                                                   |
 
 ### Jenkins deployment parameters
 
-| Parameter                               | Description                                                                                                         | Default                                                      |
-|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `podSecurityContext`                    | Jenkins pods' Security Context                                                                                      | Check `values.yaml` file                                     |
-| `containerSecurityContext`              | Jenkins containers' Security Context                                                                                | Check `values.yaml` file                                     |
-| `resources.limits`                      | The resources limits for the Jenkins container                                                                      | `{}`                                                         |
-| `resources.requests`                    | The requested resources for the Jenkins container                                                                   | `{ cpu: "300m", memory: "512Mi" }`                           |
-| `livenessProbe`                         | Liveness probe configuration for Jenkins                                                                            | Check `values.yaml` file                                     |
-| `readinessProbe`                        | Readiness probe configuration for Jenkins                                                                           | Check `values.yaml` file                                     |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                     | `nil`                                                        |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                    | `nil`                                                        |
-| `updateStrategy`                        | Strategy to use to update Pods                                                                                      | Check `values.yaml` file                                     |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                                         |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                                                       |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                         |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                              | `""`                                                         |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                           | `[]`                                                         |
-| `affinity`                              | Affinity for pod assignment                                                                                         | `{}` (evaluated as a template)                               |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                      | `{}` (evaluated as a template)                               |
-| `tolerations`                           | Tolerations for pod assignment                                                                                      | `[]` (evaluated as a template)                               |
-| `podLabels`                             | Extra labels for Jenkins pods                                                                                       | `{}` (evaluated as a template)                               |
-| `podAnnotations`                        | Annotations for Jenkins pods                                                                                        | `{}` (evaluated as a template)                               |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)                                   | `[]`                                                         |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                                                | `[]`                                                         |
-| `initContainers`                        | Add additional init containers to the Jenkins pods                                                                  | `{}` (evaluated as a template)                               |
-| `sidecars`                              | Add additional sidecar containers to the Jenkins pods                                                               | `{}` (evaluated as a template)                               |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                        | `true`                                                       |
-| `persistence.storageClass`              | PVC Storage Class for Jenkins volume                                                                                | `nil` (uses alpha storage class annotation)                  |
-| `persistence.accessMode`                | PVC Access Mode for Jenkins volume                                                                                  | `ReadWriteOnce`                                              |
-| `persistence.size`                      | PVC Storage Request for Jenkins volume                                                                              | `8Gi`                                                        |
-| `persistence.annotations`               | Persistence annotations                                                                                             | `{}`                                                         |
+| Parameter                   | Description                                                                               | Default                                     |
+|-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
+| `podSecurityContext`        | Jenkins pods' Security Context                                                            | Check `values.yaml` file                    |
+| `containerSecurityContext`  | Jenkins containers' Security Context                                                      | Check `values.yaml` file                    |
+| `resources.limits`          | The resources limits for the Jenkins container                                            | `{}`                                        |
+| `resources.requests`        | The requested resources for the Jenkins container                                         | `{ cpu: "300m", memory: "512Mi" }`          |
+| `livenessProbe`             | Liveness probe configuration for Jenkins                                                  | Check `values.yaml` file                    |
+| `readinessProbe`            | Readiness probe configuration for Jenkins                                                 | Check `values.yaml` file                    |
+| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                       |
+| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                       |
+| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file                    |
+| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
+| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
+| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
+| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                        |
+| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
+| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
+| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)              |
+| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)              |
+| `podLabels`                 | Extra labels for Jenkins pods                                                             | `{}` (evaluated as a template)              |
+| `podAnnotations`            | Annotations for Jenkins pods                                                              | `{}` (evaluated as a template)              |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`                                        |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`                                        |
+| `initContainers`            | Add additional init containers to the Jenkins pods                                        | `{}` (evaluated as a template)              |
+| `sidecars`                  | Add additional sidecar containers to the Jenkins pods                                     | `{}` (evaluated as a template)              |
+| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
+| `persistence.storageClass`  | PVC Storage Class for Jenkins volume                                                      | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`    | PVC Access Mode for Jenkins volume                                                        | `ReadWriteOnce`                             |
+| `persistence.size`          | PVC Storage Request for Jenkins volume                                                    | `8Gi`                                       |
+| `persistence.annotations`   | Persistence annotations                                                                   | `{}`                                        |
 
 ### Exposure parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `service.type`                         | Kubernetes Service type                                                                                              | `LoadBalancer`                                               |
-| `service.port`                         | Service HTTP port                                                                                                    | `80`                                                         |
-| `service.httpsPort`                    | Service HTTPS port                                                                                                   | `443`                                                        |
-| `service.nodePorts.http`               | Kubernetes http node port                                                                                            | `""`                                                         |
-| `service.nodePorts.https`              | Kubernetes https node port                                                                                           | `""`                                                         |
-| `service.externalTrafficPolicy`        | Enable client source IP preservation                                                                                 | `Cluster`                                                    |
-| `service.loadBalancerIP`               | LoadBalancer service IP address                                                                                      | `""`                                                         |
-| `service.annotations`                  | Service annotations                                                                                                  | `{}`                                                         |
-| `ingress.enabled`                      | Enable ingress controller resource                                                                                   | `false`                                                      |
-| `ingress.annotations`                  | Ingress annotations                                                                                                  | `{}`                                                         |
-| `ingress.certManager`                  | Add annotations for cert-manager                                                                                     | `false`                                                      |
-| `ingress.hostname`                     | Default host for the ingress resource                                                                                | `jenkins.local`                                              |
-| `ingress.extraHosts[0].name`           | Additional hostnames to be covered                                                                                   | `nil`                                                        |
-| `ingress.extraHosts[0].path`           | Additional hostnames to be covered                                                                                   | `nil`                                                        |
-| `ingress.extraTls[0].hosts[0]`         | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                        |
-| `ingress.extraTls[0].secretName`       | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                        |
-| `ingress.secrets[0].name`              | TLS Secret Name                                                                                                      | `nil`                                                        |
-| `ingress.secrets[0].certificate`       | TLS Secret Certificate                                                                                               | `nil`                                                        |
-| `ingress.secrets[0].key`               | TLS Secret Key                                                                                                       | `nil`                                                        |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.loadBalancerIP`         | LoadBalancer service IP address                          | `""`                           |
+| `service.annotations`            | Service annotations                                      | `{}`                           |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `jenkins.local`                |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
 
 ### Volume Permissions parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| Parameter                              | Description                                                                                                          | Default                                                 |
+|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
 
 ### Metrics parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                      | Start a side-car Jenkins Prometheus exporter                                                                         | `false`                                                      |
-| `metrics.image.registry`               | Jenkins Prometheus exporter image registry                                                                           | `docker.io`                                                  |
-| `metrics.image.repository`             | Jenkins Prometheus exporter image name                                                                               | `bitnami/jenkins-exporter`                                   |
-| `metrics.image.tag`                    | Jenkins Prometheus exporter image tag                                                                                | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`             | Image pull policy                                                                                                    | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`               | Additional annotations for Metrics exporter pod                                                                      | `{}`                                                         |
-| `metrics.resources.limits`             | Jenkins Prometheus exporter resource limits                                                                          | `{}`                                                         |
-| `metrics.resources.requests`           | Jenkins Prometheus exporter resource requests                                                                        | `{}`                                                         |
-| `metrics.service.type`                 | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                  | `ClusterIP`                                                  |
-| `metrics.service.port`                 | Jenkins Prometheus exporter service port                                                                             | `9122`                                                       |
-| `metrics.service.nodePort`             | Kubernetes node port                                                                                                 | `""`                                                         |
-| `metrics.service.annotations`          | Annotations for Jenkins Prometheus exporter service                                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
-| `metrics.service.loadBalancerIP`       | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                        |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)               | `false`                                                      |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                                             | `nil`                                                        |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                         | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                              | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                  | `{}`                                                         |
+| Parameter                              | Description                                                                                            | Default                                                      |
+|----------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                      | Start a side-car Jenkins Prometheus exporter                                                           | `false`                                                      |
+| `metrics.image.registry`               | Jenkins Prometheus exporter image registry                                                             | `docker.io`                                                  |
+| `metrics.image.repository`             | Jenkins Prometheus exporter image name                                                                 | `bitnami/jenkins-exporter`                                   |
+| `metrics.image.tag`                    | Jenkins Prometheus exporter image tag                                                                  | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`             | Image pull policy                                                                                      | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`               | Additional annotations for Metrics exporter pod                                                        | `{}`                                                         |
+| `metrics.resources.limits`             | Jenkins Prometheus exporter resource limits                                                            | `{}`                                                         |
+| `metrics.resources.requests`           | Jenkins Prometheus exporter resource requests                                                          | `{}`                                                         |
+| `metrics.service.type`                 | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`                                                  |
+| `metrics.service.port`                 | Jenkins Prometheus exporter service port                                                               | `9122`                                                       |
+| `metrics.service.nodePort`             | Kubernetes node port                                                                                   | `""`                                                         |
+| `metrics.service.annotations`          | Annotations for Jenkins Prometheus exporter service                                                    | `{prometheus.io/scrape: "true", prometheus.io/port: "9118"}` |
+| `metrics.service.loadBalancerIP`       | loadBalancerIP if service type is `LoadBalancer`                                                       | `nil`                                                        |
+| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                      |
+| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                                        |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                    | `{}`                                                         |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](http://github.com/bitnami/bitnami-docker-jenkins) image documentation.
 
