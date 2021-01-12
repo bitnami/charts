@@ -301,6 +301,8 @@ extraVolumes: []
 ##         ...
 ##       }
 ##
+## Set this flag to true if extraSecrets should be created with <release-name> prepended.
+extraSecretsPrependReleaseName: false
 extraSecrets: {}
 
 ## Number of RabbitMQ replicas to deploy
