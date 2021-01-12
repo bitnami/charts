@@ -32,18 +32,6 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-    {{- $pathType := .Values.ingress.pathType }}
-    {{- $path := .Values.ingress.path }}
-    {{- range $.Values.ingress.alternativeHostNames }}
-    - host: {{ . }}
-      http:
-        paths:
-          - path: {{ $path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-            pathType: {{ $pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
-    {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name | quote }}
       http:
@@ -59,8 +47,8 @@ spec:
     {{- if .Values.ingress.tls }}
     - hosts:
         - {{ .Values.ingress.hostname }}
-        {{- range .Values.ingress.alternativeHostNames }}
-        - {{ . }}
+        {{- range .Values.ingress.extraHosts }}
+        - {{ .name }}
         {{- end }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
