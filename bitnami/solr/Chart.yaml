@@ -1,31 +1,30 @@
 annotations:
-  category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
+  category: Infrastructure
 apiVersion: v2
-appVersion: %%UPSTREAM_PROJECT_VERSION%%
+appVersion: 8.7.0
 dependencies:
-  - condition: SUBCHART_NAME.enabled
-    name: SUBCHART_NAME
+  - condition: zookeeper.enabled
+    name: zookeeper
     repository: https://charts.bitnami.com/bitnami
-    version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
+    version: 6.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: %%DESCRIPTION%%
+description: Apache Solr is an open source enterprise search platform
 engine: gotpl
-home: %%UPSTREAM_PROJECT_URL%%
-icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
+home: https://github.com/bitnami/charts/tree/master/bitnami/solr
+#icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
 keywords:
-  - %%UPSTREAM_PROJECT_KEYWORD%%
-  - %%UPSTREAM_PROJECT_KEYWORD%%
-  - ...
+  - solr
+  - zookeeper
+  - apache
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: %%CHART_NAME%%
+name: solr
 sources:
-  - https://github.com/bitnami/bitnami-docker-%%IMAGE_NAME%%
-  - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
-  - ...
+  - https://github.com/bitnami/bitnami-docker-solr
+  - https://lucene.apache.org/solr/
 version: 0.1.0

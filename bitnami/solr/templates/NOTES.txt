@@ -1,0 +1,3 @@
+** Please wait till the chart deploys **
+
+{{- include "common.warnings.rollingTag" .Values.solr.image }}
