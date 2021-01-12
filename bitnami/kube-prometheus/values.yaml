@@ -738,7 +738,7 @@ prometheus:
       ##
       key: ""
     internal:
-      jobSpecList: []
+      jobList: []
 
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
