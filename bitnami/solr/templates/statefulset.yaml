@@ -4,7 +4,7 @@
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $interBrokerPort := .Values.service.internalPort }}
 {{- $clientPort := .Values.service.port }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "solr.fullname" . }}
