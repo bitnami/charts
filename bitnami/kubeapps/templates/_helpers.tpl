@@ -176,6 +176,14 @@ apprepo-{{ .name }}-secrets
 {{- end -}}
 
 {{/*
+Create name for pinniped-proxy based on the fullname.
+Currently used for a service name only.
+*/}}
+{{- define "kubeapps.pinniped-proxy.fullname" -}}
+{{ template "kubeapps.fullname" . }}-internal-pinniped-proxy
+{{- end -}}
+
+{{/*
 Repositories that include a caCert or an authorizationHeader
 */}}
 {{- define "kubeapps.repos-with-orphan-secrets" -}}
