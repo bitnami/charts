@@ -22,6 +22,12 @@ spec:
     {{- if .Values.metrics.serviceMonitor.interval }}
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     {{- end }}
+    {{- if .Values.metrics.serviceMonitor.relabelings }}
+    relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+    metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+    {{- end }}
   selector:
     matchLabels:
       app: {{ template "redis.name" . }}
