@@ -253,11 +253,13 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
+                - bash
                 - -ec
-                - |-
-                  {{- if .Values.tls.enabled }}OPTIONS="--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert"{{- end }}
-                  mongo --disableImplicitSessions $OPTIONS --eval "db.hello().isWritablePrimary || db.hello().secondary" | grep -q 'true'
+                - |
+                  {{- if .Values.tls.enabled }}
+                  TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+                  {{- end }}
+                  mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
