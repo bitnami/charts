@@ -162,6 +162,9 @@ forwarder:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     enabled: true
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -169,6 +172,9 @@ forwarder:
     failureThreshold: 6
     successThreshold: 1
   readinessProbe:
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
@@ -441,6 +447,9 @@ aggregator:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     enabled: true
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -448,6 +457,9 @@ aggregator:
     failureThreshold: 6
     successThreshold: 1
   readinessProbe:
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
