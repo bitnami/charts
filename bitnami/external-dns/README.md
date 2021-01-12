@@ -269,7 +269,6 @@ You can use the following arguments:
 ```
 --set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
-
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -283,7 +282,6 @@ For instance, to install ExternalDNS on AWS, you need to:
 - Install ExternalDNS chart using the command below:
 
 > Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
-
 ```bash
 $ helm install my-release \
   --set provider=aws \
