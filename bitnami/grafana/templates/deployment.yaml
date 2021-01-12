@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana.fullname" . }}
+  name: {{ include "common.names.fullname" . }}-envvars
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: grafana
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: grafana
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "grafana.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: grafana
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
@@ -36,7 +36,7 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "grafana.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
@@ -44,10 +44,10 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "grafana.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "grafana.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -61,7 +61,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ include "grafana.fullname" . }}-envvars
+                name: {{ include "common.names.fullname" . }}-envvars
           env:
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
@@ -156,13 +156,13 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "grafana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "grafana.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
         {{- end }}
         {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
         - name: ldap
@@ -173,9 +173,9 @@ spec:
         - name: dashboards-provider
           configMap:
             {{- if .Values.dashboardsProvider.configMapName }}
-            name: {{ include "grafana.tplValue" ( dict "value" .Values.dashboardsProvider.configMapName "context" $) }}
+            name: {{ include "common.tplvalues.render" ( dict "value" .Values.dashboardsProvider.configMapName "context" $) }}
             {{- else }}
-            name: {{ include "grafana.fullname" . }}-provider
+            name: {{ include "common.names.fullname" . }}-provider
             {{- end }}
         {{- end }}
         {{- range .Values.dashboardsConfigMaps }}
