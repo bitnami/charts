@@ -10,7 +10,7 @@ dependencies:
     version: 1.x.x
   - name: contour-crds
     version: 1.0.0
-    repository: https://charts.bitnami.com/bitnami/contour
+    repository: https://charts.bitnami.com/bitnami
     tags:
       - contour-crds
 description: Contour Ingress controller for Kubernetes
