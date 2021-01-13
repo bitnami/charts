@@ -16,7 +16,16 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "mongodb.fullname" . }}-headless
+  serviceName: 
+  {{- if .Values.service -}}
+      {{- if .Values.service.servicename }}
+          {{- .Values.service.servicename -}}
+      {{- else -}}
+          {{ include "mongodb.fullname" . }}-headless
+      {{- end -}}
+  {{- else -}}
+      {{ include "mongodb.fullname" . }}-headless
+  {{- end }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
