@@ -26,7 +26,7 @@ extraDeploy: []
 
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   # HTTP Port
   port: 8983
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
