@@ -55,14 +55,15 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 
 ### Common parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override common.names.fullname         | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override common.names.fullname             | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
-| `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
-| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| Parameter                               | Description                                                          | Default                                                 |
+|-----------------------------------------|----------------------------------------------------------------------|---------------------------------------------------------|
+| `nameOverride`                          | String to partially override common.names.fullname                   | `nil`                                                   |
+| `fullnameOverride`                      | String to fully override common.names.fullname                       | `nil`                                                   |
+| `commonLabels`                          | Labels to add to all deployed objects                                | `{}`                                                    |
+| `commonAnnotations`                     | Annotations to add to all deployed objects                           | `{}`                                                    |
+| `clusterDomain`                         | Default Kubernetes cluster domain                                    | `cluster.local`                                         |
+| `extraDeploy`                           | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template)                          |
+| `kubeVersion`                           | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                                                   |
 
 ### phpMyAdmin parameters
 
@@ -124,6 +125,9 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 | `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
 | `service.annotations`                   | Annotations for PhpMyAdmin service                                                       | `{}` (evaluated as a template)                          |
 | `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                            | ``                                                      |
+| `ingress.path`                          | Ingress path                                                                             | `/`                                                     |
+| `ingress.pathType`                      | Ingress path type                                                                        | `ImplementationSpecific`                                |
 | `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
 | `ingress.hostname`                      | Default host for the ingress resource                                                    | `phpmyadmin.local`                                      |
 | `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
