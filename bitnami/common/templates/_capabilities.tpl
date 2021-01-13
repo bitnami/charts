@@ -41,8 +41,10 @@ Return the appropriate apiVersion for statefulset.
 Return the appropriate apiVersion for ingress.
 */}}
 {{- define "common.capabilities.ingress.apiVersion" -}}
+{{- if .Values.ingress -}}
 {{- if .Values.ingress.apiVersion -}}
 {{- .Values.ingress.apiVersion -}}
+{{- end }}
 {{- else if semverCompare "<1.14-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "extensions/v1beta1" -}}
 {{- else if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
