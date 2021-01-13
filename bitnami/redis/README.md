@@ -1,6 +1,9 @@
-# Redis
+# Redis(TM) Chart packaged by Bitnami
 
-[Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
+Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential
+purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
+
+[Redis(TM)](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
 ## TL;DR
 
@@ -18,21 +21,21 @@ $ helm install my-release bitnami/redis --values values-production.yaml
 
 ## Introduction
 
-This chart bootstraps a [Redis](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redis(TM)](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
-### Choose between Redis Helm Chart and Redis Cluster Helm Chart
+### Choose between Redis(TM) Helm Chart and Redis(TM) Cluster Helm Chart
 
-You can choose any of the two Redis Helm charts for deploying a Redis cluster.
-While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster topology with sharding.
+You can choose any of the two Redis(TM) Helm charts for deploying a Redis(TM) cluster.
+While [Redis(TM) Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis(TM) Sentinel, the [Redis(TM) Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis(TM) Cluster topology with sharding.
 The main features of each chart are the following:
 
-| Redis                                     | Redis Cluster                                                |
-|:------------------------------------------|:-------------------------------------------------------------|
-| Supports multiple databases               | Supports only one database. Better if you have a big dataset |
-| Single write point (single master)        | Multiple write points (multiple masters)                     |
-| ![Redis Topology](img/redis-topology.png) | ![Redis Cluster Topology](img/redis-cluster-topology.png)    |
+| Redis(TM)                                     | Redis(TM) Cluster                                                                                                                                   |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supports multiple databases                   | Supports only one database. Better if you have a big dataset                                                                                        |
+| Single write point (single master)            | Multiple write points (multiple masters)                                                                                                            |
+| ![Redis(TM) Topology](img/redis-topology.png) | ![Redis(TM) Cluster Topology](img/redis-cluster-topology.png)                                                                                       |
 
 ## Prerequisites
 
@@ -48,7 +51,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/redis
 ```
 
-The command deploys Redis on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Redis(TM) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -64,17 +67,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Redis chart and their default values.
+The following table lists the configurable parameters of the Redis(TM) chart and their default values.
 
 | Parameter                                     | Description                                                                                                                                         | Default                                                 |
 |:----------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------|
 | `global.imageRegistry`                        | Global Docker image registry                                                                                                                        | `nil`                                                   |
 | `global.imagePullSecrets`                     | Global Docker registry secret names as an array                                                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                         | Global storage class for dynamic provisioning                                                                                                       | `nil`                                                   |
-| `global.redis.password`                       | Redis password (overrides `password`)                                                                                                               | `nil`                                                   |
-| `image.registry`                              | Redis Image registry                                                                                                                                | `docker.io`                                             |
-| `image.repository`                            | Redis Image name                                                                                                                                    | `bitnami/redis`                                         |
-| `image.tag`                                   | Redis Image tag                                                                                                                                     | `{TAG_NAME}`                                            |
+| `global.redis.password`                       | Redis(TM) password (overrides `password`)                                                                                                           | `nil`                                                   |
+| `image.registry`                              | Redis(TM) Image registry                                                                                                                            | `docker.io`                                             |
+| `image.repository`                            | Redis(TM) Image name                                                                                                                                | `bitnami/redis`                                         |
+| `image.tag`                                   | Redis(TM) Image tag                                                                                                                                 | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                            | Image pull policy                                                                                                                                   | `IfNotPresent`                                          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `nameOverride`                                | String to partially override redis.fullname template with a string (will prepend the release name)                                                  | `nil`                                                   |
@@ -85,8 +88,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `existingSecretPasswordKey`                   | Name of key containing password to be retrieved from the existing secret                                                                            | `nil`                                                   |
 | `usePassword`                                 | Use password                                                                                                                                        | `true`                                                  |
 | `usePasswordFile`                             | Mount passwords as files instead of environment variables                                                                                           | `false`                                                 |
-| `password`                                    | Redis password (ignored if existingSecret set)                                                                                                      | Randomly generated                                      |
-| `configmap`                                   | Additional common Redis node configuration (this value is evaluated as a template)                                                                  | See values.yaml                                         |
+| `password`                                    | Redis(TM) password (ignored if existingSecret set)                                                                                                  | Randomly generated                                      |
+| `configmap`                                   | Additional common Redis(TM) node configuration (this value is evaluated as a template)                                                              | See values.yaml                                         |
 | `clusterDomain`                               | Kubernetes DNS Domain name to use                                                                                                                   | `cluster.local`                                         |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                | `false`                                                 |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                          | `true`                                                  |
@@ -104,9 +107,9 @@ The following table lists the configurable parameters of the Redis chart and the
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                                                 |
 | `rbac.role.rules`                             | Rules to create                                                                                                                                     | `[]`                                                    |
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                | `false`                                                 |
-| `metrics.image.registry`                      | Redis exporter image registry                                                                                                                       | `docker.io`                                             |
-| `metrics.image.repository`                    | Redis exporter image name                                                                                                                           | `bitnami/redis-exporter`                                |
-| `metrics.image.tag`                           | Redis exporter image tag                                                                                                                            | `{TAG_NAME}`                                            |
+| `metrics.image.registry`                      | Redis(TM) exporter image registry                                                                                                                   | `docker.io`                                             |
+| `metrics.image.repository`                    | Redis(TM) exporter image name                                                                                                                       | `bitnami/redis-exporter`                                |
+| `metrics.image.tag`                           | Redis(TM) exporter image tag                                                                                                                        | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                                                                                   | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `metrics.extraArgs`                           | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter#flags)                                           | {}                                                      |
@@ -143,30 +146,30 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.statefulset.annotations`              | Additional annotations for redis master StatefulSet                                                                                                 | `{}`                                                    |
 | `master.statefulset.updateStrategy`           | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
 | `master.statefulset.rollingUpdatePartition`   | Partition update strategy                                                                                                                           | `nil`                                                   |
-| `master.podLabels`                            | Additional labels for Redis master pod                                                                                                              | {}                                                      |
-| `master.podAnnotations`                       | Additional annotations for Redis master pod                                                                                                         | {}                                                      |
-| `master.extraEnvVars`                         | Additional Environment Variables passed to the pod of the master's stateful set set                                                                 | `[]`                                                    |
-| `master.extraEnvVarCMs`                       | Additional Environment Variables  ConfigMappassed to the pod of the master's stateful set set                                                       | `[]`                                                    |
-| `master.extraEnvVarsSecret`                   | Additional Environment Variables Secret passed to the master's stateful set                                                                         | `[]`                                                    |
-| `podDisruptionBudget.enabled`                 | Pod Disruption Budget toggle                                                                                                                        | `false`                                                 |
-| `podDisruptionBudget.minAvailable`            | Minimum available pods                                                                                                                              | `1`                                                     |
-| `podDisruptionBudget.maxUnavailable`          | Maximum unavailable pods                                                                                                                            | `nil`                                                   |
-| `redisPort`                                   | Redis port (in both master and slaves)                                                                                                              | `6379`                                                  |
-| `tls.enabled`                                 | Enable TLS support for replication traffic                                                                                                          | `false`                                                 |
-| `tls.authClients`                             | Require clients to authenticate or not                                                                                                              | `true`                                                  |
-| `tls.certificatesSecret`                      | Name of the secret that contains the certificates                                                                                                   | `nil`                                                   |
-| `tls.certFilename`                            | Certificate filename                                                                                                                                | `nil`                                                   |
-| `tls.certKeyFilename`                         | Certificate key filename                                                                                                                            | `nil`                                                   |
-| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                             | `nil`                                                   |
-| `tls.dhParamsFilename`                        | DH params (in order to support DH based ciphers)                                                                                                    | `nil`                                                   |
-| `master.command`                              | Redis master entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`                  | `/run.sh`                                               |
+| `master.podLabels`                            | Additional labels for Redis(TM) master pod                                                                                                          | {}                                                      |
+| `master.podAnnotations`                       | Additional annotations for Redis(TM) master pod                                                                                                     | {}                                                      |
+| `master.extraEnvVars`                         | Additional Environment Variables passed to the pod of the master's stateful set set                                                                | `[]`
+| `master.extraEnvVarCMs`                       | Additional Environment Variables  ConfigMappassed to the pod of the master's stateful set set                                                      | `[]`
+| `master.extraEnvVarsSecret`                   | Additional Environment Variables Secret passed to the master's stateful set                                                                        | `[]`
+| `podDisruptionBudget.enabled`        | Pod Disruption Budget toggle                                                                                                                                                                                                                                                                                                                                                                         | `false`                                                 |
+| `podDisruptionBudget.minAvailable`   | Minimum available pods                                                                                                                                                                                                                                                                                                                                                                               | `1`                                                   |
+| `podDisruptionBudget.maxUnavailable` | Maximum unavailable pods                                                                                                                                                                                                                                                                                                                                                                             | `nil`                                                   |
+| `redisPort`                                   | Redis(TM) port (in both master and slaves)                                                                                                          | `6379`                                                  |
+| `tls.enabled`                                 | Enable TLS support for replication traffic                                                                                                                                                                                               | `false`                                                 |
+| `tls.authClients`                             | Require clients to authenticate or not                                                                                                                                                                                                   | `true`                                                 |
+| `tls.certificatesSecret`                      | Name of the secret that contains the certificates                                                                                                                                                                                          | `nil`                                                   |
+| `tls.certFilename`                            | Certificate filename                                                                                                                                                                                              | `nil`                                                   |
+| `tls.certKeyFilename`                         | Certificate key filename                                                                                                                                                                                              | `nil`                                                   |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                                                                                              |`nil`                                                   |
+| `tls.dhParamsFilename`                        | DH params (in order to support DH based ciphers)                                                                                                                                                                                              |`nil`                                                   |
+| `master.command`                              | Redis(TM) master entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`              | `/run.sh`                                               |
 | `master.preExecCmds`                          | Text to inset into the startup script immediately prior to `master.command`. Use this if you need to run other ad-hoc commands as part of startup   | `nil`                                                   |
-| `master.configmap`                            | Additional Redis configuration for the master nodes (this value is evaluated as a template)                                                         | `nil`                                                   |
-| `master.disableCommands`                      | Array of Redis commands to disable (master)                                                                                                         | `["FLUSHDB", "FLUSHALL"]`                               |
-| `master.extraFlags`                           | Redis master additional command line flags                                                                                                          | []                                                      |
-| `master.nodeSelector`                         | Redis master Node labels for pod assignment                                                                                                         | {"beta.kubernetes.io/arch": "amd64"}                    |
-| `master.tolerations`                          | Toleration labels for Redis master pod assignment                                                                                                   | []                                                      |
-| `master.affinity`                             | Affinity settings for Redis master pod assignment                                                                                                   | {}                                                      |
+| `master.configmap`                            | Additional Redis(TM) configuration for the master nodes (this value is evaluated as a template)                                                     | `nil`                                                   |
+| `master.disableCommands`                      | Array of Redis(TM) commands to disable (master)                                                                                                     | `["FLUSHDB", "FLUSHALL"]`                               |
+| `master.extraFlags`                           | Redis(TM) master additional command line flags                                                                                                      | []                                                      |
+| `master.nodeSelector`                         | Redis(TM) master Node labels for pod assignment                                                                                                     | {"beta.kubernetes.io/arch": "amd64"}                    |
+| `master.tolerations`                          | Toleration labels for Redis(TM) master pod assignment                                                                                               | []                                                      |
+| `master.affinity`                             | Affinity settings for Redis(TM) master pod assignment                                                                                               | {}                                                      |
 | `master.schedulerName`                        | Name of an alternate scheduler                                                                                                                      | `nil`                                                   |
 | `master.service.type`                         | Kubernetes Service type (redis master)                                                                                                              | `ClusterIP`                                             |
 | `master.service.externalTrafficPolicy`        | External traffic policy (when service type is LoadBalancer)                                                                                         | `Cluster`                                               |
@@ -176,7 +179,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.service.labels`                       | Additional labels for redis master service                                                                                                          | {}                                                      |
 | `master.service.loadBalancerIP`               | loadBalancerIP if redis master service type is `LoadBalancer`                                                                                       | `nil`                                                   |
 | `master.service.loadBalancerSourceRanges`     | loadBalancerSourceRanges if redis master service type is `LoadBalancer`                                                                             | `nil`                                                   |
-| `master.resources`                            | Redis master CPU/Memory resource requests/limits                                                                                                    | Memory: `256Mi`, CPU: `100m`                            |
+| `master.resources`                            | Redis(TM) master CPU/Memory resource requests/limits                                                                                                | Memory: `256Mi`, CPU: `100m`                            |
 | `master.livenessProbe.enabled`                | Turn on and off liveness probe (redis master pod)                                                                                                   | `true`                                                  |
 | `master.livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated (redis master pod)                                                                                         | `5`                                                     |
 | `master.livenessProbe.periodSeconds`          | How often to perform the probe (redis master pod)                                                                                                   | `5`                                                     |
@@ -189,8 +192,8 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.readinessProbe.timeoutSeconds`        | When the probe times out (redis master pod)                                                                                                         | `1`                                                     |
 | `master.readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (redis master pod)                                      | `1`                                                     |
 | `master.readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                          | `5`                                                     |
-| `master.shareProcessNamespace`                | Redis Master pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                                   | `false`                                                 |
-| `master.priorityClassName`                    | Redis Master pod priorityClassName                                                                                                                  | `nil`                                                   |
+| `master.shareProcessNamespace`                | Redis(TM) Master pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                               | `false`                                                 |
+| `master.priorityClassName`                    | Redis(TM) Master pod priorityClassName                                                                                                              | `nil`                                                   |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`                                             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                        | `bitnami/minideb`                                       |
@@ -205,13 +208,13 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.service.annotations`                   | annotations for redis slave service                                                                                                                 | {}                                                      |
 | `slave.service.labels`                        | Additional labels for redis slave service                                                                                                           | {}                                                      |
 | `slave.service.port`                          | Kubernetes Service port (redis slave)                                                                                                               | `6379`                                                  |
-| `slave.service.loadBalancerIP`                | LoadBalancerIP if Redis slave service type is `LoadBalancer`                                                                                        | `nil`                                                   |
-| `slave.service.loadBalancerSourceRanges`      | loadBalancerSourceRanges if Redis slave service type is `LoadBalancer`                                                                              | `nil`                                                   |
-| `slave.command`                               | Redis slave entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`                   | `/run.sh`                                               |
+| `slave.service.loadBalancerIP`                | LoadBalancerIP if Redis(TM) slave service type is `LoadBalancer`                                                                                    | `nil`                                                   |
+| `slave.service.loadBalancerSourceRanges`      | loadBalancerSourceRanges if Redis(TM) slave service type is `LoadBalancer`                                                                          | `nil`                                                   |
+| `slave.command`                               | Redis(TM) slave entrypoint string. The command `redis-server` is executed if this is not provided. Note this is prepended with `exec`               | `/run.sh`                                               |
 | `slave.preExecCmds`                           | Text to inset into the startup script immediately prior to `slave.command`. Use this if you need to run other ad-hoc commands as part of startup    | `nil`                                                   |
-| `slave.configmap`                             | Additional Redis configuration for the slave nodes (this value is evaluated as a template)                                                          | `nil`                                                   |
-| `slave.disableCommands`                       | Array of Redis commands to disable (slave)                                                                                                          | `[FLUSHDB, FLUSHALL]`                                   |
-| `slave.extraFlags`                            | Redis slave additional command line flags                                                                                                           | `[]`                                                    |
+| `slave.configmap`                             | Additional Redis(TM) configuration for the slave nodes (this value is evaluated as a template)                                                      | `nil`                                                   |
+| `slave.disableCommands`                       | Array of Redis(TM) commands to disable (slave)                                                                                                      | `[FLUSHDB, FLUSHALL]`                                   |
+| `slave.extraFlags`                            | Redis(TM) slave additional command line flags                                                                                                       | `[]`                                                    |
 | `slave.livenessProbe.enabled`                 | Turn on and off liveness probe (redis slave pod)                                                                                                    | `true`                                                  |
 | `slave.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (redis slave pod)                                                                                          | `5`                                                     |
 | `slave.livenessProbe.periodSeconds`           | How often to perform the probe (redis slave pod)                                                                                                    | `5`                                                     |
@@ -224,7 +227,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.readinessProbe.timeoutSeconds`         | When the probe times out (redis slave pod)                                                                                                          | `1`                                                     |
 | `slave.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (redis slave pod)                                       | `1`                                                     |
 | `slave.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded. (redis slave pod)                                        | `5`                                                     |
-| `slave.shareProcessNamespace`                 | Redis slave pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                                    | `false`                                                 |
+| `slave.shareProcessNamespace`                 | Redis(TM) slave pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                                                | `false`                                                 |
 | `slave.persistence.enabled`                   | Use a PVC to persist data (slave node)                                                                                                              | `true`                                                  |
 | `slave.persistence.path`                      | Path to mount the volume at, to use other images                                                                                                    | `/data`                                                 |
 | `slave.persistence.subPath`                   | Subdirectory of the volume to mount at                                                                                                              | `""`                                                    |
@@ -237,38 +240,38 @@ The following table lists the configurable parameters of the Redis chart and the
 | `slave.statefulset.annotations`               | Additional annotations for redis slave StatefulSet                                                                                                  | `{}`                                                    |
 | `slave.statefulset.updateStrategy`            | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
 | `slave.statefulset.rollingUpdatePartition`    | Partition update strategy                                                                                                                           | `nil`                                                   |
-| `slave.extraEnvVars`                          | Additional Environment Variables passed to the pod of the slave's stateful set set                                                                  | `[]`                                                    |
-| `slave.extraEnvVarCMs`                        | Additional Environment Variables  ConfigMappassed to the pod of the slave's stateful set set                                                        | `[]`                                                    |
-| `masslaveter.extraEnvVarsSecret`              | Additional Environment Variables Secret passed to the slave's stateful set                                                                          | `[]`                                                    |
-| `slave.podLabels`                             | Additional labels for Redis slave pod                                                                                                               | `master.podLabels`                                      |
-| `slave.podAnnotations`                        | Additional annotations for Redis slave pod                                                                                                          | `master.podAnnotations`                                 |
+| `slave.extraEnvVars`                          | Additional Environment Variables passed to the pod of the slave's stateful set set                                                                 | `[]`
+| `slave.extraEnvVarCMs`                        | Additional Environment Variables  ConfigMappassed to the pod of the slave's stateful set set                                                       | `[]`
+| `masslaveter.extraEnvVarsSecret`              | Additional Environment Variables Secret passed to the slave's stateful set                                                                         | `[]`
+| `slave.podLabels`                             | Additional labels for Redis(TM) slave pod                                                                                                           | `master.podLabels`                                      |
+| `slave.podAnnotations`                        | Additional annotations for Redis(TM) slave pod                                                                                                      | `master.podAnnotations`                                 |
 | `slave.schedulerName`                         | Name of an alternate scheduler                                                                                                                      | `nil`                                                   |
-| `slave.resources`                             | Redis slave CPU/Memory resource requests/limits                                                                                                     | `{}`                                                    |
+| `slave.resources`                             | Redis(TM) slave CPU/Memory resource requests/limits                                                                                                 | `{}`                                                    |
 | `slave.affinity`                              | Enable node/pod affinity for slaves                                                                                                                 | {}                                                      |
-| `slave.tolerations`                           | Toleration labels for Redis slave pod assignment                                                                                                    | []                                                      |
-| `slave.spreadConstraints`                     | [Topology Spread Constraints](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) for Redis slave pod              | {}                                                      |
-| `slave.priorityClassName`                     | Redis Slave pod priorityClassName                                                                                                                   | `nil`                                                   |
+| `slave.tolerations`                           | Toleration labels for Redis(TM) slave pod assignment                                                                                                | []                                                      |
+| `slave.spreadConstraints`                     | [Topology Spread Constraints](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) for Redis(TM) slave pod          | {}                                                      |
+| `slave.priorityClassName`                     | Redis(TM) Slave pod priorityClassName                                                                                                               | `nil`                                                   |
 | `sentinel.enabled`                            | Enable sentinel containers                                                                                                                          | `false`                                                 |
 | `sentinel.usePassword`                        | Use password for sentinel containers                                                                                                                | `true`                                                  |
 | `sentinel.masterSet`                          | Name of the sentinel master set                                                                                                                     | `mymaster`                                              |
 | `sentinel.initialCheckTimeout`                | Timeout for querying the redis sentinel service for the active sentinel list                                                                        | `5`                                                     |
 | `sentinel.quorum`                             | Quorum for electing a new master                                                                                                                    | `2`                                                     |
-| `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis node is down                                                                                                          | `60000`                                                 |
+| `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis(TM) node is down                                                                                                      | `60000`                                                 |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                          | `18000`                                                 |
 | `sentinel.parallelSyncs`                      | Number of parallel syncs in the cluster                                                                                                             | `1`                                                     |
-| `sentinel.port`                               | Redis Sentinel port                                                                                                                                 | `26379`                                                 |
-| `sentinel.configmap`                          | Additional Redis configuration for the sentinel nodes (this value is evaluated as a template)                                                       | `nil`                                                   |
+| `sentinel.port`                               | Redis(TM) Sentinel port                                                                                                                             | `26379`                                                 |
+| `sentinel.configmap`                          | Additional Redis(TM) configuration for the sentinel nodes (this value is evaluated as a template)                                                   | `nil`                                                   |
 | `sentinel.staticID`                           | Enable static IDs for sentinel replicas (If disabled IDs will be randomly generated on startup)                                                     | `false`                                                 |
 | `sentinel.service.type`                       | Kubernetes Service type (redis sentinel)                                                                                                            | `ClusterIP`                                             |
 | `sentinel.service.externalTrafficPolicy`      | External traffic policy (when service type is LoadBalancer)                                                                                         | `Cluster`                                               |
 | `sentinel.service.nodePort`                   | Kubernetes Service nodePort (redis sentinel)                                                                                                        | `nil`                                                   |
 | `sentinel.service.annotations`                | annotations for redis sentinel service                                                                                                              | {}                                                      |
 | `sentinel.service.labels`                     | Additional labels for redis sentinel service                                                                                                        | {}                                                      |
-| `sentinel.service.redisPort`                  | Kubernetes Service port for Redis read only operations                                                                                              | `6379`                                                  |
-| `sentinel.service.sentinelPort`               | Kubernetes Service port for Redis sentinel                                                                                                          | `26379`                                                 |
-| `sentinel.service.redisNodePort`              | Kubernetes Service node port for Redis read only operations                                                                                         | ``                                                      |
-| `sentinel.service.sentinelNodePort`           | Kubernetes Service node port for Redis sentinel                                                                                                     | ``                                                      |
-| `sentinel.service.loadBalancerIP`             | LoadBalancerIP if Redis sentinel service type is `LoadBalancer`                                                                                     | `nil`                                                   |
+| `sentinel.service.redisPort`                  | Kubernetes Service port for Redis(TM) read only operations                                                                                          | `6379`                                                  |
+| `sentinel.service.sentinelPort`               | Kubernetes Service port for Redis(TM) sentinel                                                                                                      | `26379`                                                 |
+| `sentinel.service.redisNodePort`              | Kubernetes Service node port for Redis(TM) read only operations                                                                                     | ``                                                      |
+| `sentinel.service.sentinelNodePort`           | Kubernetes Service node port for Redis(TM) sentinel                                                                                                 | ``                                                      |
+| `sentinel.service.loadBalancerIP`             | LoadBalancerIP if Redis(TM) sentinel service type is `LoadBalancer`                                                                                 | `nil`                                                   |
 | `sentinel.livenessProbe.enabled`              | Turn on and off liveness probe (redis sentinel pod)                                                                                                 | `true`                                                  |
 | `sentinel.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (redis sentinel pod)                                                                                       | `5`                                                     |
 | `sentinel.livenessProbe.periodSeconds`        | How often to perform the probe (redis sentinel container)                                                                                           | `5`                                                     |
@@ -281,10 +284,10 @@ The following table lists the configurable parameters of the Redis chart and the
 | `sentinel.readinessProbe.timeoutSeconds`      | When the probe times out (redis sentinel container)                                                                                                 | `1`                                                     |
 | `sentinel.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (redis sentinel container)                              | `1`                                                     |
 | `sentinel.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded. (redis sentinel container)                               | `5`                                                     |
-| `sentinel.resources`                          | Redis sentinel CPU/Memory resource requests/limits                                                                                                  | `{}`                                                    |
-| `sentinel.image.registry`                     | Redis Sentinel Image registry                                                                                                                       | `docker.io`                                             |
-| `sentinel.image.repository`                   | Redis Sentinel Image name                                                                                                                           | `bitnami/redis-sentinel`                                |
-| `sentinel.image.tag`                          | Redis Sentinel Image tag                                                                                                                            | `{TAG_NAME}`                                            |
+| `sentinel.resources`                          | Redis(TM) sentinel CPU/Memory resource requests/limits                                                                                              | `{}`                                                    |
+| `sentinel.image.registry`                     | Redis(TM) Sentinel Image registry                                                                                                                   | `docker.io`                                             |
+| `sentinel.image.repository`                   | Redis(TM) Sentinel Image name                                                                                                                       | `bitnami/redis-sentinel`                                |
+| `sentinel.image.tag`                          | Redis(TM) Sentinel Image tag                                                                                                                        | `{TAG_NAME}`                                            |
 | `sentinel.image.pullPolicy`                   | Image pull policy                                                                                                                                   | `IfNotPresent`                                          |
 | `sentinel.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                    | `nil`                                                   |
 | `sentinel.extraEnvVars`                       | Additional Environment Variables passed to the pod of the sentinel node stateful set set                                                            | `[]`                                                    |
@@ -309,7 +312,7 @@ $ helm install my-release \
     bitnami/redis
 ```
 
-The above command sets the Redis server password to `secretpassword`.
+The above command sets the Redis(TM) server password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -319,7 +322,7 @@ $ helm install my-release -f values.yaml bitnami/redis
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis pod as it attempts to write to the `/bitnami` directory. Consider installing Redis with `--set persistence.enabled=false`. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
+> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis(TM) pod as it attempts to write to the `/bitnami` directory. Consider installing Redis(TM) with `--set persistence.enabled=false`. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Configuration and installation details
 
@@ -351,28 +354,28 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-### Change Redis version
+### Change Redis(TM) version
 
-To modify the Redis version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the Redis(TM) version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Cluster topologies
 
 #### Default: Master-Slave
 
-When installing the chart with `cluster.enabled=true`, it will deploy a Redis master StatefulSet (only one master node allowed) and a Redis slave StatefulSet. The slaves will be read-replicas of the master. Two services will be exposed:
+When installing the chart with `cluster.enabled=true`, it will deploy a Redis(TM) master StatefulSet (only one master node allowed) and a Redis(TM) slave StatefulSet. The slaves will be read-replicas of the master. Two services will be exposed:
 
-   - Redis Master service: Points to the master, where read-write operations can be performed
-   - Redis Slave service: Points to the slaves, where only read operations are allowed.
+   - Redis(TM) Master service: Points to the master, where read-write operations can be performed
+   - Redis(TM) Slave service: Points to the slaves, where only read operations are allowed.
 
 In case the master crashes, the slaves will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
 #### Master-Slave with Sentinel
 
-When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis master StatefulSet (only one master allowed) and a Redis slave StatefulSet. In this case, the pods will contain an extra container with Redis Sentinel. This container will form a cluster of Redis Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `cluster.enabled=true` and `sentinel.enabled=true`, it will deploy a Redis(TM) master StatefulSet (only one master allowed) and a Redis(TM) slave StatefulSet. In this case, the pods will contain an extra container with Redis(TM) Sentinel. This container will form a cluster of Redis(TM) Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
 
-   - Redis service: Exposes port 6379 for Redis read-only operations and port 26379 for accessing Redis Sentinel.
+   - Redis(TM) service: Exposes port 6379 for Redis(TM) read-only operations and port 26379 for accessing Redis(TM) Sentinel.
 
-For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis Sentinel cluster and query the current master using the command below (using redis-cli or similar:
+For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis(TM) Sentinel cluster and query the current master using the command below (using redis-cli or similar:
 
 ```
 SENTINEL get-master-addr-by-name <name of your MasterSet. Example: mymaster>
@@ -382,7 +385,7 @@ This command will return the address of the current master, which can be accesse
 In case the current master crashes, the Sentinel containers will elect a new master node.
 
 ### Using password file
-To use a password file for Redis you need to create a secret containing the password.
+To use a password file for Redis(TM) you need to create a secret containing the password.
 
 > *NOTE*: It is important that the file with the password must be called `redis-password`
 
@@ -430,7 +433,7 @@ The chart optionally can start a metrics exporter for [prometheus](https://prome
 
 ### Host Kernel Settings
 
-Redis may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
+Redis(TM) may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 To do so, you can set up a privileged initContainer with the `sysctlImage` config values, for example:
 
 ```
@@ -565,7 +568,7 @@ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set clus
 
 ## NetworkPolicy
 
-To enable network policy for Redis, install
+To enable network policy for Redis(TM), install
 [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin),
 and set `networkPolicy.enabled` to `true`.
 
@@ -575,7 +578,7 @@ the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ p
     kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
 
 With NetworkPolicy enabled, only pods with the generated client label will be
-able to connect to Redis. This label will be displayed in the output
+able to connect to Redis(TM). This label will be displayed in the output
 after a successful install.
 
 With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
@@ -617,15 +620,15 @@ For releases with `metrics.enabled: true` the default tag for the exporter image
 
 ### To 7.0.0
 
-This version causes a change in the Redis Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
+This version causes a change in the Redis(TM) Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
 
-- Recommended: Create a clone of the Redis Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
+- Recommended: Create a clone of the Redis(TM) Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
    ```
    helm install my-release bitnami/redis --set persistence.existingClaim=<NEW PVC>
    ```
 
-- Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
+- Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis(TM) Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
    ```
    helm delete --purge <RELEASE>
@@ -639,7 +642,7 @@ Some values have changed as well:
 - `master.port` and `slave.port` have been changed to `redisPort` (same value for both master and slaves)
 - `master.securityContext` and `slave.securityContext` have been changed to `securityContext`(same values for both master and slaves)
 
-By default, the upgrade will not change the cluster topology. In case you want to use Redis Sentinel, you must explicitly set `sentinel.enabled` to `true`.
+By default, the upgrade will not change the cluster topology. In case you want to use Redis(TM) Sentinel, you must explicitly set `sentinel.enabled` to `true`.
 
 ### To 6.0.0
 
@@ -667,13 +670,13 @@ It also fixes https://github.com/helm/charts/issues/7726 where a deployment `ext
 
 Finally, it fixes https://github.com/helm/charts/issues/7803 by removing mutable labels in `spec.VolumeClaimTemplate.metadata.labels` so that it is upgradable.
 
-In order to upgrade, delete the Redis StatefulSet before upgrading:
+In order to upgrade, delete the Redis(TM) StatefulSet before upgrading:
 
 ```bash
 kubectl delete statefulsets.apps --cascade=false my-release-redis-master
 ```
 
-And edit the Redis slave (and metrics if enabled) deployment:
+And edit the Redis(TM) slave (and metrics if enabled) deployment:
 
 ```bash
 kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
@@ -709,10 +712,10 @@ When deployed with sentinel enabled, only a group of nodes is deployed and the m
 
 ### To 9.0.0
 
-The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
+The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis(TM) exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
 
 ### To 7.0.0
 
 In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
 
-This version also allows enabling Redis Sentinel containers inside of the Redis Pods (feature disabled by default). In case the master crashes, a new Redis node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).
+This version also allows enabling Redis(TM) Sentinel containers inside of the Redis(TM) Pods (feature disabled by default). In case the master crashes, a new Redis(TM) node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).
