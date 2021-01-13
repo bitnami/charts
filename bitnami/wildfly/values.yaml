@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami WildFly image version
 ## ref: https://hub.docker.com/r/bitnami/wildfly/tags/
 ##
