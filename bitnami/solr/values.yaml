@@ -24,16 +24,11 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## Number of nodes
-##
-replicaCount: 1
 
 service:
   type: LoadBalancer
   # HTTP Port
   port: 8983
-  # HTTPS Port
-  httpsPort: 8983
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -50,169 +45,168 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## %%MAIN_CONTAINER/POD_DESCRIPTION%%
+## Solr Container
 ##
-solr:
+
+# Number of solr instances to run
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: bitnami/solr
+  tag: 8.7.0-debian-10-r66
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+livenessProbe:
   enabled: true
-  # Number of solr instances to run
-  replicaCount: 1  
-  image:
-    registry: docker.io
-    repository: bitnami/solr
-    tag: 8.7.0-debian-10-r66
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Configure extra options for liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  livenessProbe:
-    enabled: true
     #%%httpGet || command || etc%%
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
     #%%httpGet || command || etc%%
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
-  ## ConfigMap with %%MAIN_CONTAINER_NAME%% Configuration
-  ##
-  # existingConfigmap:
+## ConfigMap with Solr Configuration
+##
+# existingConfigmap:
 
-  ## Command and args for running the container (set to default if not set). Use array form
-  ##
-  command: []
-  args: []
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
 
-  ## %%MAIN_CONTAINER_NAME%% resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
-    requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
+## Solr resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 200m
+  #   memory: 10Mi
 
-  ## %%MAIN_CONTAINER_NAME%% containers' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
+## Solr containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
 
-  ## %%MAIN_CONTAINER_NAME%% pods' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
+## Solr pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
 
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
   ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
   ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
   ##
-  podAntiAffinityPreset: soft
+  values: []
 
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
 
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
 
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
-  ## Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
+## Annotations for server pods.
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
 
-  ## Annotations for server pods.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-
-  ## %%MAIN_CONTAINER_NAME%% pods' priority.
+  ## Solr pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   # priorityClassName: ""
 
-  ## lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container to automate configuration before or after startup.
+  ## lifecycleHooks for the Solr container to automate configuration before or after startup.
   ##
-  lifecycleHooks: {}
+lifecycleHooks: {}
 
-  ## Custom Liveness probes for %%MAIN_CONTAINER_NAME%%
+  ## Custom Liveness probes for Solr
   ##
-  customLivenessProbe: {}
+customLivenessProbe: {}
 
-  ## Custom Rediness probes %%MAIN_CONTAINER_NAME%%
+  ## Custom Rediness probes Solr
   ##
-  customReadinessProbe: {}
+customReadinessProbe: {}
 
   ## Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
-  updateStrategy: RollingUpdate
+updateStrategy: RollingUpdate
 
   ## Additional environment variables to set
   ## Example:
@@ -220,25 +214,25 @@ solr:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  extraEnvVars: []
+extraEnvVars: []
 
   ## ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+extraEnvVarsCM:
 
   ## Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+extraEnvVarsSecret:
 
   ## Extra volumes to add to the deployment
   ##
-  extraVolumes: []
+extraVolumes: []
 
   ## Extra volume mounts to add to the container
   ##
-  extraVolumeMounts: []
+extraVolumeMounts: []
 
-  ## Add init containers to the %%MAIN_CONTAINER_NAME%% pods.
+  ## Add init containers to the Solr pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -248,9 +242,9 @@ solr:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+initContainers: {}
 
-  ## Add sidecars to the %%MAIN_CONTAINER_NAME%% pods.
+  ## Add sidecars to the Solr pods.
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -260,17 +254,8 @@ solr:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+sidecars: {}
 
-## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
-##
-#%%SECONDARY_OBJECT_BLOCK%%:
-#  %%SAME_STRUCTURE_AS_THE_MAIN_CONTAINER/POD%%
-
-## %%OTHERS_CONTAINER/POD_DESCRIPTION%%
-##
-#%%OTHER_OBJECT_BLOCK%%:
-#  %%SAME_STRUCTURE_AS_THE_MAIN_CONTAINER/POD%%
 
 ## Persistence parameters
 ##
@@ -388,4 +373,3 @@ serviceAccount:
 ##
 zookeeper:
   enabled: true
-  

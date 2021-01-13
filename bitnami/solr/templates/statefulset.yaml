@@ -1,4 +1,4 @@
-{{- $replicaCount := int .Values.solr.replicaCount }}
+{{- $replicaCount := int .Values.replicaCount }}
 {{- $fullname := include "solr.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
@@ -18,56 +18,56 @@ metadata:
   {{- end }}
 spec:
   podManagementPolicy: Parallel
-  replicas: {{ .Values.solr.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: solr
   serviceName: {{ template "solr.fullname" . }}-headless
   updateStrategy:
-    type: {{ .Values.solr.updateStrategy | quote }}
-    {{- if (eq "OnDelete" .Values.solr.updateStrategy) }}
+    type: {{ .Values.updateStrategy | quote }}
+    {{- if (eq "OnDelete" .Values.updateStrategy) }}
     rollingUpdate: null
-    {{- else if .Values.solr.rollingUpdatePartition }}
+    {{- else if .Values.rollingUpdatePartition }}
     rollingUpdate:
-      partition: {{ .Values.solr.rollingUpdatePartition }}
+      partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: solr
-        {{- if .Values.solr.podLabels }}
+        {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-        {{- if .Values.solr.podAnnotations }}
+        {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
 {{- include "solr.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.solr.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.solr.affinity "context" $) | nindent 8 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.solr.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.solr.podAntiAffinityPreset "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.solr.nodeAffinityPreset.type "key" .Values.solr.nodeAffinityPreset.key "values" .Values.solr.nodeAffinityPreset.values) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if .Values.solr.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.solr.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.solr.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.solr.tolerations "context" $) | nindent 8 }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.solr.priorityClassName }}
-      priorityClassName: {{ .Values.solr.priorityClassName }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
-      {{- if .Values.solr.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.solr.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "solr.serviceAccountName" . }}
       {{- end }}
-      {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.solr.initContainers }}
+      {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -91,52 +91,52 @@ spec:
               mountPath: {{ .Values.logPersistence.mountPath }}
         {{- end }}
 
-        {{- if .Values.solr.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.solr.initContainers "context" $ ) | nindent 8 }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
         - name: solr
           image: {{ include "solr.image" . }}
-          imagePullPolicy: {{ .Values.solr.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- if .Values.solr.args }}
+          {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: SOLR_CORE
               value: "test-core"          
-            {{- if .Values.solr.extraEnvVars }}
+            {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           ports:
             - name: solr-client
               containerPort: 8983
-          {{- if .Values.solr.livenessProbe.enabled }}
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: solr-client
-            initialDelaySeconds: {{ .Values.solr.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.solr.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.solr.livenessProbe.failureThreshold }}
-            periodSeconds: {{ .Values.solr.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.solr.livenessProbe.successThreshold }}
-          {{- else if .Values.solr.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.solr.customLivenessProbe "context" $) | nindent 12 }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.solr.readinessProbe.enabled }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
               port: solr-client
-            initialDelaySeconds: {{ .Values.solr.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.solr.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.solr.readinessProbe.failureThreshold }}
-            periodSeconds: {{ .Values.solr.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.solr.readinessProbe.successThreshold }}
-          {{- else if .Values.solr.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.solr.customReadinessProbe "context" $) | nindent 12 }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.solr.resources }}
+          {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
