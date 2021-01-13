@@ -60,7 +60,6 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `nameOverride`                            | String to partially override rabbitmq.fullname                                                                           | `nil`                                                        |
 | `fullnameOverride`                        | String to fully override rabbitmq.fullname                                                                               | `nil`                                                        |
 | `clusterDomain`                           | Default Kubernetes cluster domain                                                                                        | `cluster.local`                                              |
-| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                          | `nil`                                                        |
 
 ### RabbitMQ parameters
 
@@ -184,9 +183,6 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.labels`                          | Service labels                                                                                                           | `{}` (evaluated as a template)                               |
 | `service.annotations`                     | Service annotations                                                                                                      | `{}` (evaluated as a template)                               |
 | `ingress.enabled`                         | Enable ingress resource for Management console                                                                           | `false`                                                      |
-| `ingress.apiVersion`                      | Force Ingress API version (automatically detected if not set)                                                            | ``                                                           |
-| `ingress.path`                            | Ingress path                                                                                                             | `/`                                                          |
-| `ingress.pathType`                        | Ingress path type                                                                                                        | `ImplementationSpecific`                                     |
 | `ingress.path`                            | Path for the default host                                                                                                | `/`                                                          |
 | `ingress.certManager`                     | Add annotations for cert-manager                                                                                         | `false`                                                      |
 | `ingress.hostname`                        | Default host for the ingress resource                                                                                    | `rabbitmq.local`                                             |

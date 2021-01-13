@@ -8,10 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ##
@@ -727,7 +723,6 @@ ingress:
   ## extraHosts:
   ## - name: rabbitmq.local
   ##   path: /
-  ##   pathType: ImplementationSpecific
   ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
@@ -753,18 +748,6 @@ ingress:
   ##   key:
   ##   certificate:
   ##
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## Ingress Path
-  ##
-  path: /
-
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
 
 ## Prometheus Metrics
 ##
