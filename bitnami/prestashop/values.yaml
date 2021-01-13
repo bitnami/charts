@@ -8,10 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
 ## Bitnami PrestaShop image version
 ## ref: https://hub.docker.com/r/bitnami/prestashop/tags/
 ##
@@ -318,7 +314,6 @@ ingress:
   ## hosts:
   ## - name: prestashop.local
   ##   path: /
-  ##   pathType: ImplementationSpecific
   ##
   hosts:
   ## The tls configuration for the ingress
@@ -345,18 +340,6 @@ ingress:
   # - name: prestashop.local-tls
   #   key:
   #   certificate:
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## Ingress Path
-  ##
-  path: /
-
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
 
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
