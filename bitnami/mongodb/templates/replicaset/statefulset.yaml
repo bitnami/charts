@@ -16,16 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: 
-  {{- if .Values.service -}}
-      {{- if .Values.service.servicename }}
-          {{- .Values.service.servicename -}}
-      {{- else -}}
-          {{ include "mongodb.fullname" . }}-headless
-      {{- end -}}
-  {{- else -}}
-      {{ include "mongodb.fullname" . }}-headless
-  {{- end }}
+  serviceName: {{ include "mongodb.servicename" . }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
@@ -221,7 +212,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-headless"
+              value: "{{ include "mongodb.servicename" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: "{{ include "mongodb.fullname" . }}-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_REPLICA_SET_NAME
