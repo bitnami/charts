@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the phpBB chart and the
 ### Global parameters
 
 | Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+|:--------------------------|:------------------------------------------------|:--------------------------------------------------------|
 | `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
@@ -61,23 +61,24 @@ The following table lists the configurable parameters of the phpBB chart and the
 ### Common parameters
 
 | Parameter           | Description                                                                  | Default                                                 |
-|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
+|:--------------------|:-----------------------------------------------------------------------------|:--------------------------------------------------------|
 | `image.registry`    | phpBB image registry                                                         | `docker.io`                                             |
 | `image.repository`  | phpBB Image name                                                             | `bitnami/phpbb`                                         |
 | `image.tag`         | phpBB Image tag                                                              | `{TAG_NAME}`                                            |
 | `image.pullPolicy`  | phpBB image pull policy                                                      | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override common.names.fullname template                         | `nil`                                                   |
-| `fullnameOverride`  | String to fully override common.names.fullname template                             | `nil`                                                   |
+| `nameOverride`      | String to partially override common.names.fullname template                  | `nil`                                                   |
+| `fullnameOverride`  | String to fully override common.names.fullname template                      | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### phpBB parameters
 
 | Parameter                            | Description                                                                                                                                               | Default                                     |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
+|:-------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------|
 | `affinity`                           | Map of node/pod affinities                                                                                                                                | `{}`                                        |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                                                                  | `yes`                                       |
 | `args`                               | Override default container args (useful when using custom images)                                                                                         | `nil`                                       |
@@ -137,54 +138,57 @@ The following table lists the configurable parameters of the phpBB chart and the
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                           | Default        |
-|----------------------------------|---------------------------------------|----------------|
-| `service.type`                   | Kubernetes Service type               | `LoadBalancer` |
-| `service.port`                   | Service HTTP port                     | `80`           |
-| `service.httpsPort`              | Service HTTPS port                    | `443`          |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`      |
-| `service.nodePorts.http`         | Kubernetes http node port             | `""`           |
-| `service.nodePorts.https`        | Kubernetes https node port            | `""`           |
-| `service.loadBalancerIP`         | loadBalancerIP for phpBB Service    | `nil`          |
-| `ingress.enabled`                | Enable ingress controller resource    | `false`        |
-| `ingress.certManager`            | Add annotations for cert-manager      | `false`        |
-| `ingress.hostname`               | Default host for the ingress resource | `phpbb.local`  |
-| `ingress.annotations`            | Ingress annotations                   | `{}`           |
-| `ingress.hosts[0].name`          | Hostname to your phpBB installation   | `nil`          |
-| `ingress.hosts[0].path`          | Path within the url structure         | `nil`          |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`          |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`          |
-| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`          |
-| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`          |
+| Parameter                        | Description                                                   | Default                  |
+|:---------------------------------|:--------------------------------------------------------------|:-------------------------|
+| `service.type`                   | Kubernetes Service type                                       | `LoadBalancer`           |
+| `service.port`                   | Service HTTP port                                             | `80`                     |
+| `service.httpsPort`              | Service HTTPS port                                            | `443`                    |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                          | `Cluster`                |
+| `service.nodePorts.http`         | Kubernetes http node port                                     | `""`                     |
+| `service.nodePorts.https`        | Kubernetes https node port                                    | `""`                     |
+| `service.loadBalancerIP`         | loadBalancerIP for phpBB Service                              | `nil`                    |
+| `ingress.enabled`                | Enable ingress controller resource                            | `false`                  |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                       |
+| `ingress.path`                   | Ingress path                                                  | `/`                      |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific` |
+| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                  |
+| `ingress.hostname`               | Default host for the ingress resource                         | `phpbb.local`            |
+| `ingress.annotations`            | Ingress annotations                                           | `{}`                     |
+| `ingress.hosts[0].name`          | Hostname to your phpBB installation                           | `nil`                    |
+| `ingress.hosts[0].path`          | Path within the url structure                                 | `nil`                    |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                                                     | `nil`                    |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)                                     | `nil`                    |
+| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                    |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                    |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                    |
 
 ### Database parameters
 
-| Parameter                                  | Description                                                                 | Default                                        |
-|--------------------------------------------|-----------------------------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart                                            | `true`                                         |
-| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)                        | `standalone`                                   |
-| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                                        | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                    | Database name to create                                                     | `bitnami_phpbb`                                |
-| `mariadb.auth.username`                    | Database user to create                                                     | `bn_phpbb`                                     |
-| `mariadb.auth.password`                    | Password for the database                                                   | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                                       | `true`                                         |
-| `mariadb.primary.persistence.existingClaim`| Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas    | `nil`                                          |
-| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes                                     | `[ReadWriteOnce]`                              |
-| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                                             | `8Gi`                                          |
-| `mariadb.primary.persistence.storageClass` | MariaDB primary persistent volume storage Class                             | `nil` (uses alpha storage class annotation)    |
-| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                                          | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db                                        | `bn_phpbb`                                     |
-| `externalDatabase.password`                | Password for the above username                                             | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database                                               | `bitnami_phpbb`                                |
-| `externalDatabase.host`                    | Host of the existing database                                               | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database                                               | `3306`                                         |
-| `externalDatabase.existingSecret`          | Name of the database existing Secret Object                                 | `nil`                                          |
+| Parameter                                   | Description                                                              | Default                                        |
+|:--------------------------------------------|:-------------------------------------------------------------------------|:-----------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                  | `bitnami_phpbb`                                |
+| `mariadb.auth.username`                     | Database user to create                                                  | `bn_phpbb`                                     |
+| `mariadb.auth.password`                     | Password for the database                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas | `nil`                                          |
+| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                          | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                       | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                     | Existing username in the external db                                     | `bn_phpbb`                                     |
+| `externalDatabase.password`                 | Password for the above username                                          | `nil`                                          |
+| `externalDatabase.database`                 | Name of the existing database                                            | `bitnami_phpbb`                                |
+| `externalDatabase.host`                     | Host of the existing database                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                            | `3306`                                         |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                              | `nil`                                          |
 
 ### Metrics parameters
 
 | Parameter                   | Description                                      | Default                                                      |
-|-----------------------------|--------------------------------------------------|--------------------------------------------------------------|
+|:----------------------------|:-------------------------------------------------|:-------------------------------------------------------------|
 | `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                      |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`                                                  |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter`                                    |

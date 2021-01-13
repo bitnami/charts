@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami phpBB image version
 ## ref: https://hub.docker.com/r/bitnami/phpbb/tags/
 ##
@@ -323,6 +327,7 @@ ingress:
   ## hosts:
   ## - name: phpbb.local
   ##   path: /
+  ##   pathType: ImplementationSpecific
   ##
   hosts:
   ## The tls configuration for the ingress
@@ -348,6 +353,18 @@ ingress:
   # - name: phpbb.local-tls
   #   key:
   #   certificate:
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
