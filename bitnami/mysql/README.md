@@ -65,6 +65,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `commonAnnotations`                         | Annotations to add to all deployed objects                                                                           | `[]`                                                         |
 | `schedulerName`                             | Name of the scheduler (other than default) to dispatch pods                                                          | `nil`                                                        |
 | `extraDeploy`                               | Array of extra objects to deploy with the release (evaluated as a template)                                          | `nil`                                                        |
+| `priorityClassName`                         | Name of priority class                                                                                             | `nil`                                                        |
 
 ### MySQL common parameters
 
