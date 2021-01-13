@@ -140,7 +140,7 @@ spec:
       {{- end }}
   {{- end }}
   {{- if eq .Values.ingress.controller "ncp" }}
-  backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.notary-server" .) "servicePort" 4443 "context" $) | nindent 14 }}
+  backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.notary-server" .) "servicePort" 4443 "context" $) | nindent 4 }}
   {{- end }}
   rules:
     - http:
