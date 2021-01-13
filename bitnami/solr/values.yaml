@@ -71,7 +71,7 @@ image:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 livenessProbe:
   enabled: true
-    #%%httpGet || command || etc%%  
+    # %%httpGet || command || etc%%
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -79,7 +79,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
-    #%%httpGet || command || etc%%
+    # %%httpGet || command || etc%%
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 5
