@@ -61,6 +61,7 @@ The following tables lists the configurable parameters of the spark chart and th
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `nameOverride`                              | String to partially override common.names.fullname template with a string (will prepend the release name)                                  | `nil`                                                   |
 | `fullnameOverride`                          | String to fully override common.names.fullname template with a string                                                                      | `nil`                                                   |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                    | `nil`                          |
 
 ### Spark parameters
 
@@ -185,6 +186,9 @@ The following tables lists the configurable parameters of the spark chart and th
 | `service.annotations`                       | Annotations for spark service                                                                                                              | {}                                                      |
 | `service.loadBalancerIP`                    | loadBalancerIP if spark service type is `LoadBalancer`                                                                                     | `nil`                                                   |
 | `ingress.enabled`                           | Enable the use of the ingress controller to access the web UI                                                                              | `false`                                                 |
+| `ingress.apiVersion`                        | Force Ingress API version (automatically detected if not set)                                                                              | ``                                                      |
+| `ingress.path`                              | Ingress path                                                                                                                               | `/`                                                     |
+| `ingress.pathType`                          | Ingress path type                                                                                                                          | `ImplementationSpecific`                                |
 | `ingress.certManager`                       | Add annotations for cert-manager                                                                                                           | `false`                                                 |
 | `ingress.annotations`                       | Ingress annotations                                                                                                                        | `{}`                                                    |
 | `ingress.hosts[0].name`                     | Hostname to your Spark installation                                                                                                        | `spark.local`                                           |
