@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `kubeVersion`                           | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                                         |
 
 ### Wildfly parameters
 
