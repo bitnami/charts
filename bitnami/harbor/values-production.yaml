@@ -311,6 +311,10 @@ nginxImage:
   ##
   debug: false
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -424,6 +428,15 @@ service:
 ##
 ingress:
   enabled: true
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## The list of hostnames to be covered with this ingress record
   ##
   hosts:
@@ -1032,7 +1045,7 @@ core:
   ## Custom Startup probe
   ##
   customStartupProbe: {}
-  
+
   ## An array to add extra env vars
   ## For example:
   ##
