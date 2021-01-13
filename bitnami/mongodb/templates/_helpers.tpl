@@ -28,6 +28,7 @@ Create a default service name which can be overridden.
 {{- else -}}
     {{ include "mongodb.fullname" . }}-headless
 {{- end }}
+{{- end }}
 
 {{/*
 Return the proper MongoDB image name
