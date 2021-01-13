@@ -105,7 +105,7 @@ spec:
           {{- end }}
           env:
             - name: SOLR_CORE
-              value: "test-core"          
+              value: "my-core"            
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

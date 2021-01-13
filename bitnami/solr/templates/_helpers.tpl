@@ -15,12 +15,32 @@ If release name contains chart name it will be used as a full name.
 {{- include "common.names.fullname" . -}}
 {{- end -}}
 
+{{/*
+Create a default fully qualified zookeeper name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "solr.zookeeper.fullname" -}}
+{{- if .Values.zookeeper.fullnameOverride -}}
+{{- .Values.zookeeper.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default "zookeeper" .Values.zookeeper.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+The name of the zookeeper headless service
+*/}}
+{{- define "solr.zookeeper-service-name" -}}
+{{ printf "%s-%s" (include "solr.zookeeper.fullname" .) "headless" | trunc 63 | trimSuffix "-"  }}
+{{- end -}}
+
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "solr.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.solr.image .Values.volumePermissions.image ) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image ) "global" .Values.global) }}
 {{- end -}}
 
 
@@ -28,7 +48,7 @@ Return the proper Docker Image Registry Secret Names
 Return the proper Apache Solr image name
 */}}
 {{- define "solr.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.solr.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -77,18 +97,24 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 {{- end -}}
 
-
 {{/*
-Compile all warnings into a single message.
+Compile all warnings into a single message, and call fail.
 */}}
 {{- define "solr.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "solr.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "solr.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "solr.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Solr - service type for external access */}}
+{{- define "solr.validateValues.externalAccessServiceType" -}}
+{{- if and (not (eq .Values.service.type "NodePort")) (not (eq .Values.service.type "LoadBalancer")) -}}
+solr: service.type
+    Available service type for external access are NodePort or LoadBalancer.
 {{- end -}}
 {{- end -}}

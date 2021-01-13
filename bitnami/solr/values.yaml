@@ -71,7 +71,7 @@ image:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 livenessProbe:
   enabled: true
-    #%%httpGet || command || etc%%
+    #%%httpGet || command || etc%%  
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -94,6 +94,9 @@ readinessProbe:
 ## Command and args for running the container (set to default if not set). Use array form
 ##
 command: []
+  # - 'sh'
+  # - '-c'
+  # - 'solr start -e cloud -z test-solr-zookeeper-headless:2181'
 args: []
 
 ## Solr resource requests and limits
@@ -373,3 +376,10 @@ serviceAccount:
 ##
 zookeeper:
   enabled: true
+
+## This value is only used when zookeeper.enabled is set to false
+##
+externalZookeeper:
+  ## Server or list of external zookeeper servers to use.
+  ##
+  servers: []
