@@ -299,7 +299,6 @@ ingress:
   ## hosts:
   ## - name: suitecrm.local
   ##   path: /
-  ##   pathType: ImplementationSpecific
   ##
   hosts:
   ## The tls configuration for the ingress

@@ -8,10 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
 ## String to partially override scdf.fullname template (will maintain the release name).
 ##
 # nameOverride:
@@ -296,7 +292,6 @@ server:
     ## extraHosts:
     ## - name: dataflow.local
     ##   path: /
-    ##   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -319,18 +314,6 @@ server:
     ## - name: dataflow.local-tls
     ##   key:
     ##   certificate:
-
-    ## Override API Version (automatically detected if not set)
-    ##
-    apiVersion:
-
-    ## Ingress Path
-    ##
-    path: /
-
-    ## Ingress Path type
-    ##
-    pathType: ImplementationSpecific
 
   ## Add init containers to the Dataflow Server pods.
   ## Example:

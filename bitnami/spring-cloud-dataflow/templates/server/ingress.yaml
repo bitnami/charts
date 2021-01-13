@@ -18,21 +18,19 @@ spec:
     - host: {{ .Values.server.ingress.hostname }}
       http:
         paths:
-          - path: {{ .Values.server.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-            pathType: {{ .Values.server.ingress.pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s" (include "common.names.fullname" .) "server") "servicePort" "http" "context" $) | nindent 14 }}
+          - path: /
+            backend:
+              serviceName: {{ include "scdf.fullname" . }}-server
+              servicePort: http
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-            pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s" (include "common.names.fullname" .) "server") "servicePort" "http" "context" $) | nindent 14 }}
+            backend:
+              serviceName: {{ include "scdf.fullname" . }}-server
+              servicePort: http
     {{- end }}
   {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls .Values.server.ingress.hosts }}
   tls:

@@ -71,8 +71,6 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `deployer.volumes`                           | Streaming applications extra volumes                                                                   | `{}`                                                    |
 | `deployer.environmentVariables`              | Streaming applications environment variables                                                           | `""`                                                    |
 | `deployer.podSecurityContext`                | Streaming applications Security Context.                                                               | `{runAsUser: 1001}`                                     |
-| `kubeVersion`                                | Force target Kubernetes version (using Helm capabilities if not set)                                   | `nil`                                                   |
-
 
 ### Dataflow Server parameters
 
@@ -125,9 +123,6 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.service.loadBalancerSourceRanges`    | Address that are allowed when service is LoadBalancer                                                  | `[]`                                                    |
 | `server.service.annotations`                 | Annotations for Dataflow server service                                                                | `{}`                                                    |
 | `server.ingress.enabled`                     | Enable ingress controller resource                                                                     | `false`                                                 |
-| `server.ingress.apiVersion`                         | Force Ingress API version (automatically detected if not set)                                          | ``                                                      |
-| `server.ingress.path`                               | Ingress path                                                                                           | `/`                                                     |
-| `server.ingress.pathType`                           | Ingress path type                                                                                      | `ImplementationSpecific`                                |
 | `server.ingress.certManager`                 | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `server.ingress.hostname`                    | Default host for the ingress resource                                                                  | `dataflow.local`                                        |
 | `server.ingress.annotations`                 | Ingress annotations                                                                                    | `[]`                                                    |
