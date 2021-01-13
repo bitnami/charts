@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami Redmine image version
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
 ##
@@ -516,6 +520,7 @@ ingress:
   ## extraHosts:
   ## - name: redmine.local
   ##   path: /
+  ##   pathType: ImplementationSpecific
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -538,6 +543,18 @@ ingress:
   ## - name: redmine.local-tls
   ##   key:
   ##   certificate:
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
 ## Configure CronJob scheduler for receiving emails and converting them to tasks
 ## ref: http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails

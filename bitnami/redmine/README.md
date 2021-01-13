@@ -73,6 +73,7 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `commonLabels`                       | Labels to add to all deployed objects                                                                                                               | `nil`                                                   |
 | `commonAnnotations`                  | Annotations to add to all deployed objects                                                                                                          | `[]`                                                    |
 | `extraDeploy`                        | Array of extra objects to deploy with the release (evaluated as a template)                                                                         | `nil`                                                   |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                                                | `nil`                                                   |
 
 ### Redmine parameters
 
@@ -248,6 +249,9 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                            | Generated using the `redmine.fullname` macro            |
 | `service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                | `None`                                                  |
 | `ingress.enabled`                    | Enable ingress controller resource                                                                                                                  | `false`                                                 |
+| `ingress.apiVersion`                 | Force Ingress API version (automatically detected if not set)                                                                                       | ``                                                      |
+| `ingress.path`                       | Ingress path                                                                                                                                        | `/`                                                     |
+| `ingress.pathType`                   | Ingress path type                                                                                                                                   | `ImplementationSpecific`                                |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                                                                    | `false`                                                 |
 | `ingress.hostname`                   | Default host for the ingress resource                                                                                                               | `redmine.local`                                         |
 | `ingress.tls`                        | Enable TLS configuration                                                                                                                            | `false`                                                 |
