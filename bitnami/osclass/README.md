@@ -106,7 +106,7 @@ The following table lists the configurable parameters of the Osclass chart and t
 | `containerSecurityContext`              | Osclass containers' Security Context                                                     | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Osclass container                                           | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the Osclass container                                        | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for Osclass                                                | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for Osclass                                                 | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for Osclass                                                | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |

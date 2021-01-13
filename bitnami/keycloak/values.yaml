@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -421,6 +425,18 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: keycloak.local
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see

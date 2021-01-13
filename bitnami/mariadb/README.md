@@ -142,7 +142,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.service.nodePort`                   | MariaDB Primary K8s service node port                                                                                | `nil`                                                        |
 | `primary.service.loadBalancerIP`             | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                     | `nil`                                                        |
 | `primary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB Primary service is LoadBalancer                                                | `[]`                                                         |
-| `primary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                             | `false`                                                      |
+| `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                             | `false`                                                      |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB primary pods that should remain scheduled                                       | `1`                                                          |
 | `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that may be made unavailable                                       | `nil`                                                        |
 
@@ -198,7 +198,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.service.nodePort`                   | MariaDB secondary K8s service node port                                                                               | `nil`                                                        |
 | `secondary.service.loadBalancerIP`             | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `nil`                                                        |
 | `secondary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB secondary service is LoadBalancer                                               | `[]`                                                         |
-| `secondary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                                                      |
+| `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                                                      |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                                                          |
 | `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `nil`                                                        |
 

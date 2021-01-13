@@ -72,7 +72,7 @@ spec:
               value: {{ .Values.db.port | quote }}
             {{- if .Values.db.chartName }}
             - name: DATABASE_HOST
-              value: {{ (include "phpmyadmin.dbfullnamee" .) | quote }}
+              value: {{ (include "phpmyadmin.dbfullname" .) | quote }}
             {{- else if .Values.db.bundleTestDB }}
             - name: DATABASE_HOST
               value: {{ (include "phpmyadmin.mariadb.fullname" .) | quote }}

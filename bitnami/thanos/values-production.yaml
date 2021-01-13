@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.17.2-scratch-r0
+  tag: 0.17.2-scratch-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1649,21 +1649,21 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-## Minio Chart configuration
+## MinIO(TM) Chart configuration
 ##
 minio:
-  ## Set to true to deploy a MinIO chart
+  ## Set to true to deploy a MinIO(TM) chart
   ## to be used as an objstore for Thanos
   ##
   enabled: false
 
-  ## MinIO credentials
+  ## MinIO(TM) credentials
   ##
   accessKey:
     password: ''
   secretKey:
     password: ''
 
-  ## Default MinIO buckets
+  ## Default MinIO(TM) buckets
   ##
   defaultBuckets: 'thanos'

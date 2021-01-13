@@ -694,3 +694,44 @@ externalDatabase:
 ## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
 ##
 customPostInitScripts: {}
+
+##
+## Init containers parameters:
+## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0

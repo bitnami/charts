@@ -689,6 +689,24 @@ metrics:
     selector:
       prometheus: kube-prometheus
 
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    relabelings: []
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    metricRelabelings: []
+    #  - sourceLabels:
+    #      - "__name__"
+    #    targetLabel: "__name__"
+    #    action: replace
+    #    regex: '(.*)'
+    #    replacement: 'example_prefix_$1'
+
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions

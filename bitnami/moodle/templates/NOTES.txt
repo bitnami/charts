@@ -1,14 +1,14 @@
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 *******************************************************************
-*** PLEASE BE PATIENT: Moodle may take a few minutes to install ***
+*** PLEASE BE PATIENT: Moodle(TM) may take a few minutes to install ***
 *******************************************************************
 
-1. Get the Moodle URL:
+1. Get the Moodle(TM) URL:
 
 {{- if .Values.ingress.enabled }}
 
-  You should be able to access your new Moodle installation through
+  You should be able to access your new Moodle(TM) installation through
 
   http://{{- .Values.ingress.hostname }}/
 
@@ -20,11 +20,11 @@
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
-  echo "Moodle URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "Moodle(TM) URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
-  echo "Moodle URL: http://127.0.0.1:8080/"
+  echo "Moodle(TM) URL: http://127.0.0.1:8080/"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- end }}
@@ -35,11 +35,11 @@
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "Moodle URL: http://$NODE_IP:$NODE_PORT/"
+  echo "Moodle(TM) URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
 
-2. Get your Moodle login credentials by running:
+2. Get your Moodle(TM) login credentials by running:
 
   echo Username: {{ .Values.moodleUsername }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
@@ -50,10 +50,10 @@
 ### ERROR: You did not provide an external database host in your 'helm install' call ###
 ########################################################################################
 
-This deployment will be incomplete until you configure Moodle with a resolvable database
-host. To configure Moodle to use and external database host:
+This deployment will be incomplete until you configure Moodle(TM) with a resolvable database
+host. To configure Moodle(TM) to use and external database host:
 
-1. Complete your Moodle deployment by running:
+1. Complete your Moodle(TM) deployment by running:
 
   export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
 

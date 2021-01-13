@@ -309,8 +309,15 @@ master:
     ## If persistence is enable, and this value is defined, then
     ## accept the value as an existing Persistent Volume to which
     ## should be added as match label selector to the volumeClaimTemplate
+    ## Ignored if `selector` is set.
     ##
     # existingVolume: my-persistent-volume
+    ## Configure custom selector for volumeClaimTemplate.
+    ## Current example is equivalent to `existingVolume` setting.
+    ## Using this setting will overwrite `existingVolume`
+    # selector:
+    #   matchLabels:
+    #     volume:
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -621,8 +628,15 @@ data:
     ## If persistence is enable, and this value is defined, then
     ## accept the value as an existing Persistent Volume to which
     ## should be added as match label selector to the volumeClaimTemplate
+    ## Ignored if `selector` is set.
     ##
     # existingVolume: my-persistent-volume
+    ## Configure custom selector for volumeClaimTemplate.
+    ## Current example is equivalent to `existingVolume` setting.
+    ## Using this setting will overwrite `existingVolume`
+    # selector:
+    #   matchLabels:
+    #     volume:
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
