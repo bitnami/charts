@@ -23,20 +23,18 @@ spec:
   - host: {{ .Values.ingress.hostname }}
     http:
       paths:
-        - path: {{ .Values.ingress.path }}
-          {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-          pathType: {{ .Values.ingress.pathType }}
-          {{- end }}
-          backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+        - path: {{ default "/" .path }}
+          backend:
+            serviceName: {{ include "common.names.fullname" $ }}
+            servicePort: 80
   {{- range .Values.ingress.hosts }}
   - host: {{ .name }}
     http:
       paths:
-        - path: {{ default "/" .path }}
-          {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-          pathType: {{ default "ImplementationSpecific" .pathType }}
-          {{- end }}
-          backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+      - path: {{ default "/" .path }}
+        backend:
+          serviceName: {{ include "common.names.fullname" $ }}
+          servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
