@@ -354,11 +354,14 @@ speaker:
 
   ## Defines a secret to use outside of the auto generated
   ## Default: {{ randAlphaNum 256 | b64enc | quote }}
-  ## The auto generated has secretName: {{ "common.names.fullname" }}-memberlist
-  ## and secretKey: secretkey
+  ## The auto generated secret has:
+  ## secretName: {{ "common.names.fullname" }}-memberlist
+  ## secretKey: secretkey
+  ## secretValue: random 256 character alphanumeric string
   ##
   # secretName:
   # secretKey:
+  # secretValue:
 
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
