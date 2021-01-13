@@ -19,10 +19,9 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-            pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend:
+              serviceName: {{ include "spark.master.service.name" $ }}
+              servicePort: http
     {{- end }}
   {{- if .Values.ingress.tls }}
   tls:

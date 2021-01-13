@@ -7,10 +7,6 @@
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
 ##
@@ -422,15 +418,10 @@ ingress:
   hosts:
     - name: spark.local
       path: /
-      pathType: ImplementationSpecific
   tls:
     - hosts:
         - spark.domain.com
       secretName: spark.local-tls
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
 
 ## Metrics configuration
 ##
