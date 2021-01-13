@@ -740,6 +740,16 @@ prometheus:
     internal:
       jobList: []
 
+    ## NOTE additionalScrapeConfigsExternal is deprecated. Please see README.md
+    additionalScrapeConfigsExternal:
+      enabled: false
+      ## Name of the secret that Prometheus should use for the additional scrape configuration
+      ##
+      # name:
+      ## Name of the key inside the secret to be used for the additional scrape configuration.
+      ##
+      # key:
+
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ##

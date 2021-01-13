@@ -242,6 +242,9 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.additionalScrapeConfigs.external.name`         | Name of the secret that Prometheus should use for the additional external scrape configuration          | `nil`                                                                                                                                   |
 | `prometheus.additionalScrapeConfigs.external.key`          | Name of the key inside the secret to be used for the additional external scrape configuration           | `nil`                                                                                                                                   |
 | `prometheus.additionalScrapeConfigs.internal.jobList`      | A list of Prometheus scrape jobs                                                                        | `[]` See [docs](#additional-scrape-configurations) for details.                                                                      |
+| `prometheus.additionalScrapeConfigsExternal.enabled`       | (deprecated) Enable additional scrape configs that are managed externally to this chart                 | `false` See [docs](#additional-scrape-configurations) for details.                                                                      |
+| `prometheus.additionalScrapeConfigsExternal.name`          | (deprecated) Name of the secret that Prometheus should use for the additional scrape configuration      | `nil`                                                                                                                                   |
+| `prometheus.additionalScrapeConfigsExternal.key`           | (deprecated) Name of the key inside the secret to be used for the additional scrape configuration       | `nil`                                                                                                                                   |
 | `prometheus.additionalAlertRelabelConfigsExternal.enabled` | Enable additional Prometheus alert relabel configs that are managed externally to this chart            | `false` See [docs](#additional-alert-relabel-configurations) for details.                                                               |
 | `prometheus.additionalAlertRelabelConfigsExternal.name`    | Name of the secret that Prometheus should use for the additional Prometheus alert relabel configuration | `nil`                                                                                                                                   |
 | `prometheus.additionalAlertRelabelConfigsExternal.key`     | Name of the key inside the secret to be used for the additional Prometheus alert relabel configuration  | `nil`                                                                                                                                   |
@@ -478,6 +481,14 @@ This chart includes a `values-production.yaml` file where you can find some para
 
 ### Additional scrape configurations
 
+The following values have been deprecated. See [Upgrading](#upgrading) below.
+
+```console
+prometheus.additionalScrapeConfigsExternal.enabled
+prometheus.additionalScrapeConfigsExternal.name
+prometheus.additionalScrapeConfigsExternal.key
+```
+
 It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace which the kube-prometheus will be deployed into. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`. For instance, if you created a secret named `kube-prometheus-prometheus-scrape-config` and it contains a file named `additional-scrape-configs.yaml`, use the parameters below:
 
 ```console
@@ -527,6 +538,16 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+
+### To 3.4.0
+
+Some parameters disappeared in favor of new ones:
+
+- `prometheus.additionalScrapeConfigsExternal.enabled` -> deprecated in favor of `prometheus.additionalScrapeConfigs.enabled` and `prometheus.additionalScrapeConfigs.type`.
+- `prometheus.additionalScrapeConfigsExternal.name` -> deprecated in favor of `prometheus.additionalScrapeConfigs.external.name`.
+- `prometheus.additionalScrapeConfigsExternal.key` -> deprecated in favor of `prometheus.additionalScrapeConfigs.external.key`.
+
+Adapt you parameters accordingly if you are external scrape configs.
 
 ### To 3.1.0
 
