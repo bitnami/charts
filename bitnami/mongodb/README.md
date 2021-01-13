@@ -264,6 +264,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `serviceAccount.name`                     | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
 | `serviceAccount.annotations`              | Additional Service Account annotations                                                                     | `{}`                                                    |
 | `rbac.create`                             | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| `podSecurityPolicy.create                 | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false`                                                 |
+| `podSecurityPolicy.spec                   | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/)                         | See values.yaml                                         |
 
 ### Volume Permissions parameters
 

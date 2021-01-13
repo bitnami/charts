@@ -844,6 +844,47 @@ rbac:
   ##
   create: false
 
+## PodSecurityPolicy configuration
+## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
+## won't be created.
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  ## Specifies whether a PodSecurityPolicy should be created
+  ##
+  create: false
+  spec:
+    allowPrivilegeEscalation: false
+    fsGroup:
+      rule: 'MustRunAs'
+      ranges:
+        - min: 1001
+          max: 1001
+    hostIPC: false
+    hostNetwork: false
+    hostPID: false
+    privileged: false
+    readOnlyRootFilesystem: false
+    requiredDropCapabilities:
+      - ALL
+    runAsUser:
+      rule: 'MustRunAs'
+      ranges:
+        - min: 1001
+          max: 1001
+    seLinux:
+      rule: 'RunAsAny'
+    supplementalGroups:
+      rule: 'MustRunAs'
+      ranges:
+        - min: 1001
+          max: 1001
+    volumes:
+      - 'configMap'
+      - 'secret'
+      - 'emptyDir'
+      - 'persistentVolumeClaim'
+
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
