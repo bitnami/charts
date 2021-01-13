@@ -64,9 +64,11 @@ plugins:
 ##
 savedObjects:
   ## List of saved objects URLs
+  ##
   urls:
   # - www.example.com/dashboard.ndjson
   ## ConfigMap with saved objects
+  ##
   configmap:
 
 ## Extra configuration settings
@@ -88,18 +90,22 @@ savedObjects:
 ## Array to add extra configmaps:
 ##
 ## extraEnvVarsCM:
+##
 
 ## Array to add extra configmaps:
 ##
 ## extraEnvVarsSecret:
+##
 
 ## Array to add extra volumes
 ##
 ## extraVolumes:
+##
 
 ## Array to add extra mounts (normally used with extraVolumes)
 ##
 ## extraVolumeMounts: {}
+##
 
 ##
 ## Init containers parameters:
@@ -203,43 +209,88 @@ service:
   # extraPorts:
 
 ## Configure the ingress resource that allows you to access the
-## Kibana web. Set up the URL
+## Kibana installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: kibana.local
+
+  ## The Path to Kibana. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  # annotations:
-  #   kubernetes.io/ingress.class: nginx
+  ##
+  annotations: {}
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: kibana.local
-      path: /
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: kibana.local
+  ##   path: /
+  ##
 
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      #   - www.kibana.local
-      #   - kibana.local
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: kibana.local-tls
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - kibana.local
+  ##   secretName: kibana.local-tls
+  ##
+
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  secrets: []
+  ## - name: kibana.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## SecurityContext configuration
 ##
@@ -278,6 +329,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -314,6 +366,7 @@ tolerations: []
 podAnnotations: {}
 
 ## Extra labels to add to Pod
+##
 podLabels: {}
 
 ## Add sidecars to the pod
@@ -362,17 +415,14 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
