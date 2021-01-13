@@ -1,10 +1,10 @@
 
-# Redis(TM) Cluster Chart packaged by Bitnami
+# Redis<sup>TM</sup> Cluster Chart packaged by Bitnami
+
+[Redis<sup>TM</sup>](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
 Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential
 purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-
-[Redis(TM)](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
 ## TL;DR
 
@@ -20,21 +20,21 @@ $ helm install my-release bitnami/redis-cluster --values values-production.yaml
 
 ## Introduction
 
-This chart bootstraps a [Redis(TM)](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redis<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
-### Choose between Redis(TM) Helm Chart and Redis(TM) Cluster Helm Chart
+### Choose between Redis<sup>TM</sup> Helm Chart and Redis<sup>TM</sup> Cluster Helm Chart
 
-You can choose any of the two Redis(TM) Helm charts for deploying a Redis(TM) cluster.
-While [Redis(TM) Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis(TM) Sentinel, the [Redis(TM) Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis(TM) Cluster with sharding.
+You can choose any of the two Redis<sup>TM</sup> Helm charts for deploying a Redis<sup>TM</sup> cluster.
+While [Redis<sup>TM</sup> Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis<sup>TM</sup> Sentinel, the [Redis<sup>TM</sup> Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis<sup>TM</sup> Cluster with sharding.
 The main features of each chart are the following:
 
-| Redis(TM)                                       | Redis(TM) Cluster                                              |
+| Redis<sup>TM</sup>                                       | Redis<sup>TM</sup> Cluster                                              |
 |-------------------------------------------------|----------------------------------------------------------------|
 | Supports multiple databases                     | Supports only one database. Better if you have a big dataset   |
 | Single write point (single master)              | Multiple write points (multiple masters)                       |
-| ![Redis(TM) Topology](img/redis-topology.png)   | ![Redis(TM) Cluster Topology](img/redis-cluster-topology.png)  |
+| ![Redis<sup>TM</sup> Topology](img/redis-topology.png)   | ![Redis<sup>TM</sup> Cluster Topology](img/redis-cluster-topology.png)  |
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/redis-cluster
 ```
 
-The command deploys Redis(TM) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Redis<sup>TM</sup> on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 NOTE: if you get a timeout error waiting for the hook to complete increase the default timeout (300s) to a higher one, for example:
 
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Redis(TM) chart and their default values.
+The following table lists the configurable parameters of the Redis<sup>TM</sup> chart and their default values.
 
 #### Global parameters
 
@@ -81,16 +81,16 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `global.imageRegistry`                          | Global Docker image registry                                   | `nil`             |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                           | Global storage class for dynamic provisioning                  | `nil`             |
-| `global.redis.password`                         | Redis(TM) password (overrides `password`)                      | `nil`             |
+| `global.redis.password`                         | Redis<sup>TM</sup> password (overrides `password`)                      | `nil`             |
 
 #### Common parameters
 
 
 | Parameter                               | Description                                                                         | Default                                                 |
 |-----------------------------------------|-------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | Redis(TM) Image registry                                                            | `docker.io`                                             |
-| `image.repository`                      | Redis(TM) Image name                                                                | `bitnami/redis`                                         |
-| `image.tag`                             | Redis(TM) Image tag                                                                 | `{TAG_NAME}`                                            |
+| `image.registry`                        | Redis<sup>TM</sup> Image registry                                                            | `docker.io`                                             |
+| `image.repository`                      | Redis<sup>TM</sup> Image name                                                                | `bitnami/redis`                                         |
+| `image.tag`                             | Redis<sup>TM</sup> Image tag                                                                 | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                      | Image pull policy                                                                   | `IfNotPresent`                                          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                    | `nil`                                                   |
 | `nameOverride`                          | String to partially override redis.fullname template with a string                  | `nil`                                                   |
@@ -99,8 +99,8 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `existingSecretPasswordKey`             | Name of key containing password to be retrieved from the existing secret            | `nil`                                                   |
 | `usePassword`                           | Use password                                                                        | `true`                                                  |
 | `usePasswordFile`                       | Mount passwords as files instead of environment variables                           | `false`                                                 |
-| `password`                              | Redis(TM) password (ignored if existingSecret set)                                  | Randomly generated                                      |
-| `configmap`                             | Additional common Redis(TM) node configuration (this value is evaluated as a template)  | See `values.yaml`                                       |
+| `password`                              | Redis<sup>TM</sup> password (ignored if existingSecret set)                                  | Randomly generated                                      |
+| `configmap`                             | Additional common Redis<sup>TM</sup> node configuration (this value is evaluated as a template)  | See `values.yaml`                                       |
 | `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                | `false`                                                 |
 | `networkPolicy.allowExternal`           | Don't require client label for connections                                          | `true`                                                  |
 | `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                                             | `{}`                                                    |
@@ -148,26 +148,26 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `commonAnnotations`                     | Annotations to add to all deployed objects                                          | `[]`                                                    |
 | `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template).        | `nil`                                                   |
 
-#### Redis(TM) statefulset parameters
+#### Redis<sup>TM</sup> statefulset parameters
 
 | Parameter                                  | Description                                                                                           | Default                                                 |
 |--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `redis.port`                               | Redis(TM) port.                                                                                       | `6379`                                                  |
+| `redis.port`                               | Redis<sup>TM</sup> port.                                                                                       | `6379`                                                  |
 | `redis.useAOFPersistence`                  | Enables AOF persistence mode                                                                          | `"yes"`                                                 |
-| `redis.podLabels`                          | Additional labels for Redis(TM) pod                                                                   | {}                                                      |
-| `redis.command`                            | Redis(TM) entrypoint string. The command `redis-server` is executed if this is not provided.          | `nil`                                                   |
+| `redis.podLabels`                          | Additional labels for Redis<sup>TM</sup> pod                                                                   | {}                                                      |
+| `redis.command`                            | Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided.          | `nil`                                                   |
 | `redis.args`                               | Arguments for the provided command if needed                                                          | `nil`                                                   |
 | `redis.schedulerName`                      | Name of an alternate scheduler                                                                        | `nil`                                                   |
-| `redis.configmap`                          | Additional Redis(TM) configuration for the nodes (this value is evaluated as a template)              | `nil`                                                   |
-| `redis.podAffinityPreset`                  | Redis(TM) pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
-| `redis.podAntiAffinityPreset`              | Redis(TM) pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
-| `redis.nodeAffinityPreset.type`            | Redis(TM) node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
-| `redis.nodeAffinityPreset.key`             | Redis(TM) node label key to match Ignored if `redis.affinity` is set.                                 | `""`                                                    |
-| `redis.nodeAffinityPreset.values`          | Redis(TM) node label values to match. Ignored if `redis.affinity` is set.                             | `[]`                                                    |
-| `redis.affinity`                           | Affinity for Redis(TM) pods assignment                                                                | `{}` (evaluated as a template)                          |
-| `redis.nodeSelector`                       | Node labels for Redis(TM) pods assignment                                                             | `{}` (evaluated as a template)                          |
-| `redis.tolerations`                        | Tolerations for Redis(TM) pods assignment                                                             | `[]` (evaluated as a template)                          |
-| `redis.busPort`                            | Port for the Redis(TM) gossip protocol                                                                | `16379`                                                 |
+| `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes (this value is evaluated as a template)              | `nil`                                                   |
+| `redis.podAffinityPreset`                  | Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
+| `redis.podAntiAffinityPreset`              | Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `redis.nodeAffinityPreset.type`            | Redis<sup>TM</sup> node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `redis.nodeAffinityPreset.key`             | Redis<sup>TM</sup> node label key to match Ignored if `redis.affinity` is set.                                 | `""`                                                    |
+| `redis.nodeAffinityPreset.values`          | Redis<sup>TM</sup> node label values to match. Ignored if `redis.affinity` is set.                             | `[]`                                                    |
+| `redis.affinity`                           | Affinity for Redis<sup>TM</sup> pods assignment                                                                | `{}` (evaluated as a template)                          |
+| `redis.nodeSelector`                       | Node labels for Redis<sup>TM</sup> pods assignment                                                             | `{}` (evaluated as a template)                          |
+| `redis.tolerations`                        | Tolerations for Redis<sup>TM</sup> pods assignment                                                             | `[]` (evaluated as a template)                          |
+| `redis.busPort`                            | Port for the Redis<sup>TM</sup> gossip protocol                                                                | `16379`                                                 |
 | `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup. Evaluated as a template                     | ``                                                      |
 | `redis.livenessProbe.enabled`              | Turn on and off liveness probe.                                                                       | `true`                                                  |
 | `redis.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated.                                                             | `30`                                                    |
@@ -181,19 +181,19 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `redis.readinessProbe.timeoutSeconds`      | When the probe times out.                                                                             | `1`                                                     |
 | `redis.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.          | `1`                                                     |
 | `redis.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.            | `5`                                                     |
-| `redis.priorityClassName`                  | Redis(TM) Master pod priorityClassName                                                                | `{}`                                                    |
+| `redis.priorityClassName`                  | Redis<sup>TM</sup> Master pod priorityClassName                                                                | `{}`                                                    |
 | `redis.customLivenessProbe`                | Override default liveness probe                                                                       | `nil`                                                   |
 | `redis.customReadinessProbe`               | Override default readiness probe                                                                      | `nil`                                                   |
 | `redis.extraVolumes`                       | Array of extra volumes to be added to all pods (evaluated as a template)                              | `[]`                                                    |
 | `redis.extraVolumeMounts`                  | Array of extra volume mounts to be added to all pods (evaluated as a template)                        | `[]`                                                    |
-| `redis.affinity`                           | Affinity settings for Redis(TM) pod assignment                                                        | `{}`                                                    |
-| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis(TM) pod                                                     | `[]`                                                    |
+| `redis.affinity`                           | Affinity settings for Redis<sup>TM</sup> pod assignment                                                        | `{}`                                                    |
+| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis<sup>TM</sup> pod                                                     | `[]`                                                    |
 | `redis.extraEnvVars`                       | Array containing extra env vars to be added to all pods (evaluated as a template)                     | `[]`                                                    |
 | `redis.extraEnvVarsCM`                     | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                 | `nil`                                                   |
 | `redis.extraEnvVarsSecret`                 | Secret containing extra env vars to be added to all pods (evaluated as a template)                    | `nil`                                                   |
 | `redis.initContainers`                     | Init containers to add to the cronjob container                                                       | `{}`                                                    |
 | `redis.sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                     | `nil`                                                   |
-| `redis.resources`                          | Redis(TM) CPU/Memory resource requests/limits                                                         | `{Memory: "256Mi", CPU: "100m"}`                        |
+| `redis.resources`                          | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                         | `{Memory: "256Mi", CPU: "100m"}`                        |
 
 #### Cluster initialization job parameters
 
@@ -219,7 +219,7 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `initJob.affinity`                         | Affinity for init job pods assignment                                                                      | `{}` (evaluated as a template)                     |
 | `initJob.nodeSelector`                     | Node labels for init job pods assignment                                                                   | `{}` (evaluated as a template)                     |
 | `initJob.tolerations`                      | Tolerations for init job pods assignment                                                                   | `[]` (evaluated as a template)                     |
-| `initJob.resources`                        | Redis(TM) CPU/Memory resource requests/limits                                                              | `nil`                                              |
+| `initJob.resources`                        | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                              | `nil`                                              |
 | `initJob.priorityClassName`                | Priority class name                                                                                        | `nil`                                              |
 
 #### Cluster update job parameters
@@ -246,23 +246,23 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | `updateJob.affinity`                       | Affinity for update job pods assignment                                                                        | `{}` (evaluated as a template)                 |
 | `updateJob.nodeSelector`                   | Node labels for update job pods assignment                                                                     | `{}` (evaluated as a template)                 |
 | `updateJob.tolerations`                    | Tolerations for update job pods assignment                                                                     | `[]` (evaluated as a template)                 |
-| `updateJob.resources`                      | Redis(TM) CPU/Memory resource requests/limits                                                                  | `nil`                                          |
+| `updateJob.resources`                      | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                                  | `nil`                                          |
 | `updateJob.priorityClassName`              | Priority class name                                                                                            | `nil`                                          |
 
 #### Cluster management parameters
 
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `cluster.init`                                  | Enable the creation of a job that initializes the Redis(TM) Cluster | `true`            |
-| `cluster.nodes`                                 | Number of nodes in the Redis(TM) cluster                       | `6`               |
+| `cluster.init`                                  | Enable the creation of a job that initializes the Redis<sup>TM</sup> Cluster | `true`            |
+| `cluster.nodes`                                 | Number of nodes in the Redis<sup>TM</sup> cluster                       | `6`               |
 | `cluster.replicas`                              | Number of replicas for every master in the cluster             | `1`               |
-| `cluster.externalAccess.enabled`                | Enable access to the Redis(TM) cluster from Outside the Kubernetes Cluster | `false`           |
+| `cluster.externalAccess.enabled`                | Enable access to the Redis<sup>TM</sup> cluster from Outside the Kubernetes Cluster | `false`           |
 | `cluster.externalAccess.service.type`           | Type for the services used to expose every Pod                 | `LoadBalancer`    |
 | `cluster.externalAccess.service.port`           | Port for the services used to expose every Pod                 | `6379`            |
-| `cluster.externalAccess.service.loadBalancerIP` | Array of LoadBalancer IPs used to expose every Pod of the Redis(TM) cluster when `cluster.externalAccess.service.type` is `LoadBalancer` | `[]`              |
-| `cluster.externalAccess.service.annotations`    | Annotations to add to the services used to expose every Pod of the Redis(TM) Cluster | `{}`              |
+| `cluster.externalAccess.service.loadBalancerIP` | Array of LoadBalancer IPs used to expose every Pod of the Redis<sup>TM</sup> cluster when `cluster.externalAccess.service.type` is `LoadBalancer` | `[]`              |
+| `cluster.externalAccess.service.annotations`    | Annotations to add to the services used to expose every Pod of the Redis<sup>TM</sup> Cluster | `{}`              |
 | `cluster.update.addNodes`                       | Boolean to specify if you want to add nodes after the upgrade  | `false`           |
-| `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis(TM)  nodes                  | `6`               |
+| `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis<sup>TM</sup>  nodes                  | `6`               |
 | `cluster.update.newExternalIPs`                 | External IPs obtained from the services for the new nodes to add to the cluster | `nil`             |
 
 #### Metrics sidecar parameters
@@ -270,9 +270,9 @@ The following table lists the configurable parameters of the Redis(TM) chart and
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
 | `metrics.enabled`                               | Start a side-car prometheus exporter                           | `false`           |
-| `metrics.image.registry`                        | Redis(TM) exporter image registry                              | `docker.io`       |
-| `metrics.image.repository`                      | Redis(TM) exporter image name                                  | `bitnami/redis-exporter` |
-| `metrics.image.tag`                             | Redis(TM) exporter image tag                                   | `{TAG_NAME}`      |
+| `metrics.image.registry`                        | Redis<sup>TM</sup> exporter image registry                              | `docker.io`       |
+| `metrics.image.repository`                      | Redis<sup>TM</sup> exporter image name                                  | `bitnami/redis-exporter` |
+| `metrics.image.tag`                             | Redis<sup>TM</sup> exporter image tag                                   | `{TAG_NAME}`      |
 | `metrics.image.pullPolicy`                      | Image pull policy                                              | `IfNotPresent`    |
 | `metrics.image.pullSecrets`                     | Specify docker-registry secret names as an array               | `nil`             |
 | `metrics.extraArgs`                             | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter#flags) | {}                |
@@ -313,7 +313,7 @@ $ helm install my-release \
     bitnami/redis-cluster
 ```
 
-The above command sets the Redis(TM) server password to `secretpassword`.
+The above command sets the Redis<sup>TM</sup> server password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -323,7 +323,7 @@ $ helm install my-release -f values.yaml bitnami/redis-cluster
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis(TM) pod as it attempts to write to the `/bitnami` directory. Consider installing Redis(TM) with `--set persistence.enabled=false`. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
+> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis<sup>TM</sup> pod as it attempts to write to the `/bitnami` directory. Consider installing Redis<sup>TM</sup> with `--set persistence.enabled=false`. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Configuration and installation details
 
@@ -351,26 +351,26 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
-### Change Redis(TM) version
+### Change Redis<sup>TM</sup> version
 
-To modify the Redis(TM) version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the Redis<sup>TM</sup> version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Cluster topology
 
-The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis(TM) Cluster is not accessible from outside the Kubernetes cluster, to access the Redis(TM) Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis(TM) node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
+The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis<sup>TM</sup> Cluster is not accessible from outside the Kubernetes cluster, to access the Redis<sup>TM</sup> Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis<sup>TM</sup> node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
 Using the external access mode, you can connect to any of the pods and the slaves will redirect the client in the same way as explained before, but the all the IPs will be public.
 
-In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis(TM) nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
+In case the master crashes, one of his slaves will be promoted to master. The slots stored by the crashed master will be unavailable until the slave finish the promotion. If a master and all his slaves crash, the cluster will be down until one of them is up again. To avoid downtime, it is possible to configure the number of Redis<sup>TM</sup> nodes with `cluster.nodes` and the number of replicas that will be assigned to each master with `cluster.replicas`. For example:
 
 - `cluster.nodes=9` ( 3 master plus 2 replicas for each master)
 - `cluster.replicas=2`
 
 Providing the values above, the cluster will have 3 masters and, each master, will have 2 replicas.
 
-> NOTE: By default `cluster.init` will be set to `true` in order to initialize the Redis(TM) Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+> NOTE: By default `cluster.init` will be set to `true` in order to initialize the Redis<sup>TM</sup> Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
 #### Adding a new node to the cluster
 
@@ -392,7 +392,7 @@ The cluster will continue up while restarting pods one by one as the quorum is n
 
 ##### External Access
 
-If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis(TM) node and to get a LoadBalancerIP service. For example:
+If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis<sup>TM</sup> node and to get a LoadBalancerIP service. For example:
 
 ```
 helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false bitnami/redis-cluster
@@ -402,7 +402,7 @@ helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.
 
 As we want to add a new node, we are setting `cluster.nodes=7` and we leave empty the LoadBalancerIP for the new node, so the cluster will provide the correct one.
 `REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
-At this point, you will have a new Redis(TM) Pod that will remain in `crashLoopBackOff` state until we provide the LoadBalancerIP for the new service.
+At this point, you will have a new Redis<sup>TM</sup> Pod that will remain in `crashLoopBackOff` state until we provide the LoadBalancerIP for the new service.
 Now, wait until the cluster provides the new LoadBalancerIP for the new service and perform the second upgrade:
 
 ```
@@ -411,7 +411,7 @@ helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.
 
 Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `cluster.update.addNodes=true` to enable the creation of the Job that adds a new node and now we are setting the LoadBalancerIP of the new service instead of leave it empty.
 
-> NOTE: To avoid the creation of the Job that initializes the Redis(TM) Cluster again, you will need to provide `cluster.init=false`.
+> NOTE: To avoid the creation of the Job that initializes the Redis<sup>TM</sup> Cluster again, you will need to provide `cluster.init=false`.
 
 #### Scale down the cluster
 
@@ -423,10 +423,10 @@ helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.
 
 The cluster will continue working during the update as long as the quorum is not lost.
 
-> NOTE: To avoid the creation of the Job that initializes the Redis(TM) Cluster again, you will need to provide `cluster.init=false`.
+> NOTE: To avoid the creation of the Job that initializes the Redis<sup>TM</sup> Cluster again, you will need to provide `cluster.init=false`.
 
 ### Using password file
-To use a password file for Redis(TM) you need to create a secret containing the password.
+To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password.
 
 > *NOTE*: It is important that the file with the password must be called `redis-password`
 
@@ -469,7 +469,7 @@ tls.certCAFilename="ca.pem"
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as Redis(TM) (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Redis<sup>TM</sup> (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -510,7 +510,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 
 ### Host Kernel Settings
-Redis(TM) may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
+Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 To do so, you can set up a privileged initContainer with the `sysctlImage` config values, for example:
 ```
 sysctlImage:
@@ -538,7 +538,7 @@ Note that this will not disable transparent huge tables.
 
 ## Helm Upgrade
 
-By default `cluster.init` will be set to `true` in order to initialize the Redis(TM) Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+By default `cluster.init` will be set to `true` in order to initialize the Redis<sup>TM</sup> Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
 ## Persistence
 
@@ -546,7 +546,7 @@ By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/use
 
 ## NetworkPolicy
 
-To enable network policy for Redis(TM), install
+To enable network policy for Redis<sup>TM</sup>, install
 [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin),
 and set `networkPolicy.enabled` to `true`.
 
@@ -556,7 +556,7 @@ the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ p
     kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
 
 With NetworkPolicy enabled, only pods with the generated client label will be
-able to connect to Redis(TM). This label will be displayed in the output
+able to connect to Redis<sup>TM</sup>. This label will be displayed in the output
 after a successful install.
 
 With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
@@ -607,7 +607,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 3.0.0
 
-This version of the chart adapts the chart to the most recent Bitnami best practices and standards. Most of the Redis(TM) parameters were moved to the `redis` values section (such as extraEnvVars, sidecars, and so on). No major issues are expected during the upgrade.
+This version of the chart adapts the chart to the most recent Bitnami best practices and standards. Most of the Redis<sup>TM</sup> parameters were moved to the `redis` values section (such as extraEnvVars, sidecars, and so on). No major issues are expected during the upgrade.
 
 ### To 2.0.0
 
