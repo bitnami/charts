@@ -104,37 +104,38 @@ The following table lists the configurable parameters of the Odoo chart and thei
 
 ### Odoo parameters
 
-| Parameter                            | Description                                               | Default                                        |
-|--------------------------------------|-----------------------------------------------------------|------------------------------------------------|
-| `odooUsername`                       | User of the application                                   | `user@example.com`                             |
-| `odooPassword`                       | Admin account password                                    | _random 10 character long alphanumeric string_ |
-| `odooEmail`                          | Admin account email                                       | `user@example.com`                             |
-| `smtpHost`                           | SMTP host                                                 | `nil`                                          |
-| `smtpPort`                           | SMTP port                                                 | `nil`                                          |
-| `smtpUser`                           | SMTP user                                                 | `nil`                                          |
-| `smtpPassword`                       | SMTP password                                             | `nil`                                          |
-| `smtpProtocol`                       | SMTP protocol [`ssl`, `tls`]                              | `nil`                                          |
-| `existingSecret`                     | Name of a secret with the application password            | `nil`                                          |
-| `resources`                          | CPU/Memory resource requests/limits                       | Memory: `512Mi`, CPU: `300m`                   |
-| `livenessProbe.enabled`              | Enable/disable the liveness probe                         | `true`                                         |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                  | 300                                            |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                            | 30                                             |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                  | 5                                              |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed      | 6                                              |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes to be considered successful | 1                                              |
-| `readinessProbe.enabled`             | Enable/disable the readiness probe                        | `true`                                         |
-| `readinessProbe.initialDelaySeconds` | Delay before readinessProbe is initiated                  | 30                                             |
-| `readinessProbe.periodSeconds   `    | How often to perform the probe                            | 10                                             |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                  | 5                                              |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures to be considered failed      | 6                                              |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes to be considered successful | 1                                              |
-| `customLivenessProbe`                | Override default liveness probe                           | `nil`                                          |
-| `customReadinessProbe`               | Override default readiness probe                          | `nil`                                          |
-| `command`                            | Custom command to override image cmd                      | `nil` (evaluated as a template)                |
-| `args`                               | Custom args for the custom command                        | `nil` (evaluated as a template)                |
-| `extraEnvVars`                       | An array to add extra env vars                            | `[]` (evaluated as a template)                 |
-| `extraEnvVarsCM`                     | Array to add extra configmaps                             | `[]`                                           |
-| `extraEnvVarsSecret`                 | Array to add extra environment from a Secret              | `nil`                                          |
+| Parameter                            | Description                                                        | Default                                        |
+|--------------------------------------|--------------------------------------------------------------------|------------------------------------------------|
+| `odooUsername`                       | User of the application                                            | `user@example.com`                             |
+| `odooPassword`                       | Admin account password                                             | _random 10 character long alphanumeric string_ |
+| `odooEmail`                          | Admin account email                                                | `user@example.com`                             |
+| `withoutDemo`                        | Disable Odoo modules demo data ('', 'all' or comma-separated list) | `all`                                          |
+| `smtpHost`                           | SMTP host                                                          | `nil`                                          |
+| `smtpPort`                           | SMTP port                                                          | `nil`                                          |
+| `smtpUser`                           | SMTP user                                                          | `nil`                                          |
+| `smtpPassword`                       | SMTP password                                                      | `nil`                                          |
+| `smtpProtocol`                       | SMTP protocol [`ssl`, `tls`]                                       | `nil`                                          |
+| `existingSecret`                     | Name of a secret with the application password                     | `nil`                                          |
+| `resources`                          | CPU/Memory resource requests/limits                                | Memory: `512Mi`, CPU: `300m`                   |
+| `livenessProbe.enabled`              | Enable/disable the liveness probe                                  | `true`                                         |
+| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                           | 300                                            |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                                     | 30                                             |
+| `livenessProbe.timeoutSeconds`       | When the probe times out                                           | 5                                              |
+| `livenessProbe.failureThreshold`     | Minimum consecutive failures to be considered failed               | 6                                              |
+| `livenessProbe.successThreshold`     | Minimum consecutive successes to be considered successful          | 1                                              |
+| `readinessProbe.enabled`             | Enable/disable the readiness probe                                 | `true`                                         |
+| `readinessProbe.initialDelaySeconds` | Delay before readinessProbe is initiated                           | 30                                             |
+| `readinessProbe.periodSeconds   `    | How often to perform the probe                                     | 10                                             |
+| `readinessProbe.timeoutSeconds`      | When the probe times out                                           | 5                                              |
+| `readinessProbe.failureThreshold`    | Minimum consecutive failures to be considered failed               | 6                                              |
+| `readinessProbe.successThreshold`    | Minimum consecutive successes to be considered successful          | 1                                              |
+| `customLivenessProbe`                | Override default liveness probe                                    | `nil`                                          |
+| `customReadinessProbe`               | Override default readiness probe                                   | `nil`                                          |
+| `command`                            | Custom command to override image cmd                               | `nil` (evaluated as a template)                |
+| `args`                               | Custom args for the custom command                                 | `nil` (evaluated as a template)                |
+| `extraEnvVars`                       | An array to add extra env vars                                     | `[]` (evaluated as a template)                 |
+| `extraEnvVarsCM`                     | Array to add extra configmaps                                      | `[]`                                           |
+| `extraEnvVarsSecret`                 | Array to add extra environment from a Secret                       | `nil`                                          |
 
 ### Ingress parameters
 
