@@ -25,6 +25,20 @@ spec:
         - ip: "127.0.0.1"
           hostnames:
             - "status.localhost"
+      initContainers:
+        - name: wait-for-db
+          image: {{ template "phabricator.image" . }}
+          command: [ "sh", "-c", "until mysql -h ${MARIADB_HOST} -P ${MARIADB_PORT_NUMBER} -u root --password=${MARIADB_ROOT_PASSWORD} -e'quit'; do echo waiting for mariadb init...; sleep 5; done; echo connected to ${MARIADB_HOST}" ]
+          env:
+            - name: MARIADB_HOST
+              value: {{ include "phabricator.databaseHost" . | quote }}
+            - name: MARIADB_PORT_NUMBER
+              value: {{ include "phabricator.databasePort" . | quote }}
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "phabricator.databaseSecretName" . }}
+                  key: mariadb-root-password
       containers:
         - name: {{ template "common.names.fullname" . }}
           image: {{ template "phabricator.image" . }}
