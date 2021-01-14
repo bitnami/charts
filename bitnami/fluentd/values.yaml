@@ -69,7 +69,8 @@ forwarder:
     ##
     # readOnlyRootFilesystem: true
     capabilities:
-      drop: ['ALL']
+      drop:
+        - ALL
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
@@ -468,7 +469,8 @@ aggregator:
     ##
     # readOnlyRootFilesystem: true
     capabilities:
-      drop: ['ALL']
+      drop:
+        - ALL
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
