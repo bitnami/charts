@@ -1032,7 +1032,7 @@ core:
   ## Custom Startup probe
   ##
   customStartupProbe: {}
-  
+
   ## An array to add extra env vars
   ## For example:
   ##
@@ -1654,7 +1654,7 @@ chartmuseum:
   updateStrategy:
     type: RollingUpdate
 
-  ## Set the use of the Redis cache.
+  ## Set the use of the Redis(TM) cache.
   ##
   useRedisCache: true
 
@@ -2622,7 +2622,7 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
-## Redis chart configuration
+## Redis(TM) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -2643,17 +2643,17 @@ redis:
     persistence:
       enabled: true
 
-## If the Redis included in the chart is disabled, Harbor will use below
-## Redis parameters to connect to an external Redis server.
+## If the Redis(TM) included in the chart is disabled, Harbor will use below
+## Redis(TM) parameters to connect to an external Redis(TM) server.
 ##
 externalRedis:
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: localhost
-  ## Redis port number
+  ## Redis(TM) port number
   ##
   port: 6379
-  ## Redis password
+  ## Redis(TM) password
   ##
   password: ""
   coreDatabaseIndex: "0"

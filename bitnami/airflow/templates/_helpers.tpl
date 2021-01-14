@@ -120,7 +120,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Get the Redis credentials secret.
+Get the Redis(TM) credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.existingSecret) -}}
