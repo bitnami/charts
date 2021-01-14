@@ -8,7 +8,7 @@
  WARNING
 
     By specifying "master.service.type=LoadBalancer" and "usePassword=false" you have
-    most likely exposed the Redis service externally without any authentication
+    most likely exposed the Redis(TM) service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -40,7 +40,7 @@ Redis can be accessed via port {{ .Values.sentinel.service.redisPort }} on the f
 
 {{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} for read only operations
 
-For read/write operations, first access the Redis Sentinel cluster, which is available in port {{ .Values.sentinel.service.sentinelPort }} using the same domain name above.
+For read/write operations, first access the Redis(TM) Sentinel cluster, which is available in port {{ .Values.sentinel.service.sentinelPort }} using the same domain name above.
 
 {{- else }}
 Redis can be accessed via port {{ .Values.redisPort }} on the following DNS names from within your cluster:
@@ -62,9 +62,9 @@ To get your password run:
     export REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
 {{- end }}
 
-To connect to your Redis server:
+To connect to your Redis(TM) server:
 
-1. Run a Redis pod that you can use as a client:
+1. Run a Redis(TM) pod that you can use as a client:
 
 {{- if .Values.tls.enabled }}
    kubectl run --namespace {{ .Release.Namespace }} {{ template "redis.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis.image" . }} --command -- sleep infinity
@@ -87,7 +87,7 @@ To connect to your Redis server:
    --image {{ template "redis.image" . }} -- bash
 {{- end }}
 
-2. Connect using the Redis CLI:
+2. Connect using the Redis(TM) CLI:
 
 {{- if .Values.cluster.enabled }}
    {{- if .Values.sentinel.enabled }}
