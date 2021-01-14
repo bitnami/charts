@@ -26,6 +26,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override fluentd.fullname template (will maintain the release name)
 ##
 # nameOverride:
