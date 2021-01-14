@@ -163,6 +163,9 @@ forwarder:
   ##
   livenessProbe:
     enabled: true
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -170,6 +173,9 @@ forwarder:
     successThreshold: 1
   readinessProbe:
     enabled: true
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -442,6 +448,9 @@ aggregator:
   ##
   livenessProbe:
     enabled: true
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -449,6 +458,9 @@ aggregator:
     successThreshold: 1
   readinessProbe:
     enabled: true
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
