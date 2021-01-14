@@ -78,6 +78,8 @@ spec:
                 secretKeyRef:
                   name: {{ template "odoo.secretName" . }}
                   key: odoo-password
+            - name: WITHOUT_DEMO
+              value: {{ .Values.withoutDemo | quote }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}

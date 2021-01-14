@@ -9,13 +9,13 @@ global:
   #   storageClass: myStorageClass
   redis: {}
 
-## Bitnami Redis image version
+## Bitnami Redis(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis image tag
+  ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
   tag: 6.0.9-debian-10-r59
@@ -39,13 +39,13 @@ nameOverride:
 ##
 fullnameOverride:
 
-## Redis Cluster settings
+## Redis(TM) Cluster settings
 ##
 cluster:
-  ## Enable the creation of a Job that will execute the proper command to create the Redis Cluster.
+  ## Enable the creation of a Job that will execute the proper command to create the Redis(TM) Cluster.
   ##
   init: true
-  ## Number of Redis nodes to be deployed
+  ## Number of Redis(TM) nodes to be deployed
   ##
   nodes: 6
   ## Parameter to be passed as --cluster-replicas to the redis-cli --cluster create
@@ -53,7 +53,7 @@ cluster:
   ##
   replicas: 1
 
-  ## Configuration to access the Redis Cluster from outside the Kubernetes cluster
+  ## Configuration to access the Redis(TM) Cluster from outside the Kubernetes cluster
   ##
   externalAccess:
     enabled: false
@@ -64,17 +64,17 @@ cluster:
       ## Port used when service type is LoadBalancer
       ##
       port: 6379
-      ## Array of load balancer IPs for each Redis node. Length must be the same as cluster.nodes
+      ## Array of load balancer IPs for each Redis(TM) node. Length must be the same as cluster.nodes
       ##
       loadBalancerIP: []
       ## Service annotations done as key:value pairs
       ##
       annotations: {}
 
-  ## This section allows to update the Redis cluster nodes.
+  ## This section allows to update the Redis(TM) cluster nodes.
   ##
   update:
-    ## Setting this to true a hook will add nodes to the Redis cluster after the upgrade.
+    ## Setting this to true a hook will add nodes to the Redis(TM) cluster after the upgrade.
     ## currentNumberOfNodes is required
     ##
     addNodes: false
@@ -101,7 +101,7 @@ redis:
   # ref: https://redis.io/topics/cluster-tutorial#creating-and-using-a-redis-cluster
   useAOFPersistence: "yes"
 
-  # Redis port
+  # Redis(TM) port
   port: 6379
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
@@ -141,7 +141,7 @@ redis:
   ##
   priorityClassName:
 
-  ## Additional Redis configuration for the nodes
+  ## Additional Redis(TM) configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap:
@@ -161,12 +161,12 @@ redis:
   ##
   extraEnvVarsSecret:
 
-  ## Redis additional annotations
+  ## Redis(TM) additional annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podAnnotations: {}
 
-  ## Redis resource requests and limits
+  ## Redis(TM) resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
@@ -179,7 +179,7 @@ redis:
   ##
   schedulerName:
 
-  ## Configure extra options for Redis liveness and readiness probes
+  ## Configure extra options for Redis(TM) liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -197,19 +197,19 @@ redis:
     successThreshold: 1
     failureThreshold: 5
 
-  ## Redis pod affinity preset
+  ## Redis(TM) pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
 
-  ## Redis pod anti-affinity preset
+  ## Redis(TM) pod anti-affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
 
-  ## Redis node affinity preset
+  ## Redis(TM) node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
   ##
@@ -230,18 +230,18 @@ redis:
     ##
     values: []
 
-  ## Affinity for Redis pods assignment
+  ## Affinity for Redis(TM) pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: redis.podAffinityPreset, redis.podAntiAffinityPreset, and redis.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Node labels for Redis pods assignment
+  ## Node labels for Redis(TM) pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for Redis pods assignment
+  ## Tolerations for Redis(TM) pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -508,8 +508,8 @@ networkPolicy:
   enabled: true
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis is listening
-  ## on. When true, Redis will accept connections from any source
+  ## client label will have network access to the port Redis(TM) is listening
+  ## on. When true, Redis(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
@@ -546,7 +546,7 @@ rbac:
     #      - gce.unprivileged
     rules: []
 
-## Redis pod Security Context
+## Redis(TM) pod Security Context
 ##
 podSecurityContext:
   enabled: true
@@ -587,7 +587,7 @@ containerSecurityContext:
 ## Use password authentication
 ##
 usePassword: true
-## Redis password
+## Redis(TM) password
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
 ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
 ##
@@ -595,7 +595,7 @@ password: ""
 ## Use existing secret (ignores previous password)
 ##
 existingSecret:
-## Password key to be retrieved from Redis secret
+## Password key to be retrieved from Redis(TM) secret
 ##
 existingSecretPasswordKey:
 
@@ -636,7 +636,7 @@ commonAnnotations:
 ##
 commonLabels:
 
-## Redis Service properties for standalone mode.
+## Redis(TM) Service properties for standalone mode.
 ##
 service:
   port: 6379
@@ -664,14 +664,14 @@ service:
 persistence:
   enabled: true
   ## The path the volume will be mounted at, useful when using different
-  ## Redis images.
+  ## Redis(TM) images.
   ##
   path: /bitnami/redis/data
   ## The subdirectory of the volume to mount to, useful in dev environments
   ## and one PV for multiple services.
   ##
   subPath: ""
-  ## Redis data Persistent Volume Storage Class
+  ## Redis(TM) data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
@@ -760,8 +760,8 @@ metrics:
     #    labels:
     #      severity: error
     #    annotations:
-    #      summary: Redis instance {{ "{{ $instance }}" }} down
-    #      description: Redis instance {{ "{{ $instance }}" }} is down.
+    #      summary: Redis(TM) instance {{ "{{ $instance }}" }} down
+    #      description: Redis(TM) instance {{ "{{ $instance }}" }} is down.
     #  - alert: RedisMemoryHigh
     #    expr: >
     #       redis_memory_used_bytes{service="{{ template "common.names.fullname" . }}-metrics"} * 100
@@ -772,16 +772,16 @@ metrics:
     #    labels:
     #      severity: error
     #    annotations:
-    #      summary: Redis instance {{ "{{ $instance }}" }} is using too much memory
-    #      description: Redis instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    #      summary: Redis(TM) instance {{ "{{ $instance }}" }} is using too much memory
+    #      description: Redis(TM) instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
     #  - alert: RedisKeyEviction
     #    expr: increase(redis_evicted_keys_total{service="{{ template "common.names.fullname" . }}-metrics"}[5m]) > 0
     #    for: 1s
     #    labels:
     #      severity: error
     #    annotations:
-    #      summary: Redis instance {{ "{{ $instance }}" }} has evicted keys
-    #      description: Redis instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    #      summary: Redis(TM) instance {{ "{{ $instance }}" }} has evicted keys
+    #      description: Redis(TM) instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
 
   ## Metrics exporter pod priorityClassName
   # priorityClassName: {}

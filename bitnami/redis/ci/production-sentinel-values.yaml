@@ -9,13 +9,13 @@ global:
   # storageClass: myStorageClass
   redis: {}
 
-## Bitnami Redis image version
+## Bitnami Redis(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/redis
-  ## Bitnami Redis image tag
+  ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
   tag: 5.0.9-debian-10-r0
@@ -51,13 +51,13 @@ sentinel:
   ## Require password authentication on the sentinel itself
   ## ref: https://redis.io/topics/sentinel
   usePassword: true
-  ## Bitnami Redis Sentintel image version
+  ## Bitnami Redis(TM) Sentintel image version
   ## ref: https://hub.docker.com/r/bitnami/redis-sentinel/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    ## Bitnami Redis image tag
+    ## Bitnami Redis(TM) image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
     tag: 5.0.9-debian-10-r0
@@ -79,7 +79,7 @@ sentinel:
   failoverTimeout: 18000
   parallelSyncs: 1
   port: 26379
-  ## Additional Redis configuration for the sentinel nodes
+  ## Additional Redis(TM) configuration for the sentinel nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap:
@@ -88,7 +88,7 @@ sentinel:
   ## If enabled, each replicas will have a constant ID on each start-up
   ##
   staticID: false
-  ## Configure extra options for Redis Sentinel liveness and readiness probes
+  ## Configure extra options for Redis(TM) Sentinel liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -107,15 +107,15 @@ sentinel:
     failureThreshold: 5
   customLivenessProbe: {}
   customReadinessProbe: {}
-  ## Redis Sentinel resource requests and limits
+  ## Redis(TM) Sentinel resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   # resources:
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
-  ## Redis Sentinel Service properties
+  ## Redis(TM) Sentinel Service properties
   service:
-    ##  Redis Sentinel Service type
+    ##  Redis(TM) Sentinel Service type
     type: ClusterIP
     sentinelPort: 26379
     redisPort: 6379
@@ -144,8 +144,8 @@ networkPolicy:
   enabled: true
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis is listening
-  ## on. When true, Redis will accept connections from any source
+  ## client label will have network access to the port Redis(TM) is listening
+  ## on. When true, Redis(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   # allowExternal: true
@@ -181,7 +181,7 @@ rbac:
     #      - gce.unprivileged
     rules: []
 
-## Redis pod Security Context
+## Redis(TM) pod Security Context
 securityContext:
   enabled: true
   fsGroup: 1001
@@ -196,14 +196,14 @@ securityContext:
 
 ## Use password authentication
 usePassword: true
-## Redis password (both master and slave)
+## Redis(TM) password (both master and slave)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
 ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
 ##
 password:
 ## Use existing secret (ignores previous password)
 # existingSecret:
-## Password key to be retrieved from Redis secret
+## Password key to be retrieved from Redis(TM) secret
 ##
 # existingSecretPasswordKey:
 
@@ -217,23 +217,23 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   existingClaim:
 
-# Redis port
+# Redis(TM) port
 redisPort: 6379
 
 ##
-## Redis Master parameters
+## Redis(TM) Master parameters
 ##
 master:
-  ## Redis command arguments
+  ## Redis(TM) command arguments
   ##
   ## Can be used to specify command line arguments, for example:
   ##
   command: "/run.sh"
-  ## Additional Redis configuration for the master nodes
+  ## Additional Redis(TM) configuration for the master nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap:
-  ## Redis additional command line flags
+  ## Redis(TM) additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
   ##
@@ -241,9 +241,9 @@ master:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   extraFlags: []
-  ## Comma-separated list of Redis commands to disable
+  ## Comma-separated list of Redis(TM) commands to disable
   ##
-  ## Can be used to disable Redis commands for security reasons.
+  ## Can be used to disable Redis(TM) commands for security reasons.
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
@@ -251,12 +251,12 @@ master:
     - FLUSHDB
     - FLUSHALL
 
-  ## Redis Master additional pod labels and annotations
+  ## Redis(TM) Master additional pod labels and annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   podLabels: {}
   podAnnotations: {}
 
-  ## Redis Master resource requests and limits
+  ## Redis(TM) Master resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   # resources:
   #   requests:
@@ -267,7 +267,7 @@ master:
   ##
   # schedulerName:
 
-  ## Configure extra options for Redis Master liveness and readiness probes
+  ## Configure extra options for Redis(TM) Master liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -307,19 +307,19 @@ master:
   customLivenessProbe: {}
   customReadinessProbe: {}
 
-  ## Redis Master Node selectors and tolerations for pod assignment
+  ## Redis(TM) Master Node selectors and tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ##
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
-  ## Redis Master pod/node affinity/anti-affinity
+  ## Redis(TM) Master pod/node affinity/anti-affinity
   ##
   affinity: {}
 
-  ## Redis Master Service properties
+  ## Redis(TM) Master Service properties
   service:
-    ##  Redis Master Service type
+    ##  Redis(TM) Master Service type
     type: ClusterIP
     port: 6379
 
@@ -343,7 +343,7 @@ master:
   persistence:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
-    ## Redis images.
+    ## Redis(TM) images.
     path: /data
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
@@ -372,21 +372,21 @@ master:
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
 
-  ## Redis Master pod priorityClassName
+  ## Redis(TM) Master pod priorityClassName
   ##
   priorityClassName: {}
 
 ##
-## Redis Slave properties
+## Redis(TM) Slave properties
 ## Note: service.type is a mandatory parameter
-## The rest of the parameters are either optional or, if undefined, will inherit those declared in Redis Master
+## The rest of the parameters are either optional or, if undefined, will inherit those declared in Redis(TM) Master
 ##
 slave:
   ## Slave Service properties
   service:
-    ## Redis Slave Service type
+    ## Redis(TM) Slave Service type
     type: ClusterIP
-    ## Redis port
+    ## Redis(TM) port
     port: 6379
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -402,27 +402,27 @@ slave:
     loadBalancerIP:
     # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
-  ## Redis slave port
+  ## Redis(TM) slave port
   port: 6379
   ## Can be used to specify command line arguments, for example:
   ##
   command: "/run.sh"
-  ## Additional Redis configuration for the slave nodes
+  ## Additional Redis(TM) configuration for the slave nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap:
-  ## Redis extra flags
+  ## Redis(TM) extra flags
   extraFlags: []
-  ## List of Redis commands to disable
+  ## List of Redis(TM) commands to disable
   disableCommands:
     - FLUSHDB
     - FLUSHALL
 
-  ## Redis Slave pod/node affinity/anti-affinity
+  ## Redis(TM) Slave pod/node affinity/anti-affinity
   ##
   affinity: {}
 
-  ## Configure extra options for Redis Slave liveness and readiness probes
+  ## Configure extra options for Redis(TM) Slave liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -462,13 +462,13 @@ slave:
   customLivenessProbe: {}
   customReadinessProbe: {}
 
-  ## Redis slave Resource
+  ## Redis(TM) slave Resource
   # resources:
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
 
-  ## Redis slave selectors and tolerations for pod assignment
+  ## Redis(TM) slave selectors and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
 
@@ -477,11 +477,11 @@ slave:
   ##
   # schedulerName:
 
-  ## Redis slave pod Annotation and Labels
+  ## Redis(TM) slave pod Annotation and Labels
   podLabels: {}
   podAnnotations: {}
 
-  ## Redis slave pod priorityClassName
+  ## Redis(TM) slave pod priorityClassName
   # priorityClassName: {}
 
   ## Enable persistence using Persistent Volume Claims
@@ -490,7 +490,7 @@ slave:
   persistence:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
-    ## Redis images.
+    ## Redis(TM) images.
     path: /data
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
@@ -572,7 +572,7 @@ metrics:
     enabled: false
     additionalLabels: {}
     namespace: ""
-    ## Redis prometheus rules
+    ## Redis(TM) prometheus rules
     ## These are just examples rules, please adapt them to your needs.
     ## Make sure to constraint the rules to the current postgresql service.
     # rules:
@@ -582,8 +582,8 @@ metrics:
     #     labels:
     #       severity: error
     #     annotations:
-    #       summary: Redis instance {{ "{{ $labels.instance }}" }} down
-    #       description: Redis instance {{ "{{ $labels.instance }}" }} is down
+    #       summary: Redis(TM) instance {{ "{{ $labels.instance }}" }} down
+    #       description: Redis(TM) instance {{ "{{ $labels.instance }}" }} is down
     #    - alert: RedisMemoryHigh
     #      expr: >
     #        redis_memory_used_bytes{service="{{ template "redis.fullname" . }}-metrics"} * 100
@@ -594,9 +594,9 @@ metrics:
     #      labels:
     #        severity: error
     #      annotations:
-    #        summary: Redis instance {{ "{{ $labels.instance }}" }} is using too much memory
+    #        summary: Redis(TM) instance {{ "{{ $labels.instance }}" }} is using too much memory
     #        description: |
-    #          Redis instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    #          Redis(TM) instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
     #    - alert: RedisKeyEviction
     #      expr: |
     #        increase(redis_evicted_keys_total{service="{{ template "redis.fullname" . }}-metrics"}[5m]) > 0
@@ -604,9 +604,9 @@ metrics:
     #      labels:
     #        severity: error
     #      annotations:
-    #        summary: Redis instance {{ "{{ $labels.instance }}" }} has evicted keys
+    #        summary: Redis(TM) instance {{ "{{ $labels.instance }}" }} has evicted keys
     #        description: |
-    #          Redis instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    #          Redis(TM) instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
     rules: []
 
   ## Metrics exporter pod priorityClassName
@@ -642,7 +642,7 @@ volumePermissions:
   #     memory: 128Mi
   #     cpu: 100m
 
-## Redis config file
+## Redis(TM) config file
 ## ref: https://redis.io/topics/config
 ##
 configmap: |-

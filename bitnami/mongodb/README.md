@@ -171,8 +171,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
 | `tls.existingSecret`                      | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)            | `nil`                                                   |
-| `tls.caCert`                             | Custom CA certificated (base64 encoded)         | `nil`                                                 |
-| `tls.caKey`                             | CA certificate private key (base64 encoded)      | `nil`                                                 |
+| `tls.caCert`                              | Custom CA certificated (base64 encoded)                                                                    | `nil`                                                   |
+| `tls.caKey`                               | CA certificate private key (base64 encoded)                                                                | `nil`                                                   |
 | `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |
 | `tls.image.repository`                    | Init container TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
@@ -245,14 +245,14 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### Persistence parameters
 
-| Parameter                                 | Description                                                                                                | Default                                                 |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Parameter                                   | Description                                                                                                | Default                                                 |
+|---------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
 | `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
 | `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
 | `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
 | `persistence.size`                          | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                        |
+| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
 | `persistence.subPath`                       | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
 | `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes)                         | ``                                                      |
 
@@ -262,6 +262,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 |-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `serviceAccount.create`                   | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
 | `serviceAccount.name`                     | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
+| `serviceAccount.annotations`              | Additional Service Account annotations                                                                     | `{}`                                                    |
 | `rbac.create`                             | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
 
 ### Volume Permissions parameters

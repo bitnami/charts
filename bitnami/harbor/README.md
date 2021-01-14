@@ -4,7 +4,7 @@ This Helm chart has been developed based on [goharbor/harbor-helm](https://githu
 For example, the following changes have been introduced:
 
 - Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
-- Redis and PostgreSQL are managed as chart dependencies.
+- Redis<sup>TM</sup> and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
 - Uses new Helm chart labels formatting.
 - Uses Bitnami container images:
@@ -720,17 +720,17 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `externalDatabase.notarySignerPassword` | External database password for notary signer                                                              | `nil`                            |
 | `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`                        |
 
-### Redis Parameters
+### Redis<sup>TM</sup> Parameters
 
 | Parameter                                 | Description                                                                                               | Default     |
 |-------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------|
 | `redis.enabled`                           | If external redis is used, set it to `false`                                                              | `true`      |
 | `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`       |
-| `redis.password`                          | Redis password                                                                                            | `nil`       |
+| `redis.password`                          | Redis<sup>TM</sup> password                                                                               | `nil`       |
 | `redis.usePassword`                       | Use redis password                                                                                        | `false`     |
 | `redis.cluster.enabled`                   | Enable cluster redis                                                                                      | `false`     |
-| `redis.master.persistence.enabled`        | Enable persistence for master Redis                                                                       | `true`      |
-| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis                                                                        | `true`      |
+| `redis.master.persistence.enabled`        | Enable persistence for master Redis<sup>TM</sup>                                                          | `true`      |
+| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                           | `true`      |
 | `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
 | `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
 | `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |
@@ -789,7 +789,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + forcePassword: true
 ```
 
-- Option to deploy Redis cluster:
+- Option to deploy Redis<sup>TM</sup> cluster:
 ```diff
 - redis.cluster.enabled: false
 + redis.cluster.enabled: true
@@ -975,7 +975,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ### To 8.0.0
 
-Redis dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
+Redis<sup>TM</sup> dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis<sup>TM</sup> Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
 
 ### To 7.0.0
 
@@ -1010,10 +1010,10 @@ No issues are expected between upgrades but please double check the updated para
 
 ### To 4.0.0
 
-PostgreSQL and Redis dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
+PostgreSQL and Redis<sup>TM</sup> dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
 
 - [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/README.md#upgrade)
-- [Redis Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
+- [Redis<sup>TM</sup> Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
 
 ### To 3.0.0
 
@@ -1027,7 +1027,7 @@ This major version signifies this change.
 
 In this version, two major changes were performed:
 
-- This **chart depends on the Redis 5 chart instead of Redis 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
+- This **chart depends on the Redis<sup>TM</sup> 5 chart instead of Redis<sup>TM</sup> 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
 - This **chart depends on the PostgreSQL 11 chart instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
 
 For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:

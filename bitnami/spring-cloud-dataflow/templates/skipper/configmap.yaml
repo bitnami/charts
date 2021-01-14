@@ -5,11 +5,17 @@ metadata:
   name: {{ include "scdf.fullname" . }}-skipper
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: skipper
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   application.yaml: |-
     {{- if .Values.metrics.enabled }}
     {{- $fullname := include "scdf.fullname" . }}
-    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}     
+    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
     management:
       metrics:
          export:
@@ -19,7 +25,7 @@ data:
                   enabled: true
                   host: {{ $fullname }}-prometheus-proxy
                   port: {{ $rsocketPort }}
-    {{- end }}          
+    {{- end }}
     spring:
       cloud:
         skipper:
