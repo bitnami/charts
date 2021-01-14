@@ -59,3 +59,21 @@ Return the appropriate apiVersion for ingress.
 {{- print "networking.k8s.io/v1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns true if the used Helm version is 3.3+
+**To be removed when the catalog's minimun Helm version is 3.3**
+*/}}
+{{- define "common.capabilities.helmVersion" -}}
+{{- if regexMatch "{v[0-9]" (.Capabilities | toString ) }}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if the used Helm version is 3.3+
+**To be removed when the catalog's minimun Helm version is 3.3**
+*/}}
+{{- define "common.capabilities.helmVersion.test" -}}
+{{- printf "%s" (.Capabilities | toString ) }}
+{{- end -}}
