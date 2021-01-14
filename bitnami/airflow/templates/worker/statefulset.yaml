@@ -42,7 +42,7 @@ spec:
       {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      priorityClassName: {{ .Values.worker.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
