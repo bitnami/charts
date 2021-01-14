@@ -109,6 +109,7 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `odooUsername`                       | User of the application                                   | `user@example.com`                             |
 | `odooPassword`                       | Admin account password                                    | _random 10 character long alphanumeric string_ |
 | `odooEmail`                          | Admin account email                                       | `user@example.com`                             |
+| `withoutDemo`                        | Disable Odoo modules demo data                            | `all`                                          |
 | `smtpHost`                           | SMTP host                                                 | `nil`                                          |
 | `smtpPort`                           | SMTP port                                                 | `nil`                                          |
 | `smtpUser`                           | SMTP user                                                 | `nil`                                          |
