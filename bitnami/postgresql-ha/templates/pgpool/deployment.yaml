@@ -219,7 +219,7 @@ spec:
             - name: PGPOOL_CHILD_MAX_CONNECTIONS
               value: {{ .Values.pgpool.childMaxConnections | quote }}
             {{- end }}
-            {{- if .Values.pgpool.childLifeTime }}
+            {{- if or .Values.pgpool.childLifeTime (eq 0 .Values.pgpool.childLifeTime) }}
             - name: PGPOOL_CHILD_LIFE_TIME
               value: {{ .Values.pgpool.childLifeTime | quote }}
             {{- end }}
