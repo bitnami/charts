@@ -137,9 +137,11 @@ sentinel:
     annotations: {}
     labels: {}
     loadBalancerIP:
-  ## Additional commands to run prior to starting Redis node with sentinel
+
+  ## Additional commands to run prior to starting Redis(TM) node with sentinel
   ##
   preExecCmds: ""
+
   ## An array to add extra env var to the sentinel node configurations
   ## For example:
   ## extraEnvVars:
