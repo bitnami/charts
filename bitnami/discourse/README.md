@@ -211,20 +211,20 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Redis<sup>TM</sup> parameters
 
-| Parameter                                 | Description                                                                | Default          |
-|-------------------------------------------|----------------------------------------------------------------------------|------------------|
+| Parameter                                 | Description                                                                             | Default          |
+|-------------------------------------------|-----------------------------------------------------------------------------------------|------------------|
 | `redis.enabled`                           | Deploy Redis<sup>TM</sup> container(s)                                                  | `true`           |
-| `redis.usePassword`                       | Use password authentication                                                | `false`          |
+| `redis.usePassword`                       | Use password authentication                                                             | `false`          |
 | `redis.password`                          | Password for Redis<sup>TM</sup> authentication  - ignored if existingSecret is provided | `nil`            |
-| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                      | `nil`            |
-| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret         | `redis-password` |
-| `redis.cluster.enabled`                   | Whether to use cluster replication                                         | `false`          |
-| `redis.master.persistence.enabled`        | Enable database persistence using PVC                                      | `true`           |
-| `externalRedis.host`                      | Host of the external database                                              | `""`             |
-| `externalRedis.port`                      | Database port number                                                       | `6379`           |
+| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                                   | `nil`            |
+| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
+| `redis.cluster.enabled`                   | Whether to use cluster replication                                                      | `false`          |
+| `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                   | `true`           |
+| `externalRedis.host`                      | Host of the external database                                                           | `""`             |
+| `externalRedis.port`                      | Database port number                                                                    | `6379`           |
 | `externalRedis.password`                  | Password for the external Redis<sup>TM</sup>                                            | `nil`            |
-| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                      | `nil`            |
-| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret         | `redis-password` |
+| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                                   | `nil`            |
+| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 

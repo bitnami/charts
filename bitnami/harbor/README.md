@@ -707,14 +707,14 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `externalDatabase.password`             | Password for the above username                                                                           | `nil`                            |
 | `externalDatabase.coreDatabase`         | External database name for core                                                                           | `nil`                            |
 | `externalDatabase.clairDatabase`        | External database name for clair                                                                          | `nil`                            |
-| `externalDatabase.clairUsername`        | External database username for clair                                                                          | `nil`                            |
-| `externalDatabase.clairPassword`        | External database password for clair                                                                          | `nil`                            |
+| `externalDatabase.clairUsername`        | External database username for clair                                                                      | `nil`                            |
+| `externalDatabase.clairPassword`        | External database password for clair                                                                      | `nil`                            |
 | `externalDatabase.notaryServerDatabase` | External database name for notary server                                                                  | `nil`                            |
-| `externalDatabase.notaryServerUsername` | External database username for notary server                                                                  | `nil`                            |
-| `externalDatabase.notaryServerPassword`        | External database password for notary server                                                                          | `nil`                            |
+| `externalDatabase.notaryServerUsername` | External database username for notary server                                                              | `nil`                            |
+| `externalDatabase.notaryServerPassword` | External database password for notary server                                                              | `nil`                            |
 | `externalDatabase.notarySignerDatabase` | External database name for notary signer                                                                  | `nil`                            |
-| `externalDatabase.notarySignerUsername` | External database username for notary signer                                                                  | `nil`                            |
-| `externalDatabase.notarySignerPassword`        | External database password for notary signer                                                                          | `nil`                            |
+| `externalDatabase.notarySignerUsername` | External database username for notary signer                                                              | `nil`                            |
+| `externalDatabase.notarySignerPassword` | External database password for notary signer                                                              | `nil`                            |
 | `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`                        |
 
 ### Redis<sup>TM</sup> Parameters
@@ -723,11 +723,11 @@ The following tables list the configurable parameters of the Harbor chart and th
 |-------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------|
 | `redis.enabled`                           | If external redis is used, set it to `false`                                                              | `true`      |
 | `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`       |
-| `redis.password`                          | Redis<sup>TM</sup> password                                                                                            | `nil`       |
+| `redis.password`                          | Redis<sup>TM</sup> password                                                                               | `nil`       |
 | `redis.usePassword`                       | Use redis password                                                                                        | `false`     |
 | `redis.cluster.enabled`                   | Enable cluster redis                                                                                      | `false`     |
-| `redis.master.persistence.enabled`        | Enable persistence for master Redis<sup>TM</sup>                                                                       | `true`      |
-| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                                        | `true`      |
+| `redis.master.persistence.enabled`        | Enable persistence for master Redis<sup>TM</sup>                                                          | `true`      |
+| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                           | `true`      |
 | `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
 | `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
 | `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |

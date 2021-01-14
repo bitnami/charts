@@ -31,9 +31,9 @@ While [Redis<sup>TM</sup> Helm Chart](https://github.com/bitnami/charts/tree/mas
 The main features of each chart are the following:
 
 | Redis<sup>TM</sup>                                       | Redis<sup>TM</sup> Cluster                                              |
-|-------------------------------------------------|----------------------------------------------------------------|
-| Supports multiple databases                     | Supports only one database. Better if you have a big dataset   |
-| Single write point (single master)              | Multiple write points (multiple masters)                       |
+|----------------------------------------------------------|-------------------------------------------------------------------------|
+| Supports multiple databases                              | Supports only one database. Better if you have a big dataset            |
+| Single write point (single master)                       | Multiple write points (multiple masters)                                |
 | ![Redis<sup>TM</sup> Topology](img/redis-topology.png)   | ![Redis<sup>TM</sup> Cluster Topology](img/redis-cluster-topology.png)  |
 
 ## Prerequisites
@@ -81,16 +81,16 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `global.imageRegistry`                          | Global Docker image registry                                   | `nil`             |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                           | Global storage class for dynamic provisioning                  | `nil`             |
-| `global.redis.password`                         | Redis<sup>TM</sup> password (overrides `password`)                      | `nil`             |
+| `global.redis.password`                         | Redis<sup>TM</sup> password (overrides `password`)             | `nil`             |
 
 #### Common parameters
 
 
 | Parameter                               | Description                                                                         | Default                                                 |
 |-----------------------------------------|-------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | Redis<sup>TM</sup> Image registry                                                            | `docker.io`                                             |
-| `image.repository`                      | Redis<sup>TM</sup> Image name                                                                | `bitnami/redis`                                         |
-| `image.tag`                             | Redis<sup>TM</sup> Image tag                                                                 | `{TAG_NAME}`                                            |
+| `image.registry`                        | Redis<sup>TM</sup> Image registry                                                   | `docker.io`                                             |
+| `image.repository`                      | Redis<sup>TM</sup> Image name                                                       | `bitnami/redis`                                         |
+| `image.tag`                             | Redis<sup>TM</sup> Image tag                                                        | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                      | Image pull policy                                                                   | `IfNotPresent`                                          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                    | `nil`                                                   |
 | `nameOverride`                          | String to partially override redis.fullname template with a string                  | `nil`                                                   |
@@ -99,7 +99,7 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `existingSecretPasswordKey`             | Name of key containing password to be retrieved from the existing secret            | `nil`                                                   |
 | `usePassword`                           | Use password                                                                        | `true`                                                  |
 | `usePasswordFile`                       | Mount passwords as files instead of environment variables                           | `false`                                                 |
-| `password`                              | Redis<sup>TM</sup> password (ignored if existingSecret set)                                  | Randomly generated                                      |
+| `password`                              | Redis<sup>TM</sup> password (ignored if existingSecret set)                         | Randomly generated                                      |
 | `configmap`                             | Additional common Redis<sup>TM</sup> node configuration (this value is evaluated as a template)  | See `values.yaml`                                       |
 | `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                | `false`                                                 |
 | `networkPolicy.allowExternal`           | Don't require client label for connections                                          | `true`                                                  |
@@ -152,22 +152,22 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 
 | Parameter                                  | Description                                                                                           | Default                                                 |
 |--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `redis.port`                               | Redis<sup>TM</sup> port.                                                                                       | `6379`                                                  |
+| `redis.port`                               | Redis<sup>TM</sup> port.                                                                              | `6379`                                                  |
 | `redis.useAOFPersistence`                  | Enables AOF persistence mode                                                                          | `"yes"`                                                 |
-| `redis.podLabels`                          | Additional labels for Redis<sup>TM</sup> pod                                                                   | {}                                                      |
-| `redis.command`                            | Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided.          | `nil`                                                   |
+| `redis.podLabels`                          | Additional labels for Redis<sup>TM</sup> pod                                                          | {}                                                      |
+| `redis.command`                            | Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided. | `nil`                                                   |
 | `redis.args`                               | Arguments for the provided command if needed                                                          | `nil`                                                   |
 | `redis.schedulerName`                      | Name of an alternate scheduler                                                                        | `nil`                                                   |
-| `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes (this value is evaluated as a template)              | `nil`                                                   |
-| `redis.podAffinityPreset`                  | Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
-| `redis.podAntiAffinityPreset`              | Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
-| `redis.nodeAffinityPreset.type`            | Redis<sup>TM</sup> node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
-| `redis.nodeAffinityPreset.key`             | Redis<sup>TM</sup> node label key to match Ignored if `redis.affinity` is set.                                 | `""`                                                    |
-| `redis.nodeAffinityPreset.values`          | Redis<sup>TM</sup> node label values to match. Ignored if `redis.affinity` is set.                             | `[]`                                                    |
-| `redis.affinity`                           | Affinity for Redis<sup>TM</sup> pods assignment                                                                | `{}` (evaluated as a template)                          |
-| `redis.nodeSelector`                       | Node labels for Redis<sup>TM</sup> pods assignment                                                             | `{}` (evaluated as a template)                          |
-| `redis.tolerations`                        | Tolerations for Redis<sup>TM</sup> pods assignment                                                             | `[]` (evaluated as a template)                          |
-| `redis.busPort`                            | Port for the Redis<sup>TM</sup> gossip protocol                                                                | `16379`                                                 |
+| `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes (this value is evaluated as a template)                  | `nil`                                      |
+| `redis.podAffinityPreset`                  | Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                       |
+| `redis.podAntiAffinityPreset`              | Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                     |
+| `redis.nodeAffinityPreset.type`            | Redis<sup>TM</sup> node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`                                       |
+| `redis.nodeAffinityPreset.key`             | Redis<sup>TM</sup> node label key to match Ignored if `redis.affinity` is set.                        | `""`                                                    |
+| `redis.nodeAffinityPreset.values`          | Redis<sup>TM</sup> node label values to match. Ignored if `redis.affinity` is set.                    | `[]`                                                    |
+| `redis.affinity`                           | Affinity for Redis<sup>TM</sup> pods assignment                                                       | `{}` (evaluated as a template)                          |
+| `redis.nodeSelector`                       | Node labels for Redis<sup>TM</sup> pods assignment                                                    | `{}` (evaluated as a template)                          |
+| `redis.tolerations`                        | Tolerations for Redis<sup>TM</sup> pods assignment                                                    | `[]` (evaluated as a template)                          |
+| `redis.busPort`                            | Port for the Redis<sup>TM</sup> gossip protocol                                                       | `16379`                                                 |
 | `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup. Evaluated as a template                     | ``                                                      |
 | `redis.livenessProbe.enabled`              | Turn on and off liveness probe.                                                                       | `true`                                                  |
 | `redis.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated.                                                             | `30`                                                    |
@@ -181,19 +181,19 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `redis.readinessProbe.timeoutSeconds`      | When the probe times out.                                                                             | `1`                                                     |
 | `redis.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed.          | `1`                                                     |
 | `redis.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.            | `5`                                                     |
-| `redis.priorityClassName`                  | Redis<sup>TM</sup> Master pod priorityClassName                                                                | `{}`                                                    |
+| `redis.priorityClassName`                  | Redis<sup>TM</sup> Master pod priorityClassName                                                       | `{}`                                                    |
 | `redis.customLivenessProbe`                | Override default liveness probe                                                                       | `nil`                                                   |
 | `redis.customReadinessProbe`               | Override default readiness probe                                                                      | `nil`                                                   |
 | `redis.extraVolumes`                       | Array of extra volumes to be added to all pods (evaluated as a template)                              | `[]`                                                    |
 | `redis.extraVolumeMounts`                  | Array of extra volume mounts to be added to all pods (evaluated as a template)                        | `[]`                                                    |
-| `redis.affinity`                           | Affinity settings for Redis<sup>TM</sup> pod assignment                                                        | `{}`                                                    |
-| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis<sup>TM</sup> pod                                                     | `[]`                                                    |
+| `redis.affinity`                           | Affinity settings for Redis<sup>TM</sup> pod assignment                                               | `{}`                                                    |
+| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis<sup>TM</sup> pod                                            | `[]`                                                    |
 | `redis.extraEnvVars`                       | Array containing extra env vars to be added to all pods (evaluated as a template)                     | `[]`                                                    |
 | `redis.extraEnvVarsCM`                     | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                 | `nil`                                                   |
 | `redis.extraEnvVarsSecret`                 | Secret containing extra env vars to be added to all pods (evaluated as a template)                    | `nil`                                                   |
 | `redis.initContainers`                     | Init containers to add to the cronjob container                                                       | `{}`                                                    |
 | `redis.sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                     | `nil`                                                   |
-| `redis.resources`                          | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                         | `{Memory: "256Mi", CPU: "100m"}`                        |
+| `redis.resources`                          | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                | `{Memory: "256Mi", CPU: "100m"}`                        |
 
 #### Cluster initialization job parameters
 
@@ -219,7 +219,7 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `initJob.affinity`                         | Affinity for init job pods assignment                                                                      | `{}` (evaluated as a template)                     |
 | `initJob.nodeSelector`                     | Node labels for init job pods assignment                                                                   | `{}` (evaluated as a template)                     |
 | `initJob.tolerations`                      | Tolerations for init job pods assignment                                                                   | `[]` (evaluated as a template)                     |
-| `initJob.resources`                        | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                              | `nil`                                              |
+| `initJob.resources`                        | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                     | `nil`                                              |
 | `initJob.priorityClassName`                | Priority class name                                                                                        | `nil`                                              |
 
 #### Cluster update job parameters
@@ -246,33 +246,33 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `updateJob.affinity`                       | Affinity for update job pods assignment                                                                        | `{}` (evaluated as a template)                 |
 | `updateJob.nodeSelector`                   | Node labels for update job pods assignment                                                                     | `{}` (evaluated as a template)                 |
 | `updateJob.tolerations`                    | Tolerations for update job pods assignment                                                                     | `[]` (evaluated as a template)                 |
-| `updateJob.resources`                      | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                                  | `nil`                                          |
+| `updateJob.resources`                      | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                         | `nil`                                          |
 | `updateJob.priorityClassName`              | Priority class name                                                                                            | `nil`                                          |
 
 #### Cluster management parameters
 
-| Parameter                                       | Description                                                    | Default           |
-|-------------------------------------------------|----------------------------------------------------------------|-------------------|
-| `cluster.init`                                  | Enable the creation of a job that initializes the Redis<sup>TM</sup> Cluster | `true`            |
-| `cluster.nodes`                                 | Number of nodes in the Redis<sup>TM</sup> cluster                       | `6`               |
-| `cluster.replicas`                              | Number of replicas for every master in the cluster             | `1`               |
-| `cluster.externalAccess.enabled`                | Enable access to the Redis<sup>TM</sup> cluster from Outside the Kubernetes Cluster | `false`           |
-| `cluster.externalAccess.service.type`           | Type for the services used to expose every Pod                 | `LoadBalancer`    |
-| `cluster.externalAccess.service.port`           | Port for the services used to expose every Pod                 | `6379`            |
+| Parameter                                       | Description                                                                                   | Default           |
+|-------------------------------------------------|-----------------------------------------------------------------------------------------------|-------------------|
+| `cluster.init`                                  | Enable the creation of a job that initializes the Redis<sup>TM</sup> Cluster                  | `true`            |
+| `cluster.nodes`                                 | Number of nodes in the Redis<sup>TM</sup> cluster                                             | `6`               |
+| `cluster.replicas`                              | Number of replicas for every master in the cluster                                            | `1`               |
+| `cluster.externalAccess.enabled`                | Enable access to the Redis<sup>TM</sup> cluster from Outside the Kubernetes Cluster           | `false`           |
+| `cluster.externalAccess.service.type`           | Type for the services used to expose every Pod                                                | `LoadBalancer`    |
+| `cluster.externalAccess.service.port`           | Port for the services used to expose every Pod                                                | `6379`            |
 | `cluster.externalAccess.service.loadBalancerIP` | Array of LoadBalancer IPs used to expose every Pod of the Redis<sup>TM</sup> cluster when `cluster.externalAccess.service.type` is `LoadBalancer` | `[]`              |
 | `cluster.externalAccess.service.annotations`    | Annotations to add to the services used to expose every Pod of the Redis<sup>TM</sup> Cluster | `{}`              |
-| `cluster.update.addNodes`                       | Boolean to specify if you want to add nodes after the upgrade  | `false`           |
-| `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis<sup>TM</sup>  nodes                  | `6`               |
-| `cluster.update.newExternalIPs`                 | External IPs obtained from the services for the new nodes to add to the cluster | `nil`             |
+| `cluster.update.addNodes`                       | Boolean to specify if you want to add nodes after the upgrade                                 | `false`           |
+| `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis<sup>TM</sup>  nodes                                        | `6`               |
+| `cluster.update.newExternalIPs`                 | External IPs obtained from the services for the new nodes to add to the cluster               | `nil`             |
 
 #### Metrics sidecar parameters
 
 | Parameter                                       | Description                                                    | Default           |
 |-------------------------------------------------|----------------------------------------------------------------|-------------------|
 | `metrics.enabled`                               | Start a side-car prometheus exporter                           | `false`           |
-| `metrics.image.registry`                        | Redis<sup>TM</sup> exporter image registry                              | `docker.io`       |
-| `metrics.image.repository`                      | Redis<sup>TM</sup> exporter image name                                  | `bitnami/redis-exporter` |
-| `metrics.image.tag`                             | Redis<sup>TM</sup> exporter image tag                                   | `{TAG_NAME}`      |
+| `metrics.image.registry`                        | Redis<sup>TM</sup> exporter image registry                     | `docker.io`       |
+| `metrics.image.repository`                      | Redis<sup>TM</sup> exporter image name                         | `bitnami/redis-exporter` |
+| `metrics.image.tag`                             | Redis<sup>TM</sup> exporter image tag                          | `{TAG_NAME}`      |
 | `metrics.image.pullPolicy`                      | Image pull policy                                              | `IfNotPresent`    |
 | `metrics.image.pullSecrets`                     | Specify docker-registry secret names as an array               | `nil`             |
 | `metrics.extraArgs`                             | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter#flags) | {}                |
