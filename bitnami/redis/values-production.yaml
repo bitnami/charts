@@ -137,6 +137,28 @@ sentinel:
     annotations: {}
     labels: {}
     loadBalancerIP:
+  ## Additional commands to run prior to starting Redis node with sentinel
+  ##
+  preExecCmds: ""
+  ## An array to add extra env var to the sentinel node configurations
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: name
+  ##    value: value
+  ##  - name: other_name
+  ##    valueFrom:
+  ##      fieldRef:
+  ##        fieldPath: fieldPath
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars:
+  ##
+  extraEnvVarsCM: []
+
+  ## Secret with extra env vars:
+  ##
+  extraEnvVarsSecret: []
 
 ## Specifies the Kubernetes Cluster's Domain Name.
 ##
