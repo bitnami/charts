@@ -282,6 +282,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 12.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
+
 ### To 11.0.0
 
 In this major there were two main changes introduced:
