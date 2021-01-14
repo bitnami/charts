@@ -26,4 +26,8 @@ name: jenkins
 sources:
   - https://github.com/bitnami/bitnami-docker-jenkins
   - https://jenkins.io/
+<<<<<<< HEAD
 version: 7.2.0
+=======
+version: 7.2.0
+>>>>>>> 44a19e2450249eacfb0c75236390c54575ac7dac
