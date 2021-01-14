@@ -858,7 +858,7 @@ externalDatabase:
   port: 5432
 
 ##
-## Redis chart configuration
+## Redis(TM) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
@@ -875,20 +875,20 @@ redis:
 
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: localhost
-  ## Redis port number
+  ## Redis(TM) port number
   ##
   port: 6379
-  ## Redis password
+  ## Redis(TM) password
   ##
   password:
-  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
+  ## Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
   ##
   existingSecret:
-  ## Redis username
-  ## Most Redis implementnations do not require a username to authenticate
+  ## Redis(TM) username
+  ## Most Redis(TM) implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
   username:

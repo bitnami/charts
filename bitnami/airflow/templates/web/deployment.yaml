@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      priorityClassName: {{ .Values.web.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -49,11 +49,11 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
-      {{- if .Values.web.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.web.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
         - name: airflow-web

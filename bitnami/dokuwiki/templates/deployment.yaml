@@ -1,7 +1,7 @@
-apiVersion: {{ template "dokuwiki.deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "dokuwiki.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -123,7 +123,7 @@ spec:
               readOnly: true
         {{- end }}
       containers:
-        - name: {{ template "dokuwiki.fullname" . }}
+        - name: dokuwiki
           image: {{ template "dokuwiki.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
@@ -283,7 +283,7 @@ spec:
         - name: dokuwiki-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "dokuwiki.fullname" . }}
+            claimName: {{ template "common.names.fullname" . }}
         {{- else }}
           emptyDir: {}
         {{- end }}

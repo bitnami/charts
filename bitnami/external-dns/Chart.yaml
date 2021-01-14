@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 0.7.5
+appVersion: 0.7.6
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ sources:
   - https://github.com/kubernetes-sigs/external-dns
   - https://github.com/bitnami/bitnami-docker-external-dns
   - https://github.com/kubernetes-sigs/external-dns
-version: 4.5.1
+version: 4.5.3

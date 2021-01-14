@@ -1,168 +1,31 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "grafana.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "grafana.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "grafana.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "grafana.labels" -}}
-app.kubernetes.io/name: {{ include "grafana.name" . }}
-helm.sh/chart: {{ include "grafana.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "grafana.matchLabels" -}}
-app.kubernetes.io/name: {{ include "grafana.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
 
 {{/*
 Return the proper Grafana image name
 */}}
 {{- define "grafana.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Image Renderer image name
 */}}
 {{- define "grafana.imageRenderer.image" -}}
-{{- $registryName := .Values.imageRenderer.image.registry -}}
-{{- $repositoryName := .Values.imageRenderer.image.repository -}}
-{{- $tag := .Values.imageRenderer.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.imageRenderer.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.imageRenderer.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.imageRenderer.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.imageRenderer.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.imageRenderer.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.imageRenderer.image) "global" .Values.global) -}}
 {{- end }}
 
 {{/*
 Return  the proper Storage Class
 */}}
 {{- define "grafana.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
+{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -172,7 +35,7 @@ Return the Grafana admin credentials secret
 {{- if .Values.admin.existingSecret -}}
     {{- printf "%s" (tpl .Values.admin.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-admin" (include "grafana.fullname" .) -}}
+    {{- printf "%s-admin" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -204,7 +67,7 @@ Return the Grafana SMTP credentials secret
 {{- if .Values.smtp.existingSecret }}
     {{- printf "%s" (tpl .Values.smtp.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-smtp" (include "grafana.fullname" .) -}}
+    {{- printf "%s-smtp" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -238,20 +101,6 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Check if there are rolling tags in the images
-*/}}
-{{- define "grafana.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.imageRenderer.image.repository) (not (.Values.imageRenderer.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.imageRenderer.image.repository }}:{{ .Values.imageRenderer.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
 {{- end -}}
 
 {{/*
@@ -293,9 +142,9 @@ WARNING: You enabled config.useGrafanaIniFile but did not specify config.grafana
 {{/*
 Renders a value that contains template.
 Usage:
-{{ include "grafana.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
-{{- define "grafana.tplValue" -}}
+{{- define "common.tplvalues.render" -}}
     {{- if typeIs "string" .value }}
         {{- tpl .value .context }}
     {{- else }}
@@ -305,12 +154,12 @@ Usage:
 
 {{/*
 Returns the proper service account name depending if an explicit service account name is set
-in the values file. If the name is not set it will default to either grafana.fullname if serviceAccount.create
+in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.create
 is true or default otherwise.
 */}}
 {{- define "grafana.serviceAccountName" -}}
     {{- if .Values.serviceAccount.create -}}
-        {{ default (include "grafana.fullname" .) .Values.serviceAccount.name }}
+        {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.serviceAccount.name }}
     {{- end -}}
@@ -326,4 +175,3 @@ Return the appropriate apiVersion for deployment.
 {{- print "networking.k8s.io/v1beta1" -}}
 {{- end -}}
 {{- end -}}
-
