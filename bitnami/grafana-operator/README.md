@@ -184,8 +184,8 @@ The following tables list the configurable parameters of the grafana-operator ch
 
 | Parameter                             | Description                                      | Default                                                 |
 |---------------------------------------|--------------------------------------------------|---------------------------------------------------------|
-| `grafanaPluginInit.image.registry`    | Grafana Plugin Init image registry               | `quay.io`                                               |
-| `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name                   | `integreatly/grafana_plugins_init`                      |
+| `grafanaPluginInit.image.registry`    | Grafana Plugin Init image registry               | `docker.io`                                             |
+| `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name                   | `bitnami/grafana`                                       |
 | `grafanaPluginInit.image.tag`         | Grafana Plugin Init image tag                    | `{TAG_NAME}`                                            |
 | `grafanaPluginInit.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 
