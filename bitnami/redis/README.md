@@ -140,11 +140,7 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `master.persistence.size`                     | Size of data volume                                                                                                                                 | `8Gi`                                                   |
 | `master.persistence.matchLabels`              | matchLabels persistent volume selector                                                                                                              | `{}`                                                    |
 | `master.persistence.matchExpressions`         | matchExpressions persistent volume selector                                                                                                         | `{}`                                                    |
-<<<<<<< HEAD
-| `master.persistence.volumes        `          | Additional volumes without creating PVC                                                                                                             | `{}`                                                    |
-=======
 | `master.persistence.volumes`                  | Additional volumes without creating PVC                                                                                                             | `{}`                                                    |
->>>>>>> 217efe432c3 (Fix table indentation in READMEs)
 | `master.statefulset.labels`                   | Additional labels for redis master StatefulSet                                                                                                      | `{}`                                                    |
 | `master.statefulset.annotations`              | Additional annotations for redis master StatefulSet                                                                                                 | `{}`                                                    |
 | `master.statefulset.updateStrategy`           | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
