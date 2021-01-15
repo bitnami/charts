@@ -16,6 +16,10 @@
 ##
 # fullnameOverride:
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Kubernetes Cluster Domain.
 ##
 clusterDomain: cluster.local
@@ -132,6 +136,7 @@ server:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -273,6 +278,15 @@ server:
     ##
     hostname: dataflow.local
 
+    ## The Path to WordPress. You may need to set this to '/*' in order to use this
+    ## with ALB ingress controllers.
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
     ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -292,6 +306,7 @@ server:
     ## extraHosts:
     ## - name: dataflow.local
     ##   path: /
+    ##
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -299,6 +314,7 @@ server:
     ## - hosts:
     ##     - dataflow.local
     ##   secretName: dataflow.local-tls
+    ##
 
     ## If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -314,6 +330,7 @@ server:
     ## - name: dataflow.local-tls
     ##   key:
     ##   certificate:
+    ##
 
   ## Add init containers to the Dataflow Server pods.
   ## Example:
@@ -468,6 +485,7 @@ skipper:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -690,7 +708,7 @@ deployer:
   ## The node selectors to apply to the streaming applications deployments in "key:value" format.
   ## Multiple node selectors are comma separated.
   ##
-  nodeSelector: ''
+  nodeSelector: ""
   tolerations: {}
   ## Extra volume mounts.
   ##
@@ -700,7 +718,7 @@ deployer:
   volumes: {}
   ## List of environment variables to set for any deployed app container. Multiple values are comma separated.
   ##
-  environmentVariables: ''
+  environmentVariables: ""
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
@@ -736,6 +754,7 @@ waitForBackends:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
@@ -795,9 +814,9 @@ metrics:
     ## Annotations for the Prometheus Rsocket Proxy service
     ##
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: '{{ .Values.metrics.service.httpPort }}'
-      prometheus.io/path: '/metrics/proxy'
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.httpPort }}"
+      prometheus.io/path: "/metrics/proxy"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -830,7 +849,7 @@ mariadb:
     ## MariaDB root password
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    rootPassword: ''
+    rootPassword: ""
     ## MariaDB custom user and database
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
@@ -869,7 +888,7 @@ externalDatabase:
   ##
   # driver:
   # scheme:
-  password: ''
+  password: ""
   # existingPasswordSecret: name-of-existing-secret
   # existingPasswordKey: key in existingPasswordSecret, defaults to "datasource-password"
   ## Data Flow user and database
@@ -879,7 +898,8 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
-    url: ''
+    ##
+    url: ""
     database: dataflow
     user: dataflow
   ## Skipper and database
@@ -889,13 +909,14 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
-    url: ''
+    ##
+    url: ""
     database: skipper
     user: skipper
   ## Hibernate Dialect
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
-  hibernateDialect: ''
+  hibernateDialect: ""
 
 ##
 ## RabbitMQ chart configuration
@@ -906,7 +927,7 @@ rabbitmq:
   enabled: true
   rabbitmq:
     username: user
-    password: ''
+    password: ""
 
 ##
 ## External RabbitMQ Configuration
@@ -944,3 +965,7 @@ kafka:
   ##
   zookeeper:
     replicaCount: 1
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []

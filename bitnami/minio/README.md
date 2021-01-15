@@ -1,4 +1,4 @@
-# MinIO<sup>TM</sup>
+# MinIO<sup>TM</sup> Helm Chart packaged by Bitnami
 
 [MinIO<sup>TM</sup>](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
 
@@ -59,6 +59,10 @@ The following table lists the configurable parameters of the MinIO<sup>TM</sup> 
 | `global.minio.existingSecret`        | Name of existing secret to use for MinIO<sup>TM</sup> credentials (overrides `existingSecret`)                                                            | `nil`                                                   |
 | `global.minio.accessKey`             | MinIO<sup>TM</sup> Access Key (overrides `accessKey.password`)                                                                                            | `nil`                                                   |
 | `global.minio.secretKey`             | MinIO<sup>TM</sup> Secret Key (overrides `secretKey.password`)                                                                                            | `nil`                                                   |
+| `commonLabels`                       | Labels to add to all deployed objects                                                                                                                     | `{}`                                                    |
+| `commonAnnotations`                  | Annotations to add to all deployed objects                                                                                                                | `{}`                                                    |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                                                      | `nil`                                                   |
+| `extraDeploy`                        | Array of extra objects to deploy with the release                                                                                                         | `[]` (evaluated as a template)                          |
 | `image.registry`                     | MinIO<sup>TM</sup> image registry                                                                                                                         | `docker.io`                                             |
 | `image.repository`                   | MinIO<sup>TM</sup> image name                                                                                                                             | `bitnami/minio`                                         |
 | `image.tag`                          | MinIO<sup>TM</sup> image tag                                                                                                                              | `{TAG_NAME}`                                            |
@@ -133,15 +137,17 @@ The following table lists the configurable parameters of the MinIO<sup>TM</sup> 
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                                                                                 | `nil`                                                   |
 | `service.loadBalancerIP`             | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                   |
 | `service.annotations`                | Kubernetes service annotations                                                                                                                            | `{}`                                                    |
-| `ingress.enabled`                    | Enable/disable ingress                                                                                                                                    | `false`                                                 |
+| `ingress.enabled`                    | Enable ingress controller resource                                                                                                                        | `false`                                                 |
 | `ingress.certManager`                | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
-| `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]`                                                    |
-| `ingress.labels`                     | Ingress additional labels                                                                                                                                 | `{}`                                                    |
-| `ingress.hosts[0].name`              | Hostname to your MinIO<sup>TM</sup> installation                                                                                                          | `minio.local`                                           |
-| `ingress.hosts[0].path`              | Path within the url structure                                                                                                                             | `/`                                                     |
-| `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
-| `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                      | `nil`                                                   |
-| `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                                                                                 | `minio.local-tls`                                       |
+| `ingress.hostname`                   | Default host for the ingress resource                                                                                                                     | `minio.local`                                           |
+| `ingress.path`                       | Default path for the ingress resource                                                                                                                     | `/`                                                     |
+| `ingress.tls`                        | Create TLS Secret                                                                                                                                         | `false`                                                 |
+| `ingress.annotations`                | Ingress annotations                                                                                                                                       | `[]` (evaluated as a template)                          |
+| `ingress.extraHosts[0].name`         | Additional hostnames to be covered                                                                                                                        | `nil`                                                   |
+| `ingress.extraHosts[0].path`         | Additional hostnames to be covered                                                                                                                        | `nil`                                                   |
+| `ingress.extraPaths`                 | Additional arbitrary path/backend objects                                                                                                                 | `nil`                                                   |
+| `ingress.extraTls[0].hosts[0]`       | TLS configuration for additional hostnames to be covered                                                                                                  | `nil`                                                   |
+| `ingress.extraTls[0].secretName`     | TLS configuration for additional hostnames to be covered                                                                                                  | `nil`                                                   |
 | `ingress.secrets[0].name`            | TLS Secret Name                                                                                                                                           | `nil`                                                   |
 | `ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
 | `ingress.secrets[0].key`             | TLS Secret Key                                                                                                                                            | `nil`                                                   |
@@ -276,6 +282,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 4.1.0
 
