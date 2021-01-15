@@ -1,0 +1,29 @@
+{{- if .Values.exporter.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: solr-exporter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: "{{ include "solr.exporter-name" . }}"
+  {{- if or .Values.exporter.service.annotations .Values.commonAnnotations }}
+  annotations: 
+    {{- if .Values.exporter.service.annotations }}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.exporter.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.exporter.service.type }}
+  ports:
+    - name: tcp-client
+      port: {{ .Values.exporter.port }}
+      protocol: TCP
+      targetPort: {{ .Values.exporter.port }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: solr-exporter
+{{ end }}

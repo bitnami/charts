@@ -16,6 +16,20 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Define the name of the client service for solr
+*/}}
+{{- define "solr.service-name" -}}
+{{- printf "%s-%s" (include "solr.fullname" .) "svc" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Define the name of the solr exporter
+*/}}
+{{- define "solr.exporter-name" -}}
+{{- printf "%s-%s" (include "solr.fullname" .) "exporter" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified zookeeper name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}

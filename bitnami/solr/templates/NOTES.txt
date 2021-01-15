@@ -3,6 +3,8 @@
 {{- $clusterDomain := .Values.clusterDomain -}}
 {{- $fullname := include "solr.fullname" . -}}
 {{- $servicePort := int .Values.service.port -}}
+{{- $exportername := include "solr.exporter-name" . -}}
+{{- $exporterPort := int .Values.exporter.port -}}
 
 {{- if (eq .Values.service.type "LoadBalancer")  }}
 ---------------------------------------------------------------------------------------------
@@ -35,11 +37,22 @@ kubectl port-forward --namespace {{ $releaseNamespace }} $POD_NAME {{ $servicePo
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
+  * External to the kubernetes cluster:
+  
   NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
         Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -l "app.kubernetes.io/name={{ template "solr.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=solr" -w'
 
         echo "$(kubectl get svc --namespace {{ $releaseNamespace }} -l "app.kubernetes.io/name={{ template "solr.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=solr" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
     Solr port: {{ .Values.service.port }}
+
+{{- end }}
+
+{{- if .Values.exporter.enabled  }}
+** Solr Prometheus metrics are exported to the following endpoints: **
+
+  * Internally, within the kubernetes cluster on:
+
+{{ $exportername }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $exporterPort }}/metrics
 
 {{- end }}

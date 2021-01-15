@@ -114,25 +114,29 @@ spec:
               containerPort: 8983
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: solr-client
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            httpGet:
+              scheme: "HTTP"
+              path: "/solr/admin/info/system"
+              port: {{ .Values.service.port }}    
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              port: solr-client
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            httpGet:
+              scheme: "HTTP"
+              path: "/solr/admin/info/system"
+              port: {{ .Values.service.port }}   
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

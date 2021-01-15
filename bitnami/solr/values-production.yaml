@@ -274,7 +274,7 @@ tls:
 
 # Configuration for the solr prometheus exporter
 exporter:
-  enabled: false  # Deploy the exporter
+  enabled: true  # Deploy the exporter
   image: {}
   configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"  # The config file to point the exporter to
   updateStrategy: {}
@@ -475,6 +475,8 @@ serviceAccount:
 zookeeper:
   enabled: true
   persistence.enabled: true
+  metrics:
+    enabled: true
 
 ## This value is only used when zookeeper.enabled is set to false
 ##

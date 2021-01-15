@@ -1,0 +1,108 @@
+{{- if .Values.exporter.enabled }}
+---
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: solr-exporter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "solr.exporter-name" . }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  {{- if .Values.exporter.updateStrategy }}
+  strategy: {{- toYaml .Values.exporter.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: solr-exporter
+  template:
+    metadata:
+      {{- if .Values.exporter.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: solr-exporter
+        {{- if .Values.exporter.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.exporter.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.exporter.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.exporter.podAffinityPreset "component" "solr" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.exporter.podAntiAffinityPreset "component" "solr" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.exporter.nodeAffinityPreset.type "key" .Values.exporter.nodeAffinityPreset.key "values" .Values.exporter.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.exporter.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.exporter.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.exporter.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.exporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: solr-exporter-init
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote  }}
+          command:
+            - 'sh'
+            - '-c'
+            - |
+              {{- if .Values.tls.enabled }}
+              PROTOCOL="https://"
+              {{ else }}
+              PROTOCOL="http://"
+              {{- end }}
+              COUNTER=0;
+              while [  $COUNTER -lt 30 ]; do
+                curl -k -s --connect-timeout 10 "${PROTOCOL}{{ include "solr.fullname" . }}:{{ .Values.service.port }}/solr/admin/info/system" && exit 0
+                sleep 2
+              done;
+              echo "Did NOT see a Running Solr instance after 60 secs!";
+              exit 1;
+      containers:
+        - name: solr-exporter
+          image: {{ template "solr.image" . }}
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+          {{- if .Values.exporter.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - "/opt/bitnami/solr/contrib/prometheus-exporter/bin/solr-exporter"
+            - "-p"
+            - "{{ .Values.exporter.port }}"
+            - "-z"
+            - "{{ include "solr.zookeeper-service-name" . }}:2181"
+            - "-n"
+            - "{{ .Values.exporter.threads }}"
+            - "-f"
+            - "{{ .Values.exporter.configFile }}"
+          {{- if .Values.exporter.resources }}
+          resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.exporter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/metrics"
+              port: {{ .Values.exporter.port }}
+          {{- else if .Values.exporter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.exporter.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/metrics"
+              port: {{ .Values.exporter.port }}          
+          {{- else if .Values.exporter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+{{ end }}
