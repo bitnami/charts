@@ -136,7 +136,9 @@ The following tables list the configurable parameters of the kong chart and thei
 | `ingress.enabled`                | Enable ingress controller resource                               | `false`                        |
 | `ingress.certManager`            | Add annotations for cert-manager                                 | `false`                        |
 | `ingress.hostname`               | Default host for the ingress resource                            | `kong.local`                   |
-| `ingress.path`                   | Default path for the ingress resource                            | `/`                            |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)    | ``                             |
+| `ingress.path`                   | Ingress path                                                     | `/`                            |
+| `ingress.pathType`               | Ingress path type                                                | `ImplementationSpecific`       |
 | `ingress.tls`                    | Create TLS Secret                                                | `false`                        |
 | `ingress.annotations`            | Ingress annotations                                              | `[]` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                               | `nil`                          |
