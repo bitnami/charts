@@ -114,6 +114,11 @@ odooEmail: user@example.com
 ##
 # odooPassword:
 
+## Odoo modules disable demo data
+## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+##
+withoutDemo: all
+
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
 # smtpHost:

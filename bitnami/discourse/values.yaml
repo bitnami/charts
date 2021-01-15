@@ -566,7 +566,7 @@ externalDatabase:
   ##
   database: bitnami_application
 
-## Redis chart configuration
+## Redis(TM) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
@@ -577,7 +577,7 @@ redis:
   ## Use password authentication
   ##
   usePassword: false
-  ## Redis password (both master and slave)
+  ## Redis(TM) password (both master and slave)
   ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
   ## It should always be set using the password value or in the existingSecret to avoid issues
   ## with Discourse.
@@ -588,7 +588,7 @@ redis:
   ##
   existingSecret:
   ##
-  ## Password key to be retrieved from Redis secret
+  ## Password key to be retrieved from Redis(TM) secret
   ##
   existingSecretPasswordKey: 'redis-password'
   ##
@@ -598,23 +598,23 @@ redis:
     enabled: false
 
   ##
-  ## Redis Master parameters
+  ## Redis(TM) Master parameters
   ##
   master:
     persistence:
       enabled: true
 
 ##
-## External Redis
+## External Redis(TM)
 ##
 externalRedis:
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: ''
-  ## Redis port
+  ## Redis(TM) port
   ##
   port: 6379
-  ## Redis password for authentication
+  ## Redis(TM) password for authentication
   ## Ignored if existingSecret is set
   ##
   password: ''
@@ -623,6 +623,6 @@ externalRedis:
   ##
   existingSecret:
   ##
-  ## Password key to be retrieved from Redis secret
+  ## Password key to be retrieved from Redis(TM) secret
   ##
   existingSecretPasswordKey: 'redis-password'

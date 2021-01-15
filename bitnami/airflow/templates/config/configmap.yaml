@@ -83,11 +83,11 @@ data:
           volumeMounts:
             - name: k8s-executor-config
               mountPath: /opt/bitnami/airflow/k8s-executor-config
-      {{- if .Values.worker.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.worker.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers:
         - name: airflow-worker

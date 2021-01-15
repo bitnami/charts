@@ -50,11 +50,11 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
-      {{- if .Values.scheduler.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.scheduler.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
         - name: airflow-scheduler

@@ -830,6 +830,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
   # name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
