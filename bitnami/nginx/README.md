@@ -58,17 +58,18 @@ The following tables lists the configurable parameters of the NGINX chart and th
 
 ### Common parameters
 
-| Parameter            | Description                                       | Default                        |
-|----------------------|---------------------------------------------------|--------------------------------|
-| `nameOverride`       | String to partially override nginx.fullname       | `nil`                          |
-| `fullnameOverride`   | String to fully override nginx.fullname           | `nil`                          |
-| `clusterDomain`      | Default Kubernetes cluster domain                 | `cluster.local`                |
-| `commonLabels`       | Labels to add to all deployed objects             | `{}`                           |
-| `commonAnnotations`  | Annotations to add to all deployed objects        | `{}`                           |
-| `extraDeploy`        | Array of extra objects to deploy with the release | `[]` (evaluated as a template) |
-| `pdb.create`         | Created a PodDisruptionBudget                     | `false`                        |
-| `pdb.minAvailable`   | Set PDB minAvailable value                        | `1`                            |
-| `pdb.maxUnavailable` | Set PDB maxUnavailable value                      | `nil`                          |
+| Parameter            | Description                                                          | Default                        |
+|----------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`       | String to partially override nginx.fullname                          | `nil`                          |
+| `fullnameOverride`   | String to fully override nginx.fullname                              | `nil`                          |
+| `clusterDomain`      | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `commonLabels`       | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations`  | Annotations to add to all deployed objects                           | `{}`                           |
+| `extraDeploy`        | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `pdb.create`         | Created a PodDisruptionBudget                                        | `false`                        |
+| `pdb.minAvailable`   | Set PDB minAvailable value                                           | `1`                            |
+| `pdb.maxUnavailable` | Set PDB maxUnavailable value                                         | `nil`                          |
+| `kubeVersion`        | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### NGINX parameters
 
@@ -178,7 +179,9 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `ingress.enabled`                | Enable ingress controller resource                                                      | `false`                        |
 | `ingress.certManager`            | Add annotations for cert-manager                                                        | `false`                        |
 | `ingress.hostname`               | Default host for the ingress resource                                                   | `nginx.local`                  |
-| `ingress.path`                   | Default path for the ingress resource                                                   | `/`                            |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                           | ``                             |
+| `ingress.path`                   | Ingress path                                                                            | `/`                            |
+| `ingress.pathType`               | Ingress path type                                                                       | `ImplementationSpecific`       |
 | `ingress.tls`                    | Create TLS Secret                                                                       | `false`                        |
 | `ingress.annotations`            | Ingress annotations                                                                     | `[]` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                      | `nil`                          |
@@ -192,6 +195,8 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `healthIngress.enabled`          | Enable healthIngress controller resource                                                | `false`                        |
 | `healthIngress.certManager`      | Add annotations for cert-manager                                                        | `false`                        |
 | `healthIngress.hostname`         | Default host for the healthIngress resource                                             | `example.local`                |
+| `healthIngress.path`             | Ingress path                                                                            | `/`                            |
+| `healthIngress.pathType`         | Ingress path type                                                                       | `ImplementationSpecific`       |
 | `healthIngress.tls`              | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter | `false`                        |
 | `healthIngress.annotations`      | Ingress annotations                                                                     | `[]`                           |
 | `healthIngress.extraHosts`       | Additional hostnames to be covered                                                      | `[]`                           |

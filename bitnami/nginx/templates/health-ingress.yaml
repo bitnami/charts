@@ -33,7 +33,7 @@ spec:
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.healthIngress.extraHosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
@@ -50,7 +50,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
     {{- end }}
     {{- if .Values.healthIngress.extraTls }}
-    {{- toYaml .Values.healthIngress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.healthIngress.extraTls "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
