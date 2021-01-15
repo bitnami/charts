@@ -73,6 +73,7 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### OrangeHRM parameters
 
@@ -133,31 +134,35 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 
 ### Traffic Exposure Parameters
 
-| Parameter                                 | Description                                                                   | Default                        |
-|-------------------------------------------|-------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                            | Kubernetes Service type                                                       | `LoadBalancer`                 |
-| `service.port`                            | Service HTTP port                                                             | `80`                           |
-| `service.httpsPort`                       | Service HTTPS port                                                            | `443`                          |
-| `service.httpsTargetPort`                 | Service Target HTTPS port                                                     | `https`                        |
-| `service.nodePorts.http`                  | Kubernetes http node port                                                     | `""`                           |
-| `service.nodePorts.https`                 | Kubernetes https node port                                                    | `""`                           |
-| `service.extraPorts`                      | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`                          |
-| `service.clusterIP`                       | WordPress service clusterIP IP                                                | `None`                         |
-| `service.loadBalancerSourceRanges`        | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)    | `[]`                           |
-| `service.loadBalancerIP`                  | loadBalancerIP if service type is `LoadBalancer`                              | `nil`                          |
-| `service.externalTrafficPolicy`           | Enable client source IP preservation                                          | `Cluster`                      |
-| `service.annotations`                     | Service annotations                                                           | `{}` (evaluated as a template) |
-| `ingress.enabled`                         | Enable ingress controller resource                                            | `false`                        |
-| `ingress.certManager`                     | Add annotations for cert-manager                                              | `false`                        |
-| `ingress.hostname`                        | Default host for the ingress resource                                         | `orangehrm.local`              |
-| `ingress.annotations`                     | Ingress annotations                                                           | `{}` (evaluated as a template) |
-| `ingress.hosts[0].name`                   | Hostname to your OrangeHRM installation                                       | `nil`                          |
-| `ingress.hosts[0].path`                   | Path within the url structure                                                 | `nil`                          |
-| `ingress.tls[0].hosts[0]`                 | TLS hosts                                                                     | `nil`                          |
-| `ingress.tls[0].secretName`               | TLS Secret (certificates)                                                     | `nil`                          |
-| `ingress.secrets[0].name`                 | TLS Secret Name                                                               | `nil`                          |
-| `ingress.secrets[0].certificate`          | TLS Secret Certificate                                                        | `nil`                          |
-| `ingress.secrets[0].key`                  | TLS Secret Key                                                                | `nil`                          |
+| Parameter                          | Description                                                                   | Default                        |
+|------------------------------------|-------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                     | Kubernetes Service type                                                       | `LoadBalancer`                 |
+| `service.port`                     | Service HTTP port                                                             | `80`                           |
+| `service.httpsPort`                | Service HTTPS port                                                            | `443`                          |
+| `service.httpsTargetPort`          | Service Target HTTPS port                                                     | `https`                        |
+| `service.nodePorts.http`           | Kubernetes http node port                                                     | `""`                           |
+| `service.nodePorts.https`          | Kubernetes https node port                                                    | `""`                           |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`                          |
+| `service.clusterIP`                | WordPress service clusterIP IP                                                | `None`                         |
+| `service.loadBalancerSourceRanges` | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)    | `[]`                           |
+| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                              | `nil`                          |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                          | `Cluster`                      |
+| `service.annotations`              | Service annotations                                                           | `{}` (evaluated as a template) |
+| `ingress.enabled`                  | Enable ingress controller resource                                            | `false`                        |
+| `ingress.certManager`              | Add annotations for cert-manager                                              | `false`                        |
+| `ingress.hostname`                 | Default host for the ingress resource                                         | `orangehrm.local`              |
+| `ingress.path`                     | Default path for the ingress resource                                         | `/`                            |
+| `ingress.tls`                      | Create TLS Secret                                                             | `false`                        |
+| `ingress.annotations`              | Ingress annotations                                                           | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                            | `nil`                          |
+| `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                            | `nil`                          |
+| `ingress.extraPaths`               | Additional arbitrary path/backend objects                                     | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                      | `nil`                          |
+| `ingress.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered                      | `nil`                          |
+| `ingress.secrets[0].name`          | TLS Secret Name                                                               | `nil`                          |
+| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                        | `nil`                          |
+| `ingress.secrets[0].key`           | TLS Secret Key                                                                | `nil`                          |
+| `ingress.pathType`                 | Ingress path type                                                             | `ImplementationSpecific`       |
 
 ### Database parameters
 
@@ -183,15 +188,15 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Metrics parameters
 
@@ -208,25 +213,25 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/orangehrm](http://github.com/bitnami/bitnami-docker-orangehrm). For more information please refer to the [bitnami/orangehrm](http://github.com/bitnami/bitnami-docker-orangehrm) image documentation.
 
@@ -372,6 +377,10 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/orang
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 9.0.0
 

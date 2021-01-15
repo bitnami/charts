@@ -4,6 +4,12 @@ metadata:
   name: {{ include "common.names.fullname" . }}-master
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: 1
