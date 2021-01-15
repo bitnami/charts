@@ -1,3 +1,24 @@
+{{- if and .Values.aggregator.ingress.enabled .Values.aggregator.ingress.secrets }}
+{{- range .Values.aggregator.ingress.secrets }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Release.Namespace }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ .certificate | b64enc }}
+  tls.key: {{ .key | b64enc }}
+---
+{{- end }}
+{{- end }}
 {{- if and (not .Values.tls.existingSecret) ( .Values.tls.enabled) }}
 apiVersion: v1
 kind: Secret
