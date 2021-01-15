@@ -183,10 +183,18 @@ spec:
   {{- if .Values.prometheus.volumeMounts }}
   volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
+  {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
   additionalScrapeConfigs:
+    {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
+    name: {{ .Values.prometheus.additionalScrapeConfigs.external.name }}
+    key: {{ .Values.prometheus.additionalScrapeConfigs.external.key }}
+    {{- else if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "internal") }}
+    name: additional-scrape-jobs-{{ template "kube-prometheus.prometheus.fullname" . }}
+    key: scrape-jobs.yaml
+    {{- else if and (not .Values.prometheus.additionalScrapeConfigs.enabled) .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
     name: {{ .Values.prometheus.additionalScrapeConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalScrapeConfigsExternal.key }}
+    {{- end }}
   {{- end }}
   {{- if .Values.prometheus.additionalAlertRelabelConfigsExternal.enabled }}
   additionalAlertRelabelConfigs:

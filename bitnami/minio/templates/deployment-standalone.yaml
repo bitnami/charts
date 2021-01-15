@@ -5,6 +5,12 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.deployment.updateStrategy }}
   strategy: {{ toYaml .Values.deployment.updateStrategy | nindent 4 }}
@@ -113,7 +119,7 @@ spec:
             {{- toYaml .Values.extraEnv | nindent 12 }}
             {{- end }}
           {{ if .Values.command }}
-          command: {{- toYaml .Values.command |  nindent 12 }} 
+          command: {{- toYaml .Values.command |  nindent 12 }}
           {{- end }}
           ports:
             - name: minio

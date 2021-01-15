@@ -13,7 +13,7 @@ $ helm install my-release bitnami/discourse
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis<sup>TM</sup>](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -209,22 +209,22 @@ The following table lists the configurable parameters of the Discourse chart and
 | `externalDatabase.existingSecret`             | Name of an existing Kubernetes secret. The secret must have the following keys configured: `postgresql-postgres-password`, `postgresql-password` | `nil`                                          |
 | `externalDatabase.database`                   | Name of the existing database (when using an external db)                                                                                        | `bitnami_application`                          |
 
-### Redis parameters
+### Redis<sup>TM</sup> parameters
 
-| Parameter                                 | Description                                                                | Default          |
-|-------------------------------------------|----------------------------------------------------------------------------|------------------|
-| `redis.enabled`                           | Deploy Redis container(s)                                                  | `true`           |
-| `redis.usePassword`                       | Use password authentication                                                | `false`          |
-| `redis.password`                          | Password for Redis authentication  - ignored if existingSecret is provided | `nil`            |
-| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                      | `nil`            |
-| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret         | `redis-password` |
-| `redis.cluster.enabled`                   | Whether to use cluster replication                                         | `false`          |
-| `redis.master.persistence.enabled`        | Enable database persistence using PVC                                      | `true`           |
-| `externalRedis.host`                      | Host of the external database                                              | `""`             |
-| `externalRedis.port`                      | Database port number                                                       | `6379`           |
-| `externalRedis.password`                  | Password for the external Redis                                            | `nil`            |
-| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                      | `nil`            |
-| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret         | `redis-password` |
+| Parameter                                 | Description                                                                             | Default          |
+|-------------------------------------------|-----------------------------------------------------------------------------------------|------------------|
+| `redis.enabled`                           | Deploy Redis<sup>TM</sup> container(s)                                                  | `true`           |
+| `redis.usePassword`                       | Use password authentication                                                             | `false`          |
+| `redis.password`                          | Password for Redis<sup>TM</sup> authentication  - ignored if existingSecret is provided | `nil`            |
+| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                                   | `nil`            |
+| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
+| `redis.cluster.enabled`                   | Whether to use cluster replication                                                      | `false`          |
+| `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                   | `true`           |
+| `externalRedis.host`                      | Host of the external database                                                           | `""`             |
+| `externalRedis.port`                      | Database port number                                                                    | `6379`           |
+| `externalRedis.password`                  | Password for the external Redis<sup>TM</sup>                                            | `nil`            |
+| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret                                                   | `nil`            |
+| `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
 
 The above parameters map to the env variables defined in [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](http://github.com/bitnami/bitnami-docker-discourse) image documentation.
 
@@ -303,7 +303,7 @@ This chart includes a `values-production.yaml` file where you can find some para
 + service.externalTrafficPolicy: Local
 ```
 
-- Make Redis use password for auth:
+- Make Redis<sup>TM</sup> use password for auth:
 
 ```diff
 - redis.usePassword: false
@@ -368,7 +368,7 @@ Note also that if you disable PostgreSQL per above you MUST supply values for th
 
 In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis instance rather than installing one inside your cluster. First, you may disable the Redis installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis<sup>TM</sup> instance rather than installing one inside your cluster. First, you may disable the Redis<sup>TM</sup> installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
 
 ```console
 redis.enabled=false
@@ -539,7 +539,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 This new major version includes the following changes:
 
 * PostgreSQL dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) for more information.
-* Redis dependency version was bumped to a new major version `11.X.X`, which includes breaking changes regarding sentinel. Discourse does not use this type of setup, so no issues are expected to happen in this case. Check [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for more information.
+* Redis<sup>TM</sup> dependency version was bumped to a new major version `11.X.X`, which includes breaking changes regarding sentinel. Discourse does not use this type of setup, so no issues are expected to happen in this case. Check [Redis<sup>TM</sup> Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for more information.
 * Some non-breaking changes so as to use the `bitnami/common` library chart.
 
 As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `1.0.0` there are two alternatives:
@@ -572,7 +572,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
   $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   ```
 
-  > NOTE: You will need to export Redis credentials as well if your setup makes use of them.
+  > NOTE: You will need to export Redis<sup>TM</sup> credentials as well if your setup makes use of them.
 
 3. Scale down the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter.
 
