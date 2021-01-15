@@ -102,16 +102,16 @@ magentoDeployStaticContent: false
 ## Use SSL to access the Magento Store. Valid values: `true`, `false`
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoUseHttps:
+magentoUseHttps: false
 
 ## Use SSL to access the Magento Admin. Valid values: `true`, `false`
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoUseSecureAdmin:
+magentoUseSecureAdmin: false
 
 ## Skip Magento Indexer reindex step during the initialization. Valid values: `true`, `false`
 ##
-magentoSkipReindex:
+magentoSkipReindex: false
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
@@ -541,7 +541,7 @@ containerSecurityContext:
 livenessProbe:
   enabled: true
   path: /index.php
-  initialDelaySeconds: 180
+  initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6

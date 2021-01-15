@@ -168,22 +168,14 @@ spec:
             - name: MAGENTO_ADMIN_URL_PREFIX
               value: {{ .Values.magentoAdminUri | quote }}
             {{- end }}
-            {{- if .Values.magentoUseHttps }}
             - name: MAGENTO_ENABLE_HTTPS
               value: {{ ternary "yes" "no" .Values.magentoUseHttps | quote }}
-            {{- end }}
-            {{- if .Values.magentoUseSecureAdmin }}
             - name: MAGENTO_ENABLE_ADMIN_HTTPS
               value: {{ ternary "yes" "no" .Values.magentoUseSecureAdmin | quote }}
-            {{- end }}
-            {{- if .Values.magentoDeployStaticContent }}
             - name: MAGENTO_DEPLOY_STATIC_CONTENT
               value: {{ ternary "yes" "no" .Values.magentoDeployStaticContent | quote }}
-            {{- end }}
-            {{- if .Values.magentoSkipReindex }}
             - name: MAGENTO_SKIP_REINDEX
               value: {{ ternary "yes" "no" .Values.magentoSkipReindex | quote }}
-            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
