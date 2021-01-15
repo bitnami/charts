@@ -22,7 +22,7 @@ Validate value params:
 Validate a value must not be empty.
 
 Usage:
-{{ include "common.validations.value.empty" (dict "valueKey" "mariadb.password" "secret" "secretName" "field" "my-password" "subchart" "subchart "context" $) }}
+{{ include "common.validations.value.empty" (dict "valueKey" "mariadb.password" "secret" "secretName" "field" "my-password" "subchart" "subchart" "context" $) }}
 
 Validate value params:
   - valueKey - String - Required. The path to the validating value in the values.yaml, e.g: "mysql.password"
