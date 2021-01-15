@@ -1,4 +1,5 @@
 {{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled }}
+{{- $serviceName := printf "%s-aggregator" (include "fluentd.fullname" .) -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -26,7 +27,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.aggregator.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "fluentd.fullname" .)-aggregator "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "$serviceName" "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.aggregator.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -36,7 +37,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "fluentd.fullname" $)-aggregator "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "$serviceName" "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.aggregator.ingress.tls .Values.aggregator.ingress.extraTls }}
   tls:
