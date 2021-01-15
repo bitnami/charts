@@ -452,6 +452,9 @@ master:
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
+    volumeClaimTemplates:
+      labels: {}
+      annotations: {}
 
   ## Redis(TM) Master pod priorityClassName
   ##
@@ -645,6 +648,9 @@ slave:
     ## Partition update strategy
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
+    volumeClaimTemplates:
+      labels: {}
+      annotations: {}
 
   ## An array to add extra env vars
   ## For example:
