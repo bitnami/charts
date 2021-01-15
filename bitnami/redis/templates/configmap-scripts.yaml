@@ -125,6 +125,10 @@ data:
     {{- end }}
     {{- end }}
 
+    {{- if .Values.slave.preExecCmds }}
+    {{ .Values.slave.preExecCmds | nindent 4}}
+    {{- end }}
+
     {{- if .Values.slave.command }}
     exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
