@@ -11,5 +11,38 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+{{- if .Values.podSecurityPolicy.spec }}
 {{ .Values.podSecurityPolicy.spec | toYaml | indent 2 }}
+{{- else }}
+  allowPrivilegeEscalation: {{ .Values.podSecurityPolicy.allowPrivilegeEscalation }}
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.podSecurityContext.fsGroup }}
+        max: {{ .Values.podSecurityContext.fsGroup }}
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: {{ .Values.podSecurityPolicy.privileged }}
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+    - ALL
+  runAsUser:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
+  volumes:
+    - 'configMap'
+    - 'secret'
+    - 'emptyDir'
+    - 'persistentVolumeClaim'
+{{- end }}
 {{- end }}
