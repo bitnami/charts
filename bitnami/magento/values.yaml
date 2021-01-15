@@ -32,10 +32,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -112,7 +108,6 @@ magentoSkipReindex: false
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
-##
 allowEmptyPassword: "yes"
 
 ## Command and args for running the container (set to default if not set). Use array form
@@ -150,7 +145,6 @@ updateStrategy:
 podSecurityContext:
   enabled: false
   ## fsGroup: 1001
-  ##
 
 ## Magento containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -159,7 +153,6 @@ containerSecurityContext:
   enabled: false
   ## runAsUser: 1001
   ## runAsNonRoot: true
-  ##
 
 ## Magento resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -243,7 +236,6 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -348,7 +340,6 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
   nodePorts:
     http: ""
     https: ""
@@ -357,9 +348,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Configure the ingress resource that allows you to access the
-## Magento installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -370,22 +359,9 @@ ingress:
   ##
   certManager: false
 
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: magento.local
-
-  ## The Path to Magento. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
-  ##
-  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -397,49 +373,46 @@ ingress:
 
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
   ##
   tls: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## Example:
   ## extraHosts:
-  ## - name: magento.local
-  ##   path: /
+  ##   - name: magento.local
+  ##     path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
-  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
+  extraHosts: []
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## Example:
   ## extraTls:
   ## - hosts:
   ##     - magento.local
   ##   secretName: magento.local-tls
   ##
+  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
   ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  secrets: []
-  ## - name: magento.local-tls
-  ##   key:
-  ##   certificate:
+  ## Example
+  ## secrets:
+  ##   - name: magento.local-tls
+  ##     key: ""
+  ##     certificate: ""
   ##
+  secrets: []
 
 ## Prometheus Exporter / Metrics
 ##
@@ -476,23 +449,18 @@ externalDatabase:
   # existingSecret:
 
   ## Database host
-  ##
   host:
 
   ## Database port
-  ##
   port: 3306
 
   ## Database user
-  ##
   user: bn_magento
 
   ## Database password
-  ##
   password:
 
   ## Database name
-  ##
   database: bitnami_magento
 
 ##
@@ -500,11 +468,9 @@ externalDatabase:
 ##
 externalElasticsearch:
   ## Elasticsearch host
-  ##
   host:
 
   ## Elasticsearch port
-  ##
   port:
 
 ##
@@ -518,7 +484,6 @@ mariadb:
   enabled: true
   ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
-  ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
@@ -575,21 +540,16 @@ mariadb:
 elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
-  ##
   enabled: true
   ## Enable to perform the sysctl operation
-  ##
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
-  ##
   master:
     replicas: 1
   ## Elasticsearch coordinating-only node parameters
-  ##
   coordinating:
     replicas: 1
   ## Elasticsearch data node parameters
-  ##
   data:
     replicas: 1
