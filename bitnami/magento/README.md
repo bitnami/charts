@@ -112,7 +112,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `magentoAdminUri`                    | Magento prefix to access Magento Admin                                                                                | `admin`                                        |
 | `magentoMode`                        | Magento mode                                                                                                          | `nil`                                          |
 | `magentoExtraInstallArgs`            | Magento extra install args                                                                                            | `nil`                                          |
-| `magentoDeployStaticContent`         | Deploy static content during the first deployment, to optimize page load time                                         | `nil`                                          |
+| `magentoDeployStaticContent`         | Deploy static content during the first deployment, to optimize page load time                                         | `false`                                        |
 | `magentoUseHttps`                    | Use SSL to access the Magento Store.                                                                                  | `nil`                                          |
 | `magentoUseSecureAdmin`              | Use SSL to access the Magento Admin.                                                                                  | `nil`                                          |
 | `magentoSkipReindex`                 | Skip Magento Indexer reindex step during the initialization                                                           | `false`                                        |

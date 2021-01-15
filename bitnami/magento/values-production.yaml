@@ -97,7 +97,7 @@ magentoExtraInstallArgs:
 ## Deploy static content
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoDeployStaticContent:
+magentoDeployStaticContent: false
 
 ## Use SSL to access the Magento Store. Valid values: `true`, `false`
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
