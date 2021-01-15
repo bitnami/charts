@@ -53,6 +53,8 @@ spec:
               set -e;
             {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
             {{- range $topic := .Values.provisioning.topics }}
+              echo "Ensure topic '{{ $topic.name }}' exists";
+
               /opt/bitnami/kafka/bin/kafka-topics.sh \
                 --create \
                 --if-not-exists \
