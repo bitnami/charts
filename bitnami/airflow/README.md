@@ -73,7 +73,6 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                   | `""`                           |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                           |
 | `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                               | `[]`                           |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                          | `{}` (evaluated as a template) |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                     | `""`                           |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `soft`                         |
 | `podSecurityContext.enabled`         | Enable pod security context                                                                                             | `true`                         |
@@ -128,6 +127,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `web.livenessProbe.periodSeconds`        | How often to perform the probe                                                                       | 20                                                      |
 | `web.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed          | 1                                                       |
 | `web.livenessProbe.timeoutSeconds`       | When the probe times out                                                                             | 5                                                       |
+| `web.nodeSelector`                       | Node labels for pod assignment                                                                       | `{}` (evaluated as a template)                               |
 | `web.podAnnotations`                     | Annotations to add to the web's pods                                                                 | `nil`                                                   |
 | `web.podDisruptionBudget.enabled`        | Switch to enable Pod Disruption Budget for Airflow web component                                     | `false`                                                 |
 | `web.podDisruptionBudget.minAvailable`   | Set the minimum amount of pods available                                                             | `1`                                                     |
@@ -169,6 +169,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `scheduler.image.repository`                 | Airflow Scheduler image name                                                                         | `bitnami/airflow-scheduler`                             |
 | `scheduler.image.tag`                        | Airflow Scheduler image tag                                                                          | `{TAG_NAME}`                                            |
 | `scheduler.initContainers`                   | List of init containers to be added to the scheduler's pods                                          | `nil`                                                   |
+| `scheduler.nodeSelector`                     | Node labels for pod assignment                                                                       | `{}` (evaluated as a template)                          |
 | `scheduler.podAnnotations`                   | Annotations to add to the scheduler's pods                                                           | `nil`                                                   |
 | `scheduler.podDisruptionBudget.enabled`      | Switch to enable Pod Disruption Budget for Airflow scheduler component                               | `false`                                                 |
 | `scheduler.podDisruptionBudget.minAvailable` | Set the minimum amount of pods available                                                             | `1`                                                     |
@@ -210,6 +211,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `worker.livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                                         | 20                                                      |
 | `worker.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed                                                                            | 1                                                       |
 | `worker.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                                               | 5                                                       |
+| `worker.nodeSelector`                       | Node labels for pod assignment                                                                    |                        `{}` (evaluated as a template) |
 | `worker.podAnnotations`                     | Annotations to add to the worker's pods                                                                                                                                | `nil`                                                   |
 | `worker.podDisruptionBudget.enabled`        | Switch to enable Pod Disruption Budget for Airflow worker component                                                                                                    | `false`                                                 |
 | `worker.podDisruptionBudget.minAvailable`   | Set the minimum amount of pods available                                                                                                                               | `1`                                                     |
@@ -282,6 +284,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `metrics.image.registry`    | Airflow exporter image registry                  | `docker.io`                                             |
 | `metrics.image.repository`  | Airflow exporter image name                      | `bitnami/airflow-exporter`                              |
 | `metrics.image.tag`         | Airflow exporter image tag                       | `{TAG_NAME}`                                            |
+| `metrics.nodeSelector`      | Node labels for pod assignment                   | `{}` (evaluated as a template)                          |
 | `metrics.podAnnotations`    | Annotations to add to the metrics's pods         | `nil`                                                   |
 | `metrics.podLabels`         | Labels to add to the worker's pods               | `{}`                                                    |
 | `metrics.resources`         | The resources for the metrics containers         | `{}`                                                    |
