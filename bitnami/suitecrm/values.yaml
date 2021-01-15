@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami SuiteCRM image version
 ## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
 ##
@@ -321,6 +325,18 @@ ingress:
   # - name: suitecrm.local-tls
   #   key:
   #   certificate:
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
