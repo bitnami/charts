@@ -213,6 +213,12 @@ mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
+  ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 10.4.17-debian-10-r35
 
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
