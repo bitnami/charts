@@ -177,24 +177,33 @@ The following tables lists the configurable parameters of the spark chart and th
 
 ### Exposure parameters
 
-| Parameter                    | Description                                                                          | Default           |
-|------------------------------|--------------------------------------------------------------------------------------|-------------------|
-| `service.type`               | Kubernetes Service type                                                              | `ClusterIP`       |
-| `service.webPort`            | Spark client port                                                                    | `80`              |
-| `service.clusterPort`        | Spark cluster port                                                                   | `7077`            |
-| `service.nodePort`           | Port to bind to for NodePort service type (client port)                              | `nil`             |
-| `service.nodePorts.cluster`  | Kubernetes cluster node port                                                         | `""`              |
-| `service.nodePorts.web`      | Kubernetes web node port                                                             | `""`              |
-| `service.annotations`        | Annotations for spark service                                                        | {}                |
-| `service.loadBalancerIP`     | loadBalancerIP if spark service type is `LoadBalancer`                               | `nil`             |
-| `ingress.enabled`            | Enable the use of the ingress controller to access the web UI                        | `false`           |
-| `ingress.certManager`        | Add annotations for cert-manager                                                     | `false`           |
-| `ingress.annotations`        | Ingress annotations                                                                  | `{}`              |
-| `ingress.hosts[0].name`      | Hostname to your Spark installation                                                  | `spark.local`     |
-| `ingress.hosts[0].path`      | Path within the url structure                                                        | `/`               |
-| `ingress.hosts[0].tls`       | Utilize TLS backend in ingress                                                       | `false`           |
-| `ingress.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`) | `nil`             |
-| `ingress.hosts[0].tlsSecret` | TLS Secret (certificates)                                                            | `spark.local-tls` |
+| Parameter                        | Description                                                   | Default                        |
+|----------------------------------|---------------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                       | `ClusterIP`                    |
+| `service.webPort`                | Spark client port                                             | `80`                           |
+| `service.clusterPort`            | Spark cluster port                                            | `7077`                         |
+| `service.nodePort`               | Port to bind to for NodePort service type (client port)       | `nil`                          |
+| `service.nodePorts.cluster`      | Kubernetes cluster node port                                  | `""`                           |
+| `service.nodePorts.web`          | Kubernetes web node port                                      | `""`                           |
+| `service.annotations`            | Annotations for spark service                                 | {}                             |
+| `service.loadBalancerIP`         | loadBalancerIP if spark service type is `LoadBalancer`        | `nil`                          |
+| `ingress.enabled`                | Enable ingress controller resource                            | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                         | `spark.local`                  |
+| `ingress.path`                   | Default path for the ingress resource                         | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                             | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                           | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                     | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                          |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
+| `ingress.path`                   | Ingress path                                                  | `/`                            |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
 
 ### Metrics parameters
 
