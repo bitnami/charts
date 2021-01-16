@@ -21,7 +21,9 @@ Params:
 
 {{- with .existingSecret -}}
 {{- if not (typeIs "string" .) -}}
-{{- $name = .name -}}
+{{- with .name -}}
+{{- $name = . -}}
+{{- end -}}
 {{- else -}}
 {{- $name = . -}}
 {{- end -}}
