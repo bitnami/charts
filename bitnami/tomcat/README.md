@@ -59,14 +59,15 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 ### Common parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override common.names.fullname         | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override common.names.fullname             | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
-| `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
-| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| Parameter                               | Description                                                   | Default                                                 |
+|-----------------------------------------|---------------------------------------------------------------|---------------------------------------------------------|
+| `nameOverride`                          | String to partially override common.names.fullname            | `nil`                                                   |
+| `fullnameOverride`                      | String to fully override common.names.fullname                | `nil`                                                   |
+| `commonLabels`                          | Labels to add to all deployed objects                         | `{}`                                                    |
+| `commonAnnotations`                     | Annotations to add to all deployed objects                    | `{}`                                                    |
+| `clusterDomain`                         | Default Kubernetes cluster domain                             | `cluster.local`                                         |
+| `extraDeploy`                           | Array of extra objects to deploy with the release             | `[]` (evaluated as a template)                          |
+| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                                                   |
 
 ### Tomcat parameters
 
@@ -97,7 +98,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `containerSecurityContext`              | Tomcat containers' Security Context                                                      | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Tomcat container                                            | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the Tomcat container                                         | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for Tomcat                                                 | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for Tomcat                                                  | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for Tomcat                                                 | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
@@ -133,6 +134,9 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
 | `service.annotations`                   | Annotations for Tomcat service                                                           | `{}` (evaluated as a template)                          |
 | `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                            | ``                                                      |
+| `ingress.path`                          | Ingress path                                                                             | `/`                                                     |
+| `ingress.pathType`                      | Ingress path type                                                                        | `ImplementationSpecific`                                |
 | `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
 | `ingress.hostname`                      | Default host for the ingress resource                                                    | `tomcat.local`                                          |
 | `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |

@@ -48,134 +48,136 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 
 ### Global parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                               | `nil`                                                   |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 
 ### Common parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override common.names.fullname         | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override common.names.fullname             | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
-| `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
-| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### phpMyAdmin parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | phpMyAdmin image registry                                                                | `docker.io`                                             |
-| `image.repository`                      | phpMyAdmin image name                                                                    | `bitnami/phpmyadmin`                                    |
-| `image.tag`                             | phpMyAdmin image tag                                                                     | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                      | Image pull policy                                                                        | `IfNotPresent`                                          |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
-| `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `extraEnvVars`                          | Extra environment variables to be set on PhpMyAdmin container                            | `{}`                                                    |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
+| Parameter            | Description                                                          | Default                                                 |
+|----------------------|----------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`     | phpMyAdmin image registry                                            | `docker.io`                                             |
+| `image.repository`   | phpMyAdmin image name                                                | `bitnami/phpmyadmin`                                    |
+| `image.tag`          | phpMyAdmin image tag                                                 | `{TAG_NAME}`                                            |
+| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`                                          |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
+| `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
+| `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `{}`                                                    |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `nil`                                                   |
 
 ### phpMyAdmin deployment parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `containerPorts.http`                   | HTTP port to expose at container level                                                   | `8080`                                                  |
-| `containerPorts.https`                  | HTTPS port to expose at container level                                                  | `8443`                                                  |
-| `podSecurityContext`                    | PhpMyAdmin pods' Security Context                                                        | Check `values.yaml` file                                |
-| `containerSecurityContext`              | PhpMyAdmin containers' Security Context                                                  | Check `values.yaml` file                                |
-| `resources.limits`                      | The resources limits for the PhpMyAdmin container                                        | `{}`                                                    |
-| `resources.requests`                    | The requested resources for the PhpMyAdmin container                                     | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
-| `readinessProbe`                        | Readiness probe configuration for PhpMyAdmin                                             | Check `values.yaml` file                                |
-| `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
-| `updateStrategy`                        | Strategy to use to update Pods                                                           | Check `values.yaml` file                                |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                   | `""`                                                    |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                | `[]`                                                    |
-| `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
-| `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
-| `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
-| `podLabels`                             | Extra labels for PhpMyAdmin pods                                                         | `{}` (evaluated as a template)                          |
-| `podAnnotations`                        | Annotations for PhpMyAdmin pods                                                          | `{}` (evaluated as a template)                          |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)     | `[]`                                                    |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for PhpMyAdmin pods                  | `[]`                                                    |
-| `initContainers`                        | Add additional init containers to the PhpMyAdmin pods                                    | `{}` (evaluated as a template)                          |
-| `sidecars`                              | Add additional sidecar containers to the PhpMyAdmin pods                                 | `{}` (evaluated as a template)                          |
+| Parameter                   | Description                                                                               | Default                              |
+|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------------|
+| `containerPorts.http`       | HTTP port to expose at container level                                                    | `8080`                               |
+| `containerPorts.https`      | HTTPS port to expose at container level                                                   | `8443`                               |
+| `podSecurityContext`        | PhpMyAdmin pods' Security Context                                                         | Check `values.yaml` file             |
+| `containerSecurityContext`  | PhpMyAdmin containers' Security Context                                                   | Check `values.yaml` file             |
+| `resources.limits`          | The resources limits for the PhpMyAdmin container                                         | `{}`                                 |
+| `resources.requests`        | The requested resources for the PhpMyAdmin container                                      | `{"memory": "512Mi", "cpu": "300m"}` |
+| `livenessProbe`             | Liveness probe configuration for PhpMyAdmin                                               | Check `values.yaml` file             |
+| `readinessProbe`            | Readiness probe configuration for PhpMyAdmin                                              | Check `values.yaml` file             |
+| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                |
+| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                |
+| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file             |
+| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                 |
+| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                               |
+| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                 |
+| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                 |
+| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                 |
+| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)       |
+| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)       |
+| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)       |
+| `podLabels`                 | Extra labels for PhpMyAdmin pods                                                          | `{}` (evaluated as a template)       |
+| `podAnnotations`            | Annotations for PhpMyAdmin pods                                                           | `{}` (evaluated as a template)       |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)      | `[]`                                 |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for PhpMyAdmin pods                   | `[]`                                 |
+| `initContainers`            | Add additional init containers to the PhpMyAdmin pods                                     | `{}` (evaluated as a template)       |
+| `sidecars`                  | Add additional sidecar containers to the PhpMyAdmin pods                                  | `{}` (evaluated as a template)       |
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                          | Kubernetes Service type                                                                  | `LoadBalancer`                                          |
-| `service.port`                          | Service HTTP port                                                                        | `80`                                                    |
-| `service.httpsPort`                     | Service HTTPS port                                                                       | `""`                                                    |
-| `service.nodePorts.http`                | Kubernetes http node port                                                                | `""`                                                    |
-| `service.nodePorts.https`               | Kubernetes https node port                                                               | `""`                                                    |
-| `service.clusterIP`                     | PhpMyAdmin service clusterIP IP                                                          | `None`                                                  |
-| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
-| `service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                         | `nil`                                                   |
-| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
-| `service.annotations`                   | Annotations for PhpMyAdmin service                                                       | `{}` (evaluated as a template)                          |
-| `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
-| `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
-| `ingress.hostname`                      | Default host for the ingress resource                                                    | `phpmyadmin.local`                                      |
-| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
-| `ingress.annotations`                   | Ingress annotations                                                                      | `{}` (evaluated as a template)                          |
-| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
+| Parameter                          | Description                                                                       | Default                        |
+|------------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                     | Kubernetes Service type                                                           | `LoadBalancer`                 |
+| `service.port`                     | Service HTTP port                                                                 | `80`                           |
+| `service.httpsPort`                | Service HTTPS port                                                                | `""`                           |
+| `service.nodePorts.http`           | Kubernetes http node port                                                         | `""`                           |
+| `service.nodePorts.https`          | Kubernetes https node port                                                        | `""`                           |
+| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                   | `None`                         |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                              | `Cluster`                      |
+| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                  | `nil`                          |
+| `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                             | `[]`                           |
+| `service.annotations`              | Annotations for PhpMyAdmin service                                                | `{}` (evaluated as a template) |
+| `ingress.enabled`                  | Enable ingress controller resource                                                | `false`                        |
+| `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
+| `ingress.hostname`                 | Default host for the ingress resource                                             | `phpmyadmin.local`             |
+| `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
+| `ingress.annotations`              | Ingress annotations                                                               | `{}` (evaluated as a template) |
+| `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.secrets[0].name`          | TLS Secret Name                                                                   | `nil`                          |
+| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                            | `nil`                          |
+| `ingress.secrets[0].key`           | TLS Secret Key                                                                    | `nil`                          |
 
 ### Database parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `db.allowArbitraryServer`               | Enable connection to arbitrary MySQL server                                              | `true`                                                  |
-| `db.port`                               | Database port to use to connect                                                          | `3306`                                                  |
-| `db.chartName`                          | Database suffix if included in the same release                                          | `nil`                                                   |
-| `db.host`                               | Database host to connect to                                                              | `nil`                                                   |
-| `db.bundleTestDB`                       | Deploy a MariaDB instance for testing purposes                                           | `false`                                                 |
-| `db.enableSsl`                          | Enable SSL for the connection between phpMyAdmin and the database                        | `false`                                                 |
-| `db.ssl.clientKey`                      | Client key file when using SSL                                                           | `nil`                                                   |
-| `db.ssl.clientCertificate`              | Client certificate file when using SSL                                                   | `nil`                                                   |
-| `db.ssl.caCertificate`                  | CA file when using SSL                                                                   | `nil`                                                   |
-| `db.ssl.ciphers`                        | List of allowable ciphers for connections when using SSL                                 | `nil`                                                   |
-| `db.ssl.verify`                         | Enable SSL certificate validation                                                        | `true`                                                  |
+| Parameter                  | Description                                                       | Default |
+|----------------------------|-------------------------------------------------------------------|---------|
+| `db.allowArbitraryServer`  | Enable connection to arbitrary MySQL server                       | `true`  |
+| `db.port`                  | Database port to use to connect                                   | `3306`  |
+| `db.chartName`             | Database suffix if included in the same release                   | `nil`   |
+| `db.host`                  | Database host to connect to                                       | `nil`   |
+| `db.bundleTestDB`          | Deploy a MariaDB instance for testing purposes                    | `false` |
+| `db.enableSsl`             | Enable SSL for the connection between phpMyAdmin and the database | `false` |
+| `db.ssl.clientKey`         | Client key file when using SSL                                    | `nil`   |
+| `db.ssl.clientCertificate` | Client certificate file when using SSL                            | `nil`   |
+| `db.ssl.caCertificate`     | CA file when using SSL                                            | `nil`   |
+| `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `nil`   |
+| `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`  |
 
 ### Metrics parameters
 
-| Parameter                                 | Description                                                                            | Default                                                      |
-|-------------------------------------------|----------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                         | Start a side-car prometheus exporter                                                   | `false`                                                      |
-| `metrics.image.registry`                  | Apache exporter image registry                                                         | `docker.io`                                                  |
-| `metrics.image.repository`                | Apache exporter image name                                                             | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`                       | Apache exporter image tag                                                              | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`                | Image pull policy                                                                      | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.resources`                       | Exporter resource requests/limit                                                       | `{}`                                                         |
-| `metrics.service.type`                    | Prometheus metrics service type                                                        | `LoadBalancer`                                               |
-| `metrics.service.port`                    | Prometheus metrics service port                                                        | `9117`                                                       |
-| `metrics.service.loadBalancerIP`          | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`               | `nil`                                                        |
-| `metrics.service.annotations`             | Annotations for Prometheus metrics service                                             | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`                                                      |
-| `metrics.serviceMonitor.namespace`        | Namespace where servicemonitor resource should be created                              | `nil`                                                        |
-| `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                                | `30s`                                                        |
-| `metrics.serviceMonitor.jobLabel`         | The name of the label on the target service to use as the job name in prometheus.      | `nil`                                                        |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `nil`                                                        |
-| `metrics.serviceMonitor.relabellings`     | Specify Relabellings to add to the scrape endpoint                                     | `nil`                                                        |
-| `metrics.serviceMonitor.metricRelabelings`| Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
-| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
-| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator             | `{}`                                                         |
+| Parameter                                  | Description                                                                       | Default                                                      |
+|--------------------------------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                                                      |
+| `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`                                                  |
+| `metrics.image.repository`                 | Apache exporter image name                                                        | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`                        | Apache exporter image tag                                                         | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.resources`                        | Exporter resource requests/limit                                                  | `{}`                                                         |
+| `metrics.service.type`                     | Prometheus metrics service type                                                   | `LoadBalancer`                                               |
+| `metrics.service.port`                     | Prometheus metrics service port                                                   | `9117`                                                       |
+| `metrics.service.loadBalancerIP`           | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`          | `nil`                                                        |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                        | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                                                      |
+| `metrics.serviceMonitor.namespace`         | Namespace where servicemonitor resource should be created                         | `nil`                                                        |
+| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                           | `30s`                                                        |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `nil`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                               | `nil`                                                        |
+| `metrics.serviceMonitor.relabellings`      | Specify Relabellings to add to the scrape endpoint                                | `nil`                                                        |
+| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabellings to add to the scrape endpoint                         | `nil`                                                        |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels.         | `false`                                                      |
+| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the Installed Prometheus Operator        | `{}`                                                         |
 
 For more information please refer to the [bitnami/phpmyadmin](http://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
 

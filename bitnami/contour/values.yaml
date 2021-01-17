@@ -108,6 +108,15 @@ configInline:
 ##
 # ingressClass: contour
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Force Ingress API version (automatically detected if not set)
+##
+ingress:
+  apiVersion:
+
 ## String to partially override contour.fullname include (will maintain the release name)
 ##
 # nameOverride:
@@ -133,7 +142,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.11.0-debian-10-r0
+    tag: 1.11.0-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -315,7 +324,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.16.2-debian-10-r9
+    tag: 1.16.2-debian-10-r35
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -550,3 +559,183 @@ prometheus:
     interval: ''
     metricRelabelings: []
     relabelings: []
+
+## Default 404 backend
+##
+defaultBackend:
+  enabled: false
+  ## Bitnami NGINX image
+  ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.19.6-debian-10-r14
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## Additional command line arguments to pass to NGINX backend
+  ##
+  extraArgs: {}
+  containerPort: 8080
+
+  ## Number of replicas
+  ##
+  replicaCount: 1
+
+  ## Default backend pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Default backend containers' Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## Default backend containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
+  ## Default backend containers' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: http
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: http
+      scheme: HTTP
+    failureThreshold: 6
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
+  ##
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## priorityClassName
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ''
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: defaultBackend.podAffinityPreset, defaultBackend.podAntiAffinityPreset, and defaultBackend.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Default backend Service parameters
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Service port
+    ##
+    port: 80
+
+  ## Default backend Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1

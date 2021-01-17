@@ -48,7 +48,6 @@ app.kubernetes.io/name: {{ include "etcd.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-
 {{/*
 Return the proper etcd image name
 */}}
@@ -102,6 +101,8 @@ Return the proper Disaster Recovery PVC name
 {{- with .Values.disasterRecovery.pvc.existingClaim -}}
 {{ tpl . $ }}
 {{- end -}}
+{{- else if .Values.startFromSnapshot.existingClaim -}}
+{{- .Values.startFromSnapshot.existingClaim -}}
 {{- else -}}
 {{ template "etcd.fullname" . }}-snapshotter
 {{- end -}}

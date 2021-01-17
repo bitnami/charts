@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Number of Discourse & Sidekiq replicas
 ## (Note that you will need ReadWriteMany PVCs for this to work properly)
 ##
@@ -19,7 +23,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.6.0-debian-10-r0
+  tag: 2.6.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -359,6 +363,18 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: discourse.local
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -450,6 +466,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -549,7 +566,7 @@ externalDatabase:
   ##
   database: bitnami_application
 
-## Redis chart configuration
+## Redis(TM) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
@@ -560,7 +577,7 @@ redis:
   ## Use password authentication
   ##
   usePassword: false
-  ## Redis password (both master and slave)
+  ## Redis(TM) password (both master and slave)
   ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
   ## It should always be set using the password value or in the existingSecret to avoid issues
   ## with Discourse.
@@ -568,9 +585,11 @@ redis:
   # password:
   ##
   ## Name of existing secret object containing the password
+  ##
   existingSecret:
   ##
-  ## Password key to be retrieved from Redis secret
+  ## Password key to be retrieved from Redis(TM) secret
+  ##
   existingSecretPasswordKey: 'redis-password'
   ##
   ## Cluster settings
@@ -579,29 +598,31 @@ redis:
     enabled: false
 
   ##
-  ## Redis Master parameters
+  ## Redis(TM) Master parameters
   ##
   master:
     persistence:
       enabled: true
 
 ##
-## External Redis
+## External Redis(TM)
 ##
 externalRedis:
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: ''
-  ## Redis port
+  ## Redis(TM) port
   ##
   port: 6379
-  ## Redis password for authentication
+  ## Redis(TM) password for authentication
   ## Ignored if existingSecret is set
   ##
   password: ''
   ##
   ## Name of existing secret object containing the password
+  ##
   existingSecret:
   ##
-  ## Password key to be retrieved from Redis secret
+  ## Password key to be retrieved from Redis(TM) secret
+  ##
   existingSecretPasswordKey: 'redis-password'

@@ -8,13 +8,13 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami Moodle image version
+## Bitnami Moodle(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/moodle/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 3.10.0-debian-10-r45
+  tag: 3.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -32,6 +32,10 @@ image:
   ##
   debug: false
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override moodle.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -44,13 +48,14 @@ fullnameOverride:
 ##
 replicaCount: 1
 
-## Skip Moodle installation wizard. Useful for migrations and restoring from SQL dump
+## Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
 moodleSkipInstall: false
 
 ## Site name
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+##
 moodleSiteName: ""
 
 ## User of the application
@@ -66,6 +71,7 @@ moodlePassword: ""
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+##
 moodleEmail: user@example.com
 
 ## Set to `yes` to allow the container to be started with blank passwords
@@ -162,6 +168,7 @@ externalDatabase:
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-moodle/#smtp-configuration
+##
 smtpHost:
 smtpPort:
 smtpUser:
@@ -240,13 +247,14 @@ service:
   ## Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0
-  ## loadBalancerIP for the Moodle Service (optional, cloud specific)
+  ## loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## loadBalancerIP:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -256,7 +264,7 @@ service:
   externalTrafficPolicy: Cluster
 
 ## Configure the ingress resource that allows you to access the
-## Moodle installation. Set up the URL
+## Moodle(TM) installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -268,38 +276,61 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: moodle.local
+  hostname: minio.local
+
+  ## The Path to Moodle(TM). You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
+
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: moodle.local
+  ## extraHosts:
+  ## - name: minio.local
   ##   path: /
   ##
-  hosts:
-  ## The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
 
-  ## tls:
-  ## - hosts:
-  ##     - moodle.local
-  ##   secretName: moodle.local-tls
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
   ##
-  tls:
 
-  secrets:
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - minio.local
+  ##   secretName: minio.local-tls
+  ##
+
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -310,13 +341,16 @@ ingress:
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  # - name: moodle.local-tls
-  #   key:
-  #   certificate:
+  secrets: []
+  ## - name: minio.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -324,7 +358,7 @@ sessionAffinity: "None"
 ##
 persistence:
   enabled: true
-  ## Moodle Data Persistent Volume Storage Class
+  ## Moodle(TM) Data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
@@ -455,11 +489,12 @@ containerSecurityContext:
   runAsUser: 1001
 
 ## Configure extra options for liveness and readiness probes
-## Moodle core exposes /user/login to unauthenticated requests, making it a good
+## Moodle(TM) core exposes /user/login to unauthenticated requests, making it a good
 ## default liveness and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Moodle.
+## module that alters that route, or an image that does not auto-install Moodle(TM).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: /login/index.php
@@ -506,7 +541,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r253
+    tag: 0.8.0-debian-10-r271
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

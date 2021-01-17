@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.6-debian-10-r1
+  tag: 1.19.6-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,6 +38,10 @@ image:
 ## String to fully override nginx.fullname template
 ##
 # fullnameOverride:
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
 
 ## Kubernetes Cluster Domain
 ##
@@ -87,7 +91,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.29.2-debian-10-r44
+    tag: 2.30.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -174,6 +178,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -315,6 +320,7 @@ service:
   ## Target port reference value for the Loadbalancer service types can be specified explicitly.
   ## Listeners for the Loadbalancer can be custom mapped to the http or https service.
   ## Example: Mapping the https listener to targetPort http [http: https]
+  ##
   targetPort:
     http: http
     https: https
@@ -350,7 +356,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r199
+    tag: 0.20200116.0-debian-10-r219
     pullPolicy: IfNotPresent
 
   ## LDAP Daemon port
@@ -370,24 +376,31 @@ ldapDaemon:
 
     ## LDAP URI where to query the server
     ## Must follow the pattern -> ldap[s]:/<hostname>:<port>
+    ##
     uri: ""
 
     ## LDAP search base DN
+    ##
     baseDN: ""
 
     ## LDAP bind DN
+    ##
     bindDN: ""
 
     ## LDAP bind Password
+    ##
     bindPassword: ""
 
     ## LDAP search filter
+    ##
     filter: ""
 
     ## LDAP auth realm
+    ##
     httpRealm: ""
 
     ## LDAP cookie name
+    ##
     httpCookieName: ""
 
   ## NGINX Configuration File containing the directives (that define
@@ -477,7 +490,10 @@ ldapDaemon:
 #       - name: portname
 #         containerPort: 1234
 sidecars:
-## Ingress parameters
+
+## Configure the ingress resource that allows you to access the
+## Nginx installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -488,9 +504,22 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: example.local
+  hostname: nginx.local
+
+  ## The Path to Nginx. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -502,45 +531,49 @@ ingress:
 
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
-  ## let the chart create self-signed certificates for you
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## E.g.
   ## extraHosts:
-  ##   - name: example.local
-  ##     path: /
+  ## - name: nginx.local
+  ##   path: /
   ##
-  extraHosts: []
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## E.g.
   ## extraTls:
-  ##   - hosts:
-  ##       - example.local
-  ##     secretName: example.local-tls
+  ## - hosts:
+  ##     - nginx.local
+  ##   secretName: nginx.local-tls
   ##
-  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
-  ## name should line up with a secretName set further up
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  ## E.g.
-  ## secrets:
-  ##   - name: example.local-tls
-  ##     key:
-  ##     certificate:
-  ##
   secrets: []
+  ## - name: nginx.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Health Ingress parameters
 ##
@@ -552,6 +585,10 @@ healthIngress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## When the health ingress is enabled, a host pointing to this will be created
   ##
@@ -618,7 +655,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.8.0-debian-10-r168
+    tag: 0.8.0-debian-10-r188
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
 | `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
 | `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| `kubeVersion`                           | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                                         |
 
 ### Wildfly parameters
 
@@ -97,7 +98,7 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `containerSecurityContext`              | Wildfly containers' Security Context                                                     | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Wildfly container                                           | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the Wildfly container                                        | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `leavinessProbe`                        | Leaviness probe configuration for Wildfly                                                | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for Wildfly                                                 | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for Wildfly                                                | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
@@ -135,6 +136,9 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
 | `service.annotations`                   | Annotations for Wildfly service                                                          | `{}` (evaluated as a template)                          |
 | `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                            | ``                                                      |
+| `ingress.path`                          | Ingress path                                                                             | `/`                                                     |
+| `ingress.pathType`                      | Ingress path type                                                                        | `ImplementationSpecific`                                |
 | `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
 | `ingress.hostname`                      | Default host for the ingress resource                                                    | `wildfly.local`                                         |
 | `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.8-debian-10-r21
+  tag: 10.5.8-debian-10-r46
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -393,7 +393,7 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -676,7 +676,7 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -732,7 +732,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r289
+    tag: 0.12.1-debian-10-r318
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

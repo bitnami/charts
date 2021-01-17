@@ -13,13 +13,13 @@ global:
 #    - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami MinIO image version
+## Bitnami MinIO(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2020.12.26-debian-10-r0
+  tag: 2021.1.8-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -35,7 +35,12 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -44,6 +49,14 @@ image:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Scheduler name
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -61,13 +74,13 @@ serviceAccount:
 ##
 clusterDomain: cluster.local
 
-## Bitnami MinIO Client image version
+## Bitnami MinIO(TM) Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ##
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2020.12.18-debian-10-r8
+  tag: 2020.12.18-debian-10-r28
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -100,12 +113,12 @@ volumePermissions:
     #   cpu: 100m
     #   memory: 128Mi
 
-## MinIO server mode. Allowed values: standalone or distributed.
+## MinIO(TM) server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
 
-## MinIO deployment parameters
+## MinIO(TM) deployment parameters
 ## Only when mode is 'standalone'
 ##
 deployment:
@@ -121,7 +134,7 @@ deployment:
   updateStrategy:
     type: Recreate
 
-## MinIO statefulset parameters
+## MinIO(TM) statefulset parameters
 ## Only when mode is 'distributed'
 ##
 statefulset:
@@ -143,7 +156,7 @@ statefulset:
 ##
 # existingSecret:
 
-## Mount MinIO secret as a file instead of passing environment variable
+## Mount MinIO(TM) secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
 
@@ -151,10 +164,10 @@ useCredentialsFile: false
 ##
 forceNewKeys: false
 
-## MinIO credentials
+## MinIO(TM) credentials
 ##
 accessKey:
-  ## MinIO Access Key
+  ## MinIO(TM) Access Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
@@ -163,7 +176,7 @@ accessKey:
   ##
   forcePassword: false
 secretKey:
-  ## MinIO Secret Key
+  ## MinIO(TM) Secret Key
   ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
   ##
   password:
@@ -176,7 +189,7 @@ secretKey:
 ##
 # defaultBuckets: "my-bucket, my-second-bucket"
 
-## Disable MinIO Web UI
+## Disable MinIO(TM) Web UI
 ## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
 ##
 disableWebUI: false
@@ -186,6 +199,7 @@ disableWebUI: false
 extraEnv: {}
 
 ## Define a custom command for the minio container
+##
 command: {}
 
 ## Security Context
@@ -220,6 +234,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -250,7 +265,7 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## MinIO containers' resource requests and limits
+## MinIO(TM) containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
@@ -265,7 +280,7 @@ resources:
   #   cpu: 250m
   #   memory: 256Mi
 
-## MinIO containers' liveness and readiness probes
+## MinIO(TM) containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
@@ -321,14 +336,14 @@ persistence:
   ##
   annotations: {}
 
-## MinIO Service properties
+## MinIO(TM) Service properties
 ##
 service:
-  ## MinIO Service type
+  ## MinIO(TM) Service type
   ##
   type: ClusterIP
 
-  ## MinIO Service port
+  ## MinIO(TM) Service port
   ##
   port: 9000
 
@@ -349,48 +364,73 @@ service:
   # loadBalancerIP:
 
 ## Configure the ingress resource that allows you to access the
-## MinIO web browser. Set up the URL
+## MinIO(TM) installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: minio.local
+
+  ## The Path to MinIO(TM). You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  # annotations:
-  #   kubernetes.io/ingress.class: nginx
+  ##
+  annotations: {}
 
-  ## Ingress additional labels done as key:value pairs
-  labels: {}
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: minio.local
-      path: /
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: minio.local
+  ##   path: /
+  ##
 
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      # - www.minio.local
-      # - minio.local
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - minio.local
+  ##   secretName: minio.local-tls
+  ##
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: minio.local-tls
-
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -400,9 +440,12 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: minio.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: minio.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## NetworkPolicy parameters
 ##
@@ -412,12 +455,17 @@ networkPolicy:
   enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port MinIO is listening
-  ## on. When true, MinIO will accept connections from any source
+  ## client label will have network access to the port MinIO(TM) is listening
+  ## on. When true, MinIO(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
 
-## MinIO supports two authentication modes for Prometheus either jwt or public, by default MinIO runs in jwt mode.
+## MinIO(TM) supports two authentication modes for Prometheus either jwt or public, by default MinIO(TM) runs in jwt mode.
 ## To allow public access without authentication for prometheus metrics set environment as follows.
+##
 prometheusAuthType: public
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []

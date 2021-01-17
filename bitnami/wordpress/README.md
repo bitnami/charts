@@ -60,14 +60,15 @@ The following table lists the configurable parameters of the WordPress chart and
 
 ### Common parameters
 
-| Parameter           | Description                                        | Default                        |
-|---------------------|----------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                          |
-| `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                           |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]` (evaluated as a template) |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
 
 ### WordPress parameters
 
@@ -179,6 +180,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
+| `persistence.dataSource`    | PVC data source                          | `{}`                                       |
 
 ### Database parameters
 
@@ -199,6 +201,21 @@ The following table lists the configurable parameters of the WordPress chart and
 | `externalDatabase.database`               | Name of the existing database                        | `bitnami_wordpress`                            |
 | `externalDatabase.port`                   | Database port number                                 | `3306`                                         |
 | `externalDatabase.existingSecret`         | Name of the database existing Secret Object          | `nil`                                          |
+
+### Volume Permissions parameters
+
+| Parameter                                     | Description                                                                                                          | Default                                                      |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
+| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                         |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                          |
 
 ### Metrics parameters
 

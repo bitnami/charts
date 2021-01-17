@@ -13,8 +13,9 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.4-debian-10-r51
+  tag: 5.0.4-debian-10-r80
   ## Specify a imagePullPolicy
+  ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -22,6 +23,10 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -171,6 +176,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -288,6 +294,10 @@ ingress:
   ##
   hostname: phpmyadmin.local
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -346,7 +356,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r234
+    tag: 0.8.0-debian-10-r262
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -416,6 +426,7 @@ metrics:
 db:
   ## If you do not want the user to be able to specify an arbitrary MySQL server
   ## at login time, set this to false
+  ##
   allowArbitraryServer: true
 
   ## Database port

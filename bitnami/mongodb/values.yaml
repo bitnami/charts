@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.3-debian-10-r0
+  tag: 4.4.3-debian-10-r21
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -107,7 +107,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r6
+    tag: 1.19.6-debian-10-r26
     pullPolicy: IfNotPresent
 
 ## Name of the replica set
@@ -369,10 +369,12 @@ readinessProbe:
   successThreshold: 1
 
 ## Custom Liveness probes for MongoDB pods
+## Ignored when livenessProbe.enabled=true
 ##
 customLivenessProbe: {}
 
 ## Custom Rediness probes MongoDB pods
+## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
 
@@ -521,7 +523,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.13-debian-10-r12
+      tag: 1.18.14-debian-10-r20
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -760,10 +762,12 @@ arbiter:
     successThreshold: 1
 
   ## Custom Liveness probes for MongoDB Arbiter pods
+  ## Ignored when arbiter.livenessProbe.enabled=true
   ##
   customLivenessProbe: {}
 
   ## Custom Rediness probes MongoDB Arbiter pods
+  ## Ignored when arbiter.readinessProbe.enabled=true
   ##
   customReadinessProbe: {}
 
@@ -826,6 +830,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
   # name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -898,7 +905,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.20.1-debian-10-r18
+    tag: 0.20.1-debian-10-r38
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

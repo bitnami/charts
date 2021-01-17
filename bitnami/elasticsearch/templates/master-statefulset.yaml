@@ -245,7 +245,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
-        {{- if .Values.master.persistence.existingVolume }}
+        {{- if .Values.master.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.master.persistence.selector "context" $) | nindent 10 }}
+        {{- else if .Values.master.persistence.existingVolume }}
         selector:
           matchLabels:
             volume: {{ .Values.master.persistence.existingVolume }}

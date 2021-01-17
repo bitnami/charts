@@ -191,7 +191,7 @@ spec:
               value: {{ .Values.suitecrmSmtpPort | quote }}
             - name: SUITECRM_SMTP_USER
               value: {{ .Values.suitecrmSmtpUser | quote }}
-            {{- if .Values.smtpPassword }}
+            {{- if .Values.suitecrmSmtpPassword }}
             - name: SUITECRM_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:

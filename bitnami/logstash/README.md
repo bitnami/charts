@@ -58,6 +58,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `image.pullPolicy`                         | Logstash image pull policy                                                                                           | `IfNotPresent`                                          |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                              | `false`                                                 |
+| `kubeVersion`                              | Force target Kubernetes version (using Helm capabilities if not set)                                                 | `nil`                                                   |
 | `nameOverride`                             | String to partially override logstash.fullname template with a string (will prepend the release name)                | `nil`                                                   |
 | `fullnameOverride`                         | String to fully override logstash.fullname template with a string                                                    | `nil`                                                   |
 | `clusterDomain`                            | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                         |
@@ -101,11 +102,15 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
 | `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
-| `ingress.annotations`                      | Ingress annotations                                                                                                  | `{}`                                                    |
-| `ingress.hosts[0].name`                    | Hostname for Logstash service                                                                                        | `logstash.local`                                        |
-| `ingress.hosts[0].path`                    | Path within the url structure                                                                                        | `/`                                                     |
-| `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                                            | `logstash.local`                                        |
-| `ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                                            | `logstash.local-tls`                                    |
+| `ingress.hostname`                         | Default host for the ingress resource                                                                                | `logstash.local`                                        |
+| `ingress.path`                             | Default path for the ingress resource                                                                                | `/`                                                     |
+| `ingress.tls`                              | Create TLS Secret                                                                                                    | `false`                                                 |
+| `ingress.annotations`                      | Ingress annotations                                                                                                  | `[]` (evaluated as a template)                          |
+| `ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
+| `ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
+| `ingress.extraPaths`                       | Additional arbitrary path/backend objects                                                                            | `nil`                                                   |
+| `ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
+| `ingress.extraTls[0].secretName`           | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
 | `ingress.secrets[0].name`                  | TLS Secret Name                                                                                                      | `nil`                                                   |
 | `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                                               | `nil`                                                   |
 | `ingress.secrets[0].key`                   | TLS Secret Key                                                                                                       | `nil`                                                   |
@@ -302,6 +307,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 2.0.0
 

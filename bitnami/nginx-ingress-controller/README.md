@@ -116,7 +116,7 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `containerSecurityContext`              | Controller containers' Security Context                                                  | Check `values.yaml` file                                |
 | `resources.limits`                      | The resources limits for the Controller container                                        | `{}`                                                    |
 | `resources.requests`                    | The requested resources for the Controller container                                     | `{}`                                                    |
-| `leavinessProbe`                        | Leaviness probe configuration for Controller                                             | Check `values.yaml` file                                |
+| `livenessProbe`                         | Liveness probe configuration for Controller                                              | Check `values.yaml` file                                |
 | `readinessProbe`                        | Readiness probe configuration for Controller                                             | Check `values.yaml` file                                |
 | `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
@@ -159,7 +159,7 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `defaultBackend.containerSecurityContext`  | Default backend containers' Security Context                                             | Check `values.yaml` file                                |
 | `defaultBackend.resources.limits`          | The resources limits for the Default backend container                                   | `{}`                                                    |
 | `defaultBackend.resources.requests`        | The requested resources for the Default backend container                                | `{}`                                                    |
-| `defaultBackend.leavinessProbe`            | Leaviness probe configuration for Default backend                                        | Check `values.yaml` file                                |
+| `defaultBackend.livenessProbe`             | Liveness probe configuration for Default backend                                         | Check `values.yaml` file                                |
 | `defaultBackend.readinessProbe`            | Readiness probe configuration for Default backend                                        | Check `values.yaml` file                                |
 | `defaultBackend.customLivenessProbe`       | Override default liveness probe                                                          | `nil`                                                   |
 | `defaultBackend.customReadinessProbe`      | Override default readiness probe                                                         | `nil`                                                   |
@@ -190,6 +190,8 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `service.omitClusterIP`                 | To omit the `ClusterIP` from the controller service                                      | `false`                                                 |
 | `service.ports.http`                    | Controller Service HTTP port                                                             | `80`                                                    |
 | `service.ports.https`                   | Controller Service HTTPS port                                                            | `""`                                                    |
+| `service.targetPorts.http`              | Map the controller service HTTP port                                                     | `http`                                                  |
+| `service.targetPorts.https`             | Map the controller service HTTPS port                                                    | `https`                                                  |
 | `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
 | `service.nodePorts.http`                | Kubernetes http node port for Controller                                                 | `""`                                                    |
 | `service.nodePorts.https`               | Kubernetes https node port for Controller                                                | `""`                                                    |
