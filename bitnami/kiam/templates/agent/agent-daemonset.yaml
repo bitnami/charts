@@ -102,10 +102,10 @@ spec:
             {{- end }}
             - --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }}
             {{- if .Values.agent.keepaliveParams.time }}
-            - --grpc-keepalive-time-ms={{ .Values.agent.keepaliveParams.time }}
+            - --grpc-keepalive-time-duration={{ .Values.agent.keepaliveParams.time }}
             {{- end }}
             {{- if .Values.agent.keepaliveParams.timeout }}
-            - --grpc-keepalive-timeout-ms={{ .Values.agent.keepaliveParams.timeout }}
+            - --grpc-keepalive-timeout-duration={{ .Values.agent.keepaliveParams.timeout }}
             {{- end }}
             {{- if .Values.agent.keepaliveParams.permitWithoutStream }}
             - --grpc-keepalive-permit-without-stream

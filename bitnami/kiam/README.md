@@ -371,3 +371,15 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+Kiam version was updated from `3.6.0` to `4.0.0`, there are no relevant changes in the chart itself. According to the official documentation, this new major introduces the following breaking changes at application level:
+
+>- The role policy is now applied after the role ARN has been resolved, this may cause compatibility issues with existing `iam.amazonaws.com/permitted` restrictions.
+>- StatsD metrics have been removed.
+>- A number of agent flags have changed.
+
+For further information, you may check the [official notes](https://github.com/uswitch/kiam/blob/master/docs/UPGRADING.md) covering upgrade details.
