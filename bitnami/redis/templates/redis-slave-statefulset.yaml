@@ -265,7 +265,7 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/bash
-            - -cx
+            - -c
             - |
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.slave.persistence.path }}
