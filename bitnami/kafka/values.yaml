@@ -759,6 +759,53 @@ rbac:
   ##
   create: false
 
+## Kafka provisioning
+##
+provisioning:
+  enabled: false
+
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 2.7.0-debian-10-r10
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
+
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 1Gi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
+  topics: []
+  # - name: topic-name
+  #   partitions: 1
+  #   replicationFactor: 1
+  #   # https://kafka.apache.org/documentation/#topicconfigs
+  #   config:
+  #     max.message.bytes: 64000
+  #     flush.messages: 1
+
 ## Prometheus Exporters / Metrics
 ##
 metrics:
