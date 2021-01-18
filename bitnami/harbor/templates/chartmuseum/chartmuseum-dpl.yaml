@@ -215,6 +215,6 @@ spec:
             secretName: {{ include "harbor.chartmuseum.tls.secretName" . }}
         {{- end }}
       {{- if .Values.chartmuseum.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}
