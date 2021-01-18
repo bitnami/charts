@@ -846,3 +846,7 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
