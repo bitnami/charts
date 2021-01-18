@@ -8,13 +8,17 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami TestLink image version
 ## ref: https://hub.docker.com/r/bitnami/testlink/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r291
+  tag: 1.9.20-debian-10-r296
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -290,6 +294,7 @@ ingress:
   ## hosts:
   ## - name: testlink.local
   ##   path: /
+  ##   pathType: ImplementationSpecific
   ##
   hosts:
   ## The tls configuration for the ingress
@@ -316,6 +321,18 @@ ingress:
   # - name: testlink.local-tls
   #   key:
   #   certificate:
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
@@ -505,7 +522,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r266
+    tag: 0.8.0-debian-10-r270
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

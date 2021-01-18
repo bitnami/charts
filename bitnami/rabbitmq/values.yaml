@@ -42,6 +42,10 @@ image:
 ##
 # fullnameOverride:
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -157,6 +161,7 @@ loadDefinition:
 
 ## Default duration in seconds k8s waits for container to exit before sending kill signal. Any time in excess of
 ## 10 seconds will be spent waiting for any synchronization necessary for cluster not to lose data.
+##
 terminationGracePeriodSeconds: 120
 
 ## Additional environment variables to set
@@ -189,9 +194,11 @@ extraContainerPorts: []
 ##
 configuration: |-
   ## Username and password
+  ##
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
   ## Clustering
+  ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
   cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
@@ -224,10 +231,12 @@ configuration: |-
   {{- end }}
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
+  ##
   prometheus.tcp.port = 9419
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
+  ##
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
@@ -288,6 +297,7 @@ ldap:
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
+##
 extraVolumeMounts: []
 extraVolumes: []
 
@@ -301,6 +311,9 @@ extraVolumes: []
 ##         ...
 ##       }
 ##
+## Set this flag to true if extraSecrets should be created with <release-name> prepended.
+##
+extraSecretsPrependReleaseName: false
 extraSecrets: {}
 
 ## Number of RabbitMQ replicas to deploy
@@ -368,6 +381,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -525,6 +539,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
   accessMode: ReadWriteOnce
 
@@ -578,6 +593,7 @@ networkPolicy:
   #        - frontend
 
 ## Kubernetes service type
+##
 service:
   type: ClusterIP
   ## Amqp port
@@ -704,6 +720,10 @@ ingress:
   ##
   path: /
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -727,6 +747,7 @@ ingress:
   ##
   tls: false
   ## existingSecret: name-of-existing-secret
+  ##
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array

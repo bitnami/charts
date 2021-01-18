@@ -8,13 +8,9 @@
 
 {{- if .Values.ingress.enabled }}
   {{ if .Values.ingress.tls }}
-    {{- range .Values.ingress.hosts }}
-    - https://{{ . }}
-    {{- end }}
+    - https://{{ .Values.ingress.hostname }}
   {{- else }}
-    {{- range .Values.ingress.hosts }}
-    - http://{{ . }}
-    {{- end }}
+    - https://{{ .Values.ingress.hostname }}
   {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
@@ -62,14 +58,6 @@ host. To configure OrangeHRM to use and external database host:
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 
 {{- $passwordValidationErrors := list -}}
-{{- $secretName := include "orangehrm.secretName" . -}}
-
-{{- if not .Values.existingSecret -}}
-  {{- $requiredOrangeHRMPassword := dict "valueKey" "orangehrmPassword" "secret" $secretName "field" "orangehrm-password" "context" $ -}}
-  {{- $requiredOrangeHRMPasswordError := include "common.validations.values.single.empty" $requiredOrangeHRMPassword -}}
-  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOrangeHRMPasswordError -}}
-{{- end -}}
-
 {{- $databaseSecretName := include "orangehrm.databaseSecretName" . -}}
 
 {{- if .Values.mariadb.enabled }}
