@@ -363,44 +363,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- URL used to access to airflow web ui:
-
-```diff
-- # airflow.baseUrl:
-+ airflow.baseUrl: http://airflow.local
-```
-
-- Number of Airflow Worker replicas and enable autoscaling:
-
-```diff
-- worker.replicaCount: 1
-+ worker.replicaCount: 3
-- worker.autoscaling.enabled=false
-+ worker.autoscaling.enabled=true
-- worker.autoscaling.replicas.max=3
-+ worker.autoscaling.replicas.max=6
-- worker.autoscaling.replicas.min=1
-+ worker.autoscaling.replicas.min=3
-```
-
-- Force users to specify a password:
-
-```diff
-- airflow.auth.forcePassword: false
-+ airflow.auth.forcePassword: true
-```
-
-- Enable ingress controller resource:
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
 ### Generate a Fernet key
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
