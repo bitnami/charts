@@ -16,7 +16,7 @@ $ helm install my-release bitnami/<chart>
 
 ### Prerequisites
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ### Setup a Kubernetes Cluster
 

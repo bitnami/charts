@@ -26,7 +26,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
