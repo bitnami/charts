@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -289,60 +289,7 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Increase the number of replicas:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Resource needs and limits to apply to the pod:
-
-```diff
-resources:
-- requests: {}
-+ requests:
-+   memory: 2Gi
-+   cpu: 1000m
-- limits: {}
-+ limits:
-+   memory: 2Gi
-+   cpu: 1000m
-```
-
-- Enable Memory high watermark relative limit:
-
-```diff
-- memoryHighWatermark.enabled: false
-+ memoryHighWatermark.enabled: true
-```
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
+### Horizontal scaling
 
 To horizontally scale this chart once it has been deployed you have two options:
 

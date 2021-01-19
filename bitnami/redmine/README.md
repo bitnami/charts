@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -207,10 +207,10 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
 | `affinity`                           | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
 | `podAnnotations`                     | Pod annotations                                                                           | `{}`                                        |
-| `podSecurityContext.enabled`         | Enable security context for Redmine pods                                                  | `true`                                      |
-| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`                                      |
+| `podSecurityContext.enabled`         | Enable security context for Redmine pods                                                  | `false`                                     |
+| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `0`                                         |
 | `containerSecurityContext.enabled`   | Redmine Container securityContext                                                         | `false`                                     |
-| `containerSecurityContext.runAsUser` | User ID for the Redmine container                                                         | `1001`                                      |
+| `containerSecurityContext.runAsUser` | User ID for the Redmine container                                                         | `0`                                         |
 | `livenessProbe.enabled`              | Whether to enable the livenessProbe or not                                                | `true`                                      |
 | `livenessProbe.enabled`              | The path against which to perform the livenessProbe                                       | `/`                                         |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                  | 300                                         |

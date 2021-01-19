@@ -27,7 +27,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.aggregator.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" "$serviceName" "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.aggregator.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -37,7 +37,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" "$serviceName" "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.aggregator.ingress.tls .Values.aggregator.ingress.extraTls }}
   tls:
