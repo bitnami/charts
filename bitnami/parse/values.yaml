@@ -521,3 +521,7 @@ mongodb:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 8Gi
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
