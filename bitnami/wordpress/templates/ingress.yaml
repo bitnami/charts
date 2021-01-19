@@ -50,7 +50,7 @@ spec:
         {{- range .Values.ingress.extraHosts }}
         - {{ .name | quote }}
         {{- end }}
-      secretName: {{ (printf "%s-tls" .Values.ingress.hostname) | quote}}
+      secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.extraTls "context" $ ) | nindent 4 }}
