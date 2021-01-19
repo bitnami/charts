@@ -199,6 +199,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "mongodb.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "mongodb.validateValues.pspAndRBAC" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.customDatabase" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessServiceType" .) -}}
@@ -210,6 +211,15 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate RBAC is created when using PSP */}}
+{{- define "mongodb.validateValues.pspAndRBAC" -}}
+{{- if and (.Values.podSecurityPolicy.create) (not .Values.rbac.create) -}}
+mongodb: podSecurityPolicy.create, rbac.create
+    Both podSecurityPolicy.create and rbac.create must be true, if you want
+    to create podSecurityPolicy
 {{- end -}}
 {{- end -}}
 
