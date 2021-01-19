@@ -767,46 +767,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`:
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- The common name used to generate the certificate. It's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.secretName` is null:
-```diff
-- service.tls.commonName: "core.harbor.domain"
-+ service.tls.commonName: ""
-```
-
-- Option to ensure all passwords and keys are set by the user:
-```diff
-- forcePassword: false
-+ forcePassword: true
-```
-
-- Option to deploy Redis<sup>TM</sup> cluster:
-```diff
-- redis.cluster.enabled: false
-+ redis.cluster.enabled: true
-```
-
-- Option to deploy PostgreSQL replication cluster:
-```diff
-- postgresql.replication.enabled: false
-+ postgresql.replication.enabled: true
-```
-
-- Internal TLS is enabled by default:
-```diff
-- internalTLS.enabled: false
-+ internalTLS.enabled: true
-```
-
 ### Configure the way how to expose Harbor service:
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
