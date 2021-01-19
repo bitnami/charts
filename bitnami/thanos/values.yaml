@@ -253,6 +253,13 @@ query:
       key:
       # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
       ca:
+      # Existing secret name containing your own TLS certificates.
+      # The secret contains keys named:
+      # "tls.crt" - the certificate
+      # "tls.key" - the private key
+      # "ca.crt" - the certificate of CA
+      existingSecret: ''
+
     # TLS client side
     client:
       # Use TLS when talking to the gRPC server
@@ -265,6 +272,12 @@ query:
       ca:
       # Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1
       servername:
+      # Existing secret name containing your own TLS certificates.
+      # The secret contains keys named:
+      # "tls.crt" - the certificate
+      # "tls.key" - the private key
+      # "ca.crt" - the certificate of CA
+      existingSecret: ''
 
   ## Service parameters
   ##

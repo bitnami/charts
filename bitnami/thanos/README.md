@@ -143,11 +143,14 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.grpcTLS.server.cert`                   | TLS Certificate for gRPC server                                                                              | `nil`                                                   |
 | `query.grpcTLS.server.key`                    | TLS Key for gRPC server                                                                                      | `nil`                                                   |
 | `query.grpcTLS.server.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server                            | `nil`                                                   |
+| `query.grpcTLS.server.existingSecret` | Existing secret name containing your own TLS certificates                           | `false`                                                   |
 | `query.grpcTLS.client.secure`                 | Use TLS when talking to the gRPC server                                                                      | `false`                                                 |
 | `query.grpcTLS.client.cert`                   | TLS Certificates to use to identify this client to the server                                                | `nil`                                                   |
 | `query.grpcTLS.client.key`                    | TLS Key for the client's certificate                                                                         | `nil`                                                   |
 | `query.grpcTLS.client.ca`                     | TLS CA Certificates to use to verify gRPC servers                                                            | `nil`                                                   |
 | `query.grpcTLS.client.servername`             | Server name to verify the hostname on the returned gRPC certificates.                                        | `nil`                                                   |
+| `query.grpcTLS.client.existingSecret` | Existing secret name containing your own TLS certificates                         | `false`                                                   |
+
 | `query.service.type`                          | Kubernetes service type                                                                                      | `ClusterIP`                                             |
 | `query.service.clusterIP`                     | Thanos Query service clusterIP IP                                                                            | `None`                                                  |
 | `query.service.http.port`                     | Service HTTP port                                                                                            | `9090`                                                  |
