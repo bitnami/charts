@@ -240,33 +240,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of aggregator nodes:
-
-```diff
-- aggregator.replicaCount: 1
-+ aggregator.replicaCount: 2
-```
-
-- Enable prometheus to access fluentd metrics endpoint:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Recommendation to run with [PodSecurityPolicy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) created by the chart:
-
-```diff
-- forwarder.rbac.pspEnabled: false
-+ forwarder.rbac.pspEnabled: true
-```
-
-To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
-
 ### Forwarding the logs to another service
 
 By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files. For example:
