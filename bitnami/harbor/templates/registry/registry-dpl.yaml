@@ -388,5 +388,5 @@ spec:
         {{- end }}
         {{- end }}
       {{- if .Values.registry.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
