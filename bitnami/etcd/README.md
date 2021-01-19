@@ -191,48 +191,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of etcd nodes:
-```diff
-- statefulset.replicaCount: 1
-+ statefulset.replicaCount: 3
-```
-
-- Switch to encrypt client communication using TLS certificates:
-```diff
-- auth.client.secureTransport: false
-+ auth.client.secureTransport: true
-```
-
-- Switch to enable host authentication using TLS certificates:
-```diff
-- auth.client.enableAuthentication: false
-+ auth.client.enableAuthentication: true
-```
-
-- Switch to encrypt peer communication using TLS certificates:
-```diff
-- auth.peer.secureTransport: false
-+ auth.peer.secureTransport: true
-```
-
-- Switch to automatically create the TLS certificates:
-```diff
-- auth.peer.useAutoTLS: false
-+ auth.peer.useAutoTLS: true
-```
-
-- Enable prometheus to access etcd metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `statefulset.replicaCount` parameter.
-
 ### Using custom configuration
 
 In order to use custom configuration parameters, two options are available:
