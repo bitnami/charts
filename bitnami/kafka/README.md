@@ -128,6 +128,15 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
 | `initContainers`                                  | Add extra init containers                                                                                                         | `[]`                                                    |
 
+### Kafka provisioning parameters
+
+| Parameter                                         | Description                                                                                                                       | Default                                                 |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `provisioning.enabled`                                  | Enable kafka provisioning Job                                                                                                              | `false`                                             |
+| `provisioning.image`                                  | Kafka provisioning Job image                                                                                                              | `Check values.yaml file`                                             |
+| `provisioning.resources`                                  | Kafka provisioning Job resources                                                                                                              | `Check values.yaml file`                                             |
+| `provisioning.topics`                                  | Kafka provisioning topics                                                                                                              | `[]`                                             |
+
 ### Statefulset parameters
 
 | Parameter                             | Description                                                                               | Default                                            |
