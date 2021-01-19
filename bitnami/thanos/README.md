@@ -521,40 +521,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable Thanos Compactor:
-
-```diff
-- compactor.enabled: false
-+ compactor.enabled: true
-```
-
-- Enable Thanos Store Gateway:
-
-```diff
-- storegateway.enabled: false
-+ storegateway.enabled: true
-```
-
-- Enable Thanos Ruler:
-
-```diff
-- ruler.enabled: false
-+ ruler.enabled: true
-```
-
-- Enable Prometheus Metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-- metrics.serviceMonitor: false
-+ metrics.serviceMonitor: true
-```
-
 ### Adding extra flags
 
 In case you want to add extra flags to any Thanos component, you can use `XXX.extraFlags` parameter(s), where XXX is placeholder you need to replace with the actual component(s). For instance, to add extra flags to Thanos Store Gateway, use:
