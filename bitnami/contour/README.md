@@ -21,6 +21,44 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Helm 3.1.0
 - An Operator for `ServiceType: LoadBalancer` like [MetalLB](../metallb/README.md)
 
+## Notable(Breaking) Changes
+
+The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). 
+
+The `contour-crds` subchart(`charts/contour-crds`) was added as a dependency that contains all the Contour CRDs. As a dependency, this subchart always runs before the Contour templates are applied. CRD upgrades are also applied when the `helm upgrade` command is used.
+
+### Upgrading from Contour chart 3.x
+
+If you are installing a fresh chart, or if you are upgrading from a 4.x version of this chart, you can ignore this section.
+
+If you are upgrading from 3.x of this Helm chart, this is a breaking change as the subchart will not overwrite the existing CRDs. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
+
+If required, back up your existing Custom Resources:
+
+```console
+$ kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
+```
+
+Delete the existing Contour CRDs. Note that this step will *also delete* the associated CRs and impact availability until the upgrade is complete and the backup restored:
+
+```console
+$ kubectl delete extensionservices.projectcontour.io
+$ kubectl delete httpproxies.projectcontour.io
+$ kubectl delete tlscertificatedelegations.projectcontour.io
+```
+
+Upgrade the Contour chart with the release name `my-release`:
+
+```console
+$ helm upgrade my-release bitnami/contour
+```
+
+If you made a backup earlier, restore the objects:
+
+```console
+$ kubectl apply -f backup.yaml
+```
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
