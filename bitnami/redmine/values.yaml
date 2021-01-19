@@ -131,12 +131,11 @@ replicas: 1
 ##
 containerSecurityContext:
   enabled: false
-  runAsUser: 1001
-  runAsNonRoot: true
+  runAsUser: 0
 
 podSecurityContext:
-  enabled: true
-  fsGroup: 1001
+  enabled: false
+  fsGroup: 0
 
 ## Redmine containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
