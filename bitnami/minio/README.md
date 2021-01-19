@@ -182,58 +182,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- MinIO<sup>TM</sup> server mode:
-```diff
-- mode: standalone
-+ mode: distributed
-```
-
-- Disable MinIO<sup>TM</sup> Web UI:
-```diff
-- disableWebUI: false
-+ disableWebUI: true
-```
-
-- Annotations to be added to pods:
-```diff
-- podAnnotations: {}
-+ podAnnotations:
-+   prometheus.io/scrape: "true"
-+   prometheus.io/path: "/minio/prometheus/metrics"
-+   prometheus.io/port: "9000"
-```
-
-- Pod resources:
-```diff
-- resources: {}
-+ resources:
-+   requests:
-+     memory: 256Mi
-+     cpu: 250m
-```
-
-- Enable NetworkPolicy:
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-```
-
-- Don't require client label for connections:
-```diff
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Change Prometheus authentication:
-```diff
-- prometheusAuthType: public
-+ prometheusAuthType: jwt
-```
-
 ### Distributed mode
 
 You can start the MinIO<sup>TM</sup> chart in distributed mode with the following parameter: `mode=distributed`
