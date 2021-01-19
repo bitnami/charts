@@ -315,41 +315,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
-
-- Enable audit logging:
-
-```diff
-- postgresql.audit.logConnections: false
-+ postgresql.audit.logConnections: true
-- postgresql.audit.logDisconnections: false
-+ postgresql.audit.logDisconnections: true
-- pgpool.enableLogConnections: false
-+ pgpool.enableLogConnections: true
-- pgpool.enableLogPerNodeStatement: false
-+ pgpool.enableLogPerNodeStatement: true
-```
-
-- Enable Newtworkpolicy blocking external access:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart, you can use the `--replicaCount` flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the `values-production.yaml` file or modify the parameters shown above.
-
 ### Change PostgreSQL version
 
 To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql-repmgr/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
