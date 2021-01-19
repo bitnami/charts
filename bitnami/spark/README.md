@@ -250,56 +250,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable ingress controller
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- Enable RPC authentication and encryption:
-```diff
-- security.rpc.authenticationEnabled: false
-- security.rpc.encryptionEnabled: false
-+ security.rpc.authenticationEnabled: true
-+ security.rpc.encryptionEnabled: true
-```
-
-- Enable storage encryption:
-```diff
-- security.storageEncryptionEnabled: false
-+ security.storageEncryptionEnabled: true
-```
-
-- Configure SSL parameters:
-```diff
-- security.ssl.enabled: false
-- security.ssl.needClientAuth: false
-+ security.ssl.enabled: true
-+ security.ssl.needClientAuth: true
-```
-
-- Set a secret name for passwords:
-```diff
-+ security.passwordsSecretName: my-passwords-secret
-```
-
-- Set a secret name for certificates:
-```diff
-+ security.certificatesSecretName: my-certificates-secret
-```
-
-- Enable autoscaling depending on CPU:
-```diff
-- worker.autoscaling.enabled: false
-- worker.autoscaling.replicasMax: 5
-+ worker.autoscaling.enabled: true
-+ worker.autoscaling.replicasMax: 10
-```
-
 ### Using custom configuration
 
 To use a custom configuration a ConfigMap should be created with the `spark-env.sh` file inside the ConfigMap. The ConfigMap name must be provided at deployment time, to set the configuration on the master use: ` master.configurationConfigMap=configMapName`
