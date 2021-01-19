@@ -230,67 +230,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of NATS nodes
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable and set the max. number of client connections, protocol control line, payload and duration the server can block on a socket write to a client
-
-```diff
-- # maxConnections: 100
-- # maxControlLine: 512
-- # maxPayload: 65536
-- # writeDeadline: "2s"
-+ maxConnections: 100
-+ maxControlLine: 512
-+ maxPayload: 65536
-+ writeDeadline: "2s"
-```
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-```
-
-- Disallow external connections:
-
-```diff
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Enable ingress controller resource:
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- Enable Prometheus metrics via exporter side-car:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable PodDisruptionBudget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your NATS replica set.
-
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
