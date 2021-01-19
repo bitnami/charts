@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
 ##
@@ -353,6 +357,7 @@ query:
     # extraHosts:
     # - name: thanos.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -380,6 +385,18 @@ query:
     # - name: thanos.local-tls
     #   key:
     #   certificate:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
     ## Create an ingress object for the GRPC service. This requires an HTTP/2
     ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
@@ -423,6 +440,18 @@ query:
       # - name: thanos-grpc.local-tls
       #   key:
       #   certificate:
+
+      ## Override API Version (automatically detected if not set)
+      ##
+      apiVersion:
+
+      ## Ingress Path
+      ##
+      path: /
+
+      ## Ingress Path type
+      ##
+      pathType: ImplementationSpecific
 
 ## Thanos Query Frontend parameters
 ##
@@ -658,6 +687,7 @@ queryFrontend:
     # extraHosts:
     # - name: thanos.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -680,6 +710,18 @@ queryFrontend:
     # - name: thanos.local-tls
     #   key:
     #   certificate:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
 ## Thanos Bucket Web parameters
 ##
@@ -898,6 +940,7 @@ bucketweb:
     # extraHosts:
     # - name: thanos-bucketweb.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -924,6 +967,18 @@ bucketweb:
     # - name: thanos-bucketweb.local-tls
     #   key:
     #   certificate:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
 ## Thanos Compactor parameters
 ##

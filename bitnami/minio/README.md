@@ -1,4 +1,4 @@
-# MinIO<sup>TM</sup>
+# MinIO<sup>TM</sup> Helm Chart packaged by Bitnami
 
 [MinIO<sup>TM</sup>](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
 

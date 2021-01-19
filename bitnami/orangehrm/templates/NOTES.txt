@@ -8,13 +8,9 @@
 
 {{- if .Values.ingress.enabled }}
   {{ if .Values.ingress.tls }}
-    {{- range .Values.ingress.hosts }}
-    - https://{{ . }}
-    {{- end }}
+    - https://{{ .Values.ingress.hostname }}
   {{- else }}
-    {{- range .Values.ingress.hosts }}
-    - http://{{ . }}
-    {{- end }}
+    - https://{{ .Values.ingress.hostname }}
   {{- end }}
 {{- else if contains "NodePort" .Values.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
