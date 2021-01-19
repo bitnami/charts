@@ -20,7 +20,7 @@ metadata:
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
-    - host: {{ .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
@@ -46,11 +46,11 @@ spec:
   tls:
     {{- if .Values.ingress.tls }}
     - hosts:
-        - {{ .Values.ingress.hostname }}
+        - {{ .Values.ingress.hostname | quote }}
         {{- range .Values.ingress.extraHosts }}
-        - {{ .name }}
+        - {{ .name | quote }}
         {{- end }}
-      secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+      secretName: {{ (printf "%s-tls" .Values.ingress.hostname) | quote}}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.extraTls "context" $ ) | nindent 4 }}
