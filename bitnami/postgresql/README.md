@@ -303,42 +303,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable replication:
-```diff
-- replication.enabled: false
-+ replication.enabled: true
-```
-
-- Number of read replicas:
-```diff
-- replication.readReplicas: 1
-+ replication.readReplicas: 2
-```
-
-- Set synchronous commit mode:
-```diff
-- replication.synchronousCommit: "off"
-+ replication.synchronousCommit: "on"
-```
-
-- Number of replicas that will have synchronous replication:
-```diff
-- replication.numSynchronousReplicas: 0
-+ replication.numSynchronousReplicas: 1
-```
-
-- Start a prometheus exporter:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your PostgreSQL deployment. Also you can use the `values-production.yaml` file or modify the parameters shown above.
-
 ### Customizing primary and read replica services in a replicated configuration
 
 At the top level, there is a service object which defines the services for both primary and readReplicas. For deeper customization, there are service objects for both the primary and read types individually. This allows you to override the values in the top level service object so that the primary and read can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the primary.service or readReplicas.service objects will take precedence over the top level service object.
