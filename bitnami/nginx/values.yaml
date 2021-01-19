@@ -491,6 +491,9 @@ ldapDaemon:
 #         containerPort: 1234
 sidecars:
 
+## Extra init containers
+initContainers:
+
 ## Configure the ingress resource that allows you to access the
 ## Nginx installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
