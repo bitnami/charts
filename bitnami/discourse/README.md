@@ -292,38 +292,6 @@ persistence.storageClass=nfs
 postgresql.persistence.storageClass=nfs
 ```
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable client source IP preservation:
-
-```diff
-- service.externalTrafficPolicy: Cluster
-+ service.externalTrafficPolicy: Local
-```
-
-- Make Redis<sup>TM</sup> use password for auth:
-
-```diff
-- redis.usePassword: false
-+ redis.usePassword: true
-```
-
-- PVC Access Mode:
-
-```diff
-- persistence.accessMode: ReadWriteOnce
-+ ## To use the portal and to ensure you can scale Discourse you need to provide a
-+ ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
-+ ## We recommend that you install the nfs provisioner and map it to a RWO volume
-+ ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
-+ ##
-+ persistence.accessMode: ReadWriteMany
-```
-
-Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
-
 ### Sidecars
 
 If you have a need for additional containers to run within the same pod as Discourse (e.g. metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
