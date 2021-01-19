@@ -8,13 +8,8 @@ Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights there
 ## TL;DR
 
 ```bash
-# Testing configuration
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/redis-cluster
-```
-
-```bash
-# Production configuration
-$ helm install my-release bitnami/redis-cluster --values values-production.yaml
 ```
 
 ## Introduction
