@@ -1,0 +1,6 @@
+ingress:
+  enabled: true
+  extraHosts:
+    - name: "*.domain.tld"
+      path: /
+  tls: true
