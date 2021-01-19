@@ -356,7 +356,7 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 ### Enable bundled Kibana
 
-This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
+This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
 ### Adding extra environment variables
