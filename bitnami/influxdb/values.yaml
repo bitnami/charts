@@ -51,45 +51,60 @@ clusterDomain: cluster.local
 ##
 architecture: standalone
 
-## Database to be created on first run
-## ref: https://github.com/bitnami/bitnami-docker-influxdb#creating-a-database-on-first-run
+## Authentication parameters
 ##
-database: my_database
-
-## Enable/disable authentication
-## ref: https://github.com/bitnami/bitnami-docker-influxdb#allowing-empty-passwords
-##
-authEnabled: true
-
-## InfluxDB(TM) admin credentials
-##
-adminUser:
-  name: admin
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
-##
-user:
-  name:
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
-##
-readUser:
-  name:
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
-##
-writeUser:
-  name:
-  pwd:
-  usePasswordFile: false
-
-## Secret with InfluxDB(TM) credentials
-## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
-##
-# existingSecret:
+auth:
+  ## Variable to keep compatibility with influxdb v1
+  enabled: true
+  ## InfluxDB(TM) admin credentials
+  ##
+  admin:
+    username: admin
+    password:
+    token:
+    usePasswordFile: false
+    ## Primary org name and id
+    ##
+    org: primary
+    ## Primary bucket name and id
+    ##
+    bucket: primary
+  ## Whether to automatically create users' token
+  ## You should take into account this token are going to be create by CLI
+  ## so it is not possible to get them by k8s secrets nor to provide them though
+  ## values
+  ## See more influxdb 2.0 auth ref: https://docs.influxdata.com/influxdb/v2.0/security/tokens/
+  ##
+  createUserToken: false
+  ## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
+  ##
+  user:
+    username:
+    password:
+    usePasswordFile: false
+    ## Org where to create the user, Default: primary.org
+    ##
+    org:
+    ## Whether to create a new bucket or use the primary bucket
+    ## already create. If it is not null a new bucket will be created.
+    ##
+    bucket:
+  ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
+  ##
+  readUser:
+    username:
+    password:
+    usePasswordFile: false
+  ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
+  ##
+  writeUser:
+    username:
+    password:
+    usePasswordFile: false
+  ## Secret with InfluxDB(TM) credentials
+  ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
+  ##
+  # existingSecret:
 
 ## InfluxDB(TM) backend parameters
 ##

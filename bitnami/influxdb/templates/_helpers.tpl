@@ -209,8 +209,8 @@ imagePullSecrets:
 Return the InfluxDB(TM) credentials secret.
 */}}
 {{- define "influxdb.secretName" -}}
-{{- if .Values.existingSecret -}}
-    {{- printf "%s" (tpl .Values.existingSecret $) -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s" (include "influxdb.fullname" .) -}}
 {{- end -}}
