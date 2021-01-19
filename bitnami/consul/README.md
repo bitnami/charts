@@ -231,24 +231,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Create a Pod disruption budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
 ### Using custom configuration
 
 This helm chart supports to customize the whole configuration file.
