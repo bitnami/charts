@@ -338,6 +338,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: master
+        {{- if .Values.master.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.master.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.master.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.master.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.master.persistence.accessModes }}

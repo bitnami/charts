@@ -47,6 +47,13 @@ Return the proper Kafka image name
 {{- end -}}
 
 {{/*
+Return the proper Kafka provisioning image name
+*/}}
+{{- define "kafka.provisioning.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.provisioning.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container auto-discovery image)
 */}}
 {{- define "kafka.externalAccess.autoDiscovery.image" -}}

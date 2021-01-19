@@ -39,7 +39,7 @@ The main features of each chart are the following:
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -145,6 +145,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `master.statefulset.annotations`              | Additional annotations for redis master StatefulSet                                                                                                 | `{}`                                                    |
 | `master.statefulset.updateStrategy`           | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
 | `master.statefulset.rollingUpdatePartition`   | Partition update strategy                                                                                                                           | `nil`                                                   |
+| `master.statefulset.volumeClaimTemplates.labels`                   | Additional labels for redis master StatefulSet volumeClaimTemplates                                                                                                     | `{}`                                                    |
+| `master.statefulset.volumeClaimTemplates.annotations`              | Additional annotations for redis master StatefulSet volumeClaimTemplates                                                                                                | `{}`                                                    |
 | `master.podLabels`                            | Additional labels for Redis<sup>TM</sup> master pod                                                                                                 | {}                                                      |
 | `master.podAnnotations`                       | Additional annotations for Redis<sup>TM</sup> master pod                                                                                            | {}                                                      |
 | `master.extraEnvVars`                         | Additional Environment Variables passed to the pod of the master's stateful set set                                                                 | `[]`                                                    |
@@ -239,6 +241,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `slave.statefulset.annotations`               | Additional annotations for redis slave StatefulSet                                                                                                  | `{}`                                                    |
 | `slave.statefulset.updateStrategy`            | Update strategy for StatefulSet                                                                                                                     | onDelete                                                |
 | `slave.statefulset.rollingUpdatePartition`    | Partition update strategy                                                                                                                           | `nil`                                                   |
+| `slave.statefulset.volumeClaimTemplates.labels`                   | Additional labels for redis slave StatefulSet volumeClaimTemplates                                                                                                     | `{}`                                                    |
+| `slave.statefulset.volumeClaimTemplates.annotations`              | Additional annotations for redis slave StatefulSet volumeClaimTemplates                                                                                                | `{}`                                                    |
 | `slave.extraEnvVars`                          | Additional Environment Variables passed to the pod of the slave's stateful set set                                                                  | `[]`                                                    |
 | `slave.extraEnvVarCMs`                        | Additional Environment Variables  ConfigMappassed to the pod of the slave's stateful set set                                                        | `[]`                                                    |
 | `masslaveter.extraEnvVarsSecret`              | Additional Environment Variables Secret passed to the slave's stateful set                                                                          | `[]`                                                    |

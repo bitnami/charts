@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
 ##
@@ -415,6 +419,18 @@ query:
       #   key:
       #   certificate:
 
+      ## Override API Version (automatically detected if not set)
+      ##
+      apiVersion:
+
+      ## Ingress Path
+      ##
+      path: /
+
+      ## Ingress Path type
+      ##
+      pathType: ImplementationSpecific
+
 ## Thanos Query Frontend parameters
 ##
 
@@ -673,6 +689,18 @@ queryFrontend:
     #   key:
     #   certificate:
 
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
 ## Thanos Bucket Web parameters
 ##
 bucketweb:
@@ -916,6 +944,18 @@ bucketweb:
     secrets: []
     # - name: thanos-bucketweb.local-tls
     #   key:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
 ## Thanos Compactor parameters
 ##

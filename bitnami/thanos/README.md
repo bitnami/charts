@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -105,6 +105,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `existingObjstoreSecret`                             | Name of existing secret with Objstore configuration                                                    | `nil`                                                   |
 | `existingObjstoreSecretItems`                        | List of Secret Keys and Paths                                                                          | `[]`                                                    |
 | `existingServiceAccount`                             | Name for the existing service account to be shared between the components                              | `nil`                                                   |
+| `kubeVersion`                                        | Force target Kubernetes version (using Helm capabilities if not set)                                   | `nil`                                                   |
 
 ### Thanos Query parameters
 
@@ -169,6 +170,9 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                               | `1`                                                     |
 | `query.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                               | `nil`                                                   |
 | `query.ingress.enabled`                       | Enable ingress controller resource                                                                           | `false`                                                 |
+| `query.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                | ``                                                      |
+| `query.ingress.path`                          | Ingress path                                                                                                 | `/`                                                     |
+| `query.ingress.pathType`                      | Ingress path type                                                                                            | `ImplementationSpecific`                                |
 | `query.ingress.certManager`                   | Add annotations for cert-manager                                                                             | `false`                                                 |
 | `query.ingress.hostname`                      | Default host for the ingress resource                                                                        | `thanos.local`                                          |
 | `query.ingress.annotations`                   | Ingress annotations                                                                                          | `[]`                                                    |
@@ -239,6 +243,9 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.pdb.minAvailable`                | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `queryFrontend.pdb.maxUnavailable`              | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
 | `queryFrontend.ingress.enabled`                 | Enable ingress controller resource                                                                     | `false`                                                 |
+| `queryFrontend.ingress.apiVersion`              | Force Ingress API version (automatically detected if not set)                                          | ``                                                      |
+| `queryFrontend.ingress.path`                    | Ingress path                                                                                           | `/`                                                     |
+| `queryFrontend.ingress.pathType`                | Ingress path type                                                                                      | `ImplementationSpecific`                                |
 | `queryFrontend.ingress.certManager`             | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `queryFrontend.ingress.hostname`                | Default host for the ingress resource                                                                  | `thanos.local`                                          |
 | `queryFrontend.ingress.annotations`             | Ingress annotations                                                                                    | `[]`                                                    |
@@ -291,10 +298,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.pdb.minAvailable`                         | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `bucketweb.pdb.maxUnavailable`                       | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
 | `bucketweb.ingress.enabled`                          | Enable ingress controller resource                                                                     | `false`                                                 |
+| `bucketweb.ingress.apiVersion`                       | Force Ingress API version (automatically detected if not set)                                          | ``                                                      |
+| `bucketweb.ingress.path`                             | Ingress path                                                                                           | `/`                                                     |
+| `bucketweb.ingress.pathType`                         | Ingress path type                                                                                      | `ImplementationSpecific`                                |
 | `bucketweb.ingress.certManager`                      | Add annotations for cert-manager                                                                       | `false`                                                 |
 | `bucketweb.ingress.hostname`                         | Default host for the ingress resource                                                                  | `thanos-bucketweb.local`                                |
 | `bucketweb.ingress.annotations`                      | Ingress annotations                                                                                    | `[]`                                                    |
-| `bucketweb.ingress.tls`                             | Create ingress TLS section                                                                              | `false`                                                 |
+| `bucketweb.ingress.tls`                              | Create ingress TLS section                                                                             | `false`                                                 |
 | `bucketweb.ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                     | `nil`                                                   |
 | `bucketweb.ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                               | `nil`                                                   |

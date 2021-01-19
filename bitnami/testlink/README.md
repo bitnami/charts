@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -73,6 +73,7 @@ The following table lists the configurable parameters of the TestLink chart and 
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### TestLink parameters
 
@@ -130,25 +131,28 @@ The following table lists the configurable parameters of the TestLink chart and 
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                            | Default            |
-|----------------------------------|----------------------------------------|--------------------|
-| `service.type`                   | Kubernetes Service type                | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                      | `80`               |
-| `service.httpsPort`              | Service HTTPS port                     | `443`              |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation   | `Cluster`          |
-| `service.nodePorts.http`         | Kubernetes http node port              | `""`               |
-| `service.nodePorts.https`        | Kubernetes https node port             | `""`               |
-| `ingress.enabled`                | Enable ingress controller resource     | `false`            |
-| `ingress.certManager`            | Add annotations for cert-manager       | `false`            |
-| `ingress.hostname`               | Default host for the ingress resource  | `testlink.local`   |
-| `ingress.annotations`            | Ingress annotations                    | `{}`               |
-| `ingress.hosts[0].name`          | Hostname to your TestLink installation | `nil`              |
-| `ingress.hosts[0].path`          | Path within the url structure          | `nil`              |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                              | `nil`              |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)              | `nil`              |
-| `ingress.secrets[0].name`        | TLS Secret Name                        | `nil`              |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                 | `nil`              |
-| `ingress.secrets[0].key`         | TLS Secret Key                         | `nil`              |
+| Parameter                        | Description                                                   | Default                  |
+|----------------------------------|---------------------------------------------------------------|--------------------------|
+| `service.type`                   | Kubernetes Service type                                       | `LoadBalancer`           |
+| `service.port`                   | Service HTTP port                                             | `80`                     |
+| `service.httpsPort`              | Service HTTPS port                                            | `443`                    |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                          | `Cluster`                |
+| `service.nodePorts.http`         | Kubernetes http node port                                     | `""`                     |
+| `service.nodePorts.https`        | Kubernetes https node port                                    | `""`                     |
+| `ingress.enabled`                | Enable ingress controller resource                            | `false`                  |
+| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                  |
+| `ingress.hostname`               | Default host for the ingress resource                         | `testlink.local`         |
+| `ingress.annotations`            | Ingress annotations                                           | `{}`                     |
+| `ingress.hosts[0].name`          | Hostname to your TestLink installation                        | `nil`                    |
+| `ingress.hosts[0].path`          | Path within the url structure                                 | `nil`                    |
+| `ingress.tls[0].hosts[0]`        | TLS hosts                                                     | `nil`                    |
+| `ingress.tls[0].secretName`      | TLS Secret (certificates)                                     | `nil`                    |
+| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                    |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                    |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                    |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                       |
+| `ingress.path`                   | Ingress path                                                  | `/`                      |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific` |
 
 ### Database parameters
 
