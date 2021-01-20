@@ -434,16 +434,16 @@ ldapDaemon:
         ###############################################################
 
         # URL and port for connecting to the LDAP server
-        proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
+        # proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
 
         # Base DN
-        proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
+        # proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
 
         # Bind DN
-        proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
+        # proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
 
         # Bind password
-        proxy_set_header X-Ldap-BindPass "adminpassword";
+        # proxy_set_header X-Ldap-BindPass "adminpassword";
     }
     }
 
