@@ -98,13 +98,13 @@ spec:
           securityContext:
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           {{- end }}
-          {{- if .Values.persistence.enabled }}
           volumeMounts:
+          {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /cache-state
+          {{- end }}
             - name: tmp
               mountPath: /tmp
-          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "memcached.metrics.image" . }}
