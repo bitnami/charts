@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "influxdb.fullname" . }}-relay
+  name: {{ include "common.names.fullname" . }}-relay
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: relay
 spec:
   replicas: {{ .Values.relay.replicaCount }}
@@ -15,12 +15,12 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      {{- include "influxdb.matchLabels" . | nindent 6 }}
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
       labels:
-        {{- include "influxdb.labels" . | nindent 8 }}
+        {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}

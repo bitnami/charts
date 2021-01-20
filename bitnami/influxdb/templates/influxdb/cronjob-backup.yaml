@@ -2,9 +2,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: "{{ template "influxdb.fullname" . }}-backup"
+  name: "{{ template "common.names.fullname" . }}-backup"
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   schedule: {{.Values.backup.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
@@ -15,9 +15,9 @@ spec:
       template:
         metadata:
           labels:
-            {{- include "influxdb.matchLabels" . | nindent 12 }}
+            {{- include "common.labels.matchLabels" . | nindent 12 }}
           annotations:
-            {{- toYaml .Values.backup.cronjob.podAnnotations | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.podAnnotations "context" $) | nindent 12 }}
         spec:
           {{- if .Values.backup.cronjob.securityContext.enabled }}
           securityContext:
@@ -28,7 +28,7 @@ spec:
           volumes:
             - name: backup-scripts
               configMap:
-                name: {{ include "influxdb.fullname" . }}-backup
+                name: {{ include "common.names.fullname" . }}-backup
                 defaultMode: 0755
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: google-cloud-key
@@ -36,13 +36,13 @@ spec:
             {{- if .Values.backup.uploadProviders.google.existingSecret }}
                 secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
             {{- else }}
-                secretName: {{ include "influxdb.fullname" . }}-backup-gcloud
+                secretName: {{ include "common.names.fullname" . }}-backup-gcloud
             {{- end }}
             {{- end }}
-            - name: {{ include "influxdb.fullname" . }}-backups
+            - name: {{ include "common.names.fullname" . }}-backups
             {{- if .Values.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ include "influxdb.fullname" . }}-backups
+                claimName: {{ include "common.names.fullname" . }}-backups
             {{- else }}
                 emptyDir: {}
             {{- end }}
@@ -55,10 +55,15 @@ spec:
                     secretKeyRef:
                       name: {{ include "influxdb.secretName" . }}
                       key: admin-user-password
+                - name: INFLUXDB_ADMIN_USER_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "influxdb.secretName" . }}
+                      key: admin-user-token
               command:
                 - "/tmp/backup.sh"
               volumeMounts:
-                - name: {{ include "influxdb.fullname" . }}-backups
+                - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
                   mountPath: /tmp/backup.sh
@@ -74,7 +79,7 @@ spec:
               command:
                 - "/tmp/upload-google.sh"
               volumeMounts:
-                - name: {{ include "influxdb.fullname" . }}-backups
+                - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
                   mountPath: /tmp/upload-google.sh
@@ -94,11 +99,11 @@ spec:
                       {{- if .Values.backup.uploadProviders.azure.existingSecret }}
                       name: {{ .Values.backup.uploadProviders.azure.existingSecret | quote }}
                       {{- else }}
-                      name: {{ include "influxdb.fullname" . }}-backup-azure
+                      name: {{ include "common.names.fullname" . }}-backup-azure
                       {{- end }}
                       key: {{ .Values.backup.uploadProviders.azure.secretKey }}
               volumeMounts:
-                - name: {{ include "influxdb.fullname" . }}-backups
+                - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
                   mountPath: /tmp/upload-azure.sh

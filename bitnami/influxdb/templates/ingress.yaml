@@ -1,10 +1,10 @@
 {{- if .Values.ingress.enabled -}}
 {{- $architecture := .Values.architecture }}
-apiVersion: {{ include "ingress.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ template "influxdb.fullname" . }}
-  labels: {{- include "influxdb.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -21,12 +21,12 @@ spec:
           {{- if eq $architecture "high-availability" }}
           - path: /write
             backend:
-              serviceName: {{ include "influxdb.fullname" $ }}-relay
+              serviceName: {{ include "common.names.fullname" $ }}-relay
               servicePort: http
-          {{- end }}        
+          {{- end }}
           - path: /*
             backend:
-              serviceName: {{ include "influxdb.fullname" $ }}
+              serviceName: {{ include "common.names.fullname" $ }}
               servicePort: http
   {{- end }}
   {{- if .Values.ingress.tls }}

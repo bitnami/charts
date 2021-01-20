@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "influxdb.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 spec:
   replicas: 1
@@ -15,12 +15,12 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      {{- include "influxdb.matchLabels" . | nindent 6 }}
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: influxdb
   template:
     metadata:
       labels:
-        {{- include "influxdb.labels" . | nindent 8 }}
+        {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: influxdb
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
@@ -248,11 +248,11 @@ spec:
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/conf/influxdb.conf") .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
+            {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
             {{- end }}
-            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,txt}") .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
+            {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
@@ -269,12 +269,12 @@ spec:
               mountPath: /bitnami/influxdb
             {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/conf/influxdb.conf") .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
+        {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
           configMap:
             name: {{ include "influxdb.configmapName" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,txt}") .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
+        {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
         - name: custom-init-scripts
           configMap:
             name: {{ include "influxdb.initdbScriptsConfigmapName" . }}

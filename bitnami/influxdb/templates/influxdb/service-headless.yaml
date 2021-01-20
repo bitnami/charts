@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "influxdb.fullname" . }}-headless
+  name: {{ include "common.names.fullname" . }}-headless
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 spec:
   type: ClusterIP
@@ -19,6 +19,6 @@ spec:
       protocol: TCP
       name: rpc
   selector:
-    {{- include "influxdb.matchLabels" . | nindent 4 }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 {{- end }}

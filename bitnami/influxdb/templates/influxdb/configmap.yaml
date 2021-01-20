@@ -1,17 +1,12 @@
-{{- if and (or (.Files.Glob "files/conf/influxdb.conf") .Values.influxdb.configuration) (not .Values.influxdb.existingConfiguration) }}
+{{- if and .Values.influxdb.configuration (not .Values.influxdb.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "influxdb.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 data:
-{{- if (.Files.Glob "files/conf/influxdb.conf") }}
-{{ (.Files.Glob "files/conf/influxdb.conf").AsConfig | indent 2 }}
-{{- else if .Values.influxdb.configuration }}
   influxdb.conf: |-
     # User-supplied configuration:
-{{ tpl .Values.influxdb.configuration . | indent 4 }}
-{{- end }}
-{{- end }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.configuration "context" $) | indent 4 }}

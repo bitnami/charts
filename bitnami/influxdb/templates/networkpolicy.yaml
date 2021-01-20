@@ -2,11 +2,11 @@
 kind: NetworkPolicy
 apiVersion: {{ template "influxdb.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "influxdb.fullname" . }}
-  labels: {{- include "influxdb.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   podSelector:
-    matchLabels:  {{ include "influxdb.matchLabels" . | nindent 6 }}
+    matchLabels:  {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: influxdb
   policyTypes:
     - Ingress
@@ -21,10 +21,10 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "influxdb.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         {{- if eq .Values.architecture "high-availability" }}
         - podSelector:
-            matchLabels: {{- include "influxdb.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: relay
         {{- end }}
       {{- end }}

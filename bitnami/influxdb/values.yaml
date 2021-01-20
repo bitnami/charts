@@ -332,8 +332,8 @@ relay:
     # Array of InfluxDB(TM) instances to use as backends for Relay.
     output = [
         {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
-        {{- $influxdbFullname := include "influxdb.fullname" . }}
-        {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "influxdb.fullname" .) }}
+        {{- $influxdbFullname := include "common.names.fullname" . }}
+        {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "common.names.fullname" .) }}
         {{- $releaseName := .Release.Namespace }}
         {{- $clusterDomain:= .Values.clusterDomain }}
         {{- range $e, $i := until $influxdbReplicaCount }}
