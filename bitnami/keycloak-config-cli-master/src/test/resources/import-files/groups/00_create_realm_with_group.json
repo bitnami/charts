@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "realm": "realmWithGroups",
+  "groups": [
+    {
+      "name": "My Group"
+    }
+  ]
+}

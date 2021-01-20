@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "realm": "realmWithAuthConfig",
+  "authenticationFlows": [
+    {
+      "alias": "my auth flow",
+      "description": "My auth flow for testing",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-create-user-if-unique",
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    }
+  ]
+}

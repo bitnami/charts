@@ -1,0 +1,28 @@
+{
+  "id": "realmWithScopeMappingsClient",
+  "realm": "realmWithScopeMappingsClient",
+  "enabled": true,
+  "scopeMappings": [
+    {
+      "client": "scope-mapping-client",
+      "roles": [
+        "scope-mapping-role"
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "scope-mapping-role",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "scope-mapping-client",
+      "enabled": true
+    }
+  ]
+}

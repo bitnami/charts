@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "realm": "realm-substitution",
+  "displayName": "${sys:kcc.junit.display-name}",
+  "displayNameHtml": "${env:JAVA_HOME}",
+  "verifyEmail": ${sys:kcc.junit.verify-email},
+  "notBefore": ${sys:kcc.junit.not-before},
+  "browserSecurityHeaders": ${sys:kcc.junit.browser-security-headers}
+}

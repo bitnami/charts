@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "realm": "realmWithClients",
+  "clients": [
+    {
+      "clientId": "new-client",
+      "description": "em3eedoh8biuph8aiwo0oe2Uyaexu7zauquohshee7yei6koo2phae4quohtioXe3Mahw7Pee4wie4ii9Oht3ooj9naes2kahNg8nei1tahn0Ahm5nipea8Ohw7eec0feenahngeeH2Rupohbae3ur7aitietaePooca1aeghooDohZ8Oof7die2Uosoenae7zie1aighaghaed0pheet0ohg7dohw2EiHe0yap5dou9Ahcohs9eeph4sooriehi",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-other-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

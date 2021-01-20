@@ -1,0 +1,33 @@
+{
+  "enabled": true,
+  "realm": "realmWithClients",
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "changed-special-client-secret",
+      "redirectUris": [
+        "https://moped-client.org/redirect"
+      ],
+      "webOrigins": [
+        "https://moped-client.org/webOrigin"
+      ],
+      "protocolMappers": []
+    },
+    {
+      "clientId": "realm-management",
+      "name": "${client_realm-management}",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [],
+      "webOrigins": [],
+      "bearerOnly": false,
+      "publicClient": true,
+      "serviceAccountsEnabled": true
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "enabled": true,
+  "realm": "realmWithClients",
+  "authenticationFlows": [
+    {
+      "alias": "custom flow",
+      "description": "Custom flow for testing",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "requirement": "DISABLED",
+          "priority": 0,
+          "userSetupAllowed": true,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
+      "alias": "custom flow 2",
+      "description": "Second custom flow for testing",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "requirement": "DISABLED",
+          "priority": 0,
+          "userSetupAllowed": true,
+          "autheticatorFlow": false
+        }
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "auth-moped-client",
+      "name": "auth-moped-client",
+      "description": "Auth-Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "changed-special-client-secret",
+      "redirectUris": [
+        "https://moped-client.org/redirect"
+      ],
+      "webOrigins": [
+        "https://moped-client.org/webOrigin"
+      ],
+      "protocolMappers": [
+        {
+          "name": "BranchCodeMapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "aggregate.attrs": "false",
+            "userinfo.token.claim": "true",
+            "multivalued": "false",
+            "user.attribute": "branch",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "branch",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "PERMISSIVE",
+        "decisionStrategy": "UNANIMOUS",
+        "resources": [
+          {
+            "name": "Admin Resource",
+            "uri": "/protected/admin/*",
+            "type": "http://servlet-authz/protected/admin",
+            "scopes": [
+              {
+                "name": "urn:servlet-authz:protected:admin:access"
+              }
+            ]
+          },
+          {
+            "name": "Premium Resource",
+            "uri": "/protected/premium/*",
+            "type": "urn:servlet-authz:protected:resource",
+            "scopes": [
+              {
+                "name": "urn:servlet-authz:protected:premium:access"
+              }
+            ]
+          },
+          {
+            "name": "Main Page",
+            "type": "urn:servlet-authz:protected:resource",
+            "scopes": [
+              {
+                "name": "urn:servlet-authz:page:main:actionForPremiumUser"
+              },
+              {
+                "name": "urn:servlet-authz:page:main:actionForAdmin"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "Any Admin Policy",
+            "description": "Defines that adminsitrators can do something",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"admin\"}]"
+            }
+          },
+          {
+            "name": "Only Premium User Policy",
+            "description": "Defines that only premium users can do something",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"user_premium\"}]"
+            }
+          },
+          {
+            "name": "All Users Policy",
+            "description": "Defines that all users can do something",
+            "type": "aggregate",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "applyPolicies": "[\"Any Admin Policy\",\"Only Premium User Policy\"]"
+            }
+          },
+          {
+            "name": "Administrative Resource Permission",
+            "description": "A policy that defines access to administrative resources",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Admin Resource\"]",
+              "applyPolicies": "[\"Any Admin Policy\"]"
+            }
+          },
+          {
+            "name": "Premium User Scope Permission",
+            "description": "A policy that defines access to a premium scope",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "scopes": "[\"urn:servlet-authz:page:main:actionForPremiumUser\"]",
+              "applyPolicies": "[\"Only Premium User Policy\"]"
+            }
+          },
+          {
+            "name": "Administrator Action Scope Permission",
+            "description": "A policy that defines access to an administrator scope",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "scopes": "[\"urn:servlet-authz:page:main:actionForAdmin\"]",
+              "applyPolicies": "[\"Any Admin Policy\"]"
+            }
+          }
+        ],
+        "scopes": [
+          {
+            "name": "urn:servlet-authz:protected:admin:access"
+          },
+          {
+            "name": "urn:servlet-authz:protected:premium:access"
+          },
+          {
+            "name": "urn:servlet-authz:page:main:actionForPremiumUser"
+          },
+          {
+            "name": "urn:servlet-authz:page:main:actionForAdmin"
+          }
+        ]
+      }
+    },
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "changed-special-client-secret",
+      "redirectUris": [
+        "https://moped-client.org/redirect"
+      ],
+      "webOrigins": [
+        "https://moped-client.org/webOrigin"
+      ],
+      "protocolMappers": [
+        {
+          "name": "BranchCodeMapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "aggregate.attrs": "false",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "user.attribute": "branch",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "branch",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "protocolMapper": "oidc-full-name-mapper",
+          "protocol": "openid-connect",
+          "name": "full name",
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "false"
+          }
+        }
+      ],
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false
+    },
+    {
+      "clientId": "another-client",
+      "name": "another-client",
+      "description": "Another-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-other-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "authenticationFlowBindingOverrides": {
+        "browser": "bad value"
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      },
+      {
+        "name": "user_premium",
+        "description": "User Premium privileges"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "service-account-auth-moped-client",
+      "enabled": true,
+      "serviceAccountClientId": "auth-moped-client"
+    }
+  ]
+}

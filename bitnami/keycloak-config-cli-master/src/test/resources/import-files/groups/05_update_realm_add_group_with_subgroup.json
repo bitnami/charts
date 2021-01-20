@@ -1,0 +1,78 @@
+{
+  "enabled": true,
+  "realm": "realmWithGroups",
+  "groups": [
+    {
+      "name": "My Group"
+    },
+    {
+      "name": "My Added Group"
+    },
+    {
+      "name": "Group with attribute",
+      "attributes": {
+        "my attribute": [
+          "my attribute value"
+        ]
+      }
+    },
+    {
+      "name": "Group with realm role",
+      "realmRoles": [
+        "my_realm_role"
+      ]
+    },
+    {
+      "name": "Group with client role",
+      "clientRoles": {
+        "moped-client": [
+          "my_client_role"
+        ]
+      }
+    },
+    {
+      "name": "Group with subgroup",
+      "subGroups": [
+        {
+          "name": "My SubGroup"
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "my_realm_role",
+        "description": "My realm role",
+        "composite": false,
+        "clientRole": false
+      }
+    ],
+    "client": {
+      "moped-client": [
+        {
+          "name": "my_client_role",
+          "description": "My moped-client role",
+          "composite": false,
+          "clientRole": true
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

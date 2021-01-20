@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "realm": "realmWithFlow",
+  "authenticationFlows": [
+    {
+      "alias": "my auth flow with non top level flows",
+      "description": "My authentication flow with authentication executions",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": "non existing sub flow",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    }
+  ]
+}

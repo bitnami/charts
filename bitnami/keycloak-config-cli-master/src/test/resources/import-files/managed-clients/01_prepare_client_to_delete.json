@@ -1,0 +1,72 @@
+{
+  "enabled": true,
+  "realm": "realmWithManagedClients",
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "delete-that-client-1",
+      "name": "delete-that-client-1",
+      "description": "delete-that-Client-1",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "delete-that-client-2",
+      "name": "delete-that-client-2",
+      "description": "delete-that-Client-2",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "delete-that-client-3",
+      "name": "delete-that-client-3",
+      "description": "delete-that-Client-3",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "delete-that-client-4",
+      "name": "delete-that-client-4",
+      "description": "delete-that-Client-4",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

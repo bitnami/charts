@@ -1,0 +1,131 @@
+{
+  "enabled": true,
+  "realm": "realmWithSubComponents",
+  "components": {
+    "org.keycloak.keys.KeyProvider": [
+      {
+        "name": "rsa-generated",
+        "providerId": "rsa-generated",
+        "config": {
+          "keySize": [
+            "2048"
+          ],
+          "priority": [
+            "100"
+          ]
+        }
+      },
+      {
+        "name": "hmac-generated",
+        "providerId": "hmac-generated",
+        "config": {
+          "secretSize": [
+            "32"
+          ],
+          "priority": [
+            "100"
+          ]
+        }
+      }
+    ],
+    "org.keycloak.storage.UserStorageProvider": [
+      {
+        "name": "em3eedoh8biuph8aiwo0oe2Uyaexu7zauquohshee7yei6koo2phae4quohtioXe3Mahw7Pee4wie4ii9Oht3ooj9naes2kahNg8nei1tahn0Ahm5nipea8Ohw7eec0feenahngeeH2Rupohbae3ur7aitietaePooca1aeghooDohZ8Oof7die2Uosoenae7zie1aighaghaed0pheet0ohg7dohw2EiHe0yap5dou9Ahcohs9eeph4sooriehi",
+        "providerId": "ldap",
+        "subComponents": {},
+        "config": {
+          "pagination": [
+            "true"
+          ],
+          "fullSyncPeriod": [
+            "-1"
+          ],
+          "connectionPooling": [
+            "true"
+          ],
+          "usersDn": [
+            "someDN"
+          ],
+          "cachePolicy": [
+            "DEFAULT"
+          ],
+          "useKerberosForPasswordAuthentication": [
+            "false"
+          ],
+          "importEnabled": [
+            "true"
+          ],
+          "enabled": [
+            "true"
+          ],
+          "changedSyncPeriod": [
+            "-1"
+          ],
+          "bindCredential": [
+            "adadasdasdasdasdasdasdasd"
+          ],
+          "bindDn": [
+            "someBindDN"
+          ],
+          "usernameLDAPAttribute": [
+            "userPrincipalName"
+          ],
+          "lastSync": [
+            "1539695370"
+          ],
+          "vendor": [
+            "ad"
+          ],
+          "uuidLDAPAttribute": [
+            "objectGUID"
+          ],
+          "allowKerberosAuthentication": [
+            "false"
+          ],
+          "connectionUrl": [
+            "ldaps://1.something.local ldaps://1.something.local"
+          ],
+          "syncRegistrations": [
+            "false"
+          ],
+          "authType": [
+            "simple"
+          ],
+          "connectionTimeout": [
+            "60000"
+          ],
+          "debug": [
+            "false"
+          ],
+          "searchScope": [
+            "2"
+          ],
+          "useTruststoreSpi": [
+            "never"
+          ],
+          "priority": [
+            "0"
+          ],
+          "userObjectClasses": [
+            "person, organizationalPerson, user"
+          ],
+          "rdnLDAPAttribute": [
+            "cn"
+          ],
+          "readTimeout": [
+            "60000"
+          ],
+          "editMode": [
+            "WRITABLE"
+          ],
+          "validatePasswordPolicy": [
+            "false"
+          ],
+          "batchSizeForSync": [
+            "1000"
+          ]
+        }
+      }
+    ]
+  }
+}

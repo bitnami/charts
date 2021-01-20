@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "realm": "realmWithRequiredActions",
+  "requiredActions": [
+    {
+      "alias": "MY_CONFIGURE_TOTP",
+      "name": "My Configure OTP",
+      "providerId": "MY_CONFIGURE_TOTP",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 1,
+      "config": {}
+    },
+    {
+      "alias": "my_terms_and_conditions",
+      "name": "Changed: My Terms and Conditions",
+      "providerId": "my_terms_and_conditions",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 0,
+      "config": {}
+    }
+  ]
+}

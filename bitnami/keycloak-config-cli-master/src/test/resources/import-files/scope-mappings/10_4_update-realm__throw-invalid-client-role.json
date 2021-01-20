@@ -1,0 +1,12 @@
+{
+  "id": "realmWithScopeMappings",
+  "realm": "realmWithScopeMappings",
+  "scopeMappings": [
+    {
+      "client": "scope-mapping-client",
+      "roles": [
+        "non-exists-role"
+      ]
+    }
+  ]
+}

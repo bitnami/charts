@@ -1,0 +1,37 @@
+version: '3'
+services:
+  keycloak:
+    image: jboss/keycloak:${KEYCLOAK_VERSION}
+    environment:
+      KEYCLOAK_PASSWORD: admin123
+      KEYCLOAK_USER: admin
+    volumes:
+      - ./providers/:/opt/jboss/keycloak/providers/
+    networks:
+      - keycloak
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    command:
+      - "-c"
+      - "standalone.xml"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+  keycloak-config-cli:
+    build: .
+    image: adorsys/keycloak-config-cli:latest
+    depends_on:
+      - keycloak
+    networks:
+      - keycloak
+    volumes:
+      - ./contrib/example-config:/config
+    environment:
+      - keycloak.url=http://keycloak:8080
+      - keycloak.user=admin
+      - keycloak.password=admin123
+      - keycloak.availability-check.enabled=true
+      - spring.profiles.active=dev
+      - import.force=false
+
+networks:
+  keycloak:

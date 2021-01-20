@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "realm": "simple",
+  "smtpServer": {
+    "from": "keycloak-config-cli@example.com",
+    "fromDisplayName": "keycloak-config-cli",
+    "host": "mta",
+    "auth": true,
+    "envelopeFrom": "keycloak-config-cli@example.com",
+    "user": "username",
+    "password": "password"
+  }
+}

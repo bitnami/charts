@@ -1,0 +1,70 @@
+---
+fullnameOverride: ""
+nameOverride: ""
+
+image:
+  repository: docker.io/adorsys/keycloak-config-cli
+  tag: "v{{ .Chart.AppVersion }}-11.0.3"
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  pullSecrets: []
+  # - myRegistrKeySecretName
+
+# Count of re(!)tries. A value of 2 means 3 tries in total.
+backoffLimit: 1
+
+# annotations of the Job. Define helm post hook here
+annotations:
+  "helm.sh/hook": "post-install,post-upgrade,post-rollback"
+  "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
+  "helm.sh/hook-weight": "5"
+
+labels: {}
+
+resources: {}
+  # limits:
+  #   cpu: "100m"
+  #   memory: "1024Mi"
+  # requests:
+  #   cpu: "100m"
+#   memory: "1024Mi"
+
+env:
+  KEYCLOAK_URL: http://keycloak:8080
+  KEYCLOAK_USER: admin
+  IMPORT_PATH: /config/
+
+secrets: {}
+#  KEYCLOAK_PASSWORD:
+
+# Specifies an existing secret to be used for the admin password
+existingSecret: ""
+
+# The key in the existing secret that stores the password
+existingSecretKey: password
+
+# The name of the service account to use.
+serviceAccount: ""
+
+securityContext: {}
+containerSecurityContext: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+## Extra Annotations to be added to pod
+podAnnotations: {}
+
+config: {}
+  # <realm name>:
+  #   inline:
+  #     realm: <realm name>
+  #     clients: []
+  # <realm name>:
+  #   file: <path>
+
+existingConfigSecret: ""

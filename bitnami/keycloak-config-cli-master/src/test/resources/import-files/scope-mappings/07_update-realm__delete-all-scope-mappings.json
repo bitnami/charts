@@ -1,0 +1,50 @@
+{
+  "id": "realmWithScopeMappings",
+  "realm": "realmWithScopeMappings",
+  "displayName": "Realm with scope-mappings",
+  "enabled": true,
+  "scopeMappings": [],
+  "roles": {
+    "realm": [
+      {
+        "name": "scope-mapping-role",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "added-scope-mapping-role",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "myuser",
+      "email": "my@mail.de",
+      "enabled": true,
+      "firstName": "My",
+      "lastName": "User",
+      "realmRoles": [
+        "scope-mapping-role",
+        "added-scope-mapping-role"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "myuser123"
+        }
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "scope-mapping-client",
+      "enabled": true
+    },
+    {
+      "clientId": "scope-mapping-client-two",
+      "enabled": true
+    }
+  ]
+}

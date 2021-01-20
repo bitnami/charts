@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "realm": "realmWithManagedEncryptedSate",
+  "roles": {
+    "realm": []
+  }
+}

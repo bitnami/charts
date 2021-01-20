@@ -1,0 +1,51 @@
+{
+  "enabled": true,
+  "realm": "realmWithFlow",
+  "browserFlow": "browser",
+  "directGrantFlow": "direct grant",
+  "clientAuthenticationFlow": "clients",
+  "dockerAuthenticationFlow": "docker auth",
+  "registrationFlow": "registration",
+  "resetCredentialsFlow": "reset credentials",
+  "authenticationFlows": [
+    {
+      "alias": "saml ecp",
+      "description": "Ahx7vooheijoo7Zoh4aeXee1aem2aehoh9seigheK2yecong3ciegoot1cee1eidogh5kooxee7noh1iohoh3aid5Aif8iodoo2aLujeijaim6Xahrai3IerahngemaipeiSho5ii4ugh2aecaeve7aiSi6aiz5eeso5thafooyuN3ook7Aij7ieweequeiM9NeemaePhuquahiech9SawaeBu5akeechoo4faipho9ahtahcheeK1bu1ooFoo8r",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "http-basic-authenticator",
+          "requirement": "CONDITIONAL",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
+      "alias": "my auth flow",
+      "description": "My auth flow for testing with pseudo-id",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "requirement": "REQUIRED",
+          "priority": 1,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "http-basic-authenticator",
+          "requirement": "DISABLED",
+          "priority": 0,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    }
+  ]
+}

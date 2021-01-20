@@ -1,0 +1,3 @@
+enabled: true
+realm: realm-file-type-yaml
+loginTheme: moped

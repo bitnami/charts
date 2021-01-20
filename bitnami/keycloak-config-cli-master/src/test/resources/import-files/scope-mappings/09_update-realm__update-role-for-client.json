@@ -1,0 +1,21 @@
+{
+  "id": "realmWithScopeMappings",
+  "realm": "realmWithScopeMappings",
+  "displayName": "Realm with scope-mappings",
+  "enabled": true,
+  "scopeMappings": [
+    {
+      "clientScope": "offline_access",
+      "roles": [
+        "offline_access",
+        "added-scope-mapping-role"
+      ]
+    },
+    {
+      "client": "scope-mapping-client",
+      "roles": [
+        "admin"
+      ]
+    }
+  ]
+}

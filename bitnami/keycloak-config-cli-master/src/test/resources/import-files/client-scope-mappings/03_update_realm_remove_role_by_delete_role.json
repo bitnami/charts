@@ -1,0 +1,74 @@
+{
+  "enabled": true,
+  "realm": "realmWithClientScopeMappings",
+  "clientScopeMappings": {
+    "moped-client": [
+      {
+        "client": "other-moped-client",
+        "roles": [
+          "2nd-moped-role"
+        ]
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "fullScopeAllowed": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "other-moped-client",
+      "name": "other-moped-client",
+      "description": "Other-Moped-Client",
+      "enabled": true,
+      "fullScopeAllowed": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ],
+  "roles": {
+    "client": {
+      "moped-client": [
+        {
+          "name": "moped-role",
+          "clientRole": true
+        },
+        {
+          "name": "2nd-moped-role",
+          "clientRole": true
+        }
+      ],
+      "other-moped-client": [
+        {
+          "name": "other-moped-role",
+          "clientRole": true
+        },
+        {
+          "name": "2nd-other-moped-role",
+          "clientRole": true
+        },
+        {
+          "name": "3rd-other-moped-role",
+          "clientRole": true
+        }
+      ]
+    }
+  }
+}

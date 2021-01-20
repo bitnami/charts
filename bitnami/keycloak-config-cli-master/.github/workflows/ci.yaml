@@ -1,0 +1,183 @@
+---
+name: CI
+
+env:
+  # https://github.com/actions/virtual-environments/issues/1499
+  MAVEN_CLI_OPTS: '-ntp --batch-mode --errors --fail-at-end --show-version -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120'
+  TESTCONTAINERS_RYUK_DISABLED: 'true'
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - KEYCLOAK_VERSION: 9.0.3
+          - KEYCLOAK_VERSION: 10.0.2
+          - KEYCLOAK_VERSION: 11.0.3
+          - KEYCLOAK_VERSION: 12.0.2
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ matrix.env.KEYCLOAK_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ matrix.env.KEYCLOAK_VERSION }}
+
+      - name: Build & Test
+        env: ${{ matrix.env }}
+        run: >-
+          mvn ${MAVEN_CLI_OPTS} -Dkeycloak.version=${KEYCLOAK_VERSION} clean verify -Pcoverage
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: keycloak-config-cli-${{ matrix.env.KEYCLOAK_VERSION }}.jar
+          path: target/keycloak-config-cli.jar
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.2.1
+        with:
+          file: "${{ github.workspace }}/target/site/jacoco/jacoco.xml"
+          fail_ci_if_error: true
+
+  build-pom-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-coverage-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-coverage
+
+      - name: Build & Test
+        run: >-
+          mvn ${MAVEN_CLI_OPTS} clean verify
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  automerge:
+    name: Merge pull request
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - build-pom-version
+      - check-licence-header
+      - lint-github-action-files
+    if: github.base_ref == 'master' && github.actor == 'dependabot[bot]' && !contains(github.event.pull_request.title, 'keycloak')
+    steps:
+      - name: Approve
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.pulls.createReview({
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE'
+            })
+      - name: Merge
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.pulls.merge({
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
+              pull_number: context.payload.pull_request.number,
+              merge_method: 'squash'
+            })
+
+  lint-github-action-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          strict: true
+          file_or_dir: .github/workflows/
+          config_data: |
+            extends: default
+            rules:
+              line-length: disable
+              truthy:
+                check-keys: false
+
+  check-licence-header:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-licence-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-licence
+
+      - name: Check licence
+        run: |-
+          mvn ${MAVEN_CLI_OPTS} clean license:check-file-header -Dlicense.failOnMissingHeader=true -Dlicense.failOnNotUptodateHeader=true
+          echo Run 'mvn license:update-file-header' to fix the licence headers
+
+  lint-dockerfile-and-helm-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-dockerfile-lint-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-dockerfile-lint
+
+      - name: Build keycloak-config-cli
+        run: mvn clean package -DskipTests
+
+      - name: Test Dockerfile
+        run: docker build -t adorsys/keycloak-config-cli .
+
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+
+      - name: Run chart-testing (lint)
+        id: lint
+        uses: helm/chart-testing-action@v1.1.0
+        with:
+          command: lint
+          config: contrib/charts/ct.yaml

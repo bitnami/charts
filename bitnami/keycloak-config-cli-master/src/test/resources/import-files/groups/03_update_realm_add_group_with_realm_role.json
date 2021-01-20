@@ -1,0 +1,36 @@
+{
+  "enabled": true,
+  "realm": "realmWithGroups",
+  "groups": [
+    {
+      "name": "My Group"
+    },
+    {
+      "name": "My Added Group"
+    },
+    {
+      "name": "Group with attribute",
+      "attributes": {
+        "my attribute": [
+          "my attribute value"
+        ]
+      }
+    },
+    {
+      "name": "Group with realm role",
+      "realmRoles": [
+        "my_realm_role"
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "my_realm_role",
+        "description": "My realm role",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "enabled": true,
+  "realm": "realmWithRoles",
+  "roles": {
+    "realm": [
+      {
+        "name": "my_realm_role",
+        "description": "My realm role",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "my_other_realm_role",
+        "description": "My changed other realm role",
+        "composite": false,
+        "clientRole": false
+      }
+    ],
+    "client": {
+      "moped-client": [
+        {
+          "name": "my_client_role",
+          "description": "My moped-client role",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_other_client_role",
+          "description": "My changed other moped-client role",
+          "composite": false,
+          "clientRole": true
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "myuser",
+      "email": "my@mail.de",
+      "enabled": true,
+      "firstName": "My",
+      "lastName": "User",
+      "realmRoles": [
+        "my_realm_role"
+      ]
+    }
+  ]
+}

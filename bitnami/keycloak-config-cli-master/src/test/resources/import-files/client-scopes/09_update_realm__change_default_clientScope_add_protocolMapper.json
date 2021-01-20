@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "realm": "realmWithClientScopes",
+  "clientScopes": [
+    {
+      "name": "profile",
+      "protocolMappers": [
+        {
+          "id": "tmp",
+          "name": "tmp",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "config": {
+            "user.attribute": "name",
+            "claim.name": "tmp",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+
+[*.{json, yaml}]
+indent_size = 2
+ij_yaml_spaces_within_brackets = false
+
+[*.{xml, java}]
+indent_size = 4
+tab_width = 4
+continuation_indent_size = 8
+indent_brace_style = K&R
+spaces_around_brackets = outside
+max_line_length = 120
+ij_java_imports_layout = *, |, java.**, javax.**, |, $*
+ij_java_if_brace_force = if_multiline
+ij_java_space_before_if_left_brace = true
+ij_java_binary_operation_wrap = on_every_item
+ij_java_binary_operation_sign_on_next_line = true

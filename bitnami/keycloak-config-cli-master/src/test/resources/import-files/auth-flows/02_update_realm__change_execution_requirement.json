@@ -1,0 +1,29 @@
+{
+  "enabled": true,
+  "realm": "realmWithFlow",
+  "authenticationFlows": [
+    {
+      "alias": "my auth flow",
+      "description": "My auth flow for testing",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "requirement": "REQUIRED",
+          "priority": 0,
+          "userSetupAllowed": true,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "http-basic-authenticator",
+          "requirement": "DISABLED",
+          "priority": 1,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    }
+  ]
+}

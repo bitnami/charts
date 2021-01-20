@@ -1,0 +1,102 @@
+{
+  "enabled": true,
+  "realm": "realmWithFlow",
+  "authenticationFlows": [
+    {
+      "alias": "my-first-broker-login-handle-existing-account",
+      "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-auto-link",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "idp-confirm-link",
+          "requirement": "REQUIRED",
+          "priority": 11,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
+      "alias": "my-first-broker-login-user-creation-or-linking",
+      "description": "Flow for the existing/non-existing user alternatives",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-create-user-if-unique",
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "flowAlias": "my-first-broker-login-handle-existing-account",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    },
+    {
+      "alias": "my-first-broker-login",
+      "description": "custom changed first broker login",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-review-profile",
+          "requirement": "DISABLED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "requirement": "DISABLED",
+          "priority": 20,
+          "flowAlias": "my-first-broker-login-user-creation-or-linking",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "keycloak-oidc",
+      "displayName": "my-keycloak-oidc",
+      "providerId": "keycloak-oidc",
+      "enabled": true,
+      "trustEmail": true,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "my-first-broker-login",
+      "config": {
+        "clientId": "example-client-id",
+        "tokenUrl": "https://example.com/protocol/openid-connect/token",
+        "authorizationUrl": "https://example.com/protocol/openid-connect/auth",
+        "clientAuthMethod": "client_secret_post",
+        "logoutUrl": "https://example.com/protocol/openid-connect/logout",
+        "syncMode": "FORCE",
+        "clientSecret": "example-client-secret",
+        "backchannelSupported": "true",
+        "defaultScope": "",
+        "guiOrder": "0",
+        "useJwksUrl": "true"
+      }
+    }
+  ]
+}

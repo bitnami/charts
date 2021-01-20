@@ -1,0 +1,6 @@
+{
+  "realm": "realmWithCustomImport",
+  "customImport": {
+    "removeImpersonation": true
+  }
+}

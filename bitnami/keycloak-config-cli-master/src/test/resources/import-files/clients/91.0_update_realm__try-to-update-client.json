@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "realm": "realmWithClients",
+  "clients": [
+    {
+      "clientId": "another-client-with-long-description",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-other-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

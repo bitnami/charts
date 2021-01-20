@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "realm": "realmWithIdentityProviders",
+  "identityProviders": []
+}

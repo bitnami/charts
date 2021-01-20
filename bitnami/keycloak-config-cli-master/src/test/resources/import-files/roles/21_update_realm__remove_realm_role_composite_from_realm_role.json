@@ -1,0 +1,167 @@
+{
+  "enabled": true,
+  "realm": "realmWithRoles",
+  "roles": {
+    "realm": [
+      {
+        "name": "my_realm_role",
+        "description": "My realm role",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "my_other_realm_role",
+        "description": "My changed other realm role",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "my_composite_realm_role",
+        "description": "My added composite realm role",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "realm": [
+            "my_other_realm_role"
+          ]
+        }
+      },
+      {
+        "name": "my_composite_client_role",
+        "description": "My added composite client role",
+        "composite": true,
+        "clientRole": false,
+        "composites": {
+          "client": {
+            "moped-client": [
+              "my_client_role",
+              "my_other_client_role"
+            ],
+            "second-moped-client": [
+              "my_second_client_role",
+              "my_other_second_client_role"
+            ]
+          }
+        }
+      }
+    ],
+    "client": {
+      "moped-client": [
+        {
+          "name": "my_client_role",
+          "description": "My moped-client role",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_other_client_role",
+          "description": "My changed other moped-client role",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_composite_moped_client_role",
+          "description": "My composite moped-client role",
+          "composite": true,
+          "clientRole": true,
+          "composites": {
+            "realm": [
+              "my_realm_role",
+              "my_other_realm_role"
+            ]
+          }
+        },
+        {
+          "name": "my_other_composite_moped_client_role",
+          "description": "My other composite moped-client role",
+          "composite": true,
+          "clientRole": true,
+          "composites": {
+            "client": {
+              "moped-client": [
+                "my_client_role",
+                "my_other_client_role"
+              ],
+              "second-moped-client": [
+                "my_second_client_role",
+                "my_other_second_client_role"
+              ]
+            }
+          }
+        }
+      ],
+      "second-moped-client": [
+        {
+          "name": "my_second_client_role",
+          "description": "My second moped-client role",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_other_second_client_role",
+          "description": "My second other moped-client role",
+          "composite": false,
+          "clientRole": true
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "second-moped-client",
+      "name": "second-moped-client",
+      "description": "Second Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "myuser",
+      "email": "my@mail.de",
+      "enabled": true,
+      "firstName": "My",
+      "lastName": "User",
+      "clientRoles": {
+        "moped-client": [
+          "my_client_role"
+        ]
+      }
+    },
+    {
+      "username": "myotheruser",
+      "email": "myother@mail.de",
+      "enabled": true,
+      "firstName": "My other",
+      "lastName": "other User",
+      "realmRoles": [
+        "my_realm_role"
+      ],
+      "clientRoles": {
+        "moped-client": [
+        ]
+      }
+    }
+  ]
+}

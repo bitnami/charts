@@ -1,0 +1,60 @@
+{
+  "enabled": true,
+  "realm": "realmWithClients",
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "changed-special-client-secret",
+      "redirectUris": [
+        "https://moped-client.org/redirect"
+      ],
+      "webOrigins": [
+        "https://moped-client.org/webOrigin"
+      ],
+      "protocolMappers": [
+        {
+          "name": "BranchCodeMapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "aggregate.attrs": "false",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "user.attribute": "branch",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "branch",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "protocolMapper": "oidc-full-name-mapper",
+          "protocol": "openid-connect",
+          "name": "full name",
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "another-client",
+      "description": "Another-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-other-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

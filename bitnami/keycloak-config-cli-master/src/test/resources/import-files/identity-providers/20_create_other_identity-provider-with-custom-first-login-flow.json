@@ -1,0 +1,37 @@
+{
+  "enabled": true,
+  "realm": "otherRealmWithIdentityProviders",
+  "identityProviders": [
+    {
+      "alias": "saml-with-custom-flow",
+      "providerId": "saml",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": true,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": true,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "my first login flow",
+      "config": {}
+    }
+  ],
+  "authenticationFlows": [
+    {
+      "alias": "my first login flow",
+      "description": "My auth first login for testing",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "requirement": "DISABLED",
+          "priority": 0,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    }
+  ]
+}

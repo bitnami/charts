@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "realm": "realmWithUsers",
+  "users": [
+    {
+      "username": "myuser",
+      "email": "myuser@mail.de",
+      "enabled": true,
+      "firstName": "My firstname",
+      "lastName": "My lastname",
+      "attributes": {
+        "locale": [
+          "de"
+        ]
+      }
+    }
+  ]
+}

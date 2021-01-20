@@ -1,0 +1,6 @@
+coverage:
+  status:
+    project: off
+    patch: off
+ignore:
+  - "contrib/**/*"

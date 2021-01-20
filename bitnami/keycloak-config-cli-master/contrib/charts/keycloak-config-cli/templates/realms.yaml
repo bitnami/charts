@@ -1,0 +1,17 @@
+{{ if not .Values.existingConfigSecret }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "keycloak-config-cli.fullname" . }}-config-realms
+  labels:
+  {{- include "keycloak-config-cli.labels" . | nindent 4 }}
+data:
+  {{- range $name, $config := .Values.config }}
+    {{- if hasKey $config "file" }}
+  {{ $name }}.json: "{{ tpl ($.Files.Get $config.file) $ | b64enc }}"
+    {{- else if hasKey $config "inline" }}
+  {{ $name }}.json: "{{ tpl (toJson $config.inline) $ | b64enc }}"
+    {{- end }}
+  {{- end }}
+{{- end }}

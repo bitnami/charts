@@ -1,0 +1,177 @@
+{
+  "enabled": true,
+  "realm": "realmWithGroups",
+  "groups": [
+    {
+      "name": "My Group",
+      "attributes": {
+        "my changed attribute": [
+          "my changed attribute value"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "second-moped-client": [
+          "my_client_role_of_second-moped-client",
+          "my_second_client_role_of_second-moped-client"
+        ]
+      },
+      "subGroups": [
+        {
+          "name": "My SubGroup",
+          "attributes": {
+            "my subgroup attribute": [
+              "my subgroup attribute value"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "My Added Group"
+    },
+    {
+      "name": "Group with attribute",
+      "attributes": {
+        "my attribute": [
+          "my attribute value"
+        ]
+      }
+    },
+    {
+      "name": "Group with realm role",
+      "realmRoles": [
+        "my_realm_role"
+      ]
+    },
+    {
+      "name": "Group with client role",
+      "clientRoles": {
+        "moped-client": [
+          "my_client_role"
+        ]
+      }
+    },
+    {
+      "name": "Group with subgroup",
+      "subGroups": [
+        {
+          "name": "My SubGroup"
+        }
+      ]
+    },
+    {
+      "name": "Group with subgroup with realm role",
+      "subGroups": [
+        {
+          "name": "My SubGroup",
+          "realmRoles": [
+            "my_second_realm_role"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Group with subgroup with client role",
+      "subGroups": [
+        {
+          "name": "My SubGroup",
+          "clientRoles": {
+            "moped-client": [
+              "my_second_client_role"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Group with subgroup with subgroup",
+      "subGroups": [
+        {
+          "name": "My SubGroup",
+          "subGroups": [
+            {
+              "name": "My Inner SubGroup"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "my_realm_role",
+        "description": "My realm role",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "my_second_realm_role",
+        "description": "My second realm role",
+        "composite": false,
+        "clientRole": false
+      }
+    ],
+    "client": {
+      "moped-client": [
+        {
+          "name": "my_client_role",
+          "description": "My moped-client role",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_second_client_role",
+          "description": "My second moped-client role",
+          "composite": false,
+          "clientRole": true
+        }
+      ],
+      "second-moped-client": [
+        {
+          "name": "my_client_role_of_second-moped-client",
+          "description": "My moped-client role of second-moped-client",
+          "composite": false,
+          "clientRole": true
+        },
+        {
+          "name": "my_second_client_role_of_second-moped-client",
+          "description": "My second moped-client role of second-moped-client",
+          "composite": false,
+          "clientRole": true
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "clientId": "moped-client",
+      "name": "moped-client",
+      "description": "Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "second-moped-client",
+      "name": "second-moped-client",
+      "description": "2nd Moped-Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}

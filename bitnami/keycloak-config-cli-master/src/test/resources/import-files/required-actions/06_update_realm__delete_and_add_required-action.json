@@ -1,0 +1,26 @@
+{
+  "enabled": true,
+  "realm": "realmWithRequiredActions",
+  "requiredActions": [
+    {
+      "alias": "moped_required_action",
+      "name": "Moped",
+      "providerId": "moped_required_action",
+      "enabled": false,
+      "defaultAction": false,
+      "priority": 48,
+      "config": {}
+    },
+    {
+      "alias": "other-moped_required_action",
+      "name": "Moped",
+      "providerId": "other-moped_required_action",
+      "enabled": false,
+      "defaultAction": false,
+      "priority": 42,
+      "config": {
+        "hello": "world"
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  {{- with .Values.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ template "keycloak-config-cli.fullname" . }}
+  labels:
+  {{- include "keycloak-config-cli.labels" . | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.backoffLimit }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- . | nindent 8 }}
+      {{- end }}
+      labels:
+      {{- include "keycloak-config-cli.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      containers:
+        - name: keycloak-config-cli
+          image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag $ }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.resources }}
+          resources:
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          env:
+            {{- range $name, $value := .Values.env }}
+            - name: {{ $name | quote }}
+              value: {{ tpl $value $ | quote }}
+            {{- end }}
+            {{- range $name, $value := .Values.secrets }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ template "keycloak-config-cli.fullname" $ }}"
+                  key: {{ $name | quote }}
+            {{- end }}
+            {{- if and .Values.existingSecret .Values.existingSecretKey }}
+            - name: "KEYCLOAK_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ tpl .Values.existingSecret . }}"
+                  key: "{{ .Values.existingSecretKey }}"
+          {{- end }}
+          {{- with .Values.securityContext }}
+          securityContext:
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          secret:
+            {{- if .Values.existingConfigSecret }}
+            secretName: "{{ tpl .Values.existingConfigSecret $ }}"
+            {{- else }}
+            secretName: "{{ template "keycloak-config-cli.fullname" . }}-config-realms"
+            {{- end }}
+            defaultMode: 0555
+      {{- with .Values.serviceAccount }}
+      serviceAccountName: "{{ tpl . $ }}"
+      {{- end }}
+      {{- with .Values.securityContext }}
+      securityContext:
+      {{- toYaml . | nindent 8 }}
+  {{- end }}

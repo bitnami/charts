@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "realm": "realmWithUsers",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "users": [
+    {
+      "username": "otheruser@mail.de",
+      "email": "otheruser@mail.de",
+      "enabled": true,
+      "firstName": "My firstname 2",
+      "lastName": "My lastname 2",
+      "attributes": {
+        "locale": [
+          "de"
+        ]
+      }
+    }
+  ]
+}

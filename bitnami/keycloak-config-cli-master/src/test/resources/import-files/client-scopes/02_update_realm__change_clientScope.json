@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "realm": "realmWithClientScopes",
+  "clientScopes": [
+    {
+      "name": "my_clientScope",
+      "description": "My clientScope",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    },
+    {
+      "name": "my_other_clientScope",
+      "description": "My changed other clientScope",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      }
+    }
+  ]
+}

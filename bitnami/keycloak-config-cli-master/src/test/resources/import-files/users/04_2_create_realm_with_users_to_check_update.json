@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "realm": "realmWithUsers",
+  "users": [
+    {
+      "username": "user",
+      "email": "user@mail.de",
+      "enabled": true,
+      "firstName": "firstName",
+      "lastName": "lastName"
+    }
+  ]
+}
