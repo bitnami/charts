@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -342,40 +342,6 @@ $ helm install my-release -f values.yaml bitnami/mongodb-sharded
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Increase shards to 4:
-```diff
-- shards: 2
-+ shards: 4
-```
-
-- Increase config server replicaset sive:
-```diff
-- configsvr.replicas: 1
-+ configsvr.replicas: 3
-```
-
-- Increase data nodes per shard:
-```diff
-- shardsvr.dataNode.replicas: 1
-+ shardsvr.dataNode.replicas: 2
-```
-
-- Enable arbiter node on each shard:
-```diff
-- shardsvr.arbiter.replicas: 0
-+ shardsvr.arbiter.replicas: 1
-```
-
-- Start a side-car prometheus exporter:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Change MongoDB version
 

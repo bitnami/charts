@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -233,49 +233,6 @@ $ helm install my-release -f values.yaml bitnami/influxdb
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Use the `high-availability` architecture:
-
-```diff
-- architecture: standalone
-+ architecture: high-availability
-```
-
-- Increase the number of InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> replicas:
-
-```diff
-- influxdb.replicaCount: 1
-+ influxdb.replicaCount: 3
-- relay.replicaCount: 1 # were actually ignored in standalone architecture
-+ relay.replicaCount: 2
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable Newtworkpolicy blocking external access:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-To horizontally scale this chart once it has been deployed (only available in the `high-availability` architecture), you can use the following parameters:
-
-```console
-influxdb.replicaCount=3
-relay.replicaCount=2
-```
 
 ## Standalone vs High Availability architecture
 

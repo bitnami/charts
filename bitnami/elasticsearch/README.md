@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -340,174 +340,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Init container that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors):
-```diff
-- sysctlImage.enabled: true
-+ sysctlImage.enabled: false
-```
-
-- Desired number of Elasticsearch master-eligible nodes:
-```diff
-- master.replicas: 2
-+ master.replicas: 3
-```
-
-- Enable the liveness probe (master-eligible nodes pod):
-```diff
-- master.livenessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ master.livenessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable the readiness probe (master-eligible nodes pod):
-```diff
-- master.readinessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ master.readinessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable the liveness probe (coordinating-only nodes pod):
-```diff
-- coordinating.livenessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ coordinating.livenessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable the readiness probe (coordinating-only nodes pod):
-```diff
-- coordinating.readinessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ coordinating.readinessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Desired number of Elasticsearch data nodes:
-```diff
-- data.replicas: 2
-+ data.replicas: 3
-```
-
-- Enable the liveness probe (data nodes pod):
-```diff
-- data.livenessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ data.livenessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable the readiness probe (data nodes pod):
-```diff
-- data.readinessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ data.readinessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable ingest nodes:
-```diff
-- ingest.enabled: false
-+ ingest.enabled: true
-```
-
-- Enable the liveness probe (ingest nodes pod):
-```diff
-- ingest.livenessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ ingest.livenessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable the readiness probe (ingest nodes pod):
-```diff
-- ingest.readinessProbe.enabled: false
--   #  initialDelaySeconds: 90
--   #  periodSeconds: 10
--   #  timeoutSeconds: 5
--   #  successThreshold: 1
--   #  failureThreshold: 5
-+ ingest.readinessProbe.enabled: true
-+   initialDelaySeconds: 90
-+   periodSeconds: 10
-+   timeoutSeconds: 5
-+   successThreshold: 1
-+   failureThreshold: 5
-```
-
-- Enable prometheus exporter:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable bundled Kibana:
-```diff
-- global.kibanaEnabled: false
-+ global.kibanaEnabled: true
-```
-
 ### Change ElasticSearch version
 
 To modify the ElasticSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/elasticsearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
@@ -524,7 +356,7 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 ### Enable bundled Kibana
 
-This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter. It is enabled by default using the `values-production.yaml` file.
+This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
 ### Adding extra environment variables

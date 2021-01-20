@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -291,38 +291,6 @@ Then you can deploy Discourse chart using the proper parameters:
 persistence.storageClass=nfs
 postgresql.persistence.storageClass=nfs
 ```
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable client source IP preservation:
-
-```diff
-- service.externalTrafficPolicy: Cluster
-+ service.externalTrafficPolicy: Local
-```
-
-- Make Redis<sup>TM</sup> use password for auth:
-
-```diff
-- redis.usePassword: false
-+ redis.usePassword: true
-```
-
-- PVC Access Mode:
-
-```diff
-- persistence.accessMode: ReadWriteOnce
-+ ## To use the portal and to ensure you can scale Discourse you need to provide a
-+ ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
-+ ## We recommend that you install the nfs provisioner and map it to a RWO volume
-+ ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
-+ ##
-+ persistence.accessMode: ReadWriteMany
-```
-
-Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
 
 ### Sidecars
 
