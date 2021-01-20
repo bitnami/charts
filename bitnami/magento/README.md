@@ -515,6 +515,7 @@ In this major there were three main changes introduced:
 
 - Parameter standarizations
 - Migration to non-root
+- Elasticsearch sub-chart 14.0.0 update
 
 **1. Chart standarizations**
 
@@ -530,6 +531,10 @@ The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image w
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.
+
+**3. Elasticsearch sub-chart 14.0.0 update**
+
+This version of the Elasticsearch sub-chart standardizes the way of defining Ingress rules in the Kibana sub-chart.
 
 ### 14.0.0
 
@@ -560,6 +565,8 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 To upgrade to `17.0.0`, backup Magento data and the previous MariaDB databases, install a new Magento chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 You can disable the non-root behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+For the Elasticsearch 14.0.0 sub-chart update, when enabling Kibana and configuring a single hostname for the Kibana Ingress rule, set the `kibana.ingress.hostname` value. When defining more than one, set the `kibana.ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 16.0.0
 

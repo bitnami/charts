@@ -17,7 +17,7 @@ dependencies:
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 14.x.x
 description: A feature-rich flexible e-commerce solution. It includes transaction options, multi-store functionality, loyalty programs, product categorization and shopper filtering, promotion rules, and more.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/magento
