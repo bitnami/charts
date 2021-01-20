@@ -245,25 +245,29 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                                                | Default                                                 |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Parameter                                 | Description                                                                                                | Default                                                 |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
 | `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
 | `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
 | `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
 | `persistence.size`                          | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
+| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                        |
 | `persistence.subPath`                       | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
 | `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes)                         | ``                                                      |
 
 ### RBAC parameters
 
-| Parameter                                 | Description                                                                                                | Default                                                 |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `serviceAccount.create`                   | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
-| `serviceAccount.name`                     | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
-| `serviceAccount.annotations`              | Additional Service Account annotations                                                                     | `{}`                                                    |
-| `rbac.create`                             | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| Parameter                                    | Description                                                                                                | Default                                                 |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                                     | `{}`                                                    |
+| `rbac.create`                                | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| `podSecurityPolicy.create                    | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false`                                                 |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                                | `false`                                                 |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                           | `false`                                                 |
+| `podSecurityPolicy.spec                      | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`                                                    |
 
 ### Volume Permissions parameters
 

@@ -14,4 +14,10 @@ rules:
       - get
       - list
       - watch
+{{- if .Values.podSecurityPolicy.create }}
+  - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames: [{{ include "mongodb.fullname" . }}]
+{{- end -}}
 {{- end }}

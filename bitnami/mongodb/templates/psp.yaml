@@ -1,0 +1,48 @@
+{{- if .Values.podSecurityPolicy.create }}
+apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "mongodb.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.podSecurityPolicy.spec }}
+{{ include "common.tplvalues.render" ( dict "value" .Values.podSecurityPolicy.spec "context" $ ) | nindent 2 }}
+{{- else }}
+  allowPrivilegeEscalation: {{ .Values.podSecurityPolicy.allowPrivilegeEscalation }}
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.podSecurityContext.fsGroup }}
+        max: {{ .Values.podSecurityContext.fsGroup }}
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: {{ .Values.podSecurityPolicy.privileged }}
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+    - ALL
+  runAsUser:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: {{ .Values.containerSecurityContext.runAsUser }}
+        max: {{ .Values.containerSecurityContext.runAsUser }}
+  volumes:
+    - 'configMap'
+    - 'secret'
+    - 'emptyDir'
+    - 'persistentVolumeClaim'
+{{- end }}
+{{- end }}
