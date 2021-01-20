@@ -822,6 +822,12 @@ arbiter:
     ##
     # maxUnavailable: 1
 
+  ## MongoDB Arbiter service parameters
+  service:
+    ## Service name
+    ##
+    name: ""
+
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
