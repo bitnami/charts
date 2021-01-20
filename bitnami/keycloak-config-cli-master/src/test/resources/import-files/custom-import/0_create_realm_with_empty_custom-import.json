@@ -1,6 +1,0 @@
-{
-  "enabled": true,
-  "realm": "realmWithCustomImport",
-  "customImport": {
-  }
-}
