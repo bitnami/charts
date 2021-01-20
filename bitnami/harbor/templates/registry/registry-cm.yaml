@@ -42,8 +42,12 @@ data:
         {{- end }}
       {{- else if eq .Values.persistence.imageChartStorage.type "s3" }}
       s3:
+        {{- if .Values.persistence.imageChartStorage.s3.region }}
         region: {{ .Values.persistence.imageChartStorage.s3.region }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.bucket }}
         bucket: {{ .Values.persistence.imageChartStorage.s3.bucket }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.regionendpoint }}
         regionendpoint: {{ .Values.persistence.imageChartStorage.s3.regionendpoint }}
         {{- end }}
