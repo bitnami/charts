@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "mongodb.servicename" . }}-arbiter
+  serviceName: {{ include "mongodb.arbiterservicename" . }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: arbiter
@@ -142,7 +142,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.servicename" . }}-arbiter"
+              value: "{{ include "mongodb.arbiterservicename" . }}"
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
