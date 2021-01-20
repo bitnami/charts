@@ -248,7 +248,7 @@ spec:
         image: "{{ template "redis.volumePermissions.image" . }}"
         imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
         command:
-          - /bin/sh
+          - /bin/bash
           - -ec
           - |
             {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
