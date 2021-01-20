@@ -270,6 +270,9 @@ initJob:
   args:
 
   ## Job annotations
+  ## IMPORTANT: When using Istio set as the following (https://github.com/istio/istio/issues/11045):
+  ## annotations:
+  ##   sidecar.istio.io/inject: "false"
   ##
   annotations: {}
 
