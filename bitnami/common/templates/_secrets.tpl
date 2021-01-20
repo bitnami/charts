@@ -75,16 +75,13 @@ Params:
 */}}
 {{- define "common.secrets.passwords.manage" -}}
 
-{{- $secret := "" }}
 {{- $password := "" }}
 {{- $subchart := "" }}
 {{- $chartName := default "" .chartName }}
 {{- $passwordLength := default 10 .length }}
 {{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
 {{- $providedPasswordValue := include "common.utils.getValueFromKey" (dict "key" $providedPasswordKey "context" $.context) }}
-{{- if (include "common.capabilities.supportsHelmVersion" $.context) }}
-  {{- $secret = (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
-{{- end -}}
+{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
 {{- if $secret }}
   {{- if index $secret.data .key }}
   {{- $password = index $secret.data .key }}
