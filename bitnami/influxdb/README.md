@@ -234,49 +234,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Use the `high-availability` architecture:
-
-```diff
-- architecture: standalone
-+ architecture: high-availability
-```
-
-- Increase the number of InfluxDB<sup>TM</sup> and InfluxDB Relay<sup>TM</sup> replicas:
-
-```diff
-- influxdb.replicaCount: 1
-+ influxdb.replicaCount: 3
-- relay.replicaCount: 1 # were actually ignored in standalone architecture
-+ relay.replicaCount: 2
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable Newtworkpolicy blocking external access:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-To horizontally scale this chart once it has been deployed (only available in the `high-availability` architecture), you can use the following parameters:
-
-```console
-influxdb.replicaCount=3
-relay.replicaCount=2
-```
-
 ## Standalone vs High Availability architecture
 
 You can install the InfluxDB<sup>TM</sup> chart with two different architecture setups: "standalone" or "high-availability", you can use the `architecture` parameter:

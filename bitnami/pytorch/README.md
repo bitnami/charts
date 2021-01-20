@@ -142,22 +142,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Run PyTorch in distributed mode:
-```diff
-- mode: standalone
-+ mode: distributed
-```
-
-- Number of nodes that will run the code:
-```diff
-- #worldSize:
-+ worldSize: 4
-```
-
 ### Loading your files
 
 The PyTorch chart supports three different ways to load your files. In order of priority, they are:

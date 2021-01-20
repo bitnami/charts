@@ -433,52 +433,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Modify the Log level for Prometheus Operator:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
-- Increase the number of days to retain metrics:
-
-```diff
--   retention: 10d
-+   retention: 30d
-```
-
-- Increase the number of Alertmanager replicas:
-
-```diff
--   replicaCount: 1
-+   replicaCount: 3
-```
-
-- Modify the Log level for Alertmanager:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
-- Increase the number of Prometheus replicas:
-
-```diff
--   replicaCount: 1
-+   replicaCount: 3
-```
-
-- Modify the Log level for Prometheus:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
 ### Additional scrape configurations
 
 The following values have been deprecated. See [Upgrading](#upgrading) below.
@@ -506,7 +460,7 @@ prometheus.additionalScrapeConfigs.type=internal
 prometheus.additionalScrapeConfigs.internal.jobList=
       - job_name: 'opentelemetry-collector'
         # metrics_path defaults to '/metrics'
-        # scheme defaults to 'http'.      
+        # scheme defaults to 'http'.
         static_configs:
           - targets: ['opentelemetry-collector:8889']
 ```

@@ -16,7 +16,6 @@ Any type of contribution is welcome; from new features, bug fixes, documentation
 When submitting a PR make sure that it:
 - Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
-- Implements changes in both files if the chart contains a _values-production.yaml_ and a _values.yaml_.
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
 
 ### Documentation Requirements

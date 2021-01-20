@@ -329,35 +329,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable Pod Disruption Budget for Server and Skipper:
-
-```diff
-- server.pdb.create: false
-+ server.pdb.create: true
-- skipper.pdb.create: false
-+ skipper.pdb.create: true
-```
-
-- Enable exposing Prometheus Metrics via Prometheus Rsocket Proxy:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Force users to specify a password and mount secrets as volumes instead of using environment variables on MariaDB:
-
-```diff
-- mariadb.auth.forcePassword: false
-+ mariadb.auth.forcePassword: true
-- mariadb.auth.usePasswordFiles: false
-+ mariadb.auth.usePasswordFiles: true
-```
-
 ### Features
 
 If you only need to deploy tasks and schedules, streaming and Skipper can be disabled:

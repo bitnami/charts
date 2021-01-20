@@ -8,13 +8,8 @@ Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights there
 ## TL;DR
 
 ```bash
-# Testing configuration
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/redis-cluster
-```
-
-```bash
-# Production configuration
-$ helm install my-release bitnami/redis-cluster --values values-production.yaml
 ```
 
 ## Introduction
@@ -331,24 +326,6 @@ $ helm install my-release -f values.yaml bitnami/redis-cluster
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Change Redis<sup>TM</sup> version
 
