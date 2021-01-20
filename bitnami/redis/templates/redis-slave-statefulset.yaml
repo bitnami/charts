@@ -342,6 +342,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: slave
+        {{- if .Values.slave.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.slave.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}

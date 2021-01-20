@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -48,27 +48,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Parse chart and their default values.
 
+### Global Parameters
+
 | Parameter                             | Description                                                                                                                                               | Default                                                 |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`             | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                 | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
+
+### Common Parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `nameOverride`                        | String to partially override common.names.fullname template with a string (will prepend the release name)                                                 | `nil`                                                   |
 | `fullnameOverride`                    | String to fully override common.names.fullname template with a string                                                                                     | `nil`                                                   |
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `{}`                                                    |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `{}`                                                    |
 | `extraDeploy`                         | Array of extra objects to deploy with the release                                                                                                         | `[]` (evaluated as a template)                          |
-| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
-| `service.type`                        | Kubernetes Service type                                                                                                                                   | `LoadBalancer`                                          |
-| `service.port`                        | Service HTTP port (Dashboard)                                                                                                                             | `80`                                                    |
-| `service.loadBalancerIP`              | `loadBalancerIP` for the Parse Service                                                                                                                    | `nil`                                                   |
-| `service.externalTrafficPolicy`       | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
-| `service.nodePorts.http`              | Kubernetes http node port                                                                                                                                 | `""`                                                    |
+
+### Parse server parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `server.image.registry`               | Parse image registry                                                                                                                                      | `docker.io`                                             |
 | `server.image.repository`             | Parse image name                                                                                                                                          | `bitnami/parse`                                         |
 | `server.image.tag`                    | Parse image tag                                                                                                                                           | `{TAG_NAME}`                                            |
@@ -99,6 +100,45 @@ The following table lists the configurable parameters of the Parse chart and the
 | `server.extraEnvVars`                 | Array containing extra env vars (evaluated as a template)                                                                                                 | `nil`                                                   |
 | `server.extraEnvVarsCM`               | ConfigMap containing extra env vars (evaluated as a template)                                                                                             | `nil`                                                   |
 | `server.extraEnvVarsSecret`           | Secret containing extra env vars  (evaluated as a template)                                                                                               | `nil`                                                   |
+
+### Traffic Exposure Parameters
+
+| Parameter                                       | Description                                                                                                                                           | Default                                                                                                     |
+|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `service.type`                        | Kubernetes Service type                                                                                                                                   | `LoadBalancer`                                          |
+| `service.port`                        | Service HTTP port (Dashboard)                                                                                                                             | `80`                                                    |
+| `service.loadBalancerIP`              | `loadBalancerIP` for the Parse Service                                                                                                                    | `nil`                                                   |
+| `service.externalTrafficPolicy`       | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
+| `service.nodePorts.http`              | Kubernetes http node port                                                                                                                                 | `""`                                                    |
+| `ingress.enabled`                     | Enable ingress controller resource                                                                                                                        | `false`                                                 |
+| `ingress.annotations`                 | Ingress annotations                                                                                                                                       | `[]`                                                    |
+| `ingress.certManager`                 | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
+| `ingress.dashboard.hostname`          | Default host for the ingress resource                                                                                                                     | `parse-dashboard.local`                                 |
+| `ingress.dashboard.extraHosts`        | Extra hosts for the ingress resource                                                                                                                      | `[]`                                                    |
+| `ingress.dashboard.path`              | Default path for the ingress resource                                                                                                                     | `/`                                                     |
+| `ingress.dashboard.pathType`          | Ingress path type                                                                                                                                         | `ImplementationSpecific`                                |
+| `ingress.server.hostname`             | Default host for the ingress resource                                                                                                                     | `parse-server.local`                                    |
+| `ingress.server.path`                 | Default path for the ingress resource                                                                                                                     | `/`                                                     |
+| `ingress.server.pathType`             | Ingress path type                                                                                                                                         | `ImplementationSpecific`                                |
+| `ingress.server.extraHosts`           | Extra hosts for the ingress resource                                                                                                                      | `[]`                                                    |
+| `ingress.secrets[0].name`             | TLS Secret Name                                                                                                                                           | `nil`                                                   |
+| `ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
+| `ingress.secrets[0].key`              | TLS Secret Key                                                                                                                                            | `nil`                                                   |
+
+### Persistence Parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `persistence.enabled`                 | Enable Parse persistence using PVC                                                                                                                        | `true`                                                  |
+| `persistence.storageClass`            | PVC Storage Class for Parse volume                                                                                                                        | `nil` (uses alpha storage class annotation)             |
+| `persistence.accessMode`              | PVC Access Mode for Parse volume                                                                                                                          | `ReadWriteOnce`                                         |
+| `persistence.size`                    | PVC Storage Request for Parse volume                                                                                                                      | `8Gi`                                                   |
+
+
+### Dashboard Parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `dashboard.enabled`                   | Enable parse dashboard                                                                                                                                    | `true`                                                  |
 | `dashboard.image.registry`            | Dashboard image registry                                                                                                                                  | `docker.io`                                             |
 | `dashboard.image.repository`          | Dashboard image name                                                                                                                                      | `bitnami/parse-dashboard`                               |
@@ -126,24 +166,22 @@ The following table lists the configurable parameters of the Parse chart and the
 | `dashboard.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                                                                                 | `nil`                                                   |
 | `dashboard.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                                                                             | `nil`                                                   |
 | `dashboard.extraEnvVarsSecret`        | Secret containing extra env vars  (evaluated as a template)                                                                                               | `nil`                                                   |
-| `persistence.enabled`                 | Enable Parse persistence using PVC                                                                                                                        | `true`                                                  |
-| `persistence.storageClass`            | PVC Storage Class for Parse volume                                                                                                                        | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`              | PVC Access Mode for Parse volume                                                                                                                          | `ReadWriteOnce`                                         |
-| `persistence.size`                    | PVC Storage Request for Parse volume                                                                                                                      | `8Gi`                                                   |
-| `ingress.enabled`                     | Enable ingress controller resource                                                                                                                        | `false`                                                 |
-| `ingress.annotations`                 | Ingress annotations                                                                                                                                       | `[]`                                                    |
-| `ingress.certManager`                 | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
-| `ingress.dashboard.hostname`          | Default host for the ingress resource                                                                                                                     | `parse-dashboard.local`                                 |
-| `ingress.dashboard.extraHosts`        | Extra hosts for the ingress resource                                                                                                                      | `[]`                                                    |
-| `ingress.dashboard.path`              | Default path for the ingress resource                                                                                                                     | `/`                                                     |
-| `ingress.dashboard.pathType`          | Ingress path type                                                                                                                                         | `ImplementationSpecific`                                |
-| `ingress.server.hostname`             | Default host for the ingress resource                                                                                                                     | `parse-server.local`                                    |
-| `ingress.server.path`                 | Default path for the ingress resource                                                                                                                     | `/`                                                     |
-| `ingress.server.pathType`             | Ingress path type                                                                                                                                         | `ImplementationSpecific`                                |
-| `ingress.server.extraHosts`           | Extra hosts for the ingress resource                                                                                                                      | `[]`                                                    |
-| `ingress.secrets[0].name`             | TLS Secret Name                                                                                                                                           | `nil`                                                   |
-| `ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
-| `ingress.secrets[0].key`              | TLS Secret Key                                                                                                                                            | `nil`                                                   |
+
+### Volume Permissions parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+
+### MongoDB Parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `mongodb.auth.enabled`                | Enable MongoDB password authentication                                                                                                                    | `true`                                                  |
 | `mongodb.auth.rootPassword`           | MongoDB admin password                                                                                                                                    | `nil`                                                   |
 | `mongodb.persistence.enabled`         | Enable MongoDB persistence using PVC                                                                                                                      | `true`                                                  |
@@ -228,6 +266,30 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: |-
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: {{ include "common.names.fullname" . }}-privileged
+      namespace: {{ .Release.Namespace }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: ServiceAccount
+        name: default
+        namespace: {{ .Release.Namespace }}
+```
 
 ### Setting Pod's affinity
 

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -127,6 +127,15 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
 | `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
 | `initContainers`                                  | Add extra init containers                                                                                                         | `[]`                                                    |
+
+### Kafka provisioning parameters
+
+| Parameter                                         | Description                                                                                                                       | Default                                                 |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `provisioning.enabled`                                  | Enable kafka provisioning Job                                                                                                              | `false`                                             |
+| `provisioning.image`                                  | Kafka provisioning Job image                                                                                                              | `Check values.yaml file`                                             |
+| `provisioning.resources`                                  | Kafka provisioning Job resources                                                                                                              | `Check values.yaml file`                                             |
+| `provisioning.topics`                                  | Kafka provisioning topics                                                                                                              | `[]`                                             |
 
 ### Statefulset parameters
 
@@ -308,110 +317,6 @@ helm install my-release -f values.yaml bitnami/kafka
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of Kafka nodes:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Allow to use the PLAINTEXT listener:
-
-```diff
-- allowPlaintextListener: true
-+ allowPlaintextListener: false
-```
-
-- Default replication factors for automatically created topics:
-
-```diff
-- defaultReplicationFactor: 1
-+ defaultReplicationFactor: 3
-```
-
-- Allow auto creation of topics.
-
-```diff
-- autoCreateTopicsEnable: true
-+ autoCreateTopicsEnable: false
-```
-
-- The replication factor for the offsets topic:
-
-```diff
-- offsetsTopicReplicationFactor: 1
-+ offsetsTopicReplicationFactor: 3
-```
-
-- The replication factor for the transaction topic:
-
-```diff
-- transactionStateLogReplicationFactor: 1
-+ transactionStateLogReplicationFactor: 3
-```
-
-- Overridden min.insync.replicas config for the transaction topic:
-
-```diff
-- transactionStateLogMinIsr: 1
-+ transactionStateLogMinIsr: 3
-```
-
-- Switch to enable the Kafka SASAL authentication on client and inter-broker communications:
-
-```diff
-- auth.clientProtocol: plaintext
-+ auth.clientProtocol: sasl
-- auth.interBrokerProtocol: plaintext
-+ auth.interBrokerProtocol: sasl
-```
-
-- Enable Zookeeper authentication:
-
-```diff
-+ auth.jaas.zookeeperUser: zookeeperUser
-+ auth.jaas.zookeeperPassword: zookeeperPassword
-- zookeeper.auth.enabled: false
-+ zookeeper.auth.enabled: true
-+ zookeeper.auth.clientUser: zookeeperUser
-+ zookeeper.auth.clientPassword: zookeeperPassword
-+ zookeeper.auth.serverUsers: zookeeperUser
-+ zookeeper.auth.serverPasswords: zookeeperPassword
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-- Create a separate Kafka metrics exporter:
-
-```diff
-- metrics.kafka.enabled: false
-+ metrics.kafka.enabled: true
-```
-
-- Expose JMX metrics to Prometheus:
-
-```diff
-- metrics.jmx.enabled: false
-+ metrics.jmx.enabled: true
-```
-
-- Enable Zookeeper metrics:
-
-```diff
-+ zookeeper.metrics.enabled: true
-```
-
-To horizontally scale this chart once it has been deployed, you can upgrade the statefulset using a new value for the `replicaCount` parameter. Please note that, when enabling TLS encryption, you must update your JKS secret including the keystore for the new replicas.
 
 ### Setting custom parameters
 

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -245,25 +245,29 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                                                | Default                                                 |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Parameter                                 | Description                                                                                                | Default                                                 |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                                                  | `true`                                                  |
 | `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                          | `nil` (evaluated as a template)                         |
 | `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                                                  | `nil`                                                   |
 | `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                                                    | `ReadWriteOnce`                                         |
 | `persistence.size`                          | PVC Storage Request for MongoDB data volume                                                                | `8Gi`                                                   |
-| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                      |
+| `persistence.mountPath`                     | Path to mount the volume at                                                                                | `/bitnami/mongodb`                                        |
 | `persistence.subPath`                       | Subdirectory of the volume to mount at                                                                     | `""`                                                    |
 | `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes)                         | ``                                                      |
 
 ### RBAC parameters
 
-| Parameter                                 | Description                                                                                                | Default                                                 |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `serviceAccount.create`                   | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
-| `serviceAccount.name`                     | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
-| `serviceAccount.annotations`              | Additional Service Account annotations                                                                     | `{}`                                                    |
-| `rbac.create`                             | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| Parameter                                    | Description                                                                                                | Default                                                 |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                                     | `{}`                                                    |
+| `rbac.create`                                | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| `podSecurityPolicy.create                    | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false`                                                 |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                                | `false`                                                 |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                           | `false`                                                 |
+| `podSecurityPolicy.spec                      | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`                                                    |
 
 ### Volume Permissions parameters
 
@@ -375,40 +379,6 @@ $ helm install my-release -f values.yaml bitnami/mongodb
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Switch to enable/disable replica set configuration:
-
-```diff
-- architecture: standalone
-+ architecture: replicaset
-```
-
-- Increase the number of MongoDB nodes:
-
-```diff
-- replicaCount: 2
-+ replicaCount: 4
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-- Enable using a sidecar Prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart, you can use the `--replicaCount` flag to modify the number of secondary nodes in your MongoDB replica set.
 
 ### Initialize a fresh instance
 
