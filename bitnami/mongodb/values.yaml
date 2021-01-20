@@ -473,7 +473,7 @@ persistence:
 service:
   ## Service name
   ##
-  servicename: ""
+  name: ""
   ## Service type
   ##
   type: ClusterIP
