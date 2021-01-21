@@ -9,4 +9,5 @@ metadata:
 data:
   influxdb.conf: |-
     # User-supplied configuration:
-    {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.configuration "context" $) | indent 4 }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.configuration "context" $) | nindent 4 }}
+{{- end }}

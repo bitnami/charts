@@ -326,6 +326,6 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-{{- include "common.storage.class" . | nindent 8 }}
+        {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" $) | nindent 8 }}
   {{- end }}
 {{- end }}

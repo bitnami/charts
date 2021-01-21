@@ -7,7 +7,5 @@ metadata:
     {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
 data:
-{{- with .Values.influxdb.initdbScripts }}
-  {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 2 }}
-{{- end }}
+  {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.initdbScripts "context" $) | nindent 2 }}
 {{- end }}

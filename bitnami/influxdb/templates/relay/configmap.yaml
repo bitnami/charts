@@ -8,5 +8,5 @@ metadata:
     app.kubernetes.io/component: relay
 data:
   relay.toml: |-
-    {{ include "common.tplvalues.render" (dict "value"  .Values.relay.configuration "context" $) | indent 4 }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.relay.configuration "context" $) | nindent 4 }}
 {{- end }}

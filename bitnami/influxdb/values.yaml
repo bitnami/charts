@@ -69,8 +69,8 @@ auth:
     ## Primary bucket name and id
     ##
     bucket: primary
-  ## Whether to automatically create users' token
-  ## You should take into account this token are going to be create by CLI
+  ## Whether to automatically create users' tokens
+  ## You should take into account these tokens are going to be created by CLI
   ## so it is not possible to get them by k8s secrets nor to provide them though
   ## values
   ## See more influxdb 2.0 auth ref: https://docs.influxdata.com/influxdb/v2.0/security/tokens/

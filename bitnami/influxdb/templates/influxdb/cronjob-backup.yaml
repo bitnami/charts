@@ -48,7 +48,7 @@ spec:
             {{- end }}
           initContainers:
             - name: influxdb-backup
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: {{ include "influxdb.image" . | quote }}
               env:
                 - name: INFLUXDB_ADMIN_USER_PASSWORD
                   valueFrom:
