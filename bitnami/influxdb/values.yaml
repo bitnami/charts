@@ -104,7 +104,7 @@ auth:
   ## Secret with InfluxDB(TM) credentials
   ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
   ##
-  # existingSecret:
+  existingSecret:
 
 ## InfluxDB(TM) backend parameters
 ##
