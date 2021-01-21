@@ -396,7 +396,7 @@ However, you can use images for versions ~1.x.x taking into account the chart ma
 #### Installing InfluxDB<sup>TM</sup> v1 in chart v2.
 
 ```
-$ helm install bitnami/influxdb --set image.tag=1.8.3-debian-10-r99
+$ helm install bitnami/influxdb --set image.tag=1.8.3-debian-10-r88
 ```
 
 As a consecuece some breaking changes have been included in this version.

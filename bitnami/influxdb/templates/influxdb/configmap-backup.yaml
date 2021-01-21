@@ -27,7 +27,7 @@ data:
         local org_name="${1:-}"
         if [[ "${BRANCH}" = "1" ]]; then
             influx -username "{{ .Values.auth.admin.username }}" -password "${INFLUXDB_ADMIN_USER_PASSWORD}" -host "${host}" -port {{ .Values.influxdb.service.port }} -execute 'SHOW DATABASES' | sed -e '1,3d'
-        elif [[ "${BRANCH}" = "2" ]]; then
+        else
             INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx --host "http://${host}:{{ .Values.influxdb.service.port }}" bucket list --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
         fi
     }
@@ -42,7 +42,7 @@ data:
 
         echo "deleting old backups"
         find {{ .Values.backup.directory }} -mindepth 2 -maxdepth 2 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
-    elif [[ "${BRANCH}" = "2" ]]; then
+    else
         for ORG in $(get_orgs); do
             for BUCKET in $(get_databases "${ORG}"); do
                 backup_dir="{{ .Values.backup.directory }}/${ORG}/${BUCKET}"
@@ -55,8 +55,6 @@ data:
 
         echo "deleting old backups"
         find {{ .Values.backup.directory }} -mindepth 3 -maxdepth 3 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
-    else
-        echo "not supported branch" && exit 1
     fi
   upload-google.sh: |-
     #!/bin/sh

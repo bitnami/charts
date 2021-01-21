@@ -202,10 +202,8 @@ spec:
 
                   if [[ "$branch" = "2" ]]; then
                       timeout {{ $livenessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-                  elif [[ "$branch" = "1" ]]; then
-                      timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   else
-                    echo "branch is not supported: $branch" && exit 1
+                      timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
             initialDelaySeconds: {{ .Values.influxdb.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.livenessProbe.periodSeconds }}
@@ -234,10 +232,8 @@ spec:
 
                   if [[ "$branch" = "2" ]]; then
                       timeout {{ $readinessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-                  elif [[ "$branch" = "1" ]]; then
-                      timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   else
-                    echo "branch is not supported: $branch" && exit 1
+                      timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
             initialDelaySeconds: {{ .Values.influxdb.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.influxdb.readinessProbe.periodSeconds }}
