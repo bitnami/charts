@@ -99,7 +99,7 @@ phabricatorLastName: Last Name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
-phabricatorEnableHTTPS: true
+phabricatorEnableHttps: true
 
 ## Configure Phabricator to use GIT Large File Storage (LFS)
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
@@ -199,7 +199,7 @@ resources:
     memory: 512Mi
     cpu: 300m
 
-## Phabricator containers' liveness and readiness probes.
+## Phabricator containers' liveness, readiness, and startup probes.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ##
 livenessProbe:
@@ -228,14 +228,31 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+startupProbe:
+  enabled: false
+  httpGet:
+    path: /auth/
+    port: http
+    httpHeaders:
+      - name: Host
+        value: "{{ include \"phabricator.host\" . }}"
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 20
+  successThreshold: 1
 
 ## Custom Liveness probes for Phabricator
 ##
 customLivenessProbe: {}
 
-## Custom Rediness probes Phabricator
+## Custom Rediness probes for Phabricator
 ##
 customReadinessProbe: {}
+
+## Custom Startup probe for Phabricator
+##
+customStartupProbe: {}
 
 ## Pod extra labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/

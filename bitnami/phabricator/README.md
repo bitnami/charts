@@ -87,7 +87,7 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `phabricatorLastName`            | Last name                                                                                                | `Last Name`                                                  |
 | `phabricatorHost`                | Phabricator host to create application URLs                                                              | `nil`                                                        |
 | `phabricatorAlternateFileDomain` | Phabricator alternate domain to upload files                                                             | `nil`                                                        |
-| `phabricatorEnableHTTPS`         | Configure Phabricator to build application URLs using https                                              | `true`                                                       |
+| `phabricatorEnableHttps`         | Configure Phabricator to build application URLs using https                                              | `true`                                                       |
 | `phabricatorUseLFS`              | Configure Phabricator to use GIT Large File Storage (LFS)                                                | `false`                                                      |
 | `phabricatorGitSSH`              | Configure a self-hosted GIT repository with SSH authentication                                           | `false`                                                      |
 | `phabricatorEnablePygments`      | Enable syntax highlighting using Pygments                                                                | `true`                                                       |

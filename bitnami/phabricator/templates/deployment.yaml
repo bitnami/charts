@@ -131,7 +131,7 @@ spec:
               value: {{ .Values.phabricatorLastName | quote }}
             {{- end }}
             - name: PHABRICATOR_ENABLE_HTTPS
-              value: {{ ternary "yes" "no" .Values.phabricatorEnableHTTPS | quote }}
+              value: {{ ternary "yes" "no" .Values.phabricatorEnableHttps | quote }}
             - name: PHABRICATOR_ENABLE_GIT_SSH_REPOSITORY
               value: {{ ternary "yes" "no" .Values.phabricatorGitSSH | quote }}
             - name: PHABRICATOR_USE_LFS
@@ -195,6 +195,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
