@@ -314,6 +314,8 @@ primary:
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
     # existingClaim:
+    ## Subdirectory of the volume to mount
+    # subPath:
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
