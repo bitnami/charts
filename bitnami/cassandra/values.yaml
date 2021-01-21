@@ -179,6 +179,11 @@ cluster:
   ##
   internodeEncryption: none
   clientEncryption: false
+  ## extraSeeds - For an external/second cassandra ring. Seed list will be appended by this.
+  ##
+  # extraSeeds:
+  #   - hostname/IP
+  #   - hostname/IP
 
 ## JVM Settings
 ##
