@@ -133,6 +133,20 @@ spec:
             {{- end }}
             - name: REDIS_DATA_DIR
               value: {{ .Values.slave.persistence.path }}
+            {{- if .Values.sentinel.extraEnvVars }}
+            {{- include "redis.tplValue" (dict "value" .Values.sentinel.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.sentinel.extraEnvVarsCM .Values.sentinel.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.sentinel.extraEnvVarsCM }}
+            - configMapRef:
+              name: {{ .Values.sentinel.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sentinel.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
@@ -440,6 +454,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: slave
+        {{- if .Values.slave.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.slave.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}

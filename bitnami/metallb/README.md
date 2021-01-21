@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - Virtual IPs for Layer 2 or Route Reflector for BGP setup.
 
 ## Installing the Chart
@@ -154,7 +154,8 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `speaker.securityContext.capabilities.drop`              | Drop capabilities for the securityContext                                                            | `["ALL"]`                                               |
 | `speaker.securityContext.capabilities.add`               | Add capabilities for the securityContext                                                             | `["NET_ADMIN", "NET_RAW", "SYS_ADMIN"]`                 |
 | `speaker.secretName`                                     | References a Secret name for the member secret outside of the helm chart                             | `nil`                                                   |
-| `speaker.secretKey`                                      | References a Secret key for the member secret outside of the helm chart                              | `nil`                                                   |
+| `speaker.secretKey`                                      | References a Secret key the member secret outside of the helm chart                                  | `nil`                                                   |
+| `speaker.secretValue`                                    | Custom value for `speaker.secretKey`                                                                 | _random 256 character alphanumeric string_              |
 | `speaker.extraEnvVars`                                   | Extra environment variable to pass to the running container.                                         | `[]`                                                    |
 | `speaker.livenessProbe.enabled`                          | Enable/disable the Liveness probe                                                                    | `true`                                                  |
 | `speaker.livenessProbe.initialDelaySeconds`              | Delay before liveness probe is initiated                                                             | `60`                                                    |

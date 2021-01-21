@@ -80,6 +80,10 @@ spec:
             - name: staticsite
               mountPath: /app
       {{- else }}
+      {{- with .Values.initContainers }}
+      initContainers:
+      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+      {{- end }}
       containers:
       {{- end }}
         - name: nginx

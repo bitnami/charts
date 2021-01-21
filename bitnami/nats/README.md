@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -48,121 +48,126 @@ The following tables lists the configurable parameters of the NATS chart and the
 
 ### Global parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                               | `nil`                                                   |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 
 ### Common parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override common.names.fullname         | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override common.names.fullname             | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
-| `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
-| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### NATS parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | NATS image registry                                                                      | `docker.io`                                             |
-| `image.repository`                      | NATS image name                                                                          | `bitnami/nats`                                          |
-| `image.tag`                             | NATS image tag                                                                           | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                      | Image pull policy                                                                        | `IfNotPresent`                                          |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `auth.enabled`                          | Switch to enable/disable client authentication                                           | `true`                                                  |
-| `auth.user`                             | Client authentication user                                                               | `nats_client`                                           |
-| `auth.password`                         | Client authentication password                                                           | `random alhpanumeric string (10)`                       |
-| `auth.token`                            | Client authentication token                                                              | `nil`                                                   |
-| `clusterAuth.enabled`                   | Switch to enable/disable cluster authentication                                          | `true`                                                  |
-| `clusterAuth.user`                      | Cluster authentication user                                                              | `nats_cluster`                                          |
-| `clusterAuth.password`                  | Cluster authentication password                                                          | `random alhpanumeric string (10)`                       |
-| `clusterAuth.token`                     | Cluster authentication token                                                             | `nil`                                                   |
-| `debug.enabled`                         | Switch to enable/disable debug on logging                                                | `false`                                                 |
-| `debug.trace`                           | Switch to enable/disable trace debug level on logging                                    | `false`                                                 |
-| `debug.logtime`                         | Switch to enable/disable logtime on logging                                              | `false`                                                 |
-| `maxConnections`                        | Max. number of client connections                                                        | `nil`                                                   |
-| `maxControlLine`                        | Max. protocol control line                                                               | `nil`                                                   |
-| `maxPayload`                            | Max. payload                                                                             | `nil`                                                   |
-| `writeDeadline`                         | Duration the server can block on a socket write to a client                              | `nil`                                                   |
-| `natsFilename`                          | Filename used by several NATS files (binary, configurarion file, and pid file)           | `nats-server`                                           |
-| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
-| `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `metrics.kafka.extraFlags`              | Extra flags to be passed to NATS                                                         | `{}`                                                    |
-| `extraEnvVars`                          | Extra environment variables to be set on NATS container                                  | `{}`                                                    |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
+| Parameter                  | Description                                                                    | Default                                                 |
+|----------------------------|--------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`           | NATS image registry                                                            | `docker.io`                                             |
+| `image.repository`         | NATS image name                                                                | `bitnami/nats`                                          |
+| `image.tag`                | NATS image tag                                                                 | `{TAG_NAME}`                                            |
+| `image.pullPolicy`         | Image pull policy                                                              | `IfNotPresent`                                          |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods) |
+| `auth.enabled`             | Switch to enable/disable client authentication                                 | `true`                                                  |
+| `auth.user`                | Client authentication user                                                     | `nats_client`                                           |
+| `auth.password`            | Client authentication password                                                 | `random alhpanumeric string (10)`                       |
+| `auth.token`               | Client authentication token                                                    | `nil`                                                   |
+| `clusterAuth.enabled`      | Switch to enable/disable cluster authentication                                | `true`                                                  |
+| `clusterAuth.user`         | Cluster authentication user                                                    | `nats_cluster`                                          |
+| `clusterAuth.password`     | Cluster authentication password                                                | `random alhpanumeric string (10)`                       |
+| `clusterAuth.token`        | Cluster authentication token                                                   | `nil`                                                   |
+| `debug.enabled`            | Switch to enable/disable debug on logging                                      | `false`                                                 |
+| `debug.trace`              | Switch to enable/disable trace debug level on logging                          | `false`                                                 |
+| `debug.logtime`            | Switch to enable/disable logtime on logging                                    | `false`                                                 |
+| `maxConnections`           | Max. number of client connections                                              | `nil`                                                   |
+| `maxControlLine`           | Max. protocol control line                                                     | `nil`                                                   |
+| `maxPayload`               | Max. payload                                                                   | `nil`                                                   |
+| `writeDeadline`            | Duration the server can block on a socket write to a client                    | `nil`                                                   |
+| `natsFilename`             | Filename used by several NATS files (binary, configurarion file, and pid file) | `nats-server`                                           |
+| `command`                  | Override default container command (useful when using custom images)           | `nil`                                                   |
+| `args`                     | Override default container args (useful when using custom images)              | `nil`                                                   |
+| `metrics.kafka.extraFlags` | Extra flags to be passed to NATS                                               | `{}`                                                    |
+| `extraEnvVars`             | Extra environment variables to be set on NATS container                        | `{}`                                                    |
+| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                           | `nil`                                                   |
+| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                              | `nil`                                                   |
 
 ### NATS deployment/statefulset parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `resourceType`                          | NATS cluster resource type under Kubernetes (Supported: StatefulSets, or Deployment)     | `statefulset`                                           |
-| `replicaCount`                          | Number of NATS nodes                                                                     | `1`                                                     |
-| `schedulerName`                         | Name of an alternate                                                                     | `nil`                                                   |
-| `priorityClassName`                     | Name of pod priority class                                                               | `nil`                                                   |
-| `podSecurityContext`                    | NATS pods' Security Context                                                              | Check `values.yaml` file                                |
-| `updateStrategy`                        | Strategy to use to update Pods                                                           | Check `values.yaml` file                                |
-| `containerSecurityContext`              | NATS containers' Security Context                                                        | Check `values.yaml` file                                |
-| `resources.limits`                      | The resources limits for the NATS container                                              | `{}`                                                    |
-| `resources.requests`                    | The requested resources for the NATS container                                           | `{}`                                                    |
-| `livenessProbe`                         | Liveness probe configuration for NATS                                                    | Check `values.yaml` file                                |
-| `readinessProbe`                        | Readiness probe configuration for NATS                                                   | Check `values.yaml` file                                |
-| `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                   | `""`                                                    |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                | `[]`                                                    |
-| `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
-| `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
-| `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
-| `podLabels`                             | Extra labels for NATS pods                                                               | `{}` (evaluated as a template)                          |
-| `podAnnotations`                        | Annotations for NATS pods                                                                | `{}` (evaluated as a template)                          |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for NATS container(s)           | `[]`                                                    |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for NATS pods                        | `[]`                                                    |
-| `initContainers`                        | Add additional init containers to the NATS pods                                          | `{}` (evaluated as a template)                          |
-| `sidecars`                              | Add additional sidecar containers to the NATS pods                                       | `{}` (evaluated as a template)                          |
+| Parameter                   | Description                                                                               | Default                        |
+|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
+| `resourceType`              | NATS cluster resource type under Kubernetes (Supported: StatefulSets, or Deployment)      | `statefulset`                  |
+| `replicaCount`              | Number of NATS nodes                                                                      | `1`                            |
+| `schedulerName`             | Name of an alternate                                                                      | `nil`                          |
+| `priorityClassName`         | Name of pod priority class                                                                | `nil`                          |
+| `podSecurityContext`        | NATS pods' Security Context                                                               | Check `values.yaml` file       |
+| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file       |
+| `containerSecurityContext`  | NATS containers' Security Context                                                         | Check `values.yaml` file       |
+| `resources.limits`          | The resources limits for the NATS container                                               | `{}`                           |
+| `resources.requests`        | The requested resources for the NATS container                                            | `{}`                           |
+| `livenessProbe`             | Liveness probe configuration for NATS                                                     | Check `values.yaml` file       |
+| `readinessProbe`            | Readiness probe configuration for NATS                                                    | Check `values.yaml` file       |
+| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                          |
+| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                           |
+| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `podLabels`                 | Extra labels for NATS pods                                                                | `{}` (evaluated as a template) |
+| `podAnnotations`            | Annotations for NATS pods                                                                 | `{}` (evaluated as a template) |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for NATS container(s)            | `[]`                           |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for NATS pods                         | `[]`                           |
+| `initContainers`            | Add additional init containers to the NATS pods                                           | `{}` (evaluated as a template) |
+| `sidecars`                  | Add additional sidecar containers to the NATS pods                                        | `{}` (evaluated as a template) |
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `client.service.type`                   | Kubernetes Service type (NATS client)                                                    | `ClusterIP`                                             |
-| `client.service.port`                   | NATS client port                                                                         | `4222`                                                  |
-| `client.service.nodePort`               | Port to bind to for NodePort service type (NATS client)                                  | `nil`                                                   |
-| `client.service.annotations`            | Annotations for NATS client service                                                      | {}                                                      |
-| `client.service.loadBalancerIP`         | loadBalancerIP if NATS client service type is `LoadBalancer`                             | `nil`                                                   |
-| `cluster.service.type`                  | Kubernetes Service type (NATS cluster)                                                   | `ClusterIP`                                             |
-| `cluster.service.port`                  | NATS cluster port                                                                        | `6222`                                                  |
-| `cluster.service.nodePort`              | Port to bind to for NodePort service type (NATS cluster)                                 | `nil`                                                   |
-| `cluster.service.annotations`           | Annotations for NATS cluster service                                                     | {}                                                      |
-| `cluster.service.loadBalancerIP`        | loadBalancerIP if NATS cluster service type is `LoadBalancer`                            | `nil`                                                   |
-| `cluster.connectRetries`                | Configure number of connect retries for implicit routes                                  | `nil`                                                   |
-| `monitoring.service.type`               | Kubernetes Service type (NATS monitoring)                                                | `ClusterIP`                                             |
-| `monitoring.service.port`               | NATS monitoring port                                                                     | `8222`                                                  |
-| `monitoring.service.nodePort`           | Port to bind to for NodePort service type (NATS monitoring)                              | `nil`                                                   |
-| `monitoring.service.annotations`        | Annotations for NATS monitoring service                                                  | {}                                                      |
-| `monitoring.service.loadBalancerIP`     | loadBalancerIP if NATS monitoring service type is `LoadBalancer`                         | `nil`                                                   |
-| `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
-| `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
-| `ingress.hostname`                      | Default hostname for the NATS monitoring ingress resource                                | `nats.local`                                            |
-| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
-| `ingress.annotations`                   | Ingress annotations                                                                      | `{}` (evaluated as a template)                          |
-| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
-| `networkPolicy.enabled`                 | Enable the default NetworkPolicy policy                                                  | `false`                                                 |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                                               | `true`                                                  |
-| `networkPolicy.additionalRules`         | Additional NetworkPolicy rules                                                           | `{}` (evaluated as a template)                          |
+| Parameter                           | Description                                                      | Default                        |
+|-------------------------------------|------------------------------------------------------------------|--------------------------------|
+| `client.service.type`               | Kubernetes Service type (NATS client)                            | `ClusterIP`                    |
+| `client.service.port`               | NATS client port                                                 | `4222`                         |
+| `client.service.nodePort`           | Port to bind to for NodePort service type (NATS client)          | `nil`                          |
+| `client.service.annotations`        | Annotations for NATS client service                              | {}                             |
+| `client.service.loadBalancerIP`     | loadBalancerIP if NATS client service type is `LoadBalancer`     | `nil`                          |
+| `cluster.service.type`              | Kubernetes Service type (NATS cluster)                           | `ClusterIP`                    |
+| `cluster.service.port`              | NATS cluster port                                                | `6222`                         |
+| `cluster.service.nodePort`          | Port to bind to for NodePort service type (NATS cluster)         | `nil`                          |
+| `cluster.service.annotations`       | Annotations for NATS cluster service                             | {}                             |
+| `cluster.service.loadBalancerIP`    | loadBalancerIP if NATS cluster service type is `LoadBalancer`    | `nil`                          |
+| `cluster.connectRetries`            | Configure number of connect retries for implicit routes          | `nil`                          |
+| `monitoring.service.type`           | Kubernetes Service type (NATS monitoring)                        | `ClusterIP`                    |
+| `monitoring.service.port`           | NATS monitoring port                                             | `8222`                         |
+| `monitoring.service.nodePort`       | Port to bind to for NodePort service type (NATS monitoring)      | `nil`                          |
+| `monitoring.service.annotations`    | Annotations for NATS monitoring service                          | {}                             |
+| `monitoring.service.loadBalancerIP` | loadBalancerIP if NATS monitoring service type is `LoadBalancer` | `nil`                          |
+| `ingress.enabled`                   | Enable ingress controller resource                               | `false`                        |
+| `ingress.certManager`               | Add annotations for cert-manager                                 | `false`                        |
+| `ingress.enabled`                   | Enable ingress controller resource                               | `false`                        |
+| `ingress.certManager`               | Add annotations for cert-manager                                 | `false`                        |
+| `ingress.hostname`                  | Default host for the ingress resource                            | `nats.local`                   |
+| `ingress.path`                      | Default path for the ingress resource                            | `/`                            |
+| `ingress.tls`                       | Create TLS Secret                                                | `false`                        |
+| `ingress.annotations`               | Ingress annotations                                              | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`        | Additional hostnames to be covered                               | `nil`                          |
+| `ingress.extraHosts[0].path`        | Additional hostnames to be covered                               | `nil`                          |
+| `ingress.extraPaths`                | Additional arbitrary path/backend objects                        | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`      | TLS configuration for additional hostnames to be covered         | `nil`                          |
+| `ingress.extraTls[0].secretName`    | TLS configuration for additional hostnames to be covered         | `nil`                          |
+| `ingress.secrets[0].name`           | TLS Secret Name                                                  | `nil`                          |
+| `ingress.secrets[0].certificate`    | TLS Secret Certificate                                           | `nil`                          |
+| `ingress.secrets[0].key`            | TLS Secret Key                                                   | `nil`                          |
+| `networkPolicy.enabled`             | Enable the default NetworkPolicy policy                          | `false`                        |
+| `networkPolicy.allowExternal`       | Don't require client label for connections                       | `true`                         |
+| `networkPolicy.additionalRules`     | Additional NetworkPolicy rules                                   | `{}` (evaluated as a template) |
 
 ### Metrics parameters
 
@@ -193,11 +198,11 @@ The following tables lists the configurable parameters of the NATS chart and the
 
 ### Other parameters
 
-| Parameter                               | Description                                                         | Default                                                 |
-|-----------------------------------------|---------------------------------------------------------------------|---------------------------------------------------------|
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                     | `false`                                                 |
-| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled      | `1`                                                     |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable      | `nil`                                                   |
+| Parameter            | Description                                                    | Default |
+|----------------------|----------------------------------------------------------------|---------|
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `nil`   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -224,67 +229,6 @@ $ helm install my-release -f values.yaml bitnami/nats
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of NATS nodes
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable and set the max. number of client connections, protocol control line, payload and duration the server can block on a socket write to a client
-
-```diff
-- # maxConnections: 100
-- # maxControlLine: 512
-- # maxPayload: 65536
-- # writeDeadline: "2s"
-+ maxConnections: 100
-+ maxControlLine: 512
-+ maxPayload: 65536
-+ writeDeadline: "2s"
-```
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-```
-
-- Disallow external connections:
-
-```diff
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Enable ingress controller resource:
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- Enable Prometheus metrics via exporter side-car:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable PodDisruptionBudget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your NATS replica set.
 
 ### Adding extra environment variables
 

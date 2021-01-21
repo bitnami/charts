@@ -17,7 +17,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -240,19 +240,19 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `externalDatabase.password`       | External PostgreSQL password                                                                                                                                                                                                   | `nil`             |
 | `externalDatabase.port`           | External PostgreSQL port                                                                                                                                                                                                       | `nil`             |
 | `externalDatabase.user`           | External PostgreSQL user                                                                                                                                                                                                       | `nil`             |
-| `externalRedis.existingSecret`    | Name of an existing secret containing the Redis password ('redis-password' key)                                                                                                                                                | `nil`             |
-| `externalRedis.host`              | External Redis host                                                                                                                                                                                                            | `nil`             |
-| `externalRedis.password`          | External Redis password                                                                                                                                                                                                        | `nil`             |
-| `externalRedis.port`              | External Redis port                                                                                                                                                                                                            | `nil`             |
-| `externalRedis.username`          | External Redis username (not required on most Redis implementations)                                                                                                                                                           | `nil`             |
+| `externalRedis.existingSecret`    | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key)                                                                                                                                   | `nil`             |
+| `externalRedis.host`              | External Redis<sup>TM</sup> host                                                                                                                                                                                               | `nil`             |
+| `externalRedis.password`          | External Redis<sup>TM</sup> password                                                                                                                                                                                           | `nil`             |
+| `externalRedis.port`              | External Redis<sup>TM</sup> port                                                                                                                                                                                               | `nil`             |
+| `externalRedis.username`          | External Redis<sup>TM</sup> username (not required on most Redis<sup>TM</sup> implementations)                                                                                                                                 | `nil`             |
 | `postgresql.enabled`              | Switch to enable or disable the PostgreSQL helm chart                                                                                                                                                                          | `true`            |
 | `postgresql.existingSecret`       | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key) . This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance | `nil`             |
 | `postgresql.postgresqlDatabase`   | Airflow Postgresql database                                                                                                                                                                                                    | `bitnami_airflow` |
 | `postgresql.postgresqlPassword`   | Airflow Postgresql password                                                                                                                                                                                                    | `nil`             |
 | `postgresql.postgresqlUsername`   | Airflow Postgresql username                                                                                                                                                                                                    | `bn_airflow`      |
 | `redis.cluster.enabled`           | Switch to enable a clustered redis                                                                                                                                                                                             | `false`           |
-| `redis.enabled`                   | Switch to enable or disable the Redis helm chart                                                                                                                                                                               | `true`            |
-| `redis.existingSecret`            | Name of an existing secret containing the Redis password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance                     | `nil`             |
+| `redis.enabled`                   | Switch to enable or disable the Redis<sup>TM</sup> helm chart                                                                                                                                                                  | `true`            |
+| `redis.existingSecret`            | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance        | `nil`             |
 
 ### Airflow exposing parameters
 
@@ -363,44 +363,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- URL used to access to airflow web ui:
-
-```diff
-- # airflow.baseUrl:
-+ airflow.baseUrl: http://airflow.local
-```
-
-- Number of Airflow Worker replicas and enable autoscaling:
-
-```diff
-- worker.replicaCount: 1
-+ worker.replicaCount: 3
-- worker.autoscaling.enabled=false
-+ worker.autoscaling.enabled=true
-- worker.autoscaling.replicas.max=3
-+ worker.autoscaling.replicas.max=6
-- worker.autoscaling.replicas.min=1
-+ worker.autoscaling.replicas.min=3
-```
-
-- Force users to specify a password:
-
-```diff
-- airflow.auth.forcePassword: false
-+ airflow.auth.forcePassword: true
-```
-
-- Enable ingress controller resource:
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
 ### Generate a Fernet key
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
@@ -445,7 +407,7 @@ git.plugins.repositories[0].path=plugins
 
 ### Existing Secrets
 
-You can use an existing secret to configure your Airflow auth, external Postgres, and extern Redis passwords:
+You can use an existing secret to configure your Airflow auth, external Postgres, and extern Redis<sup>TM</sup> passwords:
 
 ```console
 postgresql.enabled=false

@@ -48,7 +48,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.7.0-debian-10-r30
+    tag: 3.8.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -191,7 +191,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.3.6-debian-10-r20
+    tag: 7.3.7-debian-10-r4
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -434,7 +434,7 @@ grafanaPluginInit:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.3.6-debian-10-r20
+    tag: 7.3.7-debian-10-r4
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

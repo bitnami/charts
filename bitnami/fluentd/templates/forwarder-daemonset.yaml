@@ -83,8 +83,8 @@ spec:
           {{- if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-              port: http
+              path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
+              port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
@@ -94,8 +94,8 @@ spec:
           {{- if .Values.forwarder.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-              port: http
+              path: {{ .Values.forwarder.readinessProbe.httpGet.path }}
+              port: {{ .Values.forwarder.readinessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.forwarder.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}

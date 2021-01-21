@@ -126,6 +126,7 @@ Validate data
 {{- define "fluentd.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "fluentd.validateValues.deployment" .) -}}
+{{- $messages := append $messages (include "fluentd.validateValues.ingress" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.rbac" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.serviceAccount" .) -}}
 {{- $messages := without $messages "" -}}
@@ -141,6 +142,25 @@ Validate data
 fluentd:
     You have disabled both the forwarders and the aggregators.
     Please enable at least one of them (--set forwarder.enabled=true) (--set aggregator.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Fluentd - if the aggregator index is enabled there must be a port named http in the service */}}
+{{- define "fluentd.validateValues.ingress" -}}
+{{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled (not .Values.aggregator.service.ports.http)}}
+fluentd:
+    You have enabled the Ingress for the aggregator. The aggregator service needs to have a port named http for the Ingress to work.
+    Please, define it in your `values.yaml` file. For example:
+
+    aggregator:
+      service:
+        type: ClusterIP
+        ports:
+          http:
+            port: 9880
+            targetPort: http
+            protocol: TCP
+
 {{- end -}}
 {{- end -}}
 

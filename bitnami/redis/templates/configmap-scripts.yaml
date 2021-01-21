@@ -125,6 +125,10 @@ data:
     {{- end }}
     {{- end }}
 
+    {{- if .Values.slave.preExecCmds }}
+    {{ .Values.slave.preExecCmds | nindent 4}}
+    {{- end }}
+
     {{- if .Values.slave.command }}
     exec {{ .Values.slave.command }} "${ARGS[@]}"
     {{- else }}
@@ -271,6 +275,9 @@ data:
     {{- if .Values.tls.dhParamsFilename }}
     ARGS+=("--tls-dh-params-file" "${REDIS_SENTINEL_TLS_DH_PARAMS_FILE}")
     {{- end }}
+    {{- end }}
+    {{- if .Values.sentinel.preExecCmds }}
+    {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
 {{- else }}

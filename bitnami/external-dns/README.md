@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -241,28 +241,18 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Desired number of ExternalDNS replicas:
-```diff
-- replicas: 1
-+ replicas: 3
-```
-
-- Enable prometheus to access external-dns metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Using IRSA
+If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
+You can use the following arguments:
+```
+--set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
+```
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -276,7 +266,6 @@ For instance, to install ExternalDNS on AWS, you need to:
 - Install ExternalDNS chart using the command below:
 
 > Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
-
 ```bash
 $ helm install my-release \
   --set provider=aws \
@@ -285,6 +274,7 @@ $ helm install my-release \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
   bitnami/external-dns
 ```
+
 
 ## Troubleshooting
 

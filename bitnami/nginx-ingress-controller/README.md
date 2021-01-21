@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -190,6 +190,8 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `service.omitClusterIP`                 | To omit the `ClusterIP` from the controller service                                      | `false`                                                 |
 | `service.ports.http`                    | Controller Service HTTP port                                                             | `80`                                                    |
 | `service.ports.https`                   | Controller Service HTTPS port                                                            | `""`                                                    |
+| `service.targetPorts.http`              | Map the controller service HTTP port                                                     | `http`                                                  |
+| `service.targetPorts.https`             | Map the controller service HTTPS port                                                    | `https`                                                  |
 | `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
 | `service.nodePorts.http`                | Kubernetes http node port for Controller                                                 | `""`                                                    |
 | `service.nodePorts.https`               | Kubernetes https node port for Controller                                                | `""`                                                    |
@@ -269,24 +271,6 @@ $ helm install my-release -f values.yaml bitnami/nginx-ingress-controller
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Install the NGINX Ingress Controller as a daemonset:
-
-```diff
-- kind: Deployment
-+ kind: DaemonSet
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Sidecars and Init Containers
 

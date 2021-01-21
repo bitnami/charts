@@ -27,6 +27,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override odoo.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -87,6 +91,7 @@ extraEnvVarsCM:
 extraEnvVarsSecret:
 
 ## Add extra volumes
+##
 extraVolumes: []
 
 ## Add extra volume mounts
@@ -109,6 +114,11 @@ odooEmail: user@example.com
 ##
 # odooPassword:
 
+## Odoo modules disable demo data
+## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+##
+withoutDemo: all
+
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
 # smtpHost:
@@ -124,15 +134,19 @@ existingSecret:
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
   ## Database host
+  ##
   host: localhost
 
   ## non-root Username for Odoo database
+  ##
   user: postgres
 
   ## Database password
+  ##
   password: ""
 
   ## Database port number
+  ##
   port: 5432
 
 ##
@@ -200,34 +214,68 @@ service:
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: odoo.local
-      path: /
-
-      ## Set this to true in order to enable TLS on the ingress record
-      ## A side effect of this will be that the backend odoo service will be connected at port 443
-      tls: false
-
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: odoo.local-tls
-
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: odoo.local
+
+  ## The Path to Odoo. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
+
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
-  #  kubernetes.io/ingress.class: nginx
-  #  kubernetes.io/tls-acme: true
+  ##
+  annotations: {}
 
-  secrets:
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: odoo.local
+  ##   path: /
+  ##
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - odoo.local
+  ##   secretName: odoo.local-tls
+  ##
+
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -237,9 +285,12 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: odoo.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: odoo.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -267,6 +318,7 @@ resources:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
 livenessProbe:
   enabled: true
   initialDelaySeconds: 600

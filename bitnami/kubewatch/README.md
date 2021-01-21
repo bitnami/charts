@@ -16,7 +16,7 @@ This chart bootstraps a kubewatch deployment on a [Kubernetes](http://kubernetes
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 

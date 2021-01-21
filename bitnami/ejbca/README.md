@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -88,6 +88,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `persistence.existingClaim`  | Name of an existing PVC to reuse                                                          | `nil`                                                   |
 | `persistence.accessMode`     | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`                                         |
 | `persistence.size`           | Size of the PVC to request                                                                | `2Gi`                                                   |
+| `kubeVersion`                | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil`                                                   |
 
 ### Service parameters
 
@@ -118,7 +119,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `ejbcaKeystoreExistingSecret`        | Existing Secret containing a Keystore to be imported by EBJCA                           | `nil`                                          |
 | `extraEnvVars`                       | An array to add extra env vars                                                          | `[]` (evaluated as a template)                 |
 | `command`                            | Custom command to override image cmd                                                    | `nil` (evaluated as a template)                |
-| `args`                               | Custom args for the custom command                                                       | `nil` (evaluated as a template)                |
+| `args`                               | Custom args for the custom command                                                      | `nil` (evaluated as a template)                |
 | `extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                               | `[]` (evaluated as a template)                 |
 | `resources`                          | EJBCA container's resource requests and limits                                          | `{}`                                           |
 | `podSecurityContext.enabled`         | Enable security context for EJBCA container                                             | `true`                                         |
@@ -144,11 +145,22 @@ The following table lists the configurable parameters of the EJBCA chart and the
 
 ### Ingress parameters
 
-| Parameter             | Description                           | Default                        |
-|-----------------------|---------------------------------------|--------------------------------|
-| `ingress.enabled`     | Enable ingress controller resource    | `false`                        |
-| `ingress.hostname`    | Default host for the ingress resource | `ejbca.local`                  |
-| `ingress.annotations` | Ingress annotations                   | `[]` (evaluated as a template) |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `ejbca.local`                  |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
 
 ### Database parameters
 

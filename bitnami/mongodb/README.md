@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -171,8 +171,8 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                              | `nil`                                                   |
 | `tls.enabled`                             | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes         | `false`                                                 |
 | `tls.existingSecret`                      | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)            | `nil`                                                   |
-| `tls.caCert`                             | Custom CA certificated (base64 encoded)         | `nil`                                                 |
-| `tls.caKey`                             | CA certificate private key (base64 encoded)      | `nil`                                                 |
+| `tls.caCert`                              | Custom CA certificated (base64 encoded)                                                                    | `nil`                                                   |
+| `tls.caKey`                               | CA certificate private key (base64 encoded)                                                                | `nil`                                                   |
 | `tls.image.registry`                      | Init container TLS certs setup image registry (nginx)                                                      | `docker.io`                                             |
 | `tls.image.repository`                    | Init container TLS certs setup image name (nginx)                                                          | `bitnami/nginx`                                         |
 | `tls.image.tag`                           | Init container TLS certs setup image tag (nginx)                                                           | `{TAG_NAME}`                                            |
@@ -258,11 +258,16 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### RBAC parameters
 
-| Parameter                                 | Description                                                                                                | Default                                                 |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `serviceAccount.create`                   | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
-| `serviceAccount.name`                     | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
-| `rbac.create`                             | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| Parameter                                    | Description                                                                                                | Default                                                 |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB pods                                                         | `true`                                                  |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                         | Generated using the `mongodb.fullname` template         |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                                     | `{}`                                                    |
+| `rbac.create`                                | Weather to create & use RBAC resources or not                                                              | `false`                                                 |
+| `podSecurityPolicy.create                    | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false`                                                 |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                                | `false`                                                 |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                           | `false`                                                 |
+| `podSecurityPolicy.spec                      | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`                                                    |
 
 ### Volume Permissions parameters
 
@@ -374,40 +379,6 @@ $ helm install my-release -f values.yaml bitnami/mongodb
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Switch to enable/disable replica set configuration:
-
-```diff
-- architecture: standalone
-+ architecture: replicaset
-```
-
-- Increase the number of MongoDB nodes:
-
-```diff
-- replicaCount: 2
-+ replicaCount: 4
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-- Enable using a sidecar Prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart, you can use the `--replicaCount` flag to modify the number of secondary nodes in your MongoDB replica set.
 
 ### Initialize a fresh instance
 

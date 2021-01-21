@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -68,8 +68,8 @@ The following table lists the configurable parameters of the phpBB chart and the
 | `image.pullPolicy`  | phpBB image pull policy                                                      | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override common.names.fullname template                         | `nil`                                                   |
-| `fullnameOverride`  | String to fully override common.names.fullname template                             | `nil`                                                   |
+| `nameOverride`      | String to partially override common.names.fullname template                  | `nil`                                                   |
+| `fullnameOverride`  | String to fully override common.names.fullname template                      | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
@@ -137,49 +137,53 @@ The following table lists the configurable parameters of the phpBB chart and the
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                           | Default        |
-|----------------------------------|---------------------------------------|----------------|
-| `service.type`                   | Kubernetes Service type               | `LoadBalancer` |
-| `service.port`                   | Service HTTP port                     | `80`           |
-| `service.httpsPort`              | Service HTTPS port                    | `443`          |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`      |
-| `service.nodePorts.http`         | Kubernetes http node port             | `""`           |
-| `service.nodePorts.https`        | Kubernetes https node port            | `""`           |
-| `service.loadBalancerIP`         | loadBalancerIP for phpBB Service    | `nil`          |
-| `ingress.enabled`                | Enable ingress controller resource    | `false`        |
-| `ingress.certManager`            | Add annotations for cert-manager      | `false`        |
-| `ingress.hostname`               | Default host for the ingress resource | `phpbb.local`  |
-| `ingress.annotations`            | Ingress annotations                   | `{}`           |
-| `ingress.hosts[0].name`          | Hostname to your phpBB installation   | `nil`          |
-| `ingress.hosts[0].path`          | Path within the url structure         | `nil`          |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`          |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`          |
-| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`          |
-| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`          |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `service.loadBalancerIP`         | loadBalancerIP for phpBB Service                         | `nil`                          |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `phpbb.local`                  |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.pathType`               | Ingress path type                                        | `ImplementationSpecific`       |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
 
 ### Database parameters
 
-| Parameter                                  | Description                                                                 | Default                                        |
-|--------------------------------------------|-----------------------------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart                                            | `true`                                         |
-| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)                        | `standalone`                                   |
-| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                                        | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                    | Database name to create                                                     | `bitnami_phpbb`                                |
-| `mariadb.auth.username`                    | Database user to create                                                     | `bn_phpbb`                                     |
-| `mariadb.auth.password`                    | Password for the database                                                   | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                                       | `true`                                         |
-| `mariadb.primary.persistence.existingClaim`| Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas    | `nil`                                          |
-| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes                                     | `[ReadWriteOnce]`                              |
-| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                                             | `8Gi`                                          |
-| `mariadb.primary.persistence.storageClass` | MariaDB primary persistent volume storage Class                             | `nil` (uses alpha storage class annotation)    |
-| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                                          | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                    | Existing username in the external db                                        | `bn_phpbb`                                     |
-| `externalDatabase.password`                | Password for the above username                                             | `nil`                                          |
-| `externalDatabase.database`                | Name of the existing database                                               | `bitnami_phpbb`                                |
-| `externalDatabase.host`                    | Host of the existing database                                               | `nil`                                          |
-| `externalDatabase.port`                    | Port of the existing database                                               | `3306`                                         |
-| `externalDatabase.existingSecret`          | Name of the database existing Secret Object                                 | `nil`                                          |
+| Parameter                                   | Description                                                              | Default                                        |
+|---------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                  | `bitnami_phpbb`                                |
+| `mariadb.auth.username`                     | Database user to create                                                  | `bn_phpbb`                                     |
+| `mariadb.auth.password`                     | Password for the database                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas | `nil`                                          |
+| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                          | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                       | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                     | Existing username in the external db                                     | `bn_phpbb`                                     |
+| `externalDatabase.password`                 | Password for the above username                                          | `nil`                                          |
+| `externalDatabase.database`                 | Name of the existing database                                            | `bitnami_phpbb`                                |
+| `externalDatabase.host`                     | Host of the existing database                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                            | `3306`                                         |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                              | `nil`                                          |
 
 ### Metrics parameters
 
@@ -283,6 +287,10 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 9.0.0
 
