@@ -369,13 +369,14 @@ The 4.0 version of this chart introduces changes to handle Contour CRD upgrades.
 
 **What changes were introduced in this major version?**
 
-- The `contour-crds` subchart(`charts/contour-crds`) was added as a dependency that contains all the Contour CRDs. As a dependency, this subchart always runs before the Contour templates are applied. CRD upgrades are also applied when the `helm upgrade` command is used.
+- The `resources` directory was added that contains all the Contour CRDs, which are imported by the `templates/00-crds.yaml` manifest on installation and upgrade.
+- If you do not wish for this chart to manage Contour CRDs, set the flag `contour.manageCRDs` to `false` when running Helm.
 
 **Considerations when upgrading to this version**
 
 If you are installing a fresh chart, or if you are upgrading from a 4.x version of this chart, you can ignore this section.
 
-If you are upgrading from 3.x of this Helm chart, this is a breaking change as the subchart will not overwrite the existing CRDs. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
+If you are upgrading from 3.x of this Helm chart, this is a breaking change as the new CRDs will not overwrite the existing ones. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
 
 If required, back up your existing Custom Resources:
 

@@ -178,6 +178,9 @@ contour:
   ## Create Contour CRDs
   installCRDs: true
 
+  ## Manage the creation and upgrade of Contour CRDs.
+  manageCRDs: true
+
   ## Contour CRD deletion policy
   ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
   ##

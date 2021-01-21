@@ -51,6 +51,9 @@ spec:
           spec:
             description: HTTPProxySpec defines the spec of the CRD.
             properties:
+              ggvar:
+                description: Testing new param for CRD
+                type: string
               includes:
                 description: Includes allow for specific routing configuration to be included from another HTTPProxy, possibly in another namespace.
                 items:
