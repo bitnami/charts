@@ -833,6 +833,11 @@ affinity: {}
 ##
 tolerations: []
 
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
 ##
 ## PostgreSQL chart configuration
 ##
