@@ -24,6 +24,10 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Number of solr instances to run
+##
+replicaCount: 1
+
 service:
   type: ClusterIP
   port: 8983
@@ -80,9 +84,8 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Number of solr instances to run
-##
-replicaCount: 1
+## Solr core name to be created
+coreName: my-core
 
 ## ConfigMap with Solr Configuration
 ##
@@ -205,7 +208,9 @@ customReadinessProbe: {}
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
 ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
 ##
-updateStrategy: RollingUpdate
+updateStrategy: 
+  type: RollingUpdate
+  rollingUpdate: {}
 
 ## Additional environment variables to set
 ## Example:
@@ -255,6 +260,40 @@ initContainers: {}
 ##
 sidecars: {}
 
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    ##   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+
 ## Configuration for solr TLS handling, see README.md for more instructions
 ##
 tls:
@@ -271,6 +310,92 @@ tls:
     name: ""
     keyPath: "tls.key"
     certPath: "tls.crt"
+
+## Persistence parameters
+##
+persistence:
+  enabled: true
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  # existingClaim:
+  ## PV Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ## set, choosing the default provisioner.
+  ##
+  # storageClass: "-"
+  ## PV Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## PVC size
+  ##
+  size: 8Gi
+  ## PVC annotations
+  ##
+  annotations: {}
+  ## Mount point for persistence
+  mountPath: /opt/solr/server/home
+
+## Log Persistence parameters
+##
+logPersistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  # existingClaim:
+  ## PV Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ## set, choosing the default provisioner.
+  # existingLogClaim:
+  ## PV Storage Class
+  ## It getted from persistence.storageClass
+  ##
+  ## PV Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## PVC size
+  ##
+  size: 8Gi
+  ## PVC annotations
+  ##
+  annotations: {}
+  ## Mount path for persistent logs
+  mountPath: /opt/solr/server/home/logs
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name:
+
+##
+## Zookeeper chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+##
+zookeeper:
+  enabled: true
+  persistence.enabled: true
+  port: 2181
+
+## This value is only used when zookeeper.enabled is set to false
+##
+externalZookeeper:
+  ## Server or list of external zookeeper servers to use.
+  ##
+  servers: []
 
 ## Configuration for the solr prometheus exporter
 ##
@@ -502,94 +627,3 @@ exporter:
     ## LoadBalancer source ranges
     ##
     loadBalancerSourceRanges:
-
-## Persistence parameters
-##
-persistence:
-  enabled: true
-  ## A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
-  ##
-  # existingClaim:
-  ## PV Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.
-  ##
-  # storageClass: "-"
-  ## PV Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## PVC size
-  ##
-  size: 8Gi
-  ## PVC annotations
-  ##
-  annotations: {}
-  ## Mount point for persistence
-  mountPath: /opt/solr/server/home
-
-## Log Persistence parameters
-##
-logPersistence:
-  enabled: false
-  ## A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
-  ##
-  # existingClaim:
-  ## PV Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.
-  # existingLogClaim:
-  ## PV Storage Class
-  ## It getted from persistence.storageClass
-  ##
-  ## PV Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## PVC size
-  ##
-  size: 8Gi
-  ## PVC annotations
-  ##
-  annotations: {}
-  ## Mount path for persistent logs
-  mountPath: /opt/solr/server/home/logs
-
-## Specifies whether RBAC resources should be created
-##
-rbac:
-  create: true
-
-## Specifies whether a ServiceAccount should be created
-##
-serviceAccount:
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
-  name:
-
-##
-## Zookeeper chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-##
-zookeeper:
-  enabled: true
-  persistence.enabled: true
-  port: 2181
-
-## This value is only used when zookeeper.enabled is set to false
-##
-externalZookeeper:
-  ## Server or list of external zookeeper servers to use.
-  ##
-  servers: []
