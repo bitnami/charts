@@ -414,28 +414,21 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 This helm chart also supports to customize the whole configuration file.
 
-Add your custom files to "files" in your working directory. Those files will be mounted as configMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
+You can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
 
-Alternatively, you can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters.
-
-In addition to these options, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the two previous options.
+In addition to this option, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the previous options.
 
 ### Allow settings to be loaded from files other than the default `postgresql.conf`
 
-If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can add your extended `.conf` files to "files/conf.d/" in your working directory.
-Those files will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
+If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can specify the extended configuration using the `postgresql.extendedConf` parameter. A file will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
 
-Alternatively, you can specify the extended configuration using the `postgresql.extendedConf` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the two previous options.
+In addition to this option, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the previous option.
 
 ### Initialize a fresh instance
 
-The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
 
-Alternatively, you can specify custom scripts using the `initdbScripts` parameter as dict.
-
-In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
+In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsCM` parameter. Note that this will override the two previous option. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
@@ -509,6 +502,11 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+### To 6.4.0
+
+Support for adding custom configuration files or initialization scripts by placing them under the "files" directory in the working directory was removed. This functionality was very confusing for users since they do not usually clone the repo nor they fetch the charts to their working directories.
+As an alternative to this feature, users can still use the equivalent parameters available in the `values.yaml` to load their custom configuration & scripts.
 
 ### To 6.0.0
 
