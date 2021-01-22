@@ -1,4 +1,4 @@
-{{ if not .Values.existingConfigSecret }}
+{{ if not .Values.KcCasC.existingConfigSecret }}
 ---
 apiVersion: v1
 kind: Secret

@@ -12,6 +12,10 @@ dependencies:
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
+  - condition: KCasC.enabled
+    name: keycloak-config-cli
+    repository: https://charts.bitnami.com/bitnami
+    version: 3.x.x
 description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 engine: gotpl
 home: https://www.keycloak.org
