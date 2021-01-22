@@ -54,6 +54,24 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Cassandra container ports to open
+## If hostNetwork true: the hostPort is set identical to the containerPort
+##
+containerPorts:
+  cassandra:
+    intra: 7000
+    tls: 7001
+    jmx: 7199
+    cql: 9042
+    thrift: 9160
+  metrics:
+    http: 8080
+    jmx: 5555
+
+## Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+hostNetwork: false
+
 ## Service parameters
 ##
 service:
