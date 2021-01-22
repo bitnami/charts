@@ -67,7 +67,7 @@ image:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ##
 livenessProbe:
-  enabled: true  
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -287,11 +287,11 @@ exporter:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 20
-    periodSeconds: 10    
+    periodSeconds: 10
   readinessProbe:
     enabled: true
     initialDelaySeconds: 15
-    periodSeconds: 5 
+    periodSeconds: 5
 
   ## Solr exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
