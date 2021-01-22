@@ -144,3 +144,27 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image  }}
 {{- include "common.warnings.rollingTag" .Values.backup.uploadProviders.google.image }}
 {{- include "common.warnings.rollingTag" .Values.backup.uploadProviders.azure.image }}
+
+{{- $passwordValueConfigs := list -}}
+{{- if not .Values.auth.existingSecret -}}
+    {{- $secretName := include "influxdb.secretName" . -}}
+
+    {{- $adminPasswordConfig := dict "valueKey" "auth.admin.password" "secret" $secretName "field" "admin-user-password" "context" $ -}}
+    {{- $passwordValueConfigs = append $passwordValueConfigs $adminPasswordConfig -}}
+
+    {{- if .Values.auth.user.username }}
+      {{- $userPasswordConfig := dict "valueKey" "auth.user.password" "secret" $secretName "field" "user-password" "context" $ -}}
+      {{- $passwordValueConfigs = append $passwordValueConfigs $userPasswordConfig -}}
+    {{- end }}
+    {{- if .Values.auth.readUser.username }}
+      {{- $readUserPasswordConfig := dict "valueKey" "auth.readUser.password" "secret" $secretName "field" "read-user-password" "context" $ -}}
+      {{- $passwordValueConfigs = append $passwordValueConfigs $readUserPasswordConfig -}}
+    {{- end }}
+    {{- if .Values.auth.writeUser.username }}
+      {{- $writeUserPasswordConfig := dict "valueKey" "auth.writeUser.password" "secret" $secretName "field" "write-user-password" "context" $ -}}
+      {{- $passwordValueConfigs = append $passwordValueConfigs $writeUserPasswordConfig -}}
+    {{- end }}
+{{- end -}}
+
+{{- $passwordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $passwordValueConfigs "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
