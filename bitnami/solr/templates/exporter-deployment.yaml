@@ -71,7 +71,7 @@ spec:
             - "-p"
             - "{{ .Values.exporter.port }}"
             - "-z"
-            - "{{ include "solr.zookeeper-service-name" . }}:2181"
+            - "{{ include "solr.zookeeper-service-name" . }}:{{ .Values.zookeeper.port }}"
             - "-n"
             - "{{ .Values.exporter.threads }}"
             - "-f"
@@ -101,6 +101,11 @@ spec:
             httpGet:
               path: "/metrics"
               port: {{ .Values.exporter.port }}
+            initialDelaySeconds: {{ .Values.exporter.livenessProbe.initalDelaySeconds }}
+            periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.exporter.livenessProbe.failureThredshold }}
+            successThreshold: {{ .Values.exporter.livenessProbe.successThredshold }}
           {{- else if .Values.exporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -108,7 +113,12 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/metrics"
-              port: {{ .Values.exporter.port }}          
+              port: {{ .Values.exporter.port }}
+            initialDelaySeconds: {{ .Values.exporter.readinessProbe.initalDelaySeconds }}
+            periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.exporter.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.exporter.readinessProbe.failureThredshold }}
+            successThreshold: {{ .Values.exporter.readinessProbe.successThredshold }}        
           {{- else if .Values.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

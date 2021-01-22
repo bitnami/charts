@@ -19,9 +19,18 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.exporter.service.type }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - name: tcp-client
-      port: {{ .Values.exporter.port }}
+      port: {{ .Values.exporter.service.port }}
       protocol: TCP
       targetPort: {{ .Values.exporter.port }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

@@ -24,7 +24,6 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-
 service:
   type: ClusterIP
   port: 8983
@@ -276,22 +275,71 @@ tls:
 ## Configuration for the solr prometheus exporter
 ##
 exporter:
-  enabled: false
-  image: {}
-  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
-  updateStrategy: {}
-  podAnnotations: {}
-  resources: {}
-  port: 9983
-  threads: 7
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/solr
+    tag: latest
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 20
-    periodSeconds: 10
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 15
+    failureThreshold: 15
+    successThreshold: 15
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 15
+    initialDelaySeconds: 10
     periodSeconds: 5
+    timeoutSeconds: 15
+    failureThreshold: 15
+    successThreshold: 15
+
+  ## Path to the Solr exporter config file
+  ##
+  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
+  
+  ## Solr exporter port
+  ##
+  port: 9983
+  
+  ## Number of Solr exporter threads
+  ##
+  threads: 7
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## Solr resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
 
   ## Solr exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -356,9 +404,104 @@ exporter:
   ##
   tolerations: []
 
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Custom Liveness probes for %%MAIN_CONTAINER_NAME%%
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes %%MAIN_CONTAINER_NAME%%
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the %%MAIN_CONTAINER_NAME%% pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the %%MAIN_CONTAINER_NAME%% pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+
+  ## Service for the Solr exporter deployment
+  ##
   service:
-    type: "ClusterIP"
-    annotations: {}
+    type: ClusterIP
+    # HTTP Port
+    port: 9983
+    ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    ## loadBalancerIP:
+    ##
+    ## nodePorts:
+    ##   http: <to set explicitly, choose port between 30000-32767>
+    ##   https: <to set explicitly, choose port between 30000-32767>
+    nodePorts:
+      http: ""
+      https: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy:
+    ## LoadBalancer source ranges
+    ##
+    loadBalancerSourceRanges:
 
 ## Persistence parameters
 ##
@@ -442,6 +585,7 @@ serviceAccount:
 zookeeper:
   enabled: true
   persistence.enabled: true
+  port: 2181
 
 ## This value is only used when zookeeper.enabled is set to false
 ##
