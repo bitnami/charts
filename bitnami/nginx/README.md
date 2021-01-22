@@ -304,7 +304,7 @@ In some scenarios, you may require users to authenticate in order to gain access
 
 In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
 
-1. You have to make your NGINX server aware of the proxy. In order to do so, use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block, that will instruct NGINX to use it (see `values.yaml`). Alternatively, you can specify this server block configuration using an external Secret using the property `ldapDaemon.existingNginxServerBlockSecret`.
+1. NGINX server needs to be configured to be self-aware of the proxy. In order to do so, use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block, that will instruct NGINX to use it (see `values.yaml`). Alternatively, you can specify this server block configuration using an external Secret using the property `ldapDaemon.existingNginxServerBlockSecret`.
 
 2. Supply your LDAP Server connection details either in the aforementioned server block (setting request headers) or specifying them in `ldapDaemon.ldapConfig`. e.g. The following two approaches are equivalent:
 
