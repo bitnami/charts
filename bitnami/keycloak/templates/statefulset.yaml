@@ -227,7 +227,7 @@ spec:
         - name: certificates
           secret:
             secretName: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
-            defaultMode: 256
+            defaultMode: 420
         - name: shared-certs
           emptyDir: {}
         {{- end }}
