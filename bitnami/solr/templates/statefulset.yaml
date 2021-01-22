@@ -65,7 +65,7 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ template "solr.serviceAccountName" . }}
+      serviceAccountName: {{ include "solr.serviceAccountName" . }}
       {{- end }}
       {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
       initContainers:
