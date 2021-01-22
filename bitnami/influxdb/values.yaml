@@ -56,13 +56,15 @@ architecture: standalone
 auth:
   ## Variable to keep compatibility with influxdb v1
   enabled: true
+  ## Whether to use files to provide secrets instead of env vars.
+  ##
+  usePasswordFiles: false
   ## InfluxDB(TM) admin credentials
   ##
   admin:
     username: admin
     password:
     token:
-    usePasswordFile: false
     ## Primary org name and id
     ##
     org: primary
@@ -81,7 +83,6 @@ auth:
   user:
     username:
     password:
-    usePasswordFile: false
     ## Org where to create the user, Default: primary.org
     ##
     org:
@@ -94,13 +95,11 @@ auth:
   readUser:
     username:
     password:
-    usePasswordFile: false
   ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
   ##
   writeUser:
     username:
     password:
-    usePasswordFile: false
   ## Secret with InfluxDB(TM) credentials
   ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
   ##

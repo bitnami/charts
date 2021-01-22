@@ -92,7 +92,7 @@ spec:
             - name: INFLUXDB_ADMIN_USER
               value: {{ .Values.auth.admin.username | quote }}
             {{- end }}
-            {{- if .Values.auth.admin.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_ADMIN_USER_PASSWORD_FILE
               value: "/opt/bitnami/influxdb/secrets/admin-user-password"
             {{- else }}
@@ -102,7 +102,7 @@ spec:
                   name: {{ include "influxdb.secretName" . }}
                   key: admin-user-password
             {{- end }}
-            {{- if .Values.auth.admin.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_ADMIN_USER_TOKEN_FILE
               value: "/opt/bitnami/influxdb/secrets/admin-user-token"
             {{- else }}
@@ -119,7 +119,7 @@ spec:
             {{- if .Values.auth.user.username }}
             - name: INFLUXDB_USER
               value: {{ .Values.auth.user.username | quote }}
-            {{- if .Values.auth.user.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_USER_PASSWORD_FILE
               value: "/opt/bitnami/influxdb/secrets/user-password"
             {{- else }}
@@ -141,7 +141,7 @@ spec:
             {{- if .Values.auth.readUser.username }}
             - name: INFLUXDB_READ_USER
               value: {{ .Values.auth.readUser.username | quote }}
-            {{- if .Values.auth.readUser.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_READ_USER_PASSWORD_FILE
               value: "/opt/bitnami/influxdb/secrets/read-user-password"
             {{- else }}
@@ -155,7 +155,7 @@ spec:
             {{- if .Values.auth.writeUser.username }}
             - name: INFLUXDB_WRITE_USER
               value: {{ .Values.auth.writeUser.username | quote }}
-            {{- if .Values.auth.writeUser.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: INFLUXDB_WRITE_USER_PASSWORD_FILE
               value: "/opt/bitnami/influxdb/secrets/write-user-password"
             {{- else }}
@@ -256,7 +256,7 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if or .Values.auth.admin.usePasswordFile .Values.auth.user.usePasswordFile .Values.auth.readUser.usePasswordFile .Values.auth.writeUser.usePasswordFile }}
+            {{- if  .Values.auth.usePasswordFiles }}
             - name: influxdb-credentials
               mountPath: /opt/bitnami/influxdb/secrets/
             {{- end }}
@@ -280,27 +280,10 @@ spec:
           secret:
             secretName: {{ template "influxdb.initdbScriptsSecret" . }}
         {{- end }}
-        {{- if or .Values.auth.admin.usePasswordFile .Values.auth.user.usePasswordFile .Values.auth.readUser.usePasswordFile .Values.auth.writeUser.usePasswordFile }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: influxdb-credentials
           secret:
             secretName: {{ include "influxdb.secretName" . }}
-            items:
-              {{- if .Values.auth.admin.usePasswordFile }}
-              - key: admin-user-password
-                path: admin-user-password
-              {{- end }}
-              {{- if .Values.auth.user.usePasswordFile }}
-              - key: user-password
-                path: user-password
-              {{- end }}
-              {{- if .Values.auth.readUser.usePasswordFile }}
-              - key: read-user-password
-                path: read-user-password
-              {{- end }}
-              {{- if .Values.auth.writeUser.usePasswordFile }}
-              - key: write-user-password
-                path: write-user-password
-              {{- end }}
         {{- end }}
         - name: data
           {{- if .Values.persistence.enabled }}
