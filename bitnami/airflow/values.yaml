@@ -191,6 +191,11 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
 
 ## Scheculer component related properties
 ##
@@ -301,6 +306,11 @@ scheduler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
 
 ## Worker component related properties
 ##
@@ -463,6 +473,11 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
 
 ## Add labels to all the deployed resources
 ##
@@ -601,6 +616,7 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
+
 
 ## LDAP configuration
 ##
@@ -812,15 +828,15 @@ nodeAffinityPreset:
 ##
 affinity: {}
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
 ##
 ## PostgreSQL chart configuration
@@ -926,6 +942,12 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9112'
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
