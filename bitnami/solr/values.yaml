@@ -27,7 +27,6 @@ extraDeploy: []
 
 service:
   type: ClusterIP
-  # HTTP Port
   port: 8983
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -45,13 +44,11 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Solr Container
+## Bitnami Solr image version
+## ref: https://hub.docker.com/r/bitnami/solr/tags
 ##
-# Number of solr instances to run
-replicaCount: 1
-
 image:
-  registry: docker.io # harbor-repo.vmware.com/dockerhub-proxy-cache
+  registry: docker.io
   repository: bitnami/solr
   tag: 8.7.0-debian-10-r66
   ## Specify a imagePullPolicy
@@ -68,6 +65,7 @@ image:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
 livenessProbe:
   enabled: true  
   initialDelaySeconds: 30
@@ -83,27 +81,29 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
+## Number of solr instances to run
+##
+replicaCount: 1
 
 ## ConfigMap with Solr Configuration
 ##
 # existingConfigmap:
 
-## Command and args for running the container (set to default if not set). Use array form
+## Container Command (set to default if not set).
 ##
 command: []
-  # - 'sh'
-  # - '-c'
-  # - 'solr start -e cloud -z test-solr-zookeeper-headless:2181'
+## Container args (set to default if not set).
+##
 args: []
 
 ## Solr resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits: {}
   #   cpu: 200m
   #   memory: 256Mi
@@ -184,79 +184,80 @@ podLabels: {}
 ##
 podAnnotations: {}
 
-  ## Solr pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
+## Solr pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
-  ## lifecycleHooks for the Solr container to automate configuration before or after startup.
-  ##
+## lifecycleHooks for the Solr container to automate configuration before or after startup.
+##
 lifecycleHooks: {}
 
-  ## Custom Liveness probes for Solr
-  ##
+## Custom Liveness probes for Solr
+##
 customLivenessProbe: {}
 
-  ## Custom Rediness probes Solr
-  ##
+## Custom Rediness probes Solr
+##
 customReadinessProbe: {}
 
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ##
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
 updateStrategy: RollingUpdate
 
-  ## Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
+## Additional environment variables to set
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
 extraEnvVars: []
 
-  ## ConfigMap with extra environment variables
-  ##
+## ConfigMap with extra environment variables
+##
 extraEnvVarsCM:
 
-  ## Secret with extra environment variables
-  ##
+## Secret with extra environment variables
+##
 extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
-  ##
+## Extra volumes to add to the deployment
+##
 extraVolumes: []
 
-  ## Extra volume mounts to add to the container
-  ##
+## Extra volume mounts to add to the container
+##
 extraVolumeMounts: []
 
-  ## Add init containers to the Solr pods.
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
+## Add init containers to the Solr pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
 initContainers: {}
 
-  ## Add sidecars to the Solr pods.
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
+## Add sidecars to the Solr pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
 sidecars: {}
 
-# Configuration for solr TLS handling, see README.md for more instructions
+## Configuration for solr TLS handling, see README.md for more instructions
+##
 tls:
   enabled: false
   wantClientAuth: "false"
@@ -272,21 +273,22 @@ tls:
     keyPath: "tls.key"
     certPath: "tls.crt"
 
-# Configuration for the solr prometheus exporter
+## Configuration for the solr prometheus exporter
+##
 exporter:
-  enabled: false  # Deploy the exporter
+  enabled: false
   image: {}
-  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"  # The config file to point the exporter to
+  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
   updateStrategy: {}
-  podAnnotations: {}  # Annotations to apply to the exporter pod
-  resources: {}  # Resource limits for the exporter
-  port: 9983  # The port to run the exporter on
-  threads: 7  # The number of threads the exporter uses to query solr
-  livenessProbe:  # Liveness configuration for exporter pod
+  podAnnotations: {}
+  resources: {}
+  port: 9983
+  threads: 7
+  livenessProbe:
     enabled: true
     initialDelaySeconds: 20
     periodSeconds: 10    
-  readinessProbe:  # Readiness configuration for exporter pod
+  readinessProbe:
     enabled: true
     initialDelaySeconds: 15
     periodSeconds: 5 
@@ -418,40 +420,6 @@ logPersistence:
   ## Mount path for persistent logs
   mountPath: /opt/solr/server/home/logs
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
-##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io # harbor-repo.vmware.com/dockerhub-proxy-cache
-    repository: bitnami/minideb
-    tag: buster
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    pullSecrets: []
-    ##   - myRegistryKeySecretName
-  ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
-    limits: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
@@ -465,7 +433,6 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   name:
-
 
 ##
 ## Zookeeper chart configuration

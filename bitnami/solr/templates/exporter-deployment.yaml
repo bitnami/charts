@@ -1,5 +1,4 @@
 {{- if .Values.exporter.enabled }}
----
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
