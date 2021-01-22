@@ -66,6 +66,13 @@ Return the proper Apache Solr image name
 {{- end -}}
 
 {{/*
+Return the proper Solr Exporter image name
+*/}}
+{{- define "exporter.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.exporter.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
  Create the name of the service account to use
  */}}
 {{- define "solr.serviceAccountName" -}}
