@@ -56,6 +56,11 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Datacenter name for consul. If not supplied, will use the consul
 ##
 datacenterName: dc1
