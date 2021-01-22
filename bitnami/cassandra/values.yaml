@@ -54,6 +54,11 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Service parameters
 ##
 service:
