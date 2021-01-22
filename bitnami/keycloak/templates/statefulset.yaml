@@ -24,7 +24,7 @@ spec:
     metadata:
       annotations:
         checksum/configmap-env-vars: {{ include (print $.Template.BasePath "/configmap-env-vars.yaml") . | sha256sum }}
-        checksum/secret-env-vars: {{ include (print $.Template.BasePath "/secret-env-vars.yaml") . | sha256sum }}
+        checksum/secret-env-vars: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- if (include "keycloak.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
@@ -106,7 +106,32 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-
+            {{- $secretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName  }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
+            - name: KEYCLOAK_MANAGEMENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
+            - name: KEYCLOAK_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
+            - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-keystore-password") }}
+            - name: KEYCLOAK_TLS_TRUSTSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-truestore-password") }}
             {{- if .Values.extraStartupArgs }}
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
@@ -116,8 +141,6 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ printf "%s-env-vars" (include "keycloak.fullname" .) }}
-            - secretRef:
                 name: {{ printf "%s-env-vars" (include "keycloak.fullname" .) }}
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
