@@ -53,11 +53,7 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
-            - "status.localhost"
-      initContainers:
+     initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "dokuwiki.volumePermissions.image" . }}
