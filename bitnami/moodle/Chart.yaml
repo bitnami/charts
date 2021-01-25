@@ -13,7 +13,7 @@ dependencies:
 description: Moodle(TM) is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
-icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-220x234.png
 keywords:
   - moodle
   - learning
@@ -25,4 +25,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
   - http://www.moodle.org/
-version: 11.0.1
+version: 11.0.2

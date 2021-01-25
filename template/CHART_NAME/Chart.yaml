@@ -15,7 +15,7 @@ dependencies:
 description: %%DESCRIPTION%%
 engine: gotpl
 home: %%UPSTREAM_PROJECT_URL%%
-icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - %%UPSTREAM_PROJECT_KEYWORD%%
