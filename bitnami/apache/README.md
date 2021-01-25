@@ -67,6 +67,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `git.pullPolicy`                 | Git image pull policy                                                                     | `Always`                                                     |
 | `git.pullSecrets`                | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `replicaCount`                   | Number of replicas of the Apache deployment                                               | `docker.io`                                                  |
+| `hostAliases`                    | Add deployment host aliases                                                               | `Check values.yaml`                                          |
 | `htdocsConfigMap`                | ConfigMap with the server static content                                                  | `nil`                                                        |
 | `htdocsPVC`                      | PVC with the server static content                                                        | `nil`                                                        |
 | `vhostsConfigMap`                | ConfigMap with the virtual hosts content                                                  | `nil`                                                        |

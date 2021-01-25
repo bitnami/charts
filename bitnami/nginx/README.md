@@ -121,6 +121,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `extraVolumes`              | Array to add extra volumes                                                                | `[]` (evaluated as a template) |
 | `extraVolumeMounts`         | Array to add extra mount                                                                  | `[]` (evaluated as a template) |
 | `sidecars`                  | Attach additional containers to nginx pods                                                | `nil`                          |
+| `initContainers`       | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
 
 ### Custom NGINX application parameters
 
