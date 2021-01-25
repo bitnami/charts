@@ -9,6 +9,7 @@ dependencies:
       - bitnami-common
     version: 1.x.x
 description: ASP.NET Core is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
+engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core
 icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
