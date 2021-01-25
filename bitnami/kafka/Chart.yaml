@@ -15,7 +15,7 @@ dependencies:
 description: Apache Kafka is a distributed streaming platform.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/kafka
-icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
   - kafka
   - zookeeper
