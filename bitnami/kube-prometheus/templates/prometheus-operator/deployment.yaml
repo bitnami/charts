@@ -48,11 +48,6 @@ spec:
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           env:
-            - name: CONFIG_RELOADER_IMAGE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "kube-prometheus.operator.fullname" . }}
-                  key: config-reloader-image
             - name: PROMETHEUS_CONFIG_RELOADER
               valueFrom:
                 configMapKeyRef:
@@ -69,7 +64,6 @@ spec:
             - --log-level={{ .Values.operator.logLevel }}
             {{- end }}
             - --localhost=127.0.0.1
-            - --config-reloader-image=$(CONFIG_RELOADER_IMAGE)
             - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
           {{- if .Values.operator.configReloaderCpu }}
             - --config-reloader-cpu={{ .Values.operator.configReloaderCpu }}
