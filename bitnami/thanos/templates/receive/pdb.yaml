@@ -1,0 +1,18 @@
+{{- if and .Values.receive.enabled .Values.receive.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+spec:
+  {{- if .Values.receive.pdb.minAvailable }}
+  minAvailable: {{ .Values.receive.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.receive.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.receive.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: receive
+{{- end }}
