@@ -82,6 +82,7 @@ The following table lists the configurable parameters of the DokuWiki chart and 
 | `dokuwikiPassword`                   | Application password                                                                                                  | _random 10 character alphanumeric string_   |
 | `dokuwikiEmail`                      | User email                                                                                                            | `user@example.com`                          |
 | `dokuwikiWikiName`                   | Wiki name                                                                                                             | `My Wiki`                                   |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                         |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                       |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                       |
 | `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                       |
