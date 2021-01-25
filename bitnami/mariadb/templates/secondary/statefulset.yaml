@@ -90,6 +90,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.secondary.persistence.subPath }}
+              subPath: {{ .Values.secondary.persistence.subPath }}
+              {{- end }}
         {{- end }}
       {{- end }}
       containers:
@@ -195,6 +198,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.secondary.persistence.subPath }}
+              subPath: {{ .Values.secondary.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mariadb/conf/my.cnf

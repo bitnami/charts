@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.3-debian-10-r21
+  tag: 4.4.3-debian-10-r27
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -107,7 +107,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r26
+    tag: 1.19.6-debian-10-r31
     pullPolicy: IfNotPresent
 
 ## Name of the replica set
@@ -523,7 +523,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.14-debian-10-r20
+      tag: 1.18.15-debian-10-r5
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -844,6 +844,53 @@ rbac:
   ##
   create: false
 
+## PodSecurityPolicy configuration
+## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
+## won't be created.
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  ## Specifies whether a PodSecurityPolicy should be created
+  ##
+  create: false
+  ## You can either use predefined policy with some adjustments
+  allowPrivilegeEscalation: false
+  privileged: false
+  ## Or you can specifiy the full spec to use for PSP
+  ## Defining a spec ignores the above values.
+  spec: {}
+  ## Example:
+  ##    allowPrivilegeEscalation: false
+  ##    fsGroup:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    hostIPC: false
+  ##    hostNetwork: false
+  ##    hostPID: false
+  ##    privileged: false
+  ##    readOnlyRootFilesystem: false
+  ##    requiredDropCapabilities:
+  ##      - ALL
+  ##    runAsUser:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    seLinux:
+  ##      rule: 'RunAsAny'
+  ##    supplementalGroups:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    volumes:
+  ##      - 'configMap'
+  ##      - 'secret'
+  ##      - 'emptyDir'
+  ##      - 'persistentVolumeClaim'
+
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
@@ -905,7 +952,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.20.1-debian-10-r38
+    tag: 0.11.2-debian-10-r59
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

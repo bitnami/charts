@@ -84,6 +84,7 @@ The following table lists the configurable parameters of the HashiCorp Consul ch
 | `raftMultiplier`           | Multiplier used to scale key Raft timing parameters                  | `1`                                                     |
 | `gossipKey`                | Gossip key for all members                                           | `nil`                                                   |
 | `tlsEncryptionSecretName`  | Name of existing secret with TLS encryption data                     | `nil`                                                   |
+| `hostAliases`              | Add deployment host aliases                                          | `[]`                                                    |
 | `configuration`            | HashiCorp Consul configuration to be injected as ConfigMap           | `{}`                                                    |
 | `existingConfigmap`        | Name of existing ConfigMap with HashiCorp Consul configuration       | `nil`                                                   |
 | `localConfig`              | Extra configuration that will be added to the default one            | `nil`                                                   |

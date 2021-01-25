@@ -143,13 +143,19 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.grpcTLS.server.cert`                   | TLS Certificate for gRPC server                                                                              | `nil`                                                   |
 | `query.grpcTLS.server.key`                    | TLS Key for gRPC server                                                                                      | `nil`                                                   |
 | `query.grpcTLS.server.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server                            | `nil`                                                   |
-| `query.grpcTLS.server.existingSecret` | Existing secret name containing your own TLS certificates                           | `false`                                                   |
+| `query.grpcTLS.server.existingSecret.name` | Existing secret name containing your own TLS certificates for server                           | `nil`                                                   |
+| `query.grpcTLS.server.existingSecret.keyMapping.caCert` | The CA cert key in the secret                           | `ca.pem`                                                   |
+| `query.grpcTLS.server.existingSecret.keyMapping.tlsCert` | The tls cert key in the secret                           | `cert.pem`                                                   |
+| `query.grpcTLS.server.existingSecret.keyMapping.tlsKey` | The tls key key in the secret                           | `cert.pem`                                                   |
 | `query.grpcTLS.client.secure`                 | Use TLS when talking to the gRPC server                                                                      | `false`                                                 |
 | `query.grpcTLS.client.cert`                   | TLS Certificates to use to identify this client to the server                                                | `nil`                                                   |
 | `query.grpcTLS.client.key`                    | TLS Key for the client's certificate                                                                         | `nil`                                                   |
 | `query.grpcTLS.client.ca`                     | TLS CA Certificates to use to verify gRPC servers                                                            | `nil`                                                   |
 | `query.grpcTLS.client.servername`             | Server name to verify the hostname on the returned gRPC certificates.                                        | `nil`                                                   |
-| `query.grpcTLS.client.existingSecret` | Existing secret name containing your own TLS certificates                         | `false`                                                   |
+| `query.grpcTLS.client.existingSecret.name` | Existing secret name containing your own TLS certificates for client                           | `nil`                                                   |
+| `query.grpcTLS.client.existingSecret.keyMapping.caCert` | The CA cert key in the secret                           | `ca.pem`                                                   |
+| `query.grpcTLS.client.existingSecret.keyMapping.tlsCert` | The tls cert key in the secret                           | `cert.pem`                                                   |
+| `query.grpcTLS.client.existingSecret.keyMapping.tlsKey` | The tls key key in the secret                           | `cert.pem`                                                   |
 
 | `query.service.type`                          | Kubernetes service type                                                                                      | `ClusterIP`                                             |
 | `query.service.clusterIP`                     | Thanos Query service clusterIP IP                                                                            | `None`                                                  |
@@ -468,6 +474,56 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.pdb.create`                                   | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
 | `ruler.pdb.minAvailable`                             | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
 | `ruler.pdb.maxUnavailable`                           | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
+
+### Thanos Receive parameters
+
+| Parameter                                       | Description                                                  | Default                                 |
+| ----------------------------------------------- | ------------------------------------------------------------ | --------------------------------------- |
+| `receive.enabled`                               | Enable/disable Thanos Receive component                      | `false`                                 |
+| `receive.logLevel`                              | Thanos Receive log level                                     | `info`                                  |
+| `receive.alertmanagers`                         | Alermanager URLs array                                       | `[]`                                    |
+| `receive.extraFlags`                            | Extra Flags to passed to Thanos Receive                      | `[]`                                    |
+| `receive.config`                                | Receive Hashring configuration                               | `[{"endpoints": [ "127.0.0.1:10901"]}]` |
+| `receive.updateStrategyType`                    | Statefulset Update Strategy Type                             | `RollingUpdate`                         |
+| `receive.podManagementPolicy`                   | Statefulset Pod Management Policy Type                       | `OrderedReady`                          |
+| `receive.replicaCount`                          | Number of Thanos Receive replicas to deploy                  | `1`                                     |
+| `receive.podAntiAffinityPreset`                 | Thanos Receive pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard` | `soft`                                  |
+| `receive.nodeAffinityPreset.type`               | Thanos Receive node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard` | `""`                                    |
+| `receive.nodeAffinityPreset.key`                | Thanos Receive node label key to match Ignored if `ruler.affinity` is set. | `""`                                    |
+| `receive.nodeAffinityPreset.values`             | Thanos Receive node label values to match. Ignored if `ruler.affinity` is set. | `[]`                                    |
+| `receive.affinity`                              | Thanos Receive affinity for pod assignment                   | `{}` (evaluated as a template)          |
+| `receive.nodeSelector`                          | Thanos Receive node labels for pod assignment                | `{}` (evaluated as a template)          |
+| `receive.tolerations`                           | Thanos Receive tolerations for pod assignment                | `[]` (evaluated as a template)          |
+| `receive.priorityClassName`                     | Controller priorityClassName                                 | `nil`                                   |
+| `receive.securityContext.enabled`               | Enable security context for Thanos Receive pods              | `true`                                  |
+| `receive.securityContext.fsGroup`               | Group ID for the Thanos Receive filesystem                   | `1001`                                  |
+| `receive.securityContext.runAsUser`             | User ID for the Thanos Receive container                     | `1001`                                  |
+| `receive.resources.limits`                      | The resources limits for the Thanos Receive container        | `{}`                                    |
+| `receive.resources.requests`                    | The requested resources for the Thanos Receive container     | `{}`                                    |
+| `receive.podAnnotations`                        | Annotations for Thanos Ruler pods                            | `{}`                                    |
+| `receive.livenessProbe`                         | Liveness probe configuration for Thanos Receive              | `Check values.yaml file`                |
+| `receive.readinessProbe`                        | Readiness probe configuration for Thanos Ruler               | `Check values.yaml file`                |
+| `receive.service.type`                          | Kubernetes service type                                      | `ClusterIP`                             |
+| `receive.service.clusterIP`                     | Thanos Ruler service clusterIP IP                            | `None`                                  |
+| `receive.service.http.port`                     | Service HTTP port                                            | `9090`                                  |
+| `receive.service.http.nodePort`                 | Service HTTP node port                                       | `nil`                                   |
+| `receive.service.grpc.port`                     | Service GRPC port                                            | `10901`                                 |
+| `receive.service.grpc.nodePort`                 | Service GRPC node port                                       | `nil`                                   |
+| `receive.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`             | `nil`                                   |
+| `receive.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer        | `[]`                                    |
+| `receive.service.annotations`                   | Annotations for Thanos Receive service                       | `{}`                                    |
+| `receive.service.labelSelectorsOverride`        | Selector for Thanos receive service                          | `{}`                                    |
+| `receive.service.additionalHeadless`            | Additional Headless service                                  | `false`                                 |
+| `receive.serviceAccount.annotations`            | Annotations for Thanos Receive Service Account               | `{}`                                    |
+| `receive.serviceAccount.existingServiceAccount` | Name for an existing Thanos Receive Service Account          | `nil`                                   |
+| `receive.persistence.enabled`                   | Enable data persistence                                      | `true`                                  |
+| `receive.persistence.existingClaim`             | Use a existing PVC which must be created manually before bound | `nil`                                   |
+| `receive.persistence.storageClass`              | Specify the `storageClass` used to provision the volume      | `nil`                                   |
+| `receive.persistence.accessModes`               | Access modes of data volume                                  | `["ReadWriteOnce"]`                     |
+| `receive.persistence.size`                      | Size of data volume                                          | `8Gi`                                   |
+| `receive.pdb.create`                            | Enable/disable a Pod Disruption Budget creation              | `false`                                 |
+| `receive.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled | `1`                                     |
+| `receive.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable | `nil`                                   |
 
 ### Metrics parameters
 
@@ -837,3 +893,5 @@ ingress.extraHosts[0].secretName -> querier.ingress.extraHosts[0].secretName
 ingress.secrets[0].name -> querier.ingress.secrets[0].name
 ingress.secrets[0].certificate -> querier.ingress.secrets[0].certificate
 ingress.secrets[0].key -> querier.ingress.secrets[0].key
+
+```

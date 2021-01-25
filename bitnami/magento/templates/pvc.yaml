@@ -1,8 +1,9 @@
-{{- if .Values.persistence.enabled -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ printf "%s-magento" (include "common.names.fullname" .) }}
+  name: {{ include "common.names.fullname" . }}-magento
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -11,10 +12,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.persistence.hostPath }}
+  storageClassName: ""
+  {{- end }}
   accessModes:
-    - {{ .Values.persistence.magento.accessMode | quote }}
+    - {{ .Values.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.magento.size | quote }}
-  {{- include "common.storage.class" (dict "persistence" .Values.persistence.magento "global" .Values.global) | nindent 2 }}
+      storage: {{ .Values.persistence.size | quote }}
+  {{- include "magento.storageClass" . | nindent 2 }}
 {{- end -}}

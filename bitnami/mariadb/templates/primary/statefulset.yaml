@@ -89,6 +89,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.primary.persistence.subPath }}
+              subPath: {{ .Values.primary.persistence.subPath }}
+              {{- end }}
         {{- end }}
       {{- end }}
       containers:
@@ -206,6 +209,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.primary.persistence.subPath }}
+              subPath: {{ .Values.primary.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d

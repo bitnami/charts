@@ -40,6 +40,9 @@ Return the list of Cassandra seed nodes
 {{- range $e, $i := until $seedCount }}
 {{- $seeds = append $seeds (printf "%s-%d.%s-headless.%s.svc.%s" $fullname $i $fullname $releaseNamespace $clusterDomain) }}
 {{- end }}
+{{- range .Values.cluster.extraSeeds }}
+{{- $seeds = append $seeds . }}
+{{- end }}
 {{- join "," $seeds }}
 {{- end -}}
 

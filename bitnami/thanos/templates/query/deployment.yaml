@@ -86,10 +86,10 @@ spec:
             - --store={{ . }}
             {{- end }}
             {{- if $query.grpcTLS.server.secure }}
-            {{- if $query.grpcTLS.server.existingSecret }}
-            - --grpc-server-tls-cert=/tls/server/tls.crt
-            - --grpc-server-tls-key=/tls/server/tls.key
-            - --grpc-server-tls-client-ca=/tls/server/ca.crt
+            {{- if $query.grpcTLS.server.existingSecret.name }}
+            - --grpc-server-tls-cert=/tls/server/{{ $query.grpcTLS.server.existingSecret.keyMapping.tlsCert }}
+            - --grpc-server-tls-key=/tls/server/{{ $query.grpcTLS.server.existingSecret.keyMapping.tlsKey }}
+            - --grpc-server-tls-client-ca=/tls/server/{{ $query.grpcTLS.server.existingSecret.keyMapping.caCert }}
             {{- else }}
             - --grpc-server-tls-cert=/tls/server/cert.pem
             - --grpc-server-tls-key=/tls/server/key.pem
@@ -98,19 +98,19 @@ spec:
             {{- end }}
             {{- if $query.grpcTLS.client.secure }}
             - --grpc-client-tls-secure
-            {{- if and (not $query.grpcTLS.client.existingSecret) ($query.grpcTLS.client.cert) }}
+            {{- if and (not $query.grpcTLS.client.existingSecret.name) ($query.grpcTLS.client.cert) }}
             - --grpc-client-tls-cert=/tls/client/cert.pem
             {{- end }}
-            {{- if and (not $query.grpcTLS.client.existingSecret) ($query.grpcTLS.client.key) }}
+            {{- if and (not $query.grpcTLS.client.existingSecret.name) ($query.grpcTLS.client.key) }}
             - --grpc-client-tls-key=/tls/client/key.pem
             {{- end }}
-            {{- if and (not $query.grpcTLS.client.existingSecret) ($query.grpcTLS.client.ca) }}
+            {{- if and (not $query.grpcTLS.client.existingSecret.name) ($query.grpcTLS.client.ca) }}
             - --grpc-client-tls-ca=/tls/client/ca.pem
             {{- end }}
-            {{- if $query.grpcTLS.client.existingSecret }}
-            - --grpc-client-tls-cert=/tls/client/tls.crt
-            - --grpc-client-tls-key=/tls/client/tls.key
-            - --grpc-client-tls-ca=/tls/client/ca.crt
+            {{- if $query.grpcTLS.client.existingSecret.name }}
+            - --grpc-client-tls-cert=/tls/client/{{ $query.grpcTLS.client.existingSecret.keyMapping.tlsCert }}
+            - --grpc-client-tls-key=/tls/client/{{ $query.grpcTLS.client.existingSecret.keyMapping.tlsKey }}
+            - --grpc-client-tls-ca=/tls/client/{{ $query.grpcTLS.client.existingSecret.keyMapping.caCert }}
             {{- end }}
             {{- if $query.grpcTLS.client.servername }}
             - --grpc-client-server-name={{$query.grpcTLS.client.servername}}
@@ -158,8 +158,8 @@ spec:
       {{- if $query.grpcTLS.server.secure }}
         - name: tls-server
           secret:
-            {{- if $query.grpcTLS.server.existingSecret }}
-            secretName: {{ $query.grpcTLS.server.existingSecret }}
+            {{- if $query.grpcTLS.server.existingSecret.name }}
+            secretName: {{ $query.grpcTLS.server.existingSecret.name }}
             {{- else }}
             secretName: {{ include "common.names.fullname" . }}-query-tls-server
             {{- end }}
@@ -167,8 +167,8 @@ spec:
       {{- if $query.grpcTLS.client.secure }}
         - name: tls-client
           secret:
-            {{- if $query.grpcTLS.client.existingSecret }}
-            secretName: {{ $query.grpcTLS.client.existingSecret }}
+            {{- if $query.grpcTLS.client.existingSecret.name }}
+            secretName: {{ $query.grpcTLS.client.existingSecret.name }}
             {{- else }}
             secretName: {{ include "common.names.fullname" . }}-query-tls-client
             {{- end }}
