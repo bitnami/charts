@@ -175,16 +175,8 @@ contour:
     # cpu: 100m
     # memory: 25Mi
 
-  ## Create Contour CRDs
-  installCRDs: true
-
-  ## Manage the creation and upgrade of Contour CRDs.
+  ## Manage the creation, upgrade and deletion of Contour CRDs.
   manageCRDs: true
-
-  ## Contour CRD deletion policy
-  ## ref: https://v3.helm.sh/docs/topics/charts_hooks/
-  ##
-  # customResourceDeletePolicy: before-hook-creation
 
   ## Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity

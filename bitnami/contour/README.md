@@ -36,18 +36,16 @@ These commands deploy contour on the Kubernetes cluster in the default configura
 
 ## Uninstalling the Chart
 
+:warning: Uninstalling this chart will also remove CRDs. Removing CRDs will **remove all instances of it's Custom Resources**. If you wish to retain your Custom Resources for the future, run the following commands before uninstalling.
+
+```console
+$ kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
+```
+
 To uninstall/delete the `my-release` helm release:
 
 ```console
 $ helm uninstall my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release, except the `CustomResourceDefinition`s (CRD for short).
-:warning: To also remove the CRDs, please **remember that all instances of the CRDs are removed too**.
-If you are okay with that, you can remove the CRDs like this:
-
-```console
-$ kubectl delete crd httpproxies.projectcontour.io tlscertificatedelegations.projectcontour.io
 ```
 
 ## Parameters
@@ -84,8 +82,6 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.extraArgs`                           | Extra arguments passed to Contour container                                                                                                                                                                  | `[]`                                                    |
 | `contour.resources.limits`                    | Specify resource limits which the container is not allowed to succeed.                                                                                                                                       | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                  | Specify resource requests which the container needs to spawn.                                                                                                                                                | `{}` (does not add resource limits to deployed pods)    |
-| `contour.installCRDs`                         | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)                                                                                                                 | `true`                                                  |
-| `contour.customResourceDeletePolicy`          | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                                                                                                                                     | `nil`                                                   |
 | `contour.podAffinityPreset`                   | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`                                                    |
 | `contour.podAntiAffinityPreset`               | Contour Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                             | `soft`                                                  |
 | `contour.nodeAffinityPreset.type`             | Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                            | `""`                                                    |
@@ -103,6 +99,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.livenessProbe.timeoutSeconds`        | When the probe times out                                                                                                                                                                                     | `5`                                                     |
 | `contour.livenessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                                                                 | `6`                                                     |
 | `contour.livenessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                                                   | `1`                                                     |
+| `contour.manageCRDs`                          | Manage the creation, upgrade and deletion of Contour CRDs. Uninstalling will also delete CRDs and their instances. Set to `false`, and install the CRDs manually *before* installing this chart.             | `true`                                                  |
 | `contour.readynessProbe.enabled`              | Enable/disable the Readyness probe                                                                                                                                                                           | `true`                                                  |
 | `contour.readynessProbe.initialDelaySeconds`  | Delay before readyness probe is initiated                                                                                                                                                                    | `15`                                                    |
 | `contour.readynessProbe.periodSeconds`        | How often to perform the probe                                                                                                                                                                               | `10`                                                    |
