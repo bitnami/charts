@@ -277,8 +277,8 @@ wavefront:
   ## Wavefront URL (cluster) and API Token (required)
   ##
   wavefront:
-    url: https://longboard.wavefront.com
-    token: 57475518-c4cc-4da6-a004-6d63e13dbeab
+    url: $WAVEFRONT_URL
+    token: $WAVEFRONT_TOKEN
     ## Name of an existing secret containing the token
     ##
     existingSecret:
