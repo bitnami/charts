@@ -2,7 +2,8 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,14 +14,19 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
   strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
@@ -28,15 +34,13 @@ spec:
         {{- if .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- include "magento.imagePullSecrets" . | nindent 6 }}
-      hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
-            - "status.localhost"
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
@@ -44,40 +48,64 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
-      containers:
-        - name: {{ template "common.names.fullname" . }}
-          image: {{ template "magento.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "status.localhost"
+      initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "magento.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/magento"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/magento"
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: magento-data
+              mountPath: /bitnami/magento
+        {{- end }}
+        {{- include "certificates.initContainer" . | nindent 8 }}
+      containers:
+        - name: magento
+          image: {{ include "magento.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
-          env:
-          {{- if .Values.image.debug}}
-            - name: BASH_DEBUG
-              value: "1"
-            - name: NAMI_DEBUG
-              value: "1"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-            - name: MARIADB_HOST
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: MAGENTO_DATABASE_HOST
               value: {{ include "magento.databaseHost" . | quote }}
-            - name: MARIADB_PORT_NUMBER
+            - name: MAGENTO_DATABASE_PORT_NUMBER
               value: {{ include "magento.databasePort" . | quote }}
             - name: MAGENTO_DATABASE_NAME
               value: {{ include "magento.databaseName" . | quote }}
@@ -89,21 +117,23 @@ spec:
                   name: {{ include "magento.databaseSecretName" . }}
                   key: mariadb-password
             - name: ELASTICSEARCH_HOST
-            {{- if .Values.elasticsearch.enabled }}
+              {{- if .Values.elasticsearch.enabled }}
               value: {{ template "magento.elasticsearch.fullname" . }}
-            {{- else if .Values.externalElasticsearch.host }}
+              {{- else if .Values.externalElasticsearch.host }}
               value: {{ .Values.externalElasticsearch.host | quote }}
-            {{- else }}
+              {{- else }}
               value: ""
-            {{- end }}
+              {{- end }}
             - name: ELASTICSEARCH_PORT_NUMBER
-            {{- if .Values.elasticsearch.enabled }}
+              {{- if .Values.elasticsearch.enabled }}
               value: "9200"
-            {{- else if .Values.externalElasticsearch.port }}
+              {{- else if .Values.externalElasticsearch.port }}
               value: {{ .Values.externalElasticsearch.port | quote }}
-            {{- else }}
+              {{- else }}
               value: ""
-            {{- end }}
+              {{- end }}
+            - name: MAGENTO_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.magentoSkipInstall | quote }}
             {{- $port:=.Values.service.port | toString }}
             - name: MAGENTO_HOST
               value: "{{ include "magento.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
@@ -112,26 +142,43 @@ spec:
             - name: MAGENTO_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ include "common.names.fullname" . }}
                   key: magento-password
+            {{- if .Values.magentoEmail }}
             - name: MAGENTO_EMAIL
               value: {{ .Values.magentoEmail | quote }}
-            - name: MAGENTO_ADMINURI
-              value: {{ .Values.magentoAdminUri | quote }}
-            - name: MAGENTO_FIRSTNAME
+            {{- end }}
+            {{- if .Values.magentoFirstName }}
+            - name: MAGENTO_FIRST_NAME
               value: {{ .Values.magentoFirstName | quote }}
-            - name: MAGENTO_LASTNAME
+            {{- end }}
+            {{- if .Values.magentoLastName }}
+            - name: MAGENTO_LAST_NAME
               value: {{ .Values.magentoLastName | quote }}
+            {{- end }}
+            {{- if .Values.magentoMode }}
             - name: MAGENTO_MODE
               value: {{ .Values.magentoMode | quote }}
-            - name: MAGENTO_USE_SECURE_ADMIN
+            {{- end }}
+            {{- if .Values.magentoExtraInstallArgs }}
+            - name: MAGENTO_EXTRA_INSTALL_ARGS
+              value: {{ .Values.magentoExtraInstallArgs | quote }}
+            {{- end }}
+            {{- if .Values.magentoAdminUri }}
+            - name: MAGENTO_ADMIN_URL_PREFIX
+              value: {{ .Values.magentoAdminUri | quote }}
+            {{- end }}
+            - name: MAGENTO_ENABLE_HTTPS
+              value: {{ ternary "yes" "no" .Values.magentoUseHttps | quote }}
+            - name: MAGENTO_ENABLE_ADMIN_HTTPS
               value: {{ ternary "yes" "no" .Values.magentoUseSecureAdmin | quote }}
+            - name: MAGENTO_DEPLOY_STATIC_CONTENT
+              value: {{ ternary "yes" "no" .Values.magentoDeployStaticContent | quote }}
             - name: MAGENTO_SKIP_REINDEX
               value: {{ ternary "yes" "no" .Values.magentoSkipReindex | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -141,38 +188,77 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.containerPorts.http }}
             - name: https
-              containerPort: 443
+              containerPort: {{ .Values.containerPorts.https }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "magento.host" . | quote }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "magento.host" . | quote }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "magento.host" . | quote }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: magento-data
               mountPath: /bitnami/magento
-            - name: apache-data
-              mountPath: /bitnami/apache
+            {{- include "certificates.volumeMounts" . | nindent 12 }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          image: {{ template "magento.metrics.image" . }}
+          image: {{ include "magento.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto']
           ports:
             - name: metrics
               containerPort: 9117
@@ -188,28 +274,20 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
-          {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
-          {{- end }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
         {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: magento-data
-        {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ printf "%s-magento" (include "common.names.fullname" .) }}
-        {{- else }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-magento" (include "common.names.fullname" .)) }}
+          {{- else }}
           emptyDir: {}
-        {{- end }}
-        - name: apache-data
-        {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ printf "%s-apache" (include "common.names.fullname" .) }}
-        {{- else }}
-          emptyDir: {}
-        {{- end }}
+          {{- end }}
+        {{- include "certificates.volumes" . | indent 8 }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

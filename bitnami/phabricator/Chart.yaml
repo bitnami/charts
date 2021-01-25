@@ -10,7 +10,7 @@ dependencies:
 description: Collection of open source web applications that help software companies build better software.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/phabricator
-icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-220x234.png
 keywords:
   - phabricator
   - http
@@ -32,4 +32,4 @@ name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-version: 10.2.3
+version: 10.2.4

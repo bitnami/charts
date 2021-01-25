@@ -29,6 +29,13 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if or .Values.nodeSelector .Values.metrics.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
       containers:
         - image: {{ include "airflow.metrics.image" . | quote }}
           name: airflow-exporter
