@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | Parameter                             | Description                                                                                | Default                                                 |
 |---------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `replicaCount`                        | Number of ASP.NET Core replicas to deploy                                                  | `1`                                                     |
+| `hostAliases`                    | Add deployment host aliases                                                               | `[]`                                          |
 | `strategyType`                        | Deployment Strategy Type                                                                   | `RollingUpdate`                                         |
 | `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
 | `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                  |
