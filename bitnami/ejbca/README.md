@@ -124,6 +124,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `resources`                          | EJBCA container's resource requests and limits                                          | `{}`                                           |
 | `podSecurityContext.enabled`         | Enable security context for EJBCA container                                             | `true`                                         |
 | `podSecurityContext.runAsUser`       | User ID for the EJBCA container                                                         | `1001`                                         |
+| `hostAliases`                        | Add deployment host aliases                                                             | `[]`                                           |
 | `livenessProbe.enabled`              | Enable/disable livenessProbe                                                            | `true`                                         |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                | `500`                                          |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                          | `10`                                           |
