@@ -1,0 +1,233 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Number of nodes
+##
+replicaCount: 1
+
+
+## Specifies whether RBAC resources should be created
+##
+rbac:
+  create: true
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name:
+
+zookeeper:
+  replicaCount: 3
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #  cpu: 250m
+    #  memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - zookeeper
+        topologyKey: "kubernetes.io/hostname"
+
+## Kafka Subchart parameters
+##
+kafka:
+  enabled: true
+  replicaCount: 3
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {} 
+    #  cpu: 250m
+    #  memory: 1Gi
+    requests: 
+      cpu: 250m
+      memory: 1Gi
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - kafka
+        topologyKey: "kubernetes.io/hostname"
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+       - weight: 50
+         podAffinityTerm:
+           labelSelector:
+             matchExpressions:
+             - key: app.kubernetes.io/name
+               operator: In
+               values:
+                 - zookeeper
+           topologyKey: "kubernetes.io/hostname"  
+  zookeeper:
+    enabled: false
+  ## This value is only used when zookeeper.enabled is set to false
+  ##
+  externalZookeeper:
+    ## Server or list of external zookeeper servers to use.
+    ##
+    servers: dp-zookeeper
+
+## Spark Subchart parameters
+##
+spark:
+  enabled: true
+  ## Spark master specific configuration
+  ##
+  master:
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #  cpu: 250m
+      #  memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    affinity:    
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: spark
+              app.kubernetes.io/instance: dp-spark
+              app.kubernetes.io/component: worker
+          topologyKey: "kubernetes.io/hostname"
+  ## Spark worker specific configuration
+  ##
+  worker:
+    replicaCount: 2
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: spark
+              app.kubernetes.io/instance: dp-spark
+              app.kubernetes.io/component: worker
+          topologyKey: "kubernetes.io/hostname"
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #  cpu: 250m
+      #  memory: 1Gi
+      requests: 
+        cpu: 250m
+        memory: 1Gi
+
+## Solr Subchart parameters
+##
+solr:
+  enabled: true
+  replicaCount: 2
+  affinity: 
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - solr
+        topologyKey: "kubernetes.io/hostname"   
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #  cpu: 1000m
+    #  memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 1Gi
+  zookeeper:
+    enabled: false
+  ## This value is only used when zookeeper.enabled is set to false
+  ##
+  externalZookeeper:
+    ## Server or list of external zookeeper servers to use.
+    ##
+    servers: []
+
+## Wavefront Subchart Parameters
+##
+wavefront:
+  enabled: false
+  collector:
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #  cpu: 200m
+      #  memory: 256Mi
+      requests: 
+        cpu: 200m
+        memory: 10Mi  
+  proxy:
+    ## Wavefront Proxy resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #   cpu: 100m
+      #   memory: 4Gi
+      requests: 
+        cpu: 100m
+        memory: 1Gi

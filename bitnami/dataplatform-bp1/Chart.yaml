@@ -1,0 +1,52 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: spark.enabled
+    name: spark
+    repository: https://charts.bitnami.com/bitnami
+    version: 4.x.x    
+  - condition: solr.enabled
+    name: solr
+    repository: "file://../solr"
+    version: 0.1.0
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Chart to deploy bitnami kafka, spark, solr on kubernetes
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform
+#icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-110x117.png
+keywords:
+  - dataplatform
+  - kafka
+  - spark
+  - solr
+  - apache
+  - wavefront
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: dataplatform
+sources:
+  - https://github.com/bitnami/bitnami-docker-kafka
+  - https://kafka.apache.org/
+  - https://github.com/bitnami/bitnami-docker-spark
+  - https://spark.apache.org/
+version: 0.1.0
+
