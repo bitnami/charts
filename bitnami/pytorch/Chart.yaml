@@ -11,7 +11,7 @@ dependencies:
 description: Deep learning platform that accelerates the transition from research prototyping to production deployment
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/pytorch
-icon: https://bitnami.com/assets/stacks/pytorch/img/pytorch-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/pytorch/img/pytorch-stack-220x234.png
 keywords:
   - pytorch
   - python
@@ -24,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/bitnami-docker-pytorch
   - http://pytorch.org/
-version: 2.1.2
+version: 2.1.3

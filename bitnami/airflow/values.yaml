@@ -85,6 +85,12 @@ web:
   ## Number of web replicas
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## URL used to access to airflow web ui
   ##
   baseUrl:
@@ -191,6 +197,10 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Scheculer component related properties
 ##
@@ -227,6 +237,10 @@ scheduler:
   ## Override args
   ##
   args:
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Add extra labels to the web's pods
   ##
   podLabels:
@@ -301,6 +315,10 @@ scheduler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Worker component related properties
 ##
@@ -334,6 +352,10 @@ worker:
   ## Number of worker replicas
   ##
   replicaCount: 1
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
   ##
   podTemplate:
@@ -463,6 +485,10 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Add labels to all the deployed resources
 ##
@@ -812,15 +838,15 @@ nodeAffinityPreset:
 ##
 affinity: {}
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
 ##
 ## PostgreSQL chart configuration
@@ -910,6 +936,11 @@ metrics:
     pullSecrets: []
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -926,6 +957,11 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9112'
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
