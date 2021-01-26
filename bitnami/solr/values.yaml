@@ -39,6 +39,8 @@ replicaCount: 3
 service:
   type: ClusterIP
   port: 8983
+  annotations: {}
+  labels: {}
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -420,9 +422,11 @@ serviceAccount:
 ##
 zookeeper:
   enabled: true
-  persistence.enabled: true
+  persistence:
+    enabled: true
   port: 2181
   replicaCount: 3
+  fourlwCommandsWhitelist: srvr,mntr,conf,ruok
 
 ## This value is only used when zookeeper.enabled is set to false
 ##
@@ -642,6 +646,8 @@ exporter:
   ##
   service:
     type: ClusterIP
+    annotations: {}
+    labels: {}
     # HTTP Port
     port: 9983
     ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
