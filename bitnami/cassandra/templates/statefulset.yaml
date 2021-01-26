@@ -41,6 +41,9 @@ spec:
       {{- end }}
     spec:
       {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -196,17 +199,17 @@ spec:
             - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
               value: {{ .Values.cluster.enableUDF | quote }}
             {{- end }}
-            {{- if .Values.containerPorts.cassandra.intra  }}
+            {{- if .Values.containerPorts.intra  }}
             - name: CASSANDRA_TRANSPORT_PORT_NUMBER
-              value: {{ .Values.containerPorts.cassandra.intra | quote }}
+              value: {{ .Values.containerPorts.intra | quote }}
             {{- end }}
-            {{- if .Values.containerPorts.cassandra.jmx }}
+            {{- if .Values.containerPorts.jmx }}
             - name: CASSANDRA_JMX_PORT_NUMBER
-              value: {{ .Values.containerPorts.cassandra.jmx | quote }}
+              value: {{ .Values.containerPorts.jmx | quote }}
             {{- end }}
-            {{- if .Values.containerPorts.cassandra.cql }}
+            {{- if .Values.containerPorts.cql }}
             - name: CASSANDRA_CQL_PORT_NUMBER
-              value: {{ .Values.containerPorts.cassandra.cql | quote }}
+              value: {{ .Values.containerPorts.cql | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -263,30 +266,30 @@ spec:
           {{- end }}
           ports:
             - name: intra
-              containerPort: {{ .Values.containerPorts.cassandra.intra | default "7000" }}
+              containerPort: {{ .Values.containerPorts.intra | default "7000" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.cassandra.intra }}
+              hostPort: {{ .Values.containerPorts.intra }}
               {{- end }}
             - name: tls
-              containerPort: {{ .Values.containerPorts.cassandra.tls | default "7001" }}
+              containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.cassandra.tls }}
+              hostPort: {{ .Values.containerPorts.tls }}
               {{- end }}
             - name: jmx
-              containerPort: {{ .Values.containerPorts.cassandra.jmx | default "7199" }}
+              containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.cassandra.jmx }}
+              hostPort: {{ .Values.containerPorts.jmx }}
               {{- end }}
             - name: cql
-              containerPort: {{ .Values.containerPorts.cassandra.cql | default "9042" }}
+              containerPort: {{ .Values.containerPorts.cql | default "9042" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.cassandra.cql }}
+              hostPort: {{ .Values.containerPorts.cql }}
               {{- end }}
             {{- if .Values.cluster.enableRPC }}
             - name: thrift
-              containerPort: {{ .Values.containerPorts.cassandra.thrift | default "9160" }}
+              containerPort: {{ .Values.containerPorts.thrift | default "9160" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.cassandra.thrift }}
+              hostPort: {{ .Values.containerPorts.thrift }}
               {{- end }}
             {{- end }}
           {{- if .Values.resources }}
@@ -321,21 +324,21 @@ spec:
           {{- if .Values.hostNetwork }}
           env:
             - name: CASSANDRA_EXPORTER_CONFIG_listenPort
-              value: {{ .Values.containerPorts.metrics.http | quote }}
+              value: {{ .Values.metrics.containerPorts.http | quote }}
             - name:  CASSANDRA_EXPORTER_CONFIG_host
               value: localhost:{{ .Values.containerPorts.cassandra.jmx }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.containerPorts.metrics.http | default "8080" }}
+              containerPort: {{ .Values.metrics.containerPorts.http | default "8080" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.metrics.http }}
+              hostPort: {{ .Values.metrics.containerPorts.http }}
               {{- end }}
               protocol: TCP
             - name: jmx
-              containerPort: {{ .Values.containerPorts.metrics.jmx | default "5555" }}
+              containerPort: {{ .Values.metrics.containerPorts.jmx | default "5555" }}
               {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.metrics.jmx }}
+              hostPort: {{ .Values.metrics.containerPorts.jmx }}
               {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

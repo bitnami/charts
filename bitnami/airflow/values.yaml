@@ -85,6 +85,12 @@ web:
   ## Number of web replicas
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## URL used to access to airflow web ui
   ##
   baseUrl:
@@ -196,7 +202,6 @@ web:
   ##
   nodeSelector: {}
 
-
 ## Scheculer component related properties
 ##
 scheduler:
@@ -232,6 +237,10 @@ scheduler:
   ## Override args
   ##
   args:
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Add extra labels to the web's pods
   ##
   podLabels:
@@ -311,7 +320,6 @@ scheduler:
   ##
   nodeSelector: {}
 
-
 ## Worker component related properties
 ##
 worker:
@@ -344,6 +352,10 @@ worker:
   ## Number of worker replicas
   ##
   replicaCount: 1
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
   ##
   podTemplate:
@@ -477,7 +489,6 @@ worker:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
 
 ## Add labels to all the deployed resources
 ##
@@ -616,7 +627,6 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
-
 
 ## LDAP configuration
 ##
@@ -926,6 +936,11 @@ metrics:
     pullSecrets: []
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -947,7 +962,6 @@ metrics:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##

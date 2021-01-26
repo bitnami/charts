@@ -36,18 +36,16 @@ These commands deploy contour on the Kubernetes cluster in the default configura
 
 ## Uninstalling the Chart
 
+:warning: Uninstalling this chart will also remove CRDs. Removing CRDs will **remove all instances of it's Custom Resources**. If you wish to retain your Custom Resources for the future, run the following commands before uninstalling.
+
+```console
+$ kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
+```
+
 To uninstall/delete the `my-release` helm release:
 
 ```console
 $ helm uninstall my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release, except the `CustomResourceDefinition`s (CRD for short).
-:warning: To also remove the CRDs, please **remember that all instances of the CRDs are removed too**.
-If you are okay with that, you can remove the CRDs like this:
-
-```console
-$ kubectl delete crd httpproxies.projectcontour.io tlscertificatedelegations.projectcontour.io
 ```
 
 ## Parameters
@@ -84,8 +82,6 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.extraArgs`                           | Extra arguments passed to Contour container                                                                                                                                                                  | `[]`                                                    |
 | `contour.resources.limits`                    | Specify resource limits which the container is not allowed to succeed.                                                                                                                                       | `{}` (does not add resource limits to deployed pods)    |
 | `contour.resources.requests`                  | Specify resource requests which the container needs to spawn.                                                                                                                                                | `{}` (does not add resource limits to deployed pods)    |
-| `contour.installCRDs`                         | Install CustomResourceDefinitions via helm hooks (only helm v2, use `--skip-crds` on Helm 3)                                                                                                                 | `true`                                                  |
-| `contour.customResourceDeletePolicy`          | Deletion hook of CustomResourceDefinitions via helm hooks (only helm v2)                                                                                                                                     | `nil`                                                   |
 | `contour.podAffinityPreset`                   | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`                                                    |
 | `contour.podAntiAffinityPreset`               | Contour Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                             | `soft`                                                  |
 | `contour.nodeAffinityPreset.type`             | Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                            | `""`                                                    |
@@ -103,6 +99,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `contour.livenessProbe.timeoutSeconds`        | When the probe times out                                                                                                                                                                                     | `5`                                                     |
 | `contour.livenessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                                                                                                                 | `6`                                                     |
 | `contour.livenessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                                                   | `1`                                                     |
+| `contour.manageCRDs`                          | Manage the creation, upgrade and deletion of Contour CRDs. Uninstalling will also delete CRDs and their instances. Set to `false`, and install the CRDs manually *before* installing this chart.             | `true`                                                  |
 | `contour.readynessProbe.enabled`              | Enable/disable the Readyness probe                                                                                                                                                                           | `true`                                                  |
 | `contour.readynessProbe.initialDelaySeconds`  | Delay before readyness probe is initiated                                                                                                                                                                    | `15`                                                    |
 | `contour.readynessProbe.periodSeconds`        | How often to perform the probe                                                                                                                                                                               | `10`                                                    |
@@ -362,6 +359,47 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
+
+### To 4.0.0
+
+The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). 
+
+**What changes were introduced in this major version?**
+
+- The `resources` directory was added that contains all the Contour CRDs, which are imported by the `templates/00-crds.yaml` manifest on installation and upgrade.
+- If you do not wish for this chart to manage Contour CRDs, set the flag `contour.manageCRDs` to `false` when running Helm.
+
+**Considerations when upgrading to this version**
+
+If you are installing a fresh chart, or if you are upgrading from a 4.x version of this chart, you can ignore this section.
+
+If you are upgrading from 3.x of this Helm chart, this is a breaking change as the new CRDs will not overwrite the existing ones. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
+
+If required, back up your existing Custom Resources:
+
+```console
+$ kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
+```
+
+Delete the existing Contour CRDs. Note that this step will *also delete* the associated CRs and impact availability until the upgrade is complete and the backup restored:
+
+```console
+$ kubectl delete extensionservices.projectcontour.io
+$ kubectl delete httpproxies.projectcontour.io
+$ kubectl delete tlscertificatedelegations.projectcontour.io
+```
+
+Upgrade the Contour chart with the release name `my-release`:
+
+```console
+$ helm upgrade my-release bitnami/contour
+```
+
+If you made a backup earlier, restore the objects:
+
+```console
+$ kubectl apply -f backup.yaml
+```
 
 ### To 3.0.0
 
