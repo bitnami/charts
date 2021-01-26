@@ -79,7 +79,6 @@ spec:
           - |-
             ID="${MY_POD_NAME#"{{ $fullname }}-"}"
             if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
-                mkdir -p /opt/bitnami/keycloak/certs
                 cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
                 cp "/certs/keycloak-${ID}.keystore.jks" "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
             else
