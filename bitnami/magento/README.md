@@ -72,6 +72,8 @@ The following table lists the configurable parameters of the Magento chart and t
 | `fullnameOverride`  | String to fully override magento.fullname template                           | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil` 
+|
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
 
 ### Magento parameters
@@ -192,27 +194,29 @@ The following table lists the configurable parameters of the Magento chart and t
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                                 | Default            |
-|----------------------------------|---------------------------------------------|--------------------|
-| `service.type`                   | Kubernetes Service type                     | `LoadBalancer`     |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request        | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                           | `80`               |
-| `service.httpsPort`              | Service HTTPS port                          | `443`              |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation        | `Cluster`          |
-| `service.nodePorts.http`         | Kubernetes http node port                   | `""`               |
-| `service.nodePorts.https`        | Kubernetes https node port                  | `""`               |
-| `ingress.enabled`                | Enable ingress controller resource          | `false`            |
-| `ingress.certManager`            | Add annotations for cert-manager            | `false`            |
-| `ingress.hostname`               | Default host for the ingress resource       | `magento.local`    |
-| `ingress.tls`                    | Enable TLS for `ingress.hostname` parameter | `false`            |
-| `ingress.annotations`            | Ingress annotations                         | `{}`               |
-| `ingress.extraHosts[0].name`     | Hostname to your Magento installation       | `nil`              |
-| `ingress.extraHosts[0].path`     | Path within the url structure               | `nil`              |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hosts      | `nil`              |
-| `ingress.extraTls[0].secretName` | TLS Secret (certificates)                   | `nil`              |
-| `ingress.secrets[0].name`        | TLS Secret Name                             | `nil`              |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                      | `nil`              |
-| `ingress.secrets[0].key`         | TLS Secret Key                              | `nil`              |
+| Parameter                        | Description                                 | Default                 |
+|----------------------------------|---------------------------------------------|-------------------------|
+| `service.type`                   | Kubernetes Service type                     | `LoadBalancer`          |
+| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request        | `LoadBalancer`          |
+| `service.port`                   | Service HTTP port                           | `80`                    |
+| `service.httpsPort`              | Service HTTPS port                          | `443`                   |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation        | `Cluster`               |
+| `service.nodePorts.http`         | Kubernetes http node port                   | `""`                    |
+| `service.nodePorts.https`        | Kubernetes https node port                  | `""`                    |
+| `ingress.enabled`                | Enable ingress controller resource          | `false`                 |
+| `ingress.certManager`            | Add annotations for cert-manager            | `false`                 |
+| `ingress.hostname`               | Default host for the ingress resource       | `magento.local`         |
+| `ingress.path`                   | Default path for the ingress resource       | `/`                     |
+| `ingress.pathType`               | Default path type for the ingress resource  | `ImplementationSpecific`|
+| `ingress.tls`                    | Enable TLS for `ingress.hostname` parameter | `false`                 |
+| `ingress.annotations`            | Ingress annotations                         | `{}`                    |
+| `ingress.extraHosts[0].name`     | Hostname to your Magento installation       | `nil`                   |
+| `ingress.extraHosts[0].path`     | Path within the url structure               | `nil`                   |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hosts      | `nil`                   |
+| `ingress.extraTls[0].secretName` | TLS Secret (certificates)                   | `nil`                   |
+| `ingress.secrets[0].name`        | TLS Secret Name                             | `nil`                   |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                      | `nil`                   |
+| `ingress.secrets[0].key`         | TLS Secret Key                              | `nil`                   |
 
 ### Metrics parameters
 
