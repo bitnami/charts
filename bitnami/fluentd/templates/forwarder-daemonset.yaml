@@ -32,7 +32,10 @@ spec:
         checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
         {{- end }}
     spec:
-{{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.forwarder.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
@@ -50,7 +53,9 @@ spec:
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
+      # yamllint disable rule:indentation
       securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
+      # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.forwarder.initContainers }}
       initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
