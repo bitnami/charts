@@ -53,9 +53,7 @@ spec:
       tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
-      # yamllint disable rule:indentation
       securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
-      # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.forwarder.initContainers }}
       initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
@@ -111,7 +109,9 @@ spec:
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
+          # yamllint enable rule:indentation
           securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint disable rule:indentation
           {{ end }}
           volumeMounts:
             - name: fluentd-config
