@@ -1,7 +1,7 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 2020.42.0
+appVersion: 2021.4.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
