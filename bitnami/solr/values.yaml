@@ -8,6 +8,18 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## String to partially override kafka.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override solr.fullname template
+##
+# fullnameOverride:
+
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -16,17 +28,13 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
 
 ## Number of solr instances to run
 ##
-replicaCount: 1
+replicaCount: 3
 
 service:
   type: ClusterIP
@@ -85,7 +93,32 @@ readinessProbe:
   successThreshold: 1
 
 ## Solr core name to be created
+##
 coreName: my-core
+## Enable Solr cloud
+##
+cloudEnabled: true
+## Enable cloud bootstrap. It will be performed from the node 0.
+##
+cloudBootstrap: true
+## Solr number fo collection shards
+##
+collectionShards: 1
+## Solr number of collection replicas
+##
+collectionReplicas: 2
+## Port number for the Solr container
+##
+containerPort: 8983
+## Solr server directory
+##
+serverDirectory: "server"
+## Java memmory options
+##
+javaMem:
+## Java Heap options
+##
+heap:
 
 ## ConfigMap with Solr Configuration
 ##
@@ -389,6 +422,7 @@ zookeeper:
   enabled: true
   persistence.enabled: true
   port: 2181
+  replicaCount: 3
 
 ## This value is only used when zookeeper.enabled is set to false
 ##
@@ -554,6 +588,7 @@ exporter:
   ##
   updateStrategy:
     type: RollingUpdate
+    rollingUpdate: {}
 
   ## Additional environment variables to set
   ## Example:

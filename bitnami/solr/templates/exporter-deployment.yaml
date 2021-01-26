@@ -14,7 +14,7 @@ metadata:
 spec:
   replicas: 1
   {{- if .Values.exporter.updateStrategy }}
-  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.updateStrategy "context" $ | nindent 4 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -71,7 +71,7 @@ spec:
             - "-p"
             - "{{ .Values.exporter.port }}"
             - "-z"
-            - "{{ include "solr.zookeeper-service-name" . }}:{{ .Values.zookeeper.port }}"
+            - "{{ include "solr.zookeeper.service" . }}:{{ .Values.zookeeper.port }}"
             - "-n"
             - "{{ .Values.exporter.threads }}"
             - "-f"
@@ -130,7 +130,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{ end }}
