@@ -32,6 +32,9 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.aggregator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.securityContext.enabled }}
       securityContext: {{- omit .Values.aggregator.securityContext "enabled" | toYaml | nindent 8 }}
