@@ -70,17 +70,17 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.n
 To connect to your database from outside the cluster execute the following commands:
 
 {{- if .Values.ingress.enabled }}
-{{- $ingressHost := first .Values.ingress.hosts }}
-
+{{- $ingressHost := .Values.ingress.hostname }}
+  {{- if .Values.ingress.extraHosts }}
   You should be able to access your new InfluxDB(TM) server(s) through:
-
-    {{- range .Values.ingress.hosts }}
+  {{- end }}
+    {{- range .Values.ingress.extraHosts }}
     {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}
     {{- end }}
 
   e.g.:
 
-    {{ if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.auth.admin.username }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{ end }} influx -host {{ $ingressHost.name }} -port 80
+    {{ if .Values.authEnabled }}INFLUX_USERNAME="{{ .Values.auth.admin.username }}" INFLUX_PASSWORD="$ADMIN_PASSWORD"{{ end }} influx -host {{ $ingressHost }} -port 80
 
 {{- else if contains "NodePort" .Values.influxdb.service.type }}
 

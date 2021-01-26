@@ -59,18 +59,22 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 
 ### Common parameters
 
-| Parameter                     | Description                                                                                           | Default         |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`                | String to partially override influxdb.fullname template with a string (will prepend the release name) | `nil`           |
-| `fullnameOverride`            | String to fully override influxdb.fullname template with a string                                     | `nil`           |
-| `clusterDomain`               | Default Kubernetes cluster domain                                                                     | `cluster.local` |
-| `networkPolicy.enabled`       | Enable NetworkPolicy                                                                                  | `false`         |
-| `networkPolicy.allowExternal` | Don't require client label for connections                                                            | `true`          |
-| `persistence.enabled`         | Enable data persistence                                                                               | `true`          |
-| `persistence.existingClaim`   | Use a existing PVC which must be created manually before bound                                        | `nil`           |
-| `persistence.storageClass`    | Specify the `storageClass` used to provision the volume                                               | `nil`           |
-| `persistence.accessMode`      | Access mode of data volume                                                                            | `ReadWriteOnce` |
-| `persistence.size`            | Size of data volume                                                                                   | `8Gi`           |
+| Parameter                     | Description                                                                                           | Default                        |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `nameOverride`                | String to partially override influxdb.fullname template with a string (will prepend the release name) | `nil`                          |
+| `fullnameOverride`            | String to fully override influxdb.fullname template with a string                                     | `nil`                          |
+| `commonLabels`                | Labels to add to all deployed objects                                                                 | `{}`                           |
+| `commonAnnotations`           | Annotations to add to all deployed objects                                                            | `{}`                           |
+| `clusterDomain`               | Default Kubernetes cluster domain                                                                     | `cluster.local`                |
+| `extraDeploy`                 | Array of extra objects to deploy with the release                                                     | `[]` (evaluated as a template) |
+| `kubeVersion`                 | Force target Kubernetes version (using Helm capabilities if not set)                                  | `nil`                          |
+| `networkPolicy.enabled`       | Enable NetworkPolicy                                                                                  | `false`                        |
+| `networkPolicy.allowExternal` | Don't require client label for connections                                                            | `true`                         |
+| `persistence.enabled`         | Enable data persistence                                                                               | `true`                         |
+| `persistence.existingClaim`   | Use a existing PVC which must be created manually before bound                                        | `nil`                          |
+| `persistence.storageClass`    | Specify the `storageClass` used to provision the volume                                               | `nil`                          |
+| `persistence.accessMode`      | Access mode of data volume                                                                            | `ReadWriteOnce`                |
+| `persistence.size`            | Size of data volume                                                                                   | `8Gi`                          |
 
 ### InfluxDB<sup>TM</sup> parameters
 
@@ -174,18 +178,24 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 
 ### Exposing parameters
 
-| Parameter                        | Description                                | Default              |
-| -------------------------------- | ------------------------------------------ | -------------------- |
-| `ingress.enabled`                | Enable ingress controller resource         | `false`              |
-| `ingress.certManager`            | Add annotations for cert-manager           | `false`              |
-| `ingress.annotations`            | Ingress annotations                        | `[]`                 |
-| `ingress.hosts[0].name`          | Hostname for InfluxDB<sup>TM</sup> service | `influxdb.local`     |
-| `ingress.hosts[0].path`          | Path within the url structure              | `/`                  |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                                  | `influxdb.local`     |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)                  | `influxdb.local-tls` |
-| `ingress.secrets[0].name`        | TLS Secret Name                            | `nil`                |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                     | `nil`                |
-| `ingress.secrets[0].key`         | TLS Secret Key                             | `nil`                |
+| Parameter                        | Description                                                   | Default                        |
+| -------------------------------- | ------------------------------------------------------------- | ------------------------------ |
+| `ingress.enabled`                | Enable ingress controller resource                            | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                         | `phabricator.local`            |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | `nil`                          |
+| `ingress.path`                   | Ingress path                                                  | `/`                            |
+| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
+| `ingress.tls`                    | Create TLS Secret                                             | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                           | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                     | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                          |
 
 ### Metrics parameters
 
