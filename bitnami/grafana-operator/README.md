@@ -89,6 +89,7 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `operator.tolerations`                                 | Tolerations for controller pod assignment                                                           | `[]`                                                    |
 | `operator.affinity`                                    | Affinity for controller pod assignment                                                              | `{}`                                                    |
 | `operator.podAnnotations`                              | Pod annotations                                                                                     | `{}`                                                    |
+| `operator.hostAliases`                                 | Add deployment host aliases                                                                         | `[]`                                                    |
 | `operator.podLabels`                                   | Pod labels                                                                                          | `{}`                                                    |
 | `operator.serviceAccount.create`                       | create a serviceAccount for the deployment                                                          | `true`                                                  |
 | `operator.serviceAccount.name`                         | use the serviceAccount with the specified name                                                      | ``                                                      |
@@ -188,7 +189,6 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name                   | `bitnami/grafana`                                       |
 | `grafanaPluginInit.image.tag`         | Grafana Plugin Init image tag                    | `{TAG_NAME}`                                            |
 | `grafanaPluginInit.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
