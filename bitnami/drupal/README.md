@@ -116,6 +116,7 @@ The following table lists the configurable parameters of the Drupal chart and th
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
 | `podSecurityContext.enabled`         | Enable Drupal pods' Security Context                                                                                  | `true`                                         |
 | `podSecurityContext.fsGroup`         | Drupal pods' group ID                                                                                                 | `1001`                                         |
