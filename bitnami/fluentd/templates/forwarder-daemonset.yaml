@@ -109,9 +109,9 @@ spec:
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
-          # yamllint enable rule:indentation
-          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           # yamllint disable rule:indentation
+          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
           {{ end }}
           volumeMounts:
             - name: fluentd-config
