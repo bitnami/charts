@@ -103,6 +103,9 @@ cloudEnabled: true
 ## Enable cloud bootstrap. It will be performed from the node 0.
 ##
 cloudBootstrap: true
+## Solr collection name
+##
+collection: my-collection
 ## Solr number fo collection shards
 ##
 collectionShards: 1
@@ -425,7 +428,7 @@ zookeeper:
   persistence:
     enabled: true
   port: 2181
-  replicaCount: 3
+  replicaCount: 4
   fourlwCommandsWhitelist: srvr,mntr,conf,ruok
 
 ## This value is only used when zookeeper.enabled is set to false

@@ -99,9 +99,21 @@ spec:
                 export SOLR_CLOUD_BOOTSTRAP=yes
               fi
               {{- end }}
+              SOLR_ZK_HOSTS=""
+              {{- if not .Values.externalZookeeper.servers }}
+              # Set as Zookeeper hosts the FQDN of the zookeeper pods
+              nodes=($(getent hosts {{ .Release.Name }}-zookeeper-headless | awk '{print $2}'))
+              for node in "${nodes[@]}"; do
+                SOLR_ZK_HOSTS+="${node}:{{ .Values.zookeeper.port }},"
+              done
+              {{- else }}
+              SOLR_ZK_HOSTS="{{ .Values.externalZookeeper.servers }}"
+              {{- end }}
+              export SOLR_ZK_HOSTS
+              echo "Zookeeper Hosts: ${SOLR_ZK_HOSTS}"
               # Use hostname instead of IP to register in Zookeeper
-              export SOLR_HOST="$MY_POD_NAME"
-              exec /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh
+              export SOLR_HOST="${MY_POD_NAME}.{{ include "solr.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+              /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
@@ -111,22 +123,26 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: SOLR_CORE
-              value: {{ .Values.coreName | quote }}
             - name: SOLR_CLOUD_ENABLE
               value: {{ ternary "yes" "no" .Values.cloudEnabled | quote }}
-            - name: SOLR_COLLECTION_SHARDS
-              value: {{ .Values.collectionShards | quote }}
-            - name: SOLR_COLLECTION_REPLICAS
-              value: {{ .Values.collectionReplicas | quote }}
             - name: SOLR_NUMBER_OF_NODES      
               value: {{ .Values.replicaCount | quote }}
             - name: SOLR_PORT_NUMBER      
               value: {{ .Values.containerPort | quote }}
             - name: SOLR_SERVER_DIRECTORY
               value: {{ .Values.serverDirectory | quote }}
-            - name: SOLR_ZK_HOSTS
-              value: "{{ include "solr.zookeeper.service" . }}:{{ .Values.zookeeper.port }}"
+            # Parameters for the cloud bootstrap
+            {{- if .Values.cloudEnabled }}
+            - name: SOLR_COLLECTION
+              value: {{ .Values.collection | quote }}
+            {{- else }}
+            - name: SOLR_CORE
+              value: {{ .Values.coreName | quote }}
+            {{- end }}
+            - name: SOLR_COLLECTION_SHARDS
+              value: {{ .Values.collectionShards | quote }}
+            - name: SOLR_COLLECTION_REPLICAS
+              value: {{ .Values.collectionReplicas | quote }}
             {{- if .Values.heap }}
             - name: SOLR_HEAP
               value: {{ .Values.heap | quote }}
