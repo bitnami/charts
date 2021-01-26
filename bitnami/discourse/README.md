@@ -76,6 +76,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `serviceAccount.annotations` | Annotations to add to the service account                                                 | `{}`                                                    |
 | `serviceAccount.name`        | Name to be used for the service account                                                   | `""`                                                    |
 | `podSecurityContext`         | Pod security context specification                                                        | `{}`                                                    |
+| `hostAliases`                | Add deployment host aliases                                                               | `[]`                                                    |
 | `persistence.enabled`        | Whether to enable persistence based on Persistent Volume Claims                           | `true`                                                  |
 | `persistence.storageClass`   | PVC Storage Class                                                                         | `nil`                                                   |
 | `persistence.existingClaim`  | Name of an existing PVC to reuse                                                          | `nil`                                                   |

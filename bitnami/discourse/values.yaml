@@ -49,6 +49,11 @@ imagePullSecrets: []
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 discourse:
   ## Discourse host to create application URLs. The port will be automatilly included.
   ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
