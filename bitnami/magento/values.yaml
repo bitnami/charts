@@ -359,7 +359,7 @@ ingress:
   hostname: magento.local
 
   ## Default path for the ingress resource
-  ## 
+  ##
   path: /
 
 
