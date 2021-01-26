@@ -74,8 +74,8 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
-          - /bin/sh
-          - -c
+          - /bin/bash
+          - -ec
           - |-
             ID="${MY_POD_NAME#"{{ $fullname }}-"}"
             if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
