@@ -354,6 +354,12 @@ auth:
 - Setting [auth.tls.failIfNoPeerCert](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `false` allows a TLS connection if client fails to provide a certificate.
 - When setting [auth.tls.sslOptionsVerify](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `verify_peer`, the node must perform peer verification. When set to `verify_none`, peer verification will be disabled and certificate exchange won't be performed.
 
+#### TLS integration with `cert-manager` (Let's Encrypt certificates)
+
+If using `cert-manager` to provision Let's Encrypt certificates, the `tls.crt` key in the generated TLS secret will contain the full certificate chain. Depending on the version of `cert-manager` in use, there can either be an empty `ca.crt` key, or none at all.
+
+In order to instruct RabbitMQ to look for the CA certificate within the primary certificate, `auth.tls.existingSecretFullChain` can be set to `true`.
+
 ### Load Definitions
 
 It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](http://www.rabbitmq.com/management.html#load-definitions). Because definitions may contain RabbitMQ credentials, [store the JSON as a Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod). Within the secret's data, choose a key name that corresponds with the desired load definitions filename (i.e. `load_definition.json`) and use the JSON object as the value. For example:
