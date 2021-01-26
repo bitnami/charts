@@ -76,7 +76,8 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `image.tag`                        | Grafana image tag                                                          | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                 | Grafana image pull policy                                                  | `IfNotPresent`                                          |
 | `image.pullSecrets`                | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods) |
-| `hostAliases`                    | Add deployment host aliases                                                               | `Check values.yaml`                                          || `admin.user`                       | Grafana admin username                                                     | `admin`                                                 |
+| `hostAliases`                      | Add deployment host aliases                                                | `[]`                                                    |
+| `admin.user`                       | Grafana admin username                                                     | `admin`                                                 |
 | `admin.password`                   | Grafana admin password                                                     | Randomly generated                                      |
 | `admin.existingSecret`             | Name of the existing secret containing admin password                      | `nil`                                                   |
 | `admin.existingSecretPasswordKey`  | Password key on the existing secret                                        | `password`                                              |
