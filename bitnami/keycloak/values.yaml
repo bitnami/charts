@@ -75,7 +75,16 @@ auth:
   ##
   managementUser: manager
   managementPassword: ""
-
+  ## An already existing secret containing auth info
+  ##
+  # existingSecret:
+  #   name: mySecret
+  #   keyMapping:
+  #     admin-password: myPasswordKey
+  #     management-password: myManagementPasswordKey
+  #     database-password: myDatabasePasswordKey
+  #     tls-keystore-password: myTlsKeystorePasswordKey
+  #     tls-truestore-password: myTlsTruestorePasswordKey
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
