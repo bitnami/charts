@@ -137,7 +137,7 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `influxdb.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                                                                                                                                                | `[]`                                                    |
 | `influxdb.service.clusterIP`                | Static clusterIP or None for headless services                                                                                                                                                                                                                       | `nil`                                                   |
 
-### InfluxDB<sup>TM</sup> parameters
+### InfluxDB Relay<sup>TM</sup> parameters
 
 | Parameter                                | Description                                                                                                                  | Default                                                 |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
