@@ -49,8 +49,6 @@ config:
     routes:
       - match:
           - receiver: "dump"
-        drop:
-        #   - type: "Normal"
 
 rbac:
   # create specifies whether to install and use RBAC rules.
