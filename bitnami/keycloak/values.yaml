@@ -110,6 +110,36 @@ auth:
     ## Password to access the truststore when it's password-protected.
     ##
     truststorePassword: ""
+    ## Init container parameters:
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/minideb
+      tag: buster
+      pullPolicy: Always
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      pullSecrets: []
+      ##   - myRegistryKeySecretName
+    ## Init containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
+      limits: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
+      requests: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
 
 ## Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy

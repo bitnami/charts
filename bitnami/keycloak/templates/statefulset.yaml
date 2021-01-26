@@ -66,14 +66,18 @@ spec:
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.auth.tls.enabled }}
+      {{- $fullname := include "keycloak.fullname" . }}
         - name: init-certs
-          image: busybox
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ include "keycloak.auth.tls.image" . }}
+          imagePullPolicy: {{ .Values.auth.tls.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
           - /bin/sh
           - -c
           - |-
-            ID="${MY_POD_NAME#${MY_INSTANCE_NAME}-}"
+            ID="${MY_POD_NAME#"{{ $fullname }}-"}"
             if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
                 mkdir -p /opt/bitnami/keycloak/certs
                 cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
@@ -83,16 +87,14 @@ spec:
                 exit 1
             fi
           env:
-          - name: MY_INSTANCE_NAME
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.labels['app.kubernetes.io/instance']
           - name: MY_POD_NAME
             valueFrom:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.name
+          {{- if .Values.auth.tls.resources }}
+          resources: {{- toYaml .Values.auth.tls.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
           - name: certificates
             mountPath: /certs
