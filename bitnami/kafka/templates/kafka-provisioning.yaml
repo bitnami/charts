@@ -4,7 +4,7 @@ apiVersion: batch/v1
 metadata:
   name: {{ include "kafka.fullname" . }}-provisioning
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: kafka
+    app.kubernetes.io/component: kafka-provisioning
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: kafka
+        app.kubernetes.io/component: kafka-provisioning
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
