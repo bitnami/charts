@@ -350,7 +350,7 @@ ingress:
   ##
   pathType: ImplementationSpecific
 
-  ## Override API Version (automatically detected if nott set)
+  ## Override API Version (automatically detected if not set)
   ##
   apiVersion:
 
