@@ -122,16 +122,22 @@ spec:
                 secretKeyRef:
                   name: {{ $secretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
+            {{- if .Values.auth.tls.enabled }}
+            {{- if .Values.auth.tls.keystorePassword }}
             - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ $secretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-keystore-password") }}
+            {{- end }}
+            {{- if .Values.auth.tls.truststorePassword }}
             - name: KEYCLOAK_TLS_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ $secretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-truestore-password") }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.extraStartupArgs }}
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
