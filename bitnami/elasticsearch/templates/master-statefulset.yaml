@@ -31,7 +31,10 @@ spec:
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-{{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- else }}
