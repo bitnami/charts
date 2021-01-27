@@ -84,6 +84,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `auth.tls.serverCertificate`    | Server certificate content                                                                                               | `nil`                                                   |
 | `auth.tls.serverKey`            | Server private key content                                                                                               | `nil`                                                   |
 | `auth.tls.existingSecret`       | Existing secret with certificate content to RabbitMQ credentials                                                         | `nil`                                                   |
+|`auth.tls.existingSecretFullChain`         | Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`. | `false`|
 | `logs`                          | Path of the RabbitMQ server's Erlang log file                                                                            | `-`                                                     |
 | `ulimitNofiles`                 | Max File Descriptor limit                                                                                                | `65536`                                                 |
 | `maxAvailableSchedulers`        | RabbitMQ maximum available scheduler threads                                                                             | `2`                                                     |
@@ -96,7 +97,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `extraPlugins`                  | Extra plugins to enable (single string containing a space-separated list)                                                | `nil`                                                   |
 | `clustering.addressType`        | Switch clustering mode. Either `ip` or `hostname`                                                                        | `hostname`                                              |
 | `clustering.rebalance`          | Rebalance master for queues in cluster when new replica is created                                                       | `false`                                                 |
-| `clustering.forceBoot`          | Rebalance master for queues in cluster when new replica is created                                                       | `false`                                                 |
+| `clustering.forceBoot`          | Force boot of an unexpectedly shut down cluster (in an unexpected order).                                                | `false`                                                 |
 | `loadDefinition.enabled`        | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                                         | `false`                                                 |
 | `loadDefinition.existingSecret` | Existing secret with the load definitions file                                                                           | `nil`                                                   |
 | `command`                       | Override default container command (useful when using custom images)                                                     | `nil`                                                   |
@@ -352,6 +353,12 @@ auth:
 
 - Setting [auth.tls.failIfNoPeerCert](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `false` allows a TLS connection if client fails to provide a certificate.
 - When setting [auth.tls.sslOptionsVerify](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `verify_peer`, the node must perform peer verification. When set to `verify_none`, peer verification will be disabled and certificate exchange won't be performed.
+
+#### TLS integration with `cert-manager` (Let's Encrypt certificates)
+
+If using `cert-manager` to provision Let's Encrypt certificates, the `tls.crt` key in the generated TLS secret will contain the full certificate chain. Depending on the version of `cert-manager` in use, there can either be an empty `ca.crt` key, or none at all.
+
+In order to instruct RabbitMQ to look for the CA certificate within the primary certificate, `auth.tls.existingSecretFullChain` can be set to `true`.
 
 ### Load Definitions
 

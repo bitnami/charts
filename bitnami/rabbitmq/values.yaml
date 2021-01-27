@@ -81,6 +81,7 @@ auth:
     serverCertificate: |-
     serverKey: |-
     # existingSecret: name-of-existing-secret-to-rabbitmq
+    existingSecretFullChain: false
 
 ## Value for the RABBITMQ_LOGS environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
