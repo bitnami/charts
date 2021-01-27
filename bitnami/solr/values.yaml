@@ -428,8 +428,10 @@ zookeeper:
   persistence:
     enabled: true
   port: 2181
-  replicaCount: 4
+  replicaCount: 3
   fourlwCommandsWhitelist: srvr,mntr,conf,ruok
+  service:
+    publishNotReadyAddresses: true
 
 ## This value is only used when zookeeper.enabled is set to false
 ##
@@ -475,7 +477,7 @@ exporter:
     failureThreshold: 15
     successThreshold: 15
 
-  ## Path to the Solr exporter config file
+  ## Path to the Solr exporter config file defining metrics to export. To change it mount a different file using extraConfigMaps
   ##
   configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
   

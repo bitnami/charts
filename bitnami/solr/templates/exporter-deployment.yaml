@@ -71,7 +71,7 @@ spec:
             - "-p"
             - "{{ .Values.exporter.port }}"
             - "-z"
-            - "{{ include "solr.zookeeper.service" . }}:{{ .Values.zookeeper.port }}"
+            - "{{ include "solr.zookeeper.service" . }}:{{ .Values.zookeeper.port }}/solr"
             - "-n"
             - "{{ .Values.exporter.threads }}"
             - "-f"
