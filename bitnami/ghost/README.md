@@ -82,6 +82,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `allowEmptyPassword`                    | Allow DB blank passwords                                                                                              | true                                        |
 | `args`                                  | Override default container args (useful when using custom images)                                                     | `nil`                                       |
 | `command`                               | Override default container command (useful when using custom images)                                                  | `nil`                                       |
+| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                                        |
 | `containerPorts.http`                   | Sets http port inside Ghost container                                                                                 | `8080`                                      |
 | `containerPorts.https`                  | Sets https port inside Ghost container                                                                                | `8443`                                      |
 | `livenessProbe.enabled`                 | Would you like a livenessProbe to be enabled                                                                          | `true`                                      |
