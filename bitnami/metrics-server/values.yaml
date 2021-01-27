@@ -61,7 +61,7 @@ serviceAccount:
 ##
 apiService:
   ## Specifies whether the v1beta1.metrics.k8s.io API service should be created
-  ## This should not be necessary in k8s version >= 1.8
+  ## This should not be necessary in k8s version >= 1.8, but depends on vendors and cloud providers.
   ##
   create: false
 
