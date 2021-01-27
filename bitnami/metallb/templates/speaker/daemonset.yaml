@@ -24,8 +24,11 @@ spec:
       {{- if .Values.speaker.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-    spec: 
+    spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule

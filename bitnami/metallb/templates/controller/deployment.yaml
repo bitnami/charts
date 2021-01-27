@@ -25,8 +25,11 @@ spec:
       {{- if .Values.controller.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-    spec: 
+    spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "metallb.controllerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
       nodeSelector:

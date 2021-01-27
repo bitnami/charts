@@ -1,6 +1,7 @@
 ## Default values for metallb.
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
+##
 
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -79,6 +80,7 @@ commonAnnotations: {}
 
 ## Metallb Controller deployment.
 ## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
+##
 controller:
   image:
     registry: docker.io
@@ -95,6 +97,11 @@ controller:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## If global .Values.rbac.create is disabled no rbac is created.
   ## This value is then meaningless
@@ -172,6 +179,7 @@ controller:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -192,7 +200,6 @@ controller:
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
     name: ""
-
 
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -259,6 +266,7 @@ controller:
 
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
+##
 speaker:
   image:
     registry: docker.io
@@ -284,6 +292,11 @@ speaker:
     ## create specifies whether to install and use RBAC rules.
     ##
     create: true
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## If global .Values.psp.create is disabled no psp is created.
   ## This value is then meaningless
