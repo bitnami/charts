@@ -125,16 +125,16 @@ controller:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
-    # requests:
-    #   memory: 25Mi
-    #   cpu: 25m
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 100m
+  #     memory: 100Mi
+  #   requests:
+  #     memory: 25Mi
+  #     cpu: 25m
   ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -213,7 +213,7 @@ controller:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-      - ALL
+        - ALL
 
   ## Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
@@ -311,16 +311,16 @@ speaker:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
-    # requests:
-    #   memory: 25Mi
-    #   cpu: 25m
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 100m
+  #     memory: 100Mi
+  #   requests:
+  #     memory: 25Mi
+  #     cpu: 25m
   ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -386,11 +386,11 @@ speaker:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-      - ALL
+        - ALL
       add:
-      - NET_ADMIN
-      - NET_RAW
-      - SYS_ADMIN
+        - NET_ADMIN
+        - NET_RAW
+        - SYS_ADMIN
 
   ## An array to add extra env vars
   ## For example:
