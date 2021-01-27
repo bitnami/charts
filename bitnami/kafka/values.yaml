@@ -40,6 +40,16 @@ image:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -398,6 +408,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -660,6 +671,7 @@ persistence:
   ##
   annotations: {}
   ## Mount point for persistence
+  ##
   mountPath: /bitnami/kafka
 
 ## Log Persistence parameters
@@ -691,8 +703,8 @@ logPersistence:
   ##
   annotations: {}
   ## Mount path for persistent logs
+  ##
   mountPath: /opt/bitnami/kafka/logs
-
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -701,6 +713,7 @@ logPersistence:
 volumePermissions:
   enabled: false
   ## The security context for the volumePermissions init container
+  ##
   securityContext:
     runAsUser: 0
   ## Bitnami Minideb image

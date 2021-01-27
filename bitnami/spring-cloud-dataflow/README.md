@@ -233,6 +233,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag                                                                     | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                             | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                        | `{}`                                                    |
+| `metrics.resources.requests`           | The requested resources for the Prometheus Rsocket Proxy container                                     | `{}`                                                    |
 | `metrics.kafka.service.httpPort`       | Prometheus Rsocket Proxy HTTP port                                                                     | `8080`                                                  |
 | `metrics.kafka.service.rsocketPort`    | Prometheus Rsocket Proxy Rsocket port                                                                  | `8080`                                                  |
 | `metrics.kafka.service.annotations`    | Annotations for Prometheus Rsocket Proxy service                                                       | `Check values.yaml file`                                |
