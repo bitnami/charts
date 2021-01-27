@@ -33,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - http://www.ghost.org/
-version: 12.0.1
+version: 12.1.0
