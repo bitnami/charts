@@ -135,9 +135,10 @@ The following tables list the configurable parameters of the Phabricator chart a
 | `sidecars`                       | Add additional sidecar containers to the Phabricator pods                                                | `{}` (evaluated as a template)                          |
 | `persistence.enabled`            | Enable persistence using PVC                                                                             | `true`                                                  |
 | `persistence.storageClass`       | PVC Storage Class for Phabricator volume                                                                 | `nil` (uses alpha storage class annotation)             |
-| `persistence.existingClaim`      | An Existing PVC name for Phabricator volume                                                              | `nil` (uses alpha storage class annotation)             |
 | `persistence.accessMode`         | PVC Access Mode for Phabricator volume                                                                   | `ReadWriteOnce`                                         |
 | `persistence.size`               | PVC Storage Request for Phabricator volume                                                               | `8Gi`                                                   |
+| `persistence.existingClaim`      | An Existing PVC name for Phabricator volume                                                              | `nil` (uses alpha storage class annotation)             |
+| `persistence.hostPath`           | Host mount path for Phabricator volume                                                                   | `nil` (will not mount to a host path)                   |
 
 ### Traffic Exposure Parameters
 

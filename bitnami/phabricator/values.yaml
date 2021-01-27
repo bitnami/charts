@@ -119,7 +119,7 @@ phabricatorGitSSH: false
 ##
 phabricatorEnablePygments: true
 
-## Skip the initial bootstrapping for the application     
+## Skip the initial bootstrapping for the application
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
@@ -204,12 +204,7 @@ resources:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /auth/
-    port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"phabricator.host\" . }}"
+  path: /auth/
   initialDelaySeconds: 180
   periodSeconds: 10
   timeoutSeconds: 5
@@ -217,12 +212,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /auth/
-    port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"phabricator.host\" . }}"
+  path: /auth/
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -230,12 +220,7 @@ readinessProbe:
   successThreshold: 1
 startupProbe:
   enabled: false
-  httpGet:
-    path: /auth/
-    port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"phabricator.host\" . }}"
+  path: /auth/
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
@@ -359,13 +344,21 @@ persistence:
   ##
   # storageClass: "-"
 
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
-
   accessMode: ReadWriteOnce
   size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the phabricator-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
 
 ## K8s svc configuration
 ##
