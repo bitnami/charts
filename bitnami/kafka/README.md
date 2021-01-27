@@ -127,6 +127,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `allowPlaintextListener`                          | Allow to use the PLAINTEXT listener                                                                                               | `true`                                                  |
 | `interBrokerListenerName`                         | The listener that the brokers should communicate on                                                                               | `INTERNAL`                                              |
 | `initContainers`                                  | Add extra init containers                                                                                                         | `[]`                                                    |
+| `podManagementPolicy`                             | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                         | `Parallel`                                              |
 
 ### Kafka provisioning parameters
 
