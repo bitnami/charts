@@ -297,7 +297,7 @@ spec:
           secret:
             secretName: {{ template "rabbitmq.secretTLSName" . }}
             items:
-              - key: ca.crt
+              - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
                 path: ca_certificate.pem
               - key: tls.crt
                 path: server_certificate.pem
