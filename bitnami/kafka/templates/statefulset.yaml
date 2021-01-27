@@ -193,6 +193,12 @@ spec:
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
+            {{- if eq .Values.externalAccess.service.type "NodePort" }}
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP 
+            {{- end }}
             {{- end }}
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
