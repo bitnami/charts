@@ -1,11 +1,3 @@
-{{- $replicaCount := int .Values.replicaCount -}}
-{{- $releaseNamespace := .Release.Namespace -}}
-{{- $clusterDomain := .Values.clusterDomain -}}
-{{- $fullname := include "solr.fullname" . -}}
-{{- $servicePort := int .Values.service.port -}}
-{{- $exportername := include "solr.exporter-name" . -}}
-{{- $exporterPort := int .Values.exporter.port -}}
-
 {{- if (eq .Values.service.type "LoadBalancer")  }}
 ---------------------------------------------------------------------------------------------
  WARNING
@@ -21,38 +13,45 @@
 {{- end }}
 
 
-** Your Solr cluster can be accessed in the following ways: **
+** Please be patient while the chart is being deployed **
 
-  * Internally, within the kubernetes cluster on:
+Solr can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
-{{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}
+{{ include "solr.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
 
-{{- if contains "ClusterIP" .Values.service.type }}
+To connect to your Solr from outside the cluster execute the following commands:
 
-  * External to the kubernetes cluster:
+{{- if contains "NodePort" .Values.service.type }}
 
-export POD_NAME=$(kubectl get pods --namespace {{ $releaseNamespace }} -l "app={{ $fullname }},component=server,release={{ .Release.Name }}" -o jsonpath="{ .items[0].metadata.name }")
-echo "Visit http://127.0.0.1:{{ $servicePort }} to access Solr"
-kubectl port-forward --namespace {{ $releaseNamespace }} $POD_NAME {{ $servicePort }}:{{ $servicePort }}
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    echo "Go to ${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
-  * External to the kubernetes cluster:
-  
-  NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -l "app.kubernetes.io/name={{ template "solr.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=solr" -w'
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-        echo "$(kubectl get svc --namespace {{ $releaseNamespace }} -l "app.kubernetes.io/name={{ template "solr.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=solr" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    echo "Go to ${SERVICE_IP}:{{ .Values.service.port }}"
 
-    Solr port: {{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    
+    Go to localhost:{{ .Values.service.port }}
 
 {{- end }}
 
 {{- if .Values.exporter.enabled  }}
+
 ** Solr Prometheus metrics are exported to the following endpoints: **
 
   * Internally, within the kubernetes cluster on:
 
-{{ $exportername }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $exporterPort }}/metrics
+{{ include "solr.exporter-name" . }}.{{ .Release.Name }}.svc.{{ .Values.clusterDomain }}:{{ .Values.exporter.port }}/solr
 
 {{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.exporter.image }}
