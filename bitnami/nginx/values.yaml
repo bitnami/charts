@@ -43,6 +43,11 @@ image:
 ##
 kubeVersion:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -492,6 +497,7 @@ ldapDaemon:
 sidecars:
 
 ## Extra init containers
+##
 initContainers:
 
 ## Configure the ingress resource that allows you to access the
