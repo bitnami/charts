@@ -35,6 +35,11 @@ kubeVersion:
 ##
 replicaCount: 1
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Command and args for running the Ghost container (set to default if not set). Use array form
 ##
 command: []
