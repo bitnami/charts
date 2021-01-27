@@ -91,6 +91,11 @@ server:
   ##
   resourceType: daemonset
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Whether the kiam server should use host network
   ##
   useHostNetwork: false
@@ -442,6 +447,11 @@ agent:
   ## agent permits only request paths matching this reg-ex
   ##
   allowRouteRegExp:
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Host networking settings
   ##
