@@ -125,9 +125,20 @@ javaMem:
 ##
 heap:
 
-## ConfigMap with Solr Configuration
+authentication:
+  ## Enabled Solr authentication
+  ##
+  enabled: true
+  ## Solr admin username
+  ##
+  adminUsername: admin
+  ## Solr admin password
+  ##
+  adminPassword:
+
+## Secret with Solr password
 ##
-# existingConfigmap:
+# existingSecret:
 
 ## Container Command (set to default if not set).
 ##
@@ -284,7 +295,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 
 ## Add sidecars to the Solr pods.
 ## Example:

@@ -19,6 +19,15 @@ Solr can be accessed via port {{ .Values.service.port }} on the following DNS na
 
 {{ include "solr.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
 
+{{- if .Values.authentication.enabled }}
+
+To get the Solr credentials execute the following commands:
+
+    echo Username: {{ .Values.authentication.adminUser }}
+    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "solr.secretName" . }} -o jsonpath="{.data.solr-password}" | base64 --decode)
+
+{{ -end }}    
+
 To connect to your Solr from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" .Values.service.type }}

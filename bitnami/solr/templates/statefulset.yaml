@@ -123,7 +123,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: SOLR_CLOUD_ENABLE
+            - name: SOLR_ENABLE_CLOUD_MODE
               value: {{ ternary "yes" "no" .Values.cloudEnabled | quote }}
             - name: SOLR_NUMBER_OF_NODES      
               value: {{ .Values.replicaCount | quote }}
@@ -150,6 +150,17 @@ spec:
             {{- if .Values.javaMem }}
             - name: SOLR_JAVA_MEM
               value: {{ .Values.javaMem | quote }}
+            {{- end }}
+            {{- if .Values.authentication.enabled }}
+            - name: SOLR_ENABLE_AUTHENTICATION
+              value: "yes"
+            - name: SOLR_ADMIN_USERNAME
+              value: {{ .Values.authentication.adminUsername }}
+            - name: SOLR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "solr.secretName" . }}
+                  key: solr-password
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

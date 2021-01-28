@@ -76,24 +76,7 @@ Return  the proper Storage Class
 {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
 
-{{/*
-Compile all warnings into a single message, and call fail.
-*/}}
-{{- define "solr.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "solr.validateValues.externalAccessServiceType" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Solr - service type for external access */}}
-{{- define "solr.validateValues.externalAccessServiceType" -}}
-{{- if and (not (eq .Values.service.type "NodePort")) (not (eq .Values.service.type "LoadBalancer")) -}}
-solr: service.type
-    Available service type for external access are NodePort or LoadBalancer.
-{{- end -}}
+{{/* Solr credential secret name */}}
+{{- define "solr.secretName" -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
