@@ -120,6 +120,11 @@ query:
   ##
   extraFlags: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Number of Thanos Query replicas to deploy
   ##
   replicaCount: 1
@@ -474,6 +479,11 @@ queryFrontend:
 
   extraFlags: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Thanos Query Frontend Cache Configuration
   ## Specify content for config.yml
   ##
@@ -729,6 +739,11 @@ bucketweb:
   ## Set to true to enable Thanos Bucket Web component
   ##
   enabled: false
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Log level
   ##
@@ -987,6 +1002,11 @@ compactor:
   ##
   enabled: false
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Log level
   ##
   logLevel: info
@@ -1185,6 +1205,11 @@ storegateway:
   ## Set to true to enable Thanos Store Gateway component
   ##
   enabled: false
+
+  ## StatefulSet pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Log level
   ##
@@ -1425,6 +1450,11 @@ ruler:
   ## Set to true to enable Thanos Ruler component
   ##
   enabled: false
+
+  ## StatefuSet pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Log level
   ##
@@ -1673,6 +1703,11 @@ receive:
   ## Set to true to enable Thanos Receive component
   ##
   enabled: false
+
+  ## StatefuSet pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Log level
   ##
