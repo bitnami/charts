@@ -254,12 +254,12 @@ query:
       # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
       ca:
       # Existing secret containing your own TLS certificates.
-      existingSecret: {}
-        # name: 'tls-server'
-        # keyMapping:
-        #   caCert: ca.pem
-        #   tlsCert: cert.pem
-        #   tlsKey: key.pem
+      # existingSecret:
+      #   name: 
+      #   keyMapping:
+      #     ca-cert: ca.pem
+      #     tls-cert: cert.pem
+      #     tls-key: key.pem
 
     # TLS client side
     client:
@@ -274,12 +274,12 @@ query:
       # Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1
       servername:
       # Existing secret containing your own TLS certificates.
-      existingSecret: {}
-        # name: ''
-        # keyMapping:
-        #   caCert: ca.pem
-        #   tlsCert: cert.pem
-        #   tlsKey: key.pem
+      # existingSecret:
+      #   name:
+      #   keyMapping:
+      #     ca-cert: ca.pem
+      #     tls-cert: cert.pem
+      #     tls-key: key.pem
 
   ## Service parameters
   ##
