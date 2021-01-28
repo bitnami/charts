@@ -1,6 +1,7 @@
 ## Default values for metallb.
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
+##
 
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -79,6 +80,7 @@ commonAnnotations: {}
 
 ## Metallb Controller deployment.
 ## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
+##
 controller:
   image:
     registry: docker.io
@@ -95,6 +97,11 @@ controller:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## If global .Values.rbac.create is disabled no rbac is created.
   ## This value is then meaningless
@@ -118,16 +125,16 @@ controller:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
-    # requests:
-    #   memory: 25Mi
-    #   cpu: 25m
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 100m
+  #     memory: 100Mi
+  #   requests:
+  #     memory: 25Mi
+  #     cpu: 25m
   ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -172,6 +179,7 @@ controller:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -193,7 +201,6 @@ controller:
     # true, a name is generated using the fullname template
     name: ""
 
-
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -206,7 +213,7 @@ controller:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-      - ALL
+        - ALL
 
   ## Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
@@ -259,6 +266,7 @@ controller:
 
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
+##
 speaker:
   image:
     registry: docker.io
@@ -285,6 +293,11 @@ speaker:
     ##
     create: true
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## If global .Values.psp.create is disabled no psp is created.
   ## This value is then meaningless
   ## Defines if the speaker psp should be created.
@@ -298,16 +311,16 @@ speaker:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
-    # requests:
-    #   memory: 25Mi
-    #   cpu: 25m
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 100m
+  #     memory: 100Mi
+  #   requests:
+  #     memory: 25Mi
+  #     cpu: 25m
   ## Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -373,11 +386,11 @@ speaker:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
-      - ALL
+        - ALL
       add:
-      - NET_ADMIN
-      - NET_RAW
-      - SYS_ADMIN
+        - NET_ADMIN
+        - NET_RAW
+        - SYS_ADMIN
 
   ## An array to add extra env vars
   ## For example:
