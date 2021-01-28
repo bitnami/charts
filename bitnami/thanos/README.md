@@ -121,6 +121,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.sdConfig`                              | Service Discovery configuration                                                                              | `nil`                                                   |
 | `query.existingSDConfigmap`                   | Name of existing ConfigMap with Ruler configuration                                                          | `nil`                                                   |
 | `query.extraFlags`                            | Extra Flags to passed to Thanos Query                                                                        | `[]`                                                    |
+| `query.hostAliases`                        | Add deployment host aliases                                                                          | `[]`                                                    |
 | `query.replicaCount`                          | Number of Thanos Query replicas to deploy                                                                    | `1`                                                     |
 | `query.strategyType`                          | Deployment Strategy Type                                                                                     | `RollingUpdate`                                         |
 | `query.podAntiAffinityPreset`                 | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
@@ -201,6 +202,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                       | Description                                                                                            | Default                                                 |
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `queryFrontend.enabled`                         | Enable/disable Thanos Query Frontend component                                                         | `true`                                                  |
+| `queryFrontend.hostAliases`                        | Add deployment host aliases                                                                          | `[]`                                                    |
 | `queryFrontend.logLevel`                        | Thanos Query Frontend log level                                                                        | `info`                                                  |
 | `queryFrontend.extraFlags`                      | Extra Flags to passed to Thanos Query Frontend                                                         | `[]`                                                    |
 | `queryFrontend.config`                          | Thanos Query Frontend cache configuration                                                              | `nil`                                                   |
@@ -262,6 +264,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                            | Description                                                                                            | Default                                                 |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `bucketweb.enabled`                                  | Enable/disable Thanos Bucket Web component                                                             | `false`                                                 |
+| `bucketweb.hostAliases`                        | Add deployment host aliases                                                                          | `[]`                                                    |
 | `bucketweb.logLevel`                                 | Thanos Bucket Web log level                                                                            | `info`                                                  |
 | `bucketweb.refresh`                                  | Refresh interval to download metadata from remote storage                                              | `30m`                                                   |
 | `bucketweb.timeout`                                  | Timeout to download metadata from remote storage                                                       | `5m`                                                    |
@@ -318,6 +321,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                            | Description                                                                                            | Default                                                 |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `compactor.enabled`                                  | Enable/disable Thanos Compactor component                                                              | `false`                                                 |
+| `compactor.hostAliases`                        | Add deployment host aliases                                                                          | `[]`                                                    |
 | `compactor.logLevel`                                 | Thanos Compactor log level                                                                             | `info`                                                  |
 | `compactor.retentionResolutionRaw`                   | Resolution and Retention flag                                                                          | `30d`                                                   |
 | `compactor.retentionResolution5m`                    | Resolution and Retention flag                                                                          | `30d`                                                   |
@@ -362,6 +366,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                            | Description                                                                                            | Default                                                 |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                          | `false`                                                 |
+| `storegateway.hostAliases`                        | Add statefuset host aliases                                                                          | `[]`                                                    |
 | `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                         | `info`                                                  |
 | `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                          | `[]`                                                    |
 | `storegateway.config`                                | Thanos Store Gateway cache configuration                                                               | `nil`                                                   |
@@ -417,6 +422,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                            | Description                                                                                            | Default                                                 |
 |------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `ruler.enabled`                                      | Enable/disable Thanos Ruler component                                                                  | `false`                                                 |
+| `ruler.hostAliases`                        | Add statefuset host aliases                                                                          | `[]`                                                    |
 | `ruler.logLevel`                                     | Thanos Ruler log level                                                                                 | `info`                                                  |
 | `ruler.dnsDiscovery.enabled`                         | Enable Query APIs discovery via DNS                                                                    | `true`                                                  |
 | `ruler.alertmanagers`                                | Alermanager URLs array                                                                                 | `[]`                                                    |
@@ -471,6 +477,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | Parameter                                       | Description                                                  | Default                                 |
 | ----------------------------------------------- | ------------------------------------------------------------ | --------------------------------------- |
 | `receive.enabled`                               | Enable/disable Thanos Receive component                      | `false`                                 |
+| `receive.hostAliases`                        | Add statefuset host aliases                                                                          | `[]`                                                    |
 | `receive.logLevel`                              | Thanos Receive log level                                     | `info`                                  |
 | `receive.alertmanagers`                         | Alermanager URLs array                                       | `[]`                                    |
 | `receive.extraFlags`                            | Extra Flags to passed to Thanos Receive                      | `[]`                                    |
