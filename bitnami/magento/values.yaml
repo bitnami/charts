@@ -35,6 +35,15 @@ image:
 ##
 kubeVersion:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## String to partially override magento.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -219,6 +228,7 @@ mariadb:
   enabled: true
   ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
@@ -272,9 +282,11 @@ mariadb:
 ##
 externalElasticsearch:
   ## Elasticsearch host
+  ##
   host:
 
   ## Elasticsearch port
+  ##
   port:
 
 ##
@@ -285,17 +297,22 @@ externalElasticsearch:
 elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
+  ##
   enabled: true
   ## Enable to perform the sysctl operation
+  ##
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
+  ##
   master:
     replicas: 1
   ## Elasticsearch coordinating-only node parameters
+  ##
   coordinating:
     replicas: 1
   ## Elasticsearch data node parameters
+  ##
   data:
     replicas: 1
 
@@ -325,6 +342,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -361,7 +379,6 @@ ingress:
   ## Default path for the ingress resource
   ##
   path: /
-
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -416,6 +433,7 @@ ingress:
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -555,6 +573,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: /index.php
