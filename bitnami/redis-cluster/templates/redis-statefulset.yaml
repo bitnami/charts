@@ -48,6 +48,9 @@ spec:
         {{- end }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
+      {{- if .Values.redis.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.redis.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.redis.priorityClassName }}
       priorityClassName: {{ .Values.redis.priorityClassName }}
       {{- end }}
