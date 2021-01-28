@@ -31,6 +31,15 @@ image:
 ##
 kubeVersion:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:

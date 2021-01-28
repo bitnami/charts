@@ -29,6 +29,9 @@ spec:
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
       {{- end }}
+      {{- if .Values.operator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.operator.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.operator.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -79,12 +82,12 @@ spec:
             httpGet:
               path: /metrics
               port: http
-{{ toYaml .Values.operator.livenessProbe | indent 12 }}
+          {{- toYaml .Values.operator.livenessProbe | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /metrics
               port: http
-{{ toYaml .Values.operator.readinessProbe | indent 12 }}
+          {{- toYaml .Values.operator.readinessProbe | nindent 12 }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}

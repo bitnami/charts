@@ -108,6 +108,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       containers:
         - name: cassandra
           command:
@@ -195,6 +199,18 @@ spec:
             - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
               value: {{ .Values.cluster.enableUDF | quote }}
             {{- end }}
+            {{- if .Values.containerPorts.intra  }}
+            - name: CASSANDRA_TRANSPORT_PORT_NUMBER
+              value: {{ .Values.containerPorts.intra | quote }}
+            {{- end }}
+            {{- if .Values.containerPorts.jmx }}
+            - name: CASSANDRA_JMX_PORT_NUMBER
+              value: {{ .Values.containerPorts.jmx | quote }}
+            {{- end }}
+            {{- if .Values.containerPorts.cql }}
+            - name: CASSANDRA_CQL_PORT_NUMBER
+              value: {{ .Values.containerPorts.cql | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -250,16 +266,31 @@ spec:
           {{- end }}
           ports:
             - name: intra
-              containerPort: 7000
+              containerPort: {{ .Values.containerPorts.intra | default "7000" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.intra }}
+              {{- end }}
             - name: tls
-              containerPort: 7001
+              containerPort: {{ .Values.containerPorts.tls | default "7001" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.tls }}
+              {{- end }}
             - name: jmx
-              containerPort: 7199
+              containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.jmx }}
+              {{- end }}
             - name: cql
-              containerPort: 9042
+              containerPort: {{ .Values.containerPorts.cql | default "9042" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.cql }}
+              {{- end }}
             {{- if .Values.cluster.enableRPC }}
             - name: thrift
-              containerPort: 9160
+              containerPort: {{ .Values.containerPorts.thrift | default "9160" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.thrift }}
+              {{- end }}
             {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
@@ -290,12 +321,25 @@ spec:
         - name: metrics
           image: {{ include "cassandra.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.hostNetwork }}
+          env:
+            - name: CASSANDRA_EXPORTER_CONFIG_listenPort
+              value: {{ .Values.metrics.containerPorts.http | quote }}
+            - name:  CASSANDRA_EXPORTER_CONFIG_host
+              value: localhost:{{ .Values.containerPorts.cassandra.jmx }}
+          {{- end }}
           ports:
             - name: metrics
-              containerPort: 8080
+              containerPort: {{ .Values.metrics.containerPorts.http | default "8080" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.metrics.containerPorts.http }}
+              {{- end }}
               protocol: TCP
             - name: jmx
-              containerPort: 5555
+              containerPort: {{ .Values.metrics.containerPorts.jmx | default "5555" }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.metrics.containerPorts.jmx }}
+              {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
