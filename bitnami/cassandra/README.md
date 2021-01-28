@@ -139,6 +139,15 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                           | `false`                        |
 | `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                            | `1`                            |
 | `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `nil`                          |
+| `hostNetwork`                        | Use Host-Network for the PODs (if true, also dnsPolicy: ClusterFirstWithHostNet is set)   | `false`                        |
+| `containerPorts.intra`               | Intra Port on the Host and Container                                                      | `7000`                         |
+| `containerPorts.tls`                 | TLS Port on the Host and Container                                                        | `7001`                         |
+| `containerPorts.jmx`                 | JMX Port on the Host and Container                                                        | `7199`                         |
+| `containerPorts.cql`                 | CQL Port on the Host and Container                                                        | `9042`                         |
+| `containerPorts.thrift`              | Thrift Port on the Host and Container                                                     | `9160`                         |
+| `metrics.containerPorts.http`        | HTTP Port on the Host and Container                                                       | `8080`                         |
+| `metrics.containerPorts.jmx`         | JMX Port on the Host and Container                                                        | `5555`                         |
+
 
 ### Exposure parameters
 
@@ -149,7 +158,7 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `service.thriftPort`          | Thrift Port for the Kubernetes service           | `9160`      |
 | `service.metricsPort`         | Metrics Port for the Kubernetes service          | `8080`      |
 | `service.nodePorts.cql`       | Kubernetes CQL node port                         | `""`        |
-| `service.nodePorts.rcp`       | Kubernetes Thrift node port                      | `""`        |
+| `service.nodePorts.thrift`    | Kubernetes Thrift node port                      | `""`        |
 | `service.nodePorts.metrics`   | Kubernetes Metrics node port                     | `""`        |
 | `service.loadBalancerIP`      | LoadBalancerIP if service type is `LoadBalancer` | `nil`       |
 | `service.annotations`         | Annotations for the service                      | {}          |
