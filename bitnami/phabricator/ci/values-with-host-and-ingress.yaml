@@ -1,5 +1,12 @@
+phabricatorHost: phabricator.local
 service:
   type: ClusterIP
+ingress:
+  enabled: true
+  tls: true
+  hostname: phabricator.local
+metrics:
+  enabled: true
 # Avoids issues with yamllint
 livenessProbe:
   httpGet:

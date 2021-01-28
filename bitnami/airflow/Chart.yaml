@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/bitnami-docker-airflow
   - https://airflow.apache.org/
-version: 7.3.0
+version: 7.3.1
