@@ -23,6 +23,11 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 config:
   logLevel: debug
   logFormat: pretty
@@ -44,8 +49,6 @@ config:
     routes:
       - match:
           - receiver: "dump"
-        # drop:
-        # - type: "Normal"
 
 rbac:
   # create specifies whether to install and use RBAC rules.
@@ -90,7 +93,7 @@ containerSecurityContext:
   capabilities:
     add: []
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
@@ -103,12 +106,13 @@ resources:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ##
   limits: {}
-    # cpu: 400m
-    # memory: 250Mi
+  #   cpu: 400m
+  #   memory: 250Mi
   requests: {}
-    # cpu: 100m
-    # memory: 25Mi
+  #   cpu: 100m
+  #   memory: 25Mi
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -144,6 +148,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
