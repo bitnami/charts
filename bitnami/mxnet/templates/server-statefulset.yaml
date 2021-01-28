@@ -26,6 +26,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
       {{- end }}

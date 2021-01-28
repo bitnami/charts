@@ -32,6 +32,9 @@ spec:
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.defaultBackend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.defaultBackend.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
       {{- else }}

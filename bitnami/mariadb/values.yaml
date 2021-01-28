@@ -30,6 +30,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override mariadb.fullname template (will maintain the release name)
@@ -121,6 +122,11 @@ primary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MariaDB Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -190,6 +196,7 @@ primary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -338,6 +345,7 @@ primary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MariaDB Primary pod(s)
@@ -412,6 +420,11 @@ secondary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MariaDB Secondary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -479,6 +492,7 @@ secondary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -623,6 +637,7 @@ secondary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MariaDB Secondary pod(s)
