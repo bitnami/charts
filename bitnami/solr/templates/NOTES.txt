@@ -26,20 +26,20 @@ To get the Solr credentials execute the following commands:
     echo Username: {{ .Values.authentication.adminUser }}
     echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "solr.secretName" . }} -o jsonpath="{.data.solr-password}" | base64 --decode)
 
-{{- end }}    
+{{- end }}
 
 To connect to your Solr from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     echo "Go to ${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     echo "Go to ${SERVICE_IP}:{{ .Values.service.port }}"
@@ -47,7 +47,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-    
+
     Go to localhost:{{ .Values.service.port }}
 
 {{- end }}
