@@ -45,6 +45,15 @@ nameOverride:
 ##
 fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##

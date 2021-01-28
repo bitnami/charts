@@ -99,6 +99,7 @@ The following table lists the configurable parameters of the JasperReports chart
 | Parameter                   | Description                                                                               | Default                                     |
 |-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
 | `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
+| `hostAliases`               | Add deployment host aliases                                                               | `[]`                                        |
 | `podSecurityContext`        | Jasperreports pods' Security Context                                                      | Check `values.yaml` file                    |
 | `containerSecurityContext`  | Jasperreports containers' Security Context                                                | Check `values.yaml` file                    |
 | `resources.limits`          | The resources limits for the Jasperreports container                                      | `{}`                                        |

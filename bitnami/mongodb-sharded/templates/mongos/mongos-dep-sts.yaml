@@ -41,6 +41,9 @@ spec:
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.mongos.serviceAccount "context" $) }}
+      {{- if .Values.mongos.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.mongos.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.affinity "context" $) | nindent 8 }}
       {{- else }}

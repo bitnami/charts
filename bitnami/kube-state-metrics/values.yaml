@@ -9,6 +9,7 @@ global:
   # storageClass: myStorageClass
 
   ## Additional labels to apply to all resources
+  ##
   labels: {}
   #   foo: bar
 
@@ -19,6 +20,11 @@ global:
 ## String to fully override kube-state-metrics.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -66,12 +72,14 @@ image:
   #   - myRegistryKeySecretName
 
 ## Additional command line arguments to pass to kube-state-metrics
+##
 extraArgs: {}
 
 ## Comma-separated list of namespaces to be enabled. Defaults to all namespaces
 # namespace: ""
 
 ## Collectors to be enabled
+##
 collectors:
   certificatesigningrequests: true
   configmaps: true
@@ -206,6 +214,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

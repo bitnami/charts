@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 7.8.0-debian-10-r112
+  tag: 7.8.0-debian-10-r118
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -32,6 +32,11 @@ image:
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
 kubeVersion:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##

@@ -97,6 +97,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.tlsFiles.cert`                      | Base64-encoded certificate to use with the container                                        | `nil`                                    |
 | `server.tlsFiles.key`                       | Base64-encoded key to use with the container                                                | `nil`                                    |
 | `server.tlsCerts.certFileName`              | Name of the certificate filename                                                            | `cert.pem`                               |
+| `server.hostAliases`                        | Add deployment host aliases                                                                 | `[]`                                     |
 | `server.tlsCerts.keyFileName`               | Name of the certificate filename                                                            | `key.pem`                                |
 | `server.tlsCerts.caFileName`                | Name of the certificate filename                                                            | `ca.pem`                                 |
 | `server.gatewayTimeoutCreation`             | Timeout when creating the kiam gateway                                                      | `1s`                                     |
@@ -157,6 +158,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.extraArgs`                           | Extra arguments to add to the default kiam command                                         | `[]`                                     |
 | `agent.command`                             | Override kiam default command                                                              | `[]`                                     |
 | `agent.args`                                | Override kiam default args                                                                 | `[]`                                     |
+| `agent.hostAliases`                         | Add deployment host aliases                                                                | `[]`                                     |
 | `agent.logLevel`                            | Logging level                                                                              | `info`                                   |
 | `agent.sslCertHostPath`                     | Path to the host system SSL certificates (necessary for contacting the AWS metadata agent) | `/etc/ssl/certs`                         |
 | `agent.tlsFiles.ca`                         | Base64-encoded CA to use with the container                                                | `nil`                                    |
@@ -237,7 +239,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                         | Description                                                                  | Default                                                      |
 |---------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `agent.metrics.enabled`                           | Enable exposing kiam statistics                                              | `false`                                                      |
-| `agent.metrics.port`                              | Service HTTP management port                                                | `9990`                                                       |
+| `agent.metrics.port`                              | Service HTTP management port                                                 | `9990`                                                       |
 | `agent.metrics.syncInterval`                      | Metrics synchronization interval statistics                                  | `5s`                                                         |
 | `agent.metrics.annotations`                       | Annotations for enabling prometheus to access the metrics endpoints          | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
 | `agent.metrics.serviceMonitor.enabled`            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                                                      |

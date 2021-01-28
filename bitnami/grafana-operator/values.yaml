@@ -27,6 +27,7 @@ commonAnnotations: {}
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
 ## Constants it is using for creating instances:
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
+##
 operator:
   enabled: true
   ## Number of grafana-operator Pod replicas
@@ -64,6 +65,7 @@ operator:
   args:
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
     ## ensure that the operator is able to get data from other namespaces.
+    ##
     scanAllNamespaces: false
     scanNamespaces: []
 
@@ -99,7 +101,13 @@ operator:
   ## requests:
   ##   cpu: 100m
   ##   memory: 128Mi
+  ##
   resources: {}
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -116,6 +124,7 @@ operator:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ''
     ## Node label key to match
     ## E.g.
@@ -238,6 +247,7 @@ grafana:
   ## The amount of pods scheduled by the created deployment
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
+  ##
   replicaCount: 1
 
   ## Pod affinity preset
@@ -259,6 +269,7 @@ grafana:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
