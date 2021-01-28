@@ -141,11 +141,11 @@ spec:
       {{- if or $query.grpcTLS.server.secure $query.grpcTLS.server.existingSecret }}
         - name: tls-server
           secret:
-            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "context" $) }}
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "defaultNameSuffix" "query-tls-server" "context" $) }}
       {{- end }}
       {{- if or $query.grpcTLS.client.secure $query.grpcTLS.client.existingSecret }}
         - name: tls-client
           secret:
-            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "context" $) }}
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "defaultNameSuffix" "query-tls-client" "context" $) }}
       {{- end }}
 {{- end }}

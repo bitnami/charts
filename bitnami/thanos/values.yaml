@@ -255,7 +255,7 @@ query:
       ca:
       # Existing secret containing your own TLS certificates.
       # existingSecret:
-      #   name: 
+      #   name:
       #   keyMapping:
       #     ca-cert: ca.pem
       #     tls-cert: cert.pem
