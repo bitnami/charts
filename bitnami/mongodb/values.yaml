@@ -35,6 +35,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns on Bitnami debugging in minideb-extras-base
   ## ref:  https://github.com/bitnami/minideb-extras-base
+  ##
   debug: false
 
 ## String to partially override mongodb.fullname template (will maintain the release name)
@@ -91,6 +92,7 @@ auth:
 
 tls:
   ## Enable or disable MongoDB TLS Support
+  ##
   enabled: false
 
   ## Existing secret with MongoDB TLS certificates
@@ -109,6 +111,11 @@ tls:
     repository: bitnami/nginx
     tag: 1.19.6-debian-10-r34
     pullPolicy: IfNotPresent
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
@@ -193,6 +200,7 @@ configuration: ""
 ##   my_init_script.sh: |
 ##      #!/bin/bash
 ##      echo "Do something."
+##
 initdbScripts: {}
 
 ## Existing ConfigMap with custom init scripts
@@ -268,6 +276,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -411,6 +420,7 @@ sidecars: {}
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
+##
 extraVolumeMounts: []
 extraVolumes: []
 
@@ -463,9 +473,11 @@ persistence:
   ##
   subPath: ""
   ## Fine tuning for volumeClaimTemplates
+  ##
   volumeClaimTemplates:
     ## A label query over volumes to consider for binding (e.g. when using local volumes)
     ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+    ##
     selector:
 
 ## Service parameters
@@ -595,12 +607,18 @@ externalAccess:
 arbiter:
   ## Enable deploying the MongoDB Arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
+  ##
   enabled: true
 
   ## MongoDB configuration file for the Arbiter. For documentation of all options, see:
   ##   http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   configuration: ""
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## ConfigMap with MongoDB configuration for the Arbiter
   ## NOTE: When it's set the arbiter.configuration parameter is ignored
@@ -662,6 +680,7 @@ arbiter:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -804,6 +823,7 @@ arbiter:
   ## extraVolumes:
   ##   - name: extras
   ##     emptyDir: {}
+  ##
   extraVolumeMounts: []
   extraVolumes: []
 
@@ -854,10 +874,12 @@ podSecurityPolicy:
   ##
   create: false
   ## You can either use predefined policy with some adjustments
+  ##
   allowPrivilegeEscalation: false
   privileged: false
   ## Or you can specifiy the full spec to use for PSP
   ## Defining a spec ignores the above values.
+  ##
   spec: {}
   ## Example:
   ##    allowPrivilegeEscalation: false
@@ -890,6 +912,7 @@ podSecurityPolicy:
   ##      - 'secret'
   ##      - 'emptyDir'
   ##      - 'persistentVolumeClaim'
+  ##
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -1023,6 +1046,7 @@ metrics:
   ##
   serviceMonitor:
     ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
     enabled: false
 
     ## Specify the namespace where Prometheus Operator is running
