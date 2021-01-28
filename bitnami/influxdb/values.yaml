@@ -226,6 +226,14 @@ influxdb:
   ##
   tolerations: []
 
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -266,6 +274,14 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
 
   ## Container ports
   ##
@@ -415,6 +431,14 @@ relay:
   ##
   tolerations: []
 
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -455,6 +479,14 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
 
   ## Container ports
   ##

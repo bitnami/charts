@@ -188,7 +188,7 @@ spec:
               protocol: TCP
           {{- if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
-          livenessProbe:
+          livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:
               command:
                 - bash
@@ -210,15 +210,12 @@ spec:
                   else
                       timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
-            initialDelaySeconds: {{ .Values.influxdb.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.influxdb.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.influxdb.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.influxdb.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.influxdb.livenessProbe.failureThreshold }}
+          {{- else if .Values.influxdb.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.influxdb.readinessProbe.enabled }}
           {{- $readinessTimeout := sub (int .Values.influxdb.readinessProbe.timeoutSeconds) 1 }}
-          readinessProbe:
+          readinessProbe: {{- omit .Values.influxdb.readinessProbe "enabled" | toYaml | nindent 12 }}
             exec:
               command:
                 - bash
@@ -240,11 +237,8 @@ spec:
                   else
                       timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
-            initialDelaySeconds: {{ .Values.influxdb.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.influxdb.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.influxdb.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.influxdb.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.influxdb.readinessProbe.failureThreshold }}
+          {{- else if .Values.influxdb.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.influxdb.resources }}
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
@@ -270,6 +264,9 @@ spec:
             - name: data
               mountPath: /bitnami/influxdb
             {{- end }}
+          {{- if .Values.influxdb.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
       volumes:
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
@@ -298,4 +295,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+      {{- if .Values.influxdb.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
 {{- end }}
