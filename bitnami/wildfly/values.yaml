@@ -56,6 +56,11 @@ commonAnnotations: {}
 ##
 clusterDomain: cluster.local
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
@@ -199,6 +204,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
