@@ -39,9 +39,11 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: server
     spec:
-      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
-
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.server.affinity "context" $) | nindent 8 }}
       {{- else }}
