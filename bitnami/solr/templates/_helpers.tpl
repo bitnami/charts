@@ -80,3 +80,13 @@ Return  the proper Storage Class
 {{- define "solr.secretName" -}}
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
+
+
+{{/* Return the proper Zookeeper host */}}
+{{- define "solr.zookeeper.host" -}}
+{{- if .Values.externalZookeeper.servers -}}
+{{- join "," .Values.externalZookeeper.servers -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name "zookeeper" -}}
+{{- end }}
+{{- end -}}

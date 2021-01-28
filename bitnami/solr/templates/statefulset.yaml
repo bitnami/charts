@@ -99,18 +99,6 @@ spec:
                 export SOLR_CLOUD_BOOTSTRAP=yes
               fi
               {{- end }}
-              SOLR_ZK_HOSTS=""
-              {{- if not .Values.externalZookeeper.servers }}
-              # Set as Zookeeper hosts the FQDN of the zookeeper pods
-              nodes=($(getent hosts {{ .Release.Name }}-zookeeper-headless | awk '{print $2}'))
-              for node in "${nodes[@]}"; do
-                SOLR_ZK_HOSTS+="${node}:{{ .Values.zookeeper.port }},"
-              done
-              {{- else }}
-              SOLR_ZK_HOSTS="{{ .Values.externalZookeeper.servers }}"
-              {{- end }}
-              export SOLR_ZK_HOSTS
-              echo "Zookeeper Hosts: ${SOLR_ZK_HOSTS}"
               # Use hostname instead of IP to register in Zookeeper
               export SOLR_HOST="${MY_POD_NAME}.{{ include "solr.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
               /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh
@@ -131,7 +119,6 @@ spec:
               value: {{ .Values.containerPort | quote }}
             - name: SOLR_SERVER_DIRECTORY
               value: {{ .Values.serverDirectory | quote }}
-            # Parameters for the cloud bootstrap
             {{- if .Values.cloudEnabled }}
             - name: SOLR_COLLECTION
               value: {{ .Values.collection | quote }}
@@ -155,12 +142,14 @@ spec:
             - name: SOLR_ENABLE_AUTHENTICATION
               value: "yes"
             - name: SOLR_ADMIN_USERNAME
-              value: {{ .Values.authentication.adminUsername }}
+              value: {{ .Values.authentication.adminUsername | quote }}
             - name: SOLR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
                   key: solr-password
+            - name: SOLR_ZK_HOSTS
+              value: "{{ include "solr.zookeeper.host" . }}:{{ .Values.zookeeper.port }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -189,7 +178,7 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             httpGet:
               scheme: "HTTP"
-              path: "/solr/admin/info/system"
+              path: "/solr"
               port: {{ .Values.service.port }}    
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
@@ -203,7 +192,7 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             httpGet:
               scheme: "HTTP"
-              path: "/solr/admin/info/system"
+              path: "/solr"
               port: {{ .Values.service.port }}   
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -211,8 +200,6 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            - name: logs
-              mountPath: {{ .Values.logPersistence.mountPath }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -231,17 +218,8 @@ spec:
         - name: data
           emptyDir: {}
         {{- end }}
-        {{- if and .Values.logPersistence.enabled .Values.logPersistence.existingClaim }}
-        - name: logs
-          persistentVolumeClaim:
-            claimName: {{ printf "%s" (tpl .Values.logPersistence.existingClaim .) }}
-        {{- else }}
-        - name: logs
-          emptyDir: {}
-        {{- end }}
-  {{- if or (and .Values.persistence.enabled (not .Values.persistence.existingClaim)) (and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim)) }}
-  volumeClaimTemplates:
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+  volumeClaimTemplates:
     - metadata:
         name: data
         {{- if .Values.persistence.annotations }}
@@ -256,21 +234,4 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "solr.storageClass" . | nindent 8 }}
-  {{- end }}
-  {{- if and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim) }}
-    - metadata:
-        name: logs
-        {{- if .Values.logPersistence.annotations }}
-        annotations: {{- include "solr.tplValue" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
-        {{- end }}
-      spec:
-        accessModes:
-        {{- range .Values.logPersistence.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .Values.logPersistence.size | quote }}
-        {{ include "solr.storageClass" . | nindent 8 }}
-  {{- end }}
   {{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.exporter.enabled }}
+{{- if and .Values.exporter.enabled (not .Values.authentication.enabled) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
