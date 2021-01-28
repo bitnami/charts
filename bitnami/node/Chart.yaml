@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 15.0.2
+version: 15.1.0
