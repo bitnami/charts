@@ -49,6 +49,9 @@ spec:
         runAsUser: {{ .Values.bucketweb.securityContext.runAsUser }}
         fsGroup: {{ .Values.bucketweb.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.bucketweb.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: bucketweb
           image: {{ include "thanos.image" . }}

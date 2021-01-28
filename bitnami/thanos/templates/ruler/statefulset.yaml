@@ -69,6 +69,9 @@ spec:
             - name: data
               mountPath: /data
       {{- end }}
+      {{- if .Values.ruler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: ruler
           image: {{ include "thanos.image" . }}

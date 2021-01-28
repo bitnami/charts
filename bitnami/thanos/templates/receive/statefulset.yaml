@@ -53,6 +53,9 @@ spec:
       securityContext:
         fsGroup: {{ .Values.receive.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.receive.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: receive
           image: {{ include "thanos.image" . }}

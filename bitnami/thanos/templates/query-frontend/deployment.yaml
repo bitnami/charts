@@ -54,6 +54,9 @@ spec:
         runAsUser: {{ .Values.queryFrontend.securityContext.runAsUser }}
         fsGroup: {{ .Values.queryFrontend.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.queryFrontend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: query-frontend
           image: {{ include "thanos.image" . }}

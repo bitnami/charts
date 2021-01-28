@@ -70,6 +70,9 @@ spec:
             - name: data
               mountPath: /data
       {{- end }}
+      {{- if .Values.storegateway.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: storegateway
           image: {{ include "thanos.image" . }}
