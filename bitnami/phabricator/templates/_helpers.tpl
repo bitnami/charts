@@ -15,10 +15,17 @@ Return the proper image name (for the metrics image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "phabricator.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "phabricator.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -38,8 +45,13 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "phabricator.host" -}}
+{{- if .Values.ingress.enabled }}
+{{- $host := .Values.ingress.hostname | default "" -}}
+{{- default (include "phabricator.serviceIP" .) $host -}}
+{{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
 {{- default (include "phabricator.serviceIP" .) $host -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -47,11 +59,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "phabricator.mariadb.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- printf "%s-mariadb" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-mariadb" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -70,17 +78,6 @@ Return the MariaDB Hostname
 {{- end -}}
 
 {{/*
-Return the MariaDB User
-*/}}
-{{- define "phabricator.databaseUser" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- printf "%s" .Values.mariadb.auth.username -}}
-{{- else -}}
-    {{- printf "%s" .Values.externalDatabase.user -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the MariaDB Port
 */}}
 {{- define "phabricator.databasePort" -}}
@@ -88,6 +85,17 @@ Return the MariaDB Port
     {{- printf "3306" -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB Root User
+*/}}
+{{- define "phabricator.databaseRootUser" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "root" -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.rootUser -}}
 {{- end -}}
 {{- end -}}
 
