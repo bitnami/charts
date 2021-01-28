@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 14.15.4-debian-10-r0
+  tag: 14.15.4-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,6 +38,11 @@ kubeVersion:
 ## String to fully override node.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -80,7 +85,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.0-debian-10-r7
+    tag: 2.30.0-debian-10-r26
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
