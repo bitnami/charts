@@ -30,6 +30,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override common.names.fullname template (will maintain the release name)
@@ -39,7 +40,6 @@ image:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
-
 
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
@@ -118,6 +118,11 @@ entrypoint:
 ##
 mode: standalone
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Number of nodes that will run the code
 ##   WORLD_SIZE will be set to this value
 ##
@@ -166,6 +171,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
