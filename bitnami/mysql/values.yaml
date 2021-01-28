@@ -30,6 +30,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override common.names.fullname template (will maintain the release name)
@@ -121,6 +122,11 @@ primary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MySQL Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -192,6 +198,7 @@ primary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -333,6 +340,7 @@ primary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Primary pod(s)
@@ -401,6 +409,11 @@ secondary:
   ## Number of MySQL Secondary replicas to deploy
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Command and args for running the container (set to default if not set). Use array form
   ##
@@ -476,6 +489,7 @@ secondary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -613,6 +627,7 @@ secondary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Secondary pod(s)
@@ -735,6 +750,7 @@ metrics:
   ## MySQL Prometheus exporter service parameters
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes  ##
+  ##
   service:
     type: ClusterIP
     port: 9104

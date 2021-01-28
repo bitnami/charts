@@ -54,6 +54,11 @@ forwarder:
   daemonUser: root
   daemonGroup: root
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -65,6 +70,7 @@ forwarder:
 
   ## K8s Security Context for forwarder container
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
   containerSecurityContext:
     enabled: true
     privileged: false
@@ -339,6 +345,7 @@ forwarder:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -375,10 +382,12 @@ forwarder:
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
   serviceAccount:
     ## Specifies whether a ServiceAccount should be created
     ##
@@ -406,6 +415,7 @@ forwarder:
   ##
 
   ## Persist data to a persistent volume
+  ##
   persistence:
     enabled: false
     ## If persistence enabled, a hostPath volume mounts a directory of your choice from the host node's filesystem into your Pod.
@@ -415,6 +425,7 @@ forwarder:
     ##     enabled: true
     ##     hostPath:
     ##       path: /tmp/buffer
+    ##
     hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
 
@@ -463,8 +474,14 @@ aggregator:
     runAsGroup: 1001
     fsGroup: 1001
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## K8s Security Context for Aggregator containers
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
   containerSecurityContext:
     enabled: true
     privileged: false
@@ -770,6 +787,7 @@ aggregator:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -806,10 +824,12 @@ aggregator:
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ##
   serviceAccount:
     ## Specifies whether a ServiceAccount should be created
     ##
@@ -843,6 +863,7 @@ aggregator:
             averageUtilization: 60
 
   ## Persist data to a persistent volume
+  ##
   persistence:
     enabled: false
     ## If defined, storageClassName: <storageClass>
@@ -893,6 +914,7 @@ aggregator:
 ##
 ## This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead. Only the
 ## forwarder was affected by the historical usage here.
+##
 serviceAccount: {}
 
 ## Role Based Access
@@ -900,6 +922,7 @@ serviceAccount: {}
 ##
 ## This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead. Only the
 ## forwarder was affected by the historical usage here.
+##
 rbac: {}
 
 ## Prometheus Exporter / Metrics

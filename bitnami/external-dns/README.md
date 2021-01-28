@@ -46,7 +46,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the external-dns chart and their default values.
 
-
 | Parameter                              | Description                                                                                                                                                                                                     | Default                                                 |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                 | Global Docker image registry                                                                                                                                                                                    | `nil`                                                   |
@@ -63,6 +62,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `namespace`                            | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                    | `""`                                                    |
 | `fqdnTemplates`                        | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                      | `[]`                                                    |
 | `combineFQDNAnnotation`                | Combine FQDN template and annotations instead of overwriting                                                                                                                                                    | `false`                                                 |
+| `hostAliases`                          | Add deployment host aliases                                                                                                                                                                                     | `[]`                                                    |
 | `ignoreHostnameAnnotation`             | Ignore hostname annotation when generating DNS names, valid only when fqdn-template is set                                                                                                                      | `false`                                                 |
 | `publishInternalServices`              | Whether to publish DNS records for ClusterIP services or not                                                                                                                                                    | `false`                                                 |
 | `publishHostIP`                        | Allow external-dns to publish host-ip for headless services                                                                                                                                                     | `false`                                                 |
@@ -167,7 +167,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `logFormat`                            | Which format to output logs in (options: text, json)                                                                                                                                                            | `text`                                                  |
 | `interval`                             | Interval update period to use                                                                                                                                                                                   | `1m`                                                    |
 | `triggerLoopOnEvent`                   | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                                                       | `false`                                                 |
-| `policy`                               | Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )                                                                                                              | `upsert-only`                                           |
+| `policy`                               | Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )                                                                                                             | `upsert-only`                                           |
 | `registry`                             | Registry method to use (options: txt, noop)                                                                                                                                                                     | `txt`                                                   |
 | `txtOwnerId`                           | When using the TXT registry, a name that identifies this instance of ExternalDNS (optional)                                                                                                                     | `"default"`                                             |
 | `txtPrefix`                            | When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)                                                                                                 | `""`                                                    |
@@ -275,7 +275,6 @@ $ helm install my-release \
   bitnami/external-dns
 ```
 
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -285,7 +284,6 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 4.3.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
-
 
 ### To 4.0.0
 
