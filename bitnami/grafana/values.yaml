@@ -35,6 +35,11 @@ kubeVersion:
 ##
 extraDeploy: []
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## String to partially override grafana.fullname template (will maintain the release name)
 ##
 # nameOverride:

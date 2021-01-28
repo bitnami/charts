@@ -89,7 +89,7 @@ data:
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.port }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_IP="$(<${SHARED_FILE})"
+    export EXTERNAL_ACCESS_IP="${HOST_IP}"
     {{- else if .Values.externalAccess.service.domain }}
     export EXTERNAL_ACCESS_IP={{ .Values.externalAccess.service.domain }}
     {{- else }}

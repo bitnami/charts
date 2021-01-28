@@ -72,8 +72,8 @@ The following table lists the configurable parameters of the Magento chart and t
 | `fullnameOverride`  | String to fully override magento.fullname template                           | `nil`                                                   |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil` 
-|
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
+|                     |                                                                              |                                                         |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
 
 ### Magento parameters
@@ -104,6 +104,7 @@ The following table lists the configurable parameters of the Magento chart and t
 | `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
 | `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `magentoSkipInstall`                 | Skip Magento installation wizard (`no` / `yes`)                                                                       | `false`                                        |
 | `magentoHost`                        | Magento host to create application URLs                                                                               | `nil`                                          |
 | `magentoUsername`                    | User of the application                                                                                               | `user`                                         |
@@ -156,67 +157,67 @@ The following table lists the configurable parameters of the Magento chart and t
 
 ### Elasticsearch parameters
 
-| Parameter                        | Description                                 | Default            |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `elasticsearch.enabled`                 | Use the Elasticsearch chart as search engine               | `true`                                                  |
-| `elasticsearch.image.registry`          | Elasticsearch image registry                               | `docker.io`                                             |
-| `elasticsearch.image.repository`        | Elasticsearch image name                                   | `bitnami/elasticsearch`                                 |
-| `elasticsearch.image.tag`               | Elasticsearch image tag                                    | `{TAG_NAME}`                                            |
-| `elasticsearch.sysctlImage.enabled`     | Enable kernel settings modifier image for Elasticsearch    | `true`                                                  |
-| `elasticsearch.master.replicas`         | Desired number of Elasticsearch master-eligible nodes      | `1`                                                     |
-| `elasticsearch.coordinating.replicas`   | Desired number of Elasticsearch coordinating-only nodes    | `1`                                                     |
-| `elasticsearch.data.replicas`           | Desired number of Elasticsearch data nodes                 | `1`                                                     |
-| `externalElasticsearch.host`            | Host of the external elasticsearch server                  | `nil`                                                   |
-| `externalElasticsearch.port`            | Port of the external elasticsearch server                  | `nil`                                                   |
+| Parameter                             | Description                                             | Default                 |
+|---------------------------------------|---------------------------------------------------------|-------------------------|
+| `elasticsearch.enabled`               | Use the Elasticsearch chart as search engine            | `true`                  |
+| `elasticsearch.image.registry`        | Elasticsearch image registry                            | `docker.io`             |
+| `elasticsearch.image.repository`      | Elasticsearch image name                                | `bitnami/elasticsearch` |
+| `elasticsearch.image.tag`             | Elasticsearch image tag                                 | `{TAG_NAME}`            |
+| `elasticsearch.sysctlImage.enabled`   | Enable kernel settings modifier image for Elasticsearch | `true`                  |
+| `elasticsearch.master.replicas`       | Desired number of Elasticsearch master-eligible nodes   | `1`                     |
+| `elasticsearch.coordinating.replicas` | Desired number of Elasticsearch coordinating-only nodes | `1`                     |
+| `elasticsearch.data.replicas`         | Desired number of Elasticsearch data nodes              | `1`                     |
+| `externalElasticsearch.host`          | Host of the external elasticsearch server               | `nil`                   |
+| `externalElasticsearch.port`          | Port of the external elasticsearch server               | `nil`                   |
 
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                                          | Default                                                        |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| `persistence.enabled`                       | Enable persistence using PVC                                                                         | `true`                                                         |
-| `persistence.storageClass`                  | PVC Storage Class for Magento volume                                                                 | `nil` (uses alpha storage class annotation)                    |
-| `persistence.existingClaim`                 | An Existing PVC name for Magento volume                                                              | `nil` (uses alpha storage class annotation)                    |
-| `persistence.hostPath`                      | Host mount path for Magento volume                                                                   | `nil` (will not mount to a host path)                          |
-| `persistence.accessMode`                    | PVC Access Mode for Magento volume                                                                   | `ReadWriteOnce`                                                |
-| `persistence.size`                          | PVC Storage Request for Magento volume                                                               | `8Gi`                                                          |
+| Parameter                   | Description                             | Default                                     |
+|-----------------------------|-----------------------------------------|---------------------------------------------|
+| `persistence.enabled`       | Enable persistence using PVC            | `true`                                      |
+| `persistence.storageClass`  | PVC Storage Class for Magento volume    | `nil` (uses alpha storage class annotation) |
+| `persistence.existingClaim` | An Existing PVC name for Magento volume | `nil` (uses alpha storage class annotation) |
+| `persistence.hostPath`      | Host mount path for Magento volume      | `nil` (will not mount to a host path)       |
+| `persistence.accessMode`    | PVC Access Mode for Magento volume      | `ReadWriteOnce`                             |
+| `persistence.size`          | PVC Storage Request for Magento volume  | `8Gi`                                       |
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                                 | Default                 |
-|----------------------------------|---------------------------------------------|-------------------------|
-| `service.type`                   | Kubernetes Service type                     | `LoadBalancer`          |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request        | `LoadBalancer`          |
-| `service.port`                   | Service HTTP port                           | `80`                    |
-| `service.httpsPort`              | Service HTTPS port                          | `443`                   |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation        | `Cluster`               |
-| `service.nodePorts.http`         | Kubernetes http node port                   | `""`                    |
-| `service.nodePorts.https`        | Kubernetes https node port                  | `""`                    |
-| `ingress.enabled`                | Enable ingress controller resource          | `false`                 |
-| `ingress.certManager`            | Add annotations for cert-manager            | `false`                 |
-| `ingress.hostname`               | Default host for the ingress resource       | `magento.local`         |
-| `ingress.path`                   | Default path for the ingress resource       | `/`                     |
-| `ingress.pathType`               | Default path type for the ingress resource  | `ImplementationSpecific`|
-| `ingress.tls`                    | Enable TLS for `ingress.hostname` parameter | `false`                 |
-| `ingress.annotations`            | Ingress annotations                         | `{}`                    |
-| `ingress.extraHosts[0].name`     | Hostname to your Magento installation       | `nil`                   |
-| `ingress.extraHosts[0].path`     | Path within the url structure               | `nil`                   |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hosts      | `nil`                   |
-| `ingress.extraTls[0].secretName` | TLS Secret (certificates)                   | `nil`                   |
-| `ingress.secrets[0].name`        | TLS Secret Name                             | `nil`                   |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                      | `nil`                   |
-| `ingress.secrets[0].key`         | TLS Secret Key                              | `nil`                   |
+| Parameter                        | Description                                 | Default                  |
+|----------------------------------|---------------------------------------------|--------------------------|
+| `service.type`                   | Kubernetes Service type                     | `LoadBalancer`           |
+| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request        | `LoadBalancer`           |
+| `service.port`                   | Service HTTP port                           | `80`                     |
+| `service.httpsPort`              | Service HTTPS port                          | `443`                    |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation        | `Cluster`                |
+| `service.nodePorts.http`         | Kubernetes http node port                   | `""`                     |
+| `service.nodePorts.https`        | Kubernetes https node port                  | `""`                     |
+| `ingress.enabled`                | Enable ingress controller resource          | `false`                  |
+| `ingress.certManager`            | Add annotations for cert-manager            | `false`                  |
+| `ingress.hostname`               | Default host for the ingress resource       | `magento.local`          |
+| `ingress.path`                   | Default path for the ingress resource       | `/`                      |
+| `ingress.pathType`               | Default path type for the ingress resource  | `ImplementationSpecific` |
+| `ingress.tls`                    | Enable TLS for `ingress.hostname` parameter | `false`                  |
+| `ingress.annotations`            | Ingress annotations                         | `{}`                     |
+| `ingress.extraHosts[0].name`     | Hostname to your Magento installation       | `nil`                    |
+| `ingress.extraHosts[0].path`     | Path within the url structure               | `nil`                    |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hosts      | `nil`                    |
+| `ingress.extraTls[0].secretName` | TLS Secret (certificates)                   | `nil`                    |
+| `ingress.secrets[0].name`        | TLS Secret Name                             | `nil`                    |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                      | `nil`                    |
+| `ingress.secrets[0].key`         | TLS Secret Key                              | `nil`                    |
 
 ### Metrics parameters
 
@@ -235,25 +236,25 @@ The following table lists the configurable parameters of the Magento chart and t
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento) image documentation.
 

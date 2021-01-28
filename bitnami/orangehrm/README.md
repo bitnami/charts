@@ -101,6 +101,7 @@ The following table lists the configurable parameters of the OrangeHRM chart and
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
 | `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
 | `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
 | `orangehrmUsername`                  | User of the application                                                                                               | `admin`                                        |
 | `orangehrmPassword`                  | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
