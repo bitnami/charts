@@ -35,8 +35,11 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: skipper
     spec:
-      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      {{- if .Values.skipper.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.skipper.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.affinity "context" $) | nindent 8 }}
       {{- else }}
