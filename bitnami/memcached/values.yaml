@@ -107,6 +107,11 @@ resources:
     memory: 256Mi
     cpu: 250m
 
+## If you want to override the port name (can be usefull when using a service mesh)
+## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+##
+portName: memcache
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -233,6 +238,10 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9150"
+  ## If you want to override the port name (can be usefull when using a service mesh)
+  ## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+  ##
+  portName: metrics
   ## Memcached Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
