@@ -85,6 +85,7 @@ The following tables lists the configurable parameters of the Mediawki chart and
 | `mediawikiName`      | Name for the wiki                                                    | `My Wiki`                                               |
 | `mediawikiHost`      | Mediawiki host to create application URLs                            | `nil`                                                   |
 | `allowEmptyPassword` | Allow DB blank passwords                                             | `yes`                                                   |
+| `hostAliases`        | Add deployment host aliases                                          | `Check values.yaml`                                     |
 | `smtpHost`           | SMTP host                                                            | `nil`                                                   |
 | `smtpPort`           | SMTP port                                                            | `nil`                                                   |
 | `smtpHostID`         | SMTP host ID                                                         | `nil`                                                   |

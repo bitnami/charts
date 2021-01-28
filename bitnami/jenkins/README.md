@@ -95,6 +95,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 |-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
 | `podSecurityContext`        | Jenkins pods' Security Context                                                            | Check `values.yaml` file                    |
 | `containerSecurityContext`  | Jenkins containers' Security Context                                                      | Check `values.yaml` file                    |
+| `hostAliases`               | Add deployment host aliases                                                               | `[]`                                        |
 | `resources.limits`          | The resources limits for the Jenkins container                                            | `{}`                                        |
 | `resources.requests`        | The requested resources for the Jenkins container                                         | `{ cpu: "300m", memory: "512Mi" }`          |
 | `livenessProbe`             | Liveness probe configuration for Jenkins                                                  | Check `values.yaml` file                    |

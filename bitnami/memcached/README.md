@@ -47,61 +47,62 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the Memcached chart and their default values.
 
-| Parameter                                | Description                                                                                            | Default                                                      |
-|------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                   | Global Docker image registry                                                                           | `nil`                                                        |
-| `global.imagePullSecrets`                | Global Docker registry secret names as an array                                                        | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.registry`                         | Memcached image registry                                                                               | `docker.io`                                                  |
-| `image.repository`                       | Memcached Image name                                                                                   | `bitnami/memcached`                                          |
-| `image.tag`                              | Memcached Image tag                                                                                    | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                       | Memcached image pull policy                                                                            | `IfNotPresent`                                               |
-| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                           | String to partially override common.names.fullname template with a string                              | `nil`                                                        |
-| `fullnameOverride`                       | String to fully override common.names.fullname template with a string                                  | `nil`                                                        |
-| `clusterDomain`                          | Kubernetes cluster domain                                                                              | `cluster.local`                                              |
-| `architecture`                           | Memcached architecture. Allowed values: standalone or high-availability                                 | `standalone`                                                 |
-| `replicaCount`                           | Number of containers                                                                                   | `1`                                                          |
-| `extraEnv`                               | Additional env vars to pass                                                                            | `{}`                                                         |
-| `arguments`                              | Arguments to pass                                                                                      | `["/run.sh"]`                                                |
-| `memcachedUsername`                      | Memcached admin user                                                                                   | `nil`                                                        |
-| `memcachedPassword`                      | Memcached admin password                                                                               | `nil`                                                        |
-| `service.type`                           | Kubernetes service type for Memcached                                                                  | `ClusterIP`                                                  |
-| `service.port`                           | Memcached service port                                                                                 | `11211`                                                      |
-| `service.clusterIP`                      | Specific cluster IP when service type is cluster IP. Use `None` for headless service                   | `nil`                                                        |
-| `service.nodePort`                       | Kubernetes Service nodePort                                                                            | `nil`                                                        |
-| `service.loadBalancerIP`                 | `loadBalancerIP` if service type is `LoadBalancer`                                                     | `nil`                                                        |
-| `service.annotations`                    | Additional annotations for Memcached service                                                           | `{}`                                                         |
-| `resources.requests`                     | CPU/Memory resource requests                                                                           | `{memory: "256Mi", cpu: "250m"}`                             |
-| `resources.limits`                       | CPU/Memory resource limits                                                                             | `{}`                                                         |
-| `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                              | `true`                                                       |
-| `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                                 | `nil` (uses alpha storage class annotation)                  |
-| `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                                   | `ReadWriteOnce`                                              |
-| `persistence.size`                       | PVC Storage Request for Memcached volume                                                               | `8Gi`                                                        |
-| `securityContext.enabled`                | Enable security context                                                                                | `true`                                                       |
-| `securityContext.fsGroup`                | Group ID for the container                                                                             | `1001`                                                       |
-| `securityContext.runAsUser`              | User ID for the container                                                                              | `1001`                                                       |
-| `securityContext.readOnlyRootFilesystem` | Enable read-only filesystem                                                                            | `false`                                                      |
-| `podAnnotations`                         | Pod annotations                                                                                        | `{}`                                                         |
-| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                                                         |
-| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `soft`                                                       |
-| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                         |
-| `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                                 | `""`                                                         |
-| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                              | `[]`                                                         |
-| `affinity`                               | Affinity for pod assignment                                                                            | `{}` (evaluated as a template)                               |
-| `nodeSelector`                           | Node labels for pod assignment                                                                         | `{}` (evaluated as a template)                               |
-| `tolerations`                            | Tolerations for pod assignment                                                                         | `[]` (evaluated as a template)                               |
-| `priorityClassName`                      | Controller priorityClassName                                                                           | `nil`                                                        |
-| `metrics.enabled`                        | Start a side-car prometheus exporter                                                                   | `false`                                                      |
-| `metrics.image.registry`                 | Memcached exporter image registry                                                                      | `docker.io`                                                  |
-| `metrics.image.repository`               | Memcached exporter image name                                                                          | `bitnami/memcached-exporter`                                 |
-| `metrics.image.tag`                      | Memcached exporter image tag                                                                           | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`               | Image pull policy                                                                                      | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`              | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`                 | Additional annotations for Metrics exporter                                                            | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
-| `metrics.resources`                      | Exporter resource requests/limit                                                                       | `{}`                                                         |
-| `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                                         | `ClusterIP`                                                  |
-| `metrics.service.port`                   | Prometheus metrics service port                                                                        | `9150`                                                       |
-| `metrics.service.annotations`            | Prometheus exporter svc annotations                                                                    | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
+| Parameter                                | Description                                                                               | Default                                                      |
+|------------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `global.imageRegistry`                   | Global Docker image registry                                                              | `nil`                                                        |
+| `global.imagePullSecrets`                | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
+| `image.registry`                         | Memcached image registry                                                                  | `docker.io`                                                  |
+| `image.repository`                       | Memcached Image name                                                                      | `bitnami/memcached`                                          |
+| `image.tag`                              | Memcached Image tag                                                                       | `{TAG_NAME}`                                                 |
+| `image.pullPolicy`                       | Memcached image pull policy                                                               | `IfNotPresent`                                               |
+| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `nameOverride`                           | String to partially override common.names.fullname template with a string                 | `nil`                                                        |
+| `fullnameOverride`                       | String to fully override common.names.fullname template with a string                     | `nil`                                                        |
+| `clusterDomain`                          | Kubernetes cluster domain                                                                 | `cluster.local`                                              |
+| `architecture`                           | Memcached architecture. Allowed values: standalone or high-availability                   | `standalone`                                                 |
+| `replicaCount`                           | Number of containers                                                                      | `1`                                                          |
+| `extraEnv`                               | Additional env vars to pass                                                               | `{}`                                                         |
+| `arguments`                              | Arguments to pass                                                                         | `["/run.sh"]`                                                |
+| `hostAliases`                            | Add deployment host aliases                                                               | `[]`                                                         |
+| `memcachedUsername`                      | Memcached admin user                                                                      | `nil`                                                        |
+| `memcachedPassword`                      | Memcached admin password                                                                  | `nil`                                                        |
+| `service.type`                           | Kubernetes service type for Memcached                                                     | `ClusterIP`                                                  |
+| `service.port`                           | Memcached service port                                                                    | `11211`                                                      |
+| `service.clusterIP`                      | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                                                        |
+| `service.nodePort`                       | Kubernetes Service nodePort                                                               | `nil`                                                        |
+| `service.loadBalancerIP`                 | `loadBalancerIP` if service type is `LoadBalancer`                                        | `nil`                                                        |
+| `service.annotations`                    | Additional annotations for Memcached service                                              | `{}`                                                         |
+| `resources.requests`                     | CPU/Memory resource requests                                                              | `{memory: "256Mi", cpu: "250m"}`                             |
+| `resources.limits`                       | CPU/Memory resource limits                                                                | `{}`                                                         |
+| `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                 | `true`                                                       |
+| `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                    | `nil` (uses alpha storage class annotation)                  |
+| `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                      | `ReadWriteOnce`                                              |
+| `persistence.size`                       | PVC Storage Request for Memcached volume                                                  | `8Gi`                                                        |
+| `securityContext.enabled`                | Enable security context                                                                   | `true`                                                       |
+| `securityContext.fsGroup`                | Group ID for the container                                                                | `1001`                                                       |
+| `securityContext.runAsUser`              | User ID for the container                                                                 | `1001`                                                       |
+| `securityContext.readOnlyRootFilesystem` | Enable read-only filesystem                                                               | `false`                                                      |
+| `podAnnotations`                         | Pod annotations                                                                           | `{}`                                                         |
+| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                         |
+| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                       |
+| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
+| `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                                         |
+| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                         |
+| `affinity`                               | Affinity for pod assignment                                                               | `{}` (evaluated as a template)                               |
+| `nodeSelector`                           | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                               |
+| `tolerations`                            | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                               |
+| `priorityClassName`                      | Controller priorityClassName                                                              | `nil`                                                        |
+| `metrics.enabled`                        | Start a side-car prometheus exporter                                                      | `false`                                                      |
+| `metrics.image.registry`                 | Memcached exporter image registry                                                         | `docker.io`                                                  |
+| `metrics.image.repository`               | Memcached exporter image name                                                             | `bitnami/memcached-exporter`                                 |
+| `metrics.image.tag`                      | Memcached exporter image tag                                                              | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`               | Image pull policy                                                                         | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`              | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.podAnnotations`                 | Additional annotations for Metrics exporter                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
+| `metrics.resources`                      | Exporter resource requests/limit                                                          | `{}`                                                         |
+| `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                            | `ClusterIP`                                                  |
+| `metrics.service.port`                   | Prometheus metrics service port                                                           | `9150`                                                       |
+| `metrics.service.annotations`            | Prometheus exporter svc annotations                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
 
 The above parameters map to the env variables defined in [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached). For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) image documentation.
 
