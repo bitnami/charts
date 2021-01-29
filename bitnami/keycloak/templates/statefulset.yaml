@@ -101,6 +101,7 @@ spec:
             mountPath: /certs
           - name: shared-certs
             mountPath: /opt/bitnami/keycloak/certs
+        {{- end }}
       {{- end }}
       containers:
         - name: keycloak
