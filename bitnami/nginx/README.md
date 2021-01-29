@@ -81,6 +81,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`                                          |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                                                 |
+| `hostAliases`        | Add deployment host aliases                                          | `[]`                                                    |
 | `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
 | `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
 | `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                                                    |
@@ -121,7 +122,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `extraVolumes`              | Array to add extra volumes                                                                | `[]` (evaluated as a template) |
 | `extraVolumeMounts`         | Array to add extra mount                                                                  | `[]` (evaluated as a template) |
 | `sidecars`                  | Attach additional containers to nginx pods                                                | `nil`                          |
-| `initContainers`       | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
+| `initContainers`            | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
 
 ### Custom NGINX application parameters
 

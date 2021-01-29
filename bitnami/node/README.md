@@ -81,7 +81,8 @@ The following table lists the configurable parameters of the Node chart and thei
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                          | `[]` (does not add image pull secrets to deployed pods) |
 | `command`                               | Override default container command (useful when using custom images)      | `['/bin/bash', '-ec', 'npm start']`                     |
 | `args`                                  | Override default container args (useful when using custom images)         | `[]`                                                    |
-| `extraEnvVars`                          | Extra environment variables to be set on Node container                   | `{}`                                                    |
+| `hostAliases`                           | Add deployment host aliases                                               | `[]`                                                    |
+| `extraEnvVars`                          | Extra environment variables to be set on Node container                   | `[]`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                      | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                         | `nil`                                                   |
 | `mongodb.enabled`                       | Whether to install or not the MongoDB chart                               | `true`                                                  |

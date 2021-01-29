@@ -70,13 +70,13 @@ data:
         # If pinniped proxy is enabled *and* the current cluster is configured
         # to exchange credentials then we route via pinnipedProxy to exchange
         # credentials for client certificates.
-        {{- if .apiServiceUrl }}
+        {{- if .apiServiceURL }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_URL {{ .apiServiceURL }};
         {{- end }}
         {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
         {{- end }}
-        proxy_pass http://localhost:3333;
+        proxy_pass http://kubeapps-internal-pinniped-proxy.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
       {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ default "https://kubernetes.default" .apiServiceURL }};

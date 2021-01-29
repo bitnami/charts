@@ -1,16 +1,17 @@
-{{- if and (or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,txt}") .Values.influxdb.initdbScripts) (not .Values.influxdb.initdbScriptsCM) }}
+{{- if and (.Values.influxdb.initdbScripts) (not .Values.influxdb.initdbScriptsCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "influxdb.fullname" . }}-initdb-scripts
+  name: {{ include "common.names.fullname" . }}-initdb-scripts
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
-{{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,txt}" }}
-{{ .AsConfig | indent 2 }}
-{{- end }}
-{{- with .Values.influxdb.initdbScripts }}
-{{ tpl (toYaml .) $ | indent 2 }}
-{{- end }}
+  {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.initdbScripts "context" $) | nindent 2 }}
 {{- end }}

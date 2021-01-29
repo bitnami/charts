@@ -48,158 +48,159 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the ZooKeeper chart and their default values per section/component:
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                   | Global Docker image registry                                                                                                              | `nil`                                                        |
-| `global.imagePullSecrets`                | Global Docker registry secret names as an array                                                                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                    | Global storage class for dynamic provisioning                                                                                             | `nil`                                                        |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `nameOverride`                           | String to partially override common.names.fullname                                                                                        | `nil`                                                        |
-| `fullnameOverride`                       | String to fully override common.names.fullname                                                                                            | `nil`                                                        |
-| `clusterDomain`                          | Default Kubernetes cluster domain                                                                                                         | `cluster.local`                                              |
-| `commonLabels`                           | Labels to add to all deployed objects                                                                                                     | `{}`                                                         |
-| `commonAnnotations`                      | Annotations to add to all deployed objects                                                                                                | `{}`                                                         |
-| `schedulerName`                          | Kubernetes pod scheduler registry                                                                                                         | `nil` (use the default-scheduler)                            |
+| Parameter           | Description                                        | Default                           |
+|---------------------|----------------------------------------------------|-----------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname | `nil`                             |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                             |
+| `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                   |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                              |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                              |
+| `schedulerName`     | Kubernetes pod scheduler registry                  | `nil` (use the default-scheduler) |
 
 ### Zookeeper chart parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                         | ZooKeeper image registry                                                                                                                  | `docker.io`                                                  |
-| `image.repository`                       | ZooKeeper Image name                                                                                                                      | `bitnami/zookeeper`                                          |
-| `image.tag`                              | ZooKeeper Image tag                                                                                                                       | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                       | ZooKeeper image pull policy                                                                                                               | `IfNotPresent`                                               |
-| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.debug`                            | Specify if debug values should be set                                                                                                     | `false`                                                      |
-| `tickTime`                               | Basic time unit in milliseconds used by ZooKeeper for heartbeats                                                                          | `2000`                                                       |
-| `initLimit`                              | Time the ZooKeeper servers in quorum have to connect to a leader                                                                          | `10`                                                         |
-| `syncLimit`                              | How far out of date a server can be from a leader                                                                                         | `5`                                                          |
-| `maxClientCnxns`                         | Number of concurrent connections that a single client may make to a single member                                                         | `60`                                                         |
-| `maxSessionTimeout`                      | Maximum session timeout in milliseconds that the server will allow the client to negotiate.                                               | `40000`                                                      |
-| `autopurge.snapRetainCount`              | Number of retains snapshots for autopurge                                                                                                 | `3`                                                          |
-| `autopurge.purgeInterval`                | The time interval in hours for which the purge task has to be triggered                                                                   | `0`                                                          |
-| `fourlwCommandsWhitelist`                | A list of comma separated Four Letter Words commands to use                                                                               | `srvr, mntr`                                                 |
-| `listenOnAllIPs`                         | Allow Zookeeper to listen for connections from its peers on all available IP addresses.                                                   | `false`                                                      |
-| `allowAnonymousLogin`                    | Allow to accept connections from unauthenticated users                                                                                    | `yes`                                                        |
-| `auth.existingSecret`                    | Use existing secret (ignores previous password)                                                                                           | `nil`                                                        |
-| `auth.enabled`                           | Enable ZooKeeper auth                                                                                                                     | `false`                                                      |
-| `auth.clientUser`                        | User that will use ZooKeeper clients to auth                                                                                              | `nil`                                                        |
-| `auth.clientPassword`                    | Password that will use ZooKeeper clients to auth                                                                                          | `nil`                                                        |
-| `auth.serverUsers`                       | List of user to be created                                                                                                                | `nil`                                                        |
-| `auth.serverPasswords`                   | List of passwords to assign to users when created                                                                                         | `nil`                                                        |
-| `heapSize`                               | Size in MB for the Java Heap options (Xmx and XMs)                                                                                        | `[]`                                                         |
-| `logLevel`                               | Log level of ZooKeeper server                                                                                                             | `ERROR`                                                      |
-| `jvmFlags`                               | Default JVMFLAGS for the ZooKeeper process                                                                                                | `nil`                                                        |
-| `config`                                 | Configure ZooKeeper with a custom zoo.conf file                                                                                           | `nil`                                                        |
-| `dataLogDir`                             | Data log directory                                                                                                                        | `""`                                                         |
-| `namespaceOverride`                      | Namespace for ZooKeeper resources. Overrides the release namespace.                                                                       | The Release Namespace                                        |
+| Parameter                   | Description                                                                                 | Default                                                 |
+|-----------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`            | ZooKeeper image registry                                                                    | `docker.io`                                             |
+| `image.repository`          | ZooKeeper Image name                                                                        | `bitnami/zookeeper`                                     |
+| `image.tag`                 | ZooKeeper Image tag                                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`          | ZooKeeper image pull policy                                                                 | `IfNotPresent`                                          |
+| `image.pullSecrets`         | Specify docker-registry secret names as an array                                            | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`               | Specify if debug values should be set                                                       | `false`                                                 |
+| `tickTime`                  | Basic time unit in milliseconds used by ZooKeeper for heartbeats                            | `2000`                                                  |
+| `initLimit`                 | Time the ZooKeeper servers in quorum have to connect to a leader                            | `10`                                                    |
+| `syncLimit`                 | How far out of date a server can be from a leader                                           | `5`                                                     |
+| `maxClientCnxns`            | Number of concurrent connections that a single client may make to a single member           | `60`                                                    |
+| `maxSessionTimeout`         | Maximum session timeout in milliseconds that the server will allow the client to negotiate. | `40000`                                                 |
+| `autopurge.snapRetainCount` | Number of retains snapshots for autopurge                                                   | `3`                                                     |
+| `autopurge.purgeInterval`   | The time interval in hours for which the purge task has to be triggered                     | `0`                                                     |
+| `fourlwCommandsWhitelist`   | A list of comma separated Four Letter Words commands to use                                 | `srvr, mntr`                                            |
+| `listenOnAllIPs`            | Allow Zookeeper to listen for connections from its peers on all available IP addresses.     | `false`                                                 |
+| `allowAnonymousLogin`       | Allow to accept connections from unauthenticated users                                      | `yes`                                                   |
+| `auth.existingSecret`       | Use existing secret (ignores previous password)                                             | `nil`                                                   |
+| `auth.enabled`              | Enable ZooKeeper auth                                                                       | `false`                                                 |
+| `auth.clientUser`           | User that will use ZooKeeper clients to auth                                                | `nil`                                                   |
+| `auth.clientPassword`       | Password that will use ZooKeeper clients to auth                                            | `nil`                                                   |
+| `auth.serverUsers`          | List of user to be created                                                                  | `nil`                                                   |
+| `auth.serverPasswords`      | List of passwords to assign to users when created                                           | `nil`                                                   |
+| `hostAliases`               | Add deployment host aliases                                                                 | `[]`                                                    |
+| `heapSize`                  | Size in MB for the Java Heap options (Xmx and XMs)                                          | `[]`                                                    |
+| `logLevel`                  | Log level of ZooKeeper server                                                               | `ERROR`                                                 |
+| `jvmFlags`                  | Default JVMFLAGS for the ZooKeeper process                                                  | `nil`                                                   |
+| `config`                    | Configure ZooKeeper with a custom zoo.conf file                                             | `nil`                                                   |
+| `dataLogDir`                | Data log directory                                                                          | `""`                                                    |
+| `namespaceOverride`         | Namespace for ZooKeeper resources. Overrides the release namespace.                         | The Release Namespace                                   |
 
 ### Statefulset parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|:-----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------|
-| `replicaCount`                           | Number of ZooKeeper nodes                                                                                                                 | `1`                                                          |
-| `minServerId`                            | Minimal SERVER_ID value, nodes increment their IDs respectively                                                                           | `1`                                                          |
-| `updateStrategy`                         | Update strategy for the statefulset                                                                                                       | `RollingUpdate`                                              |
-| `rollingUpdatePartition`                 | Partition update strategy                                                                                                                 | `nil`                                                        |
-| `podManagementPolicy`                    | Pod management policy                                                                                                                     | `Parallel`                                                   |
-| `podLabels`                              | ZooKeeper pod labels                                                                                                                      | `{}` (evaluated as a template)                               |
-| `podAnnotations`                         | ZooKeeper Pod annotations                                                                                                                 | `{}` (evaluated as a template)                               |
-| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                                                         |
-| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                                                       |
-| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                                                         |
-| `nodeAffinityPreset.key`                 | Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                                                         |
-| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                                                         |
-| `affinity`                               | Affinity for pod assignment                                                                                                               | `{}` (evaluated as a template)                               |
-| `nodeSelector`                           | Node labels for pod assignment                                                                                                            | `{}` (evaluated as a template)                               |
-| `tolerations`                            | Tolerations for pod assignment                                                                                                            | `[]` (evaluated as a template)                               |
-| `priorityClassName`                      | Name of the existing priority class to be used by ZooKeeper pods                                                                          | `""`                                                         |
-| `securityContext.enabled`                | Enable security context (ZooKeeper master pod)                                                                                            | `true`                                                       |
-| `securityContext.fsGroup`                | Group ID for the container (ZooKeeper master pod)                                                                                         | `1001`                                                       |
-| `securityContext.runAsUser`              | User ID for the container (ZooKeeper master pod)                                                                                          | `1001`                                                       |
-| `resources`                              | CPU/Memory resource requests/limits                                                                                                       | Memory: `256Mi`, CPU: `250m`                                 |
-| `livenessProbe`                          | Liveness probe configuration for ZooKeeper                                                                                                | Check `values.yaml` file                                     |
-| `readinessProbe`                         | Readiness probe configuration for ZooKeeper                                                                                               | Check `values.yaml` file                                     |
-| `extraVolumes`                           | Extra volumes                                                                                                                             | `nil`                                                        |
-| `extraVolumeMounts`                      | Mount extra volume(s)                                                                                                                     | `nil`                                                        |
-| `initContainers`                         | Extra init container to add to the statefulset                                                                                            | `nil`                                                        |
-| `podDisruptionBudget.maxUnavailable`     | Max number of pods down simultaneously                                                                                                    | `1`                                                          |
+| Parameter                            | Description                                                                               | Default                        |
+|:-------------------------------------|:------------------------------------------------------------------------------------------|:-------------------------------|
+| `replicaCount`                       | Number of ZooKeeper nodes                                                                 | `1`                            |
+| `minServerId`                        | Minimal SERVER_ID value, nodes increment their IDs respectively                           | `1`                            |
+| `updateStrategy`                     | Update strategy for the statefulset                                                       | `RollingUpdate`                |
+| `rollingUpdatePartition`             | Partition update strategy                                                                 | `nil`                          |
+| `podManagementPolicy`                | Pod management policy                                                                     | `Parallel`                     |
+| `podLabels`                          | ZooKeeper pod labels                                                                      | `{}` (evaluated as a template) |
+| `podAnnotations`                     | ZooKeeper Pod annotations                                                                 | `{}` (evaluated as a template) |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `affinity`                           | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`                        | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `priorityClassName`                  | Name of the existing priority class to be used by ZooKeeper pods                          | `""`                           |
+| `securityContext.enabled`            | Enable security context (ZooKeeper master pod)                                            | `true`                         |
+| `securityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                                         | `1001`                         |
+| `securityContext.runAsUser`          | User ID for the container (ZooKeeper master pod)                                          | `1001`                         |
+| `resources`                          | CPU/Memory resource requests/limits                                                       | Memory: `256Mi`, CPU: `250m`   |
+| `livenessProbe`                      | Liveness probe configuration for ZooKeeper                                                | Check `values.yaml` file       |
+| `readinessProbe`                     | Readiness probe configuration for ZooKeeper                                               | Check `values.yaml` file       |
+| `extraVolumes`                       | Extra volumes                                                                             | `nil`                          |
+| `extraVolumeMounts`                  | Mount extra volume(s)                                                                     | `nil`                          |
+| `initContainers`                     | Extra init container to add to the statefulset                                            | `nil`                          |
+| `podDisruptionBudget.maxUnavailable` | Max number of pods down simultaneously                                                    | `1`                            |
 
 ### Exposure parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `service.type`                           | Kubernetes Service type                                                                                                                   | `ClusterIP`                                                  |
-| `service.loadBalancerIP`                 | Use with service.type `LoadBalancer` to assign static IP to Load Balancer instance                                                        | `""`                                                         |
-| `service.port`                           | ZooKeeper port                                                                                                                            | `2181`                                                       |
-| `service.followerPort`                   | ZooKeeper follower port                                                                                                                   | `2888`                                                       |
-| `service.electionPort`                   | ZooKeeper election port                                                                                                                   | `3888`                                                       |
-| `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                                                           | `true`                                                       |
-| `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                                                       | `false`                                                      |
-| `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated                                            | Generated using the `common.names.fullname` template         |
-| `service.tls.client_enable`              | Enable tls for client connections                                                                                                         | `false`                                                      |
-| `service.tls.quorum_enable`              | Enable tls for quorum protocol                                                                                                            | `false`                                                      |
-| `service.tls.disable_base_client_port`   | Remove client port from service definitions.                                                                                              | `false`                                                      |
-| `service.tls.client_port`                | Service port for tls client connections                                                                                                   | `3181`                                                       |
-| `service.tls.client_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                          | `/tls_key_store/key_store_file`                              |
-| `service.tls.client_keystore_password`   | KeyStore password. You can use environment variables.                                                                                     | `nil`                                                        |
-| `service.tls.client_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                        | `/tls_trust_store/trust_store_file`                          |
-| `service.tls.client_truststore_password` | TrustStore password. You can use environment variables.                                                                                   | `nil`                                                        |
-| `service.tls.quorum_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                          | `/tls_key_store/key_store_file`                              |
-| `service.tls.quorum_keystore_password`   | KeyStore password. You can use environment variables.                                                                                     | `nil`                                                        |
-| `service.tls.quorum_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods                                        | `/tls_trust_store/trust_store_file`                          |
-| `service.tls.quorum_truststore_password` | TrustStore password. You can use environment variables.                                                                                   | `nil`                                                        |
-| `service.annotations`                    | Annotations for the Service                                                                                                               | `{}`                                                         |
-| `service.headless.annotations`           | Annotations for the Headless Service                                                                                                      | `{}`                                                         |
-| `networkPolicy.enabled`                  | Enable NetworkPolicy                                                                                                                      | `false`                                                      |
-| `networkPolicy.allowExternal`            | Don't require client label for connections                                                                                                | `true`                                                       |
+| Parameter                                | Description                                                                                        | Default                                              |
+|------------------------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `service.type`                           | Kubernetes Service type                                                                            | `ClusterIP`                                          |
+| `service.loadBalancerIP`                 | Use with service.type `LoadBalancer` to assign static IP to Load Balancer instance                 | `""`                                                 |
+| `service.port`                           | ZooKeeper port                                                                                     | `2181`                                               |
+| `service.followerPort`                   | ZooKeeper follower port                                                                            | `2888`                                               |
+| `service.electionPort`                   | ZooKeeper election port                                                                            | `3888`                                               |
+| `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
+| `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
+| `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
+| `service.tls.client_enable`              | Enable tls for client connections                                                                  | `false`                                              |
+| `service.tls.quorum_enable`              | Enable tls for quorum protocol                                                                     | `false`                                              |
+| `service.tls.disable_base_client_port`   | Remove client port from service definitions.                                                       | `false`                                              |
+| `service.tls.client_port`                | Service port for tls client connections                                                            | `3181`                                               |
+| `service.tls.client_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods   | `/tls_key_store/key_store_file`                      |
+| `service.tls.client_keystore_password`   | KeyStore password. You can use environment variables.                                              | `nil`                                                |
+| `service.tls.client_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods | `/tls_trust_store/trust_store_file`                  |
+| `service.tls.client_truststore_password` | TrustStore password. You can use environment variables.                                            | `nil`                                                |
+| `service.tls.quorum_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods   | `/tls_key_store/key_store_file`                      |
+| `service.tls.quorum_keystore_password`   | KeyStore password. You can use environment variables.                                              | `nil`                                                |
+| `service.tls.quorum_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods | `/tls_trust_store/trust_store_file`                  |
+| `service.tls.quorum_truststore_password` | TrustStore password. You can use environment variables.                                            | `nil`                                                |
+| `service.annotations`                    | Annotations for the Service                                                                        | `{}`                                                 |
+| `service.headless.annotations`           | Annotations for the Headless Service                                                               | `{}`                                                 |
+| `networkPolicy.enabled`                  | Enable NetworkPolicy                                                                               | `false`                                              |
+| `networkPolicy.allowExternal`            | Don't require client label for connections                                                         | `true`                                               |
 
 ### Persistence parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `persistence.enabled`                    | Enable Zookeeper data persistence using PVC                                                                                               | `true`                                                       |
-| `persistence.existingClaim`              | Provide an existing `PersistentVolumeClaim`                                                                                               | `nil` (evaluated as a template)                              |
-| `persistence.storageClass`               | PVC Storage Class for ZooKeeper data volume                                                                                               | `nil`                                                        |
-| `persistence.accessMode`                 | PVC Access Mode for ZooKeeper data volume                                                                                                 | `ReadWriteOnce`                                              |
-| `persistence.size`                       | PVC Storage Request for ZooKeeper data volume                                                                                             | `8Gi`                                                        |
-| `persistence.annotations`                | Annotations for the PVC                                                                                                                   | `{}` (evaluated as a template)                               |
-| `persistence.dataLogDir.size`            | PVC Storage Request for ZooKeeper's Data log directory                                                                                    | `8Gi`                                                        |
-| `persistence.dataLogDir.existingClaim`   | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory                                                            | `nil` (evaluated as a template)                              |
+| Parameter                              | Description                                                                    | Default                         |
+|----------------------------------------|--------------------------------------------------------------------------------|---------------------------------|
+| `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true`                          |
+| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `nil` (evaluated as a template) |
+| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `nil`                           |
+| `persistence.accessMode`               | PVC Access Mode for ZooKeeper data volume                                      | `ReadWriteOnce`                 |
+| `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`                           |
+| `persistence.annotations`              | Annotations for the PVC                                                        | `{}` (evaluated as a template)  |
+| `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`                           |
+| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil` (evaluated as a template) |
 
 ### Volume Permissions parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`              | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`                      | `false`                                                      |
-| `volumePermissions.image.registry`       | Init container volume-permissions image registry                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`     | Init container volume-permissions image name                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`            | Init container volume-permissions image tag                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`     | Init container volume-permissions image pull policy                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`            | Init container resource requests/limit                                                                                                    | `nil`                                                        |
+| Parameter                            | Description                                                                                                          | Default           |
+|--------------------------------------|----------------------------------------------------------------------------------------------------------------------|-------------------|
+| `volumePermissions.enabled`          | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`           |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                     | `docker.io`       |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                         | `bitnami/minideb` |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                          | `buster`          |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                  | `Always`          |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                               | `nil`             |
 
 ### Metrics parameters
 
-| Parameter                                | Description                                                                                                                               | Default                                                      |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                        | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`                                                      |
-| `metrics.containerPort`                  | Port where a Jetty server will expose Prometheus metrics                                                                                  | `9141`                                                       |
-| `metrics.service.type`                   | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Jetty server exposing Prometheus metrics                          | `ClusterIP`                                                  |
-| `metrics.service.port`                   | Prometheus metrics service port                                                                                                           | `9141`                                                       |
-| `metrics.service.annotations`            | Service annotations for Prometheus to auto-discover the metrics endpoint                                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
-| `metrics.serviceMonitor.enabled`         | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                                                      |
-| `metrics.serviceMonitor.namespace`       | Namespace for the ServiceMonitor Resource                                                                                                 | The Release Namespace                                        |
-| `metrics.serviceMonitor.interval`        | Interval at which metrics should be scraped.                                                                                              | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.scrapeTimeout`   | Timeout after which the scrape is ended                                                                                                   | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.selector`        | Prometheus instance selector labels                                                                                                       | `nil`                                                        |
-| `metrics.prometheusRule.enabled`         | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                                      |
-| `metrics.prometheusRule.namespace`       | Namespace for the PrometheusRule Resource                                                                                                 | The Release Namespace                                        |
-| `metrics.prometheusRule.selector`        | Prometheus instance selector labels                                                                                                       | `nil`                                                        |
-| `metrics.prometheusRule.rules`           | Prometheus Rule definitions (see values.yaml for examples)                                                                                | `[]`                                                         |
+| Parameter                              | Description                                                                                                                               | Default                                                      |
+|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                      | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`                                                      |
+| `metrics.containerPort`                | Port where a Jetty server will expose Prometheus metrics                                                                                  | `9141`                                                       |
+| `metrics.service.type`                 | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Jetty server exposing Prometheus metrics                          | `ClusterIP`                                                  |
+| `metrics.service.port`                 | Prometheus metrics service port                                                                                                           | `9141`                                                       |
+| `metrics.service.annotations`          | Service annotations for Prometheus to auto-discover the metrics endpoint                                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "9141"}` |
+| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                                                      |
+| `metrics.serviceMonitor.namespace`     | Namespace for the ServiceMonitor Resource                                                                                                 | The Release Namespace                                        |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                              | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                   | `nil` (Prometheus Operator default value)                    |
+| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                       | `nil`                                                        |
+| `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                                      |
+| `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource                                                                                                 | The Release Namespace                                        |
+| `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `nil`                                                        |
+| `metrics.prometheusRule.rules`         | Prometheus Rule definitions (see values.yaml for examples)                                                                                | `[]`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

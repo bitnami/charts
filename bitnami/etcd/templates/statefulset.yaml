@@ -36,7 +36,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "etcd.imagePullSecrets" . | indent 6 }}
+      {{- include "etcd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "etcd.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
