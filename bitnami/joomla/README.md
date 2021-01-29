@@ -96,6 +96,7 @@ The following table lists the configurable parameters of the Joomla! chart and t
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                  | `nil`                                       |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | ``                                          |
 | `livenessProbe`                      | Liveness probe configuration                                                                                         | `Check values.yaml file`                    |
+| `hostAliases`                        | Add deployment host aliases                                                                                          | `Check values.yaml`                         |
 | `joomlaSkipInstall`                  | Skip joomla bootstrap (`no` / `yes`)                                                                                 | `no`                                        |
 | `joomlaUsername`                     | User of the application                                                                                              | `user`                                      |
 | `joomlaPassword`                     | Application password                                                                                                 | _random 10 character alphanumeric string_   |

@@ -48,12 +48,15 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.master.priorityClassName }}
-      priorityClassName: "{{ .Values.master.priorityClassName }}"
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
       {{- with .Values.master.affinity }}
       affinity: {{- tpl (toYaml .) $ | nindent 8 }}

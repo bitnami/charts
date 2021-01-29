@@ -35,6 +35,9 @@ spec:
         {{- end }}
     spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.initJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.initJob.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.affinity "context" $) | nindent 8 }}
       {{- else }}

@@ -63,6 +63,11 @@ commonAnnotations: {}
 ##
 # schedulerName: stork
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
   create: true

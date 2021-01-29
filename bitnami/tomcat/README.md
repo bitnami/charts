@@ -51,116 +51,117 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 ### Global parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                               | `nil`                                                   |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                   | Global storage class for dynamic provisioning              | `nil`                                                   |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                               | Description                                                   | Default                                                 |
-|-----------------------------------------|---------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override common.names.fullname            | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override common.names.fullname                | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                         | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                    | `{}`                                                    |
-| `clusterDomain`                         | Default Kubernetes cluster domain                             | `cluster.local`                                         |
-| `extraDeploy`                           | Array of extra objects to deploy with the release             | `[]` (evaluated as a template)                          |
-| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                                                   |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### Tomcat parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | Tomcat image registry                                                                    | `docker.io`                                             |
-| `image.repository`                      | Tomcat image name                                                                        | `bitnami/tomcat`                                        |
-| `image.tag`                             | Tomcat image tag                                                                         | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                      | Tomcat image pull policy                                                                 | `IfNotPresent`                                          |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`                           | Specify if debug logs should be enabled                                                  | `false`                                                 |
-| `tomcatUsername`                        | Tomcat admin user                                                                        | `user`                                                  |
-| `tomcatPassword`                        | Tomcat admin password                                                                    | _random 10 character alphanumeric string_               |
-| `tomcatAllowRemoteManagement`           | Enable remote access to management interface                                             | `0` (disabled)                                          |
-| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |
-| `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `extraEnvVars`                          | Extra environment variables to be set on Tomcat container                                | `{}`                                                    |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
+| Parameter                     | Description                                                          | Default                                                 |
+|-------------------------------|----------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`              | Tomcat image registry                                                | `docker.io`                                             |
+| `image.repository`            | Tomcat image name                                                    | `bitnami/tomcat`                                        |
+| `image.tag`                   | Tomcat image tag                                                     | `{TAG_NAME}`                                            |
+| `image.pullPolicy`            | Tomcat image pull policy                                             | `IfNotPresent`                                          |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`                 | Specify if debug logs should be enabled                              | `false`                                                 |
+| `hostAliases`                 | Add deployment host aliases                                          | `[]`                                                    |
+| `tomcatUsername`              | Tomcat admin user                                                    | `user`                                                  |
+| `tomcatPassword`              | Tomcat admin password                                                | _random 10 character alphanumeric string_               |
+| `tomcatAllowRemoteManagement` | Enable remote access to management interface                         | `0` (disabled)                                          |
+| `command`                     | Override default container command (useful when using custom images) | `nil`                                                   |
+| `args`                        | Override default container args (useful when using custom images)    | `nil`                                                   |
+| `extraEnvVars`                | Extra environment variables to be set on Tomcat container            | `{}`                                                    |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                    | `nil`                                                   |
 
 ### Tomcat deployment parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                          | Specify number of Tomcat replicas                                                        | `1`                                                     |
-| `containerPort`                         | HTTP port to expose at container level                                                   | `8080`                                                  |
-| `podSecurityContext`                    | Tomcat pods' Security Context                                                            | Check `values.yaml` file                                |
-| `containerSecurityContext`              | Tomcat containers' Security Context                                                      | Check `values.yaml` file                                |
-| `resources.limits`                      | The resources limits for the Tomcat container                                            | `{}`                                                    |
-| `resources.requests`                    | The requested resources for the Tomcat container                                         | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `livenessProbe`                         | Liveness probe configuration for Tomcat                                                  | Check `values.yaml` file                                |
-| `readinessProbe`                        | Readiness probe configuration for Tomcat                                                 | Check `values.yaml` file                                |
-| `customLivenessProbe`                   | Override default liveness probe                                                          | `nil`                                                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                         | `nil`                                                   |
-| `updateStrategy`                        | Strategy to use to update Pods                                                           | Check `values.yaml` file                                |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                    |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                  |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                                    |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                   | `""`                                                    |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                | `[]`                                                    |
-| `affinity`                              | Affinity for pod assignment                                                              | `{}` (evaluated as a template)                          |
-| `nodeSelector`                          | Node labels for pod assignment                                                           | `{}` (evaluated as a template)                          |
-| `tolerations`                           | Tolerations for pod assignment                                                           | `[]` (evaluated as a template)                          |
-| `podLabels`                             | Extra labels for Tomcat pods                                                             | `{}` (evaluated as a template)                          |
-| `podAnnotations`                        | Annotations for Tomcat pods                                                              | `{}` (evaluated as a template)                          |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Tomcat container(s)         | `[]`                                                    |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Tomcat pods                      | `[]`                                                    |
-| `initContainers`                        | Add additional init containers to the Tomcat pods                                        | `{}` (evaluated as a template)                          |
-| `sidecars`                              | Add additional sidecar containers to the Tomcat pods                                     | `{}` (evaluated as a template)                          |
-| `persistence.enabled`                   | Enable persistence using PVC                                                             | `true`                                                  |
-| `persistence.storageClass`              | PVC Storage Class for Tomcat volume                                                      | `nil` (uses alpha storage class annotation)             |
-| `persistence.existingClaim`             | An Existing PVC name for Tomcat volume                                                   | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`                | PVC Access Mode for Tomcat volume                                                        | `ReadWriteOnce`                                         |
-| `persistence.size`                      | PVC Storage Request for Tomcat volume                                                    | `8Gi`                                                   |
+| Parameter                   | Description                                                                               | Default                                     |
+|-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
+| `replicaCount`              | Specify number of Tomcat replicas                                                         | `1`                                         |
+| `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
+| `podSecurityContext`        | Tomcat pods' Security Context                                                             | Check `values.yaml` file                    |
+| `containerSecurityContext`  | Tomcat containers' Security Context                                                       | Check `values.yaml` file                    |
+| `resources.limits`          | The resources limits for the Tomcat container                                             | `{}`                                        |
+| `resources.requests`        | The requested resources for the Tomcat container                                          | `{"memory": "512Mi", "cpu": "300m"}`        |
+| `livenessProbe`             | Liveness probe configuration for Tomcat                                                   | Check `values.yaml` file                    |
+| `readinessProbe`            | Readiness probe configuration for Tomcat                                                  | Check `values.yaml` file                    |
+| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                       |
+| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                       |
+| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file                    |
+| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
+| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
+| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
+| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                        |
+| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
+| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
+| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)              |
+| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)              |
+| `podLabels`                 | Extra labels for Tomcat pods                                                              | `{}` (evaluated as a template)              |
+| `podAnnotations`            | Annotations for Tomcat pods                                                               | `{}` (evaluated as a template)              |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Tomcat container(s)          | `[]`                                        |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for Tomcat pods                       | `[]`                                        |
+| `initContainers`            | Add additional init containers to the Tomcat pods                                         | `{}` (evaluated as a template)              |
+| `sidecars`                  | Add additional sidecar containers to the Tomcat pods                                      | `{}` (evaluated as a template)              |
+| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
+| `persistence.storageClass`  | PVC Storage Class for Tomcat volume                                                       | `nil` (uses alpha storage class annotation) |
+| `persistence.existingClaim` | An Existing PVC name for Tomcat volume                                                    | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`    | PVC Access Mode for Tomcat volume                                                         | `ReadWriteOnce`                             |
+| `persistence.size`          | PVC Storage Request for Tomcat volume                                                     | `8Gi`                                       |
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                          | Kubernetes Service type                                                                  | `LoadBalancer`                                          |
-| `service.port`                          | Service HTTP port                                                                        | `80`                                                    |
-| `service.nodePort`                      | Kubernetes http node port                                                                | `""`                                                    |
-| `service.loadBalancerIP`                | Kubernetes LoadBalancerIP to request                                                     | `nil`                                                   |
-| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
-| `service.annotations`                   | Annotations for Tomcat service                                                           | `{}` (evaluated as a template)                          |
-| `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
-| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                            | ``                                                      |
-| `ingress.path`                          | Ingress path                                                                             | `/`                                                     |
-| `ingress.pathType`                      | Ingress path type                                                                        | `ImplementationSpecific`                                |
-| `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
-| `ingress.hostname`                      | Default host for the ingress resource                                                    | `tomcat.local`                                          |
-| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
-| `ingress.annotations`                   | Ingress annotations                                                                      | `{}` (evaluated as a template)                          |
-| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
+| Parameter                        | Description                                                                       | Default                        |
+|----------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                                           | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                                                 | `80`                           |
+| `service.nodePort`               | Kubernetes http node port                                                         | `""`                           |
+| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request                                              | `nil`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                                              | `Cluster`                      |
+| `service.annotations`            | Annotations for Tomcat service                                                    | `{}` (evaluated as a template) |
+| `ingress.enabled`                | Enable ingress controller resource                                                | `false`                        |
+| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                     | ``                             |
+| `ingress.path`                   | Ingress path                                                                      | `/`                            |
+| `ingress.pathType`               | Ingress path type                                                                 | `ImplementationSpecific`       |
+| `ingress.certManager`            | Add annotations for cert-manager                                                  | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                                             | `tomcat.local`                 |
+| `ingress.tls`                    | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                                               | `{}` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                                                   | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                            | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                                                    | `nil`                          |
 
 ### Volume Permissions parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory              | `false`                                                 |
-| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                         | `docker.io`                                             |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                             | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                              | `buster`                                                |
-| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                      | `Always`                                                |
-| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.resources.limits`    | Init container volume-permissions resource  limits                                       | `{}`                                                    |
-| `volumePermissions.resources.requests`  | Init container volume-permissions resource  requests                                     | `{}`                                                    |
+| Parameter                              | Description                                                                 | Default                                                 |
+|----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory | `false`                                                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                            | `docker.io`                                             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `buster`                                                |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `Always`                                                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                          | `{}`                                                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                        | `{}`                                                    |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 

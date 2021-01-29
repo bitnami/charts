@@ -48,6 +48,11 @@ server:
     ##
     debug: false
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   composedTaskRunner:
     ## Bitnami Spring Cloud Dataflow Composed Task Runner image
     ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
@@ -377,16 +382,6 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
-  ## Java Debug Wire Protocol (JDWP) parameters.
-  ##
-  jdwp:
-    ## Set to true to enable Java debugger.
-    ##
-    enabled: false
-    ## Specify port for remote debugging.
-    ##
-    port: 5005
-
   ## Extra volumes to mount
   ##
   # extraVolumes:
@@ -397,6 +392,16 @@ server:
   #   - name: sample
   #     mountPath: /temp/sample
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -405,6 +410,11 @@ skipper:
   ## Note: it'll be also enabled if streams are enabled in Dataflow server configuration.
   ##
   enabled: true
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Bitnami Spring Cloud Skipper image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
@@ -657,6 +667,15 @@ skipper:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Extra volumes to mount
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
+
   ## Java Debug Wire Protocol (JDWP) parameters.
   ##
   jdwp:
@@ -666,15 +685,6 @@ skipper:
     ## Specify port for remote debugging.
     ##
     port: 5005
-
-  ## Extra volumes to mount
-  # extraVolumes:
-  #   - name: sample
-  #     emptyDir: {}
-  #
-  # extraVolumeMounts:
-  #   - name: sample
-  #     mountPath: /temp/sample
 
 ##
 ## External Skipper Configuration

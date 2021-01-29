@@ -89,6 +89,11 @@ server:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Parse Server Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -246,6 +251,11 @@ dashboard:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Dashboard Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

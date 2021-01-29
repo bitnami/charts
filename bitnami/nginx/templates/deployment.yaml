@@ -33,6 +33,9 @@ spec:
       {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -48,8 +51,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.cloneStaticSiteFromGit.enabled }}
       initContainers:
@@ -90,9 +92,7 @@ spec:
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.containerSecurityContext.runAsNonRoot }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
