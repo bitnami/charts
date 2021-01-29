@@ -1,6 +1,7 @@
 ## Default values for contour.
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
+##
 
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -54,6 +55,7 @@ configInline:
   #   namespace: '{{ .Release.Namespace }}'
   # The following config shows the defaults for the leader election.
   ## This needs to be edited by when you deploy to a namespace other than projectcontour
+  ##
   leaderelection:
     # configmap-name: leader-elect
     configmap-namespace: '{{ .Release.Namespace }}'
@@ -155,6 +157,11 @@ contour:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Extra arguments passed to Contour container
   ##
   extraArgs: []
@@ -168,6 +175,7 @@ contour:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     # cpu: 400m
     # memory: 250Mi
@@ -197,6 +205,7 @@ contour:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ''
     ## Node label key to match
     ## E.g.
@@ -332,6 +341,11 @@ envoy:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Envoy container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## ref: https://projectcontour.io/guides/resource-limits/
@@ -341,6 +355,7 @@ envoy:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     # cpu: 400m
     # memory: 250Mi
@@ -367,6 +382,7 @@ envoy:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ''
     ## Node label key to match
     ## E.g.
@@ -585,6 +601,11 @@ defaultBackend:
   extraArgs: {}
   containerPort: 8080
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Number of replicas
   ##
   replicaCount: 1
@@ -683,6 +704,7 @@ defaultBackend:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
