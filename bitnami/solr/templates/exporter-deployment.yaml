@@ -11,6 +11,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
   {{- if .Values.exporter.updateStrategy }}
@@ -21,9 +22,13 @@ spec:
       app.kubernetes.io/component: solr-exporter
   template:
     metadata:
-      {{- if .Values.exporter.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.exporter.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.exporter.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: solr-exporter
         {{- if .Values.exporter.podLabels }}
@@ -32,6 +37,9 @@ spec:
     spec:
       serviceAccountName: {{ include "solr.serviceAccountName" . }}
       {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.exporter.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.exporter.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -69,13 +77,13 @@ spec:
           command:
             - "/opt/bitnami/solr/contrib/prometheus-exporter/bin/solr-exporter"
             - "-p"
-            - "{{ .Values.exporter.port }}"
+            - {{ .Values.exporter.port | quote }}
             - "-z"
-            - "{{ include "solr.zookeeper.service" . }}:{{ .Values.zookeeper.port }}/solr"
+            - "{{ include "solr.zookeeper.host" . }}:{{ .Values.zookeeper.port }}/solr"
             - "-n"
-            - "{{ .Values.exporter.threads }}"
+            - {{ .Values.exporter.threads | quote }}
             - "-f"
-            - "{{ .Values.exporter.configFile }}"
+            - {{ .Values.exporter.configFile | quote }}
           {{- end }}
           {{- if .Values.exporter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.args "context" $) | nindent 12 }}
@@ -101,7 +109,7 @@ spec:
             httpGet:
               path: "/metrics"
               port: {{ .Values.exporter.port }}
-            initialDelaySeconds: {{ .Values.exporter.livenessProbe.initalDelaySeconds }}
+            initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.exporter.livenessProbe.failureThredshold }}
@@ -114,11 +122,11 @@ spec:
             httpGet:
               path: "/metrics"
               port: {{ .Values.exporter.port }}
-            initialDelaySeconds: {{ .Values.exporter.readinessProbe.initalDelaySeconds }}
+            initialDelaySeconds: {{ .Values.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.exporter.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.exporter.readinessProbe.failureThredshold }}
-            successThreshold: {{ .Values.exporter.readinessProbe.successThredshold }}        
+            failureThreshold: {{ .Values.exporter.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.exporter.readinessProbe.successThreshold }}
           {{- else if .Values.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

@@ -64,3 +64,14 @@ To connect to your Solr from outside the cluster execute the following commands:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.exporter.image }}
+
+{{- $requiredPasswords := list -}}
+{{- $secretNameSolr := include "solr.secretName" . -}}
+
+{{- if not .Values.existingSecret -}}
+  {{- $requiredSolrPassword := dict "valueKey" "solrPassword" "secret" $secretNameSolr "field" "solr-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredSolrPassword -}}
+{{- end -}}
+
+{{- $requiredSolrPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredSolrPasswordErrors) "context" $) -}}

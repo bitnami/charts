@@ -9,7 +9,7 @@ metadata:
     {{- end }}
   name: "{{ include "solr.exporter-name" . }}"
   {{- if or .Values.exporter.service.annotations .Values.commonAnnotations }}
-  annotations: 
+  annotations:
     {{- if .Values.exporter.service.annotations }}
     {{ include "common.tplvalues.render" ( dict "value" .Values.exporter.service.annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -17,6 +17,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.exporter.service.type }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}

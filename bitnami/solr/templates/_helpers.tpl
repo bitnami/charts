@@ -3,7 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "solr.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.name" . -}}
 {{- end -}}
 
 {{/*
@@ -13,13 +13,6 @@ If release name contains chart name it will be used as a full name.
 */}}
 {{- define "solr.fullname" -}}
 {{- include "common.names.fullname" . -}}
-{{- end -}}
-
-{{/*
-Define the name of the client service for solr
-*/}}
-{{- define "solr.service-name" -}}
-{{- printf "%s-%s" (include "solr.fullname" .) "svc" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -40,7 +33,7 @@ The name of the zookeeper headless service
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "solr.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image ) "global" .Values.global) }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image ) "global" .Values.global) -}}
 {{- end -}}
 
 
@@ -48,14 +41,21 @@ Return the proper Docker Image Registry Secret Names
 Return the proper Apache Solr image name
 */}}
 {{- define "solr.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Solr Exporter image name
 */}}
 {{- define "exporter.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.exporter.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.exporter.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -63,9 +63,9 @@ Return the proper Solr Exporter image name
  */}}
 {{- define "solr.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "solr.fullname" .) .Values.serviceAccount.name }}
+    {{- default (include "solr.fullname" .) .Values.serviceAccount.name -}}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
 
@@ -87,6 +87,6 @@ Return  the proper Storage Class
 {{- if .Values.externalZookeeper.servers -}}
 {{- join "," .Values.externalZookeeper.servers -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name "zookeeper" -}}
-{{- end }}
+{{- printf "%s-%s" .Release.Name "zookeeper" -}}:{{- .Values.zookeeper.port -}}
+{{- end -}}
 {{- end -}}

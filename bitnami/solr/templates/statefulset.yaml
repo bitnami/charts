@@ -10,6 +10,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   podManagementPolicy: Parallel
   replicas: {{ .Values.replicaCount }}
@@ -20,17 +21,27 @@ spec:
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $) | nindent 4 }}
   template:
     metadata:
-      {{- if .Values.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: solr
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ include "solr.serviceAccountName" . }}
       {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -54,7 +65,7 @@ spec:
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
-          image: {{ include ".Values.volumePermissions.image" . }}
+          image: {{ include "volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - sh
@@ -89,7 +100,7 @@ spec:
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
-          command: 
+          command:
             - bash
             - -ec
             - |
@@ -113,9 +124,9 @@ spec:
                   fieldPath: metadata.name
             - name: SOLR_ENABLE_CLOUD_MODE
               value: {{ ternary "yes" "no" .Values.cloudEnabled | quote }}
-            - name: SOLR_NUMBER_OF_NODES      
+            - name: SOLR_NUMBER_OF_NODES
               value: {{ .Values.replicaCount | quote }}
-            - name: SOLR_PORT_NUMBER      
+            - name: SOLR_PORT_NUMBER
               value: {{ .Values.containerPort | quote }}
             - name: SOLR_SERVER_DIRECTORY
               value: {{ .Values.serverDirectory | quote }}
@@ -149,7 +160,7 @@ spec:
                   name: {{ include "solr.secretName" . }}
                   key: solr-password
             - name: SOLR_ZK_HOSTS
-              value: "{{ include "solr.zookeeper.host" . }}:{{ .Values.zookeeper.port }}"
+              value: "{{ include "solr.zookeeper.host" . }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -179,7 +190,7 @@ spec:
             httpGet:
               scheme: "HTTP"
               path: "/solr"
-              port: {{ .Values.service.port }}    
+              port: {{ .Values.service.port }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -193,7 +204,7 @@ spec:
             httpGet:
               scheme: "HTTP"
               path: "/solr"
-              port: {{ .Values.service.port }}   
+              port: {{ .Values.service.port }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
