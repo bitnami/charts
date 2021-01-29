@@ -54,6 +54,15 @@ commonAnnotations: {}
 ##
 clusterDomain: cluster.local
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
@@ -520,6 +529,7 @@ persistence:
   accessMode: ReadWriteOnce
   size: 10Gi
   ## Custom dataSource
+  ##
   dataSource: {}
 
 ## Wordpress Pod Disruption Budget configuration
