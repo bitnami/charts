@@ -63,10 +63,12 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.initContainers .Values.auth.tls.enabled }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.auth.tls.enabled }}
-      {{- $fullname := include "keycloak.fullname" . }}
+      initContainers: 
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.auth.tls.enabled }}
+        {{- $fullname := include "keycloak.fullname" . }}
         - name: init-certs
           image: {{ include "keycloak.auth.tls.image" . }}
           imagePullPolicy: {{ .Values.auth.tls.image.pullPolicy | quote }}
