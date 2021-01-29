@@ -8,6 +8,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 data:
 {{- with .Files.Glob "files/conf.d/*.conf" }}
 {{ .AsConfig | indent 2 }}

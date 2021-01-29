@@ -86,6 +86,11 @@ query:
     ##
     # existingServiceAccount: query-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: [replica]
@@ -147,6 +152,7 @@ query:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -242,6 +248,7 @@ query:
   ## Thanos Query GRPC TLS parameters
   ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/query.md#flags
+  ##
   grpcTLS:
     # TLS server side
     server:
@@ -422,6 +429,7 @@ query:
     ## and also the documentation for your ingress controller.
     ##
     ## The options that are accepted are identical to the HTTP one listed above
+    ##
     grpc:
       enabled: false
       certManager: false
@@ -487,6 +495,11 @@ queryFrontend:
     ##
     # existingServiceAccount: query-frontend-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   extraFlags: []
 
   ## Thanos Query Frontend Cache Configuration
@@ -526,6 +539,7 @@ queryFrontend:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -761,6 +775,11 @@ bucketweb:
   ##
   refresh: 30m
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Timeout to download metadata from remote storage
   ##
   timeout: 5m
@@ -796,6 +815,7 @@ bucketweb:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -973,6 +993,7 @@ bucketweb:
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
+    ##
 
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
@@ -1014,6 +1035,11 @@ compactor:
     ##
     # existingServiceAccount: compactor-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Resolution and Retention flags
   ##
   retentionResolutionRaw: 30d
@@ -1052,6 +1078,7 @@ compactor:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1213,6 +1240,11 @@ storegateway:
     ##
     # existingServiceAccount: storegateway-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: []
@@ -1281,6 +1313,7 @@ storegateway:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1475,6 +1508,11 @@ ruler:
     ##
     # existingServiceAccount: ruler-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Dynamically configure Query APIs using DNS discovery
   ##
   dnsDiscovery:
@@ -1538,6 +1576,7 @@ ruler:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1723,6 +1762,11 @@ receive:
     ##
     # existingServiceAccount: receive-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Receive Configuration
   ## Specify content for receive hashring
   ##
@@ -1770,6 +1814,7 @@ receive:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1862,6 +1907,7 @@ receive:
 
   ## Thanos Receive GRPC TLS parameters
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags
+  ##
   grpc:
     # Time to wait after an interrupt received for GRPC Server.
     gracePeriod: 2m
