@@ -94,6 +94,11 @@ spec:
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
+            {{- if or .Values.storegateway.grpcTLS.server.secure .Values.storegateway.grpcTLS.server.existingSecret }}
+            - --grpc-server-tls-cert=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpcTLS.server.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpcTLS.server.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpcTLS.server.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
@@ -122,6 +127,10 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if .Values.storegateway.grpcTLS.server.secure }}
+            - name: tls-server
+              mountPath: /tls/server
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -133,6 +142,11 @@ spec:
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end }}
+        {{- if or .Values.storegateway.grpcTLS.server.secure .Values.storegateway.grpcTLS.server.existingSecret }}
+        - name: tls-server
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.storegateway.grpcTLS.server.existingSecret "defaultNameSuffix" "store-tls-server" "context" $) }}
         {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data
