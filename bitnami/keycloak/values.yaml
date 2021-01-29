@@ -680,7 +680,6 @@ postgresql:
   existingSecret:
   ## PostgreSQL data Persistent Volume Storage Class
   ##
-
   persistence:
     enabled: true
 
