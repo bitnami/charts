@@ -675,8 +675,12 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_keycloak
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ##
+  existingSecret:
   ## PostgreSQL data Persistent Volume Storage Class
   ##
+
   persistence:
     enabled: true
 

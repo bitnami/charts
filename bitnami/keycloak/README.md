@@ -226,8 +226,9 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | Parameter                        | Description                                                                  | Default            |
 |----------------------------------|------------------------------------------------------------------------------|--------------------|
 | `postgresql.enabled`             | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`             |
-| `postgresql.postgresqlUsername`  | PostgreSQL user to create (used by Keycloak)                                 | `bn_keycloak`      |
-| `postgresql.postgresqlPassword`  | Password for the Dicourse user - ignored if existingSecret is provided       | `some-password`    |
+| `postgresql.postgresqlUsername`  | Keycloak PostgreSQL user to create (used by Keycloak)                        | `bn_keycloak`      |
+| `postgresql.postgresqlPassword`  | Keycloak PostgreSQL password - ignored if existingSecret is provided         | `some-password`    |
+| `postgresql.existingSecret`      | Use an existing secret file with the PostgreSQL password                     | `nil`              |
 | `postgresql.postgresqlDatabase`  | Name of the database to create                                               | `bitnami_keycloak` |
 | `postgresql.persistence.enabled` | Enable database persistence using PVC                                        | `true`             |
 | `externalDatabase.host`          | Host of the external database                                                | `""`               |
