@@ -1103,7 +1103,7 @@ alertmanager:
   ##
   logFormat: logfmt
 
-  ## Standard object’s metadata.
+  ## Standard object's metadata.
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
   podMetadata:
