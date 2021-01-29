@@ -12,6 +12,7 @@ metadata:
     # field is broken in some versions of Kubernetes:
     # https://github.com/kubernetes/kubernetes/issues/58662
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  namespace: {{ .Release.Namespace }}
 spec:
   type: ClusterIP
   clusterIP: None
