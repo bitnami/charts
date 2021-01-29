@@ -48,7 +48,7 @@ To access Keycloak from outside the cluster execute the following commands:
 3. Access the Administration Console using the following credentials:
 
   echo Username: {{ .Values.auth.adminUser }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ printf "%s-env-vars" (include "common.names.fullname" .) }} -o jsonpath="{.data.KEYCLOAK_ADMIN_PASSWORD}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ printf "%s-env-vars" (include "common.names.fullname" .) }} -o jsonpath="{.data.admin-password}" | base64 --decode)
 {{- end }}
 {{- if .Values.metrics.enabled }}
 
@@ -72,9 +72,12 @@ You can access the Prometheus metrics following the steps below:
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
 {{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
 
-{{- $keycloakSecretName := printf "%s-env-vars" (include "keycloak.fullname" .) -}}
-{{- $requiredAdminPassword := dict "valueKey" "auth.adminPassword" "secret" $keycloakSecretName "field" "KEYCLOAK_ADMIN_PASSWORD" -}}
-{{- $requiredKeycloakErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $requiredKeycloakErrors -}}
+{{- if not .Values.auth.existingSecret }}
+    {{- $keycloakSecretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) -}}
+
+    {{- $requiredAdminPassword := dict "valueKey" "auth.adminPassword" "secret" $keycloakSecretName "field" "admin-password" -}}
+    {{- $requiredAdminKeycloakErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
+    {{- $passwordErrors = append $passwordErrors $requiredAdminKeycloakErrors -}}
+{{- end }}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
