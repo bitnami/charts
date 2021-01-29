@@ -29,8 +29,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.ruler.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "ruler" "context" $) }}
+      {{- if .Values.ruler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.ruler.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.affinity "context" $) | nindent 8 }}
       {{- else }}
