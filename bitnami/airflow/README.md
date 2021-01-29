@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the Airflow chart and their default values.
 
 | Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| ------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
@@ -55,7 +55,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Common parameters
 
 | Parameter                            | Description                                                                                                             | Default                        |
-|--------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `affinity`                           | Affinity for pod assignment (evaluated as a template)                                                                   | `{}`                           |
 | `commonAnnotations`                  | Annotations to add to all deployed objects                                                                              | `{}`                           |
 | `commonLabels`                       | Labels to add to all deployed objects                                                                                   | `{}`                           |
@@ -88,7 +88,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow common parameters
 
 | Parameter                | Description                                                                                                          | Default            |
-|--------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------|
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)       | `nil`              |
 | `auth.fernetKey`         | Fernet key to secure connections                                                                                     | `nil`              |
 | `auth.forcePassword`     | Force users to specify a password                                                                                    | `false`            |
@@ -102,7 +102,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ## Airflow web parameters
 
 | Parameter                                | Description                                                                                          | Default                                                 |
-|------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `web.args`                               | Override default container args (useful when using custom images)                                    | `nil`                                                   |
 | `web.baseUrl`                            | URL used to access to airflow web ui                                                                 | `nil`                                                   |
 | `web.command`                            | Override default container command (useful when using custom images)                                 | `nil`                                                   |
@@ -154,7 +154,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow scheduler parameters
 
 | Parameter                                    | Description                                                                                          | Default                                                 |
-|----------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `scheduler.args`                             | Override default container args (useful when using custom images)                                    | `nil`                                                   |
 | `scheduler.command`                          | Override default container command (useful when using custom images)                                 | `nil`                                                   |
 | `scheduler.customLivenessProbe`              | Custom liveness probe for the Airflow scheduler component                                            | `{}`                                                    |
@@ -186,7 +186,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow worker parameters
 
 | Parameter                                   | Description                                                                                                                                                            | Default                                                 |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `worker.args`                               | Override default container args (useful when using custom images)                                                                                                      | `nil`                                                   |
 | `worker.autoscaling.enabled`                | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests` | `false`                                                 |
 | `worker.autoscaling.replicas.max`           | Maximum amount of replicas                                                                                                                                             | `3`                                                     |
@@ -239,7 +239,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow database parameters
 
 | Parameter                         | Description                                                                                                                                                                                                                    | Default           |
-|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
 | `externalDatabase.database`       | External PostgreSQL database name                                                                                                                                                                                              | `nil`             |
 | `externalDatabase.existingSecret` | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)                                                                                                                                      | `nil`             |
 | `externalDatabase.host`           | External PostgreSQL host                                                                                                                                                                                                       | `nil`             |
@@ -263,7 +263,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow exposing parameters
 
 | Parameter                        | Description                                                                          | Default                  |
-|----------------------------------|--------------------------------------------------------------------------------------|--------------------------|
+| -------------------------------- | ------------------------------------------------------------------------------------ | ------------------------ |
 | `ingress.annotations`            | Ingress annotations                                                                  | `[]`                     |
 | `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                        | ``                       |
 | `ingress.pathType`               | Ingress path type                                                                    | `ImplementationSpecific` |
@@ -281,7 +281,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow metrics parameters
 
 | Parameter                   | Description                                      | Default                                                 |
-|-----------------------------|--------------------------------------------------|---------------------------------------------------------|
+| --------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
 | `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                 |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
@@ -298,7 +298,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow ldap parameters
 
 | Parameter                        | Description                                                  | Default |
-|----------------------------------|--------------------------------------------------------------|---------|
+| -------------------------------- | ------------------------------------------------------------ | ------- |
 | `ldap.base`                      | LDAP search base DN                                          | `nil`   |
 | `ldap.binddn`                    | LDAP bind DN                                                 | `nil`   |
 | `ldap.bindpw`                    | LDAP bind password                                           | `nil`   |
@@ -313,7 +313,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 ### Airflow git sync parameters
 
 | Parameter                                | Description                                                                                                       | Default                 |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------|-------------------------|
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `git.clone.args`                         | Override default container args (useful when using custom images)                                                 | `nil`                   |
 | `git.clone.command`                      | Override default container command (useful when using custom images)                                              | `nil`                   |
 | `git.clone.extraEnvVars`                 | Array containing extra env vars                                                                                   | `nil`                   |
@@ -472,7 +472,9 @@ Celery executor is the default value for this chart with it you can scale out th
 
 #### KubernetesExecutor
 
-The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
+The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/master/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
+
+> NOTE: Redis is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
 
 ```console
 executor=KubernetesExecutor
@@ -529,13 +531,14 @@ Find more information about how to deal with common errors related to Bitnami’
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*.
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts.
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_.
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_.
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts.
 - Several parameters were renamed or disappeared in favor of new ones on this major version:
+
   - The image objects have been moved to its corresponding component object, e.g: `workerImage.*` now is located at `worker.image.*`.
-  - The prefix *airflow* has been removed. Therefore, parameters prefixed with `airflow` are now at root level, e.g. `airflow.loadExamples` now is `loadExamples` or `airflow.worker.resources` now is `worker.resources`.
-  - Parameters related to the *git* features has completely been refactored, please see how to configure git for [dags](#loaddagfiles) and [plugins](#loadingplugins) sections for more details.
+  - The prefix _airflow_ has been removed. Therefore, parameters prefixed with `airflow` are now at root level, e.g. `airflow.loadExamples` now is `loadExamples` or `airflow.worker.resources` now is `worker.resources`.
+  - Parameters related to the _git_ features has completely been refactored, please see how to configure git for [dags](#loaddagfiles) and [plugins](#loadingplugins) sections for more details.
     - They have been moved to `git.*` prefix.
     - `airflow.cloneDagsFromGit.*` no longer exists, instead you must use `git.dags.*` and `git.dags.repositories[*]` has been introduced that will add support for multiple repositories.
     - `airflow.clonePluginsFromGit.*` no longer exists, instead you must use `git.plugins.*`. `airflow.clonePluginsFromGit.repository`, `airflow.clonePluginsFromGit.branch` and `airflow.clonePluginsFromGit.path` have been removed in favour of `git.dags.repositories[*].*`.
