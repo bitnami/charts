@@ -34,6 +34,8 @@ When submitting a PR make sure that it:
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
+[Here](https://docs.bitnami.com/kubernetes/faq/get-started/understand-charts-release-process/) you can find more information about this process.
+
 ### Adding a new chart to the repository
 
 There are only three major requirements to add a new chart in our catalog:
