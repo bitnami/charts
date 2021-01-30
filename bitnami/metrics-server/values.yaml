@@ -146,6 +146,11 @@ nodeAffinityPreset:
 ##
 affinity: {}
 
+## Topology Spread Constraints. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints
+##
+topologySpreadConstraints: {}
+
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
