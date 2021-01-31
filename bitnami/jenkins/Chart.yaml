@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.263.1
+appVersion: 2.263.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ dependencies:
 description: The leading open source automation server
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/jenkins
-icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-220x234.png
 keywords:
   - jenkins
   - ci
@@ -26,4 +26,4 @@ name: jenkins
 sources:
   - https://github.com/bitnami/bitnami-docker-jenkins
   - https://jenkins.io/
-version: 7.0.4
+version: 7.3.2

@@ -14,12 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.1-debian-10-r50
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  ##
-  debug: false
+  tag: 2.4.1-debian-10-r81
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -29,37 +24,47 @@ image:
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  # pullSecrets:
+  pullSecrets:
   #   - myRegistryKeySecretName
+  ## Set to true if you would like to see extra information on logs
+  ## ref: https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
+  debug: false
 
-## String to partially override common.names.fullname template (will maintain the release name)
+## Force target Kubernetes version (using Helm capabilities if not set)
 ##
-# nameOverride:
+kubeVersion:
 
-## String to fully override common.names.fullname template
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-# fullnameOverride:
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
-## Add labels to all the deployed resources
+## String to partially override magento.fullname template (will maintain the release name)
 ##
-commonLabels: {}
+nameOverride:
 
-## Add annotations to all the deployed resources
+## String to fully override magento.fullname template
 ##
-commonAnnotations: {}
+fullnameOverride:
 
-## Kubernetes Cluster Domain
+## Number of replicas (requires ReadWriteMany PVC support)
 ##
-clusterDomain: cluster.local
+replicaCount: 1
 
-## Extra objects to deploy (value evaluated as a template)
+## Skip Magento installation wizard. Useful for migrations and restoring from SQL dump
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-extraDeploy: []
+magentoSkipInstall: false
 
 ## Magento host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoHost:
+magentoHost:
 
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
@@ -70,32 +75,47 @@ magentoUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-# magentoPassword:
+magentoPassword:
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
 magentoEmail: user@example.com
 
-## Prefix for Magento Admin
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
-##
-magentoAdminUri: admin
-
 ## First Name
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoFirstName: FirstName
+magentoFirstName:
 
 ## Last Name
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoLastName: LastName
+magentoLastName:
+
+## Prefix for Magento Admin
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+##
+magentoAdminUri:
 
 ## Mode
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
 ##
-magentoMode: developer
+magentoMode:
+
+## Extra install args
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+##
+magentoExtraInstallArgs:
+
+## Deploy static content
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+##
+magentoDeployStaticContent: false
+
+## Use SSL to access the Magento Store. Valid values: `true`, `false`
+## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+##
+magentoUseHttps: false
 
 ## Use SSL to access the Magento Admin. Valid values: `true`, `false`
 ## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
@@ -108,20 +128,38 @@ magentoSkipReindex: false
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
-allowEmptyPassword: "yes"
-
-## Command and args for running the container (set to default if not set). Use array form
 ##
-command: []
-args: []
+allowEmptyPassword: false
+
+## Container command (using container default if not set)
+##
+command:
+## Container args (using container default if ot set)
+##
+args:
+
+## Common annotations to add to all Magento resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Magento resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
 
 ## An array to add extra env vars
-## Example:
-## extraEnvVars:
-##   - name: FOO
-##     value: "bar"
+## For example:
 ##
 extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
 
 ## ConfigMap with extra environment variables
 ##
@@ -131,141 +169,6 @@ extraEnvVarsCM:
 ##
 extraEnvVarsSecret:
 
-## Strategy to use to update Pods
-##
-updateStrategy:
-  ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
-  ##
-  type: RollingUpdate
-
-## Magento pods' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-podSecurityContext:
-  enabled: false
-  ## fsGroup: 1001
-
-## Magento containers' SecurityContext
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-containerSecurityContext:
-  enabled: false
-  ## runAsUser: 1001
-  ## runAsNonRoot: true
-
-## Magento resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 200m
-  #   memory: 256Mi
-  requests:
-    memory: 512Mi
-    cpu: 300m
-
-## Magento containers' liveness and readiness probes.
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-##
-livenessProbe:
-  enabled: true
-  httpGet:
-    path: /index.php
-    port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"magento.host\" . }}"
-  initialDelaySeconds: 1000
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 6
-readinessProbe:
-  enabled: true
-  httpGet:
-    path: /index.php
-    port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"magento.host\" . }}"
-  initialDelaySeconds: 30
-  periodSeconds: 5
-  timeoutSeconds: 3
-  successThreshold: 1
-  failureThreshold: 3
-
-## Custom Liveness probes for Magento
-##
-customLivenessProbe: {}
-
-## Custom Rediness probes Magento
-##
-customReadinessProbe: {}
-
-## Pod extra labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Annotations for server pods.
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []
@@ -274,206 +177,47 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
-## Add init containers to the Magento pods.
-## Example:
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
+## Extra init containers to add to the deployment
 ##
-initContainers: {}
+initContainers: []
 
-## Add sidecars to the Magento pods.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
+## Extra sidecar containers to add to the deployment
 ##
-sidecars: {}
+sidecars: []
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-persistence:
-  enabled: true
-  apache:
-    ## apache data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 1Gi
-  magento:
-    ## magento data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 8Gi
+tolerations: []
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## Use existing secret for the application password
 ##
-service:
-  type: LoadBalancer
-  # HTTP Port
-  port: 80
-  # HTTPS Port
-  httpsPort: 443
-  ##
-  ## loadBalancerIP:
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  nodePorts:
-    http: ""
-    https: ""
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-
-## Ingress configuration
-##
-ingress:
-  ## Set to true to enable ingress record generation
-  ##
-  enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## When the ingress is enabled, a host pointing to this will be created
-  ##
-  hostname: magento.local
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
-  ## let the chart create self-signed certificates for you
-  ##
-  tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## Example:
-  ## extraHosts:
-  ##   - name: magento.local
-  ##     path: /
-  ##
-  extraHosts: []
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## Example:
-  ## extraTls:
-  ## - hosts:
-  ##     - magento.local
-  ##   secretName: magento.local-tls
-  ##
-  extraTls: []
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
-  ## name should line up with a secretName set further up
-  ##
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ##
-  ## Example
-  ## secrets:
-  ##   - name: magento.local-tls
-  ##     key: ""
-  ##     certificate: ""
-  ##
-  secrets: []
-
-## Prometheus Exporter / Metrics
-##
-metrics:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r244
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Metrics exporter pod Annotation and Labels
-  ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
+existingSecret:
 
 ##
 ## External database configuration
 ##
 externalDatabase:
-  ## Use existing secret (ignores previous password)
-  ## must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  # existingSecret:
-
   ## Database host
+  ##
   host:
 
-  ## Database port
+  ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_magento
 
   ## Database password
+  ##
   password:
 
   ## Database name
+  ##
   database: bitnami_magento
 
-##
-## External elasticsearch configuration
-##
-externalElasticsearch:
-  ## Elasticsearch host
-  host:
-
-  ## Elasticsearch port
-  port:
-
-##
 ## MariaDB chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -484,10 +228,11 @@ mariadb:
   enabled: true
   ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.17-debian-10-r35
+    tag: 10.4.17-debian-10-r64
 
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
@@ -533,6 +278,18 @@ mariadb:
       existingClaim:
 
 ##
+## External elasticsearch configuration
+##
+externalElasticsearch:
+  ## Elasticsearch host
+  ##
+  host:
+
+  ## Elasticsearch port
+  ##
+  port:
+
+##
 ## Elasticsearch chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/elasticsearch/values.yaml
@@ -540,16 +297,418 @@ mariadb:
 elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
+  ##
   enabled: true
   ## Enable to perform the sysctl operation
+  ##
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
+  ##
   master:
     replicas: 1
   ## Elasticsearch coordinating-only node parameters
+  ##
   coordinating:
     replicas: 1
   ## Elasticsearch data node parameters
+  ##
   data:
     replicas: 1
+
+## Container ports
+##
+containerPorts:
+  http: 8080
+  https: 8443
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+service:
+  type: LoadBalancer
+  # HTTP Port
+  port: 8080
+  # HTTPS Port
+  httpsPort: 8443
+  ## clusterIP: ""
+  ## Control hosts connecting to "LoadBalancer" only
+  ## loadBalancerSourceRanges:
+  ##   - 0.0.0.0/0
+  ## loadBalancerIP for the Magento Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## loadBalancerIP:
+  ##
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+
+## Configure the ingress resource that allows you to access the
+## Magento installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  ##
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: magento.local
+
+  ## Default path for the ingress resource
+  ##
+  path: /
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+  #  kubernetes.io/ingress.class: nginx
+
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
+  ##
+  tls: false
+
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## Example:
+  ## extraHosts:
+  ## - name: magento.local
+  ##   path: /
+  ##
+  extraHosts:
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## Example:
+  ## extraTls:
+  ## - hosts:
+  ##     - magento.local
+  ##   secretName: magento.local-tls
+  ##
+  extraTls: []
+
+  secrets:
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
+  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  # - name: magento.local-tls
+  #   key:
+  #   certificate:
+
+## Control where client requests go, to the same pod or round-robin
+## Values: ClientIP or None
+## ref: https://kubernetes.io/docs/user-guide/services/
+##
+sessionAffinity: "None"
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  ## Magento Data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the magento-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+#  requests:
+#    memory: 512Mi
+#    cpu: 300m
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    ##   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+##
+livenessProbe:
+  enabled: true
+  path: /index.php
+  initialDelaySeconds: 300
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: /index.php
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+startupProbe:
+  enabled: false
+  path: /index.php
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 60
+  successThreshold: 1
+
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Readiness probe
+##
+customReadinessProbe: {}
+
+## Custom Startup probe
+##
+customStartupProbe: {}
+
+## lifecycleHooks for the container to automate configuration before or after startup.
+##
+lifecycleHooks:
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/apache-exporter
+    tag: 0.8.0-debian-10-r273
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources: {}
+
+  ## Prometheus exporter service parameters
+  ##
+  service:
+    type: ClusterIP
+    ## Metrics port
+    ##
+    port: 9117
+    ## Annotations for the Prometheus exporter service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+
+# Add custom certificates and certificate authorities to Magento container
+certificates:
+  customCertificate:
+    certificateSecret: ""
+    chainSecret: {}
+    # name: secret-name
+    # key: secret-key
+    certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
+    keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
+    chainLocation: /etc/ssl/certs/mychain.pem
+  customCAs: []
+  ## Override container command
+  ##
+  command:
+  ## Override container args
+  ##
+  args:
+  # - secret: custom-CA
+  # - secret: more-custom-CAs
+  ## An array to add extra env vars
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  image:
+    registry: docker.io
+    repository: bitnami/minideb
+    tag: buster
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    # pullPolicy:
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

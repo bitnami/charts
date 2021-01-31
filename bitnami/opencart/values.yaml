@@ -43,6 +43,15 @@ nameOverride:
 ##
 fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
@@ -316,6 +325,10 @@ ingress:
   ## extraHosts:
   ## - name: opencart.local
   ##   path: /
+  ##
+  hosts:
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ##
 
   ## Any additional arbitrary paths that may need to be added to the ingress under the main host.

@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -70,6 +70,7 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
 | `nameOverride`      | String to partially override opencart.fullname template                      | `nil`                                                   |
 | `fullnameOverride`  | String to fully override opencart.fullname template                          | `nil`                                                   |
+| `hostAliases`       | Add deployment host aliases                                                  | `Check values.yaml`                                     |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |

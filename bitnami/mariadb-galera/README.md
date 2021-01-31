@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -82,6 +82,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.loadBalancerSourceRanges`         | Address that are allowed when svc is `LoadBalancer`                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.annotations`                      | Additional annotations for MariaDB Galera service                                                                                                                                                                                                                                | `{}`                                                              |
 | `service.headless.annotations`             | Annotations for the headless service. May be useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.                                                                                                                          | `{}`                                                              |
+| `hostAliases`                              | Add deployment host aliases                                                                                                                                                                                                                                                      | `[]`                                                              |
 | `clusterDomain`                            | Kubernetes DNS Domain name to use                                                                                                                                                                                                                                                | `cluster.local`                                                   |
 | `serviceAccount.create`                    | Specify whether a ServiceAccount should be created                                                                                                                                                                                                                               | `false`                                                           |
 | `serviceAccount.name`                      | The name of the ServiceAccount to create                                                                                                                                                                                                                                         | Generated using the common.names.fullname template                |
@@ -166,6 +167,12 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `readinessProbe.timeoutSeconds`            | When the probe times out                                                                                                                                                                                                                                                         | `1`                                                               |
 | `readinessProbe.successThreshold`          | Minimum consecutive successes for the probe                                                                                                                                                                                                                                      | `1`                                                               |
 | `readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe                                                                                                                                                                                                                                       | `3`                                                               |
+| `startupProbe.enabled`                     | Turn on and off startup probe                                                                                                                                                                                                                                                    | `false`                                                           |
+| `startupProbe.initialDelaySeconds`         | Delay before startup probe is initiated                                                                                                                                                                                                                                          | `120`                                                             |
+| `startupProbe.periodSeconds`               | How often to perform the probe                                                                                                                                                                                                                                                   | `10`                                                              |
+| `startupProbe.timeoutSeconds`              | When the probe times out                                                                                                                                                                                                                                                         | `1`                                                               |
+| `startupProbe.successThreshold`            | Minimum consecutive successes for the probe                                                                                                                                                                                                                                      | `1`                                                               |
+| `startupProbe.failureThreshold`            | Minimum consecutive failures for the probe                                                                                                                                                                                                                                       | `48`                                                              |
 | `podDisruptionBudget.create`               | If true, create a pod disruption budget for pods.                                                                                                                                                                                                                                | `false`                                                           |
 | `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                                                                 | `1`                                                               |
 | `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                                                                                                                                                                                 | `nil`                                                             |
@@ -227,28 +234,6 @@ $ helm install my-release \
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Force users to specify a password:
-
-```diff
-- rootUser.forcePassword: false
-+ rootUser.forcePassword: true
-- db.forcePassword: false
-+ db.forcePassword: true
-- galera.mariabackup.forcePassword: false
-+ galera.mariabackup..forcePassword: true
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Change MariaDB version
 

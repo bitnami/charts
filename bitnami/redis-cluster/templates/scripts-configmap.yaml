@@ -18,7 +18,7 @@ data:
     export REDISCLI_AUTH=$REDIS_PASSWORD
     {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}
@@ -44,7 +44,7 @@ data:
     export REDISCLI_AUTH=$REDIS_PASSWORD
     {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}

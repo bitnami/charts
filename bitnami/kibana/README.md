@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -72,6 +72,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `plugins`                              | Array containing the Kibana plugins to be installed in deployment                                                                                                                                                                                                                                              | `[]`                                                                                                    |
 | `savedObjects.urls`                    | Array containing links to NDJSON files to be imported during Kibana initialization                                                                                                                                                                                                                             | `[]`                                                                                                    |
 | `savedObjects.configmap`               | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                                                                                                                                                                        | `[]`                                                                                                    |
+| `hostAliases`                          | Add deployment host aliases                                                                                                                                                                                                                                                                                    | `[]`                                                                                                    |
 | `extraConfiguration`                   | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template                                                                                                                                                       | `nil`                                                                                                   |
 | `configurationCM`                      | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                                                                                                                                                                       | `nil`                                                                                                   |
 | `extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                                                                                                                                                                            | `nil`                                                                                                   |
@@ -149,6 +150,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                                                                                                                                                                            | `nil`                                                                                                   |
 | `elasticsearch.hosts`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                                                                                                                                                                                | `nil`                                                                                                   |
 | `elasticsearch.port`                   | Port for the accessing external Elasticsearch instances                                                                                                                                                                                                                                                        | `nil`                                                                                                   |
+| `elasticsearch.tls`                    | Is elasticsearch run with tls support                                                                                                                                                                                                                                                                          | `false`                                                                                                 |
 | `configuration.server.basePath`        | Enables you to specify a path to mount Kibana at if you are running behind a proxy. Use the `configuration.server.rewriteBasePath` setting to tell Kibana if it should remove the basePath from requests it receives, and to prevent a deprecation warning at startup. This setting cannot end in a slash (/). | `""`                                                                                                    |
 | `configuration.server.rewriteBasePath` | Specifies whether Kibana should rewrite requests that are prefixed with server.basePath or require that they are rewritten by your reverse proxy. This setting was effectively always false before Kibana 6.3 and will default to true starting in Kibana 7.0.                                                 | `false`                                                                                                 |
 | `kubeVersion`                          | Force target Kubernetes version (using Helm capabilities if not set)                                                                                                                                                                                                                                           | `nil`                                                                                                   |
@@ -177,17 +179,6 @@ $ helm install my-release -f values.yaml bitnami/kibana
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable metrics scraping
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Change Kibana version
 

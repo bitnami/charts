@@ -9,7 +9,7 @@ dependencies:
 description: Chart for PostgreSQL with HA architecture (using Replication Manager (repmgr) and Pgpool).
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha
-icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
   - postgresql
   - repmgr
@@ -27,4 +27,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 6.3.5
+version: 6.5.0

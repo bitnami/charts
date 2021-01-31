@@ -48,12 +48,15 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.master.priorityClassName }}
-      priorityClassName: "{{ .Values.master.priorityClassName }}"
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
       {{- with .Values.master.affinity }}
       affinity: {{- tpl (toYaml .) $ | nindent 8 }}
@@ -248,8 +251,8 @@ spec:
         image: "{{ template "redis.volumePermissions.image" . }}"
         imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
         command:
-          - /bin/sh
-          - -cx
+          - /bin/bash
+          - -ec
           - |
             {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
             chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.master.persistence.path }}
@@ -338,6 +341,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: master
+        {{- if .Values.master.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.master.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.master.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.master.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.master.persistence.accessModes }}

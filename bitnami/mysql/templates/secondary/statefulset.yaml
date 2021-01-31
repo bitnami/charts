@@ -42,6 +42,9 @@ spec:
         {{- end }}
     spec:
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.secondary.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
