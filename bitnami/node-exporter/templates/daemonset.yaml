@@ -21,6 +21,9 @@ spec:
     spec:
       {{- include "node-exporter.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "node-exporter.serviceAccountName" . }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}

@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.44.1-debian-10-r24
+    tag: 0.45.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -54,6 +54,11 @@ operator:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Service account for Prometheus Operator to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -239,20 +244,9 @@ operator:
     enabled: true
     namespace: kube-system
 
-  ## Configmap-reload image to use for reloading configmaps
+  ## Prometheus Configmap-reload image to use for reloading configmaps
+  ## defaults to Bitnami Prometheus Operator (ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/)
   ##
-  configmapReload:
-    image:
-      registry: docker.io
-      repository: bitnami/configmap-reload
-      tag: 0.4.0-debian-10-r156
-      ## Optionally specify an array of imagePullSecrets.
-      ## Secrets must be manually created in the namespace.
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ##
-      # pullSecrets:
-      #   - myRegistryKeySecretName
-
   prometheusConfigReloader:
     image: {}
     # registry:
@@ -276,7 +270,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.24.0-debian-10-r1
+    tag: 2.24.1-debian-10-r2
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -727,6 +721,21 @@ prometheus:
   ## Enable additional scrape configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ##
+  additionalScrapeConfigs:
+    enabled: false
+    type: external
+    external:
+      ## Name of the secret that Prometheus should use for the additional scrape configuration
+      ##
+      name: ""
+      ## Name of the key inside the secret to be used for the additional scrape configuration.
+      ##
+      key: ""
+    internal:
+      jobList: []
+
+  ## NOTE additionalScrapeConfigsExternal is deprecated. Please see README.md
+  ##
   additionalScrapeConfigsExternal:
     enabled: false
     ## Name of the secret that Prometheus should use for the additional scrape configuration
@@ -760,7 +769,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.17.2-scratch-r1
+      tag: 0.17.2-scratch-r2
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -853,7 +862,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r188
+    tag: 0.21.0-debian-10-r201
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

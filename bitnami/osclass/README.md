@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -91,6 +91,7 @@ The following table lists the configurable parameters of the Osclass chart and t
 | `smtpUser`           | SMTP user                                                            | `nil`                                                   |
 | `smtpPassword`       | SMTP password                                                        | `nil`                                                   |
 | `smtpProtocol`       | SMTP protocol [`ssl`, `tls`]                                         | `nil`                                                   |
+| `hostAliases`        | Add deployment host aliases                                          | `Check values.yaml`                                     |
 | `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
 | `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
 | `extraEnvVars`       | Extra environment variables to be set on Osclass container           | `{}`                                                    |

@@ -12,13 +12,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami InfluxDB(TM) image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 1.8.3-debian-10-r88
+  tag: 2.0.3-debian-10-r0
 
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -47,49 +51,71 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
 ## InfluxDB(TM) architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
 
-## Database to be created on first run
-## ref: https://github.com/bitnami/bitnami-docker-influxdb#creating-a-database-on-first-run
+## Authentication parameters
 ##
-database: my_database
-
-## Enable/disable authentication
-## ref: https://github.com/bitnami/bitnami-docker-influxdb#allowing-empty-passwords
-##
-authEnabled: true
-
-## InfluxDB(TM) admin credentials
-##
-adminUser:
-  name: admin
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
-##
-user:
-  name:
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
-##
-readUser:
-  name:
-  pwd:
-  usePasswordFile: false
-## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
-##
-writeUser:
-  name:
-  pwd:
-  usePasswordFile: false
-
-## Secret with InfluxDB(TM) credentials
-## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
-##
-# existingSecret:
+auth:
+  ## Variable to keep compatibility with influxdb v1
+  enabled: true
+  ## Whether to use files to provide secrets instead of env vars.
+  ##
+  usePasswordFiles: false
+  ## InfluxDB(TM) admin credentials
+  ##
+  admin:
+    username: admin
+    password:
+    token:
+    ## Primary org name and id
+    ##
+    org: primary
+    ## Primary bucket name and id
+    ##
+    bucket: primary
+  ## Whether to automatically create users' tokens
+  ## You should take into account these tokens are going to be created by CLI
+  ## so it is not possible to get them by k8s secrets nor to provide them though
+  ## values
+  ## See more influxdb 2.0 auth ref: https://docs.influxdata.com/influxdb/v2.0/security/tokens/
+  ##
+  createUserToken: false
+  ## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
+  ##
+  user:
+    username:
+    password:
+    ## Org where to create the user, Default: primary.org
+    ##
+    org:
+    ## Whether to create a new bucket or use the primary bucket
+    ## already create. If it is not null a new bucket will be created.
+    ##
+    bucket:
+  ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
+  ##
+  readUser:
+    username:
+    password:
+  ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
+  ##
+  writeUser:
+    username:
+    password:
+  ## Secret with InfluxDB(TM) credentials
+  ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
+  ##
+  existingSecret:
 
 ## InfluxDB(TM) backend parameters
 ##
@@ -200,6 +226,14 @@ influxdb:
   ##
   tolerations: []
 
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -240,6 +274,14 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
+
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
 
   ## Container ports
   ##
@@ -317,8 +359,8 @@ relay:
     # Array of InfluxDB(TM) instances to use as backends for Relay.
     output = [
         {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
-        {{- $influxdbFullname := include "influxdb.fullname" . }}
-        {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "influxdb.fullname" .) }}
+        {{- $influxdbFullname := include "common.names.fullname" . }}
+        {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "common.names.fullname" .) }}
         {{- $releaseName := .Release.Namespace }}
         {{- $clusterDomain:= .Values.clusterDomain }}
         {{- range $e, $i := until $influxdbReplicaCount }}
@@ -389,6 +431,14 @@ relay:
   ##
   tolerations: []
 
+  ## Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -430,6 +480,14 @@ relay:
     successThreshold: 1
     failureThreshold: 6
 
+  ## Custom Liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Readiness probe
+  ##
+  customReadinessProbe: {}
+
   ## Container ports
   ##
   containerPorts:
@@ -465,38 +523,74 @@ relay:
     ##
     annotations: {}
 
-## Ingress parameters
+## Configure the ingress resource that allows you to access the
+## influxdb installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: influxdb.local
+
+  ## The Path to influxdb. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /*
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
-  #  kubernetes.io/ingress.class: nginx
+  ##
+  annotations: {}
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: influxdb.local
-      path: /
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: influxdb.local
+  ##   path: /
+  ##
 
-  ## The tls configuration for the ingress
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  # tls:
-  # - hosts:
-  #   - influxdb.local
-  #   secretName: influxdb.local-tls
+  ## extraTls:
+  ## - hosts:
+  ##     - influxdb.local
+  ##   secretName: influxdb.local-tls
+  ##
 
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -506,9 +600,12 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: influxdb.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: influxdb.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Prometheus metrics
 ## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint
@@ -689,7 +786,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.322.0-debian-10-r1
+        tag: 0.325.0-debian-10-r2
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -714,7 +811,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.17.1-debian-10-r4
+        tag: 2.18.0-debian-10-r8
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -725,3 +822,7 @@ backup:
         ##
         # pullSecrets:
         #   - myRegistryKeySecretName
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/osclass
-  tag: 3.9.0-debian-10-r165
+  tag: 3.9.0-debian-10-r192
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -40,6 +40,15 @@ kubeVersion:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Add labels to all the deployed resources
 ##
@@ -433,7 +442,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r250
+    tag: 0.8.0-debian-10-r279
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
