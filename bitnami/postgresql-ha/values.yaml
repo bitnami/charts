@@ -146,6 +146,11 @@ postgresql:
   ##
   updateStrategyType: RollingUpdate
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -175,6 +180,7 @@ postgresql:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -517,6 +523,11 @@ pgpool:
   ##  users above
   #   passwords: 'pass01;pass02'
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Alternatively, you can provide the name of a secret containing this information.
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
@@ -622,6 +633,7 @@ pgpool:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1003,6 +1015,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 
 ## PgPool service parameters

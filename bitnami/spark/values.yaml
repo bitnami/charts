@@ -54,6 +54,11 @@ master:
   webPort: 8080
   clusterPort: 7077
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Set the master daemon memory limit.
   ##
   # daemonMemoryLimit:
@@ -182,6 +187,11 @@ worker:
   ##
   webPort: 8081
   # clusterPort:
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Add ports for exposing jobs running inside the worker nodes
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core

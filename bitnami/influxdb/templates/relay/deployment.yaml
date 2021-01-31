@@ -2,10 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "influxdb.fullname" . }}-relay
+  name: {{ include "common.names.fullname" . }}-relay
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: relay
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.relay.replicaCount }}
   strategy:
@@ -15,12 +21,12 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      {{- include "influxdb.matchLabels" . | nindent 6 }}
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: relay
   template:
     metadata:
       labels:
-        {{- include "influxdb.labels" . | nindent 8 }}
+        {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: relay
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
@@ -60,24 +66,18 @@ spec:
               containerPort: {{ .Values.relay.containerPorts.http }}
               protocol: TCP
           {{- if .Values.relay.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- omit .Values.relay.livenessProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
               port: http
-            initialDelaySeconds: {{ .Values.relay.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.relay.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.relay.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.relay.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.relay.livenessProbe.failureThreshold }}
+          {{- else if .Values.relay.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.relay.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- omit .Values.relay.readinessProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
               port: http
-            initialDelaySeconds: {{ .Values.relay.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.relay.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.relay.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.relay.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.relay.readinessProbe.failureThreshold }}
+          {{- else if .Values.relay.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.relay.resources }}
           resources: {{- toYaml .Values.relay.resources | nindent 12 }}
@@ -85,8 +85,14 @@ spec:
           volumeMounts:
             - name: relay-config
               mountPath: /conf
+          {{- if .Values.relay.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
       volumes:
         - name: relay-config
           configMap:
             name: {{ include "influxdb.relay.configmapName" . }}
+      {{- if .Values.relay.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
 {{- end }}
