@@ -8,13 +8,17 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami TestLink image version
 ## ref: https://hub.docker.com/r/bitnami/testlink/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r291
+  tag: 1.9.20-debian-10-r296
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -43,6 +47,15 @@ fullnameOverride:
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
@@ -250,6 +263,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -290,10 +304,12 @@ ingress:
   ## hosts:
   ## - name: testlink.local
   ##   path: /
+  ##   pathType: ImplementationSpecific
   ##
   hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
 
   ## tls:
   ## - hosts:
@@ -317,9 +333,22 @@ ingress:
   #   key:
   #   certificate:
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -459,6 +488,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: "/login.php"
@@ -505,7 +535,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r266
+    tag: 0.8.0-debian-10-r270
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

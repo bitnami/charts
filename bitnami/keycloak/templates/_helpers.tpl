@@ -18,6 +18,13 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Return the proper Auth TLS image name
+*/}}
+{{- define "keycloak.auth.tls.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.auth.tls.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper Keycloak image name
 */}}
 {{- define "keycloak.image" -}}

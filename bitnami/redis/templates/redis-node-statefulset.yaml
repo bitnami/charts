@@ -52,6 +52,9 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.slave.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.slave.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -133,6 +136,20 @@ spec:
             {{- end }}
             - name: REDIS_DATA_DIR
               value: {{ .Values.slave.persistence.path }}
+            {{- if .Values.sentinel.extraEnvVars }}
+            {{- include "redis.tplValue" (dict "value" .Values.sentinel.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.sentinel.extraEnvVarsCM .Values.sentinel.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.sentinel.extraEnvVarsCM }}
+            - configMapRef:
+              name: {{ .Values.sentinel.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sentinel.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: redis
               containerPort: {{ .Values.redisPort }}
@@ -358,8 +375,8 @@ spec:
           image: {{ template "redis.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - /bin/sh
-            - -cx
+            - /bin/bash
+            - -ec
             - |
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.slave.persistence.path }}
@@ -440,6 +457,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: slave
+        {{- if .Values.slave.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.slave.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.slave.persistence.accessModes }}

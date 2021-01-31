@@ -4,6 +4,12 @@ metadata:
   name: {{ include "common.names.fullname" . }}-worker
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.worker.replicaCount }}
@@ -27,7 +33,7 @@ spec:
       {{- end }}
       {{- end }}
     spec:
-{{- include "spark.imagePullSecrets" . | nindent 6 }}
+      {{- include "spark.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -35,6 +41,9 @@ spec:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.worker.nodeAffinityPreset.type "key" .Values.worker.nodeAffinityPreset.key "values" .Values.worker.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.worker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}

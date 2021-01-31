@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -124,6 +124,7 @@ The following table lists the configurable parameters of the EJBCA chart and the
 | `resources`                          | EJBCA container's resource requests and limits                                          | `{}`                                           |
 | `podSecurityContext.enabled`         | Enable security context for EJBCA container                                             | `true`                                         |
 | `podSecurityContext.runAsUser`       | User ID for the EJBCA container                                                         | `1001`                                         |
+| `hostAliases`                        | Add deployment host aliases                                                             | `[]`                                           |
 | `livenessProbe.enabled`              | Enable/disable livenessProbe                                                            | `true`                                         |
 | `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                | `500`                                          |
 | `livenessProbe.periodSeconds`        | How often to perform the probe                                                          | `10`                                           |

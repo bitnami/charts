@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the ownCloud chart and 
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
 | `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                        |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                       |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                         |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                       |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                       |
 | `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                      |

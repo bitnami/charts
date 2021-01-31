@@ -32,7 +32,10 @@ spec:
         checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
         {{- end }}
     spec:
-{{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.forwarder.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
@@ -106,7 +109,9 @@ spec:
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
           securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
           {{ end }}
           volumeMounts:
             - name: fluentd-config

@@ -16,6 +16,7 @@ metadata:
   {{- with .Values.readReplicas.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.replication.readReplicas }}
@@ -263,9 +264,9 @@ spec:
             - name: POSTGRESQL_STATEMENT_TIMEOUT
               value: {{ .Values.postgresqlStatementTimeout | quote }}
             {{- end }}
-            {{- if .Values.postgresqlTcpKeealivesCount }}
+            {{- if .Values.postgresqlTcpKeepalivesCount }}
             - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
-              value: {{ .Values.postgresqlTcpKeealivesCount | quote }}
+              value: {{ .Values.postgresqlTcpKeepalivesCount | quote }}
             {{- end }}
             {{- if .Values.postgresqlPghbaRemoveFilters }}
             - name: POSTGRESQL_PGHBA_REMOVE_FILTERS

@@ -22,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -54,174 +54,177 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 
 ### Global parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                      | Global Docker image registry                                                                                          | `nil`                                                        |
-| `global.imagePullSecrets`                   | Global Docker registry secret names as an array                                                                       | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                       | Global storage class for dynamic provisioning                                                                         | `nil`                                                        |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                            | Moodle<sup>TM</sup> image registry                                                                                    | `docker.io`                                                  |
-| `image.repository`                          | Moodle<sup>TM</sup> Image name                                                                                        | `bitnami/moodle`                                             |
-| `image.tag`                                 | Moodle<sup>TM</sup> Image tag                                                                                         | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                          | Moodle<sup>TM</sup> image pull policy                                                                                 | `IfNotPresent`                                               |
-| `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.debug`                               | Specify if debug logs should be enabled                                                                               | `false`                                                      |
-| `nameOverride`                              | String to partially override moodle.fullname template                                                                 | `nil`                                                        |
-| `fullnameOverride`                          | String to fully override moodle.fullname template                                                                     | `nil`                                                        |
-| `commonLabels`                              | Labels to add to all deployed objects                                                                                 | `nil`                                                        |
-| `commonAnnotations`                         | Annotations to add to all deployed objects                                                                            | `[]`                                                         |
-| `extraDeploy`                               | Array of extra objects to deploy with the release (evaluated as a template).                                          | `nil`                                                        |
+| Parameter           | Description                                                                  | Default                                                 |
+|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | Moodle<sup>TM</sup> image registry                                           | `docker.io`                                             |
+| `image.repository`  | Moodle<sup>TM</sup> Image name                                               | `bitnami/moodle`                                        |
+| `image.tag`         | Moodle<sup>TM</sup> Image tag                                                | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | Moodle<sup>TM</sup> image pull policy                                        | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
+| `nameOverride`      | String to partially override moodle.fullname template                        | `nil`                                                   |
+| `fullnameOverride`  | String to fully override moodle.fullname template                            | `nil`                                                   |
+| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### Moodle<sup>TM</sup> parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `affinity`                                  | Map of node/pod affinities                                                                                            | `{}`                                                         |
-| `allowEmptyPassword`                        | Allow DB blank passwords                                                                                              | true                                                         |
-| `args`                                      | Override default container args (useful when using custom images)                                                     | `nil`                                                        |
-| `command`                                   | Override default container command (useful when using custom images)                                                  | `nil`                                                        |
-| `containerPorts.http`                       | Sets http port inside Moodle<sup>TM</sup> container                                                                   | `8080`                                                       |
-| `containerPorts.https`                      | Sets https port inside Moodle<sup>TM</sup> container                                                                  | `8443`                                                       |
-| `containerSecurityContext.enabled`          | Enable Moodle<sup>TM</sup> containers' Security Context                                                               | `true`                                                       |
-| `containerSecurityContext.runAsUser`        | Moodle<sup>TM</sup> containers' Security Context                                                                      | `1001`                                                       |
-| `customLivenessProbe`                       | Override default liveness probe                                                                                       | `nil`                                                        |
-| `customReadinessProbe`                      | Override default readiness probe                                                                                      | `nil`                                                        |
-| `existingSecret`                            | Name of a secret with the application password                                                                        | `nil`                                                        |
-| `extraEnvVarsCM`                            | ConfigMap containing extra env vars                                                                                   | `nil`                                                        |
-| `extraEnvVarsSecret`                        | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                                        |
-| `extraEnvVars`                              | Extra environment variables                                                                                           | `nil`                                                        |
-| `extraVolumeMounts`                         | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                        |
-| `extraVolumes`                              | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                        |
-| `initContainers`                            | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                        |
-| `lifecycleHooks`                            | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                                           |
-| `livenessProbe`                             | Liveness probe configuration                                                                                          | `Check values.yaml file`                                     |
-| `moodleSkipInstall`                         | Skip Moodle<sup>TM</sup> installation wizard (true / false)                                                           | `false`                                                      |
-| `moodleSiteName`                            | Site Name                                                                                                             | `""`                                                         |
-| `moodleUsername`                            | User of the application                                                                                               | `user`                                                       |
-| `moodlePassword`                            | Application password                                                                                                  | _random 10 character alphanumeric string_                    |
-| `moodleEmail`                               | Admin email                                                                                                           | `user@example.com`                                           |
-| `nodeSelector`                              | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)                  |
-| `persistence.accessMode`                    | PVC Access Mode for Moodle<sup>TM</sup> volume                                                                        | `ReadWriteOnce`                                              |
-| `persistence.enabled`                       | Enable persistence using PVC                                                                                          | `true`                                                       |
-| `persistence.existingClaim`                 | An Existing PVC name                                                                                                  | `nil`                                                        |
-| `persistence.hostPath`                      | Host mount path for Moodle<sup>TM</sup> volume                                                                        | `nil` (will not mount to a host path)                        |
-| `persistence.size`                          | PVC Storage Request for Moodle<sup>TM</sup> volume                                                                    | `8Gi`                                                        |
-| `persistence.storageClass`                  | PVC Storage Class for Moodle<sup>TM</sup> volume                                                                      | `nil` (uses alpha storage class annotation)                  |
-| `podAnnotations`                            | Pod annotations                                                                                                       | `{}`                                                         |
-| `podLabels`                                 | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                        |
-| `podSecurityContext.enabled`                | Enable Moodle<sup>TM</sup> pods' Security Context                                                                     | `true`                                                       |
-| `podSecurityContext.fsGroup`                | Moodle<sup>TM</sup> pods' group ID                                                                                    | `1001`                                                       |
-| `readinessProbe`                            | Readiness probe configuration                                                                                         | `Check values.yaml file`                                     |
-| `replicaCount`                              | Number of Moodle<sup>TM</sup> Pods to run                                                                             | `1`                                                          |
-| `resources`                                 | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
-| `sidecars`                                  | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                        |
-| `smtpHost`                                  | SMTP host                                                                                                             | `nil`                                                        |
-| `smtpPort`                                  | SMTP port                                                                                                             | `nil` (but Moodle<sup>TM</sup> internal default is 25)       |
-| `smtpProtocol`                              | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                                        |
-| `smtpUser`                                  | SMTP user                                                                                                             | `nil`                                                        |
-| `smtpPassword`                              | SMTP password                                                                                                         | `nil`                                                        |
-| `tolerations`                               | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)                  |
-| `updateStrategy`                            | Deployment update strategy                                                                                            | `nil`                                                        |
+| Parameter                            | Description                                                                                                           | Default                                                |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                                   |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | true                                                   |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                                  |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                                  |
+| `containerPorts.http`                | Sets http port inside Moodle<sup>TM</sup> container                                                                   | `8080`                                                 |
+| `containerPorts.https`               | Sets https port inside Moodle<sup>TM</sup> container                                                                  | `8443`                                                 |
+| `containerSecurityContext.enabled`   | Enable Moodle<sup>TM</sup> containers' Security Context                                                               | `true`                                                 |
+| `containerSecurityContext.runAsUser` | Moodle<sup>TM</sup> containers' Security Context                                                                      | `1001`                                                 |
+| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                                  |
+| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                                  |
+| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                                  |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                                  |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                                  |
+| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                                  |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                  |
+| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                                  |
+| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                                  |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                                     |
+| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                               |
+| `moodleSkipInstall`                  | Skip Moodle<sup>TM</sup> installation wizard (true / false)                                                           | `false`                                                |
+| `moodleSiteName`                     | Site Name                                                                                                             | `""`                                                   |
+| `moodleUsername`                     | User of the application                                                                                               | `user`                                                 |
+| `moodlePassword`                     | Application password                                                                                                  | _random 10 character alphanumeric string_              |
+| `moodleEmail`                        | Admin email                                                                                                           | `user@example.com`                                     |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)            |
+| `persistence.accessMode`             | PVC Access Mode for Moodle<sup>TM</sup> volume                                                                        | `ReadWriteOnce`                                        |
+| `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                                 |
+| `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                                  |
+| `persistence.hostPath`               | Host mount path for Moodle<sup>TM</sup> volume                                                                        | `nil` (will not mount to a host path)                  |
+| `persistence.size`                   | PVC Storage Request for Moodle<sup>TM</sup> volume                                                                    | `8Gi`                                                  |
+| `persistence.storageClass`           | PVC Storage Class for Moodle<sup>TM</sup> volume                                                                      | `nil` (uses alpha storage class annotation)            |
+| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                                   |
+| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                                  |
+| `podSecurityContext.enabled`         | Enable Moodle<sup>TM</sup> pods' Security Context                                                                     | `true`                                                 |
+| `podSecurityContext.fsGroup`         | Moodle<sup>TM</sup> pods' group ID                                                                                    | `1001`                                                 |
+| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                               |
+| `replicaCount`                       | Number of Moodle<sup>TM</sup> Pods to run                                                                             | `1`                                                    |
+| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                           |
+| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                                  |
+| `smtpHost`                           | SMTP host                                                                                                             | `nil`                                                  |
+| `smtpPort`                           | SMTP port                                                                                                             | `nil` (but Moodle<sup>TM</sup> internal default is 25) |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                                  |
+| `smtpUser`                           | SMTP user                                                                                                             | `nil`                                                  |
+| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                                  |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)            |
+| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                                  |
 
 ### Traffic Exposure Parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `service.type`                              | Kubernetes Service type                                                                                               | `LoadBalancer`                                               |
-| `service.port`                              | Service HTTP port                                                                                                     | `80`                                                         |
-| `service.httpsPort`                         | Service HTTPS port                                                                                                    | `443`                                                        |
-| `service.externalTrafficPolicy`             | Enable client source IP preservation                                                                                  | `Cluster`                                                    |
-| `service.nodePorts.http`                    | Kubernetes http node port                                                                                             | `""`                                                         |
-| `service.nodePorts.https`                   | Kubernetes https node port                                                                                            | `""`                                                         |
-| `ingress.enabled`                           | Enable ingress controller resource                                                                                    | `false`                                                      |
-| `ingress.certManager`                       | Add annotations for cert-manager                                                                                      | `false`                                                      |
-| `ingress.hostname`                          | Default host for the ingress resource                                                                                 | `moodle.local`                                               |
-| `ingress.annotations`                       | Ingress annotations                                                                                                   | `{}`                                                         |
-| `ingress.hosts[0].name`                     | Hostname to your Moodle<sup>TM</sup> installation                                                                     | `nil`                                                        |
-| `ingress.hosts[0].path`                     | Path within the url structure                                                                                         | `nil`                                                        |
-| `ingress.tls[0].hosts[0]`                   | TLS hosts                                                                                                             | `nil`                                                        |
-| `ingress.tls[0].secretName`                 | TLS Secret (certificates)                                                                                             | `nil`                                                        |
-| `ingress.secrets[0].name`                   | TLS Secret Name                                                                                                       | `nil`                                                        |
-| `ingress.secrets[0].certificate`            | TLS Secret Certificate                                                                                                | `nil`                                                        |
-| `ingress.secrets[0].key`                    | TLS Secret Key                                                                                                        | `nil`                                                        |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `minio.local`                  |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
 
 ### Database parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                      | `true`                                                       |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                                  | `standalone`                                                 |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                  | _random 10 character alphanumeric string_                    |
-| `mariadb.auth.database`                     | Database name to create                                                                                               | `bitnami_moodle`                                             |
-| `mariadb.auth.username`                     | Database user to create                                                                                               | `bn_moodle`                                                  |
-| `mariadb.auth.password`                     | Password for the database                                                                                             | _random 10 character long alphanumeric string_               |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                 | `true`                                                       |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                              | `nil`                                                        |
-| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes                                                                               | `[ReadWriteOnce]`                                            |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                       | `8Gi`                                                        |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                       | `nil` (uses alpha storage class annotation)                  |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                                                    | `nil` (will not mount to a host path)                        |
-| `externalDatabase.user`                     | Existing username in the external db                                                                                  | `bn_moodle`                                                  |
-| `externalDatabase.password`                 | Password for the above username                                                                                       | `nil`                                                        |
-| `externalDatabase.database`                 | Name of the existing database                                                                                         | `bitnami_moodle`                                             |
-| `externalDatabase.host`                     | Host of the existing database                                                                                         | `nil`                                                        |
-| `externalDatabase.port`                     | Port of the existing database                                                                                         | `3306`                                                       |
+| Parameter                                   | Description                                                              | Default                                        |
+|---------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------|
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                         | `true`                                         |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                     | `standalone`                                   |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                     | _random 10 character alphanumeric string_      |
+| `mariadb.auth.database`                     | Database name to create                                                  | `bitnami_moodle`                               |
+| `mariadb.auth.username`                     | Database user to create                                                  | `bn_moodle`                                    |
+| `mariadb.auth.password`                     | Password for the database                                                | _random 10 character long alphanumeric string_ |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                    | `true`                                         |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas | `nil`                                          |
+| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes                                  | `[ReadWriteOnce]`                              |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                          | `8Gi`                                          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                          | `nil` (uses alpha storage class annotation)    |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                       | `nil` (will not mount to a host path)          |
+| `externalDatabase.user`                     | Existing username in the external db                                     | `bn_moodle`                                    |
+| `externalDatabase.password`                 | Password for the above username                                          | `nil`                                          |
+| `externalDatabase.database`                 | Name of the existing database                                            | `bitnami_moodle`                               |
+| `externalDatabase.host`                     | Host of the existing database                                            | `nil`                                          |
+| `externalDatabase.port`                     | Port of the existing database                                            | `3306`                                         |
 
 ### Volume Permissions parameters
 
-| Parameter                                   | Description                                                                                                                                               | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                 | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`          | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`        | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`               | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`       | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`        | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`               | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Metrics parameters
 
-| Parameter                                   | Description                                                                                                           | Default                                                      |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                           | Start a side-car prometheus exporter                                                                                  | `false`                                                      |
-| `metrics.image.registry`                    | Apache exporter image registry                                                                                        | `docker.io`                                                  |
-| `metrics.image.repository`                  | Apache exporter image name                                                                                            | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`                         | Apache exporter image tag                                                                                             | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`                  | Image pull policy                                                                                                     | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`                 | Specify docker-registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.service.type`                      | Prometheus metrics service type                                                                                       | `LoadBalancer`                                               |
-| `metrics.service.port`                      | Prometheus metrics service port                                                                                       | `9117`                                                       |
-| `metrics.service.loadBalancerIP`            | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                              | `nil`                                                        |
-| `metrics.service.annotations`               | Annotations for Prometheus metrics service                                                                            | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.podAnnotations`                    | Additional annotations for Metrics exporter pod                                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`                         | Exporter resource requests/limit                                                                                      | `{}`                                                         |
+| Parameter                        | Description                                                              | Default                                                      |
+|----------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                | Start a side-car prometheus exporter                                     | `false`                                                      |
+| `metrics.image.registry`         | Apache exporter image registry                                           | `docker.io`                                                  |
+| `metrics.image.repository`       | Apache exporter image name                                               | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`              | Apache exporter image tag                                                | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`       | Image pull policy                                                        | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array                         | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.service.type`           | Prometheus metrics service type                                          | `LoadBalancer`                                               |
+| `metrics.service.port`           | Prometheus metrics service port                                          | `9117`                                                       |
+| `metrics.service.loadBalancerIP` | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer` | `nil`                                                        |
+| `metrics.service.annotations`    | Annotations for Prometheus metrics service                               | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources`              | Exporter resource requests/limit                                         | `{}`                                                         |
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                  | Default                                                      |
-|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                             | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                          | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                           | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                           | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                     | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                           | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                   | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                      | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                  | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                          | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                         | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                            | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                         | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                     | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                          | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                 | `nil`                                                        |
-
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle) image documentation.
 
@@ -312,6 +315,10 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 10.0.0
 

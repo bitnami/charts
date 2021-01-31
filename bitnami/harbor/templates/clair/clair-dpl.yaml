@@ -262,6 +262,6 @@ spec:
 {{ include "harbor.caBundleVolume" . | indent 8 }}
         {{- end }}
       {{- if .Values.clair.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}

@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | Parameter                             | Description                                                                                | Default                                                 |
 |---------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `replicaCount`                        | Number of ASP.NET Core replicas to deploy                                                  | `1`                                                     |
+| `hostAliases`                    | Add deployment host aliases                                                               | `[]`                                          |
 | `strategyType`                        | Deployment Strategy Type                                                                   | `RollingUpdate`                                         |
 | `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
 | `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                  |
@@ -216,24 +217,6 @@ $ helm install my-release -f values.yaml bitnami/aspnet-core
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Increase number of replicas to 3:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.enabled: false
-+ pdb.enabled: true
-```
 
 ### Deploying your custom ASP.NET Core application
 

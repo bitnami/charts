@@ -25,8 +25,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "compactor" "context" $) }}
+      {{- if .Values.compactor.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.compactor.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
       {{- else }}

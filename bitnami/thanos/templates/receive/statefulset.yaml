@@ -1,0 +1,145 @@
+{{- if .Values.receive.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+spec:
+  replicas: {{ .Values.receive.replicaCount }}
+  podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
+  serviceName: {{ include "common.names.fullname" . }}-receive-headless
+  updateStrategy:
+    type: {{ .Values.receive.updateStrategyType }}
+    {{- if (eq "OnDelete" .Values.receive.updateStrategyType) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: receive
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: receive
+      annotations:
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        {{- if (include "thanos.receive.createConfigmap" .) }}
+        checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.receive.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "receive" "context" $) }}
+      {{- if .Values.receive.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.receive.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receive.podAffinityPreset "component" "receive" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receive.podAntiAffinityPreset "component" "receive" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.receive.nodeAffinityPreset.type "key" .Values.receive.nodeAffinityPreset.key "values" .Values.receive.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.receive.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.receive.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.priorityClassName }}
+      priorityClassName: {{ .Values.receive.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.receive.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.receive.securityContext.fsGroup }}
+      {{- end }}
+      containers:
+        - name: receive
+          image: {{ include "thanos.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.receive.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.receive.securityContext.runAsUser }}
+          {{- end }}
+          args:
+            - receive
+            - --log.level={{ .Values.receive.logLevel }}
+            - --log.format=logfmt
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --remote-write.address=0.0.0.0:19291
+            - --receive.replication-factor=1
+            - --objstore.config=$(OBJSTORE_CONFIG)
+            - --tsdb.path=/var/thanos/receive
+            - --label=replica="$(NAME)"
+            - --label=receive="true"
+            - --tsdb.retention=15d
+            - --receive.local-endpoint=127.0.0.1:10901
+            - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+          env:
+          - name: NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: OBJSTORE_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: objstore.yml
+                name: {{ include "thanos.objstoreSecretName" . }}
+          ports:
+            - containerPort: 10901
+              name: grpc
+              protocol: TCP
+            - containerPort: 10902
+              name: http
+              protocol: TCP
+            - containerPort: 19291
+              name: remote-write
+              protocol: TCP
+          {{- if .Values.receive.livenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.livenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.readinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.readinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.resources }}
+          resources: {{- toYaml .Values.receive.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: hashring-config
+              mountPath: /var/lib/thanos-receive
+            - name: data
+              mountPath: /var/thanos/receive
+      volumes:
+        - name: hashring-config
+          configMap:
+            name: {{ include "common.names.fullname" . }}-receive
+  {{- if and .Values.receive.persistence.enabled .Values.receive.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.receive.persistence.existingClaim }}
+  {{- else if not .Values.receive.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        {{- range .Values.receive.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.receive.persistence.size | quote }}
+        {{- include "common.storage.class" (dict "persistence" .Values.receive.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

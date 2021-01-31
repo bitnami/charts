@@ -30,6 +30,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb and in etcd pod scripts
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ##
   debug: false
 
 ## String to partially override etcd.fullname template (will maintain the release name)
@@ -39,6 +40,11 @@ image:
 ## String to fully override etcd.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -255,6 +261,7 @@ persistence:
   ## Persistent Volume selector
   ## Can specify a label selector to further filter the set of volumes.
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  ##
   selector: {}
 
 ## Define a disruption budget
@@ -332,6 +339,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -364,6 +372,7 @@ tolerations: []
 
 ## Name of the priority class to be used by etcd pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
 priorityClassName: ""
 
 ## Etcd Prometheus exporter configuration
@@ -440,6 +449,7 @@ startFromSnapshot:
 disasterRecovery:
   enabled: false
   ## Set to true if you would like to see extra information on logs for snapshotting
+  ##
   debug: true
   cronjob:
     ## Schedule in Cron format to save snapshots

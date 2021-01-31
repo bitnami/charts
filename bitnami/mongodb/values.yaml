@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.3-debian-10-r21
+  tag: 4.4.3-debian-10-r31
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -35,6 +35,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## It turns on Bitnami debugging in minideb-extras-base
   ## ref:  https://github.com/bitnami/minideb-extras-base
+  ##
   debug: false
 
 ## String to partially override mongodb.fullname template (will maintain the release name)
@@ -91,6 +92,7 @@ auth:
 
 tls:
   ## Enable or disable MongoDB TLS Support
+  ##
   enabled: false
 
   ## Existing secret with MongoDB TLS certificates
@@ -107,8 +109,13 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r26
+    tag: 1.19.6-debian-10-r34
     pullPolicy: IfNotPresent
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Name of the replica set
 ## Ignored when mongodb.architecture=standalone
@@ -193,6 +200,7 @@ configuration: ""
 ##   my_init_script.sh: |
 ##      #!/bin/bash
 ##      echo "Do something."
+##
 initdbScripts: {}
 
 ## Existing ConfigMap with custom init scripts
@@ -268,6 +276,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -411,6 +420,7 @@ sidecars: {}
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
+##
 extraVolumeMounts: []
 extraVolumes: []
 
@@ -463,9 +473,11 @@ persistence:
   ##
   subPath: ""
   ## Fine tuning for volumeClaimTemplates
+  ##
   volumeClaimTemplates:
     ## A label query over volumes to consider for binding (e.g. when using local volumes)
     ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+    ##
     selector:
 
 ## Service parameters
@@ -523,7 +535,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.14-debian-10-r20
+      tag: 1.18.15-debian-10-r8
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -595,12 +607,18 @@ externalAccess:
 arbiter:
   ## Enable deploying the MongoDB Arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
+  ##
   enabled: true
 
   ## MongoDB configuration file for the Arbiter. For documentation of all options, see:
   ##   http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   configuration: ""
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## ConfigMap with MongoDB configuration for the Arbiter
   ## NOTE: When it's set the arbiter.configuration parameter is ignored
@@ -662,6 +680,7 @@ arbiter:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -804,6 +823,7 @@ arbiter:
   ## extraVolumes:
   ##   - name: extras
   ##     emptyDir: {}
+  ##
   extraVolumeMounts: []
   extraVolumes: []
 
@@ -830,6 +850,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
   # name:
+  ## Annotations for the Service Account
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -840,6 +863,56 @@ rbac:
   ## that allows MongoDB pods querying the K8s API
   ##
   create: false
+
+## PodSecurityPolicy configuration
+## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
+## won't be created.
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  ## Specifies whether a PodSecurityPolicy should be created
+  ##
+  create: false
+  ## You can either use predefined policy with some adjustments
+  ##
+  allowPrivilegeEscalation: false
+  privileged: false
+  ## Or you can specifiy the full spec to use for PSP
+  ## Defining a spec ignores the above values.
+  ##
+  spec: {}
+  ## Example:
+  ##    allowPrivilegeEscalation: false
+  ##    fsGroup:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    hostIPC: false
+  ##    hostNetwork: false
+  ##    hostPID: false
+  ##    privileged: false
+  ##    readOnlyRootFilesystem: false
+  ##    requiredDropCapabilities:
+  ##      - ALL
+  ##    runAsUser:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    seLinux:
+  ##      rule: 'RunAsAny'
+  ##    supplementalGroups:
+  ##      rule: 'MustRunAs'
+  ##      ranges:
+  ##        - min: 1001
+  ##          max: 1001
+  ##    volumes:
+  ##      - 'configMap'
+  ##      - 'secret'
+  ##      - 'emptyDir'
+  ##      - 'persistentVolumeClaim'
+  ##
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -902,7 +975,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.20.1-debian-10-r38
+    tag: 0.11.2-debian-10-r62
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -973,6 +1046,7 @@ metrics:
   ##
   serviceMonitor:
     ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
     enabled: false
 
     ## Specify the namespace where Prometheus Operator is running

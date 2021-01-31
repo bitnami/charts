@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -89,6 +89,7 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `operator.tolerations`                                 | Tolerations for controller pod assignment                                                           | `[]`                                                    |
 | `operator.affinity`                                    | Affinity for controller pod assignment                                                              | `{}`                                                    |
 | `operator.podAnnotations`                              | Pod annotations                                                                                     | `{}`                                                    |
+| `operator.hostAliases`                                 | Add deployment host aliases                                                                         | `[]`                                                    |
 | `operator.podLabels`                                   | Pod labels                                                                                          | `{}`                                                    |
 | `operator.serviceAccount.create`                       | create a serviceAccount for the deployment                                                          | `true`                                                  |
 | `operator.serviceAccount.name`                         | use the serviceAccount with the specified name                                                      | ``                                                      |
@@ -184,11 +185,10 @@ The following tables list the configurable parameters of the grafana-operator ch
 
 | Parameter                             | Description                                      | Default                                                 |
 |---------------------------------------|--------------------------------------------------|---------------------------------------------------------|
-| `grafanaPluginInit.image.registry`    | Grafana Plugin Init image registry               | `quay.io`                                               |
-| `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name                   | `integreatly/grafana_plugins_init`                      |
+| `grafanaPluginInit.image.registry`    | Grafana Plugin Init image registry               | `docker.io`                                             |
+| `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name                   | `bitnami/grafana`                                       |
 | `grafanaPluginInit.image.tag`         | Grafana Plugin Init image tag                    | `{TAG_NAME}`                                            |
 | `grafanaPluginInit.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

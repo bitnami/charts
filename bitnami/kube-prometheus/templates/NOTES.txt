@@ -96,9 +96,6 @@ To access Alertmanager from outside the cluster execute the following commands:
 {{- if and .Values.operator.prometheusConfigReloader.image.registry (and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag) }}
 {{- include "common.warnings.rollingTag" .Values.operator.prometheusConfigReloader.image }}
 {{- end }}
-{{- if and .Values.operator.configmapReload.image.registry (and .Values.operator.configmapReload.image.repository .Values.operator.configmapReload.image.tag) }}
-{{- include "common.warnings.rollingTag" .Values.operator.configmapReload.image }}
-{{- end }}
 {{- include "common.warnings.rollingTag" .Values.prometheus.image }}
 {{- include "common.warnings.rollingTag" .Values.prometheus.thanos.image }}
 {{- include "common.warnings.rollingTag" .Values.alertmanager.image }}

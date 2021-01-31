@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -70,6 +70,7 @@ The following table lists the configurable parameters of the kube-state-metrics 
 | `image.pullSecrets`                          | Specify docker-registry secret names as an array                                                              | `[]` (does not add image pull secrets to deployed pods)    |
 | `extraArgs`                                  | Additional command line arguments to pass to kube-state-metrics                                               | `{}`                                                       |
 | `namespace`                                  | Comma-separated list of namespaces to be enabled. Defaults to all namespaces                                  | ``                                                         |
+| `hostAliases`                                | Add deployment host aliases                                                                                   | `[]`                                                       |
 | `collectors.certificatesigningrequests`      | Enable the `certificatesigningrequests` collector                                                             | `true`                                                     |
 | `collectors.configmaps`                      | Enable the `configmaps` collector                                                                             | `true`                                                     |
 | `collectors.cronjobs`                        | Enable the `cronjobs` collector                                                                               | `true`                                                     |
@@ -167,17 +168,6 @@ $ helm install my-release -f values.yaml bitnami/kube-state-metrics
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Increase the number of kube-state-metrics Pod replicas:
-
-```diff
--   replicaCount: 1
-+   replicaCount: 2
-```
 
 ### Setting Pod's affinity
 

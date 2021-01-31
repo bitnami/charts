@@ -15,7 +15,7 @@ dependencies:
 description: Event-driven I/O server-side JavaScript environment based on V8
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/node
-icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-220x234.png
 keywords:
   - node
   - javascript
@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 14.1.1
+version: 15.1.0
