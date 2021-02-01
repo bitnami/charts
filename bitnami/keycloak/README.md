@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Global parameters
 
 | Parameter                 | Description                                     | Default                                                 |
-| ------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
@@ -60,7 +60,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Common parameters
 
 | Parameter           | Description                                                          | Default                        |
-| ------------------- | -------------------------------------------------------------------- | ------------------------------ |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
 | `nameOverride`      | String to partially override keycloak.fullname                       | `nil`                          |
 | `fullnameOverride`  | String to fully override keycloak.fullname                           | `nil`                          |
 | `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
@@ -72,7 +72,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Keycloak parameters
 
 | Parameter                         | Description                                                                                                                                                   | Default                                                 |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `image.registry`                  | Keycloak image registry                                                                                                                                       | `docker.io`                                             |
 | `image.repository`                | Keycloak image name                                                                                                                                           | `bitnami/keycloak`                                      |
 | `image.tag`                       | Keycloak image tag                                                                                                                                            | `{TAG_NAME}`                                            |
@@ -88,6 +88,13 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.jksSecret`              | Existing secret containing the truststore and one keystore per Keycloak replica                                                                               | `nil`                                                   |
 | `auth.tls.keystorePassword`       | Password to access the keystore when it's password-protected                                                                                                  | `nil`                                                   |
 | `auth.tls.truststorePassword`     | Password to access the truststore when it's password-protected                                                                                                | `nil`                                                   |
+| `auth.tls.image.registry`         | TLS init container image registry                                                                                                                             | `docker.io`                                             |
+| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/minideb`                                       |
+| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `buster`                                                |
+| `auth.tls.image.pullPolicy`       | TLS init container image pull policy                                                                                                                          | `Always`                                                |
+| `auth.tls.image.pullSecrets`      | TLS init container image pull secrets                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `auth.tls.resources.limits`       | The resources limits for the TLS init container                                                                                                               | `{}`                                                    |
+| `auth.tls.resources.requests`     | The requested resources for the TLS init container                                                                                                            | `{}`                                                    |
 | `auth.existingSecret.name`        | Name for an existing secret containing passwords                                                                                                              | `nil`                                                   |
 | `auth.existingSecret.keyMapping`  | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`                                                   |
 | `proxyAddressForwarding`          | Enable Proxy Address Forwarding                                                                                                                               | `false`                                                 |
@@ -99,6 +106,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `cache.authOwnersCount`           | Number of nodes that will replicate cached authentication data                                                                                                | `1`                                                     |
 | `configuration`                   | Keycloak Configuration. Auto-generated based on other parameters when not specified                                                                           | `nil`                                                   |
 | `existingConfigmap`               | Name of existing ConfigMap with Keycloak configuration                                                                                                        | `nil`                                                   |
+| `hostAliases`                     | Add deployment host aliases                                                                                                                                   | `[]`                                                    |
 | `initdbScripts`                   | Dictionary of initdb scripts                                                                                                                                  | `{}` (evaluated as a template)                          |
 | `initdbScriptsConfigMap`          | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                           | `nil`                                                   |
 | `command`                         | Override default container command (useful when using custom images)                                                                                          | `nil`                                                   |
@@ -111,7 +119,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Keycloak deployment/statefulset parameters
 
 | Parameter                   | Description                                                                               | Default                        |
-| --------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------ |
+|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
 | `replicaCount`              | Number of Keycloak replicas to deploy                                                     | `1`                            |
 | `containerPorts.http`       | HTTP port to expose at container level                                                    | `8080`                         |
 | `containerPorts.https`      | HTTPS port to expose at container level                                                   | `8443`                         |
@@ -145,7 +153,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Exposure parameters
 
 | Parameter                          | Description                                                                       | Default                        |
-| ---------------------------------- | --------------------------------------------------------------------------------- | ------------------------------ |
+|------------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
 | `service.type`                     | Kubernetes service type                                                           | `LoadBalancer`                 |
 | `service.port`                     | Service HTTP port                                                                 | `80`                           |
 | `service.nodePort`                 | Service HTTPS port                                                                | `443`                          |
@@ -178,7 +186,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### RBAC parameters
 
 | Parameter               | Description                                               | Default                                          |
-| ----------------------- | --------------------------------------------------------- | ------------------------------------------------ |
+|-------------------------|-----------------------------------------------------------|--------------------------------------------------|
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Keycloak pods | `true`                                           |
 | `serviceAccount.name`   | Name of the created ServiceAccount                        | Generated using the `keycloak.fullname` template |
 | `rbac.create`           | Weather to create & use RBAC resources or not             | `false`                                          |
@@ -187,7 +195,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Other parameters
 
 | Parameter                  | Description                                                    | Default |
-| -------------------------- | -------------------------------------------------------------- | ------- |
+|----------------------------|----------------------------------------------------------------|---------|
 | `pdb.create`               | Enable/disable a Pod Disruption Budget creation                | `false` |
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
 | `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `nil`   |
@@ -200,7 +208,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Metrics parameters
 
 | Parameter                                 | Description                                                                         | Default                                                      |
-| ----------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+|-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                         | Enable exposing Keycloak statistics                                                 | `false`                                                      |
 | `metrics.service.port`                    | Service HTTP management port                                                        | `9990`                                                       |
 | `metrics.service.annotations`             | Annotations for enabling prometheus to access the metrics endpoints                 | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
@@ -216,7 +224,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 ### Database parameters
 
 | Parameter                        | Description                                                                  | Default            |
-| -------------------------------- | ---------------------------------------------------------------------------- | ------------------ |
+|----------------------------------|------------------------------------------------------------------------------|--------------------|
 | `postgresql.enabled`             | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`             |
 | `postgresql.postgresqlUsername`  | PostgreSQL user to create (used by Keycloak)                                 | `bn_keycloak`      |
 | `postgresql.postgresqlPassword`  | Password for the Dicourse user - ignored if existingSecret is provided       | `some-password`    |

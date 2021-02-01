@@ -43,6 +43,11 @@ image:
 ##
 kubeVersion:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -214,6 +219,13 @@ tolerations: {}
 ##
 podSecurityContext:
   enabled: false
+  fsGroup: 1001
+
+## NGINX Core containers' Security Context (only main container).
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: false
   runAsUser: 1001
   runAsNonRoot: true
   ## sysctl settings
@@ -223,13 +235,6 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: {}
-
-## NGINX Core containers' Security Context (only main container).
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: false
-  fsGroup: 1001
 
 ## Configures the ports NGINX listens on
 ##
@@ -492,6 +497,7 @@ ldapDaemon:
 sidecars:
 
 ## Extra init containers
+##
 initContainers:
 
 ## Configure the ingress resource that allows you to access the

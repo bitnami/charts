@@ -14,6 +14,7 @@ metadata:
   {{- with .Values.primary.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: 1

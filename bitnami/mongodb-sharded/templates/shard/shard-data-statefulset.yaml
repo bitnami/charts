@@ -47,6 +47,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAntiAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.dataNode.nodeAffinityPreset.type "key" $.Values.shardsvr.dataNode.nodeAffinityPreset.key "values" $.Values.shardsvr.dataNode.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if $.Values.shardsvr.dataNode.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if $.Values.shardsvr.dataNode.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $) | nindent 8 }}
       {{- end }}

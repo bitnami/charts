@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 22.0.0-debian-10-r7
+  tag: 22.0.0-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,6 +55,11 @@ commonAnnotations: {}
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Extra objects to deploy (value evaluated as a template)
 ##
@@ -199,6 +204,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

@@ -34,6 +34,11 @@ image:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Number of Metrics Server replicas to deploy
 ##
 replicas: 1
@@ -120,6 +125,7 @@ podDisruptionBudget:
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -178,6 +184,7 @@ service:
   ## have metrics-server show up in `kubectl cluster-info`
   ##  kubernetes.io/cluster-service: "true"
   ##  kubernetes.io/name: "Metrics-server"
+  ##
   labels: {}
 
 ## Metric Server containers' resource requests and limits

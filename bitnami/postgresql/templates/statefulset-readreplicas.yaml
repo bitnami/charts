@@ -16,6 +16,7 @@ metadata:
   {{- with .Values.readReplicas.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.replication.readReplicas }}

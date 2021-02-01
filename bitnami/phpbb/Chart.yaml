@@ -1,7 +1,7 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 3.3.2
+appVersion: 3.3.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -26,4 +26,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/bitnami-docker-phpbb
   - https://www.phpbb.com/
-version: 10.0.1
+version: 10.1.1

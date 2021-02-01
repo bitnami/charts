@@ -117,6 +117,7 @@ shardsvr:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
@@ -157,6 +158,10 @@ shardsvr:
     ##
     updateStrategy:
       type: RollingUpdate
+    ## Deployment pod host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
     ## Entries for the MongoDB config file. For documentation of all options, see:
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
@@ -244,6 +249,10 @@ shardsvr:
     ## Number of arbiter nodes
     ##
     replicas: 0
+    ## Deployment pod host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
     ## Configure resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -277,6 +286,7 @@ shardsvr:
     nodeAffinityPreset:
       ## Node affinity type
       ## Allowed values: soft, hard
+      ##
       type: ""
       ## Node label key to match
       ## E.g.
@@ -425,6 +435,10 @@ configsvr:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## MongoDB additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
@@ -454,6 +468,7 @@ configsvr:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -628,6 +643,10 @@ mongos:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## MongoDB additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
@@ -657,6 +676,7 @@ mongos:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.

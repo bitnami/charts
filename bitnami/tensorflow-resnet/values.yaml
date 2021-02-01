@@ -55,6 +55,11 @@ client:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Container ports
 ##
 containerPorts:
@@ -89,6 +94,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

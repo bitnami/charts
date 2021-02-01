@@ -23,4 +23,4 @@ name: metrics-server
 sources:
   - https://github.com/bitnami/bitnami-docker-metrics-server
   - https://github.com/kubernetes-incubator/metrics-server
-version: 5.3.5
+version: 5.4.0

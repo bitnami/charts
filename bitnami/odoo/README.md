@@ -65,6 +65,7 @@ The following table lists the configurable parameters of the Odoo chart and thei
 | `image.tag`                          | Odoo Image tag                                                                                    | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Image pull policy                                                                                 | `Always`                                                |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                  | `[]` (does not add image pull secrets to deployed pods) |
+| `hostAliases`                        | Add deployment host aliases                                                                       | `[]`                                                    |
 | `nameOverride`                       | String to partially override odoo.fullname template with a string (will prepend the release name) | `nil`                                                   |
 | `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                              | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override odoo.fullname template with a string                                     | `nil`                                                   |
