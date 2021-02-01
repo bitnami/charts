@@ -43,6 +43,8 @@ data:
                     environmentVariables: 'SPRING_RABBITMQ_HOST={{ $rabbitmqHost }},SPRING_RABBITMQ_PORT={{ $rabbitmqPort }},SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }},SPRING_RABBITMQ_PASSWORD=${rabbitmq-password},SPRING_RABBITMQ_VIRTUAL_HOST={{ $rabbitmqVhost }}{{ $environmentVariables }}'
                     {{- else if .Values.kafka.enabled }}
                     environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}{{ $environmentVariables }}'
+                    {{- else if .Values.externalKafka.enabled }}
+                    environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS={{ .Values.externalKafka.brokers }},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES={{ .Values.externalKafka.zkNodes }}{{ $environmentVariables }}'
                     {{- else }}
                     {{- if .Values.deployer.environmentVariables }}
                     environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
