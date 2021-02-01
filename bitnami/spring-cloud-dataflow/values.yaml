@@ -986,6 +986,23 @@ kafka:
   zookeeper:
     replicaCount: 1
 
+##
+## External Kafka Configuration
+##
+## All of these values are ignored when kafka.enabled is set to true
+##
+externalKafka:
+  enabled: false
+
+  ## External Kafka brokers
+  ## Multiple brokers can be provided in a comma separated list, e.g. host1:port1,host2:port2
+  ##
+  brokers: localhost:9092
+
+  ## External Zookeeper nodes
+  ##
+  zkNodes: localhost:2181
+
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
