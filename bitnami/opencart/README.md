@@ -74,6 +74,7 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### OpenCart parameters
 
@@ -133,25 +134,29 @@ The following table lists the configurable parameters of the OpenCart chart and 
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                            | Default          |
-|----------------------------------|----------------------------------------|------------------|
-| `service.type`                   | Kubernetes Service type                | `LoadBalancer`   |
-| `service.port`                   | Service HTTP port                      | `80`             |
-| `service.httpsPort`              | Service HTTPS port                     | `443`            |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation   | `Cluster`        |
-| `service.nodePorts.http`         | Kubernetes http node port              | `""`             |
-| `service.nodePorts.https`        | Kubernetes https node port             | `""`             |
-| `ingress.enabled`                | Enable ingress controller resource     | `false`          |
-| `ingress.certManager`            | Add annotations for cert-manager       | `false`          |
-| `ingress.hostname`               | Default host for the ingress resource  | `opencart.local` |
-| `ingress.annotations`            | Ingress annotations                    | `{}`             |
-| `ingress.hosts[0].name`          | Hostname to your OpenCart installation | `nil`            |
-| `ingress.hosts[0].path`          | Path within the url structure          | `nil`            |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                              | `nil`            |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)              | `nil`            |
-| `ingress.secrets[0].name`        | TLS Secret Name                        | `nil`            |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                 | `nil`            |
-| `ingress.secrets[0].key`         | TLS Secret Key                         | `nil`            |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `opencart.local`               |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
+| `ingress.pathType`               | Ingress path type                                        | `ImplementationSpecific`       |
 
 ### Database parameters
 
@@ -329,6 +334,10 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 9.0.0
 

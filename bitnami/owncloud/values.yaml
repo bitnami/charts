@@ -31,6 +31,10 @@ image:
   ##
   debug: false
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override owncloud.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -282,6 +286,10 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: owncloud.local
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see

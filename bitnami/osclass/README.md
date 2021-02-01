@@ -60,14 +60,15 @@ The following table lists the configurable parameters of the Osclass chart and t
 
 ### Common parameters
 
-| Parameter           | Description                                        | Default                        |
-|---------------------|----------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]` (evaluated as a template) |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### Osclass parameters
 
@@ -144,6 +145,7 @@ The following table lists the configurable parameters of the Osclass chart and t
 | `service.nodePorts.http`         | Kubernetes http node port                                                         | `""`                           |
 | `service.nodePorts.https`        | Kubernetes https node port                                                        | `""`                           |
 | `ingress.enabled`                | Enable ingress controller resource                                                | `false`                        |
+| `ingress.pathType`               | Ingress path type                                                                 | `ImplementationSpecific`       |
 | `ingress.certManager`            | Add annotations for cert-manager                                                  | `false`                        |
 | `ingress.hostname`               | Default host for the ingress resource                                             | `osclass.local`                |
 | `ingress.tls`                    | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |

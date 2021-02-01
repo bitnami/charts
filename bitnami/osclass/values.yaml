@@ -29,6 +29,10 @@ image:
   ##
   pullSecrets: []
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -371,6 +375,10 @@ ingress:
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
