@@ -1259,14 +1259,14 @@ storegateway:
   ##
   # existingConfigmap:
 
-  ## Thanos Store GRPC TLS parameters
-  ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca
-  ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/store.md#flags
-  grpcTLS:
-    # TLS server side
-    server:
-      # enable TLS for GRPC server
-      secure: false
+  ## Thanos Store GRPC server configuration
+  ##
+  grpc:
+    ## TLS configuration
+    ##
+    tls:
+      # Enable TLS encryption in the GRPC server
+      enabled: false
       # TLS Certificate for gRPC server, leave blank to disable TLS
       cert:
       # TLS Key for the gRPC server, leave blank to disable TLS
