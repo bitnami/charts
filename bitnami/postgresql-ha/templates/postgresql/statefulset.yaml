@@ -43,6 +43,9 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.postgresql.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.postgresql.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.affinity "context" $) | nindent 8 }}
       {{- else }}

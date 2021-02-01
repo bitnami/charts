@@ -1,7 +1,7 @@
 annotations:
   category: WorkFlow
 apiVersion: v2
-appVersion: 1.10.14
+appVersion: 2.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
 | `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
 | `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |

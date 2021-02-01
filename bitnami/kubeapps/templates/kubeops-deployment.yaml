@@ -49,6 +49,9 @@ spec:
             {{- if .Values.clusters }}
             - --clusters-config-path=/config/clusters.conf
             {{- end }}
+            {{- if .Values.pinnipedProxy.enabled }}
+            - --pinniped-proxy-url=http://kubeapps-internal-pinniped-proxy.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
+            {{- end }}
           {{- if .Values.clusters }}
           volumeMounts:
             - name: kubeops-config

@@ -94,6 +94,11 @@ redis:
   ##
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   # Whether to use AOF Persistence mode or not
   # It is strongly recommended to use this type when dealing with clusters
   #
@@ -216,6 +221,7 @@ redis:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -268,6 +274,11 @@ initJob:
   ## Container args (using container default if not set)
   ##
   args:
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Job annotations
   ## IMPORTANT: When using Istio set as the following (https://github.com/istio/istio/issues/11045):
@@ -326,6 +337,7 @@ initJob:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -397,6 +409,11 @@ updateJob:
   ##
   args:
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Job annotations
   ##
   annotations: {}
@@ -456,6 +473,7 @@ updateJob:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.

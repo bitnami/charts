@@ -56,6 +56,11 @@ collector:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## If set to true, DaemonSet will be used for the collector.
   ## If set to false, Deployment will be used for the collector.
   ## Setting this to true is strongly recommended
@@ -381,6 +386,11 @@ proxy:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Wavefront Proxy resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

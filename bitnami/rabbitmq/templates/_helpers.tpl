@@ -41,7 +41,7 @@ Return podAnnotations
 */}}
 {{- define "rabbitmq.podAnnotations" -}}
 {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations }}
+{{ include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) }}
 {{- end }}
 {{- if .Values.metrics.enabled }}
 {{ include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) }}

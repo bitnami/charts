@@ -21,4 +21,4 @@ name: zookeeper
 sources:
   - https://github.com/bitnami/bitnami-docker-zookeeper
   - https://zookeeper.apache.org/
-version: 6.3.4
+version: 6.4.0

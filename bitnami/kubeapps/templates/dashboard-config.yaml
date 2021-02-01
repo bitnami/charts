@@ -19,6 +19,10 @@ data:
       gzip on;
       gzip_static  on;
 
+      location /custom_style.css {
+        root /app/custom-css/;
+      }
+
       location / {
         # Redirects are required to be relative otherwise the internal hostname will be exposed
         absolute_redirect off;
@@ -40,6 +44,8 @@ data:
         try_files $uri /index.html;
       }
     }
+  custom_style.css: |-
+{{- .Values.dashboard.customStyle | nindent 4 }}
   config.json: |-
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
