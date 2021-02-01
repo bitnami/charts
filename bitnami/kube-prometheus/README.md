@@ -510,6 +510,14 @@ Find more information about how to deal with common errors related to Bitnami’
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
 
+### To 4.0.0
+
+This version standardizes the way of defining Ingress rules.
+When configuring a single hostname for the Prometheus Ingress rule, set the `prometheus.ingress.hostname` value. When defining more than one, set the `prometheus.ingress.extraHosts` array.
+When configuring a single hostname for the Alertmanager Ingress rule, set the `alertmanager.ingress.hostname` value. When defining more than one, set the `alertmanager.ingress.extraHosts` array.
+
+Apart from this case, no issues are expected to appear when upgrading.
+
 ### To 3.4.0
 
 Some parameters disappeared in favor of new ones:
