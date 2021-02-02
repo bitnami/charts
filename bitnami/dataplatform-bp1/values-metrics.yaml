@@ -126,6 +126,13 @@ kafka:
         requests: 
           cpu: 100m
           memory: 128Mi
+      ## Service configuration
+      ##
+      service:
+        ## Kafka Exporter Prometheus port to be used in wavefront configuration
+        ##
+        port: 9308
+
     ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
     ##
     jmx:
@@ -144,6 +151,12 @@ kafka:
         requests: 
           cpu: 100m
           memory: 128Mi
+      ## Service configuration
+      ##
+      service:
+        ## JMX Exporter Prometheus port
+        ##
+        port: 5556          
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false
@@ -151,7 +164,7 @@ kafka:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: dp-zookeeper
+    servers: {{ Release.name}}-zookeeper
 
 ## Spark Subchart parameters
 ##
@@ -160,6 +173,9 @@ spark:
   ## Spark master specific configuration
   ##
   master:
+    ## Spark container ports
+    ##
+    webPort: 8080  
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
@@ -185,6 +201,9 @@ spark:
   ##
   worker:
     replicaCount: 2
+    ## Spark container ports
+    ##
+    webPort: 8081    
     affinity: 
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -211,6 +230,19 @@ spark:
   ##
   metrics:
     enabled: true
+    ## Annotations for the Prometheus metrics on master nodes
+    ##
+    masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '{{ .Values.master.webPort }}'
+    ## Annotations for the Prometheus metrics on worker nodes
+    ##
+    workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '{{ .Values.worker.webPort }}'
+
 
 ## Solr Subchart parameters
 ##
@@ -252,6 +284,9 @@ solr:
   # Configuration for the solr prometheus exporter
   exporter:
     enabled: true  # Deploy the exporter
+    ## Solr exporter port
+    ##
+    port: 9983    
     affinity:
       podAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -282,7 +317,7 @@ solr:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: dp-zookeeper
+    servers: {{ Release.name}}-zookeeper
 
 ## Wavefront Subchart parameters
 ##
