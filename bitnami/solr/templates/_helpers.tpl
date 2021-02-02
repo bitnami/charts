@@ -85,7 +85,7 @@ Return  the proper Storage Class
 {{/* Return the proper Zookeeper host */}}
 {{- define "solr.zookeeper.host" -}}
 {{- if .Values.externalZookeeper.servers -}}
-{{- join "," .Values.externalZookeeper.servers -}}
+{{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name "zookeeper" -}}:{{- .Values.zookeeper.port -}}
 {{- end -}}
