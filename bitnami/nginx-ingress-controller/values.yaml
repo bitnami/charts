@@ -121,6 +121,11 @@ udpConfigMapNamespace: ''
 ##
 maxmindLicenseKey: ''
 
+# A base64ed Diffie-Hellman parameter
+# This can be generated with: openssl dhparam 4096 2> /
+# Ref: https://github.com/krmichel/ingress-nginx/blob/master/docs/examples/customization/ssl-dh-param
+dhParam:
+
 ## TCP service key:value pairs
 ## ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
 ##

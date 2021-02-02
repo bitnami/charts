@@ -150,6 +150,8 @@ To connect to your database from outside the cluster execute the following comma
 
     {{- $adminPasswordConfig := dict "valueKey" "auth.admin.password" "secret" $secretName "field" "admin-user-password" "context" $ -}}
     {{- $passwordValueConfigs = append $passwordValueConfigs $adminPasswordConfig -}}
+    {{- $adminTokenConfig := dict "valueKey" "auth.admin.token" "secret" $secretName "field" "admin-user-token" "context" $ -}}
+    {{- $passwordValueConfigs = append $passwordValueConfigs $adminTokenConfig -}}
 
     {{- if .Values.auth.user.username }}
       {{- $userPasswordConfig := dict "valueKey" "auth.user.password" "secret" $secretName "field" "user-password" "context" $ -}}
