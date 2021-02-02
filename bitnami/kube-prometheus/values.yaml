@@ -413,9 +413,9 @@ prometheus:
     annotations: {}
     #  kubernetes.io/ingress.class: nginx
 
-    ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ## Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.prometheus.ingress.hostname }}
+    ## You can use the prometheus.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
 
@@ -1088,9 +1088,9 @@ alertmanager:
     annotations: {}
     #  kubernetes.io/ingress.class: nginx
 
-    ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ## Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.alertmanager.ingress.hostname }}
+    ## You can use the alertmanager.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
 
