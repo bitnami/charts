@@ -192,6 +192,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `replicaCount`                 | Number of Grafana nodes                                                                   | `1`                            |
 | `updateStrategy`               | Update strategy for the deployment                                                        | `{type: "RollingUpdate"}`      |
 | `schedulerName`                | Alternative scheduler                                                                     | `nil`                          |
+| `priorityClassName`            | Priority class name                                                                       | `nil`                          |
 | `podLabels`                    | Grafana pod labels                                                                        | `{}` (evaluated as a template) |
 | `podAnnotations`               | Grafana Pod annotations                                                                   | `{}` (evaluated as a template) |
 | `podAffinityPreset`            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
