@@ -66,7 +66,7 @@ kafka:
     limits: {}
     #  cpu: 250m
     #  memory: 256Mi
-    requests: 
+    requests:
       cpu: 250m
       memory: 1280Mi
   affinity:
@@ -98,7 +98,7 @@ kafka:
     ## Server or list of external zookeeper servers to use.
     ##
     servers:
-      - {{ template "common.names.fullname" . }}-zookeeper
+      - '{{ include "common.names.fullname" . }}-zookeeper'
 
 ## Spark Subchart parameters
 ##
@@ -118,7 +118,7 @@ spark:
       requests:
         cpu: 250m
         memory: 1280Mi
-    affinity:    
+    affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
@@ -127,7 +127,7 @@ spark:
               operator: In
               values:
               - worker
-          topologyKey: "kubernetes.io/hostname"    
+          topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
   worker:
@@ -142,7 +142,7 @@ spark:
               values:
               - worker
               - master
-          topologyKey: "kubernetes.io/hostname"       
+          topologyKey: "kubernetes.io/hostname"
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
@@ -189,7 +189,7 @@ solr:
     ## Server or list of external zookeeper servers to use.
     ##
     servers:
-      - {{ template "common.names.fullname" . }}-zookeeper
+      - '{{ include "common.names.fullname" . }}-zookeeper'
 
 ## Wavefront Subchart Parameters
 ##
