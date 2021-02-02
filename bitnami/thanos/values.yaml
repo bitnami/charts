@@ -1265,21 +1265,28 @@ storegateway:
     ## TLS configuration
     ##
     tls:
-      # Enable TLS encryption in the GRPC server
+      ## Enable TLS encryption in the GRPC server
+      ##
       enabled: false
-      # TLS Certificate for gRPC server, leave blank to disable TLS
+      ## TLS Certificate for gRPC server, leave blank to disable TLS
+      ##
       cert:
-      # TLS Key for the gRPC server, leave blank to disable TLS
+      ## TLS Key for the gRPC server, leave blank to disable TLS
+      ##
       key:
-      # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ## TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ##
       ca:
-      # Existing secret containing your own TLS certificates.
-      # existingSecret:
-      #   name:
-      #   keyMapping:
-      #     ca-cert: ca.pem
-      #     tls-cert: cert.pem
-      #     tls-key: key.pem
+      ## Existing secret containing your own TLS certificates.
+      ## Example:
+      ## existingSecret:
+      ##   name:
+      ##   keyMapping:
+      ##     ca-cert: ca.pem
+      ##     tls-cert: cert.pem
+      ##     tls-key: key.pem
+      ##
+      existingSecret: {}
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##
