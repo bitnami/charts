@@ -57,10 +57,6 @@ service:
   nodePorts:
     http: ""
     https: ""
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
 
 ## Bitnami Solr image version
 ## ref: https://hub.docker.com/r/bitnami/solr/tags
@@ -661,10 +657,6 @@ exporter:
     nodePorts:
       http: ""
       https: ""
-    ## Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy:
     ## LoadBalancer source ranges
     ##
     loadBalancerSourceRanges:
