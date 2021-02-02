@@ -24,11 +24,6 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## Number of nodes
-##
-replicaCount: 1
-
-
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
@@ -55,7 +50,7 @@ zookeeper:
     #  memory: 1Gi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 1280Mi
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -72,23 +67,26 @@ zookeeper:
 kafka:
   enabled: true
   replicaCount: 3
+  ## Kafka's Java Heap size
+  ##
+  heapOpts: -Xmx1024m -Xms1024m
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {} 
+    limits: {}
     #  cpu: 250m
-    #  memory: 1Gi
+    #  memory: 256Mi
     requests: 
       cpu: 250m
-      memory: 1Gi
+      memory: 1280Mi
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchExpressions:
-          - key: app.kubernetes.io/name
+          - key: app.kubernetes.io/component
             operator: In
             values:
             - kafka
@@ -130,16 +128,17 @@ spark:
       #  memory: 1Gi
       requests:
         cpu: 250m
-        memory: 1Gi
+        memory: 1280Mi
     affinity:    
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: spark
-              app.kubernetes.io/instance: dp-spark
-              app.kubernetes.io/component: worker
-          topologyKey: "kubernetes.io/hostname"
+            matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - worker
+          topologyKey: "kubernetes.io/hostname"    
   ## Spark worker specific configuration
   ##
   worker:
@@ -148,11 +147,13 @@ spark:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: spark
-              app.kubernetes.io/instance: dp-spark
-              app.kubernetes.io/component: worker
-          topologyKey: "kubernetes.io/hostname"
+            matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - worker
+              - master
+          topologyKey: "kubernetes.io/hostname"       
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
@@ -163,7 +164,7 @@ spark:
       #  memory: 1Gi
       requests: 
         cpu: 250m
-        memory: 1Gi
+        memory: 1280Mi
 
 ## Solr Subchart parameters
 ##
@@ -175,7 +176,7 @@ solr:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchExpressions:
-          - key: app.kubernetes.io/name
+          - key: app.kubernetes.io/component
             operator: In
             values:
             - solr
@@ -190,7 +191,7 @@ solr:
     #  memory: 1Gi
     requests:
       cpu: 250m
-      memory: 1Gi
+      memory: 1280Mi
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false
@@ -230,4 +231,4 @@ wavefront:
       #   memory: 4Gi
       requests: 
         cpu: 100m
-        memory: 1Gi
+        memory: 1280Mi

@@ -24,7 +24,6 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
@@ -41,6 +40,9 @@ serviceAccount:
 
 zookeeper:
   replicaCount: 3
+  ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+  ##
+  heapSize: 4096
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -51,7 +53,7 @@ zookeeper:
     #  memory: 1Gi
     requests:
       cpu: 250m
-      memory: 1Gi
+      memory: 5120Mi
   affinity: 
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -68,23 +70,26 @@ zookeeper:
 kafka:
   enabled: true
   replicaCount: 3
+  ## Kafka's Java Heap size
+  ##
+  heapOpts: -Xmx4096m -Xms4096m
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {} 
+    limits: {}
     #  cpu: 250m
     #  memory: 1Gi
     requests: 
       cpu: 250m
-      memory: 1Gi
+      memory: 5120Mi
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchExpressions:
-          - key: app.kubernetes.io/name
+          - key: app.kubernetes.io/component
             operator: In
             values:
             - kafka
@@ -125,7 +130,6 @@ kafka:
     ##
     jmx:
       enabled: true
-
       ## Prometheus JMX Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
       ##
@@ -166,15 +170,16 @@ spark:
       #  memory: 1Gi
       requests:
         cpu: 250m
-        memory: 1Gi
+        memory: 5120Mi
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: spark
-              app.kubernetes.io/instance: dp-spark
-              app.kubernetes.io/component: worker
+            matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - worker
           topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -184,10 +189,12 @@ spark:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: spark
-              app.kubernetes.io/instance: dp-spark
-              app.kubernetes.io/component: worker
+            matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - worker
+              - master
           topologyKey: "kubernetes.io/hostname"
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
@@ -199,7 +206,7 @@ spark:
       #  memory: 1Gi
       requests: 
         cpu: 250m
-        memory: 1Gi
+        memory: 5120Mi
   ## Metrics configuration
   ##
   metrics:
@@ -210,12 +217,23 @@ spark:
 solr:
   enabled: true
   replicaCount: 2
+  image: 
+    registry: harbor-repo.vmware.com/dockerhub-proxy-cache
+    repository: rafaelriossaavedra/solr_temp
+    tag: fix_1
+
+  ## Java memory options
+  ##
+  javaMem: -Xmx4096m -Xms4096m
+  ## java Heap options
+  ##
+  # heap: -Xmx4096m -Xms4096m  
   affinity: 
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchExpressions:
-          - key: app.kubernetes.io/name
+          - key: app.kubernetes.io/component
             operator: In
             values:
             - solr
@@ -230,7 +248,7 @@ solr:
     #  memory: 1Gi
     requests:
       cpu: 250m
-      memory: 1Gi
+      memory: 5120Mi
   # Configuration for the solr prometheus exporter
   exporter:
     enabled: true  # Deploy the exporter
@@ -255,8 +273,8 @@ solr:
       #  cpu: 1000m
       #  memory: 1Gi
       requests:
-        cpu: 250m
-        memory: 256Mi              
+        cpu: 100m
+        memory: 128Mi              
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false
@@ -264,7 +282,7 @@ solr:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: []
+    servers: dp-zookeeper
 
 ## Wavefront Subchart parameters
 ##
@@ -273,15 +291,15 @@ wavefront:
   ## This is a unique name for the cluster (required)
   ## All metrics will receive a `cluster` tag with this value
   ##
-  clusterName: data-platform
+  clusterName: data-platform-tkc
   ## Wavefront URL (cluster) and API Token (required)
   ##
   wavefront:
-    url: $WAVEFRONT_URL
-    token: $WAVEFRONT_TOKEN
+    url: https://longboard.wavefront.com #$WAVEFRONT_URL
+
     ## Name of an existing secret containing the token
     ##
-    existingSecret:
+    existingSecret: wavefront-token
   ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
   ## It will capture Kubernetes resources metrics available from the kubelets,
   ## as well as auto-discovery capabilities.
@@ -301,38 +319,85 @@ wavefront:
       requests: 
         cpu: 200m
         memory: 10Mi  
-  discovery:
-    enabled: true
-    ## Whether to enable runtime discovery configurations
-    ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
-    ##
-    enableRuntimeConfigs: true
-    ## Can be used to add additional discovery rules
-    ##
-    ## ConfigMap with Collector Configuration
-    ##
-    # existingConfigmap: wavefront-collector-config
-    config:
-    # auto-discover a sample prometheus application
-    # auto-discover kafka-exporter
-    - name: kafka-discovery
-      type: prometheus
-      selectors:
-        images:
-        - '*bitnami/kafka-exporter*'
-        #labels:
-        #  k8s-app:
-        #  - kube-dns
-      port: 9308
-      path: /metrics
-      scheme: http
-      prefix: kube.kafka.
-    ## ConfigMap with Collector Configuration
-    ##
-    # existingConfigmap: wavefront-collector-config
-    ## Wavefront Collector resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
+    discovery:
+      enabled: true
+      ## Whether to enable runtime discovery configurations
+      ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
+      ##
+      enableRuntimeConfigs: true
+      ## Can be used to add additional discovery rules
+      ##
+      config:
+      # auto-discover a sample prometheus application
+      # auto-discover kafka-exporter
+      - name: kafka-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/kafka-exporter*'
+          #labels:
+          #  k8s-app:
+          #  - kube-dns
+        port: 9308
+        path: /metrics
+        scheme: http
+        prefix: kube.kafka.
+
+      # auto-discover jmx exporter 
+      - name: kafka-jmx-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/jmx-exporter*'
+          #labels:
+            #k8s-app:
+            #- kube-dns
+        port: 5556
+        path: /metrics
+        scheme: http
+        prefix: kube.kafkajmx.
+
+      # auto-discover solr
+      - name: solr-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/solr*'
+          #labels:
+            #k8s-app:
+            #- kube-dns
+        port: 9983
+        path: /metrics
+        scheme: http
+        prefix: kube.solr.
+
+      # auto-discover spark
+      - name: spark-worker-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/spark*'
+          #labels:
+            #k8s-app:
+            #- kube-dns
+        port: 8081
+        path: /metrics/
+        scheme: http
+        prefix: kube.spark.
+
+      # auto-discover spark
+      - name: spark-master-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/spark*'
+          #labels:
+            #k8s-app:
+            #- kube-dns
+        port: 8080
+        path: /metrics/
+        scheme: http
+        prefix: kube.spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -343,8 +408,8 @@ wavefront:
       # resources, such as Minikube. If you do want to specify resources, uncomment the following
       # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
       limits: {}
-      #   cpu: 100m
-      #   memory: 4Gi
+      #  cpu: 100m
+      #  memory: 4Gi
       requests: 
         cpu: 100m
-        memory: 1Gi
+        memory: 5Gi
