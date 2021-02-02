@@ -29,6 +29,10 @@ image:
   ##
   pullSecrets: []
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -36,6 +40,15 @@ image:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Add labels to all the deployed resources
 ##
@@ -91,6 +104,7 @@ osclassSaveStats: 1
 
 ## Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-osclass#environment-variables
+##
 allowEmptyPassword: "yes"
 
 ## SMTP mail delivery configuration
@@ -233,6 +247,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -361,6 +376,10 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: osclass.local
@@ -459,18 +478,23 @@ externalDatabase:
   # existingSecret:
 
   ## Database host
+  ##
   host:
 
   ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_osclass
 
   ## Database password
+  ##
   password:
 
   ## Database name
+  ##
   database: bitnami_osclass
 
 ##

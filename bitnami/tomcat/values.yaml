@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 9.0.41-debian-10-r36
+  tag: 9.0.41-debian-10-r49
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -59,6 +59,11 @@ clusterDomain: cluster.local
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
@@ -202,6 +207,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

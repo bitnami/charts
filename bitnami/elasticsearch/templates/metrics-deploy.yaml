@@ -34,7 +34,13 @@ spec:
           image: {{ include "elasticsearch.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           args:
+            {{- if gt .Values.coordinating.replicas 0 }}
+            # Prefer coordinating only nodes to do the initial metrics query
             - --es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
+            {{- else }}
+            # Using master nodes as there are no coordinating only nodes
+            - --es.uri=http://{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
+            {{- end }}
             - --es.all
           ports:
             - name: metrics

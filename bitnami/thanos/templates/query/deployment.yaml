@@ -30,8 +30,11 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "query" "context" $) }}
+      {{- if $query.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $query.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if $query.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" $query.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -85,25 +88,19 @@ spec:
             {{- range $query.stores }}
             - --store={{ . }}
             {{- end }}
-            {{- if $query.grpcTLS.server.secure }}
-            - --grpc-server-tls-cert=/tls/server/cert.pem
-            - --grpc-server-tls-key=/tls/server/key.pem
-            - --grpc-server-tls-client-ca=/tls/server/ca.pem
+            {{- if or $query.grpcTLS.server.secure $query.grpcTLS.server.existingSecret }}
+            - --grpc-server-tls-cert=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "ca-cert") }}
             {{- end }}
-            {{- if $query.grpcTLS.client.secure }}
+            {{- if or $query.grpcTLS.client.secure $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-secure
-            {{- if $query.grpcTLS.client.cert }}
-            - --grpc-client-tls-cert=/tls/client/cert.pem
-            {{- end }}
-            {{- if $query.grpcTLS.client.key }}
-            - --grpc-client-tls-key=/tls/client/key.pem
-            {{- end }}
-            {{- if $query.grpcTLS.client.ca }}
-            - --grpc-client-tls-ca=/tls/client/ca.pem
+            - --grpc-client-tls-cert=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-cert") }}
+            - --grpc-client-tls-key=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-key") }}
+            - --grpc-client-tls-ca=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- if $query.grpcTLS.client.servername }}
             - --grpc-client-server-name={{$query.grpcTLS.client.servername}}
-            {{- end }}
             {{- end }}
             {{- if $query.extraFlags }}
             {{- $query.extraFlags | toYaml | nindent 12 }}
@@ -144,14 +141,14 @@ spec:
           configMap:
             name: {{ include "thanos.query.SDConfigmapName" . }}
       {{- end }}
-      {{- if $query.grpcTLS.server.secure }}
+      {{- if or $query.grpcTLS.server.secure $query.grpcTLS.server.existingSecret }}
         - name: tls-server
           secret:
-            secretName: {{ include "common.names.fullname" . }}-query-tls-server
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "defaultNameSuffix" "query-tls-server" "context" $) }}
       {{- end }}
-      {{- if $query.grpcTLS.client.secure }}
+      {{- if or $query.grpcTLS.client.secure $query.grpcTLS.client.existingSecret }}
         - name: tls-client
           secret:
-            secretName: {{ include "common.names.fullname" . }}-query-tls-client
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "defaultNameSuffix" "query-tls-client" "context" $) }}
       {{- end }}
 {{- end }}

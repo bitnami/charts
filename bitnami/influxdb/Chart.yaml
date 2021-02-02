@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 1.8.3
+appVersion: 2.0.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 1.1.9
+version: 2.0.2

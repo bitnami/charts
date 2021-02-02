@@ -39,6 +39,9 @@ spec:
     spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -59,8 +62,46 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- if or .Values.initContainers .Values.auth.tls.enabled }}
+      initContainers: 
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.auth.tls.enabled }}
+        {{- $fullname := include "keycloak.fullname" . }}
+        - name: init-certs
+          image: {{ include "keycloak.auth.tls.image" . }}
+          imagePullPolicy: {{ .Values.auth.tls.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+          - /bin/bash
+          - -ec
+          - |-
+            ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+            if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
+                cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
+                cp "/certs/keycloak-${ID}.keystore.jks" "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
+            else
+                echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
+                exit 1
+            fi
+          env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          {{- if .Values.auth.tls.resources }}
+          resources: {{- toYaml .Values.auth.tls.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          - name: certificates
+            mountPath: /certs
+          - name: shared-certs
+            mountPath: /opt/bitnami/keycloak/certs
+        {{- end }}
       {{- end }}
       containers:
         - name: keycloak
@@ -74,31 +115,11 @@ spec:
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- else if .Values.auth.tls.enabled }}
-          {{- $fullname := include "keycloak.fullname" . }}
-          command:
-            - /bin/bash
-            - -ec
-            - |
-              ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-              if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
-                  mkdir -p /opt/bitnami/keycloak/certs
-                  cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
-                  cp "/certs/keycloak-${ID}.keystore.jks" "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
-              else
-                  echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
-                  exit 1
-              fi
-              exec /opt/bitnami/scripts/keycloak/entrypoint.sh /opt/bitnami/scripts/keycloak/run.sh
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: MY_POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -186,8 +207,8 @@ spec:
               subPath: standalone-ha.xml
             {{- end }}
             {{- if .Values.auth.tls.enabled }}
-            - name: certificates
-              mountPath: /certs
+            - name: shared-certs
+              mountPath: /opt/bitnami/keycloak/certs
               readOnly: true
             {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
@@ -210,7 +231,9 @@ spec:
         - name: certificates
           secret:
             secretName: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
-            defaultMode: 256
+            defaultMode: 420
+        - name: shared-certs
+          emptyDir: {}
         {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts

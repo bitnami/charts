@@ -99,6 +99,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                             | `nil`                                                   |
 | `server.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                                                | `nil`                                                   |
 | `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                                     | `1`                                                     |
+| `server.hostAliases`                         | Add deployment host aliases                                                                                      | `[]`                                                    |
 | `server.strategyType`                        | Deployment Strategy Type                                                                                         | `RollingUpdate`                                         |
 | `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
 | `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
@@ -177,6 +178,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.nodeAffinityPreset.type`          | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
 | `skipper.nodeAffinityPreset.key`           | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                    |
 | `skipper.nodeAffinityPreset.values`        | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                    |
+| `skipper.hostAliases`                       | Add deployment host aliases                                                                               | `[]`                                                    |
 | `skipper.affinity`                         | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                          |
 | `skipper.nodeSelector`                     | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                          |
 | `skipper.tolerations`                      | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                          |
@@ -299,13 +301,16 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 ### Kafka chart parameters
 
-| Parameter                             | Description                                 | Default |
-|---------------------------------------|---------------------------------------------|---------|
-| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false` |
-| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`     |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`     |
-| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`   |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`     |
+| Parameter                             | Description                                 | Default          |
+| ------------------------------------- | ------------------------------------------- | ---------------- |
+| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false`          |
+| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`              |
+| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`              |
+| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`            |
+| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`              |
+| `externalKafka.enabled`               | Enable/disable external Kafka               | `false`          |
+| `externalKafka.brokers`               | External Kafka brokers                      | `localhost:9092` |
+| `externalKafka.zkNodes`               | External Zookeeper nodes                    | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -21,7 +21,7 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: prometheus-proxy
     spec:
-      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
       containers:
         - name: prometheus-proxy

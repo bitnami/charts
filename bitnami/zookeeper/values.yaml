@@ -39,6 +39,11 @@ image:
 ## String to fully override common.names.fullname template
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -252,6 +257,7 @@ serviceAccount:
   # name:
 
 ## Zookeeper Pod Security Context
+##
 securityContext:
   enabled: true
   fsGroup: 1001
@@ -316,6 +322,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ''
   ## Node label key to match
   ## E.g.
@@ -348,14 +355,17 @@ tolerations: []
 
 ## Labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
 podLabels: {}
 
 ## Annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
 podAnnotations: {}
 
 ## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
 priorityClassName: ''
 
 ## Scheduler name
@@ -469,6 +479,7 @@ metrics:
     #   prometheus: my-prometheus
 
     ## Some example rules.
+    ##
     rules: []
     #  - alert: ZookeeperSyncedFollowers
     #    annotations:

@@ -80,6 +80,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `image.pullPolicy`            | WordPress image pull policy                                                                                                                                                                                                      | `IfNotPresent`                                          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                 | Specify if debug logs should be enabled                                                                                                                                                                                          | `false`                                                 |
+| `hostAliases`                 | Add deployment host aliases                                                                                                                                                                                                      | `Check values.yaml`                                     |
 | `wordpressSkipInstall`        | Skip wizard installation when the external db already contains data from a previous WordPress installation [see](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database) | `false`                                                 |
 | `wordpressUsername`           | User of the application                                                                                                                                                                                                          | `user`                                                  |
 | `existingSecret`              | Name of the existing Wordpress Secret (it must contain a key named `wordpress-password`). When it's set, `wordpressPassword` is ignored                                                                                          | `nil`                                                   |
@@ -181,7 +182,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
-| `persistence.dataSource`    | PVC data source                          | `{}`                                       |
+| `persistence.dataSource`    | PVC data source                          | `{}`                                        |
 
 ### Database parameters
 
@@ -205,18 +206,18 @@ The following table lists the configurable parameters of the WordPress chart and
 
 ### Volume Permissions parameters
 
-| Parameter                                     | Description                                                                                                          | Default                                                      |
-|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                      |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                                  |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                     |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                         |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                         |
-| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                         |
-| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                          |
+| Parameter                                     | Description                                                                                                          | Default                                                 |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
+| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                    |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                     |
 
 ### Metrics parameters
 
