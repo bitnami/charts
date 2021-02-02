@@ -434,7 +434,7 @@ externalZookeeper:
 ## Configuration for the solr prometheus exporter
 ##
 exporter:
-  enabled: true
+  enabled: false
   image:
     registry: docker.io
     repository: bitnami/solr
