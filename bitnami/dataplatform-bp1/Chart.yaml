@@ -11,10 +11,10 @@ dependencies:
     name: spark
     repository: https://charts.bitnami.com/bitnami
     version: 4.x.x
-    #  - condition: solr.enabled
-    # name: solr
-    # repository: file://../../../../bitnami/charts/bitnami/solr
-    # version: 0.1.0
+  - condition: solr.enabled
+    name: solr
+    repository: file://../../../../bitnami/charts/bitnami/solr
+    version: 0.1.0
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
