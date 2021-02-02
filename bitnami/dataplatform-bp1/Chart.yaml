@@ -28,7 +28,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Chart to deploy bitnami kafka, spark, solr on kubernetes
+description: OCTO platform Helm Chart
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform
 keywords:
@@ -47,4 +47,10 @@ sources:
   - https://kafka.apache.org/
   - https://github.com/bitnami/bitnami-docker-spark
   - https://spark.apache.org/
+  - https://lucene.apache.org/solr/
+  - https://github.com/bitnami/bitnami-docker-solr
+  - https://tanzu.vmware.com/observability
+  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://zookeeper.apache.org/
+  - https://github.com/bitnami/bitnami-docker-zookeeper
 version: 0.1.0

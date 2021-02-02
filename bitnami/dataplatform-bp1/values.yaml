@@ -8,18 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
@@ -101,7 +89,7 @@ kafka:
                operator: In
                values:
                  - zookeeper
-           topologyKey: "kubernetes.io/hostname"  
+           topologyKey: "kubernetes.io/hostname"
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false
@@ -109,7 +97,8 @@ kafka:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: dp-zookeeper
+    servers:
+      - {{ template "common.names.fullname" . }}-zookeeper
 
 ## Spark Subchart parameters
 ##
@@ -162,7 +151,7 @@ spark:
       limits: {}
       #  cpu: 250m
       #  memory: 1Gi
-      requests: 
+      requests:
         cpu: 250m
         memory: 1280Mi
 
@@ -171,7 +160,7 @@ spark:
 solr:
   enabled: true
   replicaCount: 2
-  affinity: 
+  affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
@@ -180,7 +169,7 @@ solr:
             operator: In
             values:
             - solr
-        topologyKey: "kubernetes.io/hostname"   
+        topologyKey: "kubernetes.io/hostname"
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -199,7 +188,8 @@ solr:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: []
+    servers:
+      - {{ template "common.names.fullname" . }}-zookeeper
 
 ## Wavefront Subchart Parameters
 ##
@@ -214,9 +204,9 @@ wavefront:
       limits: {}
       #  cpu: 200m
       #  memory: 256Mi
-      requests: 
+      requests:
         cpu: 200m
-        memory: 10Mi  
+        memory: 10Mi
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -229,6 +219,6 @@ wavefront:
       limits: {}
       #   cpu: 100m
       #   memory: 4Gi
-      requests: 
+      requests:
         cpu: 100m
         memory: 1280Mi
