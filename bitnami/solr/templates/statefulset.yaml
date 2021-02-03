@@ -159,9 +159,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
                   key: solr-password
-            - name: SOLR_ZK_HOSTS
-              value: "{{ include "solr.zookeeper.host" . }}"
             {{- end }}
+            - name: SOLR_ZK_HOSTS
+              value: {{ include "solr.zookeeper.host" . | quote }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
