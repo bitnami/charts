@@ -38,8 +38,9 @@ Below are the Kubernetes Cluster requirements for different sizes of the data pl
 
 |Data Platform Size        | Kubernetes Cluster Size |  Usage                                     |
 |--------------------------|-------------------------|--------------------------------------------|
-|Small                     |1 Master Node (2 CPU, 4Gi Memory)            |                                     |
-|                          |3 Worker Nodes (4 CPU, 32Gi Memory)          |                                     |
+|Small                     |1 Master Node (2 CPU, 4Gi Memory) 
+3 Worker Nodes (4 CPU, 32Gi Memory)            |                                     |
+                                     
 
 ## Installing the Chart
 
