@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.17.2-scratch-r1
+  tag: 0.18.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1258,6 +1258,35 @@ storegateway:
   ## NOTE: This will override storegateway.config
   ##
   # existingConfigmap:
+
+  ## Thanos Store GRPC server configuration
+  ##
+  grpc:
+    ## TLS configuration
+    ##
+    tls:
+      ## Enable TLS encryption in the GRPC server
+      ##
+      enabled: false
+      ## TLS Certificate for gRPC server, leave blank to disable TLS
+      ##
+      cert:
+      ## TLS Key for the gRPC server, leave blank to disable TLS
+      ##
+      key:
+      ## TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ##
+      ca:
+      ## Existing secret containing your own TLS certificates.
+      ## Example:
+      ## existingSecret:
+      ##   name:
+      ##   keyMapping:
+      ##     ca-cert: ca.pem
+      ##     tls-cert: cert.pem
+      ##     tls-key: key.pem
+      ##
+      existingSecret: {}
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##

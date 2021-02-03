@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.43.0-debian-10-r30
+  tag: 0.43.0-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -120,6 +120,11 @@ udpConfigMapNamespace: ''
 ## License key used to download Geolite2 database
 ##
 maxmindLicenseKey: ''
+
+# A base64ed Diffie-Hellman parameter
+# This can be generated with: openssl dhparam 4096 2> /
+# Ref: https://github.com/krmichel/ingress-nginx/blob/master/docs/examples/customization/ssl-dh-param
+dhParam:
 
 ## TCP service key:value pairs
 ## ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
@@ -533,7 +538,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r40
+    tag: 1.19.6-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -257,7 +257,7 @@ password: ""
 ##
 usePasswordFile: false
 
-## Persist data to a persistent volume (Redis Master)
+## Persist data to a persistent volume (Redis(TM) Master)
 ##
 persistence:
   ## A manually managed Persistent Volume and Claim
