@@ -8,13 +8,17 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.17.2-scratch-r1
+  tag: 0.18.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -82,6 +86,11 @@ query:
     ##
     # existingServiceAccount: query-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Labels to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: [replica]
@@ -143,6 +152,7 @@ query:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -238,6 +248,7 @@ query:
   ## Thanos Query GRPC TLS parameters
   ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/query.md#flags
+  ##
   grpcTLS:
     # TLS server side
     server:
@@ -249,6 +260,14 @@ query:
       key:
       # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
       ca:
+      # Existing secret containing your own TLS certificates.
+      # existingSecret:
+      #   name:
+      #   keyMapping:
+      #     ca-cert: ca.pem
+      #     tls-cert: cert.pem
+      #     tls-key: key.pem
+
     # TLS client side
     client:
       # Use TLS when talking to the gRPC server
@@ -261,6 +280,13 @@ query:
       ca:
       # Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1
       servername:
+      # Existing secret containing your own TLS certificates.
+      # existingSecret:
+      #   name:
+      #   keyMapping:
+      #     ca-cert: ca.pem
+      #     tls-cert: cert.pem
+      #     tls-key: key.pem
 
   ## Service parameters
   ##
@@ -353,6 +379,7 @@ query:
     # extraHosts:
     # - name: thanos.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -381,6 +408,18 @@ query:
     #   key:
     #   certificate:
 
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
     ## Create an ingress object for the GRPC service. This requires an HTTP/2
     ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
     ## - ingress.kubernetes.io/protocol: h2c
@@ -390,6 +429,7 @@ query:
     ## and also the documentation for your ingress controller.
     ##
     ## The options that are accepted are identical to the HTTP one listed above
+    ##
     grpc:
       enabled: false
       certManager: false
@@ -424,6 +464,18 @@ query:
       #   key:
       #   certificate:
 
+      ## Override API Version (automatically detected if not set)
+      ##
+      apiVersion:
+
+      ## Ingress Path
+      ##
+      path: /
+
+      ## Ingress Path type
+      ##
+      pathType: ImplementationSpecific
+
 ## Thanos Query Frontend parameters
 ##
 queryFrontend:
@@ -442,6 +494,11 @@ queryFrontend:
     ## Provide an existing service account for Query Frontend
     ##
     # existingServiceAccount: query-frontend-service-account
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   extraFlags: []
 
@@ -482,6 +539,7 @@ queryFrontend:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -658,6 +716,7 @@ queryFrontend:
     # extraHosts:
     # - name: thanos.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -681,6 +740,18 @@ queryFrontend:
     #   key:
     #   certificate:
 
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
 ## Thanos Bucket Web parameters
 ##
 bucketweb:
@@ -703,6 +774,11 @@ bucketweb:
   ## Refresh interval to download metadata from remote storage
   ##
   refresh: 30m
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Timeout to download metadata from remote storage
   ##
@@ -739,6 +815,7 @@ bucketweb:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -898,6 +975,7 @@ bucketweb:
     # extraHosts:
     # - name: thanos-bucketweb.local
     #   path: /
+    #   pathType: ImplementationSpecific
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -915,6 +993,7 @@ bucketweb:
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
+    ##
 
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
@@ -924,6 +1003,18 @@ bucketweb:
     # - name: thanos-bucketweb.local-tls
     #   key:
     #   certificate:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
 ## Thanos Compactor parameters
 ##
@@ -943,6 +1034,11 @@ compactor:
     ## Provide an existing service account for compactor
     ##
     # existingServiceAccount: compactor-service-account
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Resolution and Retention flags
   ##
@@ -982,6 +1078,7 @@ compactor:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1143,6 +1240,11 @@ storegateway:
     ##
     # existingServiceAccount: storegateway-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: []
@@ -1156,6 +1258,35 @@ storegateway:
   ## NOTE: This will override storegateway.config
   ##
   # existingConfigmap:
+
+  ## Thanos Store GRPC server configuration
+  ##
+  grpc:
+    ## TLS configuration
+    ##
+    tls:
+      ## Enable TLS encryption in the GRPC server
+      ##
+      enabled: false
+      ## TLS Certificate for gRPC server, leave blank to disable TLS
+      ##
+      cert:
+      ## TLS Key for the gRPC server, leave blank to disable TLS
+      ##
+      key:
+      ## TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ##
+      ca:
+      ## Existing secret containing your own TLS certificates.
+      ## Example:
+      ## existingSecret:
+      ##   name:
+      ##   keyMapping:
+      ##     ca-cert: ca.pem
+      ##     tls-cert: cert.pem
+      ##     tls-key: key.pem
+      ##
+      existingSecret: {}
 
   ## Number of Thanos Store Gateway replicas to deploy
   ##
@@ -1189,6 +1320,7 @@ storegateway:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1383,6 +1515,11 @@ ruler:
     ##
     # existingServiceAccount: ruler-service-account
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Dynamically configure Query APIs using DNS discovery
   ##
   dnsDiscovery:
@@ -1446,6 +1583,7 @@ ruler:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1611,6 +1749,341 @@ ruler:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+## Thanos Receive parameters
+##
+receive:
+  ## Set to true to enable Thanos Receive component
+  ##
+  enabled: false
+
+  ## Log level
+  ##
+  logLevel: info
+
+  ## Provide any additional annotations which may be required
+  ##
+  serviceAccount:
+    annotations: {}
+    ## Provide an existing service account for receive
+    ##
+    # existingServiceAccount: receive-service-account
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## Receive Configuration
+  ## Specify content for receive hashring
+  ##
+  config: |
+    [
+      {
+        "endpoints": [
+            "127.0.0.1:10901"
+        ]
+      }
+    ]
+
+  ## Extra Flags to passed to Thanos Receive
+  ##
+  extraFlags: []
+
+  ## StrategyType, can be set to RollingUpdate or OnDelete by default.
+  ##
+  updateStrategyType: RollingUpdate
+
+  ## Number of Thanos Receive replicas to deploy
+  ##
+  replicaCount: 1
+
+  ## StrategyType, can be set to RollingUpdate or Recreate by default.
+  ##
+  strategyType: RollingUpdate
+
+  ## Thanos Receive pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Thanos Receive pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Thanos Receive node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Thanos Receive pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Thanos Receive pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Thanos Receive pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for Receive pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Pod priority
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  # Create ClusterRole and ClusterRolebing for the Service account
+  rbac:
+    create: false
+
+  # Create PodSecurity Policy
+  pspEnabled: false
+
+  ## Thanos Receive containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Thanos Receive pods' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    httpGet:
+      path: /-/healthy
+      port: http
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    # periodSeconds: 10
+    # successThreshold: 1
+    # failureThreshold: 6
+  readinessProbe:
+    httpGet:
+      path: /-/ready
+      port: http
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    # periodSeconds: 10
+    # successThreshold: 1
+    # failureThreshold: 6
+
+  ## K8s Security Context for Thanos Bucket Web pods
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: false
+
+  ## Thanos Receive GRPC TLS parameters
+  ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags
+  ##
+  grpc:
+    # Time to wait after an interrupt received for GRPC Server.
+    gracePeriod: 2m
+    # TLS server side
+    server:
+      # enable TLS for GRPC server
+      secure: false
+      # TLS Certificate for gRPC server, leave blank to disable TLS
+      cert:
+      # TLS Key for the gRPC server, leave blank to disable TLS
+      key:
+      # TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ca:
+
+  ## Service parameters
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Thanos Receive service clusterIP IP
+    ##
+    # clusterIP: None
+    ## HTTP Port
+    ##
+    http:
+      port: 10902
+      ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      # nodePort:
+    ## GRPC Port
+    ##
+    grpc:
+      port: 10901
+      ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      # nodePort:
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Provide any additional annotations which may be required
+    ##
+    annotations: {}
+    ## Use to override service selector labels
+    ##
+    labelSelectorsOverride: {}
+
+  ## Autoscaling parameters
+  ##
+  autoscaling:
+    enabled: false
+    #  minReplicas: 1
+    #  maxReplicas: 11
+    #  targetCPU: 50
+    #  targetMemory: 50
+
+  ## Persistence parameters
+  ##
+  persistence:
+    enabled: true
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    # existingClaim:
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    # storageClass: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume Claim size
+    ##
+    size: 8Gi
+
+  ## Receive Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Configure the ingress resource that allows you to access Thanos Receive
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    ##
+    enabled: false
+
+    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+
+    ## When the ingress is enabled, a host pointing to this will be created
+    ##
+    hostname: thanos-receive.local
+
+    ## Ingress annotations done as key:value pairs
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    # extraHosts:
+    # - name: thanos.local
+    #   path: /
+    #   pathType: ImplementationSpecific
+
+    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    # extraTls:
+    # - hosts:
+    #     - thanos.local
+    #   secretName: thanos.local-tls
+
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ##
+
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+
+    secrets: []
+    # - name: thanos.local-tls
+    #   key:
+    #   certificate:
+
+    ## Override API Version (automatically detected if not set)
+    ##
+    apiVersion:
+
+    ## Ingress Path
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
 ## Prometheus metrics
 ##

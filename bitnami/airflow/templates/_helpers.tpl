@@ -120,7 +120,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Get the Redis credentials secret.
+Get the Redis(TM) credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.existingSecret) -}}
@@ -250,6 +250,7 @@ Add environment variables to configure database values
 Add environment variables to configure redis values
 */}}
 {{- define "airflow.configure.redis" -}}
+{{- if (not (eq .Values.executor "KubernetesExecutor" )) }}
 - name: REDIS_HOST
   value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
 - name: REDIS_PORT_NUMBER
@@ -263,6 +264,7 @@ Add environment variables to configure redis values
     secretKeyRef:
       name: {{ include "airflow.redis.secretName" . }}
       key: redis-password
+{{- end }}
 {{- end -}}
 
 {{/*

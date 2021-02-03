@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper Redis image name
+Return the proper Redis(TM) image name
 */}}
 {{- define "redis-cluster.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -18,7 +18,7 @@ Return the proper image name (for the metrics image)
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "redis-cluster.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -121,7 +121,7 @@ Get the password secret.
 {{- end -}}
 
 {{/*
-Get the password key to be retrieved from Redis secret.
+Get the password key to be retrieved from Redis(TM) secret.
 */}}
 {{- define "redis-cluster.secretPasswordKey" -}}
 {{- if and .Values.existingSecret .Values.existingSecretPasswordKey -}}
@@ -132,7 +132,7 @@ Get the password key to be retrieved from Redis secret.
 {{- end -}}
 
 {{/*
-Return Redis password
+Return Redis(TM) password
 */}}
 {{- define "redis-cluster.password" -}}
 {{- if not (empty .Values.global.redis.password) }}
@@ -177,7 +177,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Redis Cluster - check update parameters */}}
+{{/* Validate values of Redis(TM) Cluster - check update parameters */}}
 {{- define "redis-cluster.validateValues.updateParameters" -}}
 {{- if and .Values.cluster.update.addNodes ( or (and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.service.loadBalancerIP) ( not .Values.cluster.externalAccess.enabled )) -}}
   {{- if .Values.cluster.externalAccess.enabled }}
@@ -194,7 +194,7 @@ redis-cluster: currentNumberOfNodes
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Redis Cluster - tls settings */}}
+{{/* Validate values of Redis(TM) Cluster - tls settings */}}
 {{- define "redis-cluster.validateValues.tlsParameters" -}}
 {{- if .Values.tls.enabled }}
 {{- if not .Values.tls.certFilename -}}

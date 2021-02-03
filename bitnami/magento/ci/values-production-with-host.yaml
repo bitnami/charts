@@ -3,10 +3,11 @@ mariadb:
   enabled: false
 externalDatabase:
   host: database.local
-metrics:
-  enabled: true
 ingress:
   enabled: true
+metrics:
+  enabled: true
+# Avoids issues with yamllint
 livenessProbe:
   httpGet:
     httpHeaders: []

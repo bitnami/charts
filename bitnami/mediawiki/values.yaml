@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.35.1-debian-10-r0
+  tag: 1.35.1-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -26,6 +26,19 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -216,6 +229,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -333,7 +347,9 @@ service:
   ##
   externalTrafficPolicy: Cluster
 
-## Ingress configuration
+## Configure the ingress resource that allows you to access the
+## Mediawiki installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -344,9 +360,22 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: mediawiki.local
+
+  ## The Path to Mediawiki. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -358,46 +387,49 @@ ingress:
 
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
-  ## let the chart create self-signed certificates for you
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## Example:
   ## extraHosts:
-  ##   - name: mediawiki.local
-  ##     path: /
+  ## - name: mediawiki.local
+  ##   path: /
   ##
-  extraHosts: []
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## Example:
   ## extraTls:
   ## - hosts:
   ##     - mediawiki.local
   ##   secretName: mediawiki.local-tls
   ##
-  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
-  ## name should line up with a secretName set further up
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
   ##
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  ## Example
-  ## secrets:
-  ##   - name: mediawiki.local-tls
-  ##     key: ""
-  ##     certificate: ""
-  ##
   secrets: []
+  ## - name: mediawiki.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Prometheus Exporter / Metrics
 ##
@@ -406,7 +438,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r247
+    tag: 0.8.0-debian-10-r273
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -435,18 +467,23 @@ externalDatabase:
   # existingSecret:
 
   ## Database host
+  ##
   host:
 
   ## Database port
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_mediawiki
 
   ## Database password
+  ##
   password:
 
   ## Database name
+  ##
   database: bitnami_mediawiki
 
 ##

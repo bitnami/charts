@@ -27,6 +27,10 @@ image:
   ##
   pullSecrets: []
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -98,6 +102,11 @@ natsFilename: nats-server
 command: []
 args: []
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Extra flags to be passed to NATS
 ## Example:
 ## extraFlags:
@@ -157,6 +166,7 @@ updateStrategy:
 podSecurityContext:
   enabled: false
   ## fsGroup: 1001
+  ##
 
 ## NATS containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -165,6 +175,7 @@ containerSecurityContext:
   enabled: false
   ## runAsUser: 1001
   ## runAsNonRoot: true
+  ##
 
 ## NATS resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -242,6 +253,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -310,6 +322,7 @@ sidecars: {}
 client:
   service:
     ## Kubernetes service type
+    ##
     type: ClusterIP
     port: 4222
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -336,6 +349,7 @@ cluster:
   # connectRetries:
   service:
     ## Kubernetes service type
+    ##
     type: ClusterIP
     port: 6222
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -358,6 +372,7 @@ cluster:
 monitoring:
   service:
     ## Kubernetes service type
+    ##
     type: ClusterIP
     port: 8222
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -374,7 +389,9 @@ monitoring:
     ##
     loadBalancerIP:
 
-## Ingress configuration
+## Configure the ingress resource that allows you to access the
+## NATS installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -385,9 +402,22 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: nats.local
+
+  ## The Path to NATS. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -399,46 +429,49 @@ ingress:
 
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
-  ## let the chart create self-signed certificates for you
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## Example:
   ## extraHosts:
-  ##   - name: nats.local
-  ##     path: /
+  ## - name: nats.local
+  ##   path: /
   ##
-  extraHosts: []
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## Example:
   ## extraTls:
   ## - hosts:
   ##     - nats.local
   ##   secretName: nats.local-tls
   ##
-  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
-  ## name should line up with a secretName set further up
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
   ##
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  ## Example
-  ## secrets:
-  ##   - name: nats.local-tls
-  ##     key: ""
-  ##     certificate: ""
-  ##
   secrets: []
+  ## - name: nats.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -481,6 +514,7 @@ pdb:
 ## Metrics / Prometheus NATS Exporter
 ##
 ## ref: https://github.com/nats-io/prometheus-nats-exporter
+##
 metrics:
   enabled: false
   image:
@@ -531,5 +565,6 @@ metrics:
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ##
     selector:
       prometheus: kube-prometheus

@@ -65,7 +65,7 @@ Return the appropriate apiVersion for PodSecurityPolicy.
 {{- end -}}
 
 {{/*
-Return the proper Redis image name
+Return the proper Redis(TM) image name
 */}}
 {{- define "redis.image" -}}
 {{- $registryName := .Values.image.registry -}}
@@ -88,7 +88,7 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper Redis Sentinel image name
+Return the proper Redis(TM) Sentinel image name
 */}}
 {{- define "sentinel.image" -}}
 {{- $registryName := .Values.sentinel.image.registry -}}
@@ -209,7 +209,7 @@ Get the password secret.
 {{- end -}}
 
 {{/*
-Get the password key to be retrieved from Redis secret.
+Get the password key to be retrieved from Redis(TM) secret.
 */}}
 {{- define "redis.secretPasswordKey" -}}
 {{- if and .Values.existingSecret .Values.existingSecretPasswordKey -}}
@@ -220,7 +220,7 @@ Get the password key to be retrieved from Redis secret.
 {{- end -}}
 
 {{/*
-Return Redis password
+Return Redis(TM) password
 */}}
 {{- define "redis.password" -}}
 {{- if not (empty .Values.global.redis.password) }}
@@ -398,7 +398,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Redis - spreadConstrainsts K8s version */}}
+{{/* Validate values of Redis(TM) - spreadConstrainsts K8s version */}}
 {{- define "redis.validateValues.spreadConstraints" -}}
 {{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.slave.spreadConstraints -}}
 redis: spreadConstraints

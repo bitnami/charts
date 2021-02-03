@@ -29,7 +29,10 @@ spec:
       {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- if .Values.web.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.web.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -42,18 +45,22 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if or .Values.nodeSelector .Values.web.nodeSelector }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
-      {{- if .Values.web.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.web.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainer }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainer "context" $) | trim | nindent 8 }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
         - name: airflow-web

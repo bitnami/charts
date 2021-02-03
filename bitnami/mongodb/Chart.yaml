@@ -26,4 +26,5 @@ name: mongodb
 sources:
   - https://github.com/bitnami/bitnami-docker-mongodb
   - https://mongodb.org
-version: 10.3.8
+version: 10.6.2
+
