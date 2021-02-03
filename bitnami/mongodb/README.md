@@ -220,6 +220,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | Parameter                                         | Description                                                                                        | Default                                                 |
 |---------------------------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                            | `ClusterIP`                                             |
+| `service.name`                                    | MongoDB service name                                                                               | `{mongodb.fullname}-headless`                         |
 | `service.port`                                    | MongoDB service port                                                                               | `27017`                                                 |
 | `service.portName`                                | MongoDB service port name                                                                          | `mongodb`                                               |
 | `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                        | `""`                                                    |
@@ -319,6 +320,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `arbiter.sidecars`                        | Add additional sidecar containers for the Arbiter pod(s)                                                   | `{}` (evaluated as a template)                               |
 | `arbiter.extraVolumeMounts`               | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)                      | `{}`                                                         |
 | `arbiter.extraVolumes`                    | Optionally specify extra list of additional volumes to the Arbiter statefulset                             | `{}`                                                         |
+| `arbiter.service.name`                    | The arbiter service name                                                                                   | `{mongodb.fullname}-arbiter-headless`                     |
 
 ### Metrics parameters
 
