@@ -182,7 +182,7 @@ updateStrategy:
 ## Set a priority class name.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-# priorityClassName:
+# priorityClassName: ""
 
 serviceAccount:
   ## Specifies whether a ServiceAccount should be created
