@@ -1,7 +1,7 @@
 dependencies:
 - name: kafka
-  repository: file://../kafka
-  version: 12.5.0
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.7.4
 - name: spark
   repository: https://charts.bitnami.com/bitnami
   version: 4.4.1
@@ -14,5 +14,5 @@ dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.3.7
-digest: sha256:22d726f0dc1b61f2d3371d3997c318a1553449825270ed417b8baec51da7a2ac
-generated: "2021-02-02T11:55:11.455241406Z"
+digest: sha256:ab3b37cfe7faf6d398fc26711a3ffbec21af3a59754865407936a9718b33c983
+generated: "2021-02-03T10:10:07.604350085Z"

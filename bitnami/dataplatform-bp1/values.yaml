@@ -98,7 +98,7 @@ kafka:
     ## Server or list of external zookeeper servers to use.
     ##
     servers:
-      - '{{ include "common.names.fullname" . }}-zookeeper'
+      - '{{ .Release.Name }}-zookeeper'
 
 ## Spark Subchart parameters
 ##
@@ -189,7 +189,7 @@ solr:
     ## Server or list of external zookeeper servers to use.
     ##
     servers:
-      - '{{ include "common.names.fullname" . }}-zookeeper'
+      - '{{ .Release.Name }}-zookeeper'
 
 ## Wavefront Subchart Parameters
 ##
