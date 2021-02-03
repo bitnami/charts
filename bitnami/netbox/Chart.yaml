@@ -1,0 +1,34 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 2.1.4
+dependencies:
+  - condition: redis.enabled
+    name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.X.X
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: NetBox is an IP address management (IPAM) and data center infrastructure management (DCIM) tool
+engine: gotpl
+home: https://github.com/netbox-community/netbox
+icon: https://bitnami.com/assets/stacks/netbox/img/netbox-stack-220x234.png
+keywords:
+  - DCIM
+  - IPAM
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: netbox
+sources:
+  - https://github.com/bitnami/bitnami-docker-netbox
+  - https://github.com/netbox-community/netbox
+  - https://github.com/netbox-community/netbox-docker
+version: 0.1.0

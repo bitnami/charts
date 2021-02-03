@@ -1,0 +1,139 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: netbox
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.netbox.updateStrategy }}
+  strategy: {{- toYaml .Values.netbox.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: netbox
+  template:
+    metadata:
+      {{- if .Values.netbox.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: netbox
+        {{- if .Values.netbox.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.netbox.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "netbox.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.netbox.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.netbox.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.netbox.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.netbox.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.netbox.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.netbox.nodeAffinityPreset.type "key" .Values.netbox.nodeAffinityPreset.key "values" .Values.netbox.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.netbox.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.netbox.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.netbox.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.netbox.priorityClassName }}
+      priorityClassName: {{ .Values.netbox.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.netbox.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.netbox.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "netbox.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - %%commands%%
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.netbox.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.netbox.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: netbox
+          image: {{ template "netbox.image" . }}
+          imagePullPolicy: {{ .Values.netbox.image.pullPolicy }}
+          {{- if .Values.netbox.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.netbox.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.netbox.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.netbox.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.netbox.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.netbox.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.netbox.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.netbox.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.netbox.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.netbox.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.netbox.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.netbox.resources }}
+          resources: {{- toYaml .Values.netbox.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.netbox.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.netbox.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.netbox.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.netbox.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.netbox.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.netbox.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.netbox.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config-secrets
+              mountPath: "/run/secrets/"
+              readOnly: true
+          {{- if .Values.netbox.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.netbox.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.netbox.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.netbox.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config-secrets
+          secret:
+            secretName: {{ template "common.names.fullname" . }}
+        - name: extra-config
+          configmap:
+            name: {{ template "common.names.fullname" . }}-extraconfig
+        - name: extra-config-secrets
+          secret:
+            secretName: {{ template "common.names.fullname" . }}-extraconfig
+        {{- if .Values.netbox.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.netbox.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
