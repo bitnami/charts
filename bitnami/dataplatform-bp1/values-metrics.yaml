@@ -1,3 +1,30 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Specifies whether RBAC resources should be created
+##
+rbac:
+  create: true
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name:
 
 zookeeper:
   replicaCount: 3
@@ -125,7 +152,8 @@ kafka:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: {{ Release.name}}-zookeeper
+    servers:
+      - '{{ .Release.Name }}-zookeeper'
 
 ## Spark Subchart parameters
 ##
@@ -210,10 +238,16 @@ spark:
 solr:
   enabled: true
   replicaCount: 2
+  ## To be removed once the image is uploaded to bitnami docker repo
+  ##
   image: 
     registry: harbor-repo.vmware.com/dockerhub-proxy-cache
     repository: rafaelriossaavedra/solr_temp
-    tag: fix_1
+    tag: err
+  ## Exporter deployment does not work with authentication enabled- Bug
+  ##
+  authentication:
+    enabled: false
 
   ## Java memory options
   ##
@@ -278,7 +312,7 @@ solr:
   externalZookeeper:
     ## Server or list of external zookeeper servers to use.
     ##
-    servers: {{ Release.name}}-zookeeper
+    servers: '{{ .Release.Name }}-zookeeper'
 
 ## Wavefront Subchart parameters
 ##
@@ -287,15 +321,15 @@ wavefront:
   ## This is a unique name for the cluster (required)
   ## All metrics will receive a `cluster` tag with this value
   ##
-  clusterName: data-platform-tkc
+  clusterName: KUBERNETES_CLUSTER_NAME
   ## Wavefront URL (cluster) and API Token (required)
   ##
   wavefront:
-    url: https://longboard.wavefront.com #$WAVEFRONT_URL
-
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN    
     ## Name of an existing secret containing the token
     ##
-    existingSecret: wavefront-token
+    existingSecret:
   ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
   ## It will capture Kubernetes resources metrics available from the kubelets,
   ## as well as auto-discovery capabilities.
@@ -324,7 +358,7 @@ wavefront:
       ## Can be used to add additional discovery rules
       ##
       config:
-      # auto-discover a sample prometheus application
+
       # auto-discover kafka-exporter
       - name: kafka-discovery
         type: prometheus
