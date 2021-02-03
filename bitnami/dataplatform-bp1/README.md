@@ -24,6 +24,8 @@ The "Small" size data platform in default configuration deploys the following:
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
 
+Please refer [Data Platform with Wavefront Section](#wavefront-observability-set-up-for-the-data-platform) to set up the data platform with Observability framework.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
@@ -147,7 +149,7 @@ The following tables lists the recommended configurations for each application u
 
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `spark.master.enabled`                           | Switch to enable or disable the Spark helm chart                                                                                                   | `true`                          |
+| `spark.enabled`                           | Switch to enable or disable the Spark helm chart                                                                                                   | `true`                          |
 | `master.webPort`                                 | Specify the port where the web interface will listen on the master                                                                         | `8080`                                                  |
 | `spark.master.affinity`                          | Spark master affinity for pod assignment                                                                                                   | Spark master pod Affinity rules set according to data platform t-shirt size (evaluated as a template)                          |
 | `spark.master.resources`                         | CPU/Memory resource requests/limits for Master                                                                                             | Spark master pods resource requests set according to data platform t-shirt size                                                    |
@@ -161,6 +163,25 @@ The following tables lists the recommended configurations for each application u
 | `spark.metrics.workerAnnotations`                | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
 | `spark.metrics.resources.limits`                 | The resources limits for the metrics exporter container                                                                                      | `{}`                                                         |
 | `spark.metrics.resources.requests`               | The requested resources for the metrics exporter container                                                                                   | Spark exporter container resource requests set according to data platform t-shirt size                                                         |
+
+### Wavefront chart parameters
+
+By default the data platform helm chart is deployed without Wavefront Observability framework. Please refer the [Data Platform with Wavefront Section](#wavefront-observability-set-up-for-the-data-platform) for more details.
+
+| Parameter                                  | Description                                                                                                            | Default                                                 |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `wavefront.enabled`                        | Switch to enable or disable the Wavefront helm chart                                                                   | `true`                                                  |
+| `wavefront.clusterName`                    | Unique name for the Kubernetes cluster (required)                                                                      | `KUBERNETES_CLUSTER_NAME`                               |
+| `wavefront.wavefront.url`                  | Wavefront URL for your cluster (required)                                                                              | `https://YOUR_CLUSTER.wavefront.com`                    |
+| `wavefront.wavefront.token`                | Wavefront API Token (required)                                                                                         | `YOUR_API_TOKEN`                                        |
+| `wavefront.wavefront.existingSecret`       | Name of an existing secret containing the token                                                                        | `nil`                                                   |
+| `wavefront.collector.discovery.enabled`    | Rules based and Prometheus endpoints auto-discovery                                                                    | `true`                                                  |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                               | `true`                                                 |
+| `wavefront.collector.discovery.config`     | Configuration for rules based auto-discovery                                                                           | Data Platform components pods discovery config                                                   |
+| `wavefront.collector.resources.limits`     | The resources limits for the collector container                                                                       | `{}`                                                    |
+| `wavefront.collector.resources.requests`   | The requested resources for the collector container                                                                    | Collectors pods resource requests set according to data platform t-shirt size                        |
+| `wavefront.proxy.resources.limits`         | The resources limits for the proxy container                                                                           | `{}`                                                    |
+| `wavefront.proxy.resources.requests`       | The requested resources for the proxy container                                                                        | Proxy pods resource requests set according to data platform t-shirt size                                 |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -200,24 +221,32 @@ The "Small" size data platform with observability framework deploys the followin
 4. Spark with 1 Master and 2 worker nodes along with metrics exporters
 5. Wavefront Collectors running as DaemonSet and Wavefront Proxy configured for Kafka/Spark/Solr
 
-To install the chart including observability framework with wavefront, store the Wavefront URL in a environment variable $WAVEFRONT_URL
+To install the data platform chart with observability framework with the release name `my-release`:
 
 ```console
-export WAVEFRONT_URL=<YOUR-CLUSTER>.wavefront.com
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-release bitnami/dataplatform-bp1 -f values-metrics.yaml \
+  --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+  --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+  --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
 
-Also create a secret storing your Wavefront token. API Token can be found at Settings -> User Profile -> API Access. Please store it in a local file api-token.txt to create the secret.
+Alternatively you can store the Wavefront API token in a secret and use the secret while installing the chart. API Token can be found at Settings -> User Profile -> API Access. Please store it in a local file api-token.txt to create the secret using the command below.
 
 ```console
 kubectl create secret generic wavefront-token --from-file=api-token=./api-token.txt
 ```
-
-To install the chart with observability framework with the release name `my-release`:
+To install the data platform chart with observability framework using this token with the release name `my-release`:
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1 -f values-metrics.yaml
+helm install my-release bitnami/dataplatform-bp1 -f values-metrics.yaml \
+  --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+  --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+  --set wavefront.wavefront.existingSecret=wavefront-token
 ```
+
+
 > **Tip**: List all releases using `helm list`
 
 ## Troubleshooting
