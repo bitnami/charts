@@ -158,7 +158,7 @@ livenessProbe:
   enabled: true
   httpGet:
     path: /login
-    port: netbox
+    port: 8080
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 1
@@ -168,7 +168,7 @@ readinessProbe:
   enabled: true
   httpGet:
     path: /login
-    port: netbox
+    port: 8080
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 1
