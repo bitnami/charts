@@ -203,7 +203,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "mongodb.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.customDatabase" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessServiceType" .) -}}
-{{- $messages := append $messages (include "mongodb.validateValues.loadBalancerIPsListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
 {{- $messages := without $messages "" -}}
@@ -253,18 +252,6 @@ Validate values of MongoDB - service type for external access
 {{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
 mongodb: externalAccess.service.type
     Available service type for external access are NodePort or LoadBalancer.
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MongoDB - number of replicas must be the same than LoadBalancer IPs list
-*/}}
-{{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
-{{- $replicaCount := int .Values.replicaCount }}
-{{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength )) -}}
-mongodb: .Values.externalAccess.service.loadBalancerIPs
-    Number of replicas and loadBalancerIPs array length must be the same.
 {{- end -}}
 {{- end -}}
 
