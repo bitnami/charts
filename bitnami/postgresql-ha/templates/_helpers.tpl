@@ -49,6 +49,21 @@ Fully qualified app name for LDAP
 {{- end -}}
 
 {{/*
+Return the proper Node hostname
+*/}}
+{{- define "postgresql-ha.nodesHostnames" -}}
+{{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
+{{- $postgresqlFullname := include "postgresql-ha.postgresql" $ }}
+{{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" $) }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain:= .Values.clusterDomain }}
+{{- range $e, $i := until $postgresqlReplicaCount -}}
+{{- $nodeHostname := printf "%s-%d.%s.%s.svc.%s" $postgresqlFullname $i $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
+{{- printf "%d:%s:5432," $i ($nodeHostname | trunc 128 | trimSuffix "-" | trimSuffix ".") -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper PostgreSQL image name
 */}}
 {{- define "postgresql-ha.postgresqlImage" -}}
@@ -564,7 +579,6 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "postgresql-ha.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "postgresql-ha.validateValues.nodesHostnames" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldap" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.ldapPgHba" .) -}}
 {{- $messages := append $messages (include "postgresql-ha.validateValues.upgradeRepmgrExtension" .) -}}
@@ -573,20 +587,6 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of PostgreSQL HA - PostgreSQL nodes hostnames cannot be longer than 128 characters */}}
-{{- define "postgresql-ha.validateValues.nodesHostnames" -}}
-{{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
-{{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
-{{- $clusterDomain:= .Values.clusterDomain }}
-{{- $nodeHostname := printf "%s-00.%s.%s.svc.%s:1234" $postgresqlFullname $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
-{{- if gt (len $nodeHostname) 128 -}}
-postgresql-ha: Nodes hostnames
-    PostgreSQL nodes hostnames ({{ $nodeHostname }}) exceeds the characters limit for Pgpool: 128.
-    Consider using a shorter release name or namespace.
 {{- end -}}
 {{- end -}}
 

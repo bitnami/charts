@@ -89,11 +89,6 @@ spec:
       {{- if .Values.pgpool.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      # Auxiliary vars to populate environment variables
-      {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
-      {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
-      {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-      {{- $clusterDomain:= .Values.clusterDomain }}
       containers:
         - name: pgpool
           image: {{ include "postgresql-ha.pgpoolImage" . }}
@@ -130,7 +125,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: PGPOOL_BACKEND_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(PGPOOL_NAMESPACE).svc.{{ $clusterDomain }}:5432,{{ end }}
+              value: {{ include "postgresql-ha.nodesHostnames" . }}
             - name: PGPOOL_SR_CHECK_USER
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
