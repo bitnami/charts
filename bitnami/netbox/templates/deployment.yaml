@@ -147,14 +147,18 @@ spec:
             - name: config-secrets
               mountPath: "/run/secrets/"
               readOnly: true
+            {{- if .Values.netbox.extraConfig }}
             - name: extra-config
               mountPath: /etc/netbox/config/extra.py
               subPath: extra.py
               readOnly: true
+            {{- end }} 
+            {{- if .Values.netbox.extraSecretConfig }}
             - name: extra-config-secrets
               mountPath: /etc/netbox/config/secret.py
               subPath: secret.py
               readOnly: true
+            {{- end }} 
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -165,12 +169,16 @@ spec:
         - name: config-secrets
           secret:
             secretName: {{ template "common.names.fullname" . }}
+        {{- if .Values.netbox.extraConfig }}
         - name: extra-config
           configMap:
             name: {{ template "common.names.fullname" . }}-extraconfig
+        {{- end }}
+        {{- if .Values.netbox.extraSecretConfig }}
         - name: extra-config-secrets
           secret:
             secretName: {{ template "common.names.fullname" . }}-extraconfig
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

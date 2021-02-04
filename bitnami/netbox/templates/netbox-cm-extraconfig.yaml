@@ -1,3 +1,4 @@
+{{- if .Values.netbox.extraConfig }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,3 +15,4 @@ metadata:
 data:
   extra.py: |
   {{- include "common.tplvalues.render" (dict "value" .Values.netbox.extraConfig "context" $) | nindent 4 }}
+{{- end }}
