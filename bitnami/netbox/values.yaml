@@ -250,19 +250,19 @@ netbox:
     #     'AWS_STORAGE_BUCKET_NAME': 'netbox',
     #     'AWS_S3_REGION_NAME': 'eu-west-1',
     # }
-    EMAIL = {
-    'SERVER': environ.get('EMAIL_SERVER', 'localhost'),
-    'PORT': int(environ.get('EMAIL_PORT', 25)),
-    'USERNAME': environ.get('EMAIL_USERNAME', ''),
-    'PASSWORD': _read_secret('email_password', environ.get('EMAIL_PASSWORD', '')),
-    'USE_SSL': environ.get('EMAIL_USE_SSL', 'False').lower() == 'true',
-    'USE_TLS': environ.get('EMAIL_USE_TLS', 'False').lower() == 'true',
-    'SSL_CERTFILE': environ.get('EMAIL_SSL_CERTFILE', ''),
-    'SSL_KEYFILE': environ.get('EMAIL_SSL_KEYFILE', ''),
-    'TIMEOUT': int(environ.get('EMAIL_TIMEOUT', 10)),  # seconds
-    'FROM_EMAIL': environ.get('EMAIL_FROM', ''),
-    }
-    NAPALM_PASSWORD = _read_secret('napalm_password', environ.get('NAPALM_PASSWORD', ''))
+    # EMAIL = {
+    # 'SERVER': environ.get('EMAIL_SERVER', 'localhost'),
+    # 'PORT': int(environ.get('EMAIL_PORT', 25)),
+    # 'USERNAME': environ.get('EMAIL_USERNAME', ''),
+    # 'PASSWORD': _read_secret('email_password', environ.get('EMAIL_PASSWORD', '')),
+    # 'USE_SSL': environ.get('EMAIL_USE_SSL', 'False').lower() == 'true',
+    # 'USE_TLS': environ.get('EMAIL_USE_TLS', 'False').lower() == 'true',
+    # 'SSL_CERTFILE': environ.get('EMAIL_SSL_CERTFILE', ''),
+    # 'SSL_KEYFILE': environ.get('EMAIL_SSL_KEYFILE', ''),
+    # 'TIMEOUT': int(environ.get('EMAIL_TIMEOUT', 10)),  # seconds
+    # 'FROM_EMAIL': environ.get('EMAIL_FROM', ''),
+    # }
+    # NAPALM_PASSWORD = _read_secret('napalm_password', environ.get('NAPALM_PASSWORD', ''))
 ## ConfigMap with netbox Configuration
 ##
 # existingConfigmap:
