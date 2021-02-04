@@ -66,7 +66,7 @@ auth:
   ## RabbitMQ application password
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
-  # password:
+  password: CHANGEME
   # existingPasswordSecret: name-of-existing-secret
 
   ## Erlang cookie to determine whether different nodes are allowed to communicate with each other
@@ -202,7 +202,7 @@ configuration: |-
   ## Username and password
   ##
   default_user = {{ .Values.auth.username }}
-  default_pass = CHANGEME
+  default_pass = {{ .Values.auth.password }}
   ## Clustering
   ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
