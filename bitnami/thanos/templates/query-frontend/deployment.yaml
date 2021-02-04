@@ -32,6 +32,9 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "query-frontend" "context" $) }}
+      {{- if .Values.queryFrontend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.queryFrontend.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.affinity "context" $) | nindent 8 }}
       {{- else }}

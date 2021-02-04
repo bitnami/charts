@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.10.0-debian-10-r55
+  tag: 11.10.0-debian-10-r78
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -51,7 +51,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.1-debian-10-r12
+  tag: 4.2.1-debian-10-r37
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +90,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r321
+  tag: 0.8.0-debian-10-r346
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -146,6 +146,11 @@ postgresql:
   ##
   updateStrategyType: RollingUpdate
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -175,6 +180,7 @@ postgresql:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -517,6 +523,11 @@ pgpool:
   ##  users above
   #   passwords: 'pass01;pass02'
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Alternatively, you can provide the name of a secret containing this information.
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
@@ -622,6 +633,7 @@ pgpool:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -974,8 +986,10 @@ metrics:
 persistence:
   enabled: true
   ## A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
+  ## If defined, PVC must be created manually before volume will be bound.
+  ## All replicas will share this PVC, using existingClaim with
+  ## replicas > 1 is only useful in very special use cases.
+  ## The value is evaluated as a template.
   ##
   # existingClaim:
   ## Persistent Volume Storage Class
@@ -1003,6 +1017,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 
 ## PgPool service parameters

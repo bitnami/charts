@@ -76,7 +76,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.9.3-debian-10-r28
+    tag: 4.9.3-debian-10-r36
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,6 +88,11 @@ server:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Server Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -234,7 +239,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r251
+    tag: 2.1.0-debian-10-r259
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -246,6 +251,11 @@ dashboard:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Dashboard Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

@@ -48,6 +48,15 @@ fullnameOverride:
 ##
 replicaCount: 1
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
@@ -254,6 +263,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -299,6 +309,7 @@ ingress:
   hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
 
   ## tls:
   ## - hosts:
@@ -337,6 +348,7 @@ ingress:
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -476,6 +488,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: "/login.php"

@@ -35,6 +35,11 @@ kubeVersion:
 ##
 extraDeploy: []
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## String to partially override grafana.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -173,6 +178,11 @@ updateStrategy:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 # schedulerName:
+
+## Set a priority class name.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
 serviceAccount:
   ## Specifies whether a ServiceAccount should be created

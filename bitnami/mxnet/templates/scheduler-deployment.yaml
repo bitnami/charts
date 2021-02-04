@@ -15,6 +15,9 @@ spec:
         app.kubernetes.io/component: scheduler
     spec:
       {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.scheduler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.scheduler.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.affinity "context" $) | nindent 8 }}
       {{- else }}

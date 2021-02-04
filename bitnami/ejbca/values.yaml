@@ -41,6 +41,11 @@ kubeVersion:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Number of EJBCA replicas to deploy.
 ##
 replicaCount: 1

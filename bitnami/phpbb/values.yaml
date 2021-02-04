@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpbb
-  tag: 3.3.2-debian-10-r72
+  tag: 3.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,6 +85,15 @@ command:
 ## Container args (using container default if not set)
 ##
 args:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
 ##
@@ -522,7 +531,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r276
+    tag: 0.8.0-debian-10-r281
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

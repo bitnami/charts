@@ -14,7 +14,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.4.0-debian-10-r28
+    tag: 2.4.0-debian-10-r37
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -34,7 +34,7 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.4.0-debian-10-r29
+    tag: 2.4.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -54,6 +54,11 @@ client:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Container ports
 ##
@@ -89,6 +94,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

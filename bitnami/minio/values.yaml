@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.1.16-debian-10-r3
+  tag: 2021.2.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -63,6 +63,11 @@ commonAnnotations: {}
 ##
 # schedulerName: stork
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
   create: true
@@ -80,7 +85,7 @@ clusterDomain: cluster.local
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.1.16-debian-10-r1
+  tag: 2021.1.30-debian-10-r2
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.

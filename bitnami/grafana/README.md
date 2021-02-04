@@ -45,6 +45,89 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
 
+## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
+
+In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
+
+The *bitnami/grafana* chart deploys a single Grafana installation (with grafana-image-renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+
+```
+                    +--------------+             +-----+
+                    |              |             |     |
+ Service & Ingress  |    Grafana   +<------------+ PVC |
+<-------------------+              |             |     |
+                    |  Deployment  |             +-----+
+                    |              |
+                    +-----------+--+
+                                ^                +------------+
+                                |                |            |
+                                +----------------+ Configmaps |
+                                                 |   Secrets  |
+                                                 |            |
+                                                 +------------+
+
+```
+
+Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
+
+The *bitnami/grafana-operator* chart deploys a Grafana Operator installation using a Kubernetes Deployment.  The figure below shows the Grafana operator deployment after executing *helm install*:
+
+```
++--------------------+
+|                    |      +---------------+
+|  Grafana Operator  |      |               |
+|                    |      |     RBAC      |
+|    Deployment      |      |   Privileges  |
+|                    |      |               |
++-------+------------+      +-------+-------+
+        ^                           |
+        |   +-----------------+     |
+        +---+ Service Account +<----+
+            +-----------------+
+```
+
+The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboards* and *GrafanaDataSources*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after
+ deploying a *Grafana* object using *kubectl*:
+
+```
++--------------------+
+|                    |      +---------------+
+|  Grafana Operator  |      |               |
+|                    |      |     RBAC      |
+|    Deployment      |      |   Privileges  |
+|                    |      |               |
++--+----+------------+      +-------+-------+
+   |    ^                           |
+   |    |   +-----------------+     |
+   |    +---+ Service Account +<----+
+   |        +-----------------+
+   |
+   |
+   |
+   |
+   |                                                   Grafana
+   |                     +---------------------------------------------------------------------------+
+   |                     |                                                                           |
+   |                     |                          +--------------+             +-----+             |
+   |                     |                          |              |             |     |             |
+   +-------------------->+       Service & Ingress  |    Grafana   +<------------+ PVC |             |
+                         |      <-------------------+              |             |     |             |
+                         |                          |  Deployment  |             +-----+             |
+                         |                          |              |                                 |
+                         |                          +-----------+--+                                 |
+                         |                                      ^                +------------+      |
+                         |                                      |                |            |      |
+                         |                                      +----------------+ Configmaps |      |
+                         |                                                       |   Secrets  |      |
+                         |                                                       |            |      |
+                         |                                                       +------------+      |
+                         |                                                                           |
+                         +---------------------------------------------------------------------------+
+
+```
+
+This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy mulitple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+
 ## Parameters
 
 The following tables lists the configurable parameters of the grafana chart and their default values.
@@ -76,6 +159,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `image.tag`                        | Grafana image tag                                                          | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                 | Grafana image pull policy                                                  | `IfNotPresent`                                          |
 | `image.pullSecrets`                | Specify docker-registry secret names as an array                           | `[]` (does not add image pull secrets to deployed pods) |
+| `hostAliases`                      | Add deployment host aliases                                                | `[]`                                                    |
 | `admin.user`                       | Grafana admin username                                                     | `admin`                                                 |
 | `admin.password`                   | Grafana admin password                                                     | Randomly generated                                      |
 | `admin.existingSecret`             | Name of the existing secret containing admin password                      | `nil`                                                   |
@@ -108,6 +192,7 @@ The following tables lists the configurable parameters of the grafana chart and 
 | `replicaCount`                 | Number of Grafana nodes                                                                   | `1`                            |
 | `updateStrategy`               | Update strategy for the deployment                                                        | `{type: "RollingUpdate"}`      |
 | `schedulerName`                | Alternative scheduler                                                                     | `nil`                          |
+| `priorityClassName`            | Priority class name                                                                       | `nil`                          |
 | `podLabels`                    | Grafana pod labels                                                                        | `{}` (evaluated as a template) |
 | `podAnnotations`               | Grafana Pod annotations                                                                   | `{}` (evaluated as a template) |
 | `podAffinityPreset`            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |

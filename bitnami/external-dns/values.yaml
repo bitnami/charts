@@ -32,6 +32,11 @@ image:
 ## String to fully override external-dns.fullname template
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
 sources:
@@ -74,6 +79,7 @@ serviceTypeFilter: []
 ##
 alibabacloud:
   ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
+  ##
   accessKeyId: ""
   accessKeySecret: ""
   regionId: ""
@@ -280,6 +286,7 @@ hetzner:
   token: ""
 
   ## Use an existing secret. Mutually exclusive with `hetzner.token`
+  ##
   secretName: ""
   secretKey: "hetzner_token"
 
@@ -296,6 +303,7 @@ infoblox:
   ##
   ## Existing secret name, when in place wapiUsername and wapiPassword are not required
   ## secretName: ""
+  ##
   domainFilter: ""
   noSslVerify: false
   wapiPort: ""
@@ -339,6 +347,7 @@ rfc2136:
   tsigKeyname: externaldns-key
   tsigAxfr: true
   ## Possible units [ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  ##
   minTTL: "0s"
 
 ## PowerDNS configuration to be set via arguments/env. variables
@@ -359,6 +368,7 @@ transip:
   account: ""
   ##
   ## API key that is authorised for the account
+  ##
   apiKey: ""
 
 ## VinylDNS configuration to be set via arguments/env. variables
@@ -424,6 +434,7 @@ extraArgs: {}
 ##     secretKeyRef:
 ##       name: existing-secret
 ##       key: varname2-key
+##
 extraEnv: []
 
 ## Replica count
@@ -449,6 +460,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -499,8 +511,10 @@ secretAnnotations: {}
 ##
 crd:
   ## Install and use the integrated DNSEndpoint CRD
+  ##
   create: false
   ## Change these to use an external DNSEndpoint CRD (E.g. from kubefed)
+  ##
   apiversion: ""
   kind: ""
 
@@ -539,6 +553,7 @@ service:
   ## have external-dns show up in `kubectl cluster-info`
   ##  kubernetes.io/cluster-service: "true"
   ##  kubernetes.io/name: "external-dns"
+  ##
   labels: {}
 
 ## ServiceAccount parameters
@@ -559,6 +574,7 @@ serviceAccount:
 rbac:
   create: true
   ## Deploys ClusterRole by Default
+  ##
   clusterRole: true
   ## RBAC API version
   ##
@@ -619,9 +635,11 @@ readinessProbe:
   successThreshold: 1
 
 ## Configure extra volumes
+##
 extraVolumes: []
 
 ## Configure extra volumeMounts
+##
 extraVolumeMounts: []
 
 ## Prometheus Exporter / Metrics

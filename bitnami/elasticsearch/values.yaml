@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.10.2-debian-10-r0
+  tag: 7.10.2-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -152,10 +152,12 @@ name: elastic
 ##   my_init_script.sh: |
 ##      #!/bin/sh
 ##      echo "Do something."
+##
 initScripts:
 
 ## ConfigMap with scripts to be run at first boot
 ## Note: This will override initScripts
+##
 initScriptsCM:
 
 ## Secret with init scripts to execute (for sensitive data)
@@ -192,12 +194,18 @@ master:
   updateStrategy:
     type: RollingUpdate
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   heapSize: 128m
   ## Provide annotations for master-eligible pods.
   ##
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pod Security Context for master-eligible pods.
@@ -226,6 +234,7 @@ master:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -262,6 +271,7 @@ master:
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 384Mi
@@ -355,6 +365,7 @@ master:
   ##
   serviceAccount:
     ## Specifies whether a ServiceAccount should be created for the master node
+    ##
     create: false
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
@@ -366,6 +377,11 @@ coordinating:
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## updateStrategy for ElasticSearch coordinating deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -379,6 +395,7 @@ coordinating:
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pod Security Context for coordinating-only pods.
@@ -407,6 +424,7 @@ coordinating:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -443,6 +461,7 @@ coordinating:
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 384Mi
@@ -506,6 +525,10 @@ data:
   ## Number of data node(s) replicas to deploy
   ##
   replicas: 2
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## updateStrategy for ElasticSearch Data statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -518,6 +541,7 @@ data:
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pod Security Context for data pods.
@@ -546,6 +570,7 @@ data:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -582,6 +607,7 @@ data:
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 2176Mi
@@ -671,7 +697,13 @@ ingest:
   ##
   podAnnotations: {}
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pod Security Context for ingest pods.
@@ -700,6 +732,7 @@ ingest:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -736,6 +769,7 @@ ingest:
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 384Mi
@@ -790,7 +824,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.3-debian-10-r34
+    tag: 5.8.3-debian-10-r43
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -813,6 +847,7 @@ curator:
   podAnnotations: {}
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Pod affinity preset
@@ -834,6 +869,7 @@ curator:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1009,7 +1045,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r329
+    tag: 1.1.0-debian-10-r339
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1017,6 +1053,12 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Elasticsearch Prometheus exporter service type
   ##
   service:
@@ -1048,6 +1090,7 @@ metrics:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -1100,6 +1143,7 @@ metrics:
     prometheus.io/port: "9114"
 
   ## Extra labels to add to Pod
+  ##
   podLabels: {}
 
   ## Prometheus Operator ServiceMonitor configuration

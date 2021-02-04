@@ -50,6 +50,11 @@ kubeVersion:
 ##
 clusterDomain: cluster.local
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## RabbitMQ Authentication parameters
 ##
 auth:
@@ -81,6 +86,7 @@ auth:
     serverCertificate: |-
     serverKey: |-
     # existingSecret: name-of-existing-secret-to-rabbitmq
+    existingSecretFullChain: false
 
 ## Value for the RABBITMQ_LOGS environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -716,7 +722,8 @@ ingress:
   ##
   enabled: false
 
-  ## Path for the default host
+  ## Path for the default host. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
   ##
   path: /
 

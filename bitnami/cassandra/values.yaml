@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.9-debian-10-r52
+  tag: 3.11.10-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -53,6 +53,21 @@ commonAnnotations: {}
 ## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Cassandra container ports to open
+## If hostNetwork true: the hostPort is set identical to the containerPort
+##
+containerPorts:
+  intra: 7000
+  tls: 7001
+  jmx: 7199
+  cql: 9042
+  thrift: 9160
+
+## Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+##
+hostNetwork: false
 
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -460,7 +475,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r287
+    tag: 2.3.4-debian-10-r309
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -508,6 +523,13 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+  ## Metrics container ports to open
+  ## If hostNetwork true: the hostPort is set identical to the containerPort
+  ##
+  containerPorts:
+    http: 8080
+    jmx: 5555
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##

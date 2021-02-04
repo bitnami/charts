@@ -31,6 +31,9 @@ spec:
       {{- if .Values.server.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -39,7 +42,7 @@ spec:
         fsGroup: {{ .Values.server.securityContext.fsGroup }}
         runAsUser: {{ .Values.server.securityContext.runAsUser }}
       {{- end }}
-{{- include "parse.imagePullSecrets" . | indent 6 }}
+      {{- include "parse.imagePullSecrets" . | nindent 6 }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
       initContainers:
         - name: volume-permissions

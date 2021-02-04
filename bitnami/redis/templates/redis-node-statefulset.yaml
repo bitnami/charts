@@ -52,6 +52,9 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.slave.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.slave.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -454,12 +457,14 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: slave
+      {{- if .Values.slave.statefulset.volumeClaimTemplates }}
         {{- if .Values.slave.statefulset.volumeClaimTemplates.labels }}
-        {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+          {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.labels | nindent 10 }}
         {{- end }}
-      {{- if .Values.slave.statefulset.volumeClaimTemplates.annotations }}
+        {{- if .Values.slave.statefulset.volumeClaimTemplates.annotations }}
         annotations:
           {{- toYaml .Values.slave.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+        {{- end }}
       {{- end }}
       spec:
         accessModes:

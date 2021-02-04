@@ -1,12 +1,17 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 2020.42.0
+appVersion: 2021.5.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Collection of open source web applications that help software companies build better software.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/phabricator
@@ -32,4 +37,4 @@ name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-version: 10.2.4
+version: 11.0.1

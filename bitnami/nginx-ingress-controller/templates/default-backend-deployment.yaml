@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
     {{- if .Values.commonLabels }}
@@ -31,6 +31,9 @@ spec:
       {{- include "nginx-ingress-controller.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.defaultBackend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.defaultBackend.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
