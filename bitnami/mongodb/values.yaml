@@ -485,7 +485,7 @@ persistence:
 service:
   ## Service name
   ##
-  name: ""
+  nameOverride: ""
   ## Service type
   ##
   type: ClusterIP
@@ -846,7 +846,7 @@ arbiter:
   service:
     ## Service name
     ##
-    name: ""
+    nameOverride: ""
 
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
