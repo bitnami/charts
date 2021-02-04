@@ -145,11 +145,11 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.arbiterservicename" . }}"
+              value: "{{ include "mongodb.arbiter.service.nameOverride" . }}"
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: "{{ include "mongodb.fullname" . }}-0.{{ include "mongodb.servicename" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "{{ include "mongodb.fullname" . }}-0.{{ include "mongodb.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             - name: MONGODB_ADVERTISED_HOSTNAME
