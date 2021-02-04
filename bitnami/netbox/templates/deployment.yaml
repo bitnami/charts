@@ -60,9 +60,9 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if and .Values.volumePermissions.enabled .Values.persistence.media.enabled .Values.persistence.reports.enabled }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled or .Values.initContainer }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.media.enabled .Values.persistence.reports.enabled or .Values.initContainer }}
         - name: volume-permissions
           image: {{ include "netbox.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -74,8 +74,16 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: foo
-              mountPath: bar
+            {{- if .Values.persistence.media.enabled }}
+            - name: media-data
+              mountPath: {{ .Values.persistence.media.mountPath }}
+              subPath: {{ .Values.persistence.media.subPath }}
+            {{- end }}
+            {{- if .Values.persistence.reports.enabled }}
+            - name: report-data
+              mountPath: {{ .Values.persistence.reports.mountPath }}
+              subPath: {{ .Values.persistence.reports.subPath }}
+            {{- end }}  
         {{- end }}
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -126,6 +134,16 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.persistence.media.enabled }}
+            - name: media-data
+              mountPath: {{ .Values.persistence.media.mountPath }}
+              subPath: {{ .Values.persistence.media.subPath }}
+            {{- end }}
+            {{- if .Values.persistence.reports.enabled }}
+            - name: report-data
+              mountPath: {{ .Values.persistence.reports.mountPath }}
+              subPath: {{ .Values.persistence.reports.subPath }}
+            {{- end }}          
             - name: config-secrets
               mountPath: "/run/secrets/"
               readOnly: true
@@ -156,3 +174,70 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- if and .Values.persistence.media.enabled .Values.persistence.media.existingClaim }}
+        - name: media-data
+          persistentVolumeClaim:
+{{- with .Values.persistence.media.existingClaim }}
+            claimName: {{ tpl . $ }}
+{{- end }}
+{{- else if not .Values.persistence.media.enabled }}
+        - name: media-data
+          emptyDir: {}
+{{- end }}
+{{- if and .Values.persistence.reports.enabled .Values.persistence.reports.existingClaim }}
+        - name: report-data
+          persistentVolumeClaim:
+{{- with .Values.persistence.reports.existingClaim }}
+            claimName: {{ tpl . $ }}
+{{- end }}
+{{- else if not .Values.persistence.reports.enabled }}
+        - name: report-data
+          emptyDir: {}
+{{- end }}
+{{- if or (and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim)) (and .Values.persistence.reports.enabled (not .Values.persistence.reports.existingClaim)) }}
+  volumeClaimTemplates:
+{{- if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
+    - metadata:
+        name: media-data
+      {{- with .Values.persistence.media.annotations }}
+        annotations:
+        {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.media.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.media.size | quote }}
+        {{ include "common.storage.class" (dict "persistence" .Values.persistence.media "global" .Values.global) }}
+        {{- if .Values.persistence.media.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.media.selector "context" $) | nindent 10 }}
+        {{- end -}}
+{{- end }}
+{{- if and .Values.persistence.reports.enabled (not .Values.persistence.reports.existingClaim) }}
+    - metadata:
+        name: report-data
+      {{- with .Values.persistence.reports.annotations }}
+        annotations:
+        {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.reports.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.reports.size | quote }}
+        {{ include "common.storage.class" (dict "persistence" .Values.persistence.reports "global" .Values.global) }}
+        {{- if .Values.persistence.reports.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.reports.selector "context" $) | nindent 10 }}
+        {{- end -}}
+{{- end }}
+{{- end }}

@@ -442,8 +442,60 @@ sidecars: {}
 persistence:
   media:
     enabled: true
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
+    ##
+    # existingClaim:
+
+    ## The path the volume will be mounted at
+    ## If you change the media path in your netbox config you also need to adjust this
+    ##
+    mountPath: /opt/netbox/netbox/media
+
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ''
+
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
   reports:
     enabled: true
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
+    ##
+    # existingClaim:
+
+    ## The path the volume will be mounted at
+    ## If you change the reports path in your netbox config you also need to adjust this
+    ##
+    mountPath: /opt/netbox/netbox/reports
+
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ''
+
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
