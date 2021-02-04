@@ -36,7 +36,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "etcd.imagePullSecrets" . | indent 6 }}
+      {{- include "etcd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "etcd.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -238,11 +241,11 @@ spec:
               subPath: probes.sh
             - name: data
               mountPath: /bitnami/etcd
-            {{- if .Values.startFromSnapshot.enabled }}
+            {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
             - name: init-snapshot-volume
               mountPath: /init-snapshot
             {{- end }}
-            {{- if .Values.disasterRecovery.enabled }}
+            {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
             - name: snapshot-volume
               mountPath: /snapshots
             {{- end }}
@@ -265,12 +268,12 @@ spec:
           configMap:
             name: {{ include "etcd.fullname" . }}-scripts
             defaultMode: 0755
-        {{- if .Values.startFromSnapshot.enabled }}
+        {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
         - name: init-snapshot-volume
           persistentVolumeClaim:
             claimName: {{ .Values.startFromSnapshot.existingClaim }}
         {{- end }}
-        {{- if .Values.disasterRecovery.enabled }}
+        {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
         - name: snapshot-volume
           persistentVolumeClaim:
             claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}

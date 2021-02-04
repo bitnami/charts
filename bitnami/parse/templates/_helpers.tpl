@@ -63,8 +63,8 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 */}}
 {{- $host := default "" .Values.server.host -}}
 {{- if .Values.ingress.enabled -}}
-{{- $ingressHost := first .Values.ingress.server.hosts -}}
-{{- $serverHost := default $ingressHost.name $host -}}
+{{- $ingressHost := .Values.ingress.server.hostname -}}
+{{- $serverHost := default $ingressHost $host -}}
 {{- default (include "parse.serviceIP" .) $serverHost -}}
 {{- else -}}
 {{- default (include "parse.serviceIP" .) $host -}}
@@ -129,12 +129,10 @@ Validate values of Parse Dashboard - if tls is enable on server side must provid
 */}}
 {{- define "parse.validateValues.dashboard.serverUrlProtocol" -}}
 {{- if .Values.ingress.enabled -}}
-{{- range .Values.ingress.server.hosts -}}
-{{- if and (.tls) (ne $.Values.dashboard.parseServerUrlProtocol "https") -}}
+{{- if and .Values.ingress.tls (ne $.Values.dashboard.parseServerUrlProtocol "https") -}}
 parse: dashboard.parseServerUrlProtocol
     If Parse Server is using ingress with tls enable then It must be set as "https"
     in order to form the URLs with this protocol, in another case, Parse Dashboard will always redirect to "http".
-{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

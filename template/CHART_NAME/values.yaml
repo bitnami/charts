@@ -42,6 +42,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -72,6 +73,7 @@ service:
 
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
   livenessProbe:
     enabled: true
     %%httpGet || command || etc%%
@@ -99,6 +101,11 @@ service:
   ##
   command: []
   args: []
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## %%MAIN_CONTAINER_NAME%% resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -149,6 +156,7 @@ service:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.

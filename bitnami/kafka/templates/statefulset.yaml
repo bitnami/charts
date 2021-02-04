@@ -21,7 +21,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  podManagementPolicy: Parallel
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -61,7 +61,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "kafka.imagePullSecrets" . | indent 6 }}
+      {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -160,7 +163,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ include "kafka.zookeeper.fullname" . | quote }}
               {{- else }}
-              value: {{ join "," .Values.externalZookeeper.servers | quote }}
+              value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}
@@ -190,6 +193,12 @@ spec:
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
+            {{- if eq .Values.externalAccess.service.type "NodePort" }}
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP 
+            {{- end }}
             {{- end }}
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS

@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.1.2-debian-10-r6
+  tag: 2.1.3-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.1.2-debian-10-r1
+  tag: 2.1.3-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -65,7 +65,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.1.2-debian-10-r6
+  tag: 2.1.3-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r237
+  tag: 0.12.0-debian-10-r268
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,7 +115,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.1.2-debian-10-r6
+  tag: 2.1.3-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,7 +140,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.1.2-debian-10-r6
+  tag: 2.1.3-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -165,7 +165,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.1.2-debian-10-r11
+  tag: 2.1.3-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -190,7 +190,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.1.2-debian-10-r8
+  tag: 2.1.3-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.1.2-debian-10-r8
+  tag: 2.1.3-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -241,7 +241,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.1.2-debian-10-r5
+  tag: 2.1.3-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -266,7 +266,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.1.2-debian-10-r6
+  tag: 2.1.3-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -291,7 +291,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.6-debian-10-r1
+  tag: 1.19.6-debian-10-r31
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -318,6 +318,10 @@ nameOverride:
 ## String to fully override common.names.fullname template
 ##
 fullnameOverride:
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -424,6 +428,15 @@ service:
 ##
 ingress:
   enabled: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## The list of hostnames to be covered with this ingress record
   ##
   hosts:
@@ -1029,6 +1042,10 @@ core:
   ##
   customReadinessProbe: {}
 
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
+
   ## An array to add extra env vars
   ## For example:
   ##
@@ -1176,6 +1193,13 @@ core:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
+    successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
     successThreshold: 1
 
 ## Harbor Jobservice parameters
@@ -1644,7 +1668,7 @@ chartmuseum:
   updateStrategy:
     type: RollingUpdate
 
-  ## Set the use of the Redis cache.
+  ## Set the use of the Redis(TM) cache.
   ##
   useRedisCache: true
 
@@ -1679,6 +1703,7 @@ chartmuseum:
   provPostFormFieldName:
   maxStorageObjects:
   maxUploadSize:
+  storageTimestampTolerance: "1s"
 
   ## lifecycleHooks for the container to automate configuration before or after startup.
   ##
@@ -2612,7 +2637,7 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
-## Redis chart configuration
+## Redis(TM) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -2632,17 +2657,17 @@ redis:
     persistence:
       enabled: true
 
-## If the Redis included in the chart is disabled, Harbor will use below
-## Redis parameters to connect to an external Redis server.
+## If the Redis(TM) included in the chart is disabled, Harbor will use below
+## Redis(TM) parameters to connect to an external Redis(TM) server.
 ##
 externalRedis:
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: localhost
-  ## Redis port number
+  ## Redis(TM) port number
   ##
   port: 6379
-  ## Redis password
+  ## Redis(TM) password
   ##
   password: ''
   coreDatabaseIndex: '0'

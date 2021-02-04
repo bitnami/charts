@@ -31,6 +31,10 @@ image:
   ##
   debug: false
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override owncloud.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -38,6 +42,15 @@ nameOverride:
 ## String to fully override owncloud.fullname template
 ##
 fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##
@@ -248,6 +261,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -272,6 +286,10 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: owncloud.local
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -326,6 +344,7 @@ ingress:
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -465,6 +484,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: /status.php

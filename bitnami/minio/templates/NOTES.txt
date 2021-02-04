@@ -26,7 +26,7 @@ To connect to your MinIO(TM) server using a client:
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 
    NOTE: Since NetworkPolicy is enabled, only pods with label
-   "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO.
+   "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO(TM).
 {{- end }}
 {{- if not .Values.disableWebUI }}
 
@@ -38,9 +38,7 @@ To access the MinIO(TM) web UI:
 
    You should be able to access your new MinIO(TM) web UI through
 
-   {{- range .Values.ingress.hosts }}
-   {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/minio/
-   {{- end }}
+   {{ if .Values.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.ingress.hostname }}/minio/
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.

@@ -9,6 +9,7 @@ dependencies:
       - bitnami-common
     version: 1.x.x
 description: Contour Ingress controller for Kubernetes
+engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/contour
 icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
 keywords:
@@ -26,4 +27,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
   - https://projectcontour.io
-version: 3.3.1
+version: 4.1.1

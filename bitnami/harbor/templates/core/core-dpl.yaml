@@ -42,6 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: false
       {{- if .Values.core.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -108,6 +109,20 @@ spec:
             failureThreshold: {{ .Values.core.readinessProbe.failureThreshold }}
           {{- else if .Values.core.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.core.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
+              port: http
+            initialDelaySeconds: {{ .Values.core.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.core.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.core.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.core.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.core.startupProbe.failureThreshold }}
+          {{- else if .Values.core.startupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
             - configMapRef:
@@ -238,5 +253,5 @@ spec:
         - name: psc
           emptyDir: {}
       {{- if .Values.core.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 11.0.3
+appVersion: 12.0.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -15,7 +15,7 @@ dependencies:
 description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 engine: gotpl
 home: https://www.keycloak.org
-icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
 keywords:
   - keycloak
   - access-management
@@ -26,4 +26,4 @@ name: keycloak
 sources:
   - https://github.com/bitnami/bitnami-docker-keycloak
   - https://github.com/keycloak/keycloak
-version: 1.2.0
+version: 2.0.0

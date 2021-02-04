@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -80,6 +80,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `image.pullPolicy`            | WordPress image pull policy                                                                                                                                                                                                      | `IfNotPresent`                                          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                 | Specify if debug logs should be enabled                                                                                                                                                                                          | `false`                                                 |
+| `hostAliases`                 | Add deployment host aliases                                                                                                                                                                                                      | `Check values.yaml`                                     |
 | `wordpressSkipInstall`        | Skip wizard installation when the external db already contains data from a previous WordPress installation [see](https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database) | `false`                                                 |
 | `wordpressUsername`           | User of the application                                                                                                                                                                                                          | `user`                                                  |
 | `existingSecret`              | Name of the existing Wordpress Secret (it must contain a key named `wordpress-password`). When it's set, `wordpressPassword` is ignored                                                                                          | `nil`                                                   |
@@ -96,6 +97,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `allowOverrideNone`           | Set Apache AllowOverride directive to None                                                                                                                                                                                       | `false`                                                 |
 | `htaccessPersistenceEnabled`  | Make `.htaccess` persistence so that it can be customized. [See](#disabling-htaccess)                                                                                                                                            | `false`                                                 |
 | `customHTAccessCM`            | Configmap with custom wordpress-htaccess.conf directives                                                                                                                                                                         | `nil`                                                   |
+| `customPostInitScripts`       | Custom post-init.d user scripts                                                                                                                                                                                                  | `nil`                                                   |
 | `smtpHost`                    | SMTP host                                                                                                                                                                                                                        | `nil`                                                   |
 | `smtpPort`                    | SMTP port                                                                                                                                                                                                                        | `nil`                                                   |
 | `smtpUser`                    | SMTP user                                                                                                                                                                                                                        | `nil`                                                   |
@@ -180,7 +182,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
-| `persistence.dataSource`    | PVC data source                          | `{}`                                       |
+| `persistence.dataSource`    | PVC data source                          | `{}`                                        |
 
 ### Database parameters
 
@@ -201,6 +203,21 @@ The following table lists the configurable parameters of the WordPress chart and
 | `externalDatabase.database`               | Name of the existing database                        | `bitnami_wordpress`                            |
 | `externalDatabase.port`                   | Database port number                                 | `3306`                                         |
 | `externalDatabase.existingSecret`         | Name of the database existing Secret Object          | `nil`                                          |
+
+### Volume Permissions parameters
+
+| Parameter                                     | Description                                                                                                          | Default                                                 |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
+| `volumePermissions.securityContext.*`         | Other container security context to be included as-is in the container spec                                          | `{}`                                                    |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                    | `0`                                                     |
 
 ### Metrics parameters
 
@@ -267,60 +284,7 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Set Apache AllowOverride directive to None:
-
-```diff
-- allowOverrideNone: false
-+ allowOverrideNone: true
-```
-
-- Number of WordPress Pods to run:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable client source IP preservation:
-
-```diff
-- service.externalTrafficPolicy: Cluster
-+ service.externalTrafficPolicy: Local
-```
-
-- PVC Access Mode:
-
-```diff
-- persistence.accessMode: ReadWriteOnce
-+ ## To use the /admin portal and to ensure you can scale wordpress you need to provide a
-+ ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
-+ ## We recommend that you install the nfs provisioner and map it to a RWO volume
-+ ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
-+ ##
-+ persistence.accessMode: ReadWriteMany
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-Note that [values-production.yaml](values-production.yaml) includes a replicaCount of 3, so there will be 3 WordPress pods. As a result, to use the "/admin" portal and to ensure you can scale wordpress you need to provide a ReadWriteMany PVC, if you don't have a provisioner for this type of storage, we recommend that you install the [NFS Server Provisioner chart](https://github.com/helm/charts/tree/master/stable/nfs-server-provisioner) (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
-
-Then, you can deploy WordPress chart using the proper parameters:
-
-```console
-persistence.storageClass=nfs
-mariadb.primary.persistence.storageClass=nfs
-```
-
-#### Known limitations
+### Known limitations
 
 When performing admin operations that require activating the maintenance mode (such as updating a plugin or theme), it's activated in only one replica (see: [bug report](https://core.trac.wordpress.org/ticket/50797)). This implies that WP could be attending requests on other replicas while performing admin operations, with unpredictable consequences.
 

@@ -17,10 +17,13 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.podLabels }}
-        {{- toYaml .Values.podLabels | indent 8 }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
       {{- include "kube-state-metrics.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}

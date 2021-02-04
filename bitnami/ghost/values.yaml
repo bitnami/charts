@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.40.5-debian-10-r0
+  tag: 3.41.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,8 +27,18 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Number of ghost replicas to deploy
+##
 replicaCount: 1
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Command and args for running the Ghost container (set to default if not set). Use array form
 ##
@@ -107,6 +117,7 @@ ghostBlogTitle: User's Blog
 
 ## Set to `true` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-ghost#environment-variables
+##
 allowEmptyPassword: true
 
 ## SMTP mail delivery configuration
@@ -162,18 +173,23 @@ externalDatabase:
   # existingSecret:
 
   ## Database host
+  ##
   host: localhost
 
   ## non-root Username for Ghost Database
+  ##
   user: bn_ghost
 
   ## Database password
+  ##
   password: ""
 
   ## Database name
+  ##
   database: bitnami_ghost
 
   ## Database port number
+  ##
   port: 3306
 
 ##
@@ -236,6 +252,7 @@ service:
   type: LoadBalancer
 
   ## HTTP Port
+  ##
   port: 80
 
   ## Extra ports to expose (normally used with the `sidecar` value)
@@ -250,6 +267,7 @@ service:
 
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
 
@@ -325,40 +343,68 @@ resources:
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
-  ## Ingress annotations. Evaluated as a template.
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: ghost.local
+
+  ## The Path to Ghost. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
+
+  ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: ghost.local
-      path: /
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: ghost.local
+  ##   path: /
+  ##
 
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      # - www.ghost.local
-      # - ghost.local
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: ghost.local-tls
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - ghost.local
+  ##   secretName: ghost.local-tls
+  ##
 
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -368,9 +414,12 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: ghost.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: ghost.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -391,6 +440,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -461,6 +511,7 @@ extraDeploy: []
 ##     ports:
 ##       - name: portname
 ##         containerPort: 1234
+##
 sidecars: {}
 
 ## Add init containers to the pod

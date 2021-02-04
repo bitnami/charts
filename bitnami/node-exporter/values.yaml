@@ -19,6 +19,11 @@ global:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -65,16 +70,19 @@ image:
   #   - myRegistryKeySecretName
 
 ## Additional command line arguments to pass to node-exporter
+##
 extraArgs: {}
 #  collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
 #  collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 
 ## Additional volumes to the node-exporter pods
+##
 extraVolumes: []
 #  - name: copy-portal-skins
 #    emptyDir: {}
 
 ## Additional volumeMounts to the node-exporter container
+##
 extraVolumeMounts: []
 #  - name: copy-portal-skins
 #   mountPath: /var/lib/lemonldap-ng/portal/skins
@@ -185,6 +193,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.

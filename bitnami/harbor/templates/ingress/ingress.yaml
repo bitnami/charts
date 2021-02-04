@@ -15,15 +15,15 @@
   {{- $_ := set . "controller_path" "/c/.*" -}}
 {{- else }}
   {{- $_ := set . "portal_path" "/" -}}
-  {{- $_ := set . "api_path" "/api/" -}}
-  {{- $_ := set . "service_path" "/service/" -}}
-  {{- $_ := set . "v2_path" "/v2/" -}}
-  {{- $_ := set . "chartrepo_path" "/chartrepo/" -}}
-  {{- $_ := set . "controller_path" "/c/" -}}
+  {{- $_ := set . "api_path" "/api" -}}
+  {{- $_ := set . "service_path" "/service" -}}
+  {{- $_ := set . "v2_path" "/v2" -}}
+  {{- $_ := set . "chartrepo_path" "/chartrepo" -}}
+  {{- $_ := set . "controller_path" "/c" -}}
 {{- end }}
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "harbor.ingress" . }}
@@ -68,44 +68,48 @@ spec:
     {{- end }}
   {{- end }}
   {{- if eq .Values.ingress.controller "ncp" }}
-  backend:
-    serviceName: {{ include "harbor.portal" . }}
-    servicePort: http
+  backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.portal" .) "servicePort" "http" "context" $) | nindent 4 }}
   {{- end }}
   rules:
     - http:
         paths:
           - path: {{ .portal_path }}
-            backend:
-              serviceName: {{ include "harbor.portal" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.portal" .) "servicePort" "http" "context" $) | nindent 14 }}
           - path: {{ .api_path }}
-            backend:
-              serviceName: {{ include "harbor.core" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" "http" "context" $) | nindent 14 }}
           - path: {{ .service_path }}
-            backend:
-              serviceName: {{ include "harbor.core" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" "http" "context" $) | nindent 14 }}
           - path: {{ .v2_path }}
-            backend:
-              serviceName: {{ include "harbor.core" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" "http" "context" $) | nindent 14 }}
           - path: {{ .chartrepo_path }}
-            backend:
-              serviceName: {{ include "harbor.core" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" "http" "context" $) | nindent 14 }}
           - path: {{ .controller_path }}
-            backend:
-              serviceName: {{ include "harbor.core" . }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" "http" "context" $) | nindent 14 }}
       {{- if .Values.ingress.hosts.core }}
       host: {{ .Values.ingress.hosts.core }}
       {{- end }}
 
 {{- if .Values.notary.enabled  }}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "harbor.ingress-notary" . }}
@@ -136,17 +140,16 @@ spec:
       {{- end }}
   {{- end }}
   {{- if eq .Values.ingress.controller "ncp" }}
-  backend:
-    serviceName: {{ template "harbor.notary-server" . }}
-    servicePort: 4443
+  backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.notary-server" .) "servicePort" 4443 "context" $) | nindent 4 }}
   {{- end }}
   rules:
     - http:
         paths:
           - path: /
-            backend:
-              serviceName: {{ template "harbor.notary-server" . }}
-              servicePort: 4443
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.notary-server" .) "servicePort" 4443 "context" $) | nindent 14 }}
       {{- if .Values.ingress.hosts.notary }}
       host: {{ .Values.ingress.hosts.notary }}
       {{- end }}

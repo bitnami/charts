@@ -6,7 +6,7 @@ Usage:
 */}}
 {{- define "common.utils.secret.getvalue" -}}
 {{- $varname := include "common.utils.fieldToEnvVar" . -}}
-export {{ $varname }}=$(kubectl get secret --namespace {{ .context.Release.Namespace }} {{ .secret }} -o jsonpath="{.data.{{ .field }}}" | base64 --decode)
+export {{ $varname }}=$(kubectl get secret --namespace {{ .context.Release.Namespace | quote }} {{ .secret }} -o jsonpath="{.data.{{ .field }}}" | base64 --decode)
 {{- end -}}
 
 {{/*
@@ -42,4 +42,21 @@ Usage:
   {{- $latestObj = $value -}}
 {{- end -}}
 {{- printf "%v" (default "" $value) -}} 
+{{- end -}}
+
+{{/*
+Returns first .Values key with a defined value or first of the list if all non-defined
+Usage:
+{{ include "common.utils.getKeyFromList" (dict "keys" (list "path.to.key1" "path.to.key2") "context" $) }}
+*/}}
+{{- define "common.utils.getKeyFromList" -}}
+{{- $key := first .keys -}}
+{{- $reverseKeys := reverse .keys }}
+{{- range $reverseKeys }}
+  {{- $value := include "common.utils.getValueFromKey" (dict "key" . "context" $.context ) }}
+  {{- if $value -}}
+    {{- $key = . }}
+  {{- end -}}
+{{- end -}}
+{{- printf "%s" $key -}} 
 {{- end -}}
