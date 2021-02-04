@@ -18,7 +18,7 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create a default mongo service name which can be overridden.
 */}}
-{{- define "mongodb.servicename" -}}
+{{- define "mongodb.service.nameOverride" -}}
     {{- if .Values.service -}}
         {{- if .Values.service.nameOverride }}
             {{- .Values.service.nameOverride -}}
@@ -33,7 +33,7 @@ Create a default mongo service name which can be overridden.
 {{/*
 Create a default mongo arbiter service name which can be overridden.
 */}}
-{{- define "mongodb.arbiterservicename" -}}
+{{- define "mongodb.arbiter.service.nameOverride" -}}
     {{- if .Values.arbiter.service -}}
         {{- if .Values.arbiter.service.nameOverride }}
             {{- .Values.arbiter.service.nameOverride -}}
