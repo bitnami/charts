@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "mongodb.arbiterservicename" . }}
+  serviceName: {{ include "mongodb.arbiter.service.nameOverride" . }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: arbiter
