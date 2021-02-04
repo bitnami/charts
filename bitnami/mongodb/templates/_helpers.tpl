@@ -20,8 +20,8 @@ Create a default mongo service name which can be overridden.
 */}}
 {{- define "mongodb.servicename" -}}
     {{- if .Values.service -}}
-        {{- if .Values.service.name }}
-            {{- .Values.service.name -}}
+        {{- if .Values.service.nameOverride }}
+            {{- .Values.service.nameOverride -}}
         {{- else -}}
             {{ include "mongodb.fullname" . }}-headless
         {{- end -}}
@@ -35,8 +35,8 @@ Create a default mongo arbiter service name which can be overridden.
 */}}
 {{- define "mongodb.arbiterservicename" -}}
     {{- if .Values.arbiter.service -}}
-        {{- if .Values.arbiter.service.name }}
-            {{- .Values.arbiter.service.name -}}
+        {{- if .Values.arbiter.service.nameOverride }}
+            {{- .Values.arbiter.service.nameOverride -}}
         {{- else -}}
             {{ include "mongodb.fullname" . }}-arbiter-headless
         {{- end -}}
