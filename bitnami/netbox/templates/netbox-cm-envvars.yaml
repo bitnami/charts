@@ -7,82 +7,29 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-envvars
+  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-    ALLOWED_HOSTS: 
+    # ALLOWED_HOSTS: 
 
-    DB_NAME: 
+    DB_NAME: {{ include "netbox.database" . | quote }}
     DB_USER: {{ include "netbox.database.username" . | quote }}
     DB_HOST: {{ include "netbox.database.host" . | quote }}
     DB_PORT: {{ include "netbox.database.port" . | quote }}
     DB_SSLMODE: {{ include "netbox.database.sslmode" . | quote }}
-    DB_CONN_MAX_AGE:
-
+    {{- if .Values.netbox.dbConnMaxAge }}
+    DB_CONN_MAX_AGE: {{ .Values.netbox.dbConnMaxAge | quote }}
+    {{- end }}
     REDIS_HOST: {{ include "netbox.redis.taskRedis.host" . | quote }}
     REDIS_PORT: {{ include "netbox.redis.taskRedis.port" . | quote }}
     REDIS_DATABASE: {{ include "netbox.redis.taskRedis.databaseIndex" . | quote }}
-    REDIS_SSL: 
+    REDIS_SSL: {{ include "netbox.redis.taskRedis.ssl" . | quote }}
     REDIS_CACHE_HOST: {{ include "netbox.redis.cachingRedis.host" . | quote }}
     REDIS_CACHE_PORT: {{ include "netbox.redis.cachingRedis.port" . | quote }}
     REDIS_CACHE_DATABASE: {{ include "netbox.redis.cachingRedis.databaseIndex" . | quote }}
-    REDIS_CACHE_SSL: 
-
-    BANNER_TOP: 
-    BANNER_BOTTOM: 
-    BANNER_LOGIN: 
-    BASE_PATH: 
-    CACHE_TIMEOUT: 
-    CHANGELOG_RETENTION: 
-    CORS_ORIGIN_ALLOW_ALL: 
-    CORS_ORIGIN_WHITELIST: 
-    CORS_ORIGIN_REGEX_WHITELIST: 
-    DEBUG: 
-
-    EMAIL_SERVER:
-    EMAIL_PORT:
-    EMAIL_USERNAME:
-    EMAIL_USE_SSL:
-    EMAIL_USE_TLS:
-    EMAIL_SSL_CERTFILE:
-    EMAIL_SSL_KEYFILE:
-    EMAIL_TIMEOUT:
-    EMAIL_FROM:
-
-
-    ENFORCE_GLOBAL_UNIQUE: 
-    EXEMPT_VIEW_PERMISSIONS: 
-    LOGIN_REQUIRED: 
-    LOGIN_TIMEOUT: 
-    MAINTENANCE_MODE: 
-    MAX_PAGE_SIZE: 
-    MEDIA_ROOT: /opt/netbox/netbox/media
-    METRICS_ENABLED: 
-    NAPALM_USERNAME: 
-    NAPALM_TIMEOUT: 
-    PAGINATE_COUNT: 
-    PREFER_IPV4: 
-    RACK_ELEVATION_DEFAULT_UNIT_HEIGHT: 
-    RACK_ELEVATION_DEFAULT_UNIT_WIDTH: 
-    REMOTE_AUTH_ENABLED: 
-    REMOTE_AUTH_BACKEND: 
-    REMOTE_AUTH_HEADER: 
-    REMOTE_AUTH_AUTO_CREATE_USER: 
-    REMOTE_AUTH_DEFAULT_GROUPS: 
-    REMOTE_AUTH_DEFAULT_PERMISSIONS: 
-    RELEASE_CHECK_TIMEOUT: 
-    RELEASE_CHECK_URL: 
-
-
-    REPORTS_ROOT: /opt/netbox/netbox/reports
-    RQ_DEFAULT_TIMEOUT:
-    SCRIPTS_ROOT: /opt/netbox/netbox/scripts
-    SESSIONS_ROOT:
-    TIME_ZONE: 
-    DATE_FORMAT: 
-    SHORT_DATE_FORMAT: 
-    TIME_FORMAT: 
-    SHORT_TIME_FORMAT: 
-    DATETIME_FORMAT: 
-    SHORT_DATETIME_FORMAT: 
+    REDIS_CACHE_SSL: {{ include "netbox.redis.cachingRedis.ssl" . | quote }}
+    SKIP_STARTUP_SCRIPTS: {{ .Values.netbox.skipStartupScripts | quote }}
+    DEBUG: {{ .Values.netbox.debug | quote }}
+    MAINTENANCE_MODE: {{ .Values.netbox.maintenanceMode | quote }}

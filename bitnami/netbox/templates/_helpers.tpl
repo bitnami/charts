@@ -2,7 +2,7 @@
 Return the proper netbox image name
 */}}
 {{- define "netbox.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.netbox.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -16,9 +16,15 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "netbox.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.netbox.image  .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image  .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
+{{/*
+Return the fill relase name
+*/}}
+{{- define "netbox.names.fullname" -}}
+{{ template "common.names.fullname" . }}
+{{- end -}}
 
 
 {{/*
@@ -159,6 +165,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{- define "netbox.redis.taskRedis.ssl" -}}
+  {{- if eq .Values.redis.enabled true -}}
+    {{- printf "%s" "false" }}
+  {{- else -}}
+    {{- .Values.externalRedis.taskRedis.ssl -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "netbox.redis.cachingRedis.ssl" -}}
+  {{- if eq .Values.redis.enabled true -}}
+    {{- printf "%s" "false" }}
+  {{- else -}}
+    {{- .Values.externalRedis.cachingRedis.ssl -}}
+  {{- end -}}
+{{- end -}}
 
 {{- define "netbox.redis.taskRedis.rawPassword" -}}
   {{- if and (not .Values.redis.enabled) .Values.externalRedis.taskRedis.password -}}

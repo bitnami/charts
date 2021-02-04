@@ -135,225 +135,309 @@ ingress:
 
 ## Netbox configuration 
 ##
-netbox:
+image:
+  registry: docker.io
+  repository: netboxcommunity/netbox
+  tag: v2.10.4
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
+livenessProbe:
   enabled: true
-  image:
-    registry: docker.io
-    repository: bitnami/netbox
-    tag: 0.1.0-debian-10-r1
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+  httpGet:
+    path: /login
+    port: netbox
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /login
+    port: netbox
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
 
-  ## Configure extra options for liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+
+netbox:
+  debug: true
+  maintenanceMode: false
+  superuser_name: "admin"
+  dbConnMaxAge: 300
+  superuser_password: "admin"
+  superuser_api_token: "admin"
+  skipStartupScripts: true
+  secret_key: ""
   ##
-  livenessProbe:
-    enabled: true
-    httpGet:
-      path: /login
-      port: netbox
-    initialDelaySeconds: foo
-    periodSeconds: bar
-    timeoutSeconds: foo
-    failureThreshold: bar
-    successThreshold: foo
-  readinessProbe:
-    enabled: true
-    httpGet:
-      path: /login
-      port: netbox
-    initialDelaySeconds: foo
-    periodSeconds: bar
-    timeoutSeconds: foo
-    failureThreshold: bar
-    successThreshold: foo
-
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-
-  ## ConfigMap with netbox Configuration
+  ## Configuration of Netbox (see https://netbox.readthedocs.io/en/stable/configuration/) for reference
+  ## use extraSecretConfig for configblocks containing secrets/passwords/access Keys
   ##
-  # existingConfigmap:
+  extraConfig: |-
+    ####
+    ## This file contains extra configuration options that can't be configured
+    ## directly through environment variables.
+    ####
 
-  ## Command and args for running the container (set to default if not set). Use array form
+    ## Specify one or more name and email address tuples representing NetBox administrators. These people will be notified of
+    ## application errors (assuming correct email settings are provided).
+    # ADMINS = [
+    #     # ['John Doe', 'jdoe@example.com'],
+    # ]
+
+
+    ## URL schemes that are allowed within links in NetBox
+    # ALLOWED_URL_SCHEMES = (
+    #     'file', 'ftp', 'ftps', 'http', 'https', 'irc', 'mailto', 'sftp', 'ssh', 'tel', 'telnet', 'tftp', 'vnc', 'xmpp',
+    # )
+
+
+    ## NAPALM optional arguments (see http://napalm.readthedocs.io/en/latest/support/#optional-arguments). Arguments must
+    ## be provided as a dictionary.
+    # NAPALM_ARGS = {}
+
+
+    ## Enable installed plugins. Add the name of each plugin to the list.
+    # from netbox.configuration.configuration import PLUGINS
+    # PLUGINS.append('my_plugin')
+
+    ## Plugins configuration settings. These settings are used by various plugins that the user may have installed.
+    ## Each key in the dictionary is the name of an installed plugin and its value is a dictionary of settings.
+    # from netbox.configuration.configuration import PLUGINS_CONFIG
+    # PLUGINS_CONFIG['my_plugin'] = {
+    #   'foo': 'bar',
+    #   'buzz': 'bazz'
+    # }
+
+
+    ## Remote authentication support
+    # REMOTE_AUTH_DEFAULT_PERMISSIONS = {}
+
+
+
+
+    ## This file can contain arbitrary Python code, e.g.:
+    # from datetime import datetime
+    # now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    # BANNER_TOP = f'<marquee width="200px">This instance started on {now}.</marquee>'
   ##
-  command: []
-  args: []
-
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## Configuration of Netbox (see https://netbox.readthedocs.io/en/stable/configuration/) for reference
+  ## use extraConfig for configblocks not containing secrets/passwords/access Keys
   ##
-  hostAliases: []
+  extraSecretConfig: |-
+    ## By default uploaded media is stored on the local filesystem. Using Django-storages is also supported. Provide the
+    ## class path of the storage driver in STORAGE_BACKEND and any configuration options in STORAGE_CONFIG. For example:
+    # STORAGE_BACKEND = 'storages.backends.s3boto3.S3Boto3Storage'
+    # STORAGE_CONFIG = {
+    #     'AWS_ACCESS_KEY_ID': 'Key ID',
+    #     'AWS_SECRET_ACCESS_KEY': 'Secret',
+    #     'AWS_STORAGE_BUCKET_NAME': 'netbox',
+    #     'AWS_S3_REGION_NAME': 'eu-west-1',
+    # }
+    EMAIL = {
+    'SERVER': environ.get('EMAIL_SERVER', 'localhost'),
+    'PORT': int(environ.get('EMAIL_PORT', 25)),
+    'USERNAME': environ.get('EMAIL_USERNAME', ''),
+    'PASSWORD': _read_secret('email_password', environ.get('EMAIL_PASSWORD', '')),
+    'USE_SSL': environ.get('EMAIL_USE_SSL', 'False').lower() == 'true',
+    'USE_TLS': environ.get('EMAIL_USE_TLS', 'False').lower() == 'true',
+    'SSL_CERTFILE': environ.get('EMAIL_SSL_CERTFILE', ''),
+    'SSL_KEYFILE': environ.get('EMAIL_SSL_KEYFILE', ''),
+    'TIMEOUT': int(environ.get('EMAIL_TIMEOUT', 10)),  # seconds
+    'FROM_EMAIL': environ.get('EMAIL_FROM', ''),
+    }
+    NAPALM_PASSWORD = _read_secret('napalm_password', environ.get('NAPALM_PASSWORD', ''))
+## ConfigMap with netbox Configuration
+##
+# existingConfigmap:
 
-  ## netbox resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
-    requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
 
-  ## netbox containers' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
-  ## netbox pods' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
+## netbox resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 200m
+  #   memory: 10Mi
 
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## netbox containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1000
+  runAsNonRoot: true
+
+## netbox pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: false
+  fsGroup: 1000
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
   ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
   ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
+  values: []
 
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
 
-  ## Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
-  ## Annotations for server pods.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
+## Annotations for server pods.
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
 
-  ## netbox pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
+## netbox pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
-  ## lifecycleHooks for the netbox container to automate configuration before or after startup.
-  ##
-  lifecycleHooks: {}
+## lifecycleHooks for the netbox container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
 
-  ## Custom Liveness probes for netbox
-  ##
-  customLivenessProbe: {}
+## Custom Liveness probes for netbox
+##
+customLivenessProbe: {}
 
-  ## Custom Rediness probes netbox
-  ##
-  customReadinessProbe: {}
+## Custom Rediness probes netbox
+##
+customReadinessProbe: {}
 
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ##
-  updateStrategy:
-    type: RollingUpdate
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
 
-  ## Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
+## Additional environment variables to set
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
 
-  ## ConfigMap with extra environment variables
-  ##
-  extraEnvVarsCM:
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
 
-  ## Secret with extra environment variables
-  ##
-  extraEnvVarsSecret:
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
-  ##
-  extraVolumes: []
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
 
-  ## Extra volume mounts to add to the container
-  ##
-  extraVolumeMounts: []
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
 
-  ## Add init containers to the netbox pods.
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: {}
+## Add init containers to the netbox pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
 
-  ## Add sidecars to the netbox pods.
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
+## Add sidecars to the netbox pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 persistence:
   media:
@@ -460,6 +544,10 @@ externalRedis:
     ## Database Index
     ##
     databaseIndex: 1
+    ##
+    ## Use SSL for conenction to Redis
+    ##
+    ssl: false
   taskRedis:
     ## Redis(TM) host
     ##
@@ -483,6 +571,10 @@ externalRedis:
     ## Database Index
     ##
     databaseIndex: 0
+    ##
+    ## Use SSL for conenction to Redis
+    ##
+    ssl: false
 ##
 ## PostgreSQL chart configuration
 ##
@@ -490,8 +582,8 @@ externalRedis:
 ##
 postgresql:
   enabled: true
-  postgresqlUsername: netbox
-  # postgresqlPassword:
+  postgresqlUsername: postgres
+  postgresqlPassword: "thisIsunsafe"
   postgresqlDatabase: netbox
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
