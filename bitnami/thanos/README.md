@@ -57,7 +57,7 @@ This charts allows you install several Thanos components, so you deploy an archi
 │ (*)          │            │ Ruler        │      │             │                     │
 └──────────────┘            └──────────────┘      │             ▼                     │
       ▲                            │              │      ┌───────────────┐            │
-      │ push alerts                └──────────────│────▶ │ MinIO(TM) (*) │ ◀──────────┘
+      │ push alerts                └──────────────│────▶ │ MinIO(R) (*) │ ◀──────────┘
       │                                           │      │               │
 ┌ ── ── ── ── ── ── ── ── ── ──┐                  │      └───────────────┘
 │┌────────────┐  ┌────────────┐│                  │             ▲
@@ -71,7 +71,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          └──────────────┘
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO<sup>TM</sup> chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO(R) chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -555,13 +555,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 
-### MinIO<sup>TM</sup> chart parameters
+### MinIO(R) chart parameters
 
 | Parameter                  | Description                                                    | Default                                   |
 |----------------------------|----------------------------------------------------------------|-------------------------------------------|
-| `minio.enabled`            | Enable/disable MinIO<sup>TM</sup> chart installation           | `false`                                   |
-| `minio.accessKey.password` | MinIO<sup>TM</sup> Access Key                                  | _random 10 character alphanumeric string_ |
-| `minio.secretKey.password` | MinIO<sup>TM</sup> Secret Key                                  | _random 40 character alphanumeric string_ |
+| `minio.enabled`            | Enable/disable MinIO(R) chart installation           | `false`                                   |
+| `minio.accessKey.password` | MinIO(R) Access Key                                  | _random 10 character alphanumeric string_ |
+| `minio.secretKey.password` | MinIO(R) Secret Key                                  | _random 40 character alphanumeric string_ |
 | `minio.defaultBuckets`     | Comma, semi-colon or space separated list of buckets to create | `nil`                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -648,7 +648,7 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
 
-> Note: in this example we will use MinIO<sup>TM</sup> (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+> Note: in this example we will use MinIO(R) (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
 - Create a **values.yaml** like the one below:
 
