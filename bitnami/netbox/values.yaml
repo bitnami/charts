@@ -296,16 +296,16 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
 containerSecurityContext:
-  enabled: false
-  runAsUser: 1000
+  enabled: true
+  runAsUser: 1001
   runAsNonRoot: true
 
 ## netbox pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
-  enabled: false
-  fsGroup: 1000
+  enabled: true
+  fsGroup: 1001
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity

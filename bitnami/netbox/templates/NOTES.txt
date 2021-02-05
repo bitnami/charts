@@ -1,3 +1,66 @@
-%%Instructions to access the application depending on the serviceType and other considerations%%
+{{- if and (or .Values.postgresql.enabled .Values.externalDatabase.host ) (or .Values.redis.enabled  ( and .Values.externalRedis.cachingRedis.host .Values.externalRedis.taskRedis.host )) -}}
+
+*******************************************************************
+*** PLEASE BE PATIENT: Netbox may take a few minutes to install ***
+*******************************************************************
+
+1. Get the Netbox URL:
+
+{{- if .Values.ingress.enabled }}
+
+  You should be able to access your new Netbox installation through
+
+  http://{{- .Values.ingress.hostname }}/
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
+{{- $port:=.Values.service.port | toString }}
+  echo "Netbox URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+  echo "Netbox URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+
+{{- end }}
+
+{{- if eq .Values.service.type "NodePort" }}
+
+  Or running:
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Netbox URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- end }}
+
+2. Get your Netbox login admin credentials by running:
+
+  echo Username: {{ .Values.netbox.superuser_name }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.superuser_password}" | base64 --decode)
+  echo api-token: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.superuser_api_token}" | base64 --decode)
+
+{{- else -}}
+
+########################################################################################
+### ERROR: You did not provide an external database host in your 'helm install' call ###
+########################################################################################
+
+This deployment will be incomplete until you configure Netbox with a resolvable database
+host. To configure Netbox to use and external database host:
+
+## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},postgres.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- end }}
+
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+
