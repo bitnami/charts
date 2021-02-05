@@ -274,8 +274,13 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.thanos.ingress.annotations`                           | Ingress annotations                                                                                     | `[]`                                                                                                                                    |
 | `prometheus.thanos.ingress.hosts[0].name`                         | Hostname to your Prometheus installation                                                                | `thanos.prometheus.local`                                                                                                                      |
 | `prometheus.thanos.ingress.hosts[0].path`                         | Path within the url structure                                                                           | `/`                                                                                                                                     |
-| `prometheus.thanos.ingress.tls[0].hosts[0]`                       | TLS hosts                                                                                               | `thanos.prometheus.local`                                                                                                                      |
-| `prometheus.thanos.ingress.tls[0].secretName`                     | TLS Secret (certificates)                                                                               | `prometheus.local-tls`                                                                                                                  |
+| `prometheus.thanos.ingress.secrets[0].hosts[0]` | TLS configuration for hostnames | `nil` |
+| `prometheus.thanos.ingress.secrets[0].name` | TLS Secret Name | `nil` |
+| `prometheus.thanos.ingress.secrets[0].cert` | TLS Secret Certificate | `nil` |
+| `prometheus.thanos.ingress.secrets[0].key` | TLS Secret Key | `nil` |
+| `prometheus.thanos.ingress.secrets[0].ca` | TLS Secret CA Certificate | `nil` |
+| `prometheus.thanos.ingress.extraTls[0].hosts[0]` | TLS configuration for additional hostnames to be covered | `nil` |
+| `prometheus.thanos.ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil` |
 | `prometheus.serviceMonitor.enabled`                        | Creates a ServiceMonitor to monitor Prometheus itself                                                   | `true`                                                                                                                                  |
 
 ### Alertmanager Parameters

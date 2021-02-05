@@ -25,8 +25,19 @@ spec:
           {{- end }}
           backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if .Values.prometheus.thanos.ingress.tls }}
+  {{- if or .Values.prometheus.thanos.ingress.secrets .Values.prometheus.thanos.ingress.extraTls }}
   tls:
-{{ toYaml .Values.prometheus.thanos.ingress.tls | indent 4 }}
+    {{- if .Values.prometheus.thanos.ingress.secrets }}
+    {{- range .Values.prometheus.thanos.ingress.secrets }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .name }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.prometheus.thanos.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.thanos.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 {{- end -}}
