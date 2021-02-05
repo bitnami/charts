@@ -9,7 +9,7 @@ the following software components:
 
 - Apache Kafka – Data distribution bus with buffering capabilities
 - Apache Spark – In-memory data analytics
-- Solr – Data persistence and search
+- Solr – Data persistence and search 
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the
 Helm chart blueprint for this data platform deployment, covering:
