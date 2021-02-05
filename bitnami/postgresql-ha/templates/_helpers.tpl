@@ -57,10 +57,12 @@ Return the proper Node hostname
 {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" $) }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain:= .Values.clusterDomain }}
+{{- $nodeList := list }}
 {{- range $e, $i := until $postgresqlReplicaCount -}}
 {{- $nodeHostname := printf "%s-%d.%s.%s.svc.%s" $postgresqlFullname $i $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
-{{- printf "%d:%s:5432," $i ($nodeHostname | trunc 128 | trimSuffix "-" | trimSuffix ".") -}}
+{{- $nodeList = append $nodeList (printf "%d:%s:5432" $i ($nodeHostname | trunc 128 | trimSuffix "-" | trimSuffix ".")) }}
 {{- end -}}
+{{ join "," $nodeList }}
 {{- end -}}
 
 {{/*
