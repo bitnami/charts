@@ -80,7 +80,7 @@ spec:
               subPath: {{ .Values.persistence.media.subPath }}
             {{- end }}
             {{- if .Values.persistence.reports.enabled }}
-            - name: report-data
+            - name: reports-data
               mountPath: {{ .Values.persistence.reports.mountPath }}
               subPath: {{ .Values.persistence.reports.subPath }}
             {{- end }}  
@@ -140,7 +140,7 @@ spec:
               subPath: {{ .Values.persistence.media.subPath }}
             {{- end }}
             {{- if .Values.persistence.reports.enabled }}
-            - name: report-data
+            - name: reports-data
               mountPath: {{ .Values.persistence.reports.mountPath }}
               subPath: {{ .Values.persistence.reports.subPath }}
             {{- end }}          
@@ -192,21 +192,21 @@ spec:
         - name: media-data
           emptyDir: {}
 {{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
-        - name: report-data
+        - name: reports-data
           persistentVolumeClaim:
             claimName: {{ template "common.names.fullname" . }}-media-data
 {{- end }}
 {{- if and .Values.persistence.reports.enabled .Values.persistence.reports.existingClaim }}
-        - name: report-data
+        - name: reports-data
           persistentVolumeClaim:
 {{- with .Values.persistence.reports.existingClaim }}
             claimName: {{ tpl . $ }}
 {{- end }}
 {{- else if not .Values.persistence.reports.enabled }}
-        - name: report-data
+        - name: reports-data
           emptyDir: {}
 {{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
-        - name: report-data
+        - name: reports-data
           persistentVolumeClaim:
-            claimName: {{ template "common.names.fullname" . }}-report-data
+            claimName: {{ template "common.names.fullname" . }}-reports-data
 {{- end }}

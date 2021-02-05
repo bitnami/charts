@@ -9,12 +9,15 @@ metadata:
   {{- end }}
   {{- if or .Values.commonAnnotations .Values.persistence.media.annotations }}
   annotations:
-  {{- if .Values.commonAnnotations }}
+    {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- end }}
+  {{- if .Values.persistence.media.annotations }}
   {{- with .Values.persistence.media.annotations }}
   {{- range $key, $value := . }}
     {{ $key }}: {{ $value }}
+      {{- end }}
+  {{- end }}
   {{- end }}
   {{- end }}
 
@@ -30,5 +33,4 @@ spec:
   {{- if .Values.persistence.media.selector }}
   selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.media.selector "context" $) | nindent 10 }}
   {{- end -}}
-{{- end }}
 {{- end }}

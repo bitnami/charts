@@ -2,19 +2,22 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "common.names.fullname" . }}-report-data
+  name: {{ template "common.names.fullname" . }}-reports-data
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if or .Values.commonAnnotations .Values.persistence.reports.annotations }}
   annotations:
-  {{- if .Values.commonAnnotations }}
+    {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- end }}
+  {{- if .Values.persistence.reports.annotations }}
   {{- with .Values.persistence.reports.annotations }}
   {{- range $key, $value := . }}
     {{ $key }}: {{ $value }}
+      {{- end }}
+  {{- end }}
   {{- end }}
   {{- end }}
 
@@ -30,5 +33,4 @@ spec:
   {{- if .Values.persistence.reports.selector }}
   selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.reports.selector "context" $) | nindent 10 }}
   {{- end -}}
-{{- end }}
 {{- end }}
