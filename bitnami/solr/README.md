@@ -108,7 +108,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | :------------------------------------- | :----------------------------------------------------------------------------------------------- | :--------------------------------- |
 | `coreName`                             | Name of the default core to be created                                                           | `my-core`                          |
 | `cloudEnabled`                         | Enable Solr cloud mode                                                                           | `true`                             |
-| `cloudBootsrap`                        | Bootstrap the Solr cloud cluster on the install                                                  | `true`                             |
+| `cloudBootstrap`                        | Bootstrap the Solr cloud cluster on the install                                                  | `true`                             |
 | `collection`                           | Name of the collection to be created                                                             | `my-collection`                    |
 | `collectionShards`                     | Number of collection shards                                                                      | `1`                                |
 | `collectionReplicas`                   | Number of collection replicas                                                                    | `2`                                |

@@ -23,13 +23,6 @@ Define the name of the solr exporter
 {{- end -}}
 
 {{/*
-The name of the zookeeper headless service
-*/}}
-{{- define "solr.zookeeper.service" -}}
-{{- printf "%s-%s" .Release.Name "zookeeper" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "solr.imagePullSecrets" -}}

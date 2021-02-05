@@ -7,6 +7,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.exporter.service.Labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.service.labels "context" $ ) | nindent 4 }}
+    {{- end }}
   name: "{{ include "solr.exporter-name" . }}"
   {{- if or .Values.exporter.service.annotations .Values.commonAnnotations }}
   annotations:
@@ -20,17 +23,17 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.exporter.service.type }}
-  {{ if eq .Values.service.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
+  {{ if eq .Values.exporter.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.exporter.service.loadBalancerSourceRanges }}
   {{ end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- if (and (eq .Values.exporter.service.type "LoadBalancer") (not (empty .Values.exporter.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.exporter.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: tcp-client
       port: {{ .Values.exporter.service.port }}
       protocol: TCP
-      targetPort: {{ .Values.exporter.port }}
+      targetPort: exporter-port
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: solr-exporter
 {{ end }}

@@ -350,23 +350,6 @@ volumePermissions:
     runAsUser: 1001
     runAsNonRoot: true
 
-## Configuration for solr TLS handling, see README.md for more instructions
-##
-tls:
-  enabled: false
-  wantClientAuth: "false"
-  needClientAuth: "false"
-  keystorePassword: "changeit"
-  importKubernetesCA: "false"
-  checkPeerName: "false"
-  caSecret:
-    name: ""
-    bundlePath: ""
-  certSecret:
-    name: ""
-    keyPath: "tls.key"
-    certPath: "tls.crt"
-
 ## Persistence parameters
 ##
 persistence:

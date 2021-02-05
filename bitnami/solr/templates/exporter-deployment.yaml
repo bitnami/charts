@@ -101,6 +101,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          ports:
+            - name: exporter-port
+              containerPort: {{ .Values.exporter.port }}
           {{- if .Values.exporter.resources }}
           resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
           {{- end }}
@@ -138,7 +141,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.exporter.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{ end }}
