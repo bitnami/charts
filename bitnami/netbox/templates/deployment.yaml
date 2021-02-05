@@ -191,6 +191,10 @@ spec:
 {{- else if not .Values.persistence.media.enabled }}
         - name: media-data
           emptyDir: {}
+{{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
+        - name: report-data
+          persistentVolumeClaim:
+            claimName: {{ template "common.names.fullname" . }}-media-data
 {{- end }}
 {{- if and .Values.persistence.reports.enabled .Values.persistence.reports.existingClaim }}
         - name: report-data
@@ -201,51 +205,8 @@ spec:
 {{- else if not .Values.persistence.reports.enabled }}
         - name: report-data
           emptyDir: {}
-{{- end }}
-{{- if or (and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim)) (and .Values.persistence.reports.enabled (not .Values.persistence.reports.existingClaim)) }}
-  volumeClaimTemplates:
-{{- if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
-    - metadata:
-        name: media-data
-      {{- with .Values.persistence.media.annotations }}
-        annotations:
-        {{- range $key, $value := . }}
-          {{ $key }}: {{ $value }}
-        {{- end }}
-      {{- end }}
-      spec:
-        accessModes:
-        {{- range .Values.persistence.media.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .Values.persistence.media.size | quote }}
-        {{ include "common.storage.class" (dict "persistence" .Values.persistence.media "global" .Values.global) }}
-        {{- if .Values.persistence.media.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.media.selector "context" $) | nindent 10 }}
-        {{- end -}}
-{{- end }}
-{{- if and .Values.persistence.reports.enabled (not .Values.persistence.reports.existingClaim) }}
-    - metadata:
-        name: report-data
-      {{- with .Values.persistence.reports.annotations }}
-        annotations:
-        {{- range $key, $value := . }}
-          {{ $key }}: {{ $value }}
-        {{- end }}
-      {{- end }}
-      spec:
-        accessModes:
-        {{- range .Values.persistence.reports.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .Values.persistence.reports.size | quote }}
-        {{ include "common.storage.class" (dict "persistence" .Values.persistence.reports "global" .Values.global) }}
-        {{- if .Values.persistence.reports.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.reports.selector "context" $) | nindent 10 }}
-        {{- end -}}
-{{- end }}
+{{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
+        - name: report-data
+          persistentVolumeClaim:
+            claimName: {{ template "common.names.fullname" . }}-report-data
 {{- end }}

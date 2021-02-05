@@ -1,0 +1,34 @@
+{{- if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "common.names.fullname" . }}-media-data
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if or .Values.commonAnnotations .Values.persistence.media.annotations }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- with .Values.persistence.media.annotations }}
+  {{- range $key, $value := . }}
+    {{ $key }}: {{ $value }}
+  {{- end }}
+  {{- end }}
+
+spec:
+  accessModes:
+  {{- range .Values.persistence.media.accessModes }}
+    - {{ . | quote }}
+  {{- end }}  
+  resources:
+    requests:
+      storage: {{ .Values.persistence.media.size | quote }}
+  {{ include "common.storage.class" (dict "persistence" .Values.persistence.media "global" .Values.global) }}
+  {{- if .Values.persistence.media.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.media.selector "context" $) | nindent 10 }}
+  {{- end -}}
+{{- end }}
+{{- end }}
