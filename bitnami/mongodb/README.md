@@ -220,6 +220,7 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | Parameter                                         | Description                                                                                       | Default                        |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                           | `ClusterIP`                    |
+| `service.nameOverride`                            | MongoDB service name                                                                              | `{mongodb.fullname}-headless`  | 
 | `service.port`                                    | MongoDB service port                                                                              | `27017`                        |
 | `service.portName`                                | MongoDB service port name                                                                         | `mongodb`                      |
 | `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                       | `""`                           |
@@ -285,46 +286,47 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### Arbiter parameters
 
-| Parameter                           | Description                                                                                       | Default                        |
-|-------------------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
-| `arbiter.enabled`                   | Enable deploying the arbiter                                                                      | `true`                         |
-| `arbiter.hostAliases`               | Add deployment host aliases                                                                       | `[]`                           |
-| `arbiter.configuration`             | Arbiter configuration file to be used                                                             | `{}`                           |
-| `arbiter.existingConfigmap`         | Name of existing ConfigMap with Arbiter configuration                                             | `nil`                          |
-| `arbiter.command`                   | Override default container command (useful when using custom images)                              | `nil`                          |
-| `arbiter.args`                      | Override default container args (useful when using custom images)                                 | `nil`                          |
-| `arbiter.extraFlags`                | Arbiter additional command line flags                                                             | `[]`                           |
-| `arbiter.extraEnvVars`              | Extra environment variables to add to Arbiter pods                                                | `[]`                           |
-| `arbiter.extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                              | `nil`                          |
-| `arbiter.extraEnvVarsSecret`        | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `nil`                          |
-| `arbiter.labels`                    | Annotations to be added to the Arbiter statefulset                                                | `{}` (evaluated as a template) |
-| `arbiter.annotations`               | Additional labels to be added to the Arbiter statefulset                                          | `{}` (evaluated as a template) |
-| `arbiter.podLabels`                 | Arbiter pod labels                                                                                | `{}` (evaluated as a template) |
-| `arbiter.podAnnotations`            | Arbiter Pod annotations                                                                           | `{}` (evaluated as a template) |
-| `arbiter.priorityClassName`         | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`                           |
-| `arbiter.podAffinityPreset`         | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `arbiter.podAntiAffinityPreset`     | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `arbiter.nodeAffinityPreset.type`   | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `arbiter.nodeAffinityPreset.key`    | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
-| `arbiter.nodeAffinityPreset.values` | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
-| `arbiter.affinity`                  | Arbiter Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
-| `arbiter.nodeSelector`              | Arbiter Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
-| `arbiter.tolerations`               | Arbiter Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
-| `arbiter.podSecurityContext`        | Arbiter pod(s)' Security Context                                                                  | Check `values.yaml` file       |
-| `arbiter.containerSecurityContext`  | Arbiter containers' Security Context                                                              | Check `values.yaml` file       |
-| `arbiter.resources.limits`          | The resources limits for Arbiter containers                                                       | `{}`                           |
-| `arbiter.resources.requests`        | The requested resources for Arbiter containers                                                    | `{}`                           |
-| `arbiter.livenessProbe`             | Liveness probe configuration for Arbiter                                                          | Check `values.yaml` file       |
-| `arbiter.readinessProbe`            | Readiness probe configuration for Arbiter                                                         | Check `values.yaml` file       |
-| `arbiter.customLivenessProbe`       | Override default liveness probe for Arbiter containers                                            | `nil`                          |
-| `arbiter.customReadinessProbe`      | Override default readiness probe for Arbiter containers                                           | `nil`                          |
-| `arbiter.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`                        |
-| `arbiter.pdb.minAvailable`          | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`                            |
-| `arbiter.pdb.maxUnavailable`        | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `nil`                          |
-| `arbiter.initContainers`            | Add additional init containers for the Arbiter pod(s)                                             | `{}` (evaluated as a template) |
-| `arbiter.sidecars`                  | Add additional sidecar containers for the Arbiter pod(s)                                          | `{}` (evaluated as a template) |
-| `arbiter.extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `{}`                           |
-| `arbiter.extraVolumes`              | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `{}`                           |
+| Parameter                           | Description                                                                                       | Default                                |
+|-------------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------|
+| `arbiter.enabled`                   | Enable deploying the arbiter                                                                      | `true`                                 |
+| `arbiter.hostAliases`               | Add deployment host aliases                                                                       | `[]`                                   |
+| `arbiter.configuration`             | Arbiter configuration file to be used                                                             | `{}`                                   |
+| `arbiter.existingConfigmap`         | Name of existing ConfigMap with Arbiter configuration                                             | `nil`                                  |
+| `arbiter.command`                   | Override default container command (useful when using custom images)                              | `nil`                                  |
+| `arbiter.args`                      | Override default container args (useful when using custom images)                                 | `nil`                                  |
+| `arbiter.extraFlags`                | Arbiter additional command line flags                                                             | `[]`                                   |
+| `arbiter.extraEnvVars`              | Extra environment variables to add to Arbiter pods                                                | `[]`                                   |
+| `arbiter.extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                              | `nil`                                  |
+| `arbiter.extraEnvVarsSecret`        | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `nil`                                  |
+| `arbiter.labels`                    | Annotations to be added to the Arbiter statefulset                                                | `{}` (evaluated as a template)         |
+| `arbiter.annotations`               | Additional labels to be added to the Arbiter statefulset                                          | `{}` (evaluated as a template)         |
+| `arbiter.podLabels`                 | Arbiter pod labels                                                                                | `{}` (evaluated as a template)         |
+| `arbiter.podAnnotations`            | Arbiter Pod annotations                                                                           | `{}` (evaluated as a template)         |
+| `arbiter.priorityClassName`         | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`                                   |
+| `arbiter.podAffinityPreset`         | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                   |
+| `arbiter.podAntiAffinityPreset`     | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                 |
+| `arbiter.nodeAffinityPreset.type`   | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                   |
+| `arbiter.nodeAffinityPreset.key`    | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`                                   |
+| `arbiter.nodeAffinityPreset.values` | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                   |
+| `arbiter.affinity`                  | Arbiter Affinity for pod assignment                                                               | `{}` (evaluated as a template)         |
+| `arbiter.nodeSelector`              | Arbiter Node labels for pod assignment                                                            | `{}` (evaluated as a template)         |
+| `arbiter.tolerations`               | Arbiter Tolerations for pod assignment                                                            | `[]` (evaluated as a template)         |
+| `arbiter.podSecurityContext`        | Arbiter pod(s)' Security Context                                                                  | Check `values.yaml` file               |
+| `arbiter.containerSecurityContext`  | Arbiter containers' Security Context                                                              | Check `values.yaml` file               |
+| `arbiter.resources.limits`          | The resources limits for Arbiter containers                                                       | `{}`                                   |
+| `arbiter.resources.requests`        | The requested resources for Arbiter containers                                                    | `{}`                                   |
+| `arbiter.livenessProbe`             | Liveness probe configuration for Arbiter                                                          | Check `values.yaml` file               |
+| `arbiter.readinessProbe`            | Readiness probe configuration for Arbiter                                                         | Check `values.yaml` file               |
+| `arbiter.customLivenessProbe`       | Override default liveness probe for Arbiter containers                                            | `nil`                                  |
+| `arbiter.customReadinessProbe`      | Override default readiness probe for Arbiter containers                                           | `nil`                                  |
+| `arbiter.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`                                |
+| `arbiter.pdb.minAvailable`          | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`                                    |
+| `arbiter.pdb.maxUnavailable`        | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `nil`                                  |
+| `arbiter.initContainers`            | Add additional init containers for the Arbiter pod(s)                                             | `{}` (evaluated as a template)         |
+| `arbiter.sidecars`                  | Add additional sidecar containers for the Arbiter pod(s)                                          | `{}` (evaluated as a template)         |
+| `arbiter.extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `{}`                                   |
+| `arbiter.extraVolumes`              | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `{}`                                   |
+| `arbiter.service.nameOverride`      | The arbiter service name                                                                          | `{mongodb.fullname}-arbiter-headless`  |
 
 ### Metrics parameters
 
