@@ -205,7 +205,7 @@ spec:
 {{- else if not .Values.persistence.reports.enabled }}
         - name: reports-data
           emptyDir: {}
-{{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
+{{- else if and .Values.persistence.reports.enabled (not .Values.persistence.reports.existingClaim) }}
         - name: reports-data
           persistentVolumeClaim:
             claimName: {{ template "common.names.fullname" . }}-reports-data
