@@ -11,18 +11,14 @@ dependencies:
     name: spark
     repository: https://charts.bitnami.com/bitnami
     version: 4.x.x
-    #  - condition: solr.enabled
-    # name: solr
-    # repository: file://../../../../bitnami/charts/bitnami/solr
-    # version: 0.1.0
+  - condition: solr.enabled
+    name: solr
+    repository: file://../../../../bitnami/charts/bitnami/solr
+    version: 0.1.0
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-  - condition: wavefront.enabled
-    name: wavefront
-    repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -37,7 +33,6 @@ keywords:
   - spark
   - solr
   - apache
-  - wavefront
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -49,8 +44,6 @@ sources:
   - https://spark.apache.org/
   - https://lucene.apache.org/solr/
   - https://github.com/bitnami/bitnami-docker-solr
-  - https://tanzu.vmware.com/observability
-  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
 version: 0.1.0

@@ -1,11 +1,31 @@
-# Data Platform with Kafka-Spark-Solr (Blueprint-1)
+# Data Platform Blueprint with Kafka-Spark-Solr
 
-Data Platform Blueprint-1 comprises of Kafka, Spark and Solr. 
+Enterprise applications increasingly rely on large amounts of data, that needs be distributed, processed, and stored.
+Open source and commercial supported software stacks are available to implement a data platform, that can offer
+common data management services, accelerating the development and deployment of data hungry business applications.
 
-This orchestration helm chart can be used to quickly deploy this data platform blueprint on a kubernetes Cluster. It additionally gives you the following benefits: 
-1. Ability to deploy data platform in different sizes (Small/Medium/Large) 
-2. Resource sizing and pod affinity rules to bring up an optimal and resilient platform
-3. Ability to deploy the Observability framework for the data platform with Wavefront
+This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering 
+the following software components:
+
+- Apache Kafka – Data distribution bus with buffering capabilities
+- Apache Spark – In-memory data analytics
+- Solr – Data persistence and search
+
+These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the
+Helm chart blueprint for this data platform deployment, covering:
+
+- PoD placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
+- PoD resource sizing rules – Optimized PoD and JVM sizing settings for optimal performance and efficient resource usage
+- Default settings to ensure PoD access security
+
+In addition to the PoD resource optimizations, also Kubernetes node count and sizing recommendations are provided 
+(see Kubernetes Cluster Requirements) to facilitate cloud platform capacity planning. The goal is optimize the number 
+of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.  
+
+The first release of this blueprint defines a small size data platform deployment, deployed on 3 Kubernetes application nodes 
+with physical diverse underlying server infrastructure.  
+
+Use cases for this small size data platform setup include: data and application evaluation, development, and functional testing.
 
 ## TL;DR
 
@@ -24,8 +44,6 @@ The "Small" size data platform in default configuration deploys the following:
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
 
-Please refer [Data Platform with Wavefront Section](#wavefront-observability-set-up-for-the-data-platform) to set up the data platform with Observability framework.
-
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
@@ -40,7 +58,7 @@ Below are the Kubernetes Cluster requirements for different sizes of the data pl
 
 |Data Platform Size        | Kubernetes Cluster Size |  Usage                                     |
 |--------------------------|-------------------------|--------------------------------------------|
-|Small                     |1 Master Node (2 CPU, 4Gi Memory) <br /> 3 Worker Nodes (4 CPU, 32Gi Memory)            |   Development Environment <br />     |
+|Small                     |1 Master Node (2 CPU, 4Gi Memory) <br /> 3 Worker Nodes (4 CPU, 32Gi Memory)            |   Data and application evaluation, development, and functional testing <br />     |
                                      
 
 ## Installing the Chart
@@ -114,14 +132,6 @@ The following tables lists the recommended configurations for each application u
 | `kafka.resources.limits`                         | The resources limits for Kafka containers                                                 | `{}`                                               |
 | `kafka.resources.requests`                       | The requested resources for Kafka containers for a small kubernetes cluster               | Kafka pods Resource requests set according to data platform t-shirt size                                               |
 | `kafka.affinity`                                 | Affinity for pod assignment                                                               | Kafka pods affinity rules set according to data platform t-shirt size (evaluated as a template)                          |
-| `kafka.metrics.kafka.enabled`                    | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                      | `false`                                                 |
-| `kafka.metrics.kafka.resources.limits`           | Kafka Exporter container resource limits                                                                                          | `{}`                                                    |
-| `kafka.metrics.kafka.resources.requests`         | Kafka Exporter container resource requests                                                                                        | Kafka Exporter pod resource requests set according to data platform t-shirt size                                                    |
-| `kafka.metrics.kafka.service.port`               | Kafka Exporter Prometheus port                                                                                                    | `9308`                                             |
-| `kafka.metrics.jmx.enabled`                      | Whether or not to expose JMX metrics to Prometheus                                                                                | `false`                                            |
-| `kafka.metrics.jmx.resources.limits`             | JMX Exporter container resource limits                                                                                            | `{}`                                                    |
-| `kafka.metrics.jmx.resources.requests`           | JMX Exporter container resource requests                                                                                          | JMX exporter pod resource requests set according to data platform t-shirt size                                                    |
-| `kafka.metrics.jmx.service.port`                 | JMX Exporter Prometheus port                                                                                                      | `5556`                                                  |
 | `kafka.zookeeper.enabled`                        | Switch to enable or disable the Zookeeper helm chart                                                                              | `false` Common Zookeeper deployment used for kafka and solr                                                 |
 | `externalZookeeper.servers`                      | Server or list of external Zookeeper servers to use                                                                               | Zookeeper installed as a subchart to be used                                                    |
 
@@ -138,10 +148,6 @@ The following tables lists the recommended configurations for each application u
 | `solr.javaMem`                                  | Java memory options to pass to the Solr container                                        | `-Xmx4096m -Xms4096m`                              |
 | `solr.heap`                                     | Java Heap options to pass to the solr container                                          | `nil`                              |
 | `solr.affinity`                                 | Affinity for Solr pods assignment                                                        | Solr pods Affinity rules set according to data platform t-shirt size (evaluated as a template)     |
-| `solr.exporter.enabled`                         | Start a side-car prometheus exporter                                                     | `false`                                                                         |
-| `solr.exporter.port`                            | Solr exporter port                                                                       | `9983`                                                                          |
-| `solr.exporter.resources`                       | Exporter resource requests/limit                                                         | Solr exporter pod resource requests set according to data platform t-shirt size                                              |
-| `solr.exporter.affinity`                        | Affinity for Solr pods assignment                                                        | Solr exporter pod affinity rules set according to data platform t-shirt size (evaluated as a template)                                                  |
 | `solr.zookeeper.enabled`                        | Enable Zookeeper deployment. Needed for Solr cloud.                                                         | `false` common zookeeper used between kafka and solr                                                                          |
 | `solr.externalZookeeper.servers`                | Servers for an already existing Zookeeper.                                                                  | Zookeeper installed as a subchart to be used                                                                            |
 
@@ -158,30 +164,6 @@ The following tables lists the recommended configurations for each application u
 | `spark.worker.webPort`                           | Specify the port where the web interface will listen on the worker                                                                         | `8081`                                                  |
 | `spark.worker.affinity`                          | Spark worker affinity for pod assignment                                                                                                   | Spark worker pods Affinity rules set according to data platform t-shirt size (evaluated as a template)                          |
 | `spark.worker.resources`                         | CPU/Memory resource requests/limits for worker                                                                                             | Spark worker pods resource requests set according to data platform t-shirt size                            |
-| `spark.metrics.enabled`                          | Start a side-car prometheus exporter                                                                                                         | `false`                                                      |
-| `spark.metrics.masterAnnotations`                | Annotations for enabling prometheus to access the metrics endpoint of the master nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8080"}` |
-| `spark.metrics.workerAnnotations`                | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
-| `spark.metrics.resources.limits`                 | The resources limits for the metrics exporter container                                                                                      | `{}`                                                         |
-| `spark.metrics.resources.requests`               | The requested resources for the metrics exporter container                                                                                   | Spark exporter container resource requests set according to data platform t-shirt size                                                         |
-
-### Wavefront chart parameters
-
-By default the data platform helm chart is deployed without Wavefront Observability framework. Please refer the [Data Platform with Wavefront Section](#wavefront-observability-set-up-for-the-data-platform) for more details.
-
-| Parameter                                  | Description                                                                                                            | Default                                                 |
-|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `wavefront.enabled`                        | Switch to enable or disable the Wavefront helm chart                                                                   | `true`                                                  |
-| `wavefront.clusterName`                    | Unique name for the Kubernetes cluster (required)                                                                      | `KUBERNETES_CLUSTER_NAME`                               |
-| `wavefront.wavefront.url`                  | Wavefront URL for your cluster (required)                                                                              | `https://YOUR_CLUSTER.wavefront.com`                    |
-| `wavefront.wavefront.token`                | Wavefront API Token (required)                                                                                         | `YOUR_API_TOKEN`                                        |
-| `wavefront.wavefront.existingSecret`       | Name of an existing secret containing the token                                                                        | `nil`                                                   |
-| `wavefront.collector.discovery.enabled`    | Rules based and Prometheus endpoints auto-discovery                                                                    | `true`                                                  |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                               | `true`                                                 |
-| `wavefront.collector.discovery.config`     | Configuration for rules based auto-discovery                                                                           | Data Platform components pods discovery config                                                   |
-| `wavefront.collector.resources.limits`     | The resources limits for the collector container                                                                       | `{}`                                                    |
-| `wavefront.collector.resources.requests`   | The requested resources for the collector container                                                                    | Collectors pods resource requests set according to data platform t-shirt size                        |
-| `wavefront.proxy.resources.limits`         | The resources limits for the proxy container                                                                           | `{}`                                                    |
-| `wavefront.proxy.resources.requests`       | The requested resources for the proxy container                                                                        | Proxy pods resource requests set according to data platform t-shirt size                                 |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -209,45 +191,6 @@ helm install my-release -f values.yaml bitnami/dataplatform-bp1
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Wavefront Observability set up for the Data Platform
-
-This chart includes a values-metrics.yaml file where you can find some parameters oriented to deploy the wavefront observability framework additionally in comparison to the regular values.yaml. You can use this file instead of the default one.
-
-The "Small" size data platform with observability framework deploys the following:
-1. Zookeeper with 3 nodes to be used for both Kafka and Solr
-2. Kafka with 3 nodes using the zookeeper deployed above along with metrics exporters
-3. Solr with 2 nodes using the zookeeper deployed above along with metrics exporters
-4. Spark with 1 Master and 2 worker nodes along with metrics exporters
-5. Wavefront Collectors running as DaemonSet and Wavefront Proxy configured for Kafka/Spark/Solr
-
-To install the data platform chart with observability framework with the release name `my-release`:
-
-```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1 -f values-metrics.yaml \
-  --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
-  --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
-  --set wavefront.wavefront.token=<YOUR_API_TOKEN>
-```
-
-Alternatively you can store the Wavefront API token in a secret and use the secret while installing the chart. API Token can be found at Settings -> User Profile -> API Access. Please store it in a local file api-token.txt to create the secret using the command below.
-
-```console
-kubectl create secret generic wavefront-token --from-file=api-token=./api-token.txt
-```
-To install the data platform chart with observability framework using this token with the release name `my-release`:
-
-```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1 -f values-metrics.yaml \
-  --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
-  --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
-  --set wavefront.wavefront.existingSecret=wavefront-token
-```
-
-
-> **Tip**: List all releases using `helm list`
 
 ## Troubleshooting
 
