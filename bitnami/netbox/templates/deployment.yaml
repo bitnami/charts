@@ -192,7 +192,7 @@ spec:
         - name: media-data
           emptyDir: {}
 {{- else if and .Values.persistence.media.enabled (not .Values.persistence.media.existingClaim) }}
-        - name: reports-data
+        - name: media-data
           persistentVolumeClaim:
             claimName: {{ template "common.names.fullname" . }}-media-data
 {{- end }}
