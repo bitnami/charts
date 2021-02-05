@@ -483,6 +483,9 @@ persistence:
 ## Service parameters
 ##
 service:
+  ## Service name
+  ##
+  nameOverride: ""
   ## Service type
   ##
   type: ClusterIP
@@ -838,6 +841,12 @@ arbiter:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+  ## MongoDB Arbiter service parameters
+  service:
+    ## Service name
+    ##
+    nameOverride: ""
 
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
