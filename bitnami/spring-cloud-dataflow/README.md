@@ -154,6 +154,10 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.jdwp.port`                           | JDWP TCP port                                                                                                    | `5005`                                                  |
 | `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                               | `nil`                                                   |
 | `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                           | `nil`                                                   |
+| `server.proxy.host`                          | Proxy host                                                                                                       | `nil`                                                   |
+| `server.proxy.port`                          | Proxy port                                                                                                       | `nil`                                                   |
+| `server.proxy.user`                          | Proxy username (if authentication is required)                                                                   | `nil`                                                   |
+| `server.proxy.password`                      | Proxy password (if authentication is required)                                                                   | `nil`                                                   |
 
 ### Dataflow Skipper parameters
 
