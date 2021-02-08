@@ -23,7 +23,7 @@ Solr can be accessed via port {{ .Values.service.port }} on the following DNS na
 
 To get the Solr credentials execute the following commands:
 
-    echo Username: {{ .Values.authentication.adminUser }}
+    echo Username: {{ .Values.authentication.adminUsername }}
     echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "solr.secretName" . }} -o jsonpath="{.data.solr-password}" | base64 --decode)
 
 {{- end }}
