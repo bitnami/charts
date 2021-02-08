@@ -1,6 +1,6 @@
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if $query.ingress.grpc.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-grpc
