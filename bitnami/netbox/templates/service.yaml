@@ -23,7 +23,7 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: netbox
+    - name: http
       port: {{ .Values.service.port }}
       protocol: TCP
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.http)))}}
