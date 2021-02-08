@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper MinIO(TM) image name
+Return the proper MinIO(R) image name
 */}}
 {{- define "minio.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -9,7 +9,7 @@ Return the proper MinIO(TM) image name
 {{- end -}}
 
 {{/*
-Return the proper MinIO(TM) Client image name
+Return the proper MinIO(R) Client image name
 */}}
 {{- define "minio.clientImage" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.clientImage "global" .Values.global) }}
@@ -30,7 +30,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return MinIO(TM) accessKey
+Return MinIO(R) accessKey
 */}}
 {{- define "minio.accessKey" -}}
 {{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
@@ -44,7 +44,7 @@ Return MinIO(TM) accessKey
 {{- end -}}
 
 {{/*
-Return MinIO(TM) secretKey
+Return MinIO(R) secretKey
 */}}
 {{- define "minio.secretKey" -}}
 {{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
@@ -109,7 +109,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO(TM) - must provide a valid mode ("distributed" or "standalone") */}}
+{{/* Validate values of MinIO(R) - must provide a valid mode ("distributed" or "standalone") */}}
 {{- define "minio.validateValues.mode" -}}
 {{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
 minio: mode
@@ -118,7 +118,7 @@ minio: mode
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO(TM) - number of replicas must be even, greater than 4 and lower than 32 */}}
+{{/* Validate values of MinIO(R) - number of replicas must be even, greater than 4 and lower than 32 */}}
 {{- define "minio.validateValues.replicaCount" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
