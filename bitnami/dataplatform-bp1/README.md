@@ -18,8 +18,8 @@ Helm chart blueprint for this data platform deployment, covering:
 - PoD resource sizing rules – Optimized PoD and JVM sizing settings for optimal performance and efficient resource usage
 - Default settings to ensure PoD access security
 
-In addition to the PoD resource optimizations, also Kubernetes node count and sizing recommendations are provided 
-(see Kubernetes Cluster Requirements) to facilitate cloud platform capacity planning. The goal is optimize the number 
+In addition to the PoD resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations 
+[(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number 
 of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.  
 
 The first release of this blueprint defines a small size data platform deployment, deployed on 3 Kubernetes application nodes 
@@ -54,7 +54,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Kubernetes Cluster requirements
 
-Below are the Kubernetes Cluster requirements for different sizes of the data platform:
+Below are the minimum Kubernetes Cluster requirements for "Small" size data platform:
 
 |Data Platform Size        | Kubernetes Cluster Size |  Usage                                     |
 |--------------------------|-------------------------|--------------------------------------------|
@@ -107,63 +107,65 @@ The following tables lists the recommended configurations for each application u
 | Parameter                                         | Description                                                                                                                       | Default                                             |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|
 | `serviceAccount.create`                           | Enable creation of ServiceAccount                                                                                 | `true`                          |
-| `serviceAccount.name`                             | Name of the created serviceAccount                                                                                | Generated using the common.fullname template                          |
-| `rbac.create`                                     | Weather to create & use RBAC resources or not                                                                     | `false`                          |
+| `serviceAccount.name`                             | Name of the created serviceAccount                                                                                | Generated using the common.fullname template             |
+| `rbac.create`                                     | Whether to create & use RBAC resources or not                                                                     | `false`                          |
 
 ### Zookeeper chart parameters
+Parameters below are set as per the recommended values, they can be overwritten if required.
 
 | Parameter                                         | Description                                                                                                                       | Default                                             |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|
-| `zookeeper.enabled`                               | Switch to enable or disable the Zookeeper helm chart                                                                              | `true`                                              |
-| `zookeeper.replicaCount`                          | Number of Zookeeper nodes                                                                                                         | `3`                                                 |
-| `zookeeper.heap`                                  | Zookeepers's Java Heap size                                                                                                       | Zookeeper Java Heap size set for optimal resource usage                                          |
-| `zookeeper.resources.limits`                      | The resources limits for Zookeeper containers                                                 | `{}`                                               |
-| `zookeeper.resources.requests`                    | The requested resources for Zookeeper containers for a small kubernetes cluster               | Zookeeper pods Resource requests for optimal resource usage size                                               |
-| `zookeeper.affinity`                            | Affinity for pod assignment                                                               | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)                     |
+| `zookeeper.enabled`                             | Switch to enable or disable the Zookeeper helm chart                                      | `true`                           |
+| `zookeeper.replicaCount`                        | Number of Zookeeper nodes                                                                 | `3`                              |
+| `zookeeper.heap`                                | Zookeepers's Java Heap size                                                               | Zookeeper Java Heap size set for optimal resource usage |
+| `zookeeper.resources.limits`                    | The resources limits for Zookeeper containers                                             | `{}`                                               |
+| `zookeeper.resources.requests`                  | The requested resources for Zookeeper containers for a small kubernetes cluster           | Zookeeper pods Resource requests for optimal resource usage size  |
+| `zookeeper.affinity`                            | Affinity for pod assignment                                                               | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template) |
 
 
 ### Kafka chart parameters
+Parameters below are set as per the recommended values, they can be overwritten if required.
 
 | Parameter                                         | Description                                                                                                                       | Default                                                 |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `kafka.enabled`                                  | Switch to enable or disable the Kafka helm chart                                                                               | `true`                                             |
-| `kafka.replicaCount`                             | Number of Kafka nodes                                                                     | `3`                                                |
-| `kafka.heapOpts`                                 | Kafka's Java Heap size                                                                                                            | Kafka Java Heap size set for optimal resource usage                                   |
-| `kafka.resources.limits`                         | The resources limits for Kafka containers                                                 | `{}`                                               |
-| `kafka.resources.requests`                       | The requested resources for Kafka containers for a small kubernetes cluster               | Kafka pods Resource requests set for optimal resource usage                                               |
-| `kafka.affinity`                                 | Affinity for pod assignment                                                               | Kafka pods affinity rules set for best possible resiliency (evaluated as a template)                          |
-| `kafka.zookeeper.enabled`                        | Switch to enable or disable the Zookeeper helm chart                                                                              | `false` Common Zookeeper deployment used for kafka and solr                                                 |
-| `externalZookeeper.servers`                      | Server or list of external Zookeeper servers to use                                                                               | Zookeeper installed as a subchart to be used                                                    |
+| `kafka.enabled`                                 | Switch to enable or disable the Kafka helm chart                                          | `true`                                                  |
+| `kafka.replicaCount`                            | Number of Kafka nodes                                                                     | `3`                                                     |
+| `kafka.heapOpts`                                | Kafka's Java Heap size                                                                    | Kafka Java Heap size set for optimal resource usage     |
+| `kafka.resources.limits`                        | The resources limits for Kafka containers                                                 | `{}`                                                    |
+| `kafka.resources.requests`                      | The requested resources for Kafka containers for a small kubernetes cluster               | Kafka pods Resource requests set for optimal resource usage   |
+| `kafka.affinity`                                | Affinity for pod assignment                                                               | Kafka pods affinity rules set for best possible resiliency (evaluated as a template) |
+| `kafka.zookeeper.enabled`                       | Switch to enable or disable the Zookeeper helm chart                                      | `false` Common Zookeeper deployment used for kafka and solr                          |
+| `externalZookeeper.servers`                     | Server or list of external Zookeeper servers to use                                       | Zookeeper installed as a subchart to be used                                         |
 
 
 ### Solr chart parameters
+Parameters below are set as per the recommended values, they can be overwritten if required.
 
 | Parameter                                         | Description                                                                                                                       | Default                                                 |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `solr.enabled`                                  | Switch to enable or disable the Solr helm chart                                          | `true`                                             |
 | `solr.replicaCount`                             | Number of Solr nodes                                                                     | `2`                          |
-| `solr.authentication.enabled`                   | Enable Solr authentication                                                               | `true` should be 'false' for metrics exporters deployment                                            |
+| `solr.authentication.enabled`                   | Enable Solr authentication                                                               | `true`                                             |
 | `solr.resources.limits`                         | The resources limits for Solr containers                                                 | `{}`                                               |
 | `solr.resources.requests`                       | The requested resources for Solr containers                                              | Solr pods resource requests set for optimal resource usage              |
-| `solr.javaMem`                                  | Java memory options to pass to the Solr container                                        | `-Xmx4096m -Xms4096m`                              |
+| `solr.javaMem`                                  | Java memory options to pass to the Solr container                                        | Solr Java Heap size set for optimal resource usage                              |
 | `solr.heap`                                     | Java Heap options to pass to the solr container                                          | `nil`                              |
-| `solr.affinity`                                 | Affinity for Solr pods assignment                                                        | Solr pods Affinity rules set for best possible resiliency (evaluated as a template)     |
-| `solr.zookeeper.enabled`                        | Enable Zookeeper deployment. Needed for Solr cloud.                                                         | `false` common zookeeper used between kafka and solr                                                                          |
-| `solr.externalZookeeper.servers`                | Servers for an already existing Zookeeper.                                                                  | Zookeeper installed as a subchart to be used                                                                            |
+| `solr.affinity`                                 | Affinity for Solr pods assignment                                                        | Solr pods Affinity rules set for best possible resiliency (evaluated as a template)    |
+| `solr.zookeeper.enabled`                        | Enable Zookeeper deployment. Needed for Solr cloud.                                      | `false` common zookeeper used between kafka and solr                                   |
+| `solr.externalZookeeper.servers`                | Servers for an already existing Zookeeper.                                               | Zookeeper installed as a subchart to be used                    |
 
 ### Spark chart parameters
+Parameters below are set as per the recommended values, they can be overwritten if required.
 
 | Parameter                                   | Description                                                                                                                                | Default                                                 |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `spark.enabled`                           | Switch to enable or disable the Spark helm chart                                                                                                   | `true`                          |
-| `master.webPort`                                 | Specify the port where the web interface will listen on the master                                                                         | `8080`                                                  |
-| `spark.master.affinity`                          | Spark master affinity for pod assignment                                                                                                   | Spark master pod Affinity rules set for best possible resiliency (evaluated as a template)                          |
-| `spark.master.resources`                         | CPU/Memory resource requests/limits for Master                                                                                             | Spark master pods resource requests set for optimal resource usage                                                    |
-| `spark.worker.javaOptions`                       | Set options for the JVM in the form `-Dx=y`                                                                                                | No default                                              |
-| `spark.worker.replicaCount`                      | Set the number of workers                                                                                                                  | `2`                                                     |
-| `spark.worker.webPort`                           | Specify the port where the web interface will listen on the worker                                                                         | `8081`                                                  |
-| `spark.worker.affinity`                          | Spark worker affinity for pod assignment                                                                                                   | Spark worker pods Affinity rules set for best possible resiliency (evaluated as a template)                          |
-| `spark.worker.resources`                         | CPU/Memory resource requests/limits for worker                                                                                             | Spark worker pods resource requests set for optimal resource usage                            |
+| `spark.enabled`                                 | Switch to enable or disable the Spark helm chart                                    | `true`                          |
+| `spark.master.affinity`                         | Spark master affinity for pod assignment                                            | Spark master pod Affinity rules set for best possible resiliency (evaluated as a template)|
+| `spark.master.resources`                        | CPU/Memory resource requests/limits for Master                                      | Spark master pods resource requests set for optimal resource usage |
+| `spark.worker.javaOptions`                      | Set options for the JVM in the form `-Dx=y`                                         | No default                                              |
+| `spark.worker.replicaCount`                     | Set the number of workers                                                           | `2`                                                     |
+| `spark.worker.affinity`                         | Spark worker affinity for pod assignment                                            | Spark worker pods Affinity rules set for best possible resiliency (evaluated as a template)|
+| `spark.worker.resources`                        | CPU/Memory resource requests/limits for worker                                      | Spark worker pods resource requests set for optimal resource usage    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
