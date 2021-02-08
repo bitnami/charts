@@ -37,7 +37,7 @@ spec:
       hostNetwork: true
       {{- if .Values.speaker.initContainers }}
       initContainers:
-      {{ toYaml .Values.speaker.initContainers | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }} 
       {{- end }}
       containers:
         - name: metallb-speaker
