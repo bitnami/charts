@@ -16,10 +16,6 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
@@ -40,7 +36,6 @@ service:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
     http: ""
@@ -177,7 +172,7 @@ readinessProbe:
 
 
 netbox:
-  debug: true
+  debug: false
   maintenanceMode: false
   superuser_name: "admin"
   dbConnMaxAge: 300
