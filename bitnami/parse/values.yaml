@@ -496,7 +496,7 @@ persistence:
   size: 8Gi
 
 ##
-## MongoDB chart configuration
+## MongoDB(R) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
@@ -505,14 +505,14 @@ mongodb:
   # make no difference in deploying the subchart. Change this when further standardizations
   # are added (externalDB)
   enabled: true
-  ## MongoDB Authentication parameters
+  ## MongoDB(R) Authentication parameters
   ##
   auth:
     ## Enable authentication
     ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
     ##
     enabled: true
-    ## MongoDB root password
+    ## MongoDB(R) root password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
