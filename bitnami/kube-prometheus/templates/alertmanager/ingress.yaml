@@ -44,8 +44,8 @@ spec:
         - {{ .Values.alertmanager.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.alertmanager.ingress.hostname }}
     {{- end }}
-    {{- if .Values.prometheus.ingress.extraTls }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- if .Values.alertmanager.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.ingress.extraTls "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
