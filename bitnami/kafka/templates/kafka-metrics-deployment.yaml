@@ -45,7 +45,7 @@ spec:
               --sasl.username="$SASL_USERNAME" \
               --sasl.password="${sasl_passwords[0]}" \
               {{- end }}
-              {{- if (include "kafka.tlsEncryption" .) }}
+              {{- if (include "kafka.client.tlsEncryption" .) }}
               --tls.enabled \
               {{- if .Values.metrics.kafka.certificatesSecret }}
               --tls.ca-file="/opt/bitnami/kafka-exporter/certs/ca-file" \
@@ -73,7 +73,7 @@ spec:
           {{- if .Values.metrics.kafka.resources }}
           resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
           {{- end }}
-      {{- if and (include "kafka.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
+      {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
           volumeMounts:
             - name: kafka-exporter-certificates
               mountPath: /opt/bitnami/kafka-exporter/certs/
