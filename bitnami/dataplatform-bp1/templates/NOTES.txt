@@ -1,0 +1,15 @@
+** Data Platform Blueprint1 is being deployed, it could take some time to be ready **
+
+The following components are being deployed to your cluster: 
+
+{{- if  (.Values.kafka.enabled) }}
+** Kafka **
+{{- end }}
+{{- if  (.Values.spark.enabled) }}
+** Spark **
+{{- end }}
+{{- if  (.Values.solr.enabled) }}
+** Solr **
+{{- end }}
+
+In order to get detailed deployment information please use --render-subchart-notes flag while installing this chart.
