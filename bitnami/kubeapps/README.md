@@ -371,7 +371,7 @@ $ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-pos
 Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 
  - Helm 2 is no longer supported. If you are still using some Helm 2 charts, [migrate them with the available tools](https://helm.sh/docs/topics/v2_v3_migration/). Note that some charts (but not all of them) may require to be migrated to the [new Chart specification (v2)](https://helm.sh/docs/topics/charts/#the-apiversion-field). If you are facing any issue managing this migration and Kubeapps, please open a new issue!
- - MongoDB&reg; is no longer supported. Since 2.0, the only database supported is PostgreSQL.
+ - MongoDB is no longer supported. Since 2.0, the only database supported is PostgreSQL.
  - PostgreSQL chart dependency has been upgraded to a new major version.
 
 Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:
