@@ -173,6 +173,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set kafka.replicaCount=3 \
+  --render-subchart-notes \
   bitnami/dataplatform-bp1
 ```
 
@@ -181,7 +182,7 @@ The above command deploys the data platform with Kafka with 3 nodes (replicas).
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/dataplatform-bp1
+helm install my-release -f values.yaml --render-subchart-notes bitnami/dataplatform-bp1
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

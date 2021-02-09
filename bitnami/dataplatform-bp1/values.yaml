@@ -30,18 +30,16 @@ zookeeper:
   replicaCount: 3
   ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
   ##
-  heapSize: 4096  
+  heapSize: 4096
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Recommended values for cpu and memory requests
+    ##
     limits: {}
-    #  cpu: 250m
-    #  memory: 1Gi
     requests: 
       cpu: 250m
       memory: 5120Mi
+  ## Anti Affinity rules set for resiliency
+  ##
   affinity: 
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -62,16 +60,14 @@ kafka:
   ##
   heapOpts: -Xmx4096m -Xms4096m
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Recommended values for cpu and memory requests
+    ##
     limits: {}
-    #  cpu: 250m
-    #  memory: 1Gi
-    requests: 
+    requests:
       cpu: 250m
       memory: 5120Mi
+  ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
+  ##
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -95,10 +91,10 @@ kafka:
            topologyKey: "kubernetes.io/hostname"
   zookeeper:
     enabled: false
-  ## This value is only used when zookeeper.enabled is set to false
+  ## This value is only used when zookeeper.enabled is set to false.
   ##
   externalZookeeper:
-    ## Server or list of external zookeeper servers to use.
+    ## Server or list of external zookeeper servers to use. This is set to the zookeeper deployed as part of this chart
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
@@ -111,16 +107,14 @@ spark:
   ##
   master:
     resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## Recommended values for cpu and memory requests
+      ##
       limits: {}
-      #  cpu: 250m
-      #  memory: 1Gi
       requests: 
         cpu: 250m
         memory: 5120Mi
+    ## Anti affinity rules set for resiliency
+    ##
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -135,6 +129,8 @@ spark:
   ##
   worker:
     replicaCount: 2
+    ## Anti affinity rules set for resiliency
+    ##
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -147,26 +143,25 @@ spark:
               - master
           topologyKey: "kubernetes.io/hostname"
     resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## Recommended values for cpu and memory requests
+      ##
       limits: {}
-      #  cpu: 250m
-      #  memory: 1Gi
       requests: 
         cpu: 250m
         memory: 5120Mi
+
 ## Solr Subchart parameters
 ##
 solr:
   enabled: true
   replicaCount: 2
 
-  ## Java memory options
+  ## Java memory options recommended value
   ##
   javaMem: -Xmx4096m -Xms4096m
 
+  ## Anti affinity rules set for resiliency
+  ##
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -178,13 +173,9 @@ solr:
             - solr
         topologyKey: "kubernetes.io/hostname"
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Recommended values for cpu and memory requests
+    ##
     limits: {}
-    #  cpu: 1000m
-    #  memory: 1Gi
     requests: 
       cpu: 250m
       memory: 5120Mi
@@ -193,7 +184,7 @@ solr:
   ## This value is only used when zookeeper.enabled is set to false
   ##
   externalZookeeper:
-    ## Server or list of external zookeeper servers to use.
+    ## Server or list of external zookeeper servers to use. In this case, it is set to the zookeeper deployed as part of this chart.
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
