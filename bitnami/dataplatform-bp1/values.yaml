@@ -28,6 +28,9 @@ serviceAccount:
 
 zookeeper:
   replicaCount: 3
+  ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+  ##
+  heapSize: 4096  
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -36,10 +39,10 @@ zookeeper:
     limits: {}
     #  cpu: 250m
     #  memory: 1Gi
-    requests:
+    requests: 
       cpu: 250m
-      memory: 1280Mi
-  affinity:
+      memory: 5120Mi
+  affinity: 
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
@@ -57,7 +60,7 @@ kafka:
   replicaCount: 3
   ## Kafka's Java Heap size
   ##
-  heapOpts: -Xmx1024m -Xms1024m
+  heapOpts: -Xmx4096m -Xms4096m
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -65,10 +68,10 @@ kafka:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
     #  cpu: 250m
-    #  memory: 256Mi
-    requests:
+    #  memory: 1Gi
+    requests: 
       cpu: 250m
-      memory: 1280Mi
+      memory: 5120Mi
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -115,9 +118,9 @@ spark:
       limits: {}
       #  cpu: 250m
       #  memory: 1Gi
-      requests:
+      requests: 
         cpu: 250m
-        memory: 1280Mi
+        memory: 5120Mi
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -151,10 +154,9 @@ spark:
       limits: {}
       #  cpu: 250m
       #  memory: 1Gi
-      requests:
+      requests: 
         cpu: 250m
-        memory: 1280Mi
-
+        memory: 5120Mi
 ## Solr Subchart parameters
 ##
 solr:
@@ -183,9 +185,9 @@ solr:
     limits: {}
     #  cpu: 1000m
     #  memory: 1Gi
-    requests:
+    requests: 
       cpu: 250m
-      memory: 1280Mi
+      memory: 5120Mi
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false

@@ -31,7 +31,7 @@ Use cases for this small size data platform setup include: data and application 
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1
+helm install my-release bitnami/dataplatform-bp1 --render-subchart-notes
 ```
 
 ## Introduction
@@ -67,7 +67,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1
+helm install my-release bitnami/dataplatform-bp1 --render-subchart-notes
 ```
 
 These commands deploy Data Platform on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists recommended configurations of the parameters to bring up an optimal and resilient data platform. Please refer the individual charts for the remaining set of configurable parameters. 
