@@ -333,7 +333,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MongoDB&reg;, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
