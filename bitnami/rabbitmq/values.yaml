@@ -722,7 +722,8 @@ ingress:
   ##
   enabled: false
 
-  ## Path for the default host
+  ## Path for the default host. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
   ##
   path: /
 

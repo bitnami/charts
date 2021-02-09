@@ -46,6 +46,23 @@ To access Prometheus from outside the cluster execute the following commands:
     echo "Prometheus URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
+
+{{- if and .Values.prometheus.thanos.create }}
+
+Thanos Sidecar can be accessed via port "{{ .Values.prometheus.thanos.service.port }}" on the following DNS name from within your cluster:
+
+    {{ template "kube-prometheus.thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+{{- if .Values.prometheus.thanos.ingress.enabled }}
+
+  You should be able to access your new Thanos Sidecar installation through
+
+  {{- range .Values.prometheus.thanos.ingress.hosts }}
+  {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}
+  {{- end }}
+
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- if .Values.alertmanager.enabled }}

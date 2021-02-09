@@ -305,13 +305,16 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 ### Kafka chart parameters
 
-| Parameter                             | Description                                 | Default |
-|---------------------------------------|---------------------------------------------|---------|
-| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false` |
-| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`     |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`     |
-| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`   |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`     |
+| Parameter                             | Description                                 | Default          |
+| ------------------------------------- | ------------------------------------------- | ---------------- |
+| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false`          |
+| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`              |
+| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`              |
+| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`            |
+| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`              |
+| `externalKafka.enabled`               | Enable/disable external Kafka               | `false`          |
+| `externalKafka.brokers`               | External Kafka brokers                      | `localhost:9092` |
+| `externalKafka.zkNodes`               | External Zookeeper nodes                    | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

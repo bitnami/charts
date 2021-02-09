@@ -163,7 +163,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ include "kafka.zookeeper.fullname" . | quote }}
               {{- else }}
-              value: {{ join "," .Values.externalZookeeper.servers | quote }}
+              value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}

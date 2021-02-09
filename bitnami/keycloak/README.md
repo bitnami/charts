@@ -88,6 +88,13 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.jksSecret`              | Existing secret containing the truststore and one keystore per Keycloak replica                                                                               | `nil`                                                   |
 | `auth.tls.keystorePassword`       | Password to access the keystore when it's password-protected                                                                                                  | `nil`                                                   |
 | `auth.tls.truststorePassword`     | Password to access the truststore when it's password-protected                                                                                                | `nil`                                                   |
+| `auth.tls.image.registry`         | TLS init container image registry                                                                                                                             | `docker.io`                                             |
+| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/minideb`                                       |
+| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `buster`                                                |
+| `auth.tls.image.pullPolicy`       | TLS init container image pull policy                                                                                                                          | `Always`                                                |
+| `auth.tls.image.pullSecrets`      | TLS init container image pull secrets                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `auth.tls.resources.limits`       | The resources limits for the TLS init container                                                                                                               | `{}`                                                    |
+| `auth.tls.resources.requests`     | The requested resources for the TLS init container                                                                                                            | `{}`                                                    |
 | `auth.existingSecret.name`        | Name for an existing secret containing passwords                                                                                                              | `nil`                                                   |
 | `auth.existingSecret.keyMapping`  | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`                                                   |
 | `proxyAddressForwarding`          | Enable Proxy Address Forwarding                                                                                                                               | `false`                                                 |
@@ -219,8 +226,9 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | Parameter                        | Description                                                                  | Default            |
 |----------------------------------|------------------------------------------------------------------------------|--------------------|
 | `postgresql.enabled`             | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`             |
-| `postgresql.postgresqlUsername`  | PostgreSQL user to create (used by Keycloak)                                 | `bn_keycloak`      |
-| `postgresql.postgresqlPassword`  | Password for the Dicourse user - ignored if existingSecret is provided       | `some-password`    |
+| `postgresql.postgresqlUsername`  | Keycloak PostgreSQL user to create (used by Keycloak)                        | `bn_keycloak`      |
+| `postgresql.postgresqlPassword`  | Keycloak PostgreSQL password - ignored if existingSecret is provided         | `some-password`    |
+| `postgresql.existingSecret`      | Use an existing secret file with the PostgreSQL password                     | `nil`              |
 | `postgresql.postgresqlDatabase`  | Name of the database to create                                               | `bitnami_keycloak` |
 | `postgresql.persistence.enabled` | Enable database persistence using PVC                                        | `true`             |
 | `externalDatabase.host`          | Host of the external database                                                | `""`               |

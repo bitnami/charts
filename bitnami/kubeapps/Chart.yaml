@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.0.1
+appVersion: 2.1.0
 dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
@@ -20,4 +20,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 5.0.1
+version: 5.1.0

@@ -30,8 +30,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "storegateway" "context" $) }}
+      {{- if .Values.storegateway.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.storegateway.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -94,6 +97,11 @@ spec:
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
+            {{- if or .Values.storegateway.grpc.tls.enabled }}
+            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
@@ -122,6 +130,10 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if .Values.storegateway.grpc.tls.enabled }}
+            - name: tls-server
+              mountPath: /certs
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -133,6 +145,11 @@ spec:
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end }}
+        {{- if .Values.storegateway.grpc.tls.enabled }}
+        - name: tls-server
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "defaultNameSuffix" "store-tls-server" "context" $) }}
         {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data

@@ -376,6 +376,10 @@ speaker:
   # secretKey:
   # secretValue:
 
+  ## Extra containers to add before the speaker starts
+  ##
+  initContainers: []
+
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##

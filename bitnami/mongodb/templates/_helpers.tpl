@@ -16,6 +16,36 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create a default mongo service name which can be overridden.
+*/}}
+{{- define "mongodb.service.nameOverride" -}}
+    {{- if .Values.service -}}
+        {{- if .Values.service.nameOverride }}
+            {{- .Values.service.nameOverride -}}
+        {{- else -}}
+            {{ include "mongodb.fullname" . }}-headless
+        {{- end -}}
+    {{- else -}}
+        {{ include "mongodb.fullname" . }}-headless
+    {{- end }}
+{{- end }}
+
+{{/*
+Create a default mongo arbiter service name which can be overridden.
+*/}}
+{{- define "mongodb.arbiter.service.nameOverride" -}}
+    {{- if .Values.arbiter.service -}}
+        {{- if .Values.arbiter.service.nameOverride }}
+            {{- .Values.arbiter.service.nameOverride -}}
+        {{- else -}}
+            {{ include "mongodb.fullname" . }}-arbiter-headless
+        {{- end -}}
+    {{- else -}}
+        {{ include "mongodb.fullname" . }}-arbiter-headless
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper MongoDB image name
 */}}
 {{- define "mongodb.image" -}}

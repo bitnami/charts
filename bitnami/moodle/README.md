@@ -143,7 +143,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `ingress.hostname`               | Default host for the ingress resource                    | `minio.local`                  |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.annotations`            | Map of Ingress annotations                               | `{}` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
@@ -287,7 +287,7 @@ ingress:
   #   kubernetes.io/ingress.class: nginx
   #   kubernetes.io/tls-acme: 'true'
 
-  ## Moodle server Ingress hostnames
+  ## Moodle(TM) server Ingress hostnames
   ## Must be provided if Ingress is enabled
   ##
   hosts:

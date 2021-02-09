@@ -40,6 +40,11 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-alertmanager" (include "kube-prometheus.name" .) -}}
 {{- end }}
 
+{{/* Name suffixed with thanos */}}
+{{- define "kube-prometheus.thanos.name" -}}
+{{- printf "%s-thanos" (include "kube-prometheus.name" .) -}}
+{{- end }}
+
 {{/* Fullname suffixed with operator */}}
 {{- define "kube-prometheus.operator.fullname" -}}
 {{- printf "%s-operator" (include "kube-prometheus.fullname" .) -}}
@@ -53,6 +58,11 @@ If release name contains chart name it will be used as a full name.
 {{/* Fullname suffixed with alertmanager */}}
 {{- define "kube-prometheus.alertmanager.fullname" -}}
 {{- printf "%s-alertmanager" (include "kube-prometheus.fullname" .) -}}
+{{- end }}
+
+{{/* Fullname suffixed with thanos */}}
+{{- define "kube-prometheus.thanos.fullname" -}}
+{{- printf "%s-thanos" (include "kube-prometheus.prometheus.fullname" .) -}}
 {{- end }}
 
 {{- define "kube-prometheus.chart" -}}
