@@ -491,7 +491,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
@@ -559,7 +559,7 @@ You can create the Kafka Connect image using the Dockerfile below:
 
 ```Dockerfile
 FROM bitnami/kafka:latest
-# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
 RUN mkdir -p /opt/bitnami/kafka/plugins && \
     cd /opt/bitnami/kafka/plugins && \
     curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar

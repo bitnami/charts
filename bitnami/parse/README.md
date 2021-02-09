@@ -179,16 +179,16 @@ The following table lists the configurable parameters of the Parse chart and the
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`          |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`             |
 
-### MongoDB Parameters
+### MongoDB&reg; Parameters
 
-| Parameter                          | Description                            | Default                                     |
-|------------------------------------|----------------------------------------|---------------------------------------------|
-| `mongodb.auth.enabled`             | Enable MongoDB password authentication | `true`                                      |
-| `mongodb.auth.rootPassword`        | MongoDB admin password                 | `nil`                                       |
-| `mongodb.persistence.enabled`      | Enable MongoDB persistence using PVC   | `true`                                      |
-| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB volume   | `nil` (uses alpha storage class annotation) |
-| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB volume     | `ReadWriteOnce`                             |
-| `mongodb.persistence.size`         | PVC Storage Request for MongoDB volume | `8Gi`                                       |
+| Parameter                          | Description                                 | Default                                     |
+|------------------------------------|---------------------------------------------|---------------------------------------------|
+| `mongodb.auth.enabled`             | Enable MongoDB&reg; password authentication | `true`                                      |
+| `mongodb.auth.rootPassword`        | MongoDB&reg; admin password                 | `nil`                                       |
+| `mongodb.persistence.enabled`      | Enable MongoDB&reg; persistence using PVC   | `true`                                      |
+| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `nil` (uses alpha storage class annotation) |
+| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce`                             |
+| `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`                                       |
 
 The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
 
@@ -333,13 +333,13 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ### To 12.0.0
 
-MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 11.0.0
 
-Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
 
