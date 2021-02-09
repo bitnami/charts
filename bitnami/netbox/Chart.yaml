@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.1.4
+appVersion: 2.10.4
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -19,13 +19,15 @@ dependencies:
 description: NetBox is an IP address management (IPAM) and data center infrastructure management (DCIM) tool
 engine: gotpl
 home: https://github.com/netbox-community/netbox
-icon: https://bitnami.com/assets/stacks/netbox/img/netbox-stack-220x234.png
+icon: https://github.com/netbox-community/netbox/raw/develop/docs/netbox_logo.png
 keywords:
   - DCIM
   - IPAM
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
+  - url: https://github.com/MaxRink
+    name: MaxRink
 name: netbox
 sources:
   - https://github.com/bitnami/bitnami-docker-netbox
