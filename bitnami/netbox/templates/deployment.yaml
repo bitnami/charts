@@ -9,10 +9,10 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   annotations:
-    checksum/extraconfig-configmap: {{ include (print $.Template.BasePath "/netbox-cm-extraconfig.yaml") . | sha256sum }}
-    checksum/extraconfig-secret: {{ include (print $.Template.BasePath "/netbox-secret-extraconfig.yaml") . | sha256sum }}
-    checksum/env-configmap: {{ include (print $.Template.BasePath "/netbox-cm-envvars.yaml") . | sha256sum }}
-    checksum/credential-secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    checksum/extraconfig-configmap: {{ include  (print $.Template.BasePath "/netbox-cm-extraconfig.yaml") . | sha256sum }}
+    checksum/extraconfig-secret: {{ include  (print $.Template.BasePath "/netbox-secret-extraconfig.yaml") . | sha256sum }}
+    checksum/env-configmap: {{ include  (print $.Template.BasePath "/netbox-cm-envvars.yaml") . | sha256sum }}
+    checksum/credential-secret: {{ include  (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -26,8 +26,16 @@ spec:
       app.kubernetes.io/component: netbox
   template:
     metadata:
+      annotations:
+        checksum/extraconfig-configmap: {{ include  (print $.Template.BasePath "/netbox-cm-extraconfig.yaml") . | sha256sum }}
+        checksum/extraconfig-secret: {{ include  (print $.Template.BasePath "/netbox-secret-extraconfig.yaml") . | sha256sum }}
+        checksum/env-configmap: {{ include  (print $.Template.BasePath "/netbox-cm-envvars.yaml") . | sha256sum }}
+        checksum/credential-secret: {{ include  (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+      {{- end }}
       {{- if .Values.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: netbox

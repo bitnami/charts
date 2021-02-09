@@ -189,7 +189,7 @@ netbox:
   ## Configuration of Netbox (see https://netbox.readthedocs.io/en/stable/configuration/) for reference
   ## use extraSecretConfig for configblocks containing secrets/passwords/access Keys
   ##
-  extraConfig: {} #|-
+  # extraConfig: |-
     ####
     ## This file contains extra configuration options that can't be configured
     ## directly through environment variables.
@@ -240,7 +240,7 @@ netbox:
   ## Configuration of Netbox (see https://netbox.readthedocs.io/en/stable/configuration/) for reference
   ## use extraConfig for configblocks not containing secrets/passwords/access Keys
   ##
-  extraSecretConfig: {} #|-
+  # extraSecretConfig: |-
     ## By default uploaded media is stored on the local filesystem. Using Django-storages is also supported. Provide the
     ## class path of the storage driver in STORAGE_BACKEND and any configuration options in STORAGE_CONFIG. For example:
     # STORAGE_BACKEND = 'storages.backends.s3boto3.S3Boto3Storage'
