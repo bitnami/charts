@@ -115,8 +115,8 @@ spec:
             initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.exporter.livenessProbe.failureThredshold }}
-            successThreshold: {{ .Values.exporter.livenessProbe.successThredshold }}
+            failureThreshold: {{ .Values.exporter.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.exporter.livenessProbe.successThreshold }}
           {{- else if .Values.exporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
