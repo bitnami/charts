@@ -35,12 +35,12 @@ zookeeper:
     ## Recommended values for cpu and memory requests
     ##
     limits: {}
-    requests: 
+    requests:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency
   ##
-  affinity: 
+  affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
@@ -110,7 +110,7 @@ spark:
       ## Recommended values for cpu and memory requests
       ##
       limits: {}
-      requests: 
+      requests:
         cpu: 250m
         memory: 5120Mi
     ## Anti affinity rules set for resiliency
@@ -146,7 +146,7 @@ spark:
       ## Recommended values for cpu and memory requests
       ##
       limits: {}
-      requests: 
+      requests:
         cpu: 250m
         memory: 5120Mi
 
@@ -176,7 +176,7 @@ solr:
     ## Recommended values for cpu and memory requests
     ##
     limits: {}
-    requests: 
+    requests:
       cpu: 250m
       memory: 5120Mi
   zookeeper:
@@ -189,3 +189,7 @@ solr:
     servers:
       - '{{ .Release.Name }}-zookeeper'
 
+## Wavefront Subchart parameters
+##
+wavefront:
+  enabled: false
