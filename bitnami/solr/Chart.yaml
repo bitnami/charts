@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 8.7.0
+appVersion: 8.8.0
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
