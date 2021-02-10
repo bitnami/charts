@@ -121,7 +121,7 @@ spec:
             timeoutSeconds: {{ .Values.core.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.core.startupProbe.failureThreshold }}
-          {{- else if .Values.core.startupProbe }}
+          {{- else if .Values.core.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:

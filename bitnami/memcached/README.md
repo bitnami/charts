@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `service.annotations`                    | Additional annotations for Memcached service                                              | `{}`                                                         |
 | `resources.requests`                     | CPU/Memory resource requests                                                              | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`                       | CPU/Memory resource limits                                                                | `{}`                                                         |
+| `portName`                               | Name of the main port exposed by memcached                                                | `memcache`                                                   |
 | `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                 | `true`                                                       |
 | `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                    | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                      | `ReadWriteOnce`                                              |
@@ -100,6 +101,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `metrics.image.pullSecrets`              | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                 | Additional annotations for Metrics exporter                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
 | `metrics.resources`                      | Exporter resource requests/limit                                                          | `{}`                                                         |
+| `metrics.portName`                       | Memcached exporter port name                                                              | `metrics`                                                    |
 | `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                            | `ClusterIP`                                                  |
 | `metrics.service.port`                   | Prometheus metrics service port                                                           | `9150`                                                       |
 | `metrics.service.annotations`            | Prometheus exporter svc annotations                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
@@ -113,6 +115,8 @@ $ helm install my-release --set memcachedUsername=user,memcachedPassword=passwor
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

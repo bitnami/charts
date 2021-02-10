@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.4-debian-10-r80
+  tag: 5.0.4-debian-10-r106
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -365,7 +365,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r262
+    tag: 0.8.0-debian-10-r288
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
