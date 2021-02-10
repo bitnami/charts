@@ -661,6 +661,15 @@ networkPolicy:
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
+
+startupProbe:
+  enabled: false # GA since v1.20
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+
 livenessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -676,6 +685,11 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+
+
+## Custom Startup probe
+##
+customStartupProbe: {}
 
 ## Custom Liveness probe
 ##
