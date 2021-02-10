@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `service.annotations`                    | Additional annotations for Memcached service                                              | `{}`                                                         |
 | `resources.requests`                     | CPU/Memory resource requests                                                              | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`                       | CPU/Memory resource limits                                                                | `{}`                                                         |
+| `portName`                               | Name of the main port exposed by memcached                                                | `memcache`                                                   |
 | `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                 | `true`                                                       |
 | `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                    | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                      | `ReadWriteOnce`                                              |
@@ -100,6 +101,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `metrics.image.pullSecrets`              | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                 | Additional annotations for Metrics exporter                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
 | `metrics.resources`                      | Exporter resource requests/limit                                                          | `{}`                                                         |
+| `metrics.portName`                       | Memcached exporter port name                                                              | `metrics`                                                    |
 | `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                            | `ClusterIP`                                                  |
 | `metrics.service.port`                   | Prometheus metrics service port                                                           | `9150`                                                       |
 | `metrics.service.annotations`            | Prometheus exporter svc annotations                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
