@@ -57,7 +57,7 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Global parameters
 
 | Parameter                   | Description                                       | Default                                                   |
-|-----------------------------|---------------------------------------------------|-----------------------------------------------------------|
+|:----------------------------|:--------------------------------------------------|:----------------------------------------------------------|
 | :-------------------------- | :------------------------------------------------ | :-------------------------------------------------------- |
 | `global.imageRegistry`      | Global Docker image registry                      | `nil`                                                     |
 | `global.imagePullSecrets`   | Global Docker registry secret names as an array   | `[]` (does not add image pull secrets to deployed pods)   |
@@ -66,10 +66,10 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Common parameters
 
 | Parameter                               | Description                                                                                                                                           | Default                                                   |
-|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
+|:----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------|
 | :-------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
-| `nameOverride`                          | String to partially override solr.fullname template with a string                                                                                    | `nil`                                                       |
-| `fullnameOverride`                      | String to fully override solr.fullname template with a string                                                                                        | `nil`                                                       |
+| `nameOverride`                          | String to partially override solr.fullname template with a string                                                                                     | `nil`                                                     |
+| `fullnameOverride`                      | String to fully override solr.fullname template with a string                                                                                         | `nil`                                                     |
 | `clusterDomain`                         | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                           |
 | `commonLabels`                          | Common lables to add to the Kuberentes objects                                                                                                        | `{}`                                                      |
 | `commonAnnotations`                     | Common annotations to add to the Kubernetes objects                                                                                                   |                                                           |
@@ -104,11 +104,11 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Solr statefulset parameters
 
 | Parameter                              | Description                                                                                      | Default                            |
-|----------------------------------------|--------------------------------------------------------------------------------------------------|------------------------------------|
+|:---------------------------------------|:-------------------------------------------------------------------------------------------------|:-----------------------------------|
 | :------------------------------------- | :----------------------------------------------------------------------------------------------- | :--------------------------------- |
 | `coreName`                             | Name of the default core to be created                                                           | `my-core`                          |
 | `cloudEnabled`                         | Enable Solr cloud mode                                                                           | `true`                             |
-| `cloudBootstrap`                        | Bootstrap the Solr cloud cluster on the install                                                  | `true`                             |
+| `cloudBootstrap`                       | Bootstrap the Solr cloud cluster on the install                                                  | `true`                             |
 | `collection`                           | Name of the collection to be created                                                             | `my-collection`                    |
 | `collectionShards`                     | Number of collection shards                                                                      | `1`                                |
 | `collectionReplicas`                   | Number of collection replicas                                                                    | `2`                                |
@@ -158,16 +158,18 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Solr Traffic Exposure Parameters
 
 | Parameter                        | Description                                              | Default                        |
-|----------------------------------|----------------------------------------------------------|--------------------------------|
-| `service.port`                          | Kubernetes Service port.                                                                                                                              | `6379`                                                    |
-| `service.annotations`                   | annotations for solr service                                                                                                                         | {}                                                          |
-| `service.labels`                        | Additional labels for solr service                                                                                                                   | {}                                                          |
-| `service.type`                          | Service type for default solr service                                                                                                                | `ClusterIP`                                                 |
-| `service.nodePorts`                     | Node ports for the service                                                                                                                            | `{}`                                                      |
-| `service.loadBalancerIP`                | loadBalancerIP if service.type is `LoadBalancer`                                                                                                      | `nil`                                                     |
+|:---------------------------------|:---------------------------------------------------------|:-------------------------------|
+| `service.port`                   | Kubernetes Service port.                                 | `6379`                         |
+| `service.annotations`            | annotations for solr service                             | {}                             |
+| `service.labels`                 | Additional labels for solr service                       | {}                             |
+| `service.type`                   | Service type for default solr service                    | `ClusterIP`                    |
+| `service.nodePorts`              | Node ports for the service                               | `{}`                           |
+| `service.loadBalancerIP`         | loadBalancerIP if service.type is `LoadBalancer`         | `nil`                          |
 | `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.apiVersion`             | Override default Ingress Api version                     | `nil`                          |
 | `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                    | `solr.local`               |
+| `ingress.hostname`               | Default host for the ingress resource                    | `solr.local`                   |
+| `ingress.pathType`               | Path type for the ingress resource                       | `ImplementationSpecific`       |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
 | `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
@@ -183,7 +185,7 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Zookeeper parameters
 
 | Parameter                                       | Description                                                                                                 | Default                                                                         |
-|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
 | :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
 | `zookeeper.enabled`                             | Enable Zookeeper deployment. Needed for Solr cloud.                                                         | `true`                                                                          |
 | `zookeeper.persistence.enabled`                 | Enabled persistence for Zookeeper                                                                           | `true`                                                                          |
@@ -195,32 +197,32 @@ The following tables lists the configurable parameters of the solr chart and the
 ### Exporter deployment parameters
 
 | Parameter                                       | Description                                                                                                 | Default                                                                         |
-|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
 | :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
 | `exporter.enabled`                              | Start a side-car prometheus exporter                                                                        | `false`                                                                         |
 | `exporter.image.registry`                       | Solr exporter image registry                                                                                | `docker.io`                                                                     |
-| `exporter.image.repository`                     | Solr exporter image name                                                                                    | `bitnami/solr-exporter`                                                        |
+| `exporter.image.repository`                     | Solr exporter image name                                                                                    | `bitnami/solr-exporter`                                                         |
 | `exporter.image.tag`                            | Solr exporter image tag                                                                                     | `{TAG_NAME}`                                                                    |
 | `exporter.image.pullPolicy`                     | Image pull policy                                                                                           | `IfNotPresent`                                                                  |
 | `exporter.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                            | `nil`                                                                           |
 | `exporter.configFile`                           | Config file for the Solr prometheus exporter                                                                | `/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml`   |
-| `port`                                          | Solr exporter port                                                                                          | `9983`                                                                          |
-| `threads`                                       | Number of Solr exporter Threads                                                                             | `7`                                                                             |
+| `exporter.port`                                 | Solr exporter port                                                                                          | `9983`                                                                          |
+| `exporter.threads`                              | Number of Solr exporter Threads                                                                             | `7`                                                                             |
 | `exporter.podLabels`                            | Additional labels for Metrics exporter pod                                                                  | {}                                                                              |
 | `exporter.podAnnotations`                       | Additional annotations for Metrics exporter pod                                                             | {}                                                                              |
 | `exporter.resources`                            | Exporter resource requests/limit                                                                            | Memory: `256Mi`, CPU: `100m`                                                    |
-| `exporter.service.type`                         | Kubernetes Service type (solr metrics)                                                                     | `ClusterIP`                                                                     |
+| `exporter.service.type`                         | Kubernetes Service type (solr metrics)                                                                      | `ClusterIP`                                                                     |
 | `exporter.service.annotations`                  | Annotations for the services to monitor.                                                                    | {}                                                                              |
 | `exporter.service.labels`                       | Additional labels for the metrics service                                                                   | {}                                                                              |
-| `exporter.service.loadBalancerIP`               | loadBalancerIP if solr metrics service type is `LoadBalancer`                                              | `nil`                                                                           |
+| `exporter.service.loadBalancerIP`               | loadBalancerIP if solr metrics service type is `LoadBalancer`                                               | `nil`                                                                           |
 | `exporter.command`                              | Override Solr entrypoint string.                                                                            | `nil`                                                                           |
 | `exporter.args`                                 | Arguments for the provided command if needed                                                                | `nil`                                                                           |
 | `exporter.podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                                                                            |
 | `exporter.podAntiAffinityPreset`                | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `soft`                                                                          |
 | `exporter.nodeAffinityPreset.type`              | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                                            |
 | `exporter.nodeAffinityPreset.key`               | Solr node label key to match Ignored if `affinity` is set.                                                  | `""`                                                                            |
-| `exporter.nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set.                                              | `[]`                                                                               |
-| `hostAliases`                                   | Add deployment host aliases                                                                                 | `[]`                                                                               |
+| `exporter.nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set.                                              | `[]`                                                                            |
+| `exporter.hostAliases`                          | Add deployment host aliases                                                                                 | `[]`                                                                            |
 | `exporter.affinity`                             | Affinity for Solr pods assignment                                                                           | `{}` (evaluated as a template)                                                  |
 | `exporter.nodeSelector`                         | Node labels for Solr pods assignment                                                                        | `{}` (evaluated as a template)                                                  |
 | `exporter.tolerations`                          | Tolerations for Solr pods assignment                                                                        | `[]` (evaluated as a template)                                                  |
@@ -246,7 +248,14 @@ The following tables lists the configurable parameters of the solr chart and the
 | `exporter.extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods (evaluated as a template)                          | `nil`                                                                           |
 | `exporter.initContainers`                       | Init containers to add to the cronjob container                                                             | `{}`                                                                            |
 | `exporter.sidecars`                             | Attach additional containers to the pod (evaluated as a template)                                           | `nil`                                                                           |
-
+| `exporter.podSecurityContext.fsGroup`           | Group ID for the pods.                                                                                      | `1001`                                                                          |
+| `exporter.containerSecurityContext.runAsUser`   | User ID for the containers.                                                                                 | `1001`                                                                          |
+| `exporter.service.port`                         | Kubernetes Service port.                                                                                    | `6379`                                                                          |
+| `exporter.service.annotations`                  | annotations for solr exporter service                                                                       | {}                                                                              |
+| `exporter.service.labels`                       | Additional labels for solr exporter service                                                                 | {}                                                                              |
+| `exporter.service.type`                         | Service type for default solr exporter service                                                              | `ClusterIP`                                                                     |
+| `exporter.service.nodePorts`                    | Node ports for the service                                                                                  | `{}`                                                                            |
+| `exporter.service.loadBalancerIP`               | loadBalancerIP if service.type is `LoadBalancer`                                                            | `nil`                                                                           |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
