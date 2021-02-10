@@ -517,8 +517,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.service.http.nodePort`                 | Service HTTP node port                                                                                         | `nil`                                   |
 | `receive.service.grpc.port`                     | Service GRPC port                                                                                              | `10901`                                 |
 | `receive.service.grpc.nodePort`                 | Service GRPC node port                                                                                         | `nil`                                   |
-| `receive.service.remoteWrite.port`              | Service Remote Write port                                                                                      | `19291`                                 |
-| `receive.service.remoteWrite.nodePort`          | Service Remote Write node port                                                                                 | `nil`                                   |
+| `receive.service.remoteWrite.port`              | Service remote write port                                                                                      | `19291`                                 |
+| `receive.service.remoteWrite.nodePort`          | Service remote write node port                                                                                 | `nil`                                   |
 | `receive.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                               | `nil`                                   |
 | `receive.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                          | `[]`                                    |
 | `receive.service.annotations`                   | Annotations for Thanos Receive service                                                                         | `{}`                                    |
