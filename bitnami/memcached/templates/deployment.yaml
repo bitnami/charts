@@ -70,7 +70,7 @@ spec:
             {{- toYaml .Values.extraEnv | nindent 12 }}
             {{- end }}
           ports:
-            - name: memcache
+            - name: {{ .Values.portName }}
               containerPort: 11211
           livenessProbe:
             tcpSocket:
@@ -99,7 +99,7 @@ spec:
           image: {{ template "memcached.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           ports:
-            - name: metrics
+            - name: {{ .Values.metrics.portName }}
               containerPort: 9150
           livenessProbe:
             httpGet:
