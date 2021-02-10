@@ -662,8 +662,9 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
 
+# GA since v1.20
 startupProbe:
-  enabled: false # GA since v1.20
+  enabled: false
   initialDelaySeconds: 30
   periodSeconds: 15
   timeoutSeconds: 5
