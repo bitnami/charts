@@ -31,7 +31,7 @@ Use cases for this small size data platform setup include: data and application 
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1 --render-subchart-notes
+helm install my-release bitnami/dataplatform-bp1 
 ```
 
 ## Introduction
@@ -67,7 +67,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/dataplatform-bp1 --render-subchart-notes
+helm install my-release bitnami/dataplatform-bp1
 ```
 
 These commands deploy Data Platform on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists recommended configurations of the parameters to bring up an optimal and resilient data platform. Please refer the individual charts for the remaining set of configurable parameters. 
@@ -173,16 +173,25 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set kafka.replicaCount=3 \
-  --render-subchart-notes \
   bitnami/dataplatform-bp1
 ```
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
+Also, in case you need to deploy the data platform skipping any one component, you can specify 'enabled' parameter using the `--set key=value[,key=value]` argument to `helm install`. For Example,
+
+```console
+helm install my-release \
+  --set solr.enabled=false \
+  bitnami/dataplatform-bp1
+```
+
+The above command deploys the data platform without Solr i.e. with Kafka and Spark only.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml --render-subchart-notes bitnami/dataplatform-bp1
+helm install my-release -f values.yaml bitnami/dataplatform-bp1
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -198,6 +207,8 @@ Bitnami will release a new chart updating its containers if a new version of the
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
 

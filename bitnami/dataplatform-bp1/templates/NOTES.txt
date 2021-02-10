@@ -1,15 +1,343 @@
 ** Data Platform Blueprint1 is being deployed, it could take some time to be ready **
 
-The following components are being deployed to your cluster: 
+The following components are being deployed to your cluster as part of this blueprint: 
 
 {{- if  (.Values.kafka.enabled) }}
+***********
 ** Kafka **
-{{- end }}
-{{- if  (.Values.spark.enabled) }}
-** Spark **
-{{- end }}
-{{- if  (.Values.solr.enabled) }}
-** Solr **
+***********
+{{- $replicaCount := int .Values.kafka.replicaCount -}}
+{{- $releaseNamespace := .Release.Namespace -}}
+{{- $clusterDomain := .Values.kafka.clusterDomain -}}
+{{- $fullname := include "dp.kafka.fullname" . -}}
+{{- $clientProtocol := include "kafka.listenerType" ( dict "protocol" .Values.kafka.auth.clientProtocol ) -}}
+{{- $servicePort := int .Values.kafka.service.port -}}
+{{- $loadBalancerIPListLength := len .Values.kafka.externalAccess.service.loadBalancerIPs -}}
+{{- $saslProtocols := list "sasl" "sasl_tls" -}}
+
+{{- if and .Values.kafka.externalAccess.enabled (not .Values.kafka.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.kafka.externalAccess.service.type "LoadBalancer") }}
+
+###############################################################################
+### ERROR: You enabled external access to Kafka brokers without specifying  ###
+###   the array of load balancer IPs for Kafka brokers.                     ###
+###############################################################################
+
+This deployment will be incomplete until you configure the array of load balancer
+IPs for Kafka brokers. To complete your deployment follow the steps below:
+
+1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
+
+    kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ $fullname }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w
+
+2. Obtain the load balancer IPs and upgrade your chart:
+
+    {{- range $i, $e := until $replicaCount }}
+    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    {{- end }}
+
+3. Upgrade you chart:
+
+    helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+      --set replicaCount={{ $replicaCount }} \
+      --set externalAccess.enabled=true \
+      {{- range $i, $e := until $replicaCount }}
+      --set externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
+      {{- end }}
+      --set externalAccess.service.type=LoadBalancer
+
+{{- else }}
+
+{{- if and (or (eq .Values.kafka.service.type "LoadBalancer") .Values.kafka.externalAccess.enabled) (eq .Values.kafka.auth.clientProtocol "plaintext") }}
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "serviceType=LoadBalancer" and not configuring the authentication
+    you have most likely exposed the Kafka service externally without any
+    authentication mechanism.
+
+    For security reasons, we strongly suggest that you switch to "ClusterIP" or
+    "NodePort". As alternative, you can also configure the Kafka authentication.
+
+---------------------------------------------------------------------------------------------
 {{- end }}
 
-In order to get detailed deployment information please use --render-subchart-notes flag while installing this chart.
+** Please be patient while the chart is being deployed **
+
+Kafka can be accessed by consumers via port {{ $servicePort }} on the following DNS name from within your cluster:
+
+    {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
+
+Each Kafka broker can be accessed by producers via port {{ $servicePort }} on the following DNS name(s) from within your cluster:
+
+{{- $brokerList := list }}
+{{- range $e, $i := until $replicaCount }}
+{{- $brokerList = append $brokerList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $servicePort) }}
+{{- end }}
+{{ join "\n" $brokerList | nindent 4 }}
+
+
+{{- if has .Values.kafka.auth.clientProtocol $saslProtocols -}}
+
+You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files by executing these commands:
+
+    - kafka_jaas.conf:
+
+cat > kafka_jaas.conf <<EOF
+KafkaClient {
+{{- if .Values.kafka.auth.saslMechanisms | regexFind "scram" }}
+org.apache.kafka.common.security.scram.ScramLoginModule required
+{{- else }}
+org.apache.kafka.common.security.plain.PlainLoginModule required
+{{- end }}
+username="{{ index .Values.kafka.auth.jaas.clientUsers 0 }}"
+password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+};
+EOF
+
+    - client.properties:
+
+cat > client.properties <<EOF
+security.protocol={{ $clientProtocol }}
+{{- if .Values.kafka.auth.saslMechanisms | regexFind "scram-sha-256" }}
+sasl.mechanism=SCRAM-SHA-256
+{{- else if  .Values.kafka.auth.saslMechanisms | regexFind "scram-sha-512" }}
+sasl.mechanism=SCRAM-SHA-512
+{{- else }}
+sasl.mechanism=PLAIN
+{{- end }}
+{{- if eq .Values.kafka.auth.clientProtocol "sasl_tls" }}
+ssl.truststore.location=/tmp/kafka.truststore.jks
+{{- if .Values.kafka.auth.jksPassword }}
+ssl.truststore.password={{ .Values.kafka.auth.jksPassword }}
+{{- end }}
+{{- end }}
+{{- if eq .Values.kafka.auth.tlsEndpointIdentificationAlgorithm "" }}
+ssl.endpoint.identification.algorithm=
+{{- end }}
+EOF
+{{- end }}
+
+To create a pod that you can use as a Kafka client run the following commands:
+
+    kubectl run {{ $fullname }}-client --restart='Never' --image {{ template "dp.kafka.image" . }} --namespace {{ $releaseNamespace }} --command -- sleep infinity
+    {{- if has .Values.kafka.auth.clientProtocol $saslProtocols -}}
+    kubectl cp --namespace {{ $releaseNamespace }} /path/to/client.properties {{ $fullname }}-client:/tmp/client.properties
+    kubectl cp --namespace {{ $releaseNamespace }} /path/to/kafka_jaas.conf {{ $fullname }}-client:/tmp/kafka_jaas.conf
+    {{- if eq .Values.auth.clientProtocol "sasl_tls" }}
+    kubectl cp --namespace {{ $releaseNamespace }} ./kafka.truststore.jks {{ $fullname }}-client:/tmp/kafka.truststore.jks
+    {{- end }}
+    {{- end }}
+    kubectl exec --tty -i {{ $fullname }}-client --namespace {{ $releaseNamespace }} -- bash
+    {{- if has .Values.kafka.auth.clientProtocol $saslProtocols -}}
+    export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_jaas.conf"
+    {{- end }}
+
+    PRODUCER:
+        kafka-console-producer.sh \
+            {{ if has .Values.kafka.auth.clientProtocol $saslProtocols }}--producer.config /tmp/client.properties \{{ end }}
+            --broker-list {{ join "," $brokerList }} \
+            --topic test
+
+    CONSUMER:
+        kafka-console-consumer.sh \
+            {{ if has .Values.kafka.auth.clientProtocol $saslProtocols }}--consumer.config /tmp/client.properties \{{ end }}
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.kafka.service.port }} \
+            --topic test \
+            --from-beginning
+
+{{- if .Values.kafka.externalAccess.enabled }}
+
+To connect to your Kafka server from outside the cluster, follow the instructions below:
+
+{{- if eq "NodePort" .Values.kafka.externalAccess.service.type }}
+{{- if .Values.kafka.externalAccess.service.domain }}
+
+    Kafka brokers domain: Use your provided hostname to reach Kafka brokers, {{ .Values.kafka.externalAccess.service.domain }}
+
+{{- else }}
+
+    Kafka brokers domain: You can get the external node IP from the Kafka configuration file with the following commands (Check the EXTERNAL listener)
+
+        1. Obtain the pod name:
+
+        kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ $fullname }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka"
+
+        2. Obtain pod configuration:
+
+        kubectl exec -it KAFKA_POD -- cat /opt/bitnami/kafka/config/server.properties | grep advertised.listeners
+
+{{- end }}
+
+    Kafka brokers port: You will have a different node port for each Kafka broker. You can get the list of configured node ports using the command below:
+
+        echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ $fullname }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
+
+{{- else if contains "LoadBalancer" .Values.kafka.externalAccess.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ $fullname }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w'
+
+    Kafka Brokers domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
+
+        echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ $fullname }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+
+    Kafka Brokers port: {{ .Values.kafka.externalAccess.service.port }}
+
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- end }}
+{{- if  (.Values.spark.enabled) }}
+***********
+** Spark **
+***********
+
+{{- $sparkfullname := include "dp.spark.fullname" . -}}
+
+1. Get the Spark master WebUI URL by running these commands:
+{{- if .Values.spark.ingress.enabled }}
+
+  export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ $sparkfullname }}-ingress -o jsonpath='{.spec.rules[0].host}')
+  echo "Spark-master URL: http://$HOSTNAME/"
+
+{{- else -}}
+{{- if contains "NodePort" .Values.spark.service.type }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='http')].nodePort}" services {{ include "dp.spark.master.service.name" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+{{- else if contains "LoadBalancer" .Values.spark.service.type }}
+
+    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+    You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "dp.spark.master.service.name" . }}'
+
+  export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "dp.spark.master.service.name" . }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
+  echo http://$SERVICE_IP:{{ .Values.spark.service.webPort }}
+
+{{- else if contains "ClusterIP" .Values.spark.service.type }}
+
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "dp.spark.master.service.name" . }} {{ default "80" .Values.spark.service.webPort }}:{{ default "80" .Values.spark.service.webPort }}
+  echo "Visit http://127.0.0.1:{{ .Values.spark.service.webPort }} to use your application"
+
+{{- end }}
+{{- end }}
+
+2. Submit an application to the cluster:
+
+  To submit an application to the cluster the spark-submit script must be used. That script can be
+  obtained at https://github.com/apache/spark/tree/master/bin. Also you can use kubectl run.
+
+{{- if or (eq "NodePort" .Values.spark.service.type) (eq "LoadBalancer" .Values.spark.service.type) }}
+
+  Run the commands below to obtain the master IP and submit your application.
+{{- end }}
+
+  export EXAMPLE_JAR=$(kubectl exec -ti --namespace {{ .Release.Namespace }} {{ $sparkfullname }}-worker-0 -- find examples/jars/ -name 'spark-example*\.jar' | tr -d '\r')
+{{- if eq "NodePort" .Values.spark.service.type }}
+  export SUBMIT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='cluster')].nodePort}" services {{ include "dp.spark.master.service.name" . }})
+  export SUBMIT_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+    --image {{ template "spark.image" . }} \
+    -- spark-submit --master spark://$SUBMIT_IP:$SUBMIT_PORT \
+    --class org.apache.spark.examples.SparkPi \
+    --deploy-mode cluster \
+    $EXAMPLE_JAR 1000
+
+{{- else if eq "LoadBalancer" .Values.spark.service.type }}
+  export SUBMIT_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "dp.spark.master.service.name" . }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
+
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+    --image {{ template "spark.image" . }} \
+    -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.spark.service.clusterPort }} \
+    --deploy-mode cluster \
+    --class org.apache.spark.examples.SparkPi \
+    $EXAMPLE_JAR 1000
+
+{{- else }}
+
+  kubectl exec -ti --namespace {{ .Release.Namespace }} {{ $sparkfullname }}-worker-0 -- spark-submit --master spark://{{ include "dp.spark.master.service.name" . }}:{{ .Values.spark.service.clusterPort }} \
+    --class org.apache.spark.examples.SparkPi \
+    $EXAMPLE_JAR 5
+
+** IMPORTANT: When submit an application from outside the cluster service type should be set to the NodePort or LoadBalancer. **
+
+{{- end }}
+
+** IMPORTANT: When submit an application the --master parameter should be set to the service IP, if not, the application will not resolve the master. **
+
+** Please be patient while the chart is being deployed **
+
+{{- end }}
+{{- if  (.Values.solr.enabled) }}
+**********
+** Solr **
+**********
+{{- if (eq .Values.solr.service.type "LoadBalancer")  }}
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "serviceType=LoadBalancer" and not configuring the authentication
+    you have most likely exposed the solr externally without any
+    authentication mechanism.
+
+    For security reasons, we strongly suggest that you switch to "ClusterIP" or
+    "NodePort". As alternative, you can also configure the Solr authentication.
+
+---------------------------------------------------------------------------------------------
+{{- end }}
+
+
+** Please be patient while the chart is being deployed **
+
+Solr can be accessed via port {{ .Values.solr.service.port }} on the following DNS name from within your cluster:
+
+{{ include "dp.solr.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.solr.clusterDomain }}:{{ .Values.solr.service.port }}
+
+{{- if .Values.solr.authentication.enabled }}
+
+To get the Solr credentials execute the following commands:
+
+    echo Username: {{ .Values.solr.authentication.adminUsername }}
+    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "dp.solr.secretName" . }} -o jsonpath="{.data.solr-password}" | base64 --decode)
+
+{{- end }}
+
+To connect to your Solr from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.solr.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "dp.solr.fullname" . }})
+    echo "Go to ${NODE_IP}:${NODE_PORT}"
+
+{{- else if contains "LoadBalancer" .Values.solr.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "dp.solr.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "dp.solr.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    echo "Go to ${SERVICE_IP}:{{ .Values.solr.service.port }}"
+
+{{- else if contains "ClusterIP" .Values.solr.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "dp.solr.fullname" . }} {{ .Values.solr.service.port }}:{{ .Values.solr.service.port }} &
+
+    Go to localhost:{{ .Values.solr.service.port }}
+
+{{- end }}
+
+{{- if .Values.solr.exporter.enabled  }}
+
+** Solr Prometheus metrics are exported to the following endpoints: **
+
+  * Internally, within the kubernetes cluster on:
+
+{{ include "dp.solr.exporter-name" . }}.{{ .Release.Name }}.svc.{{ .Values.solr.clusterDomain }}:{{ .Values.solr.exporter.port }}/solr
+
+{{- end }}
+
+{{- end }}
