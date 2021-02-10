@@ -6,6 +6,6 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
 data:
-  hashrings.json: |
-    {{ .Values.receive.config  | toJson | nindent 4 }}
+  hashrings.json: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.receive.config  "context" $) | nindent 4 }}
 {{ end }}
