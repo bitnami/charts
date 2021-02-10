@@ -222,7 +222,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | Parameter                                         | Description                                                                                       | Default                        |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
 | `service.type`                                    | Kubernetes Service type                                                                           | `ClusterIP`                    |
-| `service.nameOverride`                            | MongoDB&reg; service name                                                                         | `{mongodb.fullname}-headless`  | 
+| `service.nameOverride`                            | MongoDB&reg; service name                                                                         | `{mongodb.fullname}-headless`  |
 | `service.port`                                    | MongoDB&reg; service port                                                                         | `27017`                        |
 | `service.portName`                                | MongoDB&reg; service port name                                                                    | `mongodb`                      |
 | `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                       | `""`                           |
@@ -368,6 +368,8 @@ $ helm install my-release \
 ```
 
 The above command sets the MongoDB&reg; `root` account password to `secretpassword`. Additionally, it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
