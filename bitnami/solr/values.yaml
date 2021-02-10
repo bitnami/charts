@@ -379,9 +379,6 @@ persistence:
   ## Mount point for persistence
   ##
   mountPath: /bitnami/solr
-  ## Labels to match persisten volume
-  ##
-  # matchLabels:
 
 ## Specifies whether a ServiceAccount should be created
 ##

@@ -17,10 +17,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
+-   Kubernetes 1.12+
+-   Helm 3.1.0
+-   PV provisioner support in the underlying infrastructure
+-   ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -65,41 +65,46 @@ The following tables lists the configurable parameters of the solr chart and the
 
 ### Common parameters
 
-| Parameter                               | Description                                                                                                                                           | Default                                                   |
-|:----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------|
-| :-------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
-| `nameOverride`                          | String to partially override solr.fullname template with a string                                                                                     | `nil`                                                     |
-| `fullnameOverride`                      | String to fully override solr.fullname template with a string                                                                                         | `nil`                                                     |
-| `clusterDomain`                         | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                           |
-| `commonLabels`                          | Common lables to add to the Kuberentes objects                                                                                                        | `{}`                                                      |
-| `commonAnnotations`                     | Common annotations to add to the Kubernetes objects                                                                                                   |                                                           |
-| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template).                                                                          | `nil`                                                     |
-| `replicaCount`                          | Number of solr replicas                                                                                                                               | `{}`                                                      |
-| `image.registry`                        | Solr Image registry                                                                                                                                   | `docker.io`                                               |
-| `image.repository`                      | Solr Image name                                                                                                                                       | `bitnami/solr`                                            |
-| `image.tag`                             | Solr Image tag                                                                                                                                        | `{TAG_NAME}`                                              |
-| `image.pullPolicy`                      | Image pull policy                                                                                                                                     | `IfNotPresent`                                            |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                      | `nil`                                                     |
-| `podSecurityContext.fsGroup`            | Group ID for the pods.                                                                                                                                | `1001`                                                    |
-| `containerSecurityContext.runAsUser`    | User ID for the containers.                                                                                                                           | `1001`                                                    |
-| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                                                                  | `false`                                                   |
-| `serviceAccount.name`                   | The name of the ServiceAccount to create                                                                                                              | Generated using the `common.names.fullname` template      |
-| `persistence.enabled`                   | Use a PVC to persist data.                                                                                                                            | `true`                                                    |
-| `persistence.storageClass`              | Storage class of backing PVC                                                                                                                          | `generic`                                                 |
-| `persistence.accessModes`               | Persistent Volume Access Modes                                                                                                                        | `[ReadWriteOnce]`                                         |
-| `persistence.size`                      | Size of data volume                                                                                                                                   | `8Gi`                                                     |
-| `persistence.matchLabels`               | matchLabels persistent volume selector                                                                                                                | `{}`                                                      |
-| `updateStrategy`                        | Update strategy for StatefulSet                                                                                                                       | onDelete                                                  |
-| `rollingUpdate`                         | Rolling Update configuration                                                                                                                          | `nil`                                                     |
-| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created                                                                                               | `false`                                                   |
-| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work)   | `false`                                                   |
-| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                      | `docker.io`                                               |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                          | `bitnami/minideb`                                         |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                           | `buster`                                                  |
-| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                   | `Always`                                                  |
-| `volumePermissions.resources`           | Init container volume-permissions CPU/Memory resource requests/limits                                                                                 | {}                                                        |
-| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                      | `[]` (does not add image pull secrets to deployed pods)   |
-
+| Parameter                                                 | Description                                                                                                                                           | Default                                                   |
+|:----------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------|
+| :--------------------------------------                   | :---------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
+| `nameOverride`                                            | String to partially override solr.fullname template with a string                                                                                     | `nil`                                                     |
+| `fullnameOverride`                                        | String to fully override solr.fullname template with a string                                                                                         | `nil`                                                     |
+| `clusterDomain`                                           | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                           |
+| `commonLabels`                                            | Common lables to add to the Kuberentes objects                                                                                                        | `{}`                                                      |
+| `commonAnnotations`                                       | Common annotations to add to the Kubernetes objects                                                                                                   |                                                           |
+| `extraDeploy`                                             | Array of extra objects to deploy with the release (evaluated as a template).                                                                          | `nil`                                                     |
+| `replicaCount`                                            | Number of solr replicas                                                                                                                               | `{}`                                                      |
+| `image.registry`                                          | Solr Image registry                                                                                                                                   | `docker.io`                                               |
+| `image.repository`                                        | Solr Image name                                                                                                                                       | `bitnami/solr`                                            |
+| `image.tag`                                               | Solr Image tag                                                                                                                                        | `{TAG_NAME}`                                              |
+| `image.pullPolicy`                                        | Image pull policy                                                                                                                                     | `IfNotPresent`                                            |
+| `image.pullSecrets`                                       | Specify docker-registry secret names as an array                                                                                                      | `nil`                                                     |
+| `podLabels`                                               | Additional labels for pods pod                                                                                                                        | `{}`                                                      |
+| `podAnnotations`                                          | Additional annotations for pods                                                                                                                       | {}                                                        |
+| `podSecurityContext.fsGroup`                              | Group ID for the pods.                                                                                                                                | `1001`                                                    |
+| `containerSecurityContext.runAsUser`                      | User ID for the containers.                                                                                                                           | `1001`                                                    |
+| `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created                                                                                                  | `false`                                                   |
+| `serviceAccount.name`                                     | The name of the ServiceAccount to create                                                                                                              | Generated using the `common.names.fullname` template      |
+| `persistence.enabled`                                     | Use a PVC to persist data.                                                                                                                            | `true`                                                    |
+| `persistence.annotations`                                 | Persistence Annotations for Solr                                                                                                                      | `{}`                                                      |
+| `persistence.mountPath`                                   | Persistence mount path for Solr                                                                                                                       | `{}`                                                      |
+| `persistence.storageClass`                                | Storage class of backing PVC                                                                                                                          | `generic`                                                 |
+| `persistence.accessModes`                                 | Persistent Volume Access Modes                                                                                                                        | `[ReadWriteOnce]`                                         |
+| `persistence.size`                                        | Size of data volume                                                                                                                                   | `8Gi`                                                     |
+| `updateStrategy`                                          | Update strategy for StatefulSet                                                                                                                       | onDelete                                                  |
+| `rollingUpdate`                                           | Rolling Update configuration                                                                                                                          | `nil`                                                     |
+| `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work)   | `false`                                                   |
+| `volumePermissions.image.registry`                        | Init container volume-permissions image registry                                                                                                      | `docker.io`                                               |
+| `volumePermissions.image.repository`                      | Init container volume-permissions image name                                                                                                          | `bitnami/minideb`                                         |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                           | `buster`                                                  |
+| `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                   | `Always`                                                  |
+| `volumePermissions.resources`                             | Init container volume-permissions CPU/Memory resource requests/limits                                                                                 | {}                                                        |
+| `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                      | `[]` (does not add image pull secrets to deployed pods)   |
+| `volumePermissions.containerSecurityContext.enabled`      | Container security context for volume permissions                                                                                                     | `true`                                                    |
+| `volumePermissions.containerSecurityContext.runAsUser`    | Container security context fsGroup for volume permissions                                                                                             | `1001`                                                    |
+| `volumePermissions.containerSecurityContext.runAsNonRoot` | Container security context runAsNonRoot for volume permissions                                                                                        | `true`                                                    |
+| `lifecycleHooks`                                          | Lifecycle hook to automate configuration before or after start                                                                                        | `{}`                                                      |
 
 ### Solr statefulset parameters
 
@@ -163,7 +168,8 @@ The following tables lists the configurable parameters of the solr chart and the
 | `service.annotations`            | annotations for solr service                             | {}                             |
 | `service.labels`                 | Additional labels for solr service                       | {}                             |
 | `service.type`                   | Service type for default solr service                    | `ClusterIP`                    |
-| `service.nodePorts`              | Node ports for the service                               | `{}`                           |
+| `service.nodePorts.http`         | Node ports for the http service                          | `""`                           |
+| `service.nodePorts.https`        | Node ports for the https service                         | `""`                           |
 | `service.loadBalancerIP`         | loadBalancerIP if service.type is `LoadBalancer`         | `nil`                          |
 | `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
 | `ingress.apiVersion`             | Override default Ingress Api version                     | `nil`                          |
@@ -193,6 +199,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `zookeeper.replicaCount`                        | Number of Zookeeper cluster replicas                                                                        | `3`                                                                             |
 | `zookeeper.fourlwCommandsWhitelist`             | Zookeeper four letters commands to enable                                                                   | `srvr,mntr,conf,ruok`                                                           |
 | `externalZookeeper.servers`                     | Servers for an already existing Zookeeper.                                                                  | `[]`                                                                            |
+| `zookeeper.service.publishNotReadyAddresses`    | Publish not Ready ips for zookeeper                                                                         | `true`                                                                          |
 
 ### Exporter deployment parameters
 
@@ -205,6 +212,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `exporter.image.tag`                            | Solr exporter image tag                                                                                     | `{TAG_NAME}`                                                                    |
 | `exporter.image.pullPolicy`                     | Image pull policy                                                                                           | `IfNotPresent`                                                                  |
 | `exporter.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                            | `nil`                                                                           |
+| `exporter.updateStrategy`                       | Specify exporter deployment update strategy                                                                 | `RollingUpdate`                                                                 |
 | `exporter.configFile`                           | Config file for the Solr prometheus exporter                                                                | `/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml`   |
 | `exporter.port`                                 | Solr exporter port                                                                                          | `9983`                                                                          |
 | `exporter.threads`                              | Number of Solr exporter Threads                                                                             | `7`                                                                             |
@@ -215,6 +223,9 @@ The following tables lists the configurable parameters of the solr chart and the
 | `exporter.service.annotations`                  | Annotations for the services to monitor.                                                                    | {}                                                                              |
 | `exporter.service.labels`                       | Additional labels for the metrics service                                                                   | {}                                                                              |
 | `exporter.service.loadBalancerIP`               | loadBalancerIP if solr metrics service type is `LoadBalancer`                                               | `nil`                                                                           |
+| `exporter.service.nodePorts.http`               | Node ports for the http exporter service                                                                    | `""`                                                                            |
+| `exporter.service.nodePorts.https`              | Node ports for the https exporter service                                                                   | `""`                                                                            |
+| `exporter.service.loadBalancerSourceRanges`     | Exporter Load Balancer Source ranges                                                                        | `nil`                                                                           |
 | `exporter.command`                              | Override Solr entrypoint string.                                                                            | `nil`                                                                           |
 | `exporter.args`                                 | Arguments for the provided command if needed                                                                | `nil`                                                                           |
 | `exporter.podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                                                                            |
@@ -273,7 +284,7 @@ $ helm install my-release -f values.yaml bitnami/solr
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
-
+>
 > NOTE: The Solr exporter is not supported when deploying Solr with authentication enabled.
 
 ## Configuration and installation details
