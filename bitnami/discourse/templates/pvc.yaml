@@ -18,6 +18,6 @@ spec:
       storage: {{ .Values.persistence.size | quote }}
   {{ include "discourse.storageClass" . }}
   {{- if .Values.persistence.selector }}
-  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 4 }}
   {{- end -}}
 {{- end }}
