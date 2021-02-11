@@ -3,6 +3,7 @@
 The following components are being deployed to your cluster:
 
 {{- if .Values.kafka.enabled }}
+
 ***********
 ** Kafka **
 ***********
@@ -14,6 +15,7 @@ To access the Kafka service from your local machine execute the following:
 {{- end -}}
 
 {{- if .Values.solr.enabled }}
+
 **********
 ** Solr **
 **********
@@ -25,6 +27,7 @@ To access the Solr service from your local machine execute the following:
 {{- end -}}
 
 {{- if .Values.spark.enabled }}
+
 ***********
 ** Spark **
 ***********
@@ -36,6 +39,7 @@ To access the Spark service from your local machine execute the following:
 {{- end -}}
 
 {{- if .Values.zookeeper.enabled }}
+
 ***************
 ** Zookeeper **
 ***************
@@ -44,15 +48,4 @@ To access the Zookeeper service from your local machine execute the following:
 
    kubectl port-forward --namespace {{ .Release.Namespace }} svc/zookeeper-{{ include "common.names.fullname" . }} 2181:2181 &
    echo "Zookeeper service available at : http://127.0.0.1:2181"
-{{- end -}}
-
-{{- if .Values.wavefront.enabled }}
-***************
-** Wavefront **
-***************
-
-To access the Wavefront service from your local machine execute the following:
-
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/wavefront-{{ include "common.names.fullname" . }} 2878:2878 &
-   echo "Wavefront service available at : http://127.0.0.1:2878"
 {{- end -}}
