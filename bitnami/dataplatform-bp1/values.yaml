@@ -26,11 +26,11 @@ zookeeper:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-          matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-                - zookeeper
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - zookeeper
           topologyKey: "kubernetes.io/hostname"
 
 ## Kafka Subchart parameters
