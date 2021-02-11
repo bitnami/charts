@@ -91,20 +91,6 @@ The following tables lists the recommended configurations for each application u
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
-### Common parameters
-
-| Parameter     | Description                                       | Default                         |
-|:--------------|:--------------------------------------------------|:--------------------------------|
-| `extraDeploy` | Array of extra objects to deploy with the release | `nil` (evaluated as a template) |
-
-### RBAC parameters
-
-| Parameter               | Description                                   | Default                                      |
-|:------------------------|:----------------------------------------------|:---------------------------------------------|
-| `serviceAccount.create` | Enable creation of ServiceAccount             | `true`                                       |
-| `serviceAccount.name`   | Name of the created serviceAccount            | Generated using the common.fullname template |
-| `rbac.create`           | Whether to create & use RBAC resources or not | `false`                                      |
-
 ### Zookeeper chart parameters
 
 Parameters below are set as per the recommended values, they can be overwritten if required.
@@ -131,7 +117,7 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | `kafka.resources.requests`  | The requested resources for Kafka containers for a small kubernetes cluster | Kafka pods Resource requests set for optimal resource usage                          |
 | `kafka.affinity`            | Affinity for pod assignment                                                 | Kafka pods affinity rules set for best possible resiliency (evaluated as a template) |
 | `kafka.zookeeper.enabled`   | Switch to enable or disable the Zookeeper helm chart                        | `false` Common Zookeeper deployment used for kafka and solr                          |
-| `externalZookeeper.servers` | Server or list of external Zookeeper servers to use                         | Zookeeper installed as a subchart to be used                                         |
+| `kafka.externalZookeeper.servers` | Server or list of external Zookeeper servers to use                         | Zookeeper installed as a subchart to be used                                         |
 
 ### Solr chart parameters
 

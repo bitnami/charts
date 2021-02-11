@@ -11,7 +11,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the proper Kafka image name
 */}}
@@ -31,7 +30,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
-
 
 {{- /*
 Return the Spark Service name. As we use a headless service we need to append -master-svc to
@@ -54,12 +52,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-
 {{/* Solr credential secret name */}}
 {{- define "dp.solr.secretName" -}}
 {{- coalesce .Values.solr.existingSecret (include "dp.solr.fullname" .) -}}
 {{- end -}}
-
 
 {{/*
 Define the name of the solr exporter

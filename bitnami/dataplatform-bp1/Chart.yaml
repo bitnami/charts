@@ -10,11 +10,11 @@ dependencies:
   - condition: spark.enabled
     name: spark
     repository: https://charts.bitnami.com/bitnami
-    version: 4.x.x
+    version: 5.x.x
   - condition: solr.enabled
     name: solr
     repository: https://charts.bitnami.com/bitnami
-    version: 0.1.0
+    version: 0.x.x
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
@@ -32,6 +32,7 @@ keywords:
   - kafka
   - spark
   - solr
+  - zookeeper
   - apache
 maintainers:
   - email: containers@bitnami.com
@@ -46,4 +47,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-solr
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 1.0.0
+version: 0.1.0

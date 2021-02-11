@@ -8,24 +8,6 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Specifies whether RBAC resources should be created
-##
-rbac:
-  create: true
-
-## Specifies whether a ServiceAccount should be created
-##
-serviceAccount:
-  create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
-  name:
-
 zookeeper:
   replicaCount: 3
   ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
@@ -188,8 +170,3 @@ solr:
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
-
-## Wavefront Subchart parameters
-##
-wavefront:
-  enabled: false
