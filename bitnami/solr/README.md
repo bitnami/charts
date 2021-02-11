@@ -56,114 +56,111 @@ The following tables lists the configurable parameters of the solr chart and the
 
 ### Global parameters
 
-| Parameter                   | Description                                       | Default                                                   |
-|:----------------------------|:--------------------------------------------------|:----------------------------------------------------------|
-| :-------------------------- | :------------------------------------------------ | :-------------------------------------------------------- |
-| `global.imageRegistry`      | Global Docker image registry                      | `nil`                                                     |
-| `global.imagePullSecrets`   | Global Docker registry secret names as an array   | `[]` (does not add image pull secrets to deployed pods)   |
-| `global.storageClass`       | Global storage class for dynamic provisioning     | `nil`                                                     |
+| Parameter                 | Description                                         | Default                                                     |
+| ------------------------- | --------------------------------------------------- | ----------------------------------------------------------- |
+| `global.imageRegistry`    | Global Docker image registry                        | `nil`                                                       |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array     | `[]` (does not add image pull secrets to deployed pods)     |
+| `global.storageClass`     | Global storage class for dynamic provisioning       | `nil`                                                       |
 
 ### Common parameters
 
-| Parameter                                                 | Description                                                                                                                                           | Default                                                   |
-|:----------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------|
-| :--------------------------------------                   | :---------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
-| `nameOverride`                                            | String to partially override solr.fullname template with a string                                                                                     | `nil`                                                     |
-| `fullnameOverride`                                        | String to fully override solr.fullname template with a string                                                                                         | `nil`                                                     |
-| `clusterDomain`                                           | Kubernetes cluster domain                                                                                                                             | `cluster.local`                                           |
-| `commonLabels`                                            | Common lables to add to the Kuberentes objects                                                                                                        | `{}`                                                      |
-| `commonAnnotations`                                       | Common annotations to add to the Kubernetes objects                                                                                                   |                                                           |
-| `extraDeploy`                                             | Array of extra objects to deploy with the release (evaluated as a template).                                                                          | `nil`                                                     |
-| `replicaCount`                                            | Number of solr replicas                                                                                                                               | `{}`                                                      |
-| `image.registry`                                          | Solr Image registry                                                                                                                                   | `docker.io`                                               |
-| `image.repository`                                        | Solr Image name                                                                                                                                       | `bitnami/solr`                                            |
-| `image.tag`                                               | Solr Image tag                                                                                                                                        | `{TAG_NAME}`                                              |
-| `image.pullPolicy`                                        | Image pull policy                                                                                                                                     | `IfNotPresent`                                            |
-| `image.pullSecrets`                                       | Specify docker-registry secret names as an array                                                                                                      | `nil`                                                     |
-| `podLabels`                                               | Additional labels for pods pod                                                                                                                        | `{}`                                                      |
-| `podAnnotations`                                          | Additional annotations for pods                                                                                                                       | {}                                                        |
-| `podSecurityContext.fsGroup`                              | Group ID for the pods.                                                                                                                                | `1001`                                                    |
-| `containerSecurityContext.runAsUser`                      | User ID for the containers.                                                                                                                           | `1001`                                                    |
-| `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created                                                                                                  | `false`                                                   |
-| `serviceAccount.name`                                     | The name of the ServiceAccount to create                                                                                                              | Generated using the `common.names.fullname` template      |
-| `persistence.enabled`                                     | Use a PVC to persist data.                                                                                                                            | `true`                                                    |
-| `persistence.annotations`                                 | Persistence Annotations for Solr                                                                                                                      | `{}`                                                      |
-| `persistence.mountPath`                                   | Persistence mount path for Solr                                                                                                                       | `{}`                                                      |
-| `persistence.storageClass`                                | Storage class of backing PVC                                                                                                                          | `generic`                                                 |
-| `persistence.accessModes`                                 | Persistent Volume Access Modes                                                                                                                        | `[ReadWriteOnce]`                                         |
-| `persistence.size`                                        | Size of data volume                                                                                                                                   | `8Gi`                                                     |
-| `updateStrategy`                                          | Update strategy for StatefulSet                                                                                                                       | onDelete                                                  |
-| `rollingUpdate`                                           | Rolling Update configuration                                                                                                                          | `nil`                                                     |
-| `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work)   | `false`                                                   |
-| `volumePermissions.image.registry`                        | Init container volume-permissions image registry                                                                                                      | `docker.io`                                               |
-| `volumePermissions.image.repository`                      | Init container volume-permissions image name                                                                                                          | `bitnami/minideb`                                         |
-| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                           | `buster`                                                  |
-| `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                   | `Always`                                                  |
-| `volumePermissions.resources`                             | Init container volume-permissions CPU/Memory resource requests/limits                                                                                 | {}                                                        |
-| `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                      | `[]` (does not add image pull secrets to deployed pods)   |
-| `volumePermissions.containerSecurityContext.enabled`      | Container security context for volume permissions                                                                                                     | `true`                                                    |
-| `volumePermissions.containerSecurityContext.runAsUser`    | Container security context fsGroup for volume permissions                                                                                             | `1001`                                                    |
-| `volumePermissions.containerSecurityContext.runAsNonRoot` | Container security context runAsNonRoot for volume permissions                                                                                        | `true`                                                    |
-| `lifecycleHooks`                                          | Lifecycle hook to automate configuration before or after start                                                                                        | `{}`                                                      |
+| Parameter                                                 | Description                                                  | Default                                                   |
+| --------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
+| `nameOverride`                                            | String to partially override solr.fullname template with a string | `nil`                                                     |
+| `fullnameOverride`                                        | String to fully override solr.fullname template with a string | `nil`                                                     |
+| `clusterDomain`                                           | Kubernetes cluster domain                                    | `cluster.local`                                           |
+| `commonLabels`                                            | Common lables to add to the Kuberentes objects               | `{}`                                                      |
+| `commonAnnotations`                                       | Common annotations to add to the Kubernetes objects          |                                                           |
+| `extraDeploy`                                             | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                     |
+| `replicaCount`                                            | Number of solr replicas                                      | `{}`                                                      |
+| `image.registry`                                          | Solr Image registry                                          | `docker.io`                                               |
+| `image.repository`                                        | Solr Image name                                              | `bitnami/solr`                                            |
+| `image.tag`                                               | Solr Image tag                                               | `{TAG_NAME}`                                              |
+| `image.pullPolicy`                                        | Image pull policy                                            | `IfNotPresent`                                            |
+| `image.pullSecrets`                                       | Specify docker-registry secret names as an array             | `nil`                                                     |
+| `podLabels`                                               | Additional labels for pods pod                               | `{}`                                                      |
+| `podAnnotations`                                          | Additional annotations for pods                              | {}                                                        |
+| `podSecurityContext.fsGroup`                              | Group ID for the pods.                                       | `1001`                                                    |
+| `containerSecurityContext.runAsUser`                      | User ID for the containers.                                  | `1001`                                                    |
+| `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created         | `false`                                                   |
+| `serviceAccount.name`                                     | The name of the ServiceAccount to create                     | Generated using the `common.names.fullname` template      |
+| `persistence.enabled`                                     | Use a PVC to persist data.                                   | `true`                                                    |
+| `persistence.annotations`                                 | Persistence Annotations for Solr                             | `{}`                                                      |
+| `persistence.mountPath`                                   | Persistence mount path for Solr                              | `{}`                                                      |
+| `persistence.storageClass`                                | Storage class of backing PVC                                 | `generic`                                                 |
+| `persistence.accessModes`                                 | Persistent Volume Access Modes                               | `[ReadWriteOnce]`                                         |
+| `persistence.size`                                        | Size of data volume                                          | `8Gi`                                                     |
+| `updateStrategy`                                          | Update strategy for StatefulSet                              | onDelete                                                  |
+| `rollingUpdate`                                           | Rolling Update configuration                                 | `nil`                                                     |
+| `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                   |
+| `volumePermissions.image.registry`                        | Init container volume-permissions image registry             | `docker.io`                                               |
+| `volumePermissions.image.repository`                      | Init container volume-permissions image name                 | `bitnami/minideb`                                         |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                  | `buster`                                                  |
+| `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy          | `Always`                                                  |
+| `volumePermissions.resources`                             | Init container volume-permissions CPU/Memory resource requests/limits | {}                                                        |
+| `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods)   |
+| `volumePermissions.containerSecurityContext.enabled`      | Container security context for volume permissions            | `true`                                                    |
+| `volumePermissions.containerSecurityContext.runAsUser`    | Container security context fsGroup for volume permissions    | `1001`                                                    |
+| `volumePermissions.containerSecurityContext.runAsNonRoot` | Container security context runAsNonRoot for volume permissions | `true`                                                    |
+| `lifecycleHooks`                                          | Lifecycle hook to automate configuration before or after start | `{}`                                                      |
 
 ### Solr statefulset parameters
 
-| Parameter                              | Description                                                                                      | Default                            |
-|:---------------------------------------|:-------------------------------------------------------------------------------------------------|:-----------------------------------|
-| :------------------------------------- | :----------------------------------------------------------------------------------------------- | :--------------------------------- |
-| `coreName`                             | Name of the default core to be created                                                           | `my-core`                          |
-| `cloudEnabled`                         | Enable Solr cloud mode                                                                           | `true`                             |
-| `cloudBootstrap`                       | Bootstrap the Solr cloud cluster on the install                                                  | `true`                             |
-| `collection`                           | Name of the collection to be created                                                             | `my-collection`                    |
-| `collectionShards`                     | Number of collection shards                                                                      | `1`                                |
-| `collectionReplicas`                   | Number of collection replicas                                                                    | `2`                                |
-| `containerPort`                        | Port number where Solr is running inside the container                                           | `8983`                             |
-| `serverDirectory`                      | Name of the created directory for the server                                                     | `server`                           |
-| `javaMem`                              | Java memory options to pass to the Solr container                                                | `nil`                              |
-| `heap`                                 | Java Heap options to pass to the solr container                                                  | `nil`                              |
-| `authentication.enabled`               | Enable Solr authentication                                                                       | `true`                             |
-| `authentication.adminUsername`         | Solr admin username                                                                              | `admin`                            |
-| `authentication.adminPassword`         | Solr admin password. Autogenerated if not provided.                                              | `mil`                              |
-| `existingSecret`                       | Existing secret with Solr password                                                               | `nil`                              |
-| `command`                              | Override Solr entrypoint string.                                                                 | `nil`                              |
-| `args`                                 | Arguments for the provided command if needed                                                     | `nil`                              |
-| `podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`                               |
-| `podAntiAffinityPreset`                | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`    | `soft`                             |
-| `nodeAffinityPreset.type`              | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `""`                               |
-| `nodeAffinityPreset.key`               | Solr node label key to match Ignored if `affinity` is set.                                       | `""`                               |
-| `nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set.                                   | `[]`                               |
-| `affinity`                             | Affinity for Solr pods assignment                                                                | `{}` (evaluated as a template)     |
-| `nodeSelector`                         | Node labels for Solr pods assignment                                                             | `{}` (evaluated as a template)     |
-| `tolerations`                          | Tolerations for Solr pods assignment                                                             | `[]` (evaluated as a template)     |
-| `livenessProbe.enabled`                | Turn on and off liveness probe.                                                                  | `true`                             |
-| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated.                                                        | `30`                               |
-| `livenessProbe.periodSeconds`          | How often to perform the probe.                                                                  | `30`                               |
-| `livenessProbe.timeoutSeconds`         | When the probe times out.                                                                        | `5`                                |
-| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed.     | `1`                                |
-| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | `5`                                |
-| `readinessProbe.enabled`               | Turn on and off readiness probe.                                                                 | `true`                             |
-| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated.                                                       | `5`                                |
-| `readinessProbe.periodSeconds`         | How often to perform the probe.                                                                  | `10`                               |
-| `readinessProbe.timeoutSeconds`        | When the probe times out.                                                                        | `1`                                |
-| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.     | `1`                                |
-| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.       | `5`                                |
-| `customLivenessProbe`                  | Override default liveness probe                                                                  | `nil`                              |
-| `customReadinessProbe`                 | Override default readiness probe                                                                 | `nil`                              |
-| `extraVolumes`                         | Array of extra volumes to be added to all pods (evaluated as a template)                         | `[]`                               |
-| `extraVolumeMounts`                    | Array of extra volume mounts to be added to all pods (evaluated as a template)                   | `[]`                               |
-| `hostAliases`                          | Add deployment host aliases                                                                      | `[]`                               |
-| `affinity`                             | Affinity settings for Solr pod assignment                                                        | `{}`                               |
-| `extraEnvVars`                         | Array containing extra env vars to be added to all pods (evaluated as a template)                | `[]`                               |
-| `extraEnvVarsCM`                       | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)            | `nil`                              |
-| `extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods (evaluated as a template)               | `nil`                              |
-| `initContainers`                       | Init containers to add to the cronjob container                                                  | `{}`                               |
-| `sidecars`                             | Attach additional containers to the pod (evaluated as a template)                                | `nil`                              |
-| `resources`                            | Solr CPU/Memory resource requests/limits                                                         | `{Memory: "256Mi", CPU: "100m"}`   |
+| Parameter                              | Description                                                  | Default                            |
+| -------------------------------------- | ------------------------------------------------------------ | ---------------------------------- |
+| `coreName`                             | Name of the default core to be created                       | `my-core`                          |
+| `cloudEnabled`                         | Enable Solr cloud mode                                       | `true`                             |
+| `cloudBootstrap`                       | Bootstrap the Solr cloud cluster on the install              | `true`                             |
+| `collection`                           | Name of the collection to be created                         | `my-collection`                    |
+| `collectionShards`                     | Number of collection shards                                  | `1`                                |
+| `collectionReplicas`                   | Number of collection replicas                                | `2`                                |
+| `containerPort`                        | Port number where Solr is running inside the container       | `8983`                             |
+| `serverDirectory`                      | Name of the created directory for the server                 | `server`                           |
+| `javaMem`                              | Java memory options to pass to the Solr container            | `nil`                              |
+| `heap`                                 | Java Heap options to pass to the solr container              | `nil`                              |
+| `authentication.enabled`               | Enable Solr authentication                                   | `true`                             |
+| `authentication.adminUsername`         | Solr admin username                                          | `admin`                            |
+| `authentication.adminPassword`         | Solr admin password. Autogenerated if not provided.          | `mil`                              |
+| `existingSecret`                       | Existing secret with Solr password                           | `nil`                              |
+| `command`                              | Override Solr entrypoint string.                             | `nil`                              |
+| `args`                                 | Arguments for the provided command if needed                 | `nil`                              |
+| `podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                               |
+| `podAntiAffinityPreset`                | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                             |
+| `nodeAffinityPreset.type`              | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                               |
+| `nodeAffinityPreset.key`               | Solr node label key to match Ignored if `affinity` is set.   | `""`                               |
+| `nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set. | `[]`                               |
+| `affinity`                             | Affinity for Solr pods assignment                            | `{}` (evaluated as a template)     |
+| `nodeSelector`                         | Node labels for Solr pods assignment                         | `{}` (evaluated as a template)     |
+| `tolerations`                          | Tolerations for Solr pods assignment                         | `[]` (evaluated as a template)     |
+| `livenessProbe.enabled`                | Turn on and off liveness probe.                              | `true`                             |
+| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated.                    | `30`                               |
+| `livenessProbe.periodSeconds`          | How often to perform the probe.                              | `30`                               |
+| `livenessProbe.timeoutSeconds`         | When the probe times out.                                    | `5`                                |
+| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                |
+| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `5`                                |
+| `readinessProbe.enabled`               | Turn on and off readiness probe.                             | `true`                             |
+| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated.                   | `5`                                |
+| `readinessProbe.periodSeconds`         | How often to perform the probe.                              | `10`                               |
+| `readinessProbe.timeoutSeconds`        | When the probe times out.                                    | `1`                                |
+| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                |
+| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `5`                                |
+| `customLivenessProbe`                  | Override default liveness probe                              | `nil`                              |
+| `customReadinessProbe`                 | Override default readiness probe                             | `nil`                              |
+| `extraVolumes`                         | Array of extra volumes to be added to all pods (evaluated as a template) | `[]`                               |
+| `extraVolumeMounts`                    | Array of extra volume mounts to be added to all pods (evaluated as a template) | `[]`                               |
+| `hostAliases`                          | Add deployment host aliases                                  | `[]`                               |
+| `affinity`                             | Affinity settings for Solr pod assignment                    | `{}`                               |
+| `extraEnvVars`                         | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`                               |
+| `extraEnvVarsCM`                       | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`                              |
+| `extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`                              |
+| `initContainers`                       | Init containers to add to the cronjob container              | `{}`                               |
+| `sidecars`                             | Attach additional containers to the pod (evaluated as a template) | `nil`                              |
+| `resources`                            | Solr CPU/Memory resource requests/limits                     | `{Memory: "256Mi", CPU: "100m"}`   |
 
 ### Solr Traffic Exposure Parameters
 
 | Parameter                        | Description                                              | Default                        |
-|:---------------------------------|:---------------------------------------------------------|:-------------------------------|
+| -------------------------------- | -------------------------------------------------------- | ------------------------------ |
 | `service.port`                   | Kubernetes Service port.                                 | `6379`                         |
 | `service.annotations`            | annotations for solr service                             | {}                             |
 | `service.labels`                 | Additional labels for solr service                       | {}                             |
@@ -190,83 +187,81 @@ The following tables lists the configurable parameters of the solr chart and the
 
 ### Zookeeper parameters
 
-| Parameter                                       | Description                                                                                                 | Default                                                                         |
-|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
-| :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
-| `zookeeper.enabled`                             | Enable Zookeeper deployment. Needed for Solr cloud.                                                         | `true`                                                                          |
-| `zookeeper.persistence.enabled`                 | Enabled persistence for Zookeeper                                                                           | `true`                                                                          |
-| `zookeeper.port`                                | Zookeeper port service port                                                                                 | `2181`                                                                          |
-| `zookeeper.replicaCount`                        | Number of Zookeeper cluster replicas                                                                        | `3`                                                                             |
-| `zookeeper.fourlwCommandsWhitelist`             | Zookeeper four letters commands to enable                                                                   | `srvr,mntr,conf,ruok`                                                           |
-| `externalZookeeper.servers`                     | Servers for an already existing Zookeeper.                                                                  | `[]`                                                                            |
-| `zookeeper.service.publishNotReadyAddresses`    | Publish not Ready ips for zookeeper                                                                         | `true`                                                                          |
+| Parameter                                       | Description                                                  | Default                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `zookeeper.enabled`                             | Enable Zookeeper deployment. Needed for Solr cloud.          | `true`                                                       |
+| `zookeeper.persistence.enabled`                 | Enabled persistence for Zookeeper                            | `true`                                                       |
+| `zookeeper.port`                                | Zookeeper port service port                                  | `2181`                                                       |
+| `zookeeper.replicaCount`                        | Number of Zookeeper cluster replicas                         | `3`                                                          |
+| `zookeeper.fourlwCommandsWhitelist`             | Zookeeper four letters commands to enable                    | `srvr,mntr,conf,ruok`                                        |
+| `externalZookeeper.servers`                     | Servers for an already existing Zookeeper.                   | `[]`                                                         |
+| `zookeeper.service.publishNotReadyAddresses`    | Publish not Ready ips for zookeeper                          | `true`                                                       |
 
 ### Exporter deployment parameters
 
-| Parameter                                       | Description                                                                                                 | Default                                                                         |
-|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
-| :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
-| `exporter.enabled`                              | Start a side-car prometheus exporter                                                                        | `false`                                                                         |
-| `exporter.image.registry`                       | Solr exporter image registry                                                                                | `docker.io`                                                                     |
-| `exporter.image.repository`                     | Solr exporter image name                                                                                    | `bitnami/solr-exporter`                                                         |
-| `exporter.image.tag`                            | Solr exporter image tag                                                                                     | `{TAG_NAME}`                                                                    |
-| `exporter.image.pullPolicy`                     | Image pull policy                                                                                           | `IfNotPresent`                                                                  |
-| `exporter.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                            | `nil`                                                                           |
-| `exporter.updateStrategy`                       | Specify exporter deployment update strategy                                                                 | `RollingUpdate`                                                                 |
-| `exporter.configFile`                           | Config file for the Solr prometheus exporter                                                                | `/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml`   |
-| `exporter.port`                                 | Solr exporter port                                                                                          | `9983`                                                                          |
-| `exporter.threads`                              | Number of Solr exporter Threads                                                                             | `7`                                                                             |
-| `exporter.podLabels`                            | Additional labels for Metrics exporter pod                                                                  | {}                                                                              |
-| `exporter.podAnnotations`                       | Additional annotations for Metrics exporter pod                                                             | {}                                                                              |
-| `exporter.resources`                            | Exporter resource requests/limit                                                                            | Memory: `256Mi`, CPU: `100m`                                                    |
-| `exporter.service.type`                         | Kubernetes Service type (solr metrics)                                                                      | `ClusterIP`                                                                     |
-| `exporter.service.annotations`                  | Annotations for the services to monitor.                                                                    | {}                                                                              |
-| `exporter.service.labels`                       | Additional labels for the metrics service                                                                   | {}                                                                              |
-| `exporter.service.loadBalancerIP`               | loadBalancerIP if solr metrics service type is `LoadBalancer`                                               | `nil`                                                                           |
-| `exporter.service.nodePorts.http`               | Node ports for the http exporter service                                                                    | `""`                                                                            |
-| `exporter.service.nodePorts.https`              | Node ports for the https exporter service                                                                   | `""`                                                                            |
-| `exporter.service.loadBalancerSourceRanges`     | Exporter Load Balancer Source ranges                                                                        | `nil`                                                                           |
-| `exporter.command`                              | Override Solr entrypoint string.                                                                            | `nil`                                                                           |
-| `exporter.args`                                 | Arguments for the provided command if needed                                                                | `nil`                                                                           |
-| `exporter.podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                                                                            |
-| `exporter.podAntiAffinityPreset`                | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `soft`                                                                          |
-| `exporter.nodeAffinityPreset.type`              | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                                                                            |
-| `exporter.nodeAffinityPreset.key`               | Solr node label key to match Ignored if `affinity` is set.                                                  | `""`                                                                            |
-| `exporter.nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set.                                              | `[]`                                                                            |
-| `exporter.hostAliases`                          | Add deployment host aliases                                                                                 | `[]`                                                                            |
-| `exporter.affinity`                             | Affinity for Solr pods assignment                                                                           | `{}` (evaluated as a template)                                                  |
-| `exporter.nodeSelector`                         | Node labels for Solr pods assignment                                                                        | `{}` (evaluated as a template)                                                  |
-| `exporter.tolerations`                          | Tolerations for Solr pods assignment                                                                        | `[]` (evaluated as a template)                                                  |
-| `exporter.livenessProbe.enabled`                | Turn on and off liveness probe.                                                                             | `true`                                                                          |
-| `exporter.livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated.                                                                   | `10`                                                                            |
-| `exporter.livenessProbe.periodSeconds`          | How often to perform the probe.                                                                             | `5`                                                                             |
-| `exporter.livenessProbe.timeoutSeconds`         | When the probe times out.                                                                                   | `15`                                                                            |
-| `exporter.livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed.                | `15`                                                                            |
-| `exporter.livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.                  | `15`                                                                            |
-| `exporter.readinessProbe.enabled`               | Turn on and off readiness probe.                                                                            | `true`                                                                          |
-| `exporter.readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated.                                                                  | `10`                                                                            |
-| `exporter.readinessProbe.periodSeconds`         | How often to perform the probe.                                                                             | `5`                                                                             |
-| `exporter.readinessProbe.timeoutSeconds`        | When the probe times out.                                                                                   | `15`                                                                            |
-| `exporter.readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                | `15`                                                                            |
-| `exporter.readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                  | `15`                                                                            |
-| `exporter.customLivenessProbe`                  | Override default liveness probe                                                                             | `nil`                                                                           |
-| `exporter.customReadinessProbe`                 | Override default readiness probe                                                                            | `nil`                                                                           |
-| `exporter.extraVolumes`                         | Array of extra volumes to be added to all pods (evaluated as a template)                                    | `[]`                                                                            |
-| `exporter.extraVolumeMounts`                    | Array of extra volume mounts to be added to all pods (evaluated as a template)                              | `[]`                                                                            |
-| `exporter.affinity`                             | Affinity settings for Solr pod assignment                                                                   | `{}`                                                                            |
-| `exporter.extraEnvVars`                         | Array containing extra env vars to be added to all pods (evaluated as a template)                           | `[]`                                                                            |
-| `exporter.extraEnvVarsCM`                       | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                       | `nil`                                                                           |
-| `exporter.extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods (evaluated as a template)                          | `nil`                                                                           |
-| `exporter.initContainers`                       | Init containers to add to the cronjob container                                                             | `{}`                                                                            |
-| `exporter.sidecars`                             | Attach additional containers to the pod (evaluated as a template)                                           | `nil`                                                                           |
-| `exporter.podSecurityContext.fsGroup`           | Group ID for the pods.                                                                                      | `1001`                                                                          |
-| `exporter.containerSecurityContext.runAsUser`   | User ID for the containers.                                                                                 | `1001`                                                                          |
-| `exporter.service.port`                         | Kubernetes Service port.                                                                                    | `6379`                                                                          |
-| `exporter.service.annotations`                  | annotations for solr exporter service                                                                       | {}                                                                              |
-| `exporter.service.labels`                       | Additional labels for solr exporter service                                                                 | {}                                                                              |
-| `exporter.service.type`                         | Service type for default solr exporter service                                                              | `ClusterIP`                                                                     |
-| `exporter.service.nodePorts`                    | Node ports for the service                                                                                  | `{}`                                                                            |
-| `exporter.service.loadBalancerIP`               | loadBalancerIP if service.type is `LoadBalancer`                                                            | `nil`                                                                           |
+| Parameter                                       | Description                                                  | Default                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `exporter.enabled`                              | Start a side-car prometheus exporter                         | `false`                                                      |
+| `exporter.image.registry`                       | Solr exporter image registry                                 | `docker.io`                                                  |
+| `exporter.image.repository`                     | Solr exporter image name                                     | `bitnami/solr-exporter`                                      |
+| `exporter.image.tag`                            | Solr exporter image tag                                      | `{TAG_NAME}`                                                 |
+| `exporter.image.pullPolicy`                     | Image pull policy                                            | `IfNotPresent`                                               |
+| `exporter.image.pullSecrets`                    | Specify docker-registry secret names as an array             | `nil`                                                        |
+| `exporter.updateStrategy`                       | Specify exporter deployment update strategy                  | `RollingUpdate`                                              |
+| `exporter.configFile`                           | Config file for the Solr prometheus exporter                 | `/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml` |
+| `exporter.port`                                 | Solr exporter port                                           | `9983`                                                       |
+| `exporter.threads`                              | Number of Solr exporter Threads                              | `7`                                                          |
+| `exporter.podLabels`                            | Additional labels for Metrics exporter pod                   | {}                                                           |
+| `exporter.podAnnotations`                       | Additional annotations for Metrics exporter pod              | {}                                                           |
+| `exporter.resources`                            | Exporter resource requests/limit                             | Memory: `256Mi`, CPU: `100m`                                 |
+| `exporter.service.type`                         | Kubernetes Service type (solr metrics)                       | `ClusterIP`                                                  |
+| `exporter.service.annotations`                  | Annotations for the services to monitor.                     | {}                                                           |
+| `exporter.service.labels`                       | Additional labels for the metrics service                    | {}                                                           |
+| `exporter.service.loadBalancerIP`               | loadBalancerIP if solr metrics service type is `LoadBalancer` | `nil`                                                        |
+| `exporter.service.nodePorts.http`               | Node ports for the http exporter service                     | `""`                                                         |
+| `exporter.service.nodePorts.https`              | Node ports for the https exporter service                    | `""`                                                         |
+| `exporter.service.loadBalancerSourceRanges`     | Exporter Load Balancer Source ranges                         | `nil`                                                        |
+| `exporter.command`                              | Override Solr entrypoint string.                             | `nil`                                                        |
+| `exporter.args`                                 | Arguments for the provided command if needed                 | `nil`                                                        |
+| `exporter.podAffinityPreset`                    | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
+| `exporter.podAntiAffinityPreset`                | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                                                       |
+| `exporter.nodeAffinityPreset.type`              | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
+| `exporter.nodeAffinityPreset.key`               | Solr node label key to match Ignored if `affinity` is set.   | `""`                                                         |
+| `exporter.nodeAffinityPreset.values`            | Solr node label values to match. Ignored if `affinity` is set. | `[]`                                                         |
+| `exporter.hostAliases`                          | Add deployment host aliases                                  | `[]`                                                         |
+| `exporter.affinity`                             | Affinity for Solr pods assignment                            | `{}` (evaluated as a template)                               |
+| `exporter.nodeSelector`                         | Node labels for Solr pods assignment                         | `{}` (evaluated as a template)                               |
+| `exporter.tolerations`                          | Tolerations for Solr pods assignment                         | `[]` (evaluated as a template)                               |
+| `exporter.livenessProbe.enabled`                | Turn on and off liveness probe.                              | `true`                                                       |
+| `exporter.livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated.                    | `10`                                                         |
+| `exporter.livenessProbe.periodSeconds`          | How often to perform the probe.                              | `5`                                                          |
+| `exporter.livenessProbe.timeoutSeconds`         | When the probe times out.                                    | `15`                                                         |
+| `exporter.livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed. | `15`                                                         |
+| `exporter.livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `15`                                                         |
+| `exporter.readinessProbe.enabled`               | Turn on and off readiness probe.                             | `true`                                                       |
+| `exporter.readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated.                   | `10`                                                         |
+| `exporter.readinessProbe.periodSeconds`         | How often to perform the probe.                              | `5`                                                          |
+| `exporter.readinessProbe.timeoutSeconds`        | When the probe times out.                                    | `15`                                                         |
+| `exporter.readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed. | `15`                                                         |
+| `exporter.readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded. | `15`                                                         |
+| `exporter.customLivenessProbe`                  | Override default liveness probe                              | `nil`                                                        |
+| `exporter.customReadinessProbe`                 | Override default readiness probe                             | `nil`                                                        |
+| `exporter.extraVolumes`                         | Array of extra volumes to be added to all pods (evaluated as a template) | `[]`                                                         |
+| `exporter.extraVolumeMounts`                    | Array of extra volume mounts to be added to all pods (evaluated as a template) | `[]`                                                         |
+| `exporter.affinity`                             | Affinity settings for Solr pod assignment                    | `{}`                                                         |
+| `exporter.extraEnvVars`                         | Array containing extra env vars to be added to all pods (evaluated as a template) | `[]`                                                         |
+| `exporter.extraEnvVarsCM`                       | ConfigMap containing extra env vars to be added to all pods (evaluated as a template) | `nil`                                                        |
+| `exporter.extraEnvVarsSecret`                   | Secret containing extra env vars to be added to all pods (evaluated as a template) | `nil`                                                        |
+| `exporter.initContainers`                       | Init containers to add to the cronjob container              | `{}`                                                         |
+| `exporter.sidecars`                             | Attach additional containers to the pod (evaluated as a template) | `nil`                                                        |
+| `exporter.podSecurityContext.fsGroup`           | Group ID for the pods.                                       | `1001`                                                       |
+| `exporter.containerSecurityContext.runAsUser`   | User ID for the containers.                                  | `1001`                                                       |
+| `exporter.service.port`                         | Kubernetes Service port.                                     | `6379`                                                       |
+| `exporter.service.annotations`                  | annotations for solr exporter service                        | {}                                                           |
+| `exporter.service.labels`                       | Additional labels for solr exporter service                  | {}                                                           |
+| `exporter.service.type`                         | Service type for default solr exporter service               | `ClusterIP`                                                  |
+| `exporter.service.nodePorts`                    | Node ports for the service                                   | `{}`                                                         |
+| `exporter.service.loadBalancerIP`               | loadBalancerIP if service.type is `LoadBalancer`             | `nil`                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
