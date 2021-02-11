@@ -2,11 +2,11 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-# global:
+global:
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+  storageClass: patata
 
 ## Bitnami Fluentd image version
 ## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
@@ -866,7 +866,7 @@ aggregator:
   ## Persist data to a persistent volume
   ##
   persistence:
-    enabled: false
+    enabled: true
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
