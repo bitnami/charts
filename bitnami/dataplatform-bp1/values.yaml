@@ -25,13 +25,13 @@ zookeeper:
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
+        - labelSelector:
           matchExpressions:
-          - key: app.kubernetes.io/name
-            operator: In
-            values:
-            - zookeeper
-        topologyKey: "kubernetes.io/hostname"
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - zookeeper
+          topologyKey: "kubernetes.io/hostname"
 
 ## Kafka Subchart parameters
 ##
@@ -53,24 +53,24 @@ kafka:
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app.kubernetes.io/component
-            operator: In
-            values:
-            - kafka
-        topologyKey: "kubernetes.io/hostname"
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - kafka
+          topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-       - weight: 50
-         podAffinityTerm:
-           labelSelector:
-             matchExpressions:
-             - key: app.kubernetes.io/name
-               operator: In
-               values:
-                 - zookeeper
-           topologyKey: "kubernetes.io/hostname"
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - zookeeper
+            topologyKey: "kubernetes.io/hostname"
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false.
@@ -100,13 +100,13 @@ spark:
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/component
-              operator: In
-              values:
-              - worker
-          topologyKey: "kubernetes.io/hostname"
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+            topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
   worker:
@@ -116,14 +116,14 @@ spark:
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/component
-              operator: In
-              values:
-              - worker
-              - master
-          topologyKey: "kubernetes.io/hostname"
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+                    - master
+            topologyKey: "kubernetes.io/hostname"
     resources:
       ## Recommended values for cpu and memory requests
       ##
@@ -147,13 +147,13 @@ solr:
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app.kubernetes.io/component
-            operator: In
-            values:
-            - solr
-        topologyKey: "kubernetes.io/hostname"
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - solr
+          topologyKey: "kubernetes.io/hostname"
   resources:
     ## Recommended values for cpu and memory requests
     ##
