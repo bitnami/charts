@@ -109,12 +109,28 @@ data:
     export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
     {{- end }}
-
     {{- if (include "kafka.tlsEncryption" .) }}
-    if [[ -f "/certs/kafka.truststore.jks" ]] && [[ -f "/certs/kafka-${ID}.keystore.jks" ]]; then
+    
+    {{- if and .Values.auth.jksTruststoreSecret .Values.auth.jksTruststore }}
+    JKS_TRUSTSTORE="/truststore/{{ .Values.auth.jksTruststore }}"
+    {{- else if .Values.auth.jksTruststoreSecret  }}
+    JKS_TRUSTSTORE="/truststore/kafka.trustore.jks"
+    {{- else if .Values.auth.jksTruststore  }}
+    JKS_TRUSTSTORE="/certs/{{ .Values.auth.jksTruststore }}"
+    {{- else }}
+    JKS_TRUSTSTORE="/certs/kafka.trustore.jks"
+    {{- end }}
+    
+    {{- if .Values.auth.jksKeystoreSAN }}
+    JKS_KEYSTORE="/certs/{{ .Values.auth.jksKeystoreSAN }}"
+    {{- else }}
+    JKS_KEYSTORE="/certs/kafka-${ID}.keystore.jks"
+    {{- end }}
+
+    if [[ -f "${JKS_TRUSTSTORE}" ]] && [[ -f "${JKS_KEYSTORE}" ]]; then
         mkdir -p /opt/bitnami/kafka/config/certs
-        cp "/certs/kafka.truststore.jks" "/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
-        cp "/certs/kafka-${ID}.keystore.jks" "/opt/bitnami/kafka/config/certs/kafka.keystore.jks"
+        cp "${JKS_TRUSTSTORE}" "/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
+        cp "${JKS_KEYSTORE}" "/opt/bitnami/kafka/config/certs/kafka.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
         exit 1

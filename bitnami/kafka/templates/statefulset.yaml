@@ -370,6 +370,11 @@ spec:
             - name: kafka-certificates
               mountPath: /certs
               readOnly: true
+            {{- if  .Values.auth.jksTruststoreSecret }}
+            - name: kafka-truststore
+              mountPath: /truststore
+              readOnly: true
+            {{- end }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
@@ -430,6 +435,12 @@ spec:
           secret:
             secretName: {{ include "kafka.jksSecretName" . }}
             defaultMode: 256
+        {{- if .Values.auth.jksTruststoreSecret }}
+        - name: kafka-truststore
+          secret:
+            secretName: {{ .Values.auth.jksTruststoreSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
