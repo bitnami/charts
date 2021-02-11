@@ -197,7 +197,7 @@ spec:
             - name: HOST_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: status.hostIP 
+                  fieldPath: status.hostIP
             {{- end }}
             {{- end }}
             {{- else }}
@@ -473,7 +473,7 @@ spec:
     - metadata:
         name: logs
         {{- if .Values.logPersistence.annotations }}
-        annotations: {{- include "kafka.tplValue" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
