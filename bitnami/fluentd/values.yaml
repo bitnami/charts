@@ -6,7 +6,7 @@ global:
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
-  storageClass: patata
+#   storageClass: myStorageClass
 
 ## Bitnami Fluentd image version
 ## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
@@ -866,7 +866,7 @@ aggregator:
   ## Persist data to a persistent volume
   ##
   persistence:
-    enabled: true
+    enabled: false
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
