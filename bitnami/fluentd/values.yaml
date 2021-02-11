@@ -976,11 +976,11 @@ metrics:
 
     ## ServiceMonitor extra labels
     ##
-    # labels: []
+    # labels: {}
 
     ## ServiceMonitor annotations
     ##
-    # annotations: []
+    # annotations: {}
 
 
 ## Mount TLS certificates
