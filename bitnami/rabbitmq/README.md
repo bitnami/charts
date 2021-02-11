@@ -512,8 +512,6 @@ $ helm upgrade RELEASE_NAME bitnami/rabbitmq \
 
 For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
 
-More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
-
 If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
 
 ```console
@@ -524,6 +522,8 @@ $ helm upgrade RELEASE_NAME bitnami/rabbitmq \
     --set auth.password=PASSWORD \
     --set auth.erlangCookie=ERLANG_COOKIE
 ```
+
+More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
 
 ### Known issues
 
