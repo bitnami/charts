@@ -1984,6 +1984,10 @@ receive:
     ##
     labelSelectorsOverride: {}
 
+    ## Create additional Headless service
+    ##
+    additionalHeadless: true
+
   ## Autoscaling parameters
   ##
   autoscaling:
