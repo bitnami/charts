@@ -658,11 +658,9 @@ networkPolicy:
   ##
   explicitNamespacesSelector: {}
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Configure extra options for startup, liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ##
-
-# GA since v1.20
 startupProbe:
   enabled: false
   initialDelaySeconds: 30
@@ -686,7 +684,6 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 
 ## Custom Startup probe
 ##
