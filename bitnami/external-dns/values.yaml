@@ -164,7 +164,7 @@ azure:
   ##
   useManagedIdentityExtension: false
   ## If you use Azure MSI, this is Client ID of Azure user-assigned managed identity (optional,
-  # system-assigned managed identity is used if useManagedIdentityExtension is true and userAssignedIdentityID is empty)
+  # system-assigned managed identity is used if empty)
   #
   userAssignedIdentityID: ""
 
