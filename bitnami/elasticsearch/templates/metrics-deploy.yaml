@@ -25,13 +25,22 @@ spec:
       annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
     spec:
-{{- include "elasticsearch.imagePullSecrets" . | indent 6 }}
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: metrics
           image: {{ include "elasticsearch.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           args:
+            {{- if gt (int .Values.coordinating.replicas) 0 }}
+            # Prefer coordinating only nodes to do the initial metrics query
             - --es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
+            {{- else }}
+            # Using master nodes as there are no coordinating only nodes
+            - --es.uri=http://{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
+            {{- end }}
             - --es.all
           ports:
             - name: metrics

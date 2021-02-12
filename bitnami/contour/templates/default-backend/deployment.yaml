@@ -1,0 +1,90 @@
+{{- if .Values.defaultBackend.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-default-backend
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: default-backend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: default-backend
+  replicas: {{ .Values.defaultBackend.replicaCount }}
+  template:
+    metadata:
+      {{- if .Values.defaultBackend.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: default-backend
+        {{- if .Values.defaultBackend.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.defaultBackend.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.defaultBackend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.priorityClassName }}
+      priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.defaultBackend.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.defaultBackend.nodeAffinityPreset.type "key" .Values.defaultBackend.nodeAffinityPreset.key "values" .Values.defaultBackend.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.podSecurityContext }}
+      securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: default-backend
+          image: {{ include "common.images.image" ( dict "imageRoot" .Values.defaultBackend.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy | quote }}
+          {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          args:
+          {{- range $key, $value := .Values.defaultBackend.extraArgs }}
+            {{- if $value }}
+            - --{{ $key }}={{ $value }}
+            {{- else }}
+            - --{{ $key }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.defaultBackend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defaultBackend.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.defaultBackend.containerPort }}
+              protocol: TCP
+          {{- if .Values.defaultBackend.resources }}
+          resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
+          {{- end }}
+{{- end }}

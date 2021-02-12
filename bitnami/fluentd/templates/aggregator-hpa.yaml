@@ -1,0 +1,20 @@
+{{- if .Values.aggregator.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator-hpa
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+  {{- if .Values.aggregator.annotations }}
+  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "fluentd.fullname" . }}
+  minReplicas: {{ .Values.aggregator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.aggregator.autoscaling.maxReplicas }}
+  metrics:
+    {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.autoscaling.metrics "context" $) | nindent 4 }}
+{{- end }}

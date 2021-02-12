@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.9.1-debian-10-r0
+  tag: 1.9.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -55,6 +55,11 @@ commonAnnotations: {}
 ## Common labels to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Datacenter name for consul. If not supplied, will use the consul
 ##
@@ -471,7 +476,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.7.1-debian-10-r133
+    tag: 0.7.1-debian-10-r182
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

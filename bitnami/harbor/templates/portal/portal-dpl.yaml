@@ -37,6 +37,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: false
       {{- if .Values.portal.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -149,5 +150,5 @@ spec:
             secretName: {{ include "harbor.portal.tls.secretName" . }}
         {{- end }}
       {{- if .Values.portal.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

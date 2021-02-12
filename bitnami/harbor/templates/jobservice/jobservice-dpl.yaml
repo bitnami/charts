@@ -42,6 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: false
       {{- if .Values.jobservice.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -215,5 +216,5 @@ spec:
             secretName: {{ include "harbor.jobservice.tls.secretName" . }}
         {{- end }}
       {{- if .Values.jobservice.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

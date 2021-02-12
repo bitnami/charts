@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -53,131 +53,138 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Node chart and their default values.
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                                                | `nil`                                                   |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                   | Global storage class for dynamic provisioning                               | `nil`                                                   |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override node.fullname template                         | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override node.fullname template                             | `nil`                                                   |
-| `commonLabels`                          | Labels to add to all deployed objects                                       | `nil`                                                   |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                                  | `[]`                                                    |
-| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template) | `nil`                                                   |
+| Parameter           | Description                                                                 | Default |
+|---------------------|-----------------------------------------------------------------------------|---------|
+| `nameOverride`      | String to partially override node.fullname template                         | `nil`   |
+| `fullnameOverride`  | String to fully override node.fullname template                             | `nil`   |
+| `commonLabels`      | Labels to add to all deployed objects                                       | `nil`   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                  | `[]`    |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template) | `nil`   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)        | `nil`   |
 
 ## Node parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | NodeJS image registry                                                       | `docker.io`                                             |
-| `image.repository`                      | NodeJS image name                                                           | `bitnami/node`                                          |
-| `image.tag`                             | NodeJS image tag                                                            | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                      | NodeJS image pull policy                                                    | `IfNotPresent`                                          |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                            | `[]` (does not add image pull secrets to deployed pods) |
-| `command`                               | Override default container command (useful when using custom images)        | `['/bin/bash', '-ec', 'npm start']`                     |
-| `args`                                  | Override default container args (useful when using custom images)           | `[]`                                                    |
-| `extraEnvVars`                          | Extra environment variables to be set on Node container                     | `{}`                                                    |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                        | `nil`                                                   |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                           | `nil`                                                   |
-| `mongodb.enabled`                       | Whether to install or not the MongoDB chart                                  | `true`                                                  |
-| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB chart                          | `true`                                                  |
-| `mongodb.auth.rootPassword`             | MongoDB admin password                                                      | `nil`                                                   |
-| `mongodb.auth.username`                 | MongoDB custom user                                                         | `user`                                                  |
-| `mongodb.auth.database`                 | MongoDB custom database                                                     | `test_db`                                               |
-| `mongodb.auth.password`                 | MongoDB custom password                                                     | `secret_password`                                       |
-| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)   | `false`                                                 |
-| `externaldb.secretName`                 | Secret containing existing database credentials                             | `nil`                                                   |
-| `externaldb.type`                       | Type of database that defines the database secret mapping                   | `osba`                                                  |
-| `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                     | `nil`                                                   |
+| Parameter                               | Description                                                               | Default                                                 |
+|-----------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`                        | NodeJS image registry                                                     | `docker.io`                                             |
+| `image.repository`                      | NodeJS image name                                                         | `bitnami/node`                                          |
+| `image.tag`                             | NodeJS image tag                                                          | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                      | NodeJS image pull policy                                                  | `IfNotPresent`                                          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                          | `[]` (does not add image pull secrets to deployed pods) |
+| `command`                               | Override default container command (useful when using custom images)      | `['/bin/bash', '-ec', 'npm start']`                     |
+| `args`                                  | Override default container args (useful when using custom images)         | `[]`                                                    |
+| `hostAliases`                           | Add deployment host aliases                                               | `[]`                                                    |
+| `extraEnvVars`                          | Extra environment variables to be set on Node container                   | `[]`                                                    |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                      | `nil`                                                   |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                         | `nil`                                                   |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                               | `true`                                                  |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                       | `true`                                                  |
+| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                    | `nil`                                                   |
+| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                       | `user`                                                  |
+| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                   | `test_db`                                               |
+| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                   | `secret_password`                                       |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`) | `false`                                                 |
+| `externaldb.secretName`                 | Secret containing existing database credentials                           | `nil`                                                   |
+| `externaldb.type`                       | Type of database that defines the database secret mapping                 | `osba`                                                  |
+| `externaldb.broker.serviceInstanceName` | The existing ServiceInstance to be used                                   | `nil`                                                   |
 
 ## Node deployment parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                          | Number of Node replicas to deploy                                           | `1`                                                     |
-| `priorityClassName`                     | Node priorityClassName                                                      | `nil`                                                   |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                             |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `soft`                                      |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`| `""`                                       |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                       | `""`                                                    |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                   | `[]`                                                    |
-| `affinity`                              | Affinity for pod assignment                                                 | `{}` (evaluated as a template)                          |
-| `nodeSelector`                          | Node labels for pod assignment                                              | `{}` (evaluated as a template)                          |
-| `tolerations`                           | Tolerations for pod assignment                                              | `[]` (evaluated as a template)                          |
-| `podLabels`                             | Additional labels for Node pods                                             | `{}` (evaluated as a template)                          |
-| `podAnnotations`                        | Annotations for Node pods                                                   | `{}` (evaluated as a template)                          |
-| `podSecurityContext.enabled`            | Enable security context for Node pods                                       | `true`                                                  |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                         | `1001`                                                  |
-| `containerSecurityContext.enabled`      | Node Container securityContext                                              | `false`                                                 |
-| `containerSecurityContext.runAsUser`    | User ID for the Node container                                              | `1001`                                                  |
-| `applicationPort`                       | Port where the application will be running                                  | `3000`                                                  |
-| `resources.limits`                      | The resources limits for the Node container                                 | `{}`                                                    |
-| `resources.requests`                    | The requested resources for the Node container                              | `{}`                                                    |
-| `livenessProbe`                         | Liveness probe configuration for Node                                       | Check `values.yaml` file                                |
-| `readinessProbe`                        | Readiness probe configuration for Node                                      | Check `values.yaml` file                                |
-| `customLivenessProbe`                   | Override default liveness probe                                             | `nil`                                                   |
-| `customReadinessProbe`                  | Override default readiness probe                                            | `nil`                                                   |
-| `extraVolumes`                          | Array to add extra volumes                                                  | `[]` (evaluated as a template)                          |
-| `extraVolumeMounts`                     | Array to add extra mount                                                    | `[]` (evaluated as a template)                          |
-| `initContainers`                        | Add additional init containers to the Node pods                             | `{}` (evaluated as a template)                          |
-| `sidecars`                              | Add additional sidecar containers to the Node pods                          | `{}` (evaluated as a template)                          |
+| Parameter                            | Description                                                                               | Default                        |
+|--------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
+| `replicaCount`                       | Number of Node replicas to deploy                                                         | `1`                            |
+| `priorityClassName`                  | Node priorityClassName                                                                    | `nil`                          |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `affinity`                           | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`                        | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `podLabels`                          | Additional labels for Node pods                                                           | `{}` (evaluated as a template) |
+| `podAnnotations`                     | Annotations for Node pods                                                                 | `{}` (evaluated as a template) |
+| `podSecurityContext.enabled`         | Enable security context for Node pods                                                     | `true`                         |
+| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`                         |
+| `containerSecurityContext.enabled`   | Node Container securityContext                                                            | `false`                        |
+| `containerSecurityContext.runAsUser` | User ID for the Node container                                                            | `1001`                         |
+| `applicationPort`                    | Port where the application will be running                                                | `3000`                         |
+| `resources.limits`                   | The resources limits for the Node container                                               | `{}`                           |
+| `resources.requests`                 | The requested resources for the Node container                                            | `{}`                           |
+| `livenessProbe`                      | Liveness probe configuration for Node                                                     | Check `values.yaml` file       |
+| `readinessProbe`                     | Readiness probe configuration for Node                                                    | Check `values.yaml` file       |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `nil`                          |
+| `extraVolumes`                       | Array to add extra volumes                                                                | `[]` (evaluated as a template) |
+| `extraVolumeMounts`                  | Array to add extra mount                                                                  | `[]` (evaluated as a template) |
+| `initContainers`                     | Add additional init containers to the Node pods                                           | `{}` (evaluated as a template) |
+| `sidecars`                           | Add additional sidecar containers to the Node pods                                        | `{}` (evaluated as a template) |
 
 ## Node application parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `git.registry`                          | Git image registry                                                          | `docker.io`                                             |
-| `git.repository`                        | Git image name                                                              | `bitnami/git`                                           |
-| `git.tag`                               | Git image tag                                                               | `{TAG_NAME}`                                            |
-| `git.pullPolicy`                        | Git image pull policy                                                       | `IfNotPresent`                                          |
-| `getAppFromExternalRepository`          | Whether to get app from external git repo or not                            | `true`                                                  |
-| `repository`                            | Repo of the application                                                     | `https://github.com/bitnami/sample-mean.git`            |
-| `revision`                              | Revision to checkout                                                        | `master`                                                |
+| Parameter                      | Description                                      | Default                                      |
+|--------------------------------|--------------------------------------------------|----------------------------------------------|
+| `git.registry`                 | Git image registry                               | `docker.io`                                  |
+| `git.repository`               | Git image name                                   | `bitnami/git`                                |
+| `git.tag`                      | Git image tag                                    | `{TAG_NAME}`                                 |
+| `git.pullPolicy`               | Git image pull policy                            | `IfNotPresent`                               |
+| `getAppFromExternalRepository` | Whether to get app from external git repo or not | `true`                                       |
+| `repository`                   | Repo of the application                          | `https://github.com/bitnami/sample-mean.git` |
+| `revision`                     | Revision to checkout                             | `master`                                     |
 
 ## Volume permissions parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory | `false`                                                 |
-| `volumePermissions.image.registry`      | Init container volume-permissions image registry                            | `docker.io`                                             |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                 | `buster`                                                |
-| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                         | `Always`                                                |
-| `volumePermissions.resources`           | Init container resource requests/limit                                      | `{}`                                                    |
+| Parameter                            | Description                                                                 | Default           |
+|--------------------------------------|-----------------------------------------------------------------------------|-------------------|
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory | `false`           |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                            | `docker.io`       |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                | `bitnami/minideb` |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                 | `buster`          |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                         | `Always`          |
+| `volumePermissions.resources`        | Init container resource requests/limit                                      | `{}`              |
 
 ### Persistence parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `persistence.enabled`                   | Enable persistence using PVC                                                | `false`                                                 |
-| `persistence.path`                      | Path to persisted directory                                                 | `/app/data`                                             |
-| `persistence.accessMode`                | PVC Access Mode                                                             | `ReadWriteOnce`                                         |
-| `persistence.size`                      | PVC Storage Request                                                         | `1Gi`                                                   |
+| Parameter                | Description                  | Default         |
+|--------------------------|------------------------------|-----------------|
+| `persistence.enabled`    | Enable persistence using PVC | `false`         |
+| `persistence.path`       | Path to persisted directory  | `/app/data`     |
+| `persistence.accessMode` | PVC Access Mode              | `ReadWriteOnce` |
+| `persistence.size`       | PVC Storage Request          | `1Gi`           |
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                                 | Default                                                 |
-|-----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                          | Kubernetes Service type                                                     | `ClusterIP`                                             |
-| `service.port`                          | Kubernetes Service port                                                     | `80`                                                    |
-| `service.annotations`                   | Annotations for the Service                                                 | {}                                                      |
-| `service.loadBalancerIP`                | LoadBalancer IP if Service type is `LoadBalancer`                           | `nil`                                                   |
-| `service.nodePort`                      | NodePort if Service type is `LoadBalancer` or `NodePort`                    | `nil`                                                   |
-| `service.loadBalancerSourceRanges`      | Limits which client IP's can access the Network Load Balancer               | `0.0.0.0/0`                                         	  |
-| `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                                                 |
-| `ingress.hosts[0].name`                 | Hostname to your Node installation                                          | `node.local`                                            |
-| `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                                     |
-| `ingress.hosts[0].tls`                  | Utilize TLS backend in ingress                                              | `false`                                                 |
-| `ingress.hosts[0].certManager`          | Add annotations for cert-manager                                            | `false`                                                 |
-| `ingress.hosts[0].tlsSecret`            | TLS Secret (certificates)                                                   | `node.local-tls-secret`                                 |
-| `ingress.hosts[0].annotations`          | Annotations for this host's ingress record                                  | `[]`                                                    |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                             | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                      | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                              | `nil`                                                   |
+| Parameter                          | Description                                                   | Default                        |
+|------------------------------------|---------------------------------------------------------------|--------------------------------|
+| `service.type`                     | Kubernetes Service type                                       | `ClusterIP`                    |
+| `service.port`                     | Kubernetes Service port                                       | `80`                           |
+| `service.annotations`              | Annotations for the Service                                   | {}                             |
+| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`             | `nil`                          |
+| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`      | `nil`                          |
+| `service.loadBalancerSourceRanges` | Limits which client IP's can access the Network Load Balancer | `0.0.0.0/0`                    |
+| `ingress.enabled`                  | Enable ingress controller resource                            | `false`                        |
+| `ingress.certManager`              | Add annotations for cert-manager                              | `false`                        |
+| `ingress.hostname`                 | Default host for the ingress resource                         | `node.local`                   |
+| `ingress.path`                     | Default path for the ingress resource                         | `/`                            |
+| `ingress.pathType`                 | Ingress path type                                             | `ImplementationSpecific`       |
+| `ingress.tls`                      | Create TLS Secret                                             | `false`                        |
+| `ingress.annotations`              | Ingress annotations                                           | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`       | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraHosts[0].path`       | Additional hostnames to be covered                            | `nil`                          |
+| `ingress.extraPaths`               | Additional arbitrary path/backend objects                     | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered      | `nil`                          |
+| `ingress.secrets[0].name`          | TLS Secret Name                                               | `nil`                          |
+| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                        | `nil`                          |
+| `ingress.secrets[0].key`           | TLS Secret Key                                                | `nil`                          |
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
 
@@ -307,7 +314,7 @@ Once the instance has been provisioned in Azure, a new secret should have been a
 
 Deploying the helm chart enabling the Azure external database makes the following assumptions:
 
-- You would want an Azure CosmosDB MongoDB database
+- You would want an Azure CosmosDB MongoDB&reg; database
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
@@ -334,6 +341,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 15.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
+
 ### To 14.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
@@ -344,7 +355,7 @@ Find more information about how to deal with common errors related to Bitnami’
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- MongoDB dependency version was bumped to a new major version `10.X.X`. Check [MongoDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
+- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
 - Inclusion of the`bitnami/common` library chart and standardization to include common features found on other charts.
 - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
 - `replicas` is deprecated in favor of `replicaCount`.
@@ -363,13 +374,13 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 13.0.0
 
-MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 12.0.0
 
-Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
 

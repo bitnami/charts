@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.9-debian-10-r27
+  tag: 1.6.9-debian-10-r55
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -33,6 +33,7 @@ image:
 
 ## Extra environment vars to pass.
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+##
 extraEnv: []
 
 ## String to partially override common.names.fullname template (will maintain the release name)
@@ -40,6 +41,7 @@ extraEnv: []
 # nameOverride:
 
 ## Number of containers to run
+##
 replicaCount: 1
 
 ## String to fully override common.names.fullname template
@@ -52,6 +54,11 @@ clusterDomain: cluster.local
 ## Memcached architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Memcached admin user
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
@@ -100,6 +107,11 @@ resources:
     memory: 256Mi
     cpu: 250m
 
+## If you want to override the port name (can be usefull when using a service mesh)
+## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+##
+portName: memcache
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -133,6 +145,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -170,6 +183,7 @@ tolerations: []
 
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
+##
 persistence:
   enabled: false
   ## Persistent Volume Storage Class
@@ -193,12 +207,12 @@ persistence:
 
 ## Args for running memcached
 ## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
+##
 arguments:
   - /run.sh
   # - -m <maxMemoryLimit>
   # - -I <maxItemSize>
   # - -vv
-
 
 ## Prometheus Exporter / Metrics
 ##
@@ -210,7 +224,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.8.0-debian-10-r15
+    tag: 0.8.0-debian-10-r46
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -224,6 +238,10 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9150"
+  ## If you want to override the port name (can be usefull when using a service mesh)
+  ## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+  ##
+  portName: metrics
   ## Memcached Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

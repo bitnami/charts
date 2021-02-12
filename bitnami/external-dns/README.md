@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -46,7 +46,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the external-dns chart and their default values.
 
-
 | Parameter                              | Description                                                                                                                                                                                                     | Default                                                 |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`                 | Global Docker image registry                                                                                                                                                                                    | `nil`                                                   |
@@ -63,6 +62,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `namespace`                            | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                    | `""`                                                    |
 | `fqdnTemplates`                        | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                      | `[]`                                                    |
 | `combineFQDNAnnotation`                | Combine FQDN template and annotations instead of overwriting                                                                                                                                                    | `false`                                                 |
+| `hostAliases`                          | Add deployment host aliases                                                                                                                                                                                     | `[]`                                                    |
 | `ignoreHostnameAnnotation`             | Ignore hostname annotation when generating DNS names, valid only when fqdn-template is set                                                                                                                      | `false`                                                 |
 | `publishInternalServices`              | Whether to publish DNS records for ClusterIP services or not                                                                                                                                                    | `false`                                                 |
 | `publishHostIP`                        | Allow external-dns to publish host-ip for headless services                                                                                                                                                     | `false`                                                 |
@@ -167,7 +167,7 @@ The following table lists the configurable parameters of the external-dns chart 
 | `logFormat`                            | Which format to output logs in (options: text, json)                                                                                                                                                            | `text`                                                  |
 | `interval`                             | Interval update period to use                                                                                                                                                                                   | `1m`                                                    |
 | `triggerLoopOnEvent`                   | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                                                       | `false`                                                 |
-| `policy`                               | Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )                                                                                                              | `upsert-only`                                           |
+| `policy`                               | Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )                                                                                                             | `upsert-only`                                           |
 | `registry`                             | Registry method to use (options: txt, noop)                                                                                                                                                                     | `txt`                                                   |
 | `txtOwnerId`                           | When using the TXT registry, a name that identifies this instance of ExternalDNS (optional)                                                                                                                     | `"default"`                                             |
 | `txtPrefix`                            | When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)                                                                                                 | `""`                                                    |
@@ -241,28 +241,18 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Desired number of ExternalDNS replicas:
-```diff
-- replicas: 1
-+ replicas: 3
-```
-
-- Enable prometheus to access external-dns metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Using IRSA
+If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
+You can use the following arguments:
+```
+--set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
+```
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -276,7 +266,6 @@ For instance, to install ExternalDNS on AWS, you need to:
 - Install ExternalDNS chart using the command below:
 
 > Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
-
 ```bash
 $ helm install my-release \
   --set provider=aws \
@@ -295,7 +284,6 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 4.3.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
-
 
 ### To 4.0.0
 

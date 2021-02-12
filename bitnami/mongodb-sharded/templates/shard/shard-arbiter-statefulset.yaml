@@ -40,6 +40,9 @@ spec:
       {{- if $.Values.common.schedulerName }}
       schedulerName: {{ $.Values.common.schedulerName | quote }}
       {{- end }}
+      {{- if $.Values.shardsvr.arbiter.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if $.Values.shardsvr.arbiter.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.affinity "context" $) | nindent 8 }}
       {{- else }}

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -48,107 +48,147 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Parse chart and their default values.
 
-| Parameter                              | Description                                                                                                                                               | Default                                                 |
-|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                 | Global Docker image registry                                                                                                                              | `nil`                                                   |
-| `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                  | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
-| `nameOverride`                         | String to partially override common.names.fullname template with a string (will prepend the release name)                                                 | `nil`                                                   |
-| `fullnameOverride`                     | String to fully override common.names.fullname template with a string                                                                                     | `nil`                                                   |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
-| `volumePermissions.resources`          | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
-| `service.type`                         | Kubernetes Service type                                                                                                                                   | `LoadBalancer`                                          |
-| `service.port`                         | Service HTTP port (Dashboard)                                                                                                                             | `80`                                                    |
-| `service.loadBalancerIP`               | `loadBalancerIP` for the Parse Service                                                                                                                    | `nil`                                                   |
-| `service.externalTrafficPolicy`        | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
-| `service.nodePorts.http`               | Kubernetes http node port                                                                                                                                 | `""`                                                    |
-| `server.image.registry`                | Parse image registry                                                                                                                                      | `docker.io`                                             |
-| `server.image.repository`              | Parse image name                                                                                                                                          | `bitnami/parse`                                         |
-| `server.image.tag`                     | Parse image tag                                                                                                                                           | `{TAG_NAME}`                                            |
-| `server.image.pullPolicy`              | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
-| `server.image.pullSecrets`             | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `server.securityContext.enabled`       | Enable security context for Parse Server                                                                                                                  | `true`                                                  |
-| `server.securityContext.fsGroup`       | Group ID for Parse Server container                                                                                                                       | `1001`                                                  |
-| `server.securityContext.runAsUser`     | User ID for Parse Server container                                                                                                                        | `1001`                                                  |
-| `server.host`                          | Hostname to use to access Parse server (when `ingress.enabled=true` is set to `ingress.server.hosts[0].name` by default)                                  | `nil`                                                   |
-| `server.port`                          | Parse server port                                                                                                                                         | `1337`                                                  |
-| `server.mountPath`                     | Parse server API mount path                                                                                                                               | `/parse`                                                |
-| `server.appId`                         | Parse server App Id                                                                                                                                       | `myappID`                                               |
-| `server.masterKey`                     | Parse server Master Key                                                                                                                                   | `random 10 character alphanumeric string`               |
-| `server.enableCloudCode`               | Enable Parse Cloud Clode                                                                                                                                  | `false`                                                 |
-| `server.cloudCodeScripts`              | Dictionary of Cloud Code scripts                                                                                                                          | `nil`                                                   |
-| `server.existingCloudCodeScriptsCM`    | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                                                                   | `nil`                                                   |
-| `server.resources`                     | The [resources] to allocate for container                                                                                                                 | `{}`                                                    |
-| `server.livenessProbe`                 | Liveness probe configuration for Server                                                                                                                   | `Check values.yaml file`                                |
-| `server.readinessProbe`                | Readiness probe configuration for Server                                                                                                                  | `Check values.yaml file`                                |
-| `server.podAffinityPreset`             | Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                                                    |
-| `server.podAntiAffinityPreset`         | Parse server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                     | `soft`                                                  |
-| `server.nodeAffinityPreset.type`       | Parse server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                                                    |
-| `server.nodeAffinityPreset.key`        | Parse server node label key to match Ignored if `affinity` is set.                                                                                        | `""`                                                    |
-| `server.nodeAffinityPreset.values`     | Parse server node label values to match. Ignored if `affinity` is set.                                                                                    | `[]`                                                    |
-| `server.affinity`                      | Parse server affinity for pod assignment                                                                                                                  | `{}` (evaluated as a template)                          |
-| `server.nodeSelector`                  | Parse server node labels for pod assignment                                                                                                               | `{}` (evaluated as a template)                          |
-| `server.tolerations`                   | Parse server tolerations for pod assignment                                                                                                               | `[]` (evaluated as a template)                          |
-| `server.extraEnvVars`                  | Array containing extra env vars (evaluated as a template)                                                                                                 | `nil`                                                   |
-| `server.extraEnvVarsCM`                | ConfigMap containing extra env vars (evaluated as a template)                                                                                             | `nil`                                                   |
-| `server.extraEnvVarsSecret`            | Secret containing extra env vars  (evaluated as a template)                                                                                               | `nil`                                                   |
-| `dashboard.enabled`                    | Enable parse dashboard                                                                                                                                    | `true`                                                  |
-| `dashboard.image.registry`             | Dashboard image registry                                                                                                                                  | `docker.io`                                             |
-| `dashboard.image.repository`           | Dashboard image name                                                                                                                                      | `bitnami/parse-dashboard`                               |
-| `dashboard.image.tag`                  | Dashboard image tag                                                                                                                                       | `{TAG_NAME}`                                            |
-| `dashboard.image.pullPolicy`           | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
-| `dashboard.securityContext.enabled`    | Enable security context for Dashboard                                                                                                                     | `true`                                                  |
-| `dashboard.securityContext.fsGroup`    | Group ID for Dashboard container                                                                                                                          | `1001`                                                  |
-| `dashboard.securityContext.runAsUser`  | User ID for Dashboard container                                                                                                                           | `1001`                                                  |
-| `dashboard.image.pullSecrets`          | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `dashboard.username`                   | Dashboard username                                                                                                                                        | `user`                                                  |
-| `dashboard.password`                   | Dashboard user password                                                                                                                                   | `random 10 character alphanumeric string`               |
-| `dashboard.appName`                    | Dashboard application name                                                                                                                                | `MyDashboard`                                           |
-| `dashboard.parseServerUrlProtocol`     | Protocol used by Parse Dashboard to form the URLs to Parse Server.                                                                                        | `http`                                                  |
-| `dashboard.resources`                  | The [resources] to allocate for container                                                                                                                 | `{}`                                                    |
-| `dashboard.livenessProbe`              | Liveness probe configuration for Dashboard                                                                                                                | `Check values.yaml file`                                |
-| `dashboard.readinessProbe`             | Readiness probe configuration for Dashboard                                                                                                               | `Check values.yaml file`                                |
-| `dashboard.podAffinityPreset`          | Parse dashboard pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                                                    |
-| `dashboard.podAntiAffinityPreset`      | Parse dashboard pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                                                  |
-| `dashboard.nodeAffinityPreset.type`    | Parse dashboard node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                                                    |
-| `dashboard.nodeAffinityPreset.key`     | Parse dashboard node label key to match Ignored if `affinity` is set.                                                                                     | `""`                                                    |
-| `dashboard.nodeAffinityPreset.values`  | Parse dashboard node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                                                    |
-| `dashboard.affinity`                   | Parse dashboard affinity for pod assignment                                                                                                               | `{}` (evaluated as a template)                          |
-| `dashboard.nodeSelector`               | Parse dashboard node labels for pod assignment                                                                                                            | `{}` (evaluated as a template)                          |
-| `dashboard.tolerations`                | Parse dashboard tolerations for pod assignment                                                                                                            | `[]` (evaluated as a template)                          |
-| `dashboard.extraEnvVars`               | Array containing extra env vars (evaluated as a template)                                                                                                 | `nil`                                                   |
-| `dashboard.extraEnvVarsCM`             | ConfigMap containing extra env vars (evaluated as a template)                                                                                             | `nil`                                                   |
-| `dashboard.extraEnvVarsSecret`         | Secret containing extra env vars  (evaluated as a template)                                                                                               | `nil`                                                   |
-| `persistence.enabled`                  | Enable Parse persistence using PVC                                                                                                                        | `true`                                                  |
-| `persistence.storageClass`             | PVC Storage Class for Parse volume                                                                                                                        | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`               | PVC Access Mode for Parse volume                                                                                                                          | `ReadWriteOnce`                                         |
-| `persistence.size`                     | PVC Storage Request for Parse volume                                                                                                                      | `8Gi`                                                   |
-| `ingress.enabled`                      | Enable ingress controller resource                                                                                                                        | `false`                                                 |
-| `ingress.annotations`                  | Ingress annotations                                                                                                                                       | `[]`                                                    |
-| `ingress.certManager`                  | Add annotations for cert-manager                                                                                                                          | `false`                                                 |
-| `ingress.dashboard.hosts[0].name`      | Hostname to your Parse Dashboard installation                                                                                                             | `ghost.local`                                           |
-| `ingress.dashboard.hosts[0].path`      | Path within the url structure                                                                                                                             | `/`                                                     |
-| `ingress.dashboard.hosts[0].tls`       | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
-| `ingress.dashboard.hosts[0].tlsHosts`  | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                      | `nil`                                                   |
-| `ingress.dashboard.hosts[0].tlsSecret` | TLS Secret (certificates)                                                                                                                                 | `ghost.local-tls-secret`                                |
-| `ingress.server.hosts[0].name`         | Hostname to your Parse Server installation                                                                                                                | `ghost.local`                                           |
-| `ingress.server.hosts[0].path`         | Path within the url structure                                                                                                                             | `/`                                                     |
-| `ingress.server.hosts[0].tls`          | Utilize TLS backend in ingress                                                                                                                            | `false`                                                 |
-| `ingress.server.hosts[0].tlsHosts`     | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                      | `nil`                                                   |
-| `ingress.server.hosts[0].tlsSecret`    | TLS Secret (certificates)                                                                                                                                 | `ghost.local-tls-secret`                                |
-| `ingress.secrets[0].name`              | TLS Secret Name                                                                                                                                           | `nil`                                                   |
-| `ingress.secrets[0].certificate`       | TLS Secret Certificate                                                                                                                                    | `nil`                                                   |
-| `ingress.secrets[0].key`               | TLS Secret Key                                                                                                                                            | `nil`                                                   |
-| `mongodb.auth.enabled`                 | Enable MongoDB password authentication                                                                                                                    | `true`                                                  |
-| `mongodb.auth.rootPassword`            | MongoDB admin password                                                                                                                                    | `nil`                                                   |
-| `mongodb.persistence.enabled`          | Enable MongoDB persistence using PVC                                                                                                                      | `true`                                                  |
-| `mongodb.persistence.storageClass`     | PVC Storage Class for MongoDB volume                                                                                                                      | `nil` (uses alpha storage class annotation)             |
-| `mongodb.persistence.accessMode`       | PVC Access Mode for MongoDB volume                                                                                                                        | `ReadWriteOnce`                                         |
-| `mongodb.persistence.size`             | PVC Storage Request for MongoDB volume                                                                                                                    | `8Gi`                                                   |
+### Global Parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+
+### Common Parameters
+
+| Parameter           | Description                                                                                               | Default                        |
+|---------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                                                     | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                                | `{}`                           |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]` (evaluated as a template) |
+
+### Parse server parameters
+
+| Parameter                           | Description                                                                                                              | Default                                                 |
+|-------------------------------------|--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `server.image.registry`             | Parse image registry                                                                                                     | `docker.io`                                             |
+| `server.image.repository`           | Parse image name                                                                                                         | `bitnami/parse`                                         |
+| `server.image.tag`                  | Parse image tag                                                                                                          | `{TAG_NAME}`                                            |
+| `server.image.pullPolicy`           | Image pull policy                                                                                                        | `IfNotPresent`                                          |
+| `server.image.pullSecrets`          | Specify docker-registry secret names as an array                                                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `server.securityContext.enabled`    | Enable security context for Parse Server                                                                                 | `true`                                                  |
+| `server.securityContext.fsGroup`    | Group ID for Parse Server container                                                                                      | `1001`                                                  |
+| `server.securityContext.runAsUser`  | User ID for Parse Server container                                                                                       | `1001`                                                  |
+| `server.host`                       | Hostname to use to access Parse server (when `ingress.enabled=true` is set to `ingress.server.hosts[0].name` by default) | `nil`                                                   |
+| `server.port`                       | Parse server port                                                                                                        | `1337`                                                  |
+| `server.hostAliases`                | Add deployment host aliases                                                                                              | `[]`                                                    |
+| `server.mountPath`                  | Parse server API mount path                                                                                              | `/parse`                                                |
+| `server.appId`                      | Parse server App Id                                                                                                      | `myappID`                                               |
+| `server.masterKey`                  | Parse server Master Key                                                                                                  | `random 10 character alphanumeric string`               |
+| `server.enableCloudCode`            | Enable Parse Cloud Clode                                                                                                 | `false`                                                 |
+| `server.cloudCodeScripts`           | Dictionary of Cloud Code scripts                                                                                         | `nil`                                                   |
+| `server.existingCloudCodeScriptsCM` | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                                  | `nil`                                                   |
+| `server.resources`                  | The [resources] to allocate for container                                                                                | `{}`                                                    |
+| `server.livenessProbe`              | Liveness probe configuration for Server                                                                                  | `Check values.yaml file`                                |
+| `server.readinessProbe`             | Readiness probe configuration for Server                                                                                 | `Check values.yaml file`                                |
+| `server.podAffinityPreset`          | Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                                                    |
+| `server.podAntiAffinityPreset`      | Parse server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `soft`                                                  |
+| `server.nodeAffinityPreset.type`    | Parse server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                                    |
+| `server.nodeAffinityPreset.key`     | Parse server node label key to match Ignored if `affinity` is set.                                                       | `""`                                                    |
+| `server.nodeAffinityPreset.values`  | Parse server node label values to match. Ignored if `affinity` is set.                                                   | `[]`                                                    |
+| `server.affinity`                   | Parse server affinity for pod assignment                                                                                 | `{}` (evaluated as a template)                          |
+| `server.nodeSelector`               | Parse server node labels for pod assignment                                                                              | `{}` (evaluated as a template)                          |
+| `server.tolerations`                | Parse server tolerations for pod assignment                                                                              | `[]` (evaluated as a template)                          |
+| `server.extraEnvVars`               | Array containing extra env vars (evaluated as a template)                                                                | `nil`                                                   |
+| `server.extraEnvVarsCM`             | ConfigMap containing extra env vars (evaluated as a template)                                                            | `nil`                                                   |
+| `server.extraEnvVarsSecret`         | Secret containing extra env vars  (evaluated as a template)                                                              | `nil`                                                   |
+
+### Traffic Exposure Parameters
+
+| Parameter                        | Description                            | Default                  |
+|----------------------------------|----------------------------------------|--------------------------|
+| `service.type`                   | Kubernetes Service type                | `LoadBalancer`           |
+| `service.port`                   | Service HTTP port (Dashboard)          | `80`                     |
+| `service.loadBalancerIP`         | `loadBalancerIP` for the Parse Service | `nil`                    |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation   | `Cluster`                |
+| `service.nodePorts.http`         | Kubernetes http node port              | `""`                     |
+| `ingress.enabled`                | Enable ingress controller resource     | `false`                  |
+| `ingress.annotations`            | Ingress annotations                    | `[]`                     |
+| `ingress.certManager`            | Add annotations for cert-manager       | `false`                  |
+| `ingress.dashboard.hostname`     | Default host for the ingress resource  | `parse-dashboard.local`  |
+| `ingress.dashboard.extraHosts`   | Extra hosts for the ingress resource   | `[]`                     |
+| `ingress.dashboard.path`         | Default path for the ingress resource  | `/`                      |
+| `ingress.dashboard.pathType`     | Ingress path type                      | `ImplementationSpecific` |
+| `ingress.server.hostname`        | Default host for the ingress resource  | `parse-server.local`     |
+| `ingress.server.path`            | Default path for the ingress resource  | `/`                      |
+| `ingress.server.pathType`        | Ingress path type                      | `ImplementationSpecific` |
+| `ingress.server.extraHosts`      | Extra hosts for the ingress resource   | `[]`                     |
+| `ingress.secrets[0].name`        | TLS Secret Name                        | `nil`                    |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                 | `nil`                    |
+| `ingress.secrets[0].key`         | TLS Secret Key                         | `nil`                    |
+
+### Persistence Parameters
+
+| Parameter                  | Description                          | Default                                     |
+|----------------------------|--------------------------------------|---------------------------------------------|
+| `persistence.enabled`      | Enable Parse persistence using PVC   | `true`                                      |
+| `persistence.storageClass` | PVC Storage Class for Parse volume   | `nil` (uses alpha storage class annotation) |
+| `persistence.accessMode`   | PVC Access Mode for Parse volume     | `ReadWriteOnce`                             |
+| `persistence.size`         | PVC Storage Request for Parse volume | `8Gi`                                       |
+
+### Dashboard Parameters
+
+| Parameter                             | Description                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `dashboard.enabled`                   | Enable parse dashboard                                                                                    | `true`                                                  |
+| `dashboard.image.registry`            | Dashboard image registry                                                                                  | `docker.io`                                             |
+| `dashboard.image.repository`          | Dashboard image name                                                                                      | `bitnami/parse-dashboard`                               |
+| `dashboard.image.tag`                 | Dashboard image tag                                                                                       | `{TAG_NAME}`                                            |
+| `dashboard.image.pullPolicy`          | Image pull policy                                                                                         | `IfNotPresent`                                          |
+| `dashboard.securityContext.enabled`   | Enable security context for Dashboard                                                                     | `true`                                                  |
+| `dashboard.securityContext.fsGroup`   | Group ID for Dashboard container                                                                          | `1001`                                                  |
+| `dashboard.securityContext.runAsUser` | User ID for Dashboard container                                                                           | `1001`                                                  |
+| `dashboard.image.pullSecrets`         | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `dashboard.hostAliases`               | Add deployment host aliases                                                                               | `[]`                                                    |
+| `dashboard.username`                  | Dashboard username                                                                                        | `user`                                                  |
+| `dashboard.password`                  | Dashboard user password                                                                                   | `random 10 character alphanumeric string`               |
+| `dashboard.appName`                   | Dashboard application name                                                                                | `MyDashboard`                                           |
+| `dashboard.parseServerUrlProtocol`    | Protocol used by Parse Dashboard to form the URLs to Parse Server.                                        | `http`                                                  |
+| `dashboard.resources`                 | The [resources] to allocate for container                                                                 | `{}`                                                    |
+| `dashboard.livenessProbe`             | Liveness probe configuration for Dashboard                                                                | `Check values.yaml file`                                |
+| `dashboard.readinessProbe`            | Readiness probe configuration for Dashboard                                                               | `Check values.yaml file`                                |
+| `dashboard.podAffinityPreset`         | Parse dashboard pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
+| `dashboard.podAntiAffinityPreset`     | Parse dashboard pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `dashboard.nodeAffinityPreset.type`   | Parse dashboard node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `dashboard.nodeAffinityPreset.key`    | Parse dashboard node label key to match Ignored if `affinity` is set.                                     | `""`                                                    |
+| `dashboard.nodeAffinityPreset.values` | Parse dashboard node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                    |
+| `dashboard.affinity`                  | Parse dashboard affinity for pod assignment                                                               | `{}` (evaluated as a template)                          |
+| `dashboard.nodeSelector`              | Parse dashboard node labels for pod assignment                                                            | `{}` (evaluated as a template)                          |
+| `dashboard.tolerations`               | Parse dashboard tolerations for pod assignment                                                            | `[]` (evaluated as a template)                          |
+| `dashboard.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                                 | `nil`                                                   |
+| `dashboard.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                             | `nil`                                                   |
+| `dashboard.extraEnvVarsSecret`        | Secret containing extra env vars  (evaluated as a template)                                               | `nil`                                                   |
+
+### Volume Permissions parameters
+
+| Parameter                            | Description                                                                                                                                               | Default           |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`           |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`       |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb` |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `buster`          |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`          |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`             |
+
+### MongoDB&reg; Parameters
+
+| Parameter                          | Description                                 | Default                                     |
+|------------------------------------|---------------------------------------------|---------------------------------------------|
+| `mongodb.auth.enabled`             | Enable MongoDB&reg; password authentication | `true`                                      |
+| `mongodb.auth.rootPassword`        | MongoDB&reg; admin password                 | `nil`                                       |
+| `mongodb.persistence.enabled`      | Enable MongoDB&reg; persistence using PVC   | `true`                                      |
+| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `nil` (uses alpha storage class annotation) |
+| `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce`                             |
+| `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`                                       |
 
 The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
 
@@ -175,6 +215,8 @@ $ helm install my-release \
 ```
 
 The above command sets the Parse administrator account username and password to `admin` and `password` respectively.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -228,6 +270,30 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: |-
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: {{ include "common.names.fullname" . }}-privileged
+      namespace: {{ .Release.Namespace }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: ServiceAccount
+        name: default
+        namespace: {{ .Release.Namespace }}
+```
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -239,6 +305,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.dashboard.hostname` and `ingress.server.hostname` values. When defining more than one, set the `ingress.dashboard.extraHosts` and `ingress.server.extraHosts` arrays. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 13.0.0
 
@@ -265,13 +335,13 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 12.0.0
 
-MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 11.0.0
 
-Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
 

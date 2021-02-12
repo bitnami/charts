@@ -150,7 +150,7 @@ Return the Postgresql secret name
 {{- end -}}
 
 {{/*
-Return the Redis hostname
+Return the Redis(TM) hostname
 */}}
 {{- define "discourse.redisHost" -}}
 {{- if .Values.redis.enabled }}
@@ -161,7 +161,7 @@ Return the Redis hostname
 {{- end -}}
 
 {{/*
-Return the Redis port
+Return the Redis(TM) port
 */}}
 {{- define "discourse.redisPort" -}}
 {{- if .Values.redis.enabled }}
@@ -172,7 +172,7 @@ Return the Redis port
 {{- end -}}
 
 {{/*
-Return true if a secret object for Redis should be created
+Return true if a secret object for Redis(TM) should be created
 */}}
 {{- define "discourse.redis.createSecret" -}}
 {{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) .Values.externalRedis.password }}
@@ -181,7 +181,7 @@ Return true if a secret object for Redis should be created
 {{- end -}}
 
 {{/*
-Return the Redis secret name
+Return the Redis(TM) secret name
 */}}
 {{- define "discourse.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
@@ -198,7 +198,7 @@ Return the Redis secret name
 {{- end -}}
 
 {{/*
-Return the Redis secret key
+Return the Redis(TM) secret key
 */}}
 {{- define "discourse.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.enabled .Values.redis.existingSecret }}
@@ -211,7 +211,7 @@ Return the Redis secret key
 {{- end -}}
 
 {{/*
-Return whether Redis uses password authentication or not
+Return whether Redis(TM) uses password authentication or not
 */}}
 {{- define "discourse.redis.usePassword" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}

@@ -32,7 +32,10 @@ spec:
         checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
         {{- end }}
     spec:
-{{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.forwarder.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
@@ -83,8 +86,8 @@ spec:
           {{- if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-              port: http
+              path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
+              port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
@@ -94,8 +97,8 @@ spec:
           {{- if .Values.forwarder.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
-              port: http
+              path: {{ .Values.forwarder.readinessProbe.httpGet.path }}
+              port: {{ .Values.forwarder.readinessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.forwarder.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}
@@ -106,7 +109,9 @@ spec:
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
           securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
           {{ end }}
           volumeMounts:
             - name: fluentd-config

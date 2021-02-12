@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -61,6 +61,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `image.debug`                                   | Specify if debug values should be set                                                                                                                     | `false`                                                     |
 | `nameOverride`                                  | String to partially override etcd.fullname template with a string (will prepend the release name)                                                         | `nil`                                                       |
 | `fullnameOverride`                              | String to fully override etcd.fullname template with a string                                                                                             | `nil`                                                       |
+| `hostAliases`                                   | Add deployment host aliases                                                                                                                               | `[]`                                                        |
 | `volumePermissions.enabled`                     | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                     |
 | `volumePermissions.image.registry`              | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                 |
 | `volumePermissions.image.repository`            | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                           |
@@ -99,9 +100,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `clusterDomain`                                 | Default Kubernetes cluster domain                                                                                                                         | `cluster.local`                                             |
 | `service.type`                                  | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                                 |
 | `service.port`                                  | etcd client port                                                                                                                                          | `2379`                                                      |
-| `service.clientPortNameOverride`                | etcd client port name override                                                                                                                            | `""`                                                    |
+| `service.clientPortNameOverride`                | etcd client port name override                                                                                                                            | `""`                                                        |
 | `service.peerPort`                              | etcd peer port                                                                                                                                            | `2380`                                                      |
-| `service.peerPortNameOverride`                  | etcd peer port name override                                                                                                                              | `""`                                                    |
+| `service.peerPortNameOverride`                  | etcd peer port name override                                                                                                                              | `""`                                                        |
 | `service.nodePorts.clientPort`                  | Kubernetes etcd client node port                                                                                                                          | `""`                                                        |
 | `service.nodePorts.peerPort`                    | Kubernetes etcd peer node port                                                                                                                            | `""`                                                        |
 | `service.annotations`                           | Annotations for etcd service                                                                                                                              | `{}`                                                        |
@@ -130,9 +131,9 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `readinessProbe.timeoutSeconds`                 | When the probe times out                                                                                                                                  | `5`                                                         |
 | `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                                                         |
 | `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed                                                               | `1`                                                         |
-| `statefulsetLabels`                             | Extra statefulset labels                                                                                                                                  | `{}` (evaluated as a template)                               |
+| `statefulsetLabels`                             | Extra statefulset labels                                                                                                                                  | `{}` (evaluated as a template)                              |
 | `podAnnotations`                                | Annotations to be added to pods                                                                                                                           | `{}`                                                        |
-| `podLabels`                                     | Extra pod labels                                                                                                                                          | `{}` (evaluated as a template)                               |
+| `podLabels`                                     | Extra pod labels                                                                                                                                          | `{}` (evaluated as a template)                              |
 | `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                        |
 | `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                      |
 | `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                        |
@@ -175,6 +176,8 @@ $ helm install my-release \
 
 The above command sets the etcd `root` account password to `secretpassword`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
@@ -190,48 +193,6 @@ $ helm install my-release -f values.yaml bitnami/etcd
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of etcd nodes:
-```diff
-- statefulset.replicaCount: 1
-+ statefulset.replicaCount: 3
-```
-
-- Switch to encrypt client communication using TLS certificates:
-```diff
-- auth.client.secureTransport: false
-+ auth.client.secureTransport: true
-```
-
-- Switch to enable host authentication using TLS certificates:
-```diff
-- auth.client.enableAuthentication: false
-+ auth.client.enableAuthentication: true
-```
-
-- Switch to encrypt peer communication using TLS certificates:
-```diff
-- auth.peer.secureTransport: false
-+ auth.peer.secureTransport: true
-```
-
-- Switch to automatically create the TLS certificates:
-```diff
-- auth.peer.useAutoTLS: false
-+ auth.peer.useAutoTLS: true
-```
-
-- Enable prometheus to access etcd metrics endpoint:
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `statefulset.replicaCount` parameter.
 
 ### Using custom configuration
 
@@ -302,6 +263,8 @@ disasterRecovery.enabled=true
 disasterRecovery.pvc.size=2Gi
 disasterRecovery.pvc.storageClassName=nfs
 ```
+
+If `startFromSnapshot` is enabled at the same time than `disasterRecovery`, the PVC provided via `startFromSnapshot.existingClaim` will be used to store the periodical snapshots.
 
 > **Note**: Disaster recovery feature requires using volumes with ReadWriteMany access mode. For instance, you can use the stable/nfs-server-provisioner chart to provide NFS PVCs.
 

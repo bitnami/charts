@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -47,211 +47,215 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the RabbitMQ chart and their default values.
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                    | Global Docker image registry                                                                                             | `nil`                                                        |
-| `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                                                            | `nil`                                                        |
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
 
 ### Common parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `nameOverride`                            | String to partially override rabbitmq.fullname                                                                           | `nil`                                                        |
-| `fullnameOverride`                        | String to fully override rabbitmq.fullname                                                                               | `nil`                                                        |
-| `clusterDomain`                           | Default Kubernetes cluster domain                                                                                        | `cluster.local`                                              |
+| Parameter          | Description                                                          | Default         |
+|--------------------|----------------------------------------------------------------------|-----------------|
+| `nameOverride`     | String to partially override rabbitmq.fullname                       | `nil`           |
+| `fullnameOverride` | String to fully override rabbitmq.fullname                           | `nil`           |
+| `clusterDomain`    | Default Kubernetes cluster domain                                    | `cluster.local` |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
 
 ### RabbitMQ parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                          | RabbitMQ image registry                                                                                                  | `docker.io`                                                  |
-| `image.repository`                        | RabbitMQ image name                                                                                                      | `bitnami/rabbitmq`                                           |
-| `image.tag`                               | RabbitMQ image tag                                                                                                       | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                        | RabbitMQ image pull policy                                                                                               | `IfNotPresent`                                               |
-| `image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.debug`                             | Set to true if you would like to see extra information on logs                                                           | `false`                                                      |
-| `auth.username`                           | RabbitMQ application username                                                                                            | `user`                                                       |
-| `auth.password`                           | RabbitMQ application password                                                                                            | _random 10 character long alphanumeric string_               |
-| `auth.existingPasswordSecret`             | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                             | `nil` (evaluated as a template)                              |
-| `auth.erlangCookie`                       | Erlang cookie                                                                                                            | _random 32 character long alphanumeric string_               |
-| `auth.existingErlangSecret`               | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                      | `nil` (evaluated as a template)                                                        |
-| `auth.tls.enabled`                        | Enable TLS support on RabbitMQ                                                                                           | `false`                                                      |
-| `auth.tls.failIfNoPeerCert`               | When set to true, TLS connection will be rejected if client fails to provide a certificate                               | `true`                                                       |
-| `auth.tls.sslOptionsVerify`               | Should [peer verification](https://www.rabbitmq.com/ssl.html#peer-verification) be enabled?                              | `verify_peer`                                                |
-| `auth.tls.caCertificate`                  | Certificate Authority (CA) bundle content                                                                                | `nil`                                                        |
-| `auth.tls.serverCertificate`              | Server certificate content                                                                                               | `nil`                                                        |
-| `auth.tls.serverKey`                      | Server private key content                                                                                               | `nil`                                                        |
-| `auth.tls.existingSecret`                 | Existing secret with certificate content to RabbitMQ credentials                                                         | `nil`                                                        |
-| `logs`                                    | Path of the RabbitMQ server's Erlang log file                                                                            | `-`                                                          |
-| `ulimitNofiles`                           | Max File Descriptor limit                                                                                                | `65536`                                                      |
-| `maxAvailableSchedulers`                  | RabbitMQ maximum available scheduler threads                                                                             | `2`                                                          |
-| `onlineSchedulers`                        | RabbitMQ online scheduler threads                                                                                        | `1`                                                          |
-| `memoryHighWatermark.enabled`             | Enable configuring Memory high watermark on RabbitMQ                                                                     | `false`                                                      |
-| `memoryHighWatermark.type`                | Memory high watermark type. Either `absolute` or `relative`                                                              | `relative`                                                   |
-| `memoryHighWatermark.value`               | Memory high watermark value                                                                                              | `0.4`                                                        |
-| `plugins`                                 | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`) | `rabbitmq_management rabbitmq_peer_discovery_k8s`            |
-| `communityPlugins`                        | List of custom plugins (URLs) to be downloaded during container initialization                                           | `nil`                                                        |
-| `extraPlugins`                            | Extra plugins to enable (single string containing a space-separated list)                                                | `nil`                                                        |
-| `clustering.addressType`                  | Switch clustering mode. Either `ip` or `hostname`                                                                        | `hostname`                                                   |
-| `clustering.rebalance`                    | Rebalance master for queues in cluster when new replica is created                                                       | `false`                                                      |
-| `clustering.forceBoot`                    | Rebalance master for queues in cluster when new replica is created                                                       | `false`                                                      |
-| `loadDefinition.enabled`                  | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                                         | `false`                                                      |
-| `loadDefinition.existingSecret`           | Existing secret with the load definitions file                                                                           | `nil`                                                        |
-| `command`                                 | Override default container command (useful when using custom images)                                                     | `nil`                                                        |
-| `args`                                    | Override default container args (useful when using custom images)                                                        | `nil`                                                        |
-| `terminationGracePeriodSeconds`           | TerminationGracePeriodSeconds of container (time in excess of 10 seconds will be spent waiting for synchronization)      | `120`                                                        |
-| `extraEnvVars`                            | Extra environment variables to add to RabbitMQ pods                                                                      | `[]`                                                         |
-| `extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                                     | `nil`                                                        |
-| `extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars (in case of sensitive data)                                            | `nil`                                                        |
-| `extraContainerPorts`                     | Extra ports to be included in container spec, primarily informational                                                    | `[]`                                                         |
-| `configuration`                           | RabbitMQ configuration                                                                                                   | Check `values.yaml` file                                     |
-| `extraConfiguration`                      | Extra configuration to be appended to RabbitMQ configuration                                                             | Check `values.yaml` file                                     |
-| `advancedConfiguration`                   | Extra configuration (in classic format)                                                                                  | Check `values.yaml` file                                     |
-| `ldap.enabled`                            | Enable LDAP support                                                                                                      | `false`                                                      |
-| `ldap.servers`                            | List of LDAP servers hostnames                                                                                           | `[]`                                                         |
-| `ldap.port`                               | LDAP servers port                                                                                                        | `389`                                                        |
-| `ldap.user_dn_pattern`                    | Pattern used to translate the provided username into a value to be used for the LDAP bind                                | `cn=${username},dc=example,dc=org`                           |
-| `ldap.tls.enabled`                        | Enable TLS for LDAP connections (check advancedConfiguration parameter in values.yml)                                    | `false`                                                      |
+| Parameter                          | Description                                                                                                                              | Default                                                 |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`                   | RabbitMQ image registry                                                                                                                  | `docker.io`                                             |
+| `image.repository`                 | RabbitMQ image name                                                                                                                      | `bitnami/rabbitmq`                                      |
+| `image.tag`                        | RabbitMQ image tag                                                                                                                       | `{TAG_NAME}`                                            |
+| `image.pullPolicy`                 | RabbitMQ image pull policy                                                                                                               | `IfNotPresent`                                          |
+| `image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
+| `image.debug`                      | Set to true if you would like to see extra information on logs                                                                           | `false`                                                 |
+| `auth.username`                    | RabbitMQ application username                                                                                                            | `user`                                                  |
+| `auth.password`                    | RabbitMQ application password                                                                                                            | _random 10 character long alphanumeric string_          |
+| `auth.existingPasswordSecret`      | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                                             | `nil` (evaluated as a template)                         |
+| `auth.erlangCookie`                | Erlang cookie                                                                                                                            | _random 32 character long alphanumeric string_          |
+| `auth.existingErlangSecret`        | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                      | `nil` (evaluated as a template)                         |
+| `auth.tls.enabled`                 | Enable TLS support on RabbitMQ                                                                                                           | `false`                                                 |
+| `auth.tls.failIfNoPeerCert`        | When set to true, TLS connection will be rejected if client fails to provide a certificate                                               | `true`                                                  |
+| `auth.tls.sslOptionsVerify`        | Should [peer verification](https://www.rabbitmq.com/ssl.html#peer-verification) be enabled?                                              | `verify_peer`                                           |
+| `auth.tls.caCertificate`           | Certificate Authority (CA) bundle content                                                                                                | `nil`                                                   |
+| `auth.tls.serverCertificate`       | Server certificate content                                                                                                               | `nil`                                                   |
+| `auth.tls.serverKey`               | Server private key content                                                                                                               | `nil`                                                   |
+| `auth.tls.existingSecret`          | Existing secret with certificate content to RabbitMQ credentials                                                                         | `nil`                                                   |
+| `auth.tls.existingSecretFullChain` | Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`. | `false`                                                 |
+| `logs`                             | Path of the RabbitMQ server's Erlang log file                                                                                            | `-`                                                     |
+| `ulimitNofiles`                    | Max File Descriptor limit                                                                                                                | `65536`                                                 |
+| `maxAvailableSchedulers`           | RabbitMQ maximum available scheduler threads                                                                                             | `2`                                                     |
+| `onlineSchedulers`                 | RabbitMQ online scheduler threads                                                                                                        | `1`                                                     |
+| `memoryHighWatermark.enabled`      | Enable configuring Memory high watermark on RabbitMQ                                                                                     | `false`                                                 |
+| `memoryHighWatermark.type`         | Memory high watermark type. Either `absolute` or `relative`                                                                              | `relative`                                              |
+| `memoryHighWatermark.value`        | Memory high watermark value                                                                                                              | `0.4`                                                   |
+| `plugins`                          | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)                 | `rabbitmq_management rabbitmq_peer_discovery_k8s`       |
+| `communityPlugins`                 | List of custom plugins (URLs) to be downloaded during container initialization                                                           | `nil`                                                   |
+| `hostAliases`                      | Add deployment host aliases                                                                                                              | `[]`                                                    |
+| `extraPlugins`                     | Extra plugins to enable (single string containing a space-separated list)                                                                | `nil`                                                   |
+| `clustering.addressType`           | Switch clustering mode. Either `ip` or `hostname`                                                                                        | `hostname`                                              |
+| `clustering.rebalance`             | Rebalance master for queues in cluster when new replica is created                                                                       | `false`                                                 |
+| `clustering.forceBoot`             | Force boot of an unexpectedly shut down cluster (in an unexpected order).                                                                | `false`                                                 |
+| `loadDefinition.enabled`           | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                                                         | `false`                                                 |
+| `loadDefinition.existingSecret`    | Existing secret with the load definitions file                                                                                           | `nil`                                                   |
+| `command`                          | Override default container command (useful when using custom images)                                                                     | `nil`                                                   |
+| `args`                             | Override default container args (useful when using custom images)                                                                        | `nil`                                                   |
+| `terminationGracePeriodSeconds`    | TerminationGracePeriodSeconds of container (time in excess of 10 seconds will be spent waiting for synchronization)                      | `120`                                                   |
+| `extraEnvVars`                     | Extra environment variables to add to RabbitMQ pods                                                                                      | `[]`                                                    |
+| `extraEnvVarsCM`                   | Name of existing ConfigMap containing extra env vars                                                                                     | `nil`                                                   |
+| `extraEnvVarsSecret`               | Name of existing Secret containing extra env vars (in case of sensitive data)                                                            | `nil`                                                   |
+| `extraContainerPorts`              | Extra ports to be included in container spec, primarily informational                                                                    | `[]`                                                    |
+| `configuration`                    | RabbitMQ configuration                                                                                                                   | Check `values.yaml` file                                |
+| `extraConfiguration`               | Extra configuration to be appended to RabbitMQ configuration                                                                             | Check `values.yaml` file                                |
+| `advancedConfiguration`            | Extra configuration (in classic format)                                                                                                  | Check `values.yaml` file                                |
+| `ldap.enabled`                     | Enable LDAP support                                                                                                                      | `false`                                                 |
+| `ldap.servers`                     | List of LDAP servers hostnames                                                                                                           | `[]`                                                    |
+| `ldap.port`                        | LDAP servers port                                                                                                                        | `389`                                                   |
+| `ldap.user_dn_pattern`             | Pattern used to translate the provided username into a value to be used for the LDAP bind                                                | `cn=${username},dc=example,dc=org`                      |
+| `ldap.tls.enabled`                 | Enable TLS for LDAP connections (check advancedConfiguration parameter in values.yml)                                                    | `false`                                                 |
 
 ### Statefulset parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `replicaCount`                            | Number of RabbitMQ nodes                                                                                                 | `1`                                                          |
-| `schedulerName`                           | Name of the k8s service (other than default)                                                                             | `nil`                                                        |
-| `podManagementPolicy`                     | Pod management policy                                                                                                    | `OrderedReady`                                               |
-| `updateStrategyType`                      | Update strategy type for the statefulset                                                                                 | `RollingUpdate`                                              |
-| `rollingUpdatePartition`                  | Partition update strategy                                                                                                | `nil`                                                        |
-| `statefulsetLabels`                       | RabbitMQ statefulset labels                                                                                              | `{}` (evaluated as a template)                               |
-| `podLabels`                               | RabbitMQ pod labels                                                                                                      | `{}` (evaluated as a template)                               |
-| `podAnnotations`                          | RabbitMQ Pod annotations                                                                                                 | `{}` (evaluated as a template)                               |
-| `podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                                                         |
-| `podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                                                       |
-| `nodeAffinityPreset.type`                 | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                                                         |
-| `nodeAffinityPreset.key`                  | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                                                         |
-| `nodeAffinityPreset.values`               | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                                                         |
-| `nodeSelector`                            | Node labels for pod assignment                                                                                           | `{}` (evaluated as a template)                               |
-| `tolerations`                             | Tolerations for pod assignment                                                                                           | `[]` (evaluated as a template)                               |
-| `affinity`                                | Affinity for pod assignment                                                                                              | `{}` (evaluated as a template)                               |
-| `priorityClassName`                       | Name of the existing priority class to be used by rabbitmq pods                                                          | `""`                                                         |
-| `podSecurityContext`                      | RabbitMQ pods' Security Context                                                                                          | `{}`                                                         |
-| `containerSecurityContext`                | RabbitMQ containers' Security Context                                                                                    | `{}`                                                         |
-| `resources.limits`                        | The resources limits for RabbitMQ containers                                                                             | `{}`                                                         |
-| `resources.requests`                      | The requested resources for RabbitMQ containers                                                                          | `{}`                                                         |
-| `livenessProbe`                           | Liveness probe configuration for RabbitMQ                                                                                | Check `values.yaml` file                                     |
-| `readinessProbe`                          | Readiness probe configuration for RabbitMQ                                                                               | Check `values.yaml` file                                     |
-| `customLivenessProbe`                     | Override default liveness probe                                                                                          | `nil`                                                        |
-| `customReadinessProbe`                    | Override default readiness probe                                                                                         | `nil`                                                        |
-| `customStartupProbe`                      | Define a custom startup probe                                                                                            | `nil`                                                        |
-| `pdb.create`                              | Enable/disable a Pod Disruption Budget creation                                                                          | `false`                                                      |
-| `pdb.minAvailable`                        | Minimum number/percentage of pods that should remain scheduled                                                           | `nil`                                                        |
-| `pdb.maxUnavailable`                      | Maximum number/percentage of pods that may be made unavailable                                                           | `1`                                                          |
-| `initContainers`                          | Add additional init containers to the RabbitMQ pod                                                                       | `{}` (evaluated as a template)                               |
-| `sidecars`                                | Add additional sidecar containers to the RabbitMQ pod                                                                    | `{}` (evaluated as a template)                               |
-| `extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts .                                                               | `{}`                                                         |
-| `extraVolumes`                            | Optionally specify extra list of additional volumes .                                                                    | `{}`                                                         |
-| `extraSecrets`                            | Optionally specify extra secrets to be created by the chart.                                                             | `{}` (evaluated as a template)                               |
+| Parameter                   | Description                                                                               | Default                        |
+|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
+| `replicaCount`              | Number of RabbitMQ nodes                                                                  | `1`                            |
+| `schedulerName`             | Name of the k8s service (other than default)                                              | `nil`                          |
+| `podManagementPolicy`       | Pod management policy                                                                     | `OrderedReady`                 |
+| `updateStrategyType`        | Update strategy type for the statefulset                                                  | `RollingUpdate`                |
+| `rollingUpdatePartition`    | Partition update strategy                                                                 | `nil`                          |
+| `statefulsetLabels`         | RabbitMQ statefulset labels                                                               | `{}` (evaluated as a template) |
+| `podLabels`                 | RabbitMQ pod labels                                                                       | `{}` (evaluated as a template) |
+| `podAnnotations`            | RabbitMQ Pod annotations                                                                  | `{}` (evaluated as a template) |
+| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`    | Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
+| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `priorityClassName`         | Name of the existing priority class to be used by rabbitmq pods                           | `""`                           |
+| `podSecurityContext`        | RabbitMQ pods' Security Context                                                           | `{}`                           |
+| `containerSecurityContext`  | RabbitMQ containers' Security Context                                                     | `{}`                           |
+| `resources.limits`          | The resources limits for RabbitMQ containers                                              | `{}`                           |
+| `resources.requests`        | The requested resources for RabbitMQ containers                                           | `{}`                           |
+| `livenessProbe`             | Liveness probe configuration for RabbitMQ                                                 | Check `values.yaml` file       |
+| `readinessProbe`            | Readiness probe configuration for RabbitMQ                                                | Check `values.yaml` file       |
+| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                          |
+| `customStartupProbe`        | Define a custom startup probe                                                             | `nil`                          |
+| `pdb.create`                | Enable/disable a Pod Disruption Budget creation                                           | `false`                        |
+| `pdb.minAvailable`          | Minimum number/percentage of pods that should remain scheduled                            | `nil`                          |
+| `pdb.maxUnavailable`        | Maximum number/percentage of pods that may be made unavailable                            | `1`                            |
+| `initContainers`            | Add additional init containers to the RabbitMQ pod                                        | `{}` (evaluated as a template) |
+| `sidecars`                  | Add additional sidecar containers to the RabbitMQ pod                                     | `{}` (evaluated as a template) |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts .                                | `{}`                           |
+| `extraVolumes`              | Optionally specify extra list of additional volumes .                                     | `{}`                           |
+| `extraSecrets`              | Optionally specify extra secrets to be created by the chart.                              | `{}` (evaluated as a template) |
 
 ### Exposure parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `service.type`                            | Kubernetes Service type                                                                                                  | `ClusterIP`                                                  |
-| `service.port`                            | Amqp port                                                                                                                | `5672`                                                       |
-| `service.portName`                        | Amqp service port name                                                                                                   | `amqp`                                                       |
-| `service.tlsPort`                         | Amqp TLS port                                                                                                            | `5671`                                                       |
-| `service.tlsPortName`                     | Amqp TLS service port name                                                                                               | `amqp-ssl`                                                   |
-| `service.nodePort`                        | Node port override for `amqp` port, if serviceType NodePort or LoadBalancer                                              | `nil`                                                        |
-| `service.tlsNodePort`                     | Node port override for `amqp-ssl` port, if serviceType NodePort or LoadBalancer                                          | `nil`                                                        |
-| `service.distPort`                        | Erlang distribution server port                                                                                          | `25672`                                                      |
-| `service.distPortName`                    | Erlang distribution service port name                                                                                    | `dist`                                                       |
-| `service.distNodePort`                    | Node port override for `dist` port, if serviceType NodePort                                                              | `nil`                                                        |
-| `service.managerPort`                     | RabbitMQ Manager port                                                                                                    | `15672`                                                      |
-| `service.managerPortName`                 | RabbitMQ Manager service port name                                                                                       | `http-stats`                                                 |
-| `service.managerNodePort`                 | Node port override for `http-stats` port, if serviceType NodePort                                                        | `nil`                                                        |
-| `service.metricsPort`                     | RabbitMQ Prometheues metrics port                                                                                        | `9419`                                                       |
-| `service.metricsPortName`                 | RabbitMQ Prometheues metrics service port name                                                                           | `metrics`                                                    |
-| `service.metricsNodePort`                 | Node port override for `metrics` port, if serviceType NodePort                                                           | `nil`                                                        |
-| `service.epmdPortName`                    | EPMD Discovery service port name                                                                                         | `epmd`                                                       |
-| `service.epmdNodePort`                    | Node port override for `epmd` port, if serviceType NodePort                                                              | `nil`                                                        |
-| `service.extraPorts`                      | Extra ports to expose in the service                                                                                     | `[]`                                                         |
-| `service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                | `[]`                                                         |
-| `service.loadBalancerIP`                  | LoadBalancerIP for the service                                                                                           | `nil`                                                        |
-| `service.externalIP`                      | ExternalIP for the service                                                                                               | `nil`                                                        |
-| `service.externalTrafficPolicy`           | Enable client source IP preservation                                                                                     | `Cluster`                                                    |
-| `service.labels`                          | Service labels                                                                                                           | `{}` (evaluated as a template)                               |
-| `service.annotations`                     | Service annotations                                                                                                      | `{}` (evaluated as a template)                               |
-| `ingress.enabled`                         | Enable ingress resource for Management console                                                                           | `false`                                                      |
-| `ingress.path`                            | Path for the default host                                                                                                | `/`                                                          |
-| `ingress.certManager`                     | Add annotations for cert-manager                                                                                         | `false`                                                      |
-| `ingress.hostname`                        | Default host for the ingress resource                                                                                    | `rabbitmq.local`                                             |
-| `ingress.annotations`                     | Ingress annotations                                                                                                      | `[]`                                                         |
-| `ingress.tls`                             | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                        | `false`                                                      |
-| `ingress.existingSecret`                  | Existing secret for the Ingress TLS certificate                                                                          | `nil`                                                        |
-| `ingress.extraHosts[0].name`              | Additional hostnames to be covered                                                                                       | `nil`                                                        |
-| `ingress.extraHosts[0].path`              | Additional hostnames to be covered                                                                                       | `nil`                                                        |
-| `ingress.extraTls[0].hosts[0]`            | TLS configuration for additional hostnames to be covered                                                                 | `nil`                                                        |
-| `ingress.extraTls[0].secretName`          | TLS configuration for additional hostnames to be covered                                                                 | `nil`                                                        |
-| `ingress.secrets[0].name`                 | TLS Secret Name                                                                                                          | `nil`                                                        |
-| `ingress.secrets[0].certificate`          | TLS Secret Certificate                                                                                                   | `nil`                                                        |
-| `ingress.secrets[0].key`                  | TLS Secret Key                                                                                                           | `nil`                                                        |
-| `networkPolicy.enabled`                   | Enable NetworkPolicy                                                                                                     | `false`                                                      |
-| `networkPolicy.allowExternal`             | Don't require client label for connections                                                                               | `true`                                                       |
-| `networkPolicy.additionalRules`           | Additional NetworkPolicy rules                                                                                           | `nil`                                                        |
+| Parameter                          | Description                                                                       | Default                        |
+|------------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                     | Kubernetes Service type                                                           | `ClusterIP`                    |
+| `service.port`                     | Amqp port                                                                         | `5672`                         |
+| `service.portName`                 | Amqp service port name                                                            | `amqp`                         |
+| `service.tlsPort`                  | Amqp TLS port                                                                     | `5671`                         |
+| `service.tlsPortName`              | Amqp TLS service port name                                                        | `amqp-ssl`                     |
+| `service.nodePort`                 | Node port override for `amqp` port, if serviceType NodePort or LoadBalancer       | `nil`                          |
+| `service.tlsNodePort`              | Node port override for `amqp-ssl` port, if serviceType NodePort or LoadBalancer   | `nil`                          |
+| `service.distPort`                 | Erlang distribution server port                                                   | `25672`                        |
+| `service.distPortName`             | Erlang distribution service port name                                             | `dist`                         |
+| `service.distNodePort`             | Node port override for `dist` port, if serviceType NodePort                       | `nil`                          |
+| `service.managerPort`              | RabbitMQ Manager port                                                             | `15672`                        |
+| `service.managerPortName`          | RabbitMQ Manager service port name                                                | `http-stats`                   |
+| `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType NodePort                 | `nil`                          |
+| `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                 | `9419`                         |
+| `service.metricsPortName`          | RabbitMQ Prometheues metrics service port name                                    | `metrics`                      |
+| `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType NodePort                    | `nil`                          |
+| `service.epmdPortName`             | EPMD Discovery service port name                                                  | `epmd`                         |
+| `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType NodePort                       | `nil`                          |
+| `service.extraPorts`               | Extra ports to expose in the service                                              | `[]`                           |
+| `service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                         | `[]`                           |
+| `service.loadBalancerIP`           | LoadBalancerIP for the service                                                    | `nil`                          |
+| `service.externalIP`               | ExternalIP for the service                                                        | `nil`                          |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                              | `Cluster`                      |
+| `service.labels`                   | Service labels                                                                    | `{}` (evaluated as a template) |
+| `service.annotations`              | Service annotations                                                               | `{}` (evaluated as a template) |
+| `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
+| `ingress.path`                     | Path for the default host                                                         | `/`                            |
+| `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
+| `ingress.hostname`                 | Default host for the ingress resource                                             | `rabbitmq.local`               |
+| `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
+| `ingress.annotations`              | Ingress annotations                                                               | `[]`                           |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
+| `ingress.existingSecret`           | Existing secret for the Ingress TLS certificate                                   | `nil`                          |
+| `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered                          | `nil`                          |
+| `ingress.secrets[0].name`          | TLS Secret Name                                                                   | `nil`                          |
+| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                            | `nil`                          |
+| `ingress.secrets[0].key`           | TLS Secret Key                                                                    | `nil`                          |
+| `networkPolicy.enabled`            | Enable NetworkPolicy                                                              | `false`                        |
+| `networkPolicy.allowExternal`      | Don't require client label for connections                                        | `true`                         |
+| `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                    | `nil`                          |
 
 ### Persistence parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `persistence.enabled`                     | Enable RabbitMQ data persistence using PVC                                                                               | `true`                                                       |
-| `persistence.existingClaim`               | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                        | `nil`                                                        |
-| `persistence.storageClass`                | PVC Storage Class for RabbitMQ data volume                                                                               | `nil`                                                        |
-| `persistence.accessMode`                  | PVC Access Mode for RabbitMQ data volume                                                                                 | `ReadWriteOnce`                                              |
-| `persistence.size`                        | PVC Storage Request for RabbitMQ data volume                                                                             | `8Gi`                                                        |
-| `persistence.selector`                    | Selector to match an existing Persistent Volume                                                                          | `{}`(evaluated as a template)                                |
-| `persistence.volumes`                     | Additional volumes without creating PVC                                                                                  | `{}`(evaluated as a template)                                |
+| Parameter                   | Description                                                                       | Default                       |
+|-----------------------------|-----------------------------------------------------------------------------------|-------------------------------|
+| `persistence.enabled`       | Enable RabbitMQ data persistence using PVC                                        | `true`                        |
+| `persistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `nil`                         |
+| `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume                                        | `nil`                         |
+| `persistence.accessMode`    | PVC Access Mode for RabbitMQ data volume                                          | `ReadWriteOnce`               |
+| `persistence.size`          | PVC Storage Request for RabbitMQ data volume                                      | `8Gi`                         |
+| `persistence.selector`      | Selector to match an existing Persistent Volume                                   | `{}`(evaluated as a template) |
+| `persistence.volumes`       | Additional volumes without creating PVC                                           | `{}`(evaluated as a template) |
 
 ### RBAC parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `serviceAccount.create`                   | Enable creation of ServiceAccount for RabbitMQ pods                                                                      | `true`                                                       |
-| `serviceAccount.name`                     | Name of the created serviceAccount                                                                                       | Generated using the `rabbitmq.fullname` template             |
-| `rbac.create`                             | Weather to create & use RBAC resources or not                                                                            | `true`                                                       |
+| Parameter               | Description                                         | Default                                          |
+|-------------------------|-----------------------------------------------------|--------------------------------------------------|
+| `serviceAccount.create` | Enable creation of ServiceAccount for RabbitMQ pods | `true`                                           |
+| `serviceAccount.name`   | Name of the created serviceAccount                  | Generated using the `rabbitmq.fullname` template |
+| `rbac.create`           | Weather to create & use RBAC resources or not       | `true`                                           |
 
 ### Volume Permissions parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`               | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`     | `false`                                                      |
-| `volumePermissions.image.registry`        | Init container volume-permissions image registry                                                                         | `docker.io`                                                  |
-| `volumePermissions.image.repository`      | Init container volume-permissions image name                                                                             | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`             | Init container volume-permissions image tag                                                                              | `buster`                                                     |
-| `volumePermissions.image.pullPolicy`      | Init container volume-permissions image pull policy                                                                      | `Always`                                                     |
-| `volumePermissions.image.pullSecrets`     | Specify docker-registry secret names as an array                                                                         | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.resources.limits`      | Init container volume-permissions resource  limits                                                                       | `{}`                                                         |
-| `volumePermissions.resources.requests`    | Init container volume-permissions resource  requests                                                                     | `{}`                                                         |
+| Parameter                              | Description                                                                                                          | Default                                                 |
+|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
 
 ### Metrics parameters
 
-| Parameter                                 | Description                                                                                                              | Default                                                      |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                         | Enable exposing RabbitMQ metrics to be gathered by Prometheus                                                            | `false`                                                      |
-| `metrics.plugins`                         | Plugins to enable Prometheus metrics in RabbitMQ                                                                         | `rabbitmq_prometheus`                                        |
-| `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9419"}` |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                             | `false`                                                      |
-| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                                                 | `monitoring`                                                 |
-| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                                              | `30s`                                                        |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                                                      | `nil`                                                        |
-| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                                                | `nil`                                                        |
-| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.                                                | `false`                                                      |
-| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator                                               | `{}`                                                         |
-| `metrics.serviceMonitor.release`          | Used to pass Labels release that sometimes should be custom for Prometheus Operator                                      | `nil`                                                        |
-| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                                                       | `false`                                                      |
-| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                   | `{}`                                                         |
-| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                                                               | `monitoring`                                                 |
-| `metrics.prometheusRule.rules`            | Rules to be created, check values for an example.                                                                        | `[]`                                                         |
+| Parameter                                 | Description                                                                            | Default                                                      |
+|-------------------------------------------|----------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`                         | Enable exposing RabbitMQ metrics to be gathered by Prometheus                          | `false`                                                      |
+| `metrics.plugins`                         | Plugins to enable Prometheus metrics in RabbitMQ                                       | `rabbitmq_prometheus`                                        |
+| `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                     | `{prometheus.io/scrape: "true", prometheus.io/port: "9419"}` |
+| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`                                                      |
+| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                               | `monitoring`                                                 |
+| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                            | `30s`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `nil`                                                        |
+| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
+| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
+| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator             | `{}`                                                         |
+| `metrics.serviceMonitor.release`          | Used to pass Labels release that sometimes should be custom for Prometheus Operator    | `nil`                                                        |
+| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                     | `false`                                                      |
+| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                                                         |
+| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                             | `monitoring`                                                 |
+| `metrics.prometheusRule.rules`            | Rules to be created, check values for an example.                                      | `[]`                                                         |
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
 
@@ -264,6 +268,8 @@ $ helm install my-release \
 ```
 
 The above command sets the RabbitMQ admin username and password to `admin` and `secretpassword` respectively. Additionally the secure erlang cookie is set to `secretcookie`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -287,60 +293,7 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Increase the number of replicas:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Resource needs and limits to apply to the pod:
-
-```diff
-resources:
-- requests: {}
-+ requests:
-+   memory: 2Gi
-+   cpu: 1000m
-- limits: {}
-+ limits:
-+   memory: 2Gi
-+   cpu: 1000m
-```
-
-- Enable Memory high watermark relative limit:
-
-```diff
-- memoryHighWatermark.enabled: false
-+ memoryHighWatermark.enabled: true
-```
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
+### Horizontal scaling
 
 To horizontally scale this chart once it has been deployed you have two options:
 
@@ -403,6 +356,12 @@ auth:
 
 - Setting [auth.tls.failIfNoPeerCert](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `false` allows a TLS connection if client fails to provide a certificate.
 - When setting [auth.tls.sslOptionsVerify](https://www.rabbitmq.com/ssl.html#peer-verification-configuration) to `verify_peer`, the node must perform peer verification. When set to `verify_none`, peer verification will be disabled and certificate exchange won't be performed.
+
+#### TLS integration with `cert-manager` (Let's Encrypt certificates)
+
+If using `cert-manager` to provision Let's Encrypt certificates, the `tls.crt` key in the generated TLS secret will contain the full certificate chain. Depending on the version of `cert-manager` in use, there can either be an empty `ca.crt` key, or none at all.
+
+In order to instruct RabbitMQ to look for the CA certificate within the primary certificate, `auth.tls.existingSecretFullChain` can be set to `true`.
 
 ### Load Definitions
 
@@ -534,6 +493,38 @@ communityPlugins="http://some-public-url/my-custom-plugin-X.Y.Z.ez"
 extraPlugins="my-custom-plugin"
 ```
 
+### Recovering the cluster from complete shutdown
+
+> IMPORTANT: Some of these procedures can lead to data loss, always make a backup beforehand.
+
+The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+
+This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+
+```console
+$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+
+If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+
+```console
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set clustering.forceBoot=true \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
+
 ### Known issues
 
 - Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
@@ -576,7 +567,6 @@ extraConfiguration: |-
   default_permissions.read = .*
   default_permissions.write = .*
 ```
-
 
 ## Troubleshooting
 

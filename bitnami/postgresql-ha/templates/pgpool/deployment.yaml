@@ -36,6 +36,9 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.pgpool.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.pgpool.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -219,9 +222,10 @@ spec:
             - name: PGPOOL_CHILD_MAX_CONNECTIONS
               value: {{ .Values.pgpool.childMaxConnections | quote }}
             {{- end }}
-            {{- if .Values.pgpool.childLifeTime }}
+            {{- $childlifetime := .Values.pgpool.childLifeTime | quote }}
+            {{- if or $childlifetime (eq "0" $childlifetime) }}
             - name: PGPOOL_CHILD_LIFE_TIME
-              value: {{ .Values.pgpool.childLifeTime | quote }}
+              value: {{ $childlifetime }}
             {{- end }}
             {{- if .Values.pgpool.clientIdleLimit }}
             - name: PGPOOL_CLIENT_IDLE_LIMIT
@@ -231,7 +235,7 @@ spec:
             - name: PGPOOL_CONNECTION_LIFE_TIME
               value: {{ .Values.pgpool.connectionLifeTime | quote }}
             {{- end }}
-            {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
+            {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: PGPOOL_USER_CONF_FILE
               value: "/opt/bitnami/pgpool/user_config/pgpool.conf"
             {{- end }}
@@ -297,11 +301,11 @@ spec:
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
+            {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/user_config/
             {{- end }}
-            {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM  }}
+            {{- if or .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM  }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
@@ -333,12 +337,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration .Values.pgpool.configurationCM }}
+        {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
           configMap:
             name: {{ include "postgresql-ha.pgpoolConfigurationCM" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/pgpool-entrypoint-initdb.d/*.sh") .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM }}
+        {{- if or .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM }}
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.pgpoolInitdbScriptsCM" . }}

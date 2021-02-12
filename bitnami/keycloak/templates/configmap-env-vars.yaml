@@ -32,6 +32,6 @@ data:
   KEYCLOAK_ENABLE_TLS: {{ ternary "true" "false" .Values.auth.tls.enabled | quote }}
   {{- if .Values.auth.tls.enabled }}
   KEYCLOAK_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}
-  KEYCLOAK_TLS_KEYSTORE_FILE: "/opt/bitnami/keycloak/secrets/keycloak.keystore.jks"
-  KEYCLOAK_TLS_TRUSTSTORE_FILE: "/opt/bitnami/keycloak/secrets/keycloak.truststore.jks"
+  KEYCLOAK_TLS_KEYSTORE_FILE: "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
+  KEYCLOAK_TLS_TRUSTSTORE_FILE: "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
   {{- end }}

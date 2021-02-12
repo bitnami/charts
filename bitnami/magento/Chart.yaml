@@ -11,15 +11,17 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
+    tags:
+      - magento-database
     version: 9.x.x
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 14.x.x
 description: A feature-rich flexible e-commerce solution. It includes transaction options, multi-store functionality, loyalty programs, product categorization and shopper filtering, promotion rules, and more.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/magento
-icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
   - magento
   - e-commerce
@@ -33,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 16.0.2
+version: 17.2.0

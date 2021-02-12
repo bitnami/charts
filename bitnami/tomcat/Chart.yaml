@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 9.0.41
+appVersion: 9.0.43
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ dependencies:
 description: Chart for Apache Tomcat
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/tomcat
-icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-220x234.png
 keywords:
   - tomcat
   - java
@@ -26,4 +26,4 @@ name: tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
   - http://tomcat.apache.org
-version: 8.0.0
+version: 8.2.2

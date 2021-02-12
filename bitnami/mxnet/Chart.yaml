@@ -11,7 +11,7 @@ dependencies:
 description: A flexible and efficient library for deep learning
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/mxnet
-icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-220x234.png
 keywords:
   - mxnet
   - python
@@ -24,4 +24,4 @@ name: mxnet
 sources:
   - https://github.com/bitnami/bitnami-docker-mxnet
   - https://mxnet.apache.org/
-version: 2.1.2
+version: 2.2.0

@@ -5,6 +5,12 @@ metadata:
   name: {{ include "scdf.fullname" . }}-skipper
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: skipper
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.skipper.replicaCount }}
   selector:
@@ -29,8 +35,11 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: skipper
     spec:
-      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      {{- if .Values.skipper.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.skipper.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -166,8 +175,8 @@ spec:
               mountPath: /etc/secrets/rabbitmq
               readOnly: true
             {{- end }}
-            {{- if .Values.server.extraVolumeMounts }}
-            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- if .Values.skipper.extraVolumeMounts }}
+            {{- toYaml .Values.skipper.extraVolumeMounts | nindent 12 }}
             {{- end }}
         {{- if .Values.skipper.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.sidecars "context" $) | nindent 8 }}
@@ -193,7 +202,7 @@ spec:
             name: {{ include "scdf.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
-        {{- if .Values.server.extraVolumes }}
-          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
+        {{- if .Values.skipper.extraVolumes }}
+          {{- toYaml .Values.skipper.extraVolumes | nindent 8 }}
         {{- end }}
 {{- end }}

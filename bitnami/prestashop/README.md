@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -73,6 +73,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### PrestaShop parameters
 
@@ -80,6 +81,7 @@ The following table lists the configurable parameters of the PrestaShop chart an
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
 | `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
 | `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
 | `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
@@ -139,25 +141,29 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                           | Default            |
-|----------------------------------|---------------------------------------|--------------------|
-| `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                     | `80`               |
-| `service.httpsPort`              | Service HTTPS port                    | `443`              |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
-| `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
-| `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
-| `ingress.enabled`                | Enable ingress controller resource    | `false`            |
-| `ingress.certManager`            | Add annotations for cert-manager      | `false`            |
-| `ingress.hostname`               | Default host for the ingress resource | `prestashop.local` |
-| `ingress.annotations`            | Ingress annotations                   | `{}`               |
-| `ingress.hosts[0].name`          | Hostname to your PrestaShop installation  | `nil`          |
-| `ingress.hosts[0].path`          | Path within the url structure         | `nil`              |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`              |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`              |
-| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`              |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`              |
-| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`              |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `prestashop.local`             |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
+| `ingress.pathType`               | Ingress path type                                        | `ImplementationSpecific`       |
 
 ### Database parameters
 
@@ -183,15 +189,15 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Metrics parameters
 
@@ -208,25 +214,25 @@ The following table lists the configurable parameters of the PrestaShop chart an
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop). For more information please refer to the [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop) image documentation.
 
@@ -253,6 +259,8 @@ $ helm install my-release \
 ```
 
 The above command sets the PrestaShop administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -350,6 +358,10 @@ To enable SSL on all pages, follow these steps:
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 13.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 12.0.0
 

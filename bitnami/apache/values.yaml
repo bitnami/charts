@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.46-debian-10-r108
+  tag: 2.4.46-debian-10-r153
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -40,7 +40,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.29.2-debian-10-r38
+  tag: 2.30.0-debian-10-r26
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -140,6 +140,15 @@ cloneHtdocsFromGit:
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Apache pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -254,7 +263,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r234
+    tag: 0.8.0-debian-10-r279
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -48,12 +48,15 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.master.priorityClassName }}
-      priorityClassName: "{{ .Values.master.priorityClassName }}"
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
       {{- with .Values.master.affinity }}
       affinity: {{- tpl (toYaml .) $ | nindent 8 }}
@@ -248,8 +251,8 @@ spec:
         image: "{{ template "redis.volumePermissions.image" . }}"
         imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
         command:
-          - /bin/sh
-          - -cx
+          - /bin/bash
+          - -ec
           - |
             {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
             chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.master.persistence.path }}
@@ -312,6 +315,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "redis.tplValue" (dict "value" .Values.persistence.existingClaim "context" $) }}
         {{- end }}
+        {{- if .Values.master.persistence.volumes }}
+        {{- toYaml .Values.master.persistence.volumes | nindent 8 }}
+        {{- end }}
         {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
         - name: host-sys
@@ -326,7 +332,7 @@ spec:
             secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
             defaultMode: 256
         {{- end }}
-  {{- if and .Values.master.persistence.enabled (not .Values.persistence.existingClaim) }}
+  {{- if and .Values.master.persistence.enabled (not .Values.persistence.existingClaim) (not .Values.master.persistence.volumes) }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data
@@ -335,6 +341,13 @@ spec:
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
           component: master
+        {{- if .Values.master.statefulset.volumeClaimTemplates.labels }}
+        {{- toYaml .Values.master.statefulset.volumeClaimTemplates.labels | nindent 10 }}
+        {{- end }}
+      {{- if .Values.master.statefulset.volumeClaimTemplates.annotations }}
+        annotations:
+          {{- toYaml .Values.master.statefulset.volumeClaimTemplates.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
         {{- range .Values.master.persistence.accessModes }}

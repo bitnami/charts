@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.17.2
+appVersion: 0.18.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ dependencies:
   - condition: minio.enabled
     name: minio
     repository: https://charts.bitnami.com/bitnami
-    version: 4.x.x
+    version: 6.x.x
 description: Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/thanos
@@ -28,4 +28,4 @@ name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
-version: 3.3.0
+version: 3.8.5

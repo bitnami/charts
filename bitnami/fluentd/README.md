@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 > Note: Please, note that the forwarder runs the container as root by default setting the `forwarder.securityContext.runAsUser` to `0` (_root_ user)
@@ -54,11 +54,13 @@ The following tables lists the configurable parameters of the fluentd chart and 
 |-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `global.imageRegistry`                          | Global Docker image registry                                                                                   | `nil`                                                                                                   |
 | `global.imagePullSecrets`                       | Global Docker registry secret names as an array                                                                | `[]` (does not add image pull secrets to deployed pods)                                                 |
+| `global.storageClass`                           | Global storage class for dynamic provisioning                                                                  | `nil`                                                                                                   |
 | `image.registry`                                | Fluentd image registry                                                                                         | `docker.io`                                                                                             |
 | `image.repository`                              | Fluentd image name                                                                                             | `bitnami/fluentd`                                                                                       |
 | `image.tag`                                     | Fluentd image tag                                                                                              | `{TAG_NAME}`                                                                                            |
 | `image.pullPolicy`                              | Fluentd image pull policy                                                                                      | `IfNotPresent`                                                                                          |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods)                                                 |
+| `kubeVersion`                                   | Force target Kubernetes version (using Helm capabilities if not set)                                           | `nil`                                                                                                   |
 | `nameOverride`                                  | String to partially override fluentd.fullname template with a string (will prepend the release name)           | `nil`                                                                                                   |
 | `fullnameOverride`                              | String to fully override fluentd.fullname template with a string                                               | `nil`                                                                                                   |
 | `clusterDomain`                                 | Kubernetes DNS domain name to use                                                                              | `cluster.local`                                                                                         |
@@ -74,6 +76,8 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.containerSecurityContext.*`          | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
 | `forwarder.configFile`                          | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `forwarder.configMap`                           | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
+| `forwarder.configMapFiles`                      | Files to be added to be config map. Ignored if `forwarder.configMap` is set                                    | `Check values.yaml`                                                                                     |
+| `forwarder.hostAliases`                         | Add deployment host aliases                                                                                    | `[]`                                                                                                    |
 | `forwarder.extraArgs`                           | Extra arguments for the Fluentd command line                                                                   | `nil`                                                                                                   |
 | `forwarder.priorityClassName`                   | Set Pods Priority Class                                                                                        | `nil`                                                                                                   |
 | `forwarder.extraEnv`                            | Extra environment variables to pass to the container                                                           | `[]`                                                                                                    |
@@ -84,9 +88,11 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `forwarder.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                        | `[]`                                                                                                    |
 | `forwarder.service.clusterIP`                   | Static clusterIP or None for headless services                                                                 | `nil`                                                                                                   |
 | `forwarder.service.annotations`                 | Annotations for the forwarder service                                                                          | `{}`                                                                                                    |
-| `forwarder.persistence.enabled`                 | Enable persistence volume for the forwarder                                                                          | `false`                                                                                                    |
-| `forwarder.persistence.hostPath.path`                 | Directory from the host node's filesystem to mount as hostPath volume for persistence.                                                                         | `false`                                                                                                    |
+| `forwarder.persistence.enabled`                 | Enable persistence volume for the forwarder                                                                    | `false`                                                                                                 |
+| `forwarder.persistence.hostPath.path`           | Directory from the host node's filesystem to mount as hostPath volume for persistence.                         | `false`                                                                                                 |
 | `forwarder.livenessProbe.enabled`               | Enable liveness probes for the forwarder                                                                       | `true`                                                                                                  |
+| `forwarder.livenessProbe.httpGet.path`          | Path to access the liveness probes for the forwarder                                                           | `/fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D`                                              |
+| `forwarder.livenessProbe.httpGet.port`          | Name or number of the port to access on the liveness probes for the forwarder                                  | `http`                                                                                                  |
 | `forwarder.livenessProbe.initialDelaySeconds`   | Delay before liveness probe is initiated                                                                       | `60`                                                                                                    |
 | `forwarder.livenessProbe.periodSeconds`         | How often to perform the probe                                                                                 | `10`                                                                                                    |
 | `forwarder.livenessProbe.timeoutSeconds`        | When the probe times out                                                                                       | `5`                                                                                                     |
@@ -129,21 +135,40 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.containerSecurityContext.*`         | Other container security context to be included as-is in pod spec                                              | `{ "privileged" : false, "allowPrivilegeEscalation": false, "capabilities": { "drop": ["ALL"] } }`      |
 | `aggregator.configFile`                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory | `fluentd.conf`                                                                                          |
 | `aggregator.configMap`                          | Name of the config map that contains the Fluentd configuration files                                           | `nil`                                                                                                   |
+| `aggregator.configMapFiles`                     | Files to be added to be config map. Ignored if `aggregator.configMap` is set                                   | `Check values.yaml`                                                                                     |
 | `aggregator.port`                               | Kubernetes Service port - Fluentd transport port for the aggregators                                           | `24224`                                                                                                 |
 | `aggregator.extraArgs`                          | Extra arguments for the Fluentd command line                                                                   | `nil`                                                                                                   |
 | `aggregator.extraEnv`                           | Extra environment variables to pass to the container                                                           | `[]`                                                                                                    |
 | `aggregator.containerPorts`                     | Ports the aggregator containers will listen on                                                                 | `Check values.yaml`                                                                                     |
+| `aggregator.hostAliases`                        | Add deployment host aliases                                                                                    | `[]`                                                                                                    |
 | `aggregator.service.type`                       | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`) for the aggregators                       | `ClusterIP`                                                                                             |
 | `aggregator.service.ports`                      | Array containing the aggregator service ports                                                                  | `Check values.yaml file`                                                                                |
 | `aggregator.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                               | `nil`                                                                                                   |
 | `aggregator.service.loadBalancerSourceRanges`   | Addresses that are allowed when service is LoadBalancer                                                        | `[]`                                                                                                    |
 | `aggregator.service.clusterIP`                  | Static clusterIP or None for headless services                                                                 | `nil`                                                                                                   |
 | `aggregator.service.annotations`                | Annotations for the aggregator service                                                                         | `{}`                                                                                                    |
+| `aggregator.ingress.enabled`                    | Enable ingress controller resource                                                                             | `false`                                                                                                 |
+| `aggregator.ingress.certManager`                | Add annotations for cert-manager                                                                               | `false`                                                                                                 |
+| `aggregator.ingress.hostname`                   | Default host for the ingress resource                                                                          | `wordpress.local`                                                                                       |
+| `aggregator.ingress.path`                       | Default path for the ingress resource                                                                          | `/`                                                                                                     |
+| `aggregator.ingress.pathType`                   | How the path matching is interpreted                                                                           | `ImplementationSpecific`                                                                                |
+| `aggregator.ingress.tls`                        | Create TLS Secret                                                                                              | `false`                                                                                                 |
+| `aggregator.ingress.annotations`                | Ingress annotations                                                                                            | `[]` (evaluated as a template)                                                                          |
+| `aggregator.ingress.extraHosts[0].name`         | Additional hostnames to be covered                                                                             | `nil`                                                                                                   |
+| `aggregator.ingress.extraHosts[0].path`         | Additional hostnames to be covered                                                                             | `nil`                                                                                                   |
+| `aggregator.ingress.extraPaths`                 | Additional arbitrary path/backend objects                                                                      | `nil`                                                                                                   |
+| `aggregator.ingress.extraTls[0].hosts[0]`       | TLS configuration for additional hostnames to be covered                                                       | `nil`                                                                                                   |
+| `aggregator.ingress.extraTls[0].secretName`     | TLS configuration for additional hostnames to be covered                                                       | `nil`                                                                                                   |
+| `aggregator.ingress.secrets[0].name`            | TLS Secret Name                                                                                                | `nil`                                                                                                   |
+| `aggregator.ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                         | `nil`                                                                                                   |
+| `aggregator.ingress.secrets[0].key`             | TLS Secret Key                                                                                                 | `nil`                                                                                                   |
 | `aggregator.persistence.enabled`                | Enable persistence volume for the aggregator                                                                   | `false`                                                                                                 |
 | `aggregator.persistence.storageClass`           | Persistent Volume storage class                                                                                | `nil`                                                                                                   |
 | `aggregator.persistence.accessMode`             | Persistent Volume access mode                                                                                  | `ReadWriteOnce`                                                                                         |
 | `aggregator.persistence.size`                   | Persistent Volume size                                                                                         | `10Gi`                                                                                                  |
 | `aggregator.livenessProbe.enabled`              | Enable liveness probes for the aggregator                                                                      | `true`                                                                                                  |
+| `aggregator.livenessProbe.httpGet.path`         | Path to access the liveness probes for the aggregator                                                          | `/fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D`                                              |
+| `aggregator.livenessProbe.httpGet.port`         | Name or number of the port to access on the liveness probes for the aggregator                                 | `http`                                                                                                  |
 | `aggregator.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                       | `60`                                                                                                    |
 | `aggregator.livenessProbe.periodSeconds`        | How often to perform the probe                                                                                 | `10`                                                                                                    |
 | `aggregator.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                       | `5`                                                                                                     |
@@ -169,6 +194,10 @@ The following tables lists the configurable parameters of the fluentd chart and 
 | `aggregator.serviceAccount.create`              | Specify whether a ServiceAccount should be created.                                                            | `false`                                                                                                 |
 | `aggregator.serviceAccount.name`                | The name of the ServiceAccount to create                                                                       | Generated using the `fluentd.fullname` template                                                         |
 | `aggregator.serviceAccount.annotations`         | Additional Service Account annotations (evaluated as a template)                                               | `{}`                                                                                                    |
+| `aggregator.autoscaling.enabled`                | Create an Horizontal Pod Autoscaler                                                                            | `false`                                                                                                 |
+| `aggregator.autoscaling.minReplicas`            | Minimum number of replicas for the HPA                                                                         | `2`                                                                                                     |
+| `aggregator.autoscaling.maxReplicas`            | Maximum number of replicas for the HPA                                                                         | `5`                                                                                                     |
+| `aggregator.autoscaling.metrics`                | Metrics for the HPA to manage the scaling                                                                      | `Check values.yaml`                                                                                     |
 | `aggregator.initContainers`                     | Additional init containers to add to the pods                                                                  | `[]`                                                                                                    |
 | `aggregator.sidecars`                           | Add additional containers to the pods                                                                          | `[]`                                                                                                    |
 | `aggregator.extraVolumes`                       | Extra volumes                                                                                                  | `nil`                                                                                                   |
@@ -213,33 +242,6 @@ $ helm install my-release -f values.yaml bitnami/fluentd
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of aggregator nodes:
-
-```diff
-- aggregator.replicaCount: 1
-+ aggregator.replicaCount: 2
-```
-
-- Enable prometheus to access fluentd metrics endpoint:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Recommendation to run with [PodSecurityPolicy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) created by the chart:
-
-```diff
-- forwarder.rbac.pspEnabled: false
-+ forwarder.rbac.pspEnabled: true
-```
-
-To horizontally scale this chart once it has been deployed, you can upgrade the deployment using a new value for the `aggregator.replicaCount` parameter.
 
 ### Forwarding the logs to another service
 

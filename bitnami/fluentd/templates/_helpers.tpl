@@ -53,41 +53,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Return the proper Fluentd image name
 */}}
 {{- define "fluentd.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global.imageRegistry }}
-    {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "fluentd.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if .Values.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -126,6 +99,7 @@ Validate data
 {{- define "fluentd.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "fluentd.validateValues.deployment" .) -}}
+{{- $messages := append $messages (include "fluentd.validateValues.ingress" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.rbac" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.serviceAccount" .) -}}
 {{- $messages := without $messages "" -}}
@@ -141,6 +115,25 @@ Validate data
 fluentd:
     You have disabled both the forwarders and the aggregators.
     Please enable at least one of them (--set forwarder.enabled=true) (--set aggregator.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Fluentd - if the aggregator index is enabled there must be a port named http in the service */}}
+{{- define "fluentd.validateValues.ingress" -}}
+{{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled (not .Values.aggregator.service.ports.http)}}
+fluentd:
+    You have enabled the Ingress for the aggregator. The aggregator service needs to have a port named http for the Ingress to work.
+    Please, define it in your `values.yaml` file. For example:
+
+    aggregator:
+      service:
+        type: ClusterIP
+        ports:
+          http:
+            port: 9880
+            targetPort: http
+            protocol: TCP
+
 {{- end -}}
 {{- end -}}
 

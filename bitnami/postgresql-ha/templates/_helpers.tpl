@@ -92,9 +92,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.username }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.username -}}
             {{- .Values.global.postgresql.username -}}
         {{- else -}}
             {{- .Values.postgresql.username -}}
@@ -111,9 +111,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return PostgreSQL postgres user password
 */}}
 {{- define "postgresql-ha.postgresqlPostgresPassword" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.postgresPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.postgresPassword -}}
             {{- .Values.global.postgresql.postgresPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
@@ -123,6 +123,23 @@ Return PostgreSQL postgres user password
     {{- end -}}
 {{- else -}}
     {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if PostgreSQL postgres user password has been provided
+*/}}
+{{- define "postgresql-ha.postgresqlPasswordProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.postgresql.postgresPassword -}}
+      {{- true -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -159,9 +176,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.adminUsername }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.adminUsername -}}
             {{- .Values.global.pgpool.adminUsername -}}
         {{- else -}}
             {{- .Values.pgpool.adminUsername -}}
@@ -183,9 +200,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.adminPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.adminPassword -}}
             {{- .Values.global.pgpool.adminPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.pgpool.adminPassword (empty .Values.pgpool.adminPassword) -}}
@@ -208,9 +225,9 @@ but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else l
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
 {{- $postgresqlDatabase := default "postgres" .Values.postgresql.database -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.database }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.database -}}
             {{- default "postgres" .Values.global.postgresql.database -}}
         {{- else -}}
             {{- $postgresqlDatabase -}}
@@ -232,9 +249,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrUsername }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrUsername -}}
             {{- .Values.global.postgresql.repmgrUsername -}}
         {{- else -}}
             {{- .Values.postgresql.repmgrUsername -}}
@@ -256,9 +273,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrPassword }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrPassword -}}
             {{- .Values.global.postgresql.repmgrPassword -}}
         {{- else -}}
             {{- ternary (randAlphaNum 10) .Values.postgresql.repmgrPassword (empty .Values.postgresql.repmgrPassword) -}}
@@ -280,9 +297,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.repmgrDatabase }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.repmgrDatabase -}}
             {{- .Values.global.postgresql.repmgrDatabase -}}
         {{- else -}}
             {{- .Values.postgresql.repmgrDatabase -}}
@@ -299,9 +316,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
         {{- else if (not .Values.postgresql.existingSecret) -}}
             {{- true -}}
         {{- end -}}
@@ -322,9 +339,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
             {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
         {{- else if .Values.postgresql.existingSecret -}}
             {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
@@ -349,9 +366,9 @@ Also, we can't use a single if because lazy evaluation is not an option
 Return true if a secret object should be created for Pgpool
 */}}
 {{- define "postgresql-ha.pgpoolCreateSecret" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
         {{- else if (not .Values.pgpool.existingSecret) -}}
             {{- true -}}
         {{- end -}}
@@ -372,9 +389,9 @@ Helm 2.11 supports the assignment of a value to a variable defined in a differen
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.pgpool }}
-        {{- if .Values.global.pgpool.existingSecret }}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
             {{- printf "%s" .Values.global.pgpool.existingSecret -}}
         {{- else if .Values.pgpool.existingSecret -}}
             {{- printf "%s" .Values.pgpool.existingSecret -}}

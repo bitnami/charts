@@ -11,7 +11,7 @@ dependencies:
 description: Chart for Memcached
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/memcached
-icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-220x234.png
 keywords:
   - memcached
   - cache
@@ -22,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/bitnami-docker-memcached
   - http://memcached.org/
-version: 5.4.1
+version: 5.5.1

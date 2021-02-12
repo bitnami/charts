@@ -16,6 +16,10 @@
 ##
 # fullnameOverride:
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Kubernetes Cluster Domain.
 ##
 clusterDomain: cluster.local
@@ -30,7 +34,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.7.0-debian-10-r14
+    tag: 2.7.1-debian-10-r6
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -44,6 +48,11 @@ server:
     ##
     debug: false
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   composedTaskRunner:
     ## Bitnami Spring Cloud Dataflow Composed Task Runner image
     ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
@@ -51,7 +60,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.7.0-debian-10-r31
+      tag: 2.7.1-debian-10-r9
 
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -132,6 +141,7 @@ server:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -265,6 +275,15 @@ server:
     ##
     enabled: false
 
+    ## The Path to WordPress. You may need to set this to '/*' in order to use this
+    ## with ALB ingress controllers.
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
     ## Set this to true in order to add the corresponding annotations for cert-manager
     ##
     certManager: false
@@ -292,6 +311,7 @@ server:
     ## extraHosts:
     ## - name: dataflow.local
     ##   path: /
+    ##
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -299,6 +319,7 @@ server:
     ## - hosts:
     ##     - dataflow.local
     ##   secretName: dataflow.local-tls
+    ##
 
     ## If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -314,6 +335,7 @@ server:
     ## - name: dataflow.local-tls
     ##   key:
     ##   certificate:
+    ##
 
   ## Add init containers to the Dataflow Server pods.
   ## Example:
@@ -360,16 +382,6 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
-  ## Java Debug Wire Protocol (JDWP) parameters.
-  ##
-  jdwp:
-    ## Set to true to enable Java debugger.
-    ##
-    enabled: false
-    ## Specify port for remote debugging.
-    ##
-    port: 5005
-
   ## Extra volumes to mount
   ##
   # extraVolumes:
@@ -380,6 +392,26 @@ server:
   #   - name: sample
   #     mountPath: /temp/sample
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
+  ## Add proxy configuration for SCDF server
+  ## Example:
+  ## proxy:
+  ##   host: "myproxy.com"
+  ##   port: 8080
+  ##   user: ""
+  ##   password: ""
+  ##
+  proxy: {}
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -389,13 +421,18 @@ skipper:
   ##
   enabled: true
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Bitnami Spring Cloud Skipper image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.6.0-debian-10-r34
+    tag: 2.6.1-debian-10-r9
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -468,6 +505,7 @@ skipper:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -639,6 +677,15 @@ skipper:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Extra volumes to mount
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
+
   ## Java Debug Wire Protocol (JDWP) parameters.
   ##
   jdwp:
@@ -648,15 +695,6 @@ skipper:
     ## Specify port for remote debugging.
     ##
     port: 5005
-
-  ## Extra volumes to mount
-  # extraVolumes:
-  #   - name: sample
-  #     emptyDir: {}
-  #
-  # extraVolumeMounts:
-  #   - name: sample
-  #     mountPath: /temp/sample
 
 ##
 ## External Skipper Configuration
@@ -715,7 +753,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.14-debian-10-r11
+    tag: 1.18.15-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -736,6 +774,7 @@ waitForBackends:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
@@ -775,7 +814,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.3.0-debian-10-r29
+    tag: 1.3.0-debian-10-r54
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -785,6 +824,16 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## Prometheus Rsocket Proxy containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    requests: {}
   service:
     ## Prometheus Rsocket Proxy HTTP port
     ##
@@ -880,6 +929,7 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
+    ##
     url: ""
     database: dataflow
     username: dataflow
@@ -890,6 +940,7 @@ externalDatabase:
     ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
     ## individual attributes (scheme, host, port, database)
+    ##
     url: ""
     database: skipper
     username: skipper
@@ -944,3 +995,24 @@ kafka:
   ##
   zookeeper:
     replicaCount: 1
+
+##
+## External Kafka Configuration
+##
+## All of these values are ignored when kafka.enabled is set to true
+##
+externalKafka:
+  enabled: false
+
+  ## External Kafka brokers
+  ## Multiple brokers can be provided in a comma separated list, e.g. host1:port1,host2:port2
+  ##
+  brokers: localhost:9092
+
+  ## External Zookeeper nodes
+  ##
+  zkNodes: localhost:2181
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []

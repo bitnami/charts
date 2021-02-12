@@ -34,12 +34,12 @@ metadata:
   {{- end }}
 subjects:
 {{- if .Values.controller.rbac.create }}
-- kind: ServiceAccount
-  name: {{ include "metallb.controllerServiceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ include "metallb.controllerServiceAccountName" . }}
 {{- end }}
 {{- if .Values.speaker.rbac.create }}
-- kind: ServiceAccount
-  name: {{ include "metallb.speakerServiceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ include "metallb.speakerServiceAccountName" . }}
 {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io

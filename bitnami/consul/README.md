@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -84,6 +84,7 @@ The following table lists the configurable parameters of the HashiCorp Consul ch
 | `raftMultiplier`           | Multiplier used to scale key Raft timing parameters                  | `1`                                                     |
 | `gossipKey`                | Gossip key for all members                                           | `nil`                                                   |
 | `tlsEncryptionSecretName`  | Name of existing secret with TLS encryption data                     | `nil`                                                   |
+| `hostAliases`              | Add deployment host aliases                                          | `[]`                                                    |
 | `configuration`            | HashiCorp Consul configuration to be injected as ConfigMap           | `{}`                                                    |
 | `existingConfigmap`        | Name of existing ConfigMap with HashiCorp Consul configuration       | `nil`                                                   |
 | `localConfig`              | Extra configuration that will be added to the default one            | `nil`                                                   |
@@ -215,6 +216,8 @@ $ helm install my-release --set domain=consul-domain,gossipKey=secretkey bitnami
 
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
@@ -230,24 +233,6 @@ $ helm install my-release -f values.yaml bitnami/consul
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Create a Pod disruption budget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
 
 ### Using custom configuration
 
@@ -350,7 +335,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MongoDB&reg;, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:

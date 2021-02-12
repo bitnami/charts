@@ -16,6 +16,18 @@
 ##
 # fullnameOverride:
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -45,6 +57,7 @@ service:
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
   ## Enable client source IP preservation
@@ -63,7 +76,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.9.3-debian-10-r0
+    tag: 4.9.3-debian-10-r36
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,6 +88,11 @@ server:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Server Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -221,7 +239,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r223
+    tag: 2.1.0-debian-10-r259
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -233,6 +251,11 @@ dashboard:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Dashboard Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -361,6 +384,12 @@ ingress:
   ##
   certManager: false
 
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
   ## Ingress annotations done as key:value pairs. If certManager is set to true,
   ## the annotation 'kubernetes.io/tls-acme: "true"' will automatically be set
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -369,50 +398,72 @@ ingress:
   #  kubernetes.io/ingress.class: nginx
 
   dashboard:
-    ## The list of hostnames to be covered with this ingress record.
-    ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+    ## When the ingress is enabled, a host pointing to this will be created
     ##
-    hosts:
-      - name: parse.local
-        path: /
+    hostname: parse-dashboard.local
 
-        ## Set this to true in order to enable TLS on the ingress record
-        ##
-        tls: false
+    ## The Path to WordPress. You may need to set this to '/*' in order to use this
+    ## with ALB ingress controllers.
+    ##
+    path: /
 
-        ## Optionally specify the TLS hosts for the ingress record
-        ## Useful when the Ingress controller supports www-redirection
-        ## If not specified, the above host name will be used
-        # tlsHosts:
-        # - www.parse.local
-        # - parse.local
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
-        ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-        ##
-        tlsSecret: parse.local-tls
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: wordpress.local
+    ##   path: /
+    ##
+
+    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
 
   server:
-    ## The list of hostnames to be covered with this ingress record.
-    ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+    ## When the ingress is enabled, a host pointing to this will be created
     ##
-    hosts:
-      - name: parse-server.local
-        path: /
+    hostname: parse-server.local
 
-        ## Set this to true in order to enable TLS on the ingress record
-        ##
-        tls: false
+    ## The Path to WordPress. You may need to set this to '/*' in order to use this
+    ## with ALB ingress controllers.
+    ##
+    path: /
 
-        ## Optionally specify the TLS hosts for the ingress record
-        ## Useful when the Ingress controller supports www-redirection
-        ## If not specified, the above host name will be used
-        # tlsHosts:
-        # - www.parse-server.local
-        # - parse-server.local
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
 
-        ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-        ##
-        tlsSecret: parse.local-tls
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: wordpress.local
+    ##   path: /
+    ##
+
+    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - wordpress.local
+  ##   secretName: wordpress.local-tls
+  ##
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -445,7 +496,7 @@ persistence:
   size: 8Gi
 
 ##
-## MongoDB chart configuration
+## MongoDB(R) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
@@ -454,14 +505,14 @@ mongodb:
   # make no difference in deploying the subchart. Change this when further standardizations
   # are added (externalDB)
   enabled: true
-  ## MongoDB Authentication parameters
+  ## MongoDB(R) Authentication parameters
   ##
   auth:
     ## Enable authentication
     ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
     ##
     enabled: true
-    ## MongoDB root password
+    ## MongoDB(R) root password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
@@ -480,3 +531,7 @@ mongodb:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 8Gi
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
