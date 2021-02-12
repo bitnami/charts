@@ -843,6 +843,7 @@ arbiter:
     # maxUnavailable: 1
 
   ## MongoDB(R) Arbiter service parameters
+  ##
   service:
     ## Service name
     ##
@@ -1017,6 +1018,10 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+
+  ## Prometheus exporter container port
+  ##
+  containerPort: 9216
 
   ## Prometheus Exporter service configuration
   ##
