@@ -288,68 +288,37 @@ To modify the MariaDB version used in this chart you can specify a [valid image 
 
 ### Initialize a fresh instance
 
-The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify custom scripts using the `initdbScripts` parameter as dict.
-
-In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
-Take into account those scripts are treated differently depending on the extension. While the `.sh` scripts are executed in all the nodes; the `.sql` and `.sql.gz` scripts are only executed in the primary nodes. The reason behind this differentiation is that the `.sh` scripts allow adding conditions to determine what is the node running the script, while these conditions can't be set using `.sql` nor `sql.gz` files. This way it is possible to cover different use cases depending on their needs.
+These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `.sql.gz` files.
 
-If using a `.sh` script you want to do a "one-time" action like creating a database, you need to add a condition in your `.sh` script to be executed only in one of the nodes, such as
-
-```yaml
-initdbScripts:
-  my_init_script.sh: |
-     #!/bin/sh
-     if [[ $(hostname) == *primary* ]]; then
-       echo "Primary node"
-       mysql -P 3306 -uroot -prandompassword -e "create database new_database";
-     else
-       echo "No primary node"
-     fi
-```
+[Refer to the chart documentation for more information and a usage example](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/customize-new-instance/).
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MariaDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod as MariaDB (such as additional metrics or logging exporters), they can be defined using the sidecars parameter. 
 
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
+The Helm chart already includes sidecar containers for the Prometheus exporters. These can be activated by adding the `–enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers. [See an example of configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/configure-use-sidecars/).
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
+Similarly, additional containers can be added to MariaDB pods using the `initContainers` parameter. [See an example of configuring and using init containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/configure-use-init-containers/).
 
 ## Persistence
 
-The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
+The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container. 
 
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can also be defined.
+
+[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/understand-chart-persistence/).
 
 ### Adjust permissions of persistent volume mountpoint
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
 
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions. 
 
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination. You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Troubleshooting
 
@@ -369,24 +338,7 @@ $ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/upgrade-helm3/).
 
 ### To 8.0.0
 
