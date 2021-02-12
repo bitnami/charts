@@ -1449,7 +1449,7 @@ storegateway:
 
     ## Create additional Headless service
     ##
-    additionalHeadless: true
+    additionalHeadless: false
 
   ## Persistence parameters
   ##
@@ -1712,7 +1712,7 @@ ruler:
 
     ## Create additional Headless service
     ##
-    additionalHeadless: true
+    additionalHeadless: false
 
   ## Persistence parameters
   ##
@@ -1980,7 +1980,7 @@ receive:
 
     ## Create additional Headless service
     ##
-    additionalHeadless: true
+    additionalHeadless: false
 
   ## Autoscaling parameters
   ##
