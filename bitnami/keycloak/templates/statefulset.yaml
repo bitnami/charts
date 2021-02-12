@@ -67,7 +67,7 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.auth.tls.enabled }}
+        {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.sharedJKS) }}
         {{- $fullname := include "keycloak.fullname" . }}
         - name: init-certs
           image: {{ include "keycloak.auth.tls.image" . }}
@@ -207,9 +207,15 @@ spec:
               subPath: standalone-ha.xml
             {{- end }}
             {{- if .Values.auth.tls.enabled }}
+            {{- if not .Values.auth.tls.sharedJKS }}
             - name: shared-certs
               mountPath: /opt/bitnami/keycloak/certs
               readOnly: true
+            {{- else }}
+            - name: certificates
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
             {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
