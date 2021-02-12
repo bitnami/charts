@@ -79,6 +79,9 @@ spec:
             - --tsdb.retention=15d
             - --receive.local-endpoint=127.0.0.1:10901
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            {{- if .Values.receive.extraFlags }}
+            {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
+            {{- end }}
           env:
           - name: NAME
             valueFrom:

@@ -1,8 +1,8 @@
-# MinIO<sup>TM</sup> Helm Chart packaged by Bitnami
+# MinIO&reg; Helm Chart packaged by Bitnami
 
-[MinIO<sup>TM</sup>](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
+[MinIO&reg;](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MinIO<sup>TM</sup> is run and maintained by MinIO, which is a completely separate project from Bitnami.
+Disclaimer: All software products, projects and company names are trademarks&trade; or registered&reg; trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis.
 
 ## TL;DR
 
@@ -13,7 +13,7 @@ $ helm install my-release bitnami/minio
 
 ## Introduction
 
-This chart bootstraps a [MinIO<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-minio) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/bitnami-docker-minio) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -33,7 +33,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/minio
 ```
 
-These commands deploy MinIO<sup>TM</sup> on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy MinIO&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,23 +49,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the MinIO<sup>TM</sup> chart and their default values.
+The following table lists the configurable parameters of the MinIO&reg; chart and their default values.
 
 | Parameter                            | Description                                                                                                                                               | Default                                                 |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                   |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                   |
-| `global.minio.existingSecret`        | Name of existing secret to use for MinIO<sup>TM</sup> credentials (overrides `existingSecret`)                                                            | `nil`                                                   |
-| `global.minio.accessKey`             | MinIO<sup>TM</sup> Access Key (overrides `accessKey.password`)                                                                                            | `nil`                                                   |
-| `global.minio.secretKey`             | MinIO<sup>TM</sup> Secret Key (overrides `secretKey.password`)                                                                                            | `nil`                                                   |
+| `global.minio.existingSecret`        | Name of existing secret to use for MinIO&reg; credentials (overrides `existingSecret`)                                                                    | `nil`                                                   |
+| `global.minio.accessKey`             | MinIO&reg; Access Key (overrides `accessKey.password`)                                                                                                    | `nil`                                                   |
+| `global.minio.secretKey`             | MinIO&reg; Secret Key (overrides `secretKey.password`)                                                                                                    | `nil`                                                   |
 | `commonLabels`                       | Labels to add to all deployed objects                                                                                                                     | `{}`                                                    |
 | `commonAnnotations`                  | Annotations to add to all deployed objects                                                                                                                | `{}`                                                    |
 | `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                                                      | `nil`                                                   |
 | `extraDeploy`                        | Array of extra objects to deploy with the release                                                                                                         | `[]` (evaluated as a template)                          |
-| `image.registry`                     | MinIO<sup>TM</sup> image registry                                                                                                                         | `docker.io`                                             |
-| `image.repository`                   | MinIO<sup>TM</sup> image name                                                                                                                             | `bitnami/minio`                                         |
-| `image.tag`                          | MinIO<sup>TM</sup> image tag                                                                                                                              | `{TAG_NAME}`                                            |
+| `image.registry`                     | MinIO&reg; image registry                                                                                                                                 | `docker.io`                                             |
+| `image.repository`                   | MinIO&reg; image name                                                                                                                                     | `bitnami/minio`                                         |
+| `image.tag`                          | MinIO&reg; image tag                                                                                                                                      | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                 |
@@ -76,29 +76,29 @@ The following table lists the configurable parameters of the MinIO<sup>TM</sup> 
 | `serviceAccount.name`                | If serviceAccount.create is enabled, what should the serviceAccount name be - otherwise defaults to the fullname                                          | `nil`                                                   |
 | `clusterDomain`                      | Kubernetes cluster domain                                                                                                                                 | `cluster.local`                                         |
 | `hostAliases`                        | Add deployment host aliases                                                                                                                               | `[]`                                                    |
-| `clientImage.registry`               | MinIO<sup>TM</sup> Client image registry                                                                                                                  | `docker.io`                                             |
-| `clientImage.repository`             | MinIO<sup>TM</sup> Client image name                                                                                                                      | `bitnami/minio-client`                                  |
-| `clientImage.tag`                    | MinIO<sup>TM</sup> Client image tag                                                                                                                       | `{TAG_NAME}`                                            |
+| `clientImage.registry`               | MinIO&reg; Client image registry                                                                                                                          | `docker.io`                                             |
+| `clientImage.repository`             | MinIO&reg; Client image name                                                                                                                              | `bitnami/minio-client`                                  |
+| `clientImage.tag`                    | MinIO&reg; Client image tag                                                                                                                               | `{TAG_NAME}`                                            |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
 | `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
-| `mode`                               | MinIO<sup>TM</sup> server mode (`standalone` or `distributed`)                                                                                            | `standalone`                                            |
+| `mode`                               | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                    | `standalone`                                            |
 | `statefulset.replicaCount`           | Number of pods (only for Minio distributed mode). Should be 4 <= x <= 32                                                                                  | `4`                                                     |
 | `statefulset.updateStrategy`         | Statefulset update strategy policy                                                                                                                        | `RollingUpdate`                                         |
 | `statefulset.podManagementpolicy`    | Statefulset pods management policy                                                                                                                        | `Parallel`                                              |
 | `deployment.updateStrategy`          | Deployment update strategy policy                                                                                                                         | `Recreate`                                              |
-| `existingSecret`                     | Existing secret with MinIO<sup>TM</sup> credentials                                                                                                       | `nil`                                                   |
+| `existingSecret`                     | Existing secret with MinIO&reg; credentials                                                                                                               | `nil`                                                   |
 | `useCredentialsFile`                 | Have the secret mounted as a file instead of env vars                                                                                                     | `false`                                                 |
 | `forceNewKeys`                       | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets                                                  | `false`                                                 |
-| `accessKey.password`                 | MinIO<sup>TM</sup> Access Key. Ignored if existing secret is provided.                                                                                    | _random 10 character alphanumeric string_               |
+| `accessKey.password`                 | MinIO&reg; Access Key. Ignored if existing secret is provided.                                                                                            | _random 10 character alphanumeric string_               |
 | `accessKey.forcePassword`            | Force users to specify an Access Key                                                                                                                      | `false`                                                 |
-| `secretKey.password`                 | MinIO<sup>TM</sup> Secret Key. Ignored if existing secret is provided.                                                                                    | _random 40 character alphanumeric string_               |
+| `secretKey.password`                 | MinIO&reg; Secret Key. Ignored if existing secret is provided.                                                                                            | _random 40 character alphanumeric string_               |
 | `secretKey.forcePassword`            | Force users to specify an Secret Key                                                                                                                      | `false`                                                 |
 | `defaultBuckets`                     | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)                                                                  | `nil`                                                   |
-| `disableWebUI`                       | Disable MinIO<sup>TM</sup> Web UI                                                                                                                         | `false`                                                 |
+| `disableWebUI`                       | Disable MinIO&reg; Web UI                                                                                                                                 | `false`                                                 |
 | `extraEnv`                           | Any extra environment variables you would like to pass to the pods                                                                                        | `{}`                                                    |
 | `command`                            | Command for the minio container                                                                                                                           | `{}`                                                    |
 | `resources`                          | Minio containers' resources                                                                                                                               | `{}`                                                    |
@@ -134,7 +134,7 @@ The following table lists the configurable parameters of the MinIO<sup>TM</sup> 
 | `persistence.annotations`            | Persistent Volume annotations                                                                                                                             | `{}`                                                    |
 | `persistence.existingClaim`          | Name of an existing PVC to use (only in "standalone" mode)                                                                                                | `nil`                                                   |
 | `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                             |
-| `service.port`                       | MinIO<sup>TM</sup> service port                                                                                                                           | `9000`                                                  |
+| `service.port`                       | MinIO&reg; service port                                                                                                                                   | `9000`                                                  |
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                                                                                 | `nil`                                                   |
 | `service.loadBalancerIP`             | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                   |
 | `service.annotations`                | Kubernetes service annotations                                                                                                                            | `{}`                                                    |
@@ -165,7 +165,9 @@ $ helm install my-release \
     bitnami/minio
 ```
 
-The above command sets the MinIO<sup>TM</sup> Server access key and secret key to `minio-access-key` and `minio-secret-key`, respectively.
+The above command sets the MinIO&reg; Server access key and secret key to `minio-access-key` and `minio-secret-key`, respectively.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -185,7 +187,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Distributed mode
 
-You can start the MinIO<sup>TM</sup> chart in distributed mode with the following parameter: `mode=distributed`
+You can start the MinIO&reg; chart in distributed mode with the following parameter: `mode=distributed`
 
 This chart sets Minio server in distributed mode with 4 nodes by default. You can change the number of nodes setting the `statefulset.replicaCount` parameter, for example to `statefulset.replicaCount=8`
 
@@ -193,7 +195,7 @@ This chart sets Minio server in distributed mode with 4 nodes by default. You ca
 
 ### Prometheus exporter
 
-MinIO<sup>TM</sup> exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO<sup>TM</sup> metrics, modify the `values.yaml` adding the corresponding annotations:
+MinIO&reg; exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO&reg; metrics, modify the `values.yaml` adding the corresponding annotations:
 
 ```diff
 - podAnnotations: {}
@@ -203,11 +205,11 @@ MinIO<sup>TM</sup> exports Prometheus metrics at `/minio/prometheus/metrics`. To
 +   prometheus.io/port: "9000"
 ```
 
-> Find more information about MinIO<sup>TM</sup> metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
+> Find more information about MinIO&reg; metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
 
 ## Persistence
 
-The [Bitnami MinIO<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
+The [Bitnami MinIO&reg;](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

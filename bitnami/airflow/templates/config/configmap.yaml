@@ -14,7 +14,7 @@ metadata:
 data:
 {{- if .Values.config }}
   airflow.cfg: |-
-    {{ .Values.config | indent 4 }}
+    {{ .Values.config | nindent 4 }}
 {{- end }}
 {{- if $kube }}
   pod_template.yaml: |-

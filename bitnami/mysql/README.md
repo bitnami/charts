@@ -142,7 +142,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `primary.service.nodePort`                   | MySQL Primary K8s service node port                                                                             | `nil`                          |
 | `primary.service.loadBalancerIP`             | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `nil`                          |
 | `primary.service.loadBalancerSourceRanges`   | Address that are allowed when MySQL Primary service is LoadBalancer                                             | `[]`                           |
-| `primary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`                        |
+| `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`                        |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`                            |
 | `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `nil`                          |
 
@@ -197,7 +197,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `secondary.service.nodePort`                   | MySQL secondary K8s service node port                                                                               | `nil`                          |
 | `secondary.service.loadBalancerIP`             | MySQL secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `nil`                          |
 | `secondary.service.loadBalancerSourceRanges`   | Address that are allowed when MySQL secondary service is LoadBalancer                                               | `[]`                           |
-| `secondary.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`                        |
+| `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`                        |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                      | `1`                            |
 | `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `nil`                          |
 
@@ -261,6 +261,8 @@ $ helm install my-release \
 ```
 
 The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a database named `app_database`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

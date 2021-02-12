@@ -38,6 +38,15 @@ spec:
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - port: {{ .Values.receive.service.remoteWrite.port }}
+      targetPort: remote-write
+      protocol: TCP
+      name: remote-write
+      {{- if (and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.remoteWrite.nodePort) }}
+      nodePort: {{ .Values.receive.service.remoteWrite.nodePort }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: 
     {{- if .Values.receive.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ruler.service.labelSelectorsOverride "context" $) | nindent 4 }}
