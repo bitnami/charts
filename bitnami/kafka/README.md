@@ -127,8 +127,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `listenerSecurityProtocolMap`             | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `nil`                                                   |
 | `allowPlaintextListener`                  | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                                                  |
 | `interBrokerListenerName`                 | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                                              |
-| `initContainers`                          | Add extra init containers    | `[]`                                                    |
-| `podManagementPolicy`                             | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                         | `Parallel`                                              |
+| `initContainers`                          | Add extra init containers                                                                                                                            | `[]`                                                    |
+| `podManagementPolicy`                     | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                                            | `Parallel`                                              |
 
 ### Kafka provisioning parameters
 
@@ -501,16 +501,16 @@ extraDeploy: |-
     kind: Deployment
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 8 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "kafka.labels" . | nindent 10 }}
+          labels: {{- include "common.labels.standard" . | nindent 10 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -531,7 +531,7 @@ extraDeploy: |-
     kind: ConfigMap
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -544,14 +544,14 @@ extraDeploy: |-
     kind: Service
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+      selector: {{- include "common.labels.matchLabels" . | nindent 6 }}
         app.kubernetes.io/component: connector
 ```
 

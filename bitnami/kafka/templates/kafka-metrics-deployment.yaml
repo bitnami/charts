@@ -29,7 +29,7 @@ spec:
 {{- include "kafka.imagePullSecrets" . | indent 6 }}
       containers:
         - name: kafka-exporter
-          image: {{ include  "kafka.metrics.kafka.image" . }}
+          image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
           command:
             - /bin/bash
