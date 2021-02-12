@@ -533,6 +533,10 @@ ingress:
   ##
   secrets: []
 
+  ## The service port to be used by this ingress.
+  ## Default is http. Alternative is https.
+  servicePort: http
+
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
