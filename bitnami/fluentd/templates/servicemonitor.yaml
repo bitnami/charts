@@ -10,16 +10,12 @@ metadata:
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- range $key, $value := .Values.metrics.serviceMonitor.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
-  {{- end }}
+{{- if .Values.metrics.serviceMonitor.labels }}
+{{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
+{{- end }}
   {{- if .Values.metrics.serviceMonitor.annotations }}
   annotations:
-    {{- range $key, $value := .Values.metrics.serviceMonitor.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+{{- toYaml .Values.metrics.serviceMonitor.annotations | nindent 4 }}
   {{- end }}
 spec:
   selector:

@@ -982,7 +982,6 @@ metrics:
     ##
     # annotations: {}
 
-
 ## Mount TLS certificates
 ##
 tls:
