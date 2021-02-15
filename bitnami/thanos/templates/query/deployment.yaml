@@ -80,10 +80,13 @@ spec:
             - --store=dnssrv+_grpc._tcp.{{- include "common.tplvalues.render" ( dict "value" $query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "common.tplvalues.render"  ( dict "value" $query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.storegateway.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.ruler.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
             - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}

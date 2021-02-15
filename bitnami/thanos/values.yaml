@@ -1906,7 +1906,7 @@ receive:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## K8s Security Context for Thanos Bucket Web pods
+  ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -1954,6 +1954,8 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    ## RemoteWrite Port
+    ##
     remoteWrite:
       port: 19291
       ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -1975,6 +1977,10 @@ receive:
     ## Use to override service selector labels
     ##
     labelSelectorsOverride: {}
+
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Autoscaling parameters
   ##
