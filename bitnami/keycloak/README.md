@@ -97,6 +97,12 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.resources.requests`     | The requested resources for the TLS init container                                                                                                            | `{}`                                                    |
 | `auth.existingSecret.name`        | Name for an existing secret containing passwords                                                                                                              | `nil`                                                   |
 | `auth.existingSecret.keyMapping`  | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`                                                   |
+| `auth.existingSecretPerPassword.adminPassword.name`  | Name of the secret which contains the Keycloak admin password. Overrides `existingSecret` and `adminPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.managementPassword.name`  | Name of the secret which contains the Widlfly admin password. Overrides `existingSecret` and `managementPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.databasePassword.name`  | Name of the secret which contains the database password. Overrides `existingSecret` and `databaseEncryptedPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.tlsKeystorePassword.name`  | Name of the secret which contains the JKS keystore password. Overrides `existingSecret` and `keystorePassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.tlsTruststorePassword.name`  | Name of the secret which contains the JKS truststore password. Overrides `existingSecret` and `truststorePassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.keyMapping`  | Key mapping between the expected keys and the existing secrets' keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`        
 | `proxyAddressForwarding`          | Enable Proxy Address Forwarding                                                                                                                               | `false`                                                 |
 | `serviceDiscovery.enabled`        | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                                                                                      | `false`                                                 |
 | `serviceDiscovery.protocol`       | Sets the protocol that Keycloak nodes would use to discover new peers                                                                                         | `kubernetes.KUBE_PING`                                  |
@@ -378,6 +384,26 @@ In the first two cases, it's needed a certificate and a key. We would expect the
 If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
 
 If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `keycloak.local-tls` for example).
+
+### Secrets and passwords
+
+This chart provides several ways to manage passwords:
+- Values passed to the chart
+- An existing secret with all the passwords
+- Passwords present among several secrets
+
+In the first case, you need to keep a copy of the secrets and indicate the values using the `--set` argument.
+For example:
+```console
+$ helm upgrade keycloak bitnami/keycloak \
+    --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
+    --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+In the second, a Secret has been created with all the passwords. This secret name must indicated in the `auth.existingSecret.name` value. If the keys in the Secret are not the same as the expected ones, you can use `keyMapping`:
+
 
 ## Troubleshooting
 
