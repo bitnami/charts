@@ -97,13 +97,21 @@ spec:
             {{- if or $query.grpcTLS.server.secure $query.grpcTLS.server.existingSecret }}
             - --grpc-server-tls-cert=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-key") }}
+            {{- if or $query.grpcTLS.server.ca $query.grpcTLS.client.existingSecret }}
             - --grpc-server-tls-client-ca=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if or $query.grpcTLS.client.secure $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-secure
+            {{- if or $query.grpcTLS.client.cert $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-cert=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-cert") }}
+            {{- end }}
+            {{- if or $query.grpcTLS.client.key $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-key=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-key") }}
+            {{- end }}
+            {{- if or $query.grpcTLS.client.ca $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-ca=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if $query.grpcTLS.client.servername }}
             - --grpc-client-server-name={{$query.grpcTLS.client.servername}}
