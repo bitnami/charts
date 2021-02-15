@@ -127,8 +127,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `listenerSecurityProtocolMap`             | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `nil`                                                   |
 | `allowPlaintextListener`                  | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                                                  |
 | `interBrokerListenerName`                 | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                                              |
-| `initContainers`                          | Add extra init containers    | `[]`                                                    |
-| `podManagementPolicy`                             | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                         | `Parallel`                                              |
+| `initContainers`                          | Add extra init containers                                                                                                                            | `[]`                                                    |
+| `podManagementPolicy`                     | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                                            | `Parallel`                                              |
 
 ### Kafka provisioning parameters
 
@@ -491,7 +491,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
@@ -501,16 +501,16 @@ extraDeploy: |-
     kind: Deployment
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 8 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "kafka.labels" . | nindent 10 }}
+          labels: {{- include "common.labels.standard" . | nindent 10 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -531,7 +531,7 @@ extraDeploy: |-
     kind: ConfigMap
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -544,14 +544,14 @@ extraDeploy: |-
     kind: Service
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+      selector: {{- include "common.labels.matchLabels" . | nindent 6 }}
         app.kubernetes.io/component: connector
 ```
 
@@ -559,7 +559,7 @@ You can create the Kafka Connect image using the Dockerfile below:
 
 ```Dockerfile
 FROM bitnami/kafka:latest
-# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
 RUN mkdir -p /opt/bitnami/kafka/plugins && \
     cd /opt/bitnami/kafka/plugins && \
     curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar

@@ -48,7 +48,7 @@ To access Keycloak from outside the cluster execute the following commands:
 3. Access the Administration Console using the following credentials:
 
   echo Username: {{ .Values.auth.adminUser }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ printf "%s-env-vars" (include "common.names.fullname" .) }} -o jsonpath="{.data.admin-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }} -o jsonpath="{.data.admin-password}" | base64 --decode)
 {{- end }}
 {{- if .Values.metrics.enabled }}
 

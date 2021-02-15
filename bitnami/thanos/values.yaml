@@ -1906,7 +1906,7 @@ receive:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## K8s Security Context for Thanos Bucket Web pods
+  ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -1954,6 +1954,14 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    ## RemoteWrite Port
+    ##
+    remoteWrite:
+      port: 19291
+      ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      # nodePort:
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1969,6 +1977,10 @@ receive:
     ## Use to override service selector labels
     ##
     labelSelectorsOverride: {}
+
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Autoscaling parameters
   ##
@@ -2132,21 +2144,21 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-## MinIO(TM) Chart configuration
+## MinIO(R) Chart configuration
 ##
 minio:
-  ## Set to true to deploy a MinIO(TM) chart
+  ## Set to true to deploy a MinIO(R) chart
   ## to be used as an objstore for Thanos
   ##
   enabled: false
 
-  ## MinIO(TM) credentials
+  ## MinIO(R) credentials
   ##
   accessKey:
     password: ''
   secretKey:
     password: ''
 
-  ## Default MinIO(TM) buckets
+  ## Default MinIO(R) buckets
   ##
   defaultBuckets: 'thanos'

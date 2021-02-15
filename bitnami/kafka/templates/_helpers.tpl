@@ -144,11 +144,30 @@ Return true if authentication via SASL should be configured for inter-broker com
 {{- end -}}
 
 {{/*
+Return true if encryption via TLS for client connections should be configured
+*/}}
+{{- define "kafka.client.tlsEncryption" -}}
+{{- $tlsProtocols := list "tls" "mtls" "sasl_tls" -}}
+{{- if (has .Values.auth.clientProtocol $tlsProtocols) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if encryption via TLS for inter broker communication connections should be configured
+*/}}
+{{- define "kafka.interBroker.tlsEncryption" -}}
+{{- $tlsProtocols := list "tls" "mtls" "sasl_tls" -}}
+{{- if (has .Values.auth.interBrokerProtocol $tlsProtocols) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if encryption via TLS should be configured
 */}}
 {{- define "kafka.tlsEncryption" -}}
-{{- $tlsProtocols := list "tls" "mtls" "sasl_tls" -}}
-{{- if or (has .Values.auth.clientProtocol $tlsProtocols) (has .Values.auth.interBrokerProtocol $tlsProtocols) -}}
+{{- if or (include "kafka.client.tlsEncryption" .) (include "kafka.interBroker.tlsEncryption" .) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}

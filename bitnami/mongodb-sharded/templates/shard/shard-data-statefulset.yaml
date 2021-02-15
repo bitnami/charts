@@ -267,7 +267,7 @@ spec:
               {{- if $.Values.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --web.listen-address ":{{ $.Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
           {{- if $.Values.usePasswordFile }}
           volumeMounts:
             - name: secrets
@@ -275,7 +275,7 @@ spec:
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9216
+              containerPort: {{ $.Values.metrics.containerPort }}
           {{- if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

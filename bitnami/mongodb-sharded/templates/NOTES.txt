@@ -1,6 +1,6 @@
 ** Please be patient while the chart is being deployed **
 
-The MongoDB Sharded cluster can be accessed via the Mongos instances in port {{ .Values.service.port }} on the following DNS name from within your cluster:
+The MongoDB(R) Sharded cluster can be accessed via the Mongos instances in port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ include "mongodb-sharded.serviceName" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 

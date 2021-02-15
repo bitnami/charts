@@ -143,7 +143,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `ingress.hostname`               | Default host for the ingress resource                    | `minio.local`                  |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.annotations`            | Map of Ingress annotations                               | `{}` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
@@ -237,6 +237,8 @@ $ helm install my-release \
 ```
 
 The above command sets the Moodle<sup>TM</sup> administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 

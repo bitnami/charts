@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 14.15.4-debian-10-r19
+  tag: 14.15.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,7 +85,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.0-debian-10-r26
+    tag: 2.30.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -446,16 +446,16 @@ ingress:
   ##
 
 ##
-## MongoDB chart configuration
+## MongoDB(R) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## Whether to deploy a MongoDB server to satisfy the applications database requirements.
+  ## Whether to deploy a MongoDB(R) server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
   ##
   enabled: true
 
-  ## MongoDB Authentication parameters
+  ## MongoDB(R) Authentication parameters
   ##
   auth:
     ## Enable authentication
@@ -463,12 +463,12 @@ mongodb:
     ##
     enabled: true
 
-    ## MongoDB root password
+    ## MongoDB(R) root password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
     rootPassword: ''
 
-    ## MongoDB custom user and database
+    ## MongoDB(R) custom user and database
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
     ##
     username: user
