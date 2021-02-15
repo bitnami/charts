@@ -303,7 +303,7 @@ kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath=
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
 ```yaml
-kong:
+wordpress:
   extraEnvVars:
     - name: LOG_LEVEL
       value: error
@@ -317,7 +317,7 @@ If additional containers are needed in the same pod as WordPress (such as additi
 
 ### External database support
 
-Sometimes, you may want to have WordPress connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or to use a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. Here is an example:
+You may want to have WordPress connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. Here is an example:
 
 ```console
 mariadb.enabled=false
