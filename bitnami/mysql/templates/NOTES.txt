@@ -46,7 +46,7 @@ To upgrade this helm chart:
 
   1. Obtain the password as described on the 'Administrator credentials' section and set the 'root.password' parameter as shown below:
 
-      ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+      ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
       helm upgrade {{ .Release.Name }} bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
 
 {{ include "mysql.validateValues" . }}
