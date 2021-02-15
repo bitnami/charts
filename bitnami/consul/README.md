@@ -216,6 +216,8 @@ $ helm install my-release --set domain=consul-domain,gossipKey=secretkey bitnami
 
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
@@ -333,7 +335,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MongoDB&reg;, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:

@@ -355,6 +355,8 @@ $ helm install my-release \
 
 The above command sets the credentials to access the Airflow web UI.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
@@ -474,7 +476,7 @@ Celery executor is the default value for this chart with it you can scale out th
 
 The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/master/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
 
-> NOTE: Redis is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
+> NOTE: Redis<sup>TM</sup> is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
 
 ```console
 executor=KubernetesExecutor

@@ -87,7 +87,7 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                               | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`                                                 |
 | `architecture`                              | InfluxDB<sup>TM</sup> architecture (`standalone` or `high-availability`)                                                                                                                                                                                             | `standalone`                                            |
-| `auth.enabled`                              | Enable/disable authentication (Variable to keep compatibility with InfluxDB v1, in v2 it will be ignored)                                                                                                                                                            | `true`                                                  |
+| `auth.enabled`                              | Enable/disable authentication (Variable to keep compatibility with InfluxDB<sup>TM</sup> v1, in v2 it will be ignored)                                                                                                                                               | `true`                                                  |
 | `auth.admin.username`                       | InfluxDB<sup>TM</sup> admin user name                                                                                                                                                                                                                                | `admin`                                                 |
 | `auth.admin.password`                       | InfluxDB<sup>TM</sup> admin user's password                                                                                                                                                                                                                          | `nil`                                                   |
 | `auth.admin.token`                          | InfluxDB<sup>TM</sup> admin user's token. Only valid with InfluxDB<sup>TM</sup> v2                                                                                                                                                                                   | `nil`                                                   |
@@ -275,6 +275,8 @@ $ helm install my-release \
 
 The above command sets the InfluxDB<sup>TM</sup> admin user to `admin-user`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
@@ -455,7 +457,7 @@ $ helm install bitnami/influxdb --set image.tag=1.8.3-debian-10-r88
 As a consecuece some breaking changes have been included in this version.
 
 - Authentication values has been moved to `auth.<property>...`.
-- We keep `auth.readUser` and `auth.writeUser` user options in order to be compatible with InfluxDB v1. If you are using InfluxDB 2.0, please, use the CLI to create user and tokens through initDb scripts at `influxdb.initdbScripts` or the UI due to we are not able to automacally provide a token for them to be used. See more [InfluxDB<sup>TM</sup> 2.0 auth](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
+- We keep `auth.readUser` and `auth.writeUser` user options in order to be compatible with InfluxDB<sup>TM</sup> v1. If you are using InfluxDB<sup>TM</sup> 2.0, please, use the CLI to create user and tokens through initDb scripts at `influxdb.initdbScripts` or the UI due to we are not able to automacally provide a token for them to be used. See more [InfluxDB<sup>TM</sup> 2.0 auth](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
 - InfluxDB<sup>TM</sup> 2.0 has removed database concept, now it is called Bucket so the property `database` has been also moved to `auth.user.bucket`.
 - Removed support for `files/docker-entrypoint-initdb.d/*.{sh,txt}`, please use `.influxdb.initdbScripts` or `.Values.influxdb.initdbScriptsCM` instead.
 - Removed support for `files/conf/influxdb.conf`, please use `.influxdb.configuration` or `.influxdb.existingConfiguration` instead.
