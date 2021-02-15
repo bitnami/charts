@@ -548,7 +548,7 @@ persistence:
     ##
     caBundleSecretName:
     ## Specify whether to disable `redirect` for images and chart storage, for
-    ## backends which not supported it (such as using MinIO(TM) for `s3` storage type), please disable
+    ## backends which not supported it (such as using MinIO(R) for `s3` storage type), please disable
     ## it. To disable redirects, simply set `disableredirect` to `true` instead.
     ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect
     ##

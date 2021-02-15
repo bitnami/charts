@@ -56,10 +56,10 @@ This charts allows you install several Thanos components, so you deploy an archi
 │ Alertmanager │ ◀──────────│ Thanos       │ ◀────┤             │ query metrics       │ compact blocks
 │ (*)          │            │ Ruler        │      │             │                     │
 └──────────────┘            └──────────────┘      │             ▼                     │
-      ▲                            │              │      ┌───────────────┐            │
-      │ push alerts                └──────────────│────▶ │ MinIO(TM) (*) │ ◀──────────┘
-      │                                           │      │               │
-┌ ── ── ── ── ── ── ── ── ── ──┐                  │      └───────────────┘
+      ▲                            │              │      ┌────────────────┐           │
+      │ push alerts                └──────────────│────▶ │ MinIO&reg; (*) │ ◀─────────┘
+      │                                           │      │                │
+┌ ── ── ── ── ── ── ── ── ── ──┐                  │      └────────────────┘
 │┌────────────┐  ┌────────────┐│                  │             ▲
 ││ Prometheus │─▶│ Thanos     ││ ◀────────────────┘             │
 ││ (*)        │◀─│ Sidecar (*)││    query                       │ inspect
@@ -71,7 +71,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          └──────────────┘
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO<sup>TM</sup> chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -372,6 +372,12 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                                               | `false`                        |
 | `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                                              | `info`                         |
 | `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                                               | `[]`                           |
+| `storegateway.grpc.tls.enabled`                 | Enable TLS for GRPC server                                                                                   | `false`                                                 |
+| `storegateway.grpc.tls.cert`                   | TLS Certificate for gRPC server - ignored if existingSecret is provided                                                                              | `nil`                                                   |
+| `storegateway.grpc.tls.key`                    | TLS Key for gRPC server - ignored if existingSecret is provided                                                                                      | `nil`                                                   |
+| `storegateway.grpc.tls.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server - ignored if existingSecret is provided                            | `nil`                                                   |
+| `storegateway.grpc.tls.existingSecret.name` | Existing secret name containing your own TLS certificates for server                           | `nil`                                                   |
+| `storegateway.grpc.tls.existingSecret.keyMapping` | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret)                           | `nil`                                                   |
 | `storegateway.hostAliases`                           | Add deployment host aliases                                                                                                 | `[]`                           |
 | `storegateway.config`                                | Thanos Store Gateway cache configuration                                                                                    | `nil`                          |
 | `storegateway.existingConfigmap`                     | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                    | `nil`                          |
@@ -511,6 +517,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.service.http.nodePort`                 | Service HTTP node port                                                                                         | `nil`                                   |
 | `receive.service.grpc.port`                     | Service GRPC port                                                                                              | `10901`                                 |
 | `receive.service.grpc.nodePort`                 | Service GRPC node port                                                                                         | `nil`                                   |
+| `receive.service.remoteWrite.port`              | Service remote write port                                                                                      | `19291`                                 |
+| `receive.service.remoteWrite.nodePort`          | Service remote write node port                                                                                 | `nil`                                   |
 | `receive.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                               | `nil`                                   |
 | `receive.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                          | `[]`                                    |
 | `receive.service.annotations`                   | Annotations for Thanos Receive service                                                                         | `{}`                                    |
@@ -549,13 +557,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 
-### MinIO<sup>TM</sup> chart parameters
+### MinIO&reg; chart parameters
 
 | Parameter                  | Description                                                    | Default                                   |
 |----------------------------|----------------------------------------------------------------|-------------------------------------------|
-| `minio.enabled`            | Enable/disable MinIO<sup>TM</sup> chart installation           | `false`                                   |
-| `minio.accessKey.password` | MinIO<sup>TM</sup> Access Key                                  | _random 10 character alphanumeric string_ |
-| `minio.secretKey.password` | MinIO<sup>TM</sup> Secret Key                                  | _random 40 character alphanumeric string_ |
+| `minio.enabled`            | Enable/disable MinIO&reg; chart installation                   | `false`                                   |
+| `minio.accessKey.password` | MinIO&reg; Access Key                                          | _random 10 character alphanumeric string_ |
+| `minio.secretKey.password` | MinIO&reg; Secret Key                                          | _random 40 character alphanumeric string_ |
 | `minio.defaultBuckets`     | Comma, semi-colon or space separated list of buckets to create | `nil`                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -642,7 +650,7 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
 
-> Note: in this example we will use MinIO (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
 - Create a **values.yaml** like the one below:
 

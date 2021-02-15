@@ -272,7 +272,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `volumePermissions.securityContext.runAsUser`   | User ID for the Bitnami Minideb container                                                                                                                                                       | `0`                                                          |
 | **Persistence**                                 |                                                                                                                                                                                                 |                                                              |
 | `persistence.enabled`                           | Enable data persistence                                                                                                                                                                         | `true`                                                       |
-| `persistence.existingClaim`                     | Use a existing PVC which must be created manually before bound                                                                                                                                  | `nil`                                                        |
+| `persistence.existingClaim`                     | Use a existing PVC which must be created manually before bound. PVC will be shared between all replicas, which is useful for special cases only.                                               | `nil`                                                        |
 | `persistence.storageClass`                      | Specify the `storageClass` used to provision the volume                                                                                                                                         | `nil`                                                        |
 | `persistence.mountPath`                         | Path to mount data volume at                                                                                                                                                                    | `nil`                                                        |
 | `persistence.accessMode`                        | Access mode of data volume                                                                                                                                                                      | `ReadWriteOnce`                                              |
@@ -300,6 +300,8 @@ $ helm install my-release \
 ```
 
 The above command sets the password for user `postgres` to `password`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 

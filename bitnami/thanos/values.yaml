@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.17.2-scratch-r1
+  tag: 0.18.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1259,6 +1259,35 @@ storegateway:
   ##
   # existingConfigmap:
 
+  ## Thanos Store GRPC server configuration
+  ##
+  grpc:
+    ## TLS configuration
+    ##
+    tls:
+      ## Enable TLS encryption in the GRPC server
+      ##
+      enabled: false
+      ## TLS Certificate for gRPC server, leave blank to disable TLS
+      ##
+      cert:
+      ## TLS Key for the gRPC server, leave blank to disable TLS
+      ##
+      key:
+      ## TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
+      ##
+      ca:
+      ## Existing secret containing your own TLS certificates.
+      ## Example:
+      ## existingSecret:
+      ##   name:
+      ##   keyMapping:
+      ##     ca-cert: ca.pem
+      ##     tls-cert: cert.pem
+      ##     tls-key: key.pem
+      ##
+      existingSecret: {}
+
   ## Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1
@@ -1877,7 +1906,7 @@ receive:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## K8s Security Context for Thanos Bucket Web pods
+  ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -1925,6 +1954,14 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    ## RemoteWrite Port
+    ##
+    remoteWrite:
+      port: 19291
+      ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ##
+      # nodePort:
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1940,6 +1977,10 @@ receive:
     ## Use to override service selector labels
     ##
     labelSelectorsOverride: {}
+
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Autoscaling parameters
   ##
@@ -2103,21 +2144,21 @@ volumePermissions:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
-## MinIO(TM) Chart configuration
+## MinIO(R) Chart configuration
 ##
 minio:
-  ## Set to true to deploy a MinIO(TM) chart
+  ## Set to true to deploy a MinIO(R) chart
   ## to be used as an objstore for Thanos
   ##
   enabled: false
 
-  ## MinIO(TM) credentials
+  ## MinIO(R) credentials
   ##
   accessKey:
     password: ''
   secretKey:
     password: ''
 
-  ## Default MinIO(TM) buckets
+  ## Default MinIO(R) buckets
   ##
   defaultBuckets: 'thanos'

@@ -16,7 +16,7 @@ spec:
     - port: {{ .Values.ruler.service.grpc.port }}
       targetPort: grpc
       protocol: TCP
-      name: rcp
+      name: grpc
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ruler
 {{- end }}

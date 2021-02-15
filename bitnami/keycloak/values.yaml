@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r81
+  tag: 12.0.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -698,6 +698,9 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_keycloak
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ##
+  existingSecret:
   ## PostgreSQL data Persistent Volume Storage Class
   ##
   persistence:

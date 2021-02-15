@@ -19,7 +19,15 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
   backend:
     serviceName: {{ include "common.names.fullname" . }}-default-backend
     servicePort: http
+  {{- else }}
+  defaultBackend:
+    service:
+      name: {{ include "common.names.fullname" . }}-default-backend
+      port:
+        name: http
+  {{- end }}
 {{- end }}

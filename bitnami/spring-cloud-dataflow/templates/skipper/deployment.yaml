@@ -175,8 +175,8 @@ spec:
               mountPath: /etc/secrets/rabbitmq
               readOnly: true
             {{- end }}
-            {{- if .Values.server.extraVolumeMounts }}
-            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- if .Values.skipper.extraVolumeMounts }}
+            {{- toYaml .Values.skipper.extraVolumeMounts | nindent 12 }}
             {{- end }}
         {{- if .Values.skipper.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.sidecars "context" $) | nindent 8 }}
@@ -202,7 +202,7 @@ spec:
             name: {{ include "scdf.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
-        {{- if .Values.server.extraVolumes }}
-          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
+        {{- if .Values.skipper.extraVolumes }}
+          {{- toYaml .Values.skipper.extraVolumes | nindent 8 }}
         {{- end }}
 {{- end }}
