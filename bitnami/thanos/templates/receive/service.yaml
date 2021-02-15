@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
   {{- if .Values.receive.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.receive.service.type }}
@@ -49,7 +49,7 @@ spec:
       {{- end }}
   selector: 
     {{- if .Values.receive.service.labelSelectorsOverride }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
     {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: receive

@@ -1,0 +1,172 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+zookeeper:
+  replicaCount: 3
+  ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+  ##
+  heapSize: 4096
+  resources:
+    ## Recommended values for cpu and memory requests
+    ##
+    limits: {}
+    requests:
+      cpu: 250m
+      memory: 5120Mi
+  ## Anti Affinity rules set for resiliency
+  ##
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - zookeeper
+          topologyKey: "kubernetes.io/hostname"
+
+## Kafka Subchart parameters
+##
+kafka:
+  enabled: true
+  replicaCount: 3
+  ## Kafka's Java Heap size
+  ##
+  heapOpts: -Xmx4096m -Xms4096m
+  resources:
+    ## Recommended values for cpu and memory requests
+    ##
+    limits: {}
+    requests:
+      cpu: 250m
+      memory: 5120Mi
+  ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
+  ##
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - kafka
+          topologyKey: "kubernetes.io/hostname"
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - zookeeper
+            topologyKey: "kubernetes.io/hostname"
+  zookeeper:
+    enabled: false
+  ## This value is only used when zookeeper.enabled is set to false.
+  ##
+  externalZookeeper:
+    ## Server or list of external zookeeper servers to use. This is set to the zookeeper deployed as part of this chart
+    ##
+    servers:
+      - '{{ .Release.Name }}-zookeeper'
+
+## Spark Subchart parameters
+##
+spark:
+  enabled: true
+  ## Spark master specific configuration
+  ##
+  master:
+    resources:
+      ## Recommended values for cpu and memory requests
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+    ## Anti affinity rules set for resiliency
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+            topologyKey: "kubernetes.io/hostname"
+  ## Spark worker specific configuration
+  ##
+  worker:
+    replicaCount: 2
+    ## Anti affinity rules set for resiliency
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+                    - master
+            topologyKey: "kubernetes.io/hostname"
+    resources:
+      ## Recommended values for cpu and memory requests
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+
+## Solr Subchart parameters
+##
+solr:
+  enabled: true
+  replicaCount: 2
+
+  ## Java memory options recommended value
+  ##
+  javaMem: -Xmx4096m -Xms4096m
+
+  ## Anti affinity rules set for resiliency
+  ##
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - solr
+          topologyKey: "kubernetes.io/hostname"
+  resources:
+    ## Recommended values for cpu and memory requests
+    ##
+    limits: {}
+    requests:
+      cpu: 250m
+      memory: 5120Mi
+  zookeeper:
+    enabled: false
+  ## This value is only used when zookeeper.enabled is set to false
+  ##
+  externalZookeeper:
+    ## Server or list of external zookeeper servers to use. In this case, it is set to the zookeeper deployed as part of this chart.
+    ##
+    servers:
+      - '{{ .Release.Name }}-zookeeper'
