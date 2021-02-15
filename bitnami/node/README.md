@@ -85,12 +85,12 @@ The following table lists the configurable parameters of the Node chart and thei
 | `extraEnvVars`                          | Extra environment variables to be set on Node container                   | `[]`                                                    |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                      | `nil`                                                   |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                         | `nil`                                                   |
-| `mongodb.enabled`                       | Whether to install or not the MongoDB chart                               | `true`                                                  |
-| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB chart                       | `true`                                                  |
-| `mongodb.auth.rootPassword`             | MongoDB admin password                                                    | `nil`                                                   |
-| `mongodb.auth.username`                 | MongoDB custom user                                                       | `user`                                                  |
-| `mongodb.auth.database`                 | MongoDB custom database                                                   | `test_db`                                               |
-| `mongodb.auth.password`                 | MongoDB custom password                                                   | `secret_password`                                       |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                               | `true`                                                  |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                       | `true`                                                  |
+| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                    | `nil`                                                   |
+| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                       | `user`                                                  |
+| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                   | `test_db`                                               |
+| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                   | `secret_password`                                       |
 | `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`) | `false`                                                 |
 | `externaldb.secretName`                 | Secret containing existing database credentials                           | `nil`                                                   |
 | `externaldb.type`                       | Type of database that defines the database secret mapping                 | `osba`                                                  |
@@ -314,7 +314,7 @@ Once the instance has been provisioned in Azure, a new secret should have been a
 
 Deploying the helm chart enabling the Azure external database makes the following assumptions:
 
-- You would want an Azure CosmosDB MongoDB database
+- You would want an Azure CosmosDB MongoDB&reg; database
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
 You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
@@ -355,7 +355,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- MongoDB dependency version was bumped to a new major version `10.X.X`. Check [MongoDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
+- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
 - Inclusion of the`bitnami/common` library chart and standardization to include common features found on other charts.
 - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
 - `replicas` is deprecated in favor of `replicaCount`.
@@ -374,13 +374,13 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ### To 13.0.0
 
-MongoDB subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB.
+MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
 
 ### To 12.0.0
 
-Backwards compatibility is not guaranteed since breaking changes were included in MongoDB subchart. More information in the link below:
+Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
 - https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
 

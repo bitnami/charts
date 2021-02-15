@@ -325,6 +325,11 @@ persistence:
   # existingClaim: your-claim
   accessMode: ReadWriteOnce
   size: 10Gi
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP

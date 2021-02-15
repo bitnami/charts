@@ -269,6 +269,8 @@ $ helm install my-release \
 
 The above command sets the RabbitMQ admin username and password to `admin` and `secretpassword` respectively. Additionally the secure erlang cookie is set to `secretcookie`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
@@ -490,6 +492,38 @@ In addition to this, you can also use the `communityPlugins` parameter to indica
 communityPlugins="http://some-public-url/my-custom-plugin-X.Y.Z.ez"
 extraPlugins="my-custom-plugin"
 ```
+
+### Recovering the cluster from complete shutdown
+
+> IMPORTANT: Some of these procedures can lead to data loss, always make a backup beforehand.
+
+The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+
+This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+
+```console
+$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+
+If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+
+```console
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set clustering.forceBoot=true \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
 
 ### Known issues
 

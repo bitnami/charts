@@ -35,6 +35,10 @@ spec:
       serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
       hostNetwork: true
+      {{- if .Values.speaker.initContainers }}
+      initContainers:
+      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }} 
+      {{- end }}
       containers:
         - name: metallb-speaker
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.image "global" .Values.global) }}

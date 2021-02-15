@@ -130,7 +130,15 @@ spec:
               {{- end }}
             {{- end }}
             - name: SPRING_APPLICATION_JSON
+              {{- if .Values.server.proxy }}
+              {{- if .Values.server.proxy.user }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }}, \"auth\": { \"username\": \"{{ .Values.server.proxy.user }}\", \"password\": \"{{ .Values.server.proxy.password }}\"} } } }"
+              {{- else }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }} } } }"
+              {{- end }}
+              {{- else }}
               value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} } } }"
+              {{- end }}
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
