@@ -645,7 +645,7 @@ service:
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   managerPortEnabled: true
-  
+
   managerPort: 15672
 
   ## RabbitMQ Manager service port name
