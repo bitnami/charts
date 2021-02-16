@@ -218,7 +218,10 @@ region = {{ .Values.aws.region }}
   "aadClientId": "{{ .Values.azure.aadClientId }}",
   "aadClientSecret": "{{ .Values.azure.aadClientSecret }}"
   {{- end }}
-  {{- if .Values.azure.useManagedIdentityExtension }}
+  {{- if and .Values.azure.useManagedIdentityExtension .Values.azure.userAssignedIdentityID }}
+  "useManagedIdentityExtension": true,
+  "userAssignedIdentityID": "{{ .Values.azure.userAssignedIdentityID }}"
+  {{- else if and .Values.azure.useManagedIdentityExtension (not .Values.azure.userAssignedIdentityID) }}
   "useManagedIdentityExtension": true
   {{- end }}
 }
@@ -244,6 +247,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azure.subscriptionIdWithoutTenantId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.azure.userAssignedIdentityIDWithoutUseManagedIdentityExtension" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.aadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.aadClientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.resourceGroup" .) -}}
@@ -253,6 +257,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.aadClientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionAadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.useManagedIdentityExtensionAadClientSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.userAssignedIdentityIDWithoutUseManagedIdentityExtension" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.linode.apiToken" .) -}}
@@ -475,6 +480,18 @@ external-dns: azure.useManagedIdentityExtension
 
 {{/*
 Validate values of Azure DNS:
+- must enable the MSI when provider is "azure", secretName is not set and managed identity ID is set
+*/}}
+{{- define "external-dns.validateValues.azure.userAssignedIdentityIDWithoutUseManagedIdentityExtension" -}}
+{{- if and (eq .Values.provider "azure") (not .Values.azure.secretName) (not .Values.azure.useManagedIdentityExtension) .Values.azure.userAssignedIdentityID -}}
+external-dns: azure.userAssignedIdentityID
+    You must enable the MSI when provider="azure" and userAssignedIdentityID is set.
+    Please set the useManagedIdentityExtension parameter (--set azure.useManagedIdentityExtension="true")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure DNS:
 - must provide the Azure AAD Client ID when provider is "azure", secretName is not set and MSI is disabled and aadClientSecret is set
 */}}
 {{- define "external-dns.validateValues.azure.aadClientId" -}}
@@ -506,6 +523,18 @@ Validate values of Azure Private DNS:
 external-dns: azure.useManagedIdentityExtension
     You must not provide the Azure AAD Client Secret when provider="azure-private-dns", secretName is not set, and useManagedIdentityExtension is "true".
     Please unset the aadClientSecret parameter (--set azure.aadClientSecret="")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Azure Private DNS:
+- must enable the MSI when provider is "azure", secretName is not set and managed identity ID is set
+*/}}
+{{- define "external-dns.validateValues.azurePrivateDns.userAssignedIdentityIDWithoutUseManagedIdentityExtension" -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.useManagedIdentityExtension) .Values.azure.userAssignedIdentityID -}}
+external-dns: azure.userAssignedIdentityID
+    You must enable the MSI when provider="azure-private-dns" and userAssignedIdentityID is set.
+    Please set the useManagedIdentityExtension parameter (--set azure.useManagedIdentityExtension="true")
 {{- end -}}
 {{- end -}}
 
@@ -563,7 +592,7 @@ Validate values of Azure Private DNS:
 - must provide the Azure AAD Client ID when provider is "azure-private-dns", secret name is not set and MSI is disabled
 */}}
 {{- define "external-dns.validateValues.azurePrivateDns.aadClientId" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientId) (not .Values.azure.useManagedIdentityExtension) -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientId) (not .Values.azure.useManagedIdentityExtension) (not .Values.azure.userAssignedIdentityID) -}}
 external-dns: azure.useManagedIdentityExtension
     You must provide the Azure AAD Client ID when provider="azure-private-dns" and useManagedIdentityExtension is not set.
     Please set the aadClientSecret parameter (--set azure.aadClientId="xxxx")
@@ -575,7 +604,7 @@ Validate values of Azure Private DNS:
 - must provide the Azure AAD Client Secret when provider is "azure-private-dns", secretName is not set and MSI is disabled
 */}}
 {{- define "external-dns.validateValues.azurePrivateDns.aadClientSecret" -}}
-{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientSecret) (not .Values.azure.useManagedIdentityExtension) -}}
+{{- if and (eq .Values.provider "azure-private-dns") (not .Values.azure.secretName) (not .Values.azure.aadClientSecret) (not .Values.azure.useManagedIdentityExtension) (not .Values.azure.userAssignedIdentityID) -}}
 external-dns: azure.useManagedIdentityExtension
     You must provide the Azure AAD Client Secret when provider="azure-private-dns" and useManagedIdentityExtension is not set.
     Please set the aadClientSecret parameter (--set azure.aadClientSecret="xxxx")
