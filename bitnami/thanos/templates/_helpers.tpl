@@ -262,8 +262,50 @@ Usage:
 Return true if a hashring configmap object should be created
 */}}
 {{- define "thanos.receive.createConfigmap" -}}
-{{- if and .Values.receive.enabled .Values.receive.config (not .Values.receive.existingConfigmap) }}
+{{- if and .Values.receive.enabled (not .Values.receive.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/* Return the proper pod name of the replica.
+Usage:
+{{ include "thanos.receive.podFQDN" (dict "root" . "extra" $suffix ) }}
+*/}}
+{{- define "thanos.receive.podFQDN" -}}
+{{- if .root.Values.receive.service.additionalHeadless -}}
+{{- printf "\"%s-receive-headless-%d.%s.svc.%s:%d\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain (int .root.Values.receive.service.grpc.port) -}}
+{{- else -}}
+{{- printf "\"%s-receive-%d.%s.svc.%s:%d\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain (int .root.Values.receive.service.grpc.port) -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Returns a proper configuration when no config is specified
+Usage:
+{{ include "thanos.receive.config" . }}
+*/}}
+{{- define "thanos.receive.config" -}}
+{{- $root := . -}}
+{{- if not .Values.receive.config -}}
+{{- $count := int .Values.receive.replicaCount -}}
+{{- $endpoints_dict := dict "endpoints" (list)  -}}
+{{- range $i := until $count -}}
+{{- $data := dict "root" $root "extra" $i -}}
+{{- $noop := (include "thanos.receive.podFQDN" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
+{{- end -}}
+[
+  {
+    "endpoints": [
+{{ join ",\n" $endpoints_dict.endpoints | indent 6 }}
+    ]
+  }
+]
+{{- else -}}
+{{- if (typeIs "string" $root.Values.receive.config)}}
+{{- $root.Values.receive.config -}}
+{{- else -}}
+{{- $root.Values.receive.config | toPrettyJson -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}

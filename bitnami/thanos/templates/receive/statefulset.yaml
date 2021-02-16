@@ -77,7 +77,11 @@ spec:
             - --label=replica="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention=15d
+            {{- if and (eq .Values.receive.replicaCount 1) .Values.receive.config }}
+            - --receive.local-endpoint=127.0.0.1:{{ .Values.receive.service.grpc.port }}
+            {{- else }}
             - --receive.local-endpoint=${NAME}.thanos-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.${NAMESPACE}.svc.{{ .Values.clusterDomain }}:10901
+            {{- end }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
             {{- if .Values.receive.extraFlags }}
             {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
