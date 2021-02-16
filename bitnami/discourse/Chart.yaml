@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 2.2.1
+version: 2.3.0

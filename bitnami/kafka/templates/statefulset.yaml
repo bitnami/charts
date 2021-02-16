@@ -197,7 +197,7 @@ spec:
             - name: HOST_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: status.hostIP 
+                  fieldPath: status.hostIP
             {{- end }}
             {{- end }}
             {{- else }}
@@ -370,6 +370,11 @@ spec:
             - name: kafka-certificates
               mountPath: /certs
               readOnly: true
+            {{- if  .Values.auth.jksTruststoreSecret }}
+            - name: kafka-truststore
+              mountPath: /truststore
+              readOnly: true
+            {{- end }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
@@ -430,6 +435,12 @@ spec:
           secret:
             secretName: {{ include "kafka.jksSecretName" . }}
             defaultMode: 256
+        {{- if .Values.auth.jksTruststoreSecret }}
+        - name: kafka-truststore
+          secret:
+            secretName: {{ .Values.auth.jksTruststoreSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
@@ -473,7 +484,7 @@ spec:
     - metadata:
         name: logs
         {{- if .Values.logPersistence.annotations }}
-        annotations: {{- include "kafka.tplValue" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

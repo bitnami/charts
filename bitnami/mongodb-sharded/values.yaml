@@ -2,19 +2,19 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-global: {}
+# global:
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Bitnami MongoDB Sharded image version
+## Bitnami MongoDB(R) Sharded image version
 ## ref: https://hub.docker.com/r/bitnami/mongodb-sharded/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.3-debian-10-r39
+  tag: 4.4.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -40,10 +40,10 @@ nameOverride:
 ##
 fullnameOverride:
 
-## MongoDB credentials
+## MongoDB(R) credentials
 ##
 
-## MongoDB root password
+## MongoDB(R) root password
 ## If set to null it will be randomly generated
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
@@ -69,7 +69,7 @@ existingSecret:
 ##
 usePasswordFile: false
 
-## Number of MongoDB Shards
+## Number of MongoDB(R) Shards
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
 shards: 2
@@ -88,7 +88,7 @@ shardsvr:
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
-    ## MongoDB additional command line flags
+    ## MongoDB(R) additional command line flags
     ##
     ## Can be used to specify command line flags, for example:
     ##
@@ -153,7 +153,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
+    ## updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
@@ -162,11 +162,11 @@ shardsvr:
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []
-    ## Entries for the MongoDB config file. For documentation of all options, see:
+    ## Entries for the MongoDB(R) config file. For documentation of all options, see:
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
     config:
-    ## Name of a ConfigMap containing a MongoDB config file (cannot be used at the same time as config)
+    ## Name of a ConfigMap containing a MongoDB(R) config file (cannot be used at the same time as config)
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
     configCM:
@@ -257,7 +257,7 @@ shardsvr:
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
-    ## MongoDB additional command line flags
+    ## MongoDB(R) additional command line flags
     ##
     ## Can be used to specify command line flags, for example:
     ##
@@ -317,16 +317,16 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
+    ## updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:
       type: RollingUpdate
-    ## Entries for the MongoDB config file. For documentation of all options, see:
+    ## Entries for the MongoDB(R) config file. For documentation of all options, see:
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
     config:
-    ## Name of a ConfigMap containing a MongoDB config file (cannot be used at the same time as config)
+    ## Name of a ConfigMap containing a MongoDB(R) config file (cannot be used at the same time as config)
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
     configCM:
@@ -397,7 +397,7 @@ shardsvr:
   persistence:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
-    ## MongoDB images.
+    ## MongoDB(R) images.
     ##
     mountPath: /bitnami/mongodb
 
@@ -439,7 +439,7 @@ configsvr:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## MongoDB additional command line flags
+  ## MongoDB(R) additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
   ##
@@ -499,16 +499,16 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
+  ## updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-  ## Entries for the MongoDB config file. For documentation of all options, see:
+  ## Entries for the MongoDB(R) config file. For documentation of all options, see:
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   config:
-  ## Name of a ConfigMap containing a MongoDB config file (cannot be used at the same time as config)
+  ## Name of a ConfigMap containing a MongoDB(R) config file (cannot be used at the same time as config)
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   configCM:
@@ -578,7 +578,7 @@ configsvr:
   persistence:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
-    ## MongoDB images.
+    ## MongoDB(R) images.
     ##
     mountPath: /bitnami/mongodb
 
@@ -647,7 +647,7 @@ mongos:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## MongoDB additional command line flags
+  ## MongoDB(R) additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
   ##
@@ -707,16 +707,16 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## updateStrategy for MongoDB Primary, Secondary and Arbiter statefulsets
+  ## updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-  ## Entries for the MongoDB config file. For documentation of all options, see:
+  ## Entries for the MongoDB(R) config file. For documentation of all options, see:
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   config:
-  ## Name of a ConfigMap containing a MongoDB config file (cannot be used at the same time as config)
+  ## Name of a ConfigMap containing a MongoDB(R) config file (cannot be used at the same time as config)
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   configCM:
@@ -801,11 +801,11 @@ common:
   ## Use hostnames instead of IP addresses
   ##
   useHostnames: true
-  ## Whether enable/disable IPv6 on MongoDB
+  ## Whether enable/disable IPv6 on MongoDB(R)
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
   ##
   mongodbEnableIPv6: false
-  ## Whether enable/disable DirectoryPerDB on MongoDB
+  ## Whether enable/disable DirectoryPerDB on MongoDB(R)
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
   ##
   mongodbDirectoryPerDB: false
@@ -813,7 +813,7 @@ common:
   ## ref: https://docs.mongodb.com/manual/reference/program/mongo/#cmdoption-mongo-ipv6
   ##
   mongodbSystemLogVerbosity: 0
-  ## MongoDB System Log configuration
+  ## MongoDB(R) System Log configuration
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
   ##
   mongodbDisableSystemLog: false
@@ -935,7 +935,7 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   ##
   externalTrafficPolicy: Cluster
-  ## MongoDB Service port and Container Port
+  ## MongoDB(R) Service port and Container Port
   ##
   port: 27017
   ## Set a fixed service ClusterIP address
@@ -971,7 +971,7 @@ service:
   sessionAffinity: None
 
 ## Configure extra options for liveness and readiness probes
-## This applies to all the MongoDB in the sharded cluster
+## This applies to all the MongoDB(R) in the sharded cluster
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
 livenessProbe:
@@ -997,7 +997,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r72
+    tag: 0.11.2-debian-10-r79
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1034,11 +1034,15 @@ metrics:
     failureThreshold: 3
     successThreshold: 1
 
+  ## Metrics container port
+  ##
+  containerPort: 9216
+
   ## Metrics exporter pod Annotation
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9216"
+    prometheus.io/port: "{{ .Values.metrics.containerPort }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator

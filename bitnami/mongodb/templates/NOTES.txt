@@ -12,12 +12,12 @@
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
 ###############################################################################
-### ERROR: You enabled external access to MongoDB nodes without specifying  ###
-###   the array of load balancer IPs for MongoDB nodes.                     ###
+### ERROR: You enabled external access to MongoDB(R) nodes without specifying  ###
+###   the array of load balancer IPs for MongoDB(R) nodes.                     ###
 ###############################################################################
 
 This deployment will be incomplete until you configure the array of load balancer
-IPs for MongoDB nodes. To complete your deployment follow the steps below:
+IPs for MongoDB(R) nodes. To complete your deployment follow the steps below:
 
 1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
 
@@ -46,7 +46,7 @@ IPs for MongoDB nodes. To complete your deployment follow the steps below:
  WARNING
 
     By not enabling "mongodb.auth.enabled" you have most likely exposed the
-    MongoDB service externally without any authentication mechanism.
+    MongoDB(R) service externally without any authentication mechanism.
 
     For security reasons, we strongly suggest that you enable authentiation
     setting the "mongodb.auth.enabled" parameter to "true".
@@ -56,7 +56,7 @@ IPs for MongoDB nodes. To complete your deployment follow the steps below:
 
 ** Please be patient while the chart is being deployed **
 
-MongoDB can be accessed on the following DNS name(s) and ports from within your cluster:
+MongoDB(R) can be accessed on the following DNS name(s) and ports from within your cluster:
 
 {{- if eq .Values.architecture "replicaset" }}
 {{ join "\n" $mongoList | nindent 4 }}
@@ -81,7 +81,7 @@ To get the password for "{{ .Values.auth.username }}" run:
 
 {{- end }}
 
-To connect to your database, create a MongoDB client container:
+To connect to your database, create a MongoDB(R) client container:
 
     kubectl run --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }}-client --rm --tty -i --restart='Never' --env="MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" --image {{ template "mongodb.image" . }} --command -- bash
 
@@ -100,17 +100,17 @@ To connect to your database nodes from outside, you need to add both primary and
 {{- if eq "NodePort" .Values.externalAccess.service.type }}
 {{- if .Values.externalAccess.service.domain }}
 
-    MongoDB nodes domain: Use your provided hostname to reach MongoDB nodes, {{ .Values.externalAccess.service.domain }}
+    MongoDB(R) nodes domain: Use your provided hostname to reach MongoDB(R) nodes, {{ .Values.externalAccess.service.domain }}
 
 {{- else }}
 
-    MongoDB nodes domain: you can reach MongoDB nodes on any of the K8s nodes external IPs.
+    MongoDB(R) nodes domain: you can reach MongoDB(R) nodes on any of the K8s nodes external IPs.
 
         kubectl get nodes -o wide
 
 {{- end }}
 
-    MongoDB nodes port: You will have a different node port for each MongoDB node. You can get the list of configured node ports using the command below:
+    MongoDB(R) nodes port: You will have a different node port for each MongoDB(R) node. You can get the list of configured node ports using the command below:
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
@@ -119,11 +119,11 @@ To connect to your database nodes from outside, you need to add both primary and
   NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -w'
 
-    MongoDB nodes domain: You will have a different external IP for each MongoDB node. You can get the list of external IPs using the command below:
+    MongoDB(R) nodes domain: You will have a different external IP for each MongoDB(R) node. You can get the list of external IPs using the command below:
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
-    MongoDB nodes port: {{ .Values.externalAccess.service.port }}
+    MongoDB(R) nodes port: {{ .Values.externalAccess.service.port }}
 
 {{- end }}
 
@@ -156,7 +156,7 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if .Values.metrics.enabled }}
 
-To access the MongoDB Prometheus metrics, get the MongoDB Prometheus URL by running:
+To access the MongoDB(R) Prometheus metrics, get the MongoDB(R) Prometheus URL by running:
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
     echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"

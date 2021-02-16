@@ -80,10 +80,16 @@ spec:
             - --store=dnssrv+_grpc._tcp.{{- include "common.tplvalues.render" ( dict "value" $query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "common.tplvalues.render"  ( dict "value" $query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.storegateway.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.ruler.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
+            {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
+            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- range $query.stores }}
             - --store={{ . }}
@@ -91,13 +97,21 @@ spec:
             {{- if or $query.grpcTLS.server.secure $query.grpcTLS.server.existingSecret }}
             - --grpc-server-tls-cert=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "tls-key") }}
+            {{- if or $query.grpcTLS.server.ca $query.grpcTLS.client.existingSecret }}
             - --grpc-server-tls-client-ca=/tls/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.server.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if or $query.grpcTLS.client.secure $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-secure
+            {{- if or $query.grpcTLS.client.cert $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-cert=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-cert") }}
+            {{- end }}
+            {{- if or $query.grpcTLS.client.key $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-key=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "tls-key") }}
+            {{- end }}
+            {{- if or $query.grpcTLS.client.ca $query.grpcTLS.client.existingSecret }}
             - --grpc-client-tls-ca=/tls/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if $query.grpcTLS.client.servername }}
             - --grpc-client-server-name={{$query.grpcTLS.client.servername}}

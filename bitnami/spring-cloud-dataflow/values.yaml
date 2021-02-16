@@ -402,6 +402,16 @@ server:
     ##
     port: 5005
 
+  ## Add proxy configuration for SCDF server
+  ## Example:
+  ## proxy:
+  ##   host: "myproxy.com"
+  ##   port: 8080
+  ##   user: ""
+  ##   password: ""
+  ##
+  proxy: {}
+
 ##
 ## Spring Cloud Skipper parameters.
 ##

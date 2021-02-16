@@ -11,16 +11,16 @@
 #   namespaceOverride: my-global-namespace
 
 image:
-  ## Bitnami MongoDB registry
+  ## Bitnami MongoDB(R) registry
   ##
   registry: docker.io
-  ## Bitnami MongoDB image name
+  ## Bitnami MongoDB(R) image name
   ##
   repository: bitnami/mongodb
-  ## Bitnami MongoDB image tag
+  ## Bitnami MongoDB(R) image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.3-debian-10-r42
+  tag: 4.4.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -55,7 +55,7 @@ clusterDomain: cluster.local
 ##
 # schedulerName:
 
-## MongoDB architecture. Allowed values: standalone or replicaset
+## MongoDB(R) architecture. Allowed values: standalone or replicaset
 ##
 architecture: standalone
 
@@ -63,18 +63,18 @@ architecture: standalone
 ##
 useStatefulSet: false
 
-## MongoDB Authentication parameters
+## MongoDB(R) Authentication parameters
 ##
 auth:
   ## Enable authentication
   ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
   ##
   enabled: true
-  ## MongoDB root password
+  ## MongoDB(R) root password
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
-  ## MongoDB custom user and database
+  ## MongoDB(R) custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
   # username: username
@@ -85,17 +85,17 @@ auth:
   ##
   replicaSetKey: ""
 
-  ## Existing secret with MongoDB credentials
+  ## Existing secret with MongoDB(R) credentials
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   # existingSecret: name-of-existing-secret
 
 tls:
-  ## Enable or disable MongoDB TLS Support
+  ## Enable or disable MongoDB(R) TLS Support
   ##
   enabled: false
 
-  ## Existing secret with MongoDB TLS certificates
+  ## Existing secret with MongoDB(R) TLS certificates
   ## NOTE: When it's set it will disable certificate creation
   ##
   # existingSecret: name-of-existing-secret
@@ -109,7 +109,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r44
+    tag: 1.19.6-debian-10-r51
     pullPolicy: IfNotPresent
 
 ## Deployment pod host aliases
@@ -128,23 +128,23 @@ replicaSetName: rs0
 ##
 replicaSetHostnames: true
 
-## Whether enable/disable IPv6 on MongoDB
+## Whether enable/disable IPv6 on MongoDB(R)
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
 ##
 enableIPv6: false
 
-## Whether enable/disable DirectoryPerDB on MongoDB
+## Whether enable/disable DirectoryPerDB on MongoDB(R)
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
 ##
 directoryPerDB: false
 
-## MongoDB System Log configuration
+## MongoDB(R) System Log configuration
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
 ##
 systemLogVerbosity: 0
 disableSystemLog: false
 
-## MongoDB configuration file for Primary and Secondary nodes. For documentation of all options, see:
+## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
 ## configuration: |-
@@ -188,7 +188,7 @@ disableSystemLog: false
 ##
 configuration: ""
 
-## ConfigMap with MongoDB configuration for Primary and Secondary nodes
+## ConfigMap with MongoDB(R) configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
 # existingConfigmap:
@@ -235,25 +235,25 @@ extraEnvVars: []
 ##
 # extraEnvVarsSecret:
 
-## Annotations to be added to the MongoDB statefulset. Evaluated as a template.
+## Annotations to be added to the MongoDB(R) statefulset. Evaluated as a template.
 ##
 annotations: {}
 
-## Additional labels to be added to the MongoDB statefulset. Evaluated as a template.
+## Additional labels to be added to the MongoDB(R) statefulset. Evaluated as a template.
 ##
 labels: {}
 
-## Number of MongoDB replicas to deploy.
+## Number of MongoDB(R) replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaCount: 2
 
-## StrategyType for MongoDB statefulset
+## StrategyType for MongoDB(R) statefulset
 ## It can be set to RollingUpdate or Recreate by default.
 ##
 strategyType: RollingUpdate
 
-## MongoDB should be initialized one by one when building the replicaset for the first time.
+## MongoDB(R) should be initialized one by one when building the replicaset for the first time.
 ##
 podManagementPolicy: OrderedReady
 
@@ -307,22 +307,22 @@ nodeSelector: {}
 ##
 tolerations: []
 
-## Labels for MongoDB pods. Evaluated as a template.
+## Labels for MongoDB(R) pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
 
-## Annotations for MongoDB pods. Evaluated as a template.
+## Annotations for MongoDB(R) pods. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## MongoDB pods' priority.
+## MongoDB(R) pods' priority.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 # priorityClassName: ""
 
-## MongoDB pods' Security Context.
+## MongoDB(R) pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
@@ -336,7 +336,7 @@ podSecurityContext:
   ##
   sysctls: []
 
-## MongoDB containers' Security Context (main and metrics container).
+## MongoDB(R) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
 containerSecurityContext:
@@ -344,7 +344,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 
-## MongoDB containers' resource requests and limits.
+## MongoDB(R) containers' resource requests and limits.
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
@@ -359,7 +359,7 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
-## MongoDB pods' liveness and readiness probes. Evaluated as a template.
+## MongoDB(R) pods' liveness and readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
@@ -377,17 +377,17 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 
-## Custom Liveness probes for MongoDB pods
+## Custom Liveness probes for MongoDB(R) pods
 ## Ignored when livenessProbe.enabled=true
 ##
 customLivenessProbe: {}
 
-## Custom Rediness probes MongoDB pods
+## Custom Rediness probes MongoDB(R) pods
 ## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
 
-## Add init containers to the MongoDB pods.
+## Add init containers to the MongoDB(R) pods.
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -399,7 +399,7 @@ customReadinessProbe: {}
 ##
 initContainers: {}
 
-## Add sidecars to the MongoDB pods.
+## Add sidecars to the MongoDB(R) pods.
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -411,7 +411,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB pods
+## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) pods
 ## Examples:
 ## extraVolumeMounts:
 ##   - name: extras
@@ -424,7 +424,7 @@ sidecars: {}
 extraVolumeMounts: []
 extraVolumes: []
 
-## MongoDB Pod Disruption Budget configuration
+## MongoDB(R) Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -465,7 +465,7 @@ persistence:
   ##
   annotations: {}
   ## The path the volume will be mounted at, useful when using different
-  ## MongoDB images.
+  ## MongoDB(R) images.
   ##
   mountPath: /bitnami/mongodb
   ## The subdirectory of the volume to mount to, useful in dev environments
@@ -489,17 +489,17 @@ service:
   ## Service type
   ##
   type: ClusterIP
-  ## MongoDB service port
+  ## MongoDB(R) service port
   ##
   port: 27017
-  ## MongoDB service port name
+  ## MongoDB(R) service port name
   ##
   portName: mongodb
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
-  ## MongoDB service clusterIP IP
+  ## MongoDB(R) service clusterIP IP
   ##
   # clusterIP: None
   ## Specify the externalIP value ClusterIP service type.
@@ -518,10 +518,10 @@ service:
   ##
   annotations: {}
 
-## External Access to MongoDB nodes configuration
+## External Access to MongoDB(R) nodes configuration
 ##
 externalAccess:
-  ## Enable Kubernetes external cluster access to MongoDB nodes
+  ## Enable Kubernetes external cluster access to MongoDB(R) nodes
   ##
   enabled: false
   ## External IPs auto-discovery configuration
@@ -538,7 +538,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.15-debian-10-r18
+      tag: 1.18.15-debian-10-r24
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -565,7 +565,7 @@ externalAccess:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
-  ## Parameters to configure K8s service(s) used to externally access MongoDB
+  ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
   ## A new service per broker will be created
   ##
   service:
@@ -575,7 +575,7 @@ externalAccess:
     ## Port used when service type is LoadBalancer
     ##
     port: 27017
-    ## Array of load balancer IPs for each MongoDB node. Length must be the same as replicaCount
+    ## Array of load balancer IPs for each MongoDB(R) node. Length must be the same as replicaCount
     ## Example:
     ## loadBalancerIPs:
     ##   - X.X.X.X
@@ -589,14 +589,14 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## Array of node ports used for each MongoDB nodes. Length must be the same as replicaCount
+    ## Array of node ports used for each MongoDB(R) nodes. Length must be the same as replicaCount
     ## Example:
     ## nodePorts:
     ##   - 30001
     ##   - 30002
     ##
     nodePorts: []
-    ## When service type is NodePort, you can specify the domain used for MongoDB advertised hostnames.
+    ## When service type is NodePort, you can specify the domain used for MongoDB(R) advertised hostnames.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     # domain: mydomain.com
@@ -605,15 +605,15 @@ externalAccess:
     annotations: {}
 
 ##
-## MongoDB Arbiter parameters.
+## MongoDB(R) Arbiter parameters.
 ##
 arbiter:
-  ## Enable deploying the MongoDB Arbiter
+  ## Enable deploying the MongoDB(R) Arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
   ##
   enabled: true
 
-  ## MongoDB configuration file for the Arbiter. For documentation of all options, see:
+  ## MongoDB(R) configuration file for the Arbiter. For documentation of all options, see:
   ##   http://docs.mongodb.org/manual/reference/configuration-options/
   ##
   configuration: ""
@@ -623,7 +623,7 @@ arbiter:
   ##
   hostAliases: []
 
-  ## ConfigMap with MongoDB configuration for the Arbiter
+  ## ConfigMap with MongoDB(R) configuration for the Arbiter
   ## NOTE: When it's set the arbiter.configuration parameter is ignored
   ##
   # existingConfigmap:
@@ -714,22 +714,22 @@ arbiter:
   ##
   tolerations: []
 
-  ## Labels for MongoDB Arbiter pods. Evaluated as a template.
+  ## Labels for MongoDB(R) Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
 
-  ## Annotations for MongoDB Arbiter pods. Evaluated as a template.
+  ## Annotations for MongoDB(R) Arbiter pods. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
-  ## MongoDB Arbiter pods' priority.
+  ## MongoDB(R) Arbiter pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   # priorityClassName: ""
 
-  ## MongoDB Arbiter pods' Security Context.
+  ## MongoDB(R) Arbiter pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
   podSecurityContext:
@@ -743,14 +743,14 @@ arbiter:
     ##
     sysctls: []
 
-  ## MongoDB Arbiter containers' Security Context (only main container).
+  ## MongoDB(R) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
 
-  ## MongoDB Arbiter containers' resource requests and limits.
+  ## MongoDB(R) Arbiter containers' resource requests and limits.
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
@@ -765,7 +765,7 @@ arbiter:
     #   cpu: 100m
     #   memory: 128Mi
 
-  ## MongoDB Arbiter pods' liveness and readiness probes. Evaluated as a template.
+  ## MongoDB(R) Arbiter pods' liveness and readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -783,17 +783,17 @@ arbiter:
     failureThreshold: 6
     successThreshold: 1
 
-  ## Custom Liveness probes for MongoDB Arbiter pods
+  ## Custom Liveness probes for MongoDB(R) Arbiter pods
   ## Ignored when arbiter.livenessProbe.enabled=true
   ##
   customLivenessProbe: {}
 
-  ## Custom Rediness probes MongoDB Arbiter pods
+  ## Custom Rediness probes MongoDB(R) Arbiter pods
   ## Ignored when arbiter.readinessProbe.enabled=true
   ##
   customReadinessProbe: {}
 
-  ## Add init containers to the MongoDB Arbiter pods.
+  ## Add init containers to the MongoDB(R) Arbiter pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -805,7 +805,7 @@ arbiter:
   ##
   initContainers: {}
 
-  ## Add sidecars to the MongoDB Arbiter pods.
+  ## Add sidecars to the MongoDB(R) Arbiter pods.
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -817,7 +817,7 @@ arbiter:
   ##
   sidecars: {}
 
-  ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB Arbiter pods
+  ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) Arbiter pods
   ## Examples:
   ## extraVolumeMounts:
   ##   - name: extras
@@ -830,7 +830,7 @@ arbiter:
   extraVolumeMounts: []
   extraVolumes: []
 
-  ## MongoDB Arbiter Pod Disruption Budget configuration
+  ## MongoDB(R) Arbiter Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
@@ -842,7 +842,8 @@ arbiter:
     ##
     # maxUnavailable: 1
 
-  ## MongoDB Arbiter service parameters
+  ## MongoDB(R) Arbiter service parameters
+  ##
   service:
     ## Service name
     ##
@@ -868,8 +869,8 @@ serviceAccount:
 ##
 rbac:
   ## Specifies whether RBAC rules should be created
-  ## binding MongoDB ServiceAccount to a role
-  ## that allows MongoDB pods querying the K8s API
+  ## binding MongoDB(R) ServiceAccount to a role
+  ## that allows MongoDB(R) pods querying the K8s API
   ##
   create: false
 
@@ -978,13 +979,13 @@ volumePermissions:
 ##
 metrics:
   enabled: false
-  ## Bitnami MongoDB Promtheus Exporter image
+  ## Bitnami MongoDB(R) Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r72
+    tag: 0.11.2-debian-10-r79
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1017,6 +1018,10 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+
+  ## Prometheus exporter container port
+  ##
+  containerPort: 9216
 
   ## Prometheus Exporter service configuration
   ##

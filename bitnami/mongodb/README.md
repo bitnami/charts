@@ -1,6 +1,8 @@
-# MongoDB
+# MongoDB&reg; packaged by Bitnami
 
-[MongoDB](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+[MongoDB&reg;](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
 
@@ -11,7 +13,7 @@ $ helm install my-release bitnami/mongodb
 
 ## Introduction
 
-This chart bootstraps a [MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -29,7 +31,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/mongodb
 ```
 
-The command deploys MongoDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,76 +47,76 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Architecture
 
-This charts allows you install MongoDB using two different architecture setups: "standalone" or "replicaset". You can use the `architecture` parameter to choose the one to use:
+This charts allows you install MongoDB&reg; using two different architecture setups: "standalone" or "replicaset". You can use the `architecture` parameter to choose the one to use:
 
 ```console
 architecture="standalone"
 architecture="replicaset"
 ```
 
-The standalone architecture installs a deployment (or statefulset) with one MongoDB server (it cannot be scaled):
+The standalone architecture installs a deployment (or statefulset) with one MongoDB&reg; server (it cannot be scaled):
 
 ```
                 ┌────────────────┐
-                │    MongoDB     │
+                │   MongoDB&reg; │
                 |      svc       │
                 └───────┬────────┘
                         │
                         ▼
-                  ┌──────────┐
-                  │  MongoDB │
-                  │  Server  │
-                  │   Pod    │
-                  └──────────┘
+                  ┌────────────┐
+                  │MongoDB&reg;│
+                  │   Server   │
+                  │    Pod     │
+                  └────────────┘
 ```
 
-The chart supports the replicaset architecture with and without a [MongoDB Arbiter](https://docs.mongodb.com/manual/core/replica-set-arbiter/):
+The chart supports the replicaset architecture with and without a [MongoDB&reg; Arbiter](https://docs.mongodb.com/manual/core/replica-set-arbiter/):
 
-- When the MongoDB Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB arbiter node (it cannot be scaled).
+- When the MongoDB&reg; Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB&reg; arbiter node (it cannot be scaled).
 
     ```
         ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌─────────────┐
-        │   MongoDB 0    │ │   MongoDB 1    │ │   MongoDB N    │    │   Arbiter   │
+        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │   Arbiter   │
         |  external svc  │ |  external svc  │ |  external svc  │    |     svc     │
         └───────┬────────┘ └───────┬────────┘ └───────┬────────┘    └──────┬──────┘
                 │                  │                  │                    │
                 ▼                  ▼                  ▼                    ▼
-          ┌───────────┐      ┌───────────┐      ┌───────────┐        ┌───────────┐
-          │ MongoDB 0 │      │ MongoDB 1 │      │ MongoDB N │        │  MongoDB  │
-          │  Server   │      │  Server   │ .... │  Server   │        │  Arbiter  │
-          │   Pod     │      │   Pod     │      │   Pod     │        │   Pod     │
-          └───────────┘      └───────────┘      └───────────┘        └───────────┘
-             primary           secondary          secondary
+        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌──────────────┐
+        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │ MongoDB&reg; │
+        │    Server      │ │     Server     │ │     Server     │    │    Arbiter   │
+        │     Pod        │ │      Pod       │ │      Pod       │    │     Pod      │
+        └────────────────┘ └────────────────┘ └────────────────┘    └──────────────┘
+             primary           secondary         secondary
     ```
 
-    The PSA model is useful when the third Availability Zone cannot hold a full MongoDB instance. The MongoDB Arbiter as decision maker is lightweight and can run alongside other workloads.
+    The PSA model is useful when the third Availability Zone cannot hold a full MongoDB&reg; instance. The MongoDB&reg; Arbiter as decision maker is lightweight and can run alongside other workloads.
 
-    _Note:_ An update takes your MongoDB replicaset offline if the Arbiter is enabled and the number of MongoDB replicas is two. Helm applies updates to the statefulsets for the MongoDB instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
+    _Note:_ An update takes your MongoDB&reg; replicaset offline if the Arbiter is enabled and the number of MongoDB&reg; replicas is two. Helm applies updates to the statefulsets for the MongoDB&reg; instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
 
-- Without the Arbiter, the chart deploys a single statefulset with N MongoDB servers (organised with one primary and N-1 secondary nodes)
+- Without the Arbiter, the chart deploys a single statefulset with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes)
 
     ```
         ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-        │   MongoDB 0    │ │   MongoDB 1    │ │   MongoDB N    │
+        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
         |  external svc  │ |  external svc  │ |  external svc  │
         └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
                 │                  │                  │
                 ▼                  ▼                  ▼
-          ┌───────────┐      ┌───────────┐      ┌───────────┐
-          │ MongoDB 0 │      │ MongoDB 1 │      │ MongoDB N │
-          │  Server   │      │  Server   │ .... │  Server   │
-          │   Pod     │      │   Pod     │      │   Pod     │
-          └───────────┘      └───────────┘      └───────────┘
-             primary           secondary          secondary
+        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
+        │    Server      │ │     Server     │ │     Server     │
+        │     Pod        │ │      Pod       │ │      Pod       │
+        └────────────────┘ └────────────────┘ └────────────────┘
+             primary           secondary         secondary
     ```
 
-There are no services load balancing requests between MongoDB nodes, instead each node has an associated service to access them individually.
+There are no services load balancing requests between MongoDB&reg; nodes, instead each node has an associated service to access them individually.
 
-> Note: although the 1st replica is initially assigned the "primary" role, any of the "secondary" nodes can become the "primary" if it is down, or during upgrades. Do not make any assumption about what replica has the "primary" role, instead configure your Mongo client with the list of MongoDB hostnames so it can dynamically choose the node to send requests.
+> Note: although the 1st replica is initially assigned the "primary" role, any of the "secondary" nodes can become the "primary" if it is down, or during upgrades. Do not make any assumption about what replica has the "primary" role, instead configure your Mongo client with the list of MongoDB&reg; hostnames so it can dynamically choose the node to send requests.
 
 ## Parameters
 
-The following tables lists the configurable parameters of the MongoDB chart and their default values per section/component:
+The following tables lists the configurable parameters of the MongoDB&reg; chart and their default values per section/component:
 
 ### Global parameters
 
@@ -133,142 +135,142 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 | `fullnameOverride`  | String to fully override mongodb.fullname                      | `nil`                                                   |
 | `clusterDomain`     | Default Kubernetes cluster domain                              | `cluster.local`                                         |
 | `schedulerName`     | Name of the scheduler (other than default) to dispatch pods    | `nil`                                                   |
-| `image.registry`    | MongoDB image registry                                         | `docker.io`                                             |
-| `image.repository`  | MongoDB image name                                             | `bitnami/mongodb`                                       |
-| `image.tag`         | MongoDB image tag                                              | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | MongoDB image pull policy                                      | `IfNotPresent`                                          |
+| `image.registry`    | MongoDB&reg; image registry                                    | `docker.io`                                             |
+| `image.repository`  | MongoDB&reg; image name                                        | `bitnami/mongodb`                                       |
+| `image.tag`         | MongoDB&reg; image tag                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | MongoDB&reg; image pull policy                                 | `IfNotPresent`                                          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`                                                 |
 
-### MongoDB parameters
+### MongoDB&reg; parameters
 
-| Parameter                | Description                                                                                                              | Default                                        |
-|--------------------------|--------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `architecture`           | MongoDB architecture (`standalone` or `replicaset`)                                                                      | `standalone`                                   |
-| `hostAliases`            | Add deployment host aliases                                                                                              | `[]`                                           |
-| `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                           | `false`                                        |
-| `auth.enabled`           | Enable authentication                                                                                                    | `true`                                         |
-| `auth.rootPassword`      | MongoDB admin password                                                                                                   | _random 10 character long alphanumeric string_ |
-| `auth.username`          | MongoDB custom user (mandatory if `auth.database` is set)                                                                | `nil`                                          |
-| `auth.password`          | MongoDB custom user password                                                                                             | _random 10 character long alphanumeric string_ |
-| `auth.database`          | MongoDB custom database                                                                                                  | `nil`                                          |
-| `auth.replicaSetKey`     | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                      | _random 10 character long alphanumeric string_ |
-| `auth.existingSecret`    | Existing secret with MongoDB credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`) | `nil`                                          |
-| `replicaSetName`         | Name of the replica set (only when `architecture=replicaset`)                                                            | `rs0`                                          |
-| `replicaSetHostnames`    | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                      | `true`                                         |
-| `enableIPv6`             | Switch to enable/disable IPv6 on MongoDB                                                                                 | `false`                                        |
-| `directoryPerDB`         | Switch to enable/disable DirectoryPerDB on MongoDB                                                                       | `false`                                        |
-| `systemLogVerbosity`     | MongoDB system log verbosity level                                                                                       | `0`                                            |
-| `disableSystemLog`       | Switch to enable/disable MongoDB system log                                                                              | `false`                                        |
-| `configuration`          | MongoDB configuration file to be used                                                                                    | `{}`                                           |
-| `existingConfigmap`      | Name of existing ConfigMap with MongoDB configuration                                                                    | `nil`                                          |
-| `initdbScripts`          | Dictionary of initdb scripts                                                                                             | `nil`                                          |
-| `initdbScriptsConfigMap` | ConfigMap with the initdb scripts                                                                                        | `nil`                                          |
-| `command`                | Override default container command (useful when using custom images)                                                     | `nil`                                          |
-| `args`                   | Override default container args (useful when using custom images)                                                        | `nil`                                          |
-| `extraFlags`             | MongoDB additional command line flags                                                                                    | `[]`                                           |
-| `extraEnvVars`           | Extra environment variables to add to MongoDB pods                                                                       | `[]`                                           |
-| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                     | `nil`                                          |
-| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars (in case of sensitive data)                                            | `nil`                                          |
-| `tls.enabled`            | Enable MongoDB TLS support between nodes in the cluster as well as between mongo clients and nodes                       | `false`                                        |
-| `tls.existingSecret`     | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)                          | `nil`                                          |
-| `tls.caCert`             | Custom CA certificated (base64 encoded)                                                                                  | `nil`                                          |
-| `tls.caKey`              | CA certificate private key (base64 encoded)                                                                              | `nil`                                          |
-| `tls.image.registry`     | Init container TLS certs setup image registry (nginx)                                                                    | `docker.io`                                    |
-| `tls.image.repository`   | Init container TLS certs setup image name (nginx)                                                                        | `bitnami/nginx`                                |
-| `tls.image.tag`          | Init container TLS certs setup image tag (nginx)                                                                         | `{TAG_NAME}`                                   |
-| `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy (nginx)                                                                 | `Always`                                       |
+| Parameter                | Description                                                                                                                   | Default                                        |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `architecture`           | MongoDB&reg; architecture (`standalone` or `replicaset`)                                                                      | `standalone`                                   |
+| `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                                           |
+| `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`                                        |
+| `auth.enabled`           | Enable authentication                                                                                                         | `true`                                         |
+| `auth.rootPassword`      | MongoDB&reg; admin password                                                                                                   | _random 10 character long alphanumeric string_ |
+| `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `nil`                                          |
+| `auth.password`          | MongoDB&reg; custom user password                                                                                             | _random 10 character long alphanumeric string_ |
+| `auth.database`          | MongoDB&reg; custom database                                                                                                  | `nil`                                          |
+| `auth.replicaSetKey`     | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                           | _random 10 character long alphanumeric string_ |
+| `auth.existingSecret`    | Existing secret with MongoDB&reg; credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`) | `nil`                                          |
+| `replicaSetName`         | Name of the replica set (only when `architecture=replicaset`)                                                                 | `rs0`                                          |
+| `replicaSetHostnames`    | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                           | `true`                                         |
+| `enableIPv6`             | Switch to enable/disable IPv6 on MongoDB&reg;                                                                                 | `false`                                        |
+| `directoryPerDB`         | Switch to enable/disable DirectoryPerDB on MongoDB&reg;                                                                       | `false`                                        |
+| `systemLogVerbosity`     | MongoDB&reg; system log verbosity level                                                                                       | `0`                                            |
+| `disableSystemLog`       | Switch to enable/disable MongoDB&reg; system log                                                                              | `false`                                        |
+| `configuration`          | MongoDB&reg; configuration file to be used                                                                                    | `{}`                                           |
+| `existingConfigmap`      | Name of existing ConfigMap with MongoDB&reg; configuration                                                                    | `nil`                                          |
+| `initdbScripts`          | Dictionary of initdb scripts                                                                                                  | `nil`                                          |
+| `initdbScriptsConfigMap` | ConfigMap with the initdb scripts                                                                                             | `nil`                                          |
+| `command`                | Override default container command (useful when using custom images)                                                          | `nil`                                          |
+| `args`                   | Override default container args (useful when using custom images)                                                             | `nil`                                          |
+| `extraFlags`             | MongoDB&reg; additional command line flags                                                                                    | `[]`                                           |
+| `extraEnvVars`           | Extra environment variables to add to MongoDB&reg; pods                                                                       | `[]`                                           |
+| `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                          | `nil`                                          |
+| `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars (in case of sensitive data)                                                 | `nil`                                          |
+| `tls.enabled`            | Enable MongoDB&reg; TLS support between nodes in the cluster as well as between mongo clients and nodes                       | `false`                                        |
+| `tls.existingSecret`     | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)                               | `nil`                                          |
+| `tls.caCert`             | Custom CA certificated (base64 encoded)                                                                                       | `nil`                                          |
+| `tls.caKey`              | CA certificate private key (base64 encoded)                                                                                   | `nil`                                          |
+| `tls.image.registry`     | Init container TLS certs setup image registry (nginx)                                                                         | `docker.io`                                    |
+| `tls.image.repository`   | Init container TLS certs setup image name (nginx)                                                                             | `bitnami/nginx`                                |
+| `tls.image.tag`          | Init container TLS certs setup image tag (nginx)                                                                              | `{TAG_NAME}`                                   |
+| `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy (nginx)                                                                      | `Always`                                       |
 
-### MongoDB statefulset parameters
+### MongoDB&reg; statefulset parameters
 
-| Parameter                   | Description                                                                                       | Default                        |
-|-----------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
-| `replicaCount`              | Number of MongoDB nodes (only when `architecture=replicaset`)                                     | `2`                            |
-| `labels`                    | Annotations to be added to the MongoDB statefulset                                                | `{}` (evaluated as a template) |
-| `annotations`               | Additional labels to be added to the MongoDB statefulset                                          | `{}` (evaluated as a template) |
-| `podManagementPolicy`       | Pod management policy for MongoDB                                                                 | `OrderedReady`                 |
-| `strategyType`              | StrategyType for MongoDB statefulset                                                              | `RollingUpdate`                |
-| `podLabels`                 | MongoDB pod labels                                                                                | `{}` (evaluated as a template) |
-| `podAnnotations`            | MongoDB Pod annotations                                                                           | `{}` (evaluated as a template) |
-| `priorityClassName`         | Name of the existing priority class to be used by MongoDB pod(s)                                  | `""`                           |
-| `podAffinityPreset`         | MongoDB Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `podAntiAffinityPreset`     | MongoDB Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `nodeAffinityPreset.type`   | MongoDB Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `nodeAffinityPreset.key`    | MongoDB Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
-| `nodeAffinityPreset.values` | MongoDB Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
-| `affinity`                  | MongoDB Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
-| `nodeSelector`              | MongoDB Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
-| `tolerations`               | MongoDB Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
-| `podSecurityContext`        | MongoDB pod(s)' Security Context                                                                  | Check `values.yaml` file       |
-| `containerSecurityContext`  | MongoDB containers' Security Context                                                              | Check `values.yaml` file       |
-| `resources.limits`          | The resources limits for MongoDB containers                                                       | `{}`                           |
-| `resources.requests`        | The requested resources for MongoDB containers                                                    | `{}`                           |
-| `livenessProbe`             | Liveness probe configuration for MongoDB                                                          | Check `values.yaml` file       |
-| `readinessProbe`            | Readiness probe configuration for MongoDB                                                         | Check `values.yaml` file       |
-| `customLivenessProbe`       | Override default liveness probe for MongoDB containers                                            | `nil`                          |
-| `customReadinessProbe`      | Override default readiness probe for MongoDB containers                                           | `nil`                          |
-| `pdb.create`                | Enable/disable a Pod Disruption Budget creation for MongoDB pod(s)                                | `false`                        |
-| `pdb.minAvailable`          | Minimum number/percentage of MongoDB pods that should remain scheduled                            | `1`                            |
-| `pdb.maxUnavailable`        | Maximum number/percentage of MongoDB pods that may be made unavailable                            | `nil`                          |
-| `initContainers`            | Add additional init containers for the MongoDB pod(s)                                             | `{}` (evaluated as a template) |
-| `sidecars`                  | Add additional sidecar containers for the MongoDB pod(s)                                          | `{}` (evaluated as a template) |
-| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the MongoDB container(s)             | `{}`                           |
-| `extraVolumes`              | Optionally specify extra list of additional volumes to the MongoDB statefulset                    | `{}`                           |
+| Parameter                   | Description                                                                                            | Default                        |
+|-----------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------|
+| `replicaCount`              | Number of MongoDB&reg; nodes (only when `architecture=replicaset`)                                     | `2`                            |
+| `labels`                    | Annotations to be added to the MongoDB&reg; statefulset                                                | `{}` (evaluated as a template) |
+| `annotations`               | Additional labels to be added to the MongoDB&reg; statefulset                                          | `{}` (evaluated as a template) |
+| `podManagementPolicy`       | Pod management policy for MongoDB&reg;                                                                 | `OrderedReady`                 |
+| `strategyType`              | StrategyType for MongoDB&reg; statefulset                                                              | `RollingUpdate`                |
+| `podLabels`                 | MongoDB&reg; pod labels                                                                                | `{}` (evaluated as a template) |
+| `podAnnotations`            | MongoDB&reg; Pod annotations                                                                           | `{}` (evaluated as a template) |
+| `priorityClassName`         | Name of the existing priority class to be used by MongoDB&reg; pod(s)                                  | `""`                           |
+| `podAffinityPreset`         | MongoDB&reg; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`     | MongoDB&reg; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`   | MongoDB&reg; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`    | MongoDB&reg; Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
+| `nodeAffinityPreset.values` | MongoDB&reg; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `affinity`                  | MongoDB&reg; Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `nodeSelector`              | MongoDB&reg; Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`               | MongoDB&reg; Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `podSecurityContext`        | MongoDB&reg; pod(s)' Security Context                                                                  | Check `values.yaml` file       |
+| `containerSecurityContext`  | MongoDB&reg; containers' Security Context                                                              | Check `values.yaml` file       |
+| `resources.limits`          | The resources limits for MongoDB&reg; containers                                                       | `{}`                           |
+| `resources.requests`        | The requested resources for MongoDB&reg; containers                                                    | `{}`                           |
+| `livenessProbe`             | Liveness probe configuration for MongoDB&reg;                                                          | Check `values.yaml` file       |
+| `readinessProbe`            | Readiness probe configuration for MongoDB&reg;                                                         | Check `values.yaml` file       |
+| `customLivenessProbe`       | Override default liveness probe for MongoDB&reg; containers                                            | `nil`                          |
+| `customReadinessProbe`      | Override default readiness probe for MongoDB&reg; containers                                           | `nil`                          |
+| `pdb.create`                | Enable/disable a Pod Disruption Budget creation for MongoDB&reg; pod(s)                                | `false`                        |
+| `pdb.minAvailable`          | Minimum number/percentage of MongoDB&reg; pods that should remain scheduled                            | `1`                            |
+| `pdb.maxUnavailable`        | Maximum number/percentage of MongoDB&reg; pods that may be made unavailable                            | `nil`                          |
+| `initContainers`            | Add additional init containers for the MongoDB&reg; pod(s)                                             | `{}` (evaluated as a template) |
+| `sidecars`                  | Add additional sidecar containers for the MongoDB&reg; pod(s)                                          | `{}` (evaluated as a template) |
+| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the MongoDB&reg; container(s)             | `{}`                           |
+| `extraVolumes`              | Optionally specify extra list of additional volumes to the MongoDB&reg; statefulset                    | `{}`                           |
 
 ### Exposure parameters
 
-| Parameter                                         | Description                                                                                       | Default                        |
-|---------------------------------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                                    | Kubernetes Service type                                                                           | `ClusterIP`                    |
-| `service.nameOverride`                            | MongoDB service name                                                                              | `{mongodb.fullname}-headless`  | 
-| `service.port`                                    | MongoDB service port                                                                              | `27017`                        |
-| `service.portName`                                | MongoDB service port name                                                                         | `mongodb`                      |
-| `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                       | `""`                           |
-| `service.clusterIP`                               | MongoDB service cluster IP                                                                        | `nil`                          |
-| `service.loadBalancerIP`                          | loadBalancerIP for MongoDB Service                                                                | `nil`                          |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                         | `[]`                           |
-| `service.annotations`                             | Service annotations                                                                               | `{}` (evaluated as a template) |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to MongoDB nodes                                        | `false`                        |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs by querying the K8s API                | `false`                        |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry (kubectl)                                            | `docker.io`                    |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image name (kubectl)                                                | `bitnami/kubectl`              |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (kubectl)                                                 | `{TAG_NAME}`                   |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                         | `Always`                       |
-| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                     | `{}`                           |
-| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                   | `{}`                           |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                   | `LoadBalancer`                 |
-| `externalAccess.service.port`                     | MongoDB port used for external access when service type is LoadBalancer                           | `27017`                        |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB nodes                                                      | `[]`                           |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                         | `[]`                           |
-| `externalAccess.service.domain`                   | Domain or external IP used to configure MongoDB advertised hostname when service type is NodePort | `nil`                          |
-| `externalAccess.service.nodePorts`                | Array of node ports used to configure MongoDB advertised hostname when service type is NodePort   | `[]`                           |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                           | `{}`(evaluated as a template)  |
+| Parameter                                         | Description                                                                                            | Default                        |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                                    | Kubernetes Service type                                                                                | `ClusterIP`                    |
+| `service.nameOverride`                            | MongoDB&reg; service name                                                                              | `{mongodb.fullname}-headless`  |
+| `service.port`                                    | MongoDB&reg; service port                                                                              | `27017`                        |
+| `service.portName`                                | MongoDB&reg; service port name                                                                         | `mongodb`                      |
+| `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                            | `""`                           |
+| `service.clusterIP`                               | MongoDB&reg; service cluster IP                                                                        | `nil`                          |
+| `service.loadBalancerIP`                          | loadBalancerIP for MongoDB&reg; Service                                                                | `nil`                          |
+| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
+| `service.annotations`                             | Service annotations                                                                                    | `{}` (evaluated as a template) |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to MongoDB&reg; nodes                                        | `false`                        |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs by querying the K8s API                     | `false`                        |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry (kubectl)                                                 | `docker.io`                    |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image name (kubectl)                                                     | `bitnami/kubectl`              |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (kubectl)                                                      | `{TAG_NAME}`                   |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                              | `Always`                       |
+| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                          | `{}`                           |
+| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                        | `{}`                           |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                        | `LoadBalancer`                 |
+| `externalAccess.service.port`                     | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
+| `externalAccess.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort | `nil`                          |
+| `externalAccess.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
 
 ### Persistence parameters
 
 | Parameter                                   | Description                                                                        | Default                         |
 |---------------------------------------------|------------------------------------------------------------------------------------|---------------------------------|
-| `persistence.enabled`                       | Enable MongoDB data persistence using PVC                                          | `true`                          |
+| `persistence.enabled`                       | Enable MongoDB&reg; data persistence using PVC                                     | `true`                          |
 | `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil` (evaluated as a template) |
-| `persistence.storageClass`                  | PVC Storage Class for MongoDB data volume                                          | `nil`                           |
-| `persistence.accessMode`                    | PVC Access Mode for MongoDB data volume                                            | `ReadWriteOnce`                 |
-| `persistence.size`                          | PVC Storage Request for MongoDB data volume                                        | `8Gi`                           |
+| `persistence.storageClass`                  | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`                           |
+| `persistence.accessMode`                    | PVC Access Mode for MongoDB&reg; data volume                                       | `ReadWriteOnce`                 |
+| `persistence.size`                          | PVC Storage Request for MongoDB&reg; data volume                                   | `8Gi`                           |
 | `persistence.mountPath`                     | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
 | `persistence.subPath`                       | Subdirectory of the volume to mount at                                             | `""`                            |
 | `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
 
 ### RBAC parameters
 
-| Parameter                                                                                                                                                                                                                  | Description                                        | Default                                         |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|-------------------------------------------------|
-| `serviceAccount.create`                                                                                                                                                                                                    | Enable creation of ServiceAccount for MongoDB pods | `true`                                          |
-| `serviceAccount.name`                                                                                                                                                                                                      | Name of the created serviceAccount                 | Generated using the `mongodb.fullname` template |
-| `serviceAccount.annotations`                                                                                                                                                                                               | Additional Service Account annotations             | `{}`                                            |
-| `rbac.create`                                                                                                                                                                                                              | Weather to create & use RBAC resources or not      | `false`                                         |
-| `podSecurityPolicy.create                    | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false` |                                                    | |                                                    |                                                 |
-| `podSecurityPolicy.allowPrivilegeEscalation`                                                                                                                                                                               | Enable privilege escalation                        | `false`                                         |
-| `podSecurityPolicy.privileged`                                                                                                                                                                                             | Allow privileged                                   | `false`                                         |
-| `podSecurityPolicy.spec                      | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`    |                                                    | |                                                    |                                                 |
+| Parameter                                                                                                                                                                                                                                                                         | Description                                             | Default                                         |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------|
+| `serviceAccount.create`                                                                                                                                                                                                                                                           | Enable creation of ServiceAccount for MongoDB&reg; pods | `true`                                          |
+| `serviceAccount.name`                                                                                                                                                                                                                                                             | Name of the created serviceAccount                      | Generated using the `mongodb.fullname` template |
+| `serviceAccount.annotations`                                                                                                                                                                                                                                                      | Additional Service Account annotations                  | `{}`                                            |
+| `rbac.create`                                                                                                                                                                                                                                                                     | Weather to create & use RBAC resources or not           | `false`                                         |
+| `podSecurityPolicy.create                    | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false` |                                                    | |                                                    | |                                                         |                                                 |
+| `podSecurityPolicy.allowPrivilegeEscalation`                                                                                                                                                                                                                                      | Enable privilege escalation                             | `false`                                         |
+| `podSecurityPolicy.privileged`                                                                                                                                                                                                                                                    | Allow privileged                                        | `false`                                         |
+| `podSecurityPolicy.spec                      | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`    |                                                    | |                                                    | |                                                         |                                                 |
 
 ### Volume Permissions parameters
 
@@ -286,61 +288,62 @@ The following tables lists the configurable parameters of the MongoDB chart and 
 
 ### Arbiter parameters
 
-| Parameter                           | Description                                                                                       | Default                                |
-|-------------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------|
-| `arbiter.enabled`                   | Enable deploying the arbiter                                                                      | `true`                                 |
-| `arbiter.hostAliases`               | Add deployment host aliases                                                                       | `[]`                                   |
-| `arbiter.configuration`             | Arbiter configuration file to be used                                                             | `{}`                                   |
-| `arbiter.existingConfigmap`         | Name of existing ConfigMap with Arbiter configuration                                             | `nil`                                  |
-| `arbiter.command`                   | Override default container command (useful when using custom images)                              | `nil`                                  |
-| `arbiter.args`                      | Override default container args (useful when using custom images)                                 | `nil`                                  |
-| `arbiter.extraFlags`                | Arbiter additional command line flags                                                             | `[]`                                   |
-| `arbiter.extraEnvVars`              | Extra environment variables to add to Arbiter pods                                                | `[]`                                   |
-| `arbiter.extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                              | `nil`                                  |
-| `arbiter.extraEnvVarsSecret`        | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `nil`                                  |
-| `arbiter.labels`                    | Annotations to be added to the Arbiter statefulset                                                | `{}` (evaluated as a template)         |
-| `arbiter.annotations`               | Additional labels to be added to the Arbiter statefulset                                          | `{}` (evaluated as a template)         |
-| `arbiter.podLabels`                 | Arbiter pod labels                                                                                | `{}` (evaluated as a template)         |
-| `arbiter.podAnnotations`            | Arbiter Pod annotations                                                                           | `{}` (evaluated as a template)         |
-| `arbiter.priorityClassName`         | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`                                   |
-| `arbiter.podAffinityPreset`         | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                   |
-| `arbiter.podAntiAffinityPreset`     | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                 |
-| `arbiter.nodeAffinityPreset.type`   | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                   |
-| `arbiter.nodeAffinityPreset.key`    | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`                                   |
-| `arbiter.nodeAffinityPreset.values` | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                   |
-| `arbiter.affinity`                  | Arbiter Affinity for pod assignment                                                               | `{}` (evaluated as a template)         |
-| `arbiter.nodeSelector`              | Arbiter Node labels for pod assignment                                                            | `{}` (evaluated as a template)         |
-| `arbiter.tolerations`               | Arbiter Tolerations for pod assignment                                                            | `[]` (evaluated as a template)         |
-| `arbiter.podSecurityContext`        | Arbiter pod(s)' Security Context                                                                  | Check `values.yaml` file               |
-| `arbiter.containerSecurityContext`  | Arbiter containers' Security Context                                                              | Check `values.yaml` file               |
-| `arbiter.resources.limits`          | The resources limits for Arbiter containers                                                       | `{}`                                   |
-| `arbiter.resources.requests`        | The requested resources for Arbiter containers                                                    | `{}`                                   |
-| `arbiter.livenessProbe`             | Liveness probe configuration for Arbiter                                                          | Check `values.yaml` file               |
-| `arbiter.readinessProbe`            | Readiness probe configuration for Arbiter                                                         | Check `values.yaml` file               |
-| `arbiter.customLivenessProbe`       | Override default liveness probe for Arbiter containers                                            | `nil`                                  |
-| `arbiter.customReadinessProbe`      | Override default readiness probe for Arbiter containers                                           | `nil`                                  |
-| `arbiter.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`                                |
-| `arbiter.pdb.minAvailable`          | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`                                    |
-| `arbiter.pdb.maxUnavailable`        | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `nil`                                  |
-| `arbiter.initContainers`            | Add additional init containers for the Arbiter pod(s)                                             | `{}` (evaluated as a template)         |
-| `arbiter.sidecars`                  | Add additional sidecar containers for the Arbiter pod(s)                                          | `{}` (evaluated as a template)         |
-| `arbiter.extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `{}`                                   |
-| `arbiter.extraVolumes`              | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `{}`                                   |
-| `arbiter.service.nameOverride`      | The arbiter service name                                                                          | `{mongodb.fullname}-arbiter-headless`  |
+| Parameter                           | Description                                                                                       | Default                               |
+|-------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------|
+| `arbiter.enabled`                   | Enable deploying the arbiter                                                                      | `true`                                |
+| `arbiter.hostAliases`               | Add deployment host aliases                                                                       | `[]`                                  |
+| `arbiter.configuration`             | Arbiter configuration file to be used                                                             | `{}`                                  |
+| `arbiter.existingConfigmap`         | Name of existing ConfigMap with Arbiter configuration                                             | `nil`                                 |
+| `arbiter.command`                   | Override default container command (useful when using custom images)                              | `nil`                                 |
+| `arbiter.args`                      | Override default container args (useful when using custom images)                                 | `nil`                                 |
+| `arbiter.extraFlags`                | Arbiter additional command line flags                                                             | `[]`                                  |
+| `arbiter.extraEnvVars`              | Extra environment variables to add to Arbiter pods                                                | `[]`                                  |
+| `arbiter.extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                              | `nil`                                 |
+| `arbiter.extraEnvVarsSecret`        | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `nil`                                 |
+| `arbiter.labels`                    | Annotations to be added to the Arbiter statefulset                                                | `{}` (evaluated as a template)        |
+| `arbiter.annotations`               | Additional labels to be added to the Arbiter statefulset                                          | `{}` (evaluated as a template)        |
+| `arbiter.podLabels`                 | Arbiter pod labels                                                                                | `{}` (evaluated as a template)        |
+| `arbiter.podAnnotations`            | Arbiter Pod annotations                                                                           | `{}` (evaluated as a template)        |
+| `arbiter.priorityClassName`         | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`                                  |
+| `arbiter.podAffinityPreset`         | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                  |
+| `arbiter.podAntiAffinityPreset`     | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                |
+| `arbiter.nodeAffinityPreset.type`   | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                  |
+| `arbiter.nodeAffinityPreset.key`    | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`                                  |
+| `arbiter.nodeAffinityPreset.values` | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                  |
+| `arbiter.affinity`                  | Arbiter Affinity for pod assignment                                                               | `{}` (evaluated as a template)        |
+| `arbiter.nodeSelector`              | Arbiter Node labels for pod assignment                                                            | `{}` (evaluated as a template)        |
+| `arbiter.tolerations`               | Arbiter Tolerations for pod assignment                                                            | `[]` (evaluated as a template)        |
+| `arbiter.podSecurityContext`        | Arbiter pod(s)' Security Context                                                                  | Check `values.yaml` file              |
+| `arbiter.containerSecurityContext`  | Arbiter containers' Security Context                                                              | Check `values.yaml` file              |
+| `arbiter.resources.limits`          | The resources limits for Arbiter containers                                                       | `{}`                                  |
+| `arbiter.resources.requests`        | The requested resources for Arbiter containers                                                    | `{}`                                  |
+| `arbiter.livenessProbe`             | Liveness probe configuration for Arbiter                                                          | Check `values.yaml` file              |
+| `arbiter.readinessProbe`            | Readiness probe configuration for Arbiter                                                         | Check `values.yaml` file              |
+| `arbiter.customLivenessProbe`       | Override default liveness probe for Arbiter containers                                            | `nil`                                 |
+| `arbiter.customReadinessProbe`      | Override default readiness probe for Arbiter containers                                           | `nil`                                 |
+| `arbiter.pdb.create`                | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`                               |
+| `arbiter.pdb.minAvailable`          | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`                                   |
+| `arbiter.pdb.maxUnavailable`        | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `nil`                                 |
+| `arbiter.initContainers`            | Add additional init containers for the Arbiter pod(s)                                             | `{}` (evaluated as a template)        |
+| `arbiter.sidecars`                  | Add additional sidecar containers for the Arbiter pod(s)                                          | `{}` (evaluated as a template)        |
+| `arbiter.extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `{}`                                  |
+| `arbiter.extraVolumes`              | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `{}`                                  |
+| `arbiter.service.nameOverride`      | The arbiter service name                                                                          | `{mongodb.fullname}-arbiter-headless` |
 
 ### Metrics parameters
 
 | Parameter                                 | Description                                                                            | Default                                                 |
 |-------------------------------------------|----------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `metrics.enabled`                         | Enable using a sidecar Prometheus exporter                                             | `false`                                                 |
-| `metrics.image.registry`                  | MongoDB Prometheus exporter image registry                                             | `docker.io`                                             |
-| `metrics.image.repository`                | MongoDB Prometheus exporter image name                                                 | `bitnami/mongodb-exporter`                              |
-| `metrics.image.tag`                       | MongoDB Prometheus exporter image tag                                                  | `{TAG_NAME}`                                            |
-| `metrics.image.pullPolicy`                | MongoDB Prometheus exporter image pull policy                                          | `Always`                                                |
+| `metrics.image.registry`                  | MongoDB&reg; Prometheus exporter image registry                                        | `docker.io`                                             |
+| `metrics.image.repository`                | MongoDB&reg; Prometheus exporter image name                                            | `bitnami/mongodb-exporter`                              |
+| `metrics.image.tag`                       | MongoDB&reg; Prometheus exporter image tag                                             | `{TAG_NAME}`                                            |
+| `metrics.image.pullPolicy`                | MongoDB&reg; Prometheus exporter image pull policy                                     | `Always`                                                |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                       | `[]` (does not add image pull secrets to deployed pods) |
 | `metrics.extraFlags`                      | Additional command line flags                                                          | `""`                                                    |
 | `metrics.extraUri`                        | Additional URI options of the metrics service                                          | `""`                                                    |
 | `metrics.service.type`                    | Type of the Prometheus metrics service                                                 | `ClusterIP file`                                        |
+| `metrics.containerPort`                   | Port of the Prometheus metrics container                                               | `9216`                                                  |
 | `metrics.service.port`                    | Port of the Prometheus metrics service                                                 | `9216`                                                  |
 | `metrics.service.annotations`             | Annotations for Prometheus metrics service                                             | Check `values.yaml` file                                |
 | `metrics.resources.limits`                | The resources limits for Prometheus exporter  containers                               | `{}`                                                    |
@@ -365,7 +368,9 @@ $ helm install my-release \
     bitnami/mongodb
 ```
 
-The above command sets the MongoDB `root` account password to `secretpassword`. Additionally, it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+The above command sets the MongoDB&reg; `root` account password to `secretpassword`. Additionally, it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -385,15 +390,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Initialize a fresh instance
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify them using the `initdbScripts` parameter as dict.
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify them using the `initdbScripts` parameter as dict.
 
 You can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
 
 The allowed extensions are `.sh`, and `.js`.
 
-### Replicaset: Accessing MongoDB nodes from outside the cluster
+### Replicaset: Accessing MongoDB&reg; nodes from outside the cluster
 
-In order to access MongoDB nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB pod will be created. There are two ways of configuring external access:
+In order to access MongoDB&reg; nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB&reg; pod will be created. There are two ways of configuring external access:
 
 - Using LoadBalancer services
 - Using NodePort services.
@@ -429,7 +434,7 @@ externalAccess.service.loadBalancerIPs[0]='external-ip-1'
 externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
 ```
 
-> Note: You need to know in advance the load balancer IPs so each MongoDB node advertised hostname is configured with it.
+> Note: You need to know in advance the load balancer IPs so each MongoDB&reg; node advertised hostname is configured with it.
 
 #### Using NodePort services
 
@@ -444,7 +449,7 @@ externalAccess.service.nodePorts[0]='node-port-1'
 externalAccess.service.nodePorts[1]='node-port-2'
 ```
 
-> Note: You need to know in advance the node ports that will be exposed so each MongoDB node advertised hostname is configured with it.
+> Note: You need to know in advance the node ports that will be exposed so each MongoDB&reg; node advertised hostname is configured with it.
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
 
@@ -462,7 +467,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as MongoDB&reg; (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -488,7 +493,7 @@ initContainers:
 
 ## Persistence
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
@@ -536,8 +541,8 @@ To use your own CA set `tls.caCert` and `tls.caKey` with appropriate base64 enco
 
 ### Accessing the cluster
 
-To access the cluster you will need to enable the initContainer which generates the MongoDB server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
-Note: You will be generating self signed certs for the MongoDB deployment. With the initContainer it will generate a new MongoDB private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certificate. The process will be repeated for each node in the cluster.
+To access the cluster you will need to enable the initContainer which generates the MongoDB&reg; server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB&reg; replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
+Note: You will be generating self signed certs for the MongoDB&reg; deployment. With the initContainer it will generate a new MongoDB&reg; private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certificate. The process will be repeated for each node in the cluster.
 
 ### Starting the cluster
 
@@ -588,14 +593,14 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 
 ### To 9.0.0
 
-MongoDB container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB. Refer to the following guides to upgrade your applications:
+MongoDB&reg; container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB&reg;. Refer to the following guides to upgrade your applications:
 
 - [Standalone](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-standalone/)
 - [Replica Set](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-replica-set/)
 
 ### To 8.0.0
 
-- Architecture used to configure MongoDB as a replicaset was completely refactored. Now, both primary and secondary nodes are part of the same statefulset.
+- Architecture used to configure MongoDB&reg; as a replicaset was completely refactored. Now, both primary and secondary nodes are part of the same statefulset.
 - Chart labels were adapted to follow the Helm charts best practices.
 - This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 - Several parameters were renamed or disappeared in favor of new ones on this major version. These are the most important ones:
@@ -609,7 +614,7 @@ MongoDB container images were updated to `4.4.x` and it can affect compatibility
 
 Consequences:
 
-- Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new release of the MongoDB chart, and migrate your data by creating a backup of the database, and restoring it on the new release.
+- Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new release of the MongoDB&reg; chart, and migrate your data by creating a backup of the database, and restoring it on the new release.
 
 ### To 7.0.0
 

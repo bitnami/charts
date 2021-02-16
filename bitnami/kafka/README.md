@@ -113,6 +113,9 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.saslMechanisms`                     | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                     |
 | `auth.saslInterBrokerMechanism`           | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                                         | `plain`                                                 |
 | `auth.jksSecret`                          | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                                      | `nil`                                                   |
+| `auth.jksKeystoreSAN`                          | The secret key from the jksSecret containing the keystore with a SAN certificate.                                      | `nil`                                                   |
+| `auth.jksTruststoreSecret`                          | Name of the existing secret containing your truststore if truststore not existing or different from the one in the jksSecret.                                      | `nil`                                                   |
+| `auth.jksTruststore`                          | The secret key from the jksSecret or jksTruststoreSecret if truststore key different from the default                                      | `nil`                                                   |
 | `auth.jksPassword`                        | Password to access the JKS files when they are password-protected                                                                                    | `nil`                                                   |
 | `auth.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                                           | `https`                                                 |
 | `auth.jaas.interBrokerUser`               | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                                                 |
@@ -127,8 +130,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `listenerSecurityProtocolMap`             | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `nil`                                                   |
 | `allowPlaintextListener`                  | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                                                  |
 | `interBrokerListenerName`                 | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                                              |
-| `initContainers`                          | Add extra init containers    | `[]`                                                    |
-| `podManagementPolicy`                             | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                         | `Parallel`                                              |
+| `initContainers`                          | Add extra init containers                                                                                                                            | `[]`                                                    |
+| `podManagementPolicy`                     | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                                            | `Parallel`                                              |
 
 ### Kafka provisioning parameters
 
@@ -354,7 +357,7 @@ If you enabled SASL authentication on any listener, you can set the SASL credent
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
+In order to configure TLS authentication/encryption, you **can** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.jksPassword` parameter to provide your password.
 
@@ -367,6 +370,12 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 > **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
 As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
+
+If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
+ - `auth.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.jksPassword` 
+ - `auth.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`). 
+ - `auth.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.jksSecret` with the `auth.jksKeystoreSAN`-value and use this as a keystore for **all** brokers
+> **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.jksPassword`
 
 You can deploy the chart with authentication using the following parameters:
 
@@ -491,7 +500,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
@@ -501,16 +510,16 @@ extraDeploy: |-
     kind: Deployment
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 8 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "kafka.labels" . | nindent 10 }}
+          labels: {{- include "common.labels.standard" . | nindent 10 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -531,7 +540,7 @@ extraDeploy: |-
     kind: ConfigMap
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -544,14 +553,14 @@ extraDeploy: |-
     kind: Service
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 6 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+      selector: {{- include "common.labels.matchLabels" . | nindent 6 }}
         app.kubernetes.io/component: connector
 ```
 
@@ -559,7 +568,7 @@ You can create the Kafka Connect image using the Dockerfile below:
 
 ```Dockerfile
 FROM bitnami/kafka:latest
-# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
 RUN mkdir -p /opt/bitnami/kafka/plugins && \
     cd /opt/bitnami/kafka/plugins && \
     curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar

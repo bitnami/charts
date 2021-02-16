@@ -1,8 +1,10 @@
-# MongoDB Sharded
+# MongoDB&reg; Sharded packaged by Bitnami
 
-[MongoDB Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+[MongoDB&reg; Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
 
@@ -13,7 +15,7 @@ $ helm install my-release bitnami/mongodb-sharded
 
 ## Introduction
 
-This chart bootstraps a [MongoDB Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB&reg; Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -32,7 +34,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/mongodb-sharded
 ```
 
-The command deploys MongoDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -48,7 +50,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the MongoDB chart and their default values.
+The following table lists the configurable parameters of the MongoDB&reg; chart and their default values.
 
 ### Global Configuration
 
@@ -57,9 +59,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                              | `nil`                                                    |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)  |
 | `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                             | `nil`                                                    |
-| `image.registry`                     | MongoDB image registry                                                                                                                                    | `docker.io`                                              |
-| `image.repository`                   | MongoDB Image name                                                                                                                                        | `bitnami/mongodb-sharded`                                |
-| `image.tag`                          | MongoDB Image tag                                                                                                                                         | `{TAG_NAME}`                                             |
+| `image.registry`                     | MongoDB&reg; image registry                                                                                                                               | `docker.io`                                              |
+| `image.repository`                   | MongoDB&reg; Image name                                                                                                                                   | `bitnami/mongodb-sharded`                                |
+| `image.tag`                          | MongoDB&reg; Image tag                                                                                                                                    | `{TAG_NAME}`                                             |
 | `image.pullPolicy`                   | Image pull policy                                                                                                                                         | `IfNotPresent`                                           |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                                                  |
@@ -72,14 +74,14 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                 |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                    |
 | `clusterDomain`                      | Default Kubernetes cluster domain                                                                                                                         | `cluster.local`                                          |
-| `existingSecret`                     | Existing secret with MongoDB credentials                                                                                                                  | `nil`                                                    |
-| `mongodbRootPassword`                | MongoDB admin password                                                                                                                                    | `random alphanumeric string (10)`                        |
+| `existingSecret`                     | Existing secret with MongoDB&reg; credentials                                                                                                             | `nil`                                                    |
+| `mongodbRootPassword`                | MongoDB&reg; admin password                                                                                                                               | `random alphanumeric string (10)`                        |
 | `shards`                             | Number of shards to be created                                                                                                                            | `2`                                                      |
-| `common.mongodbEnableIPv6`           | Switch to enable/disable IPv6 on MongoDB                                                                                                                  | `false`                                                  |
-| `common.mongodbDirectoryPerDB`       | Switch to enable/disable DirectoryPerDB on MongoDB                                                                                                        | `false`                                                  |
-| `common.mongodbSystemLogVerbosity`   | MongoDB system log verbosity level                                                                                                                        | `0`                                                      |
-| `common.mongodbDisableSystemLog`     | Whether to disable MongoDB system log or not                                                                                                              | `false`                                                  |
-| `common.mongodbMaxWaitTimeout`       | Maximum time (in seconds) for MongoDB nodes to wait for another MongoDB node to be ready                                                                  | `120`                                                    |
+| `common.mongodbEnableIPv6`           | Switch to enable/disable IPv6 on MongoDB&reg;                                                                                                             | `false`                                                  |
+| `common.mongodbDirectoryPerDB`       | Switch to enable/disable DirectoryPerDB on MongoDB&reg;                                                                                                   | `false`                                                  |
+| `common.mongodbSystemLogVerbosity`   | MongoDB&reg; system log verbosity level                                                                                                                   | `0`                                                      |
+| `common.mongodbDisableSystemLog`     | Whether to disable MongoDB&reg; system log or not                                                                                                         | `false`                                                  |
+| `common.mongodbMaxWaitTimeout`       | Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready                                                        | `120`                                                    |
 | `common.podLabels`                   | Extra labels for all pods in the cluster (evaluated as a template)                                                                                        | `{}`                                                     |
 | `common.podAnnotations`              | Extra annotations for all pods in the cluster (evaluated as a template)                                                                                   | `{}`                                                     |
 | `common.serviceAccount.name`         | Name of a Service Account to be used by all Pods                                                                                                          | `nil`                                                    |
@@ -98,7 +100,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `service.annotations`                | Kubernetes service annotations (evaluate as a template)                                                                                                   | `{}`                                                     |
 | `service.type`                       | Kubernetes Service type                                                                                                                                   | `ClusterIP`                                              |
 | `service.clusterIP`                  | Static clusterIP or None for headless services                                                                                                            | `nil`                                                    |
-| `service.port`                       | MongoDB service port                                                                                                                                      | `27017`                                                  |
+| `service.port`                       | MongoDB&reg; service port                                                                                                                                 | `27017`                                                  |
 | `service.extraPorts`                 | Extra ports to expose in the service (normally used with the `sidecar` value). Evaluated as a template.                                                   | `[]`                                                     |
 | `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                                |
 | `service.nodePort`                   | Port to bind to for NodePort service type                                                                                                                 | `nil`                                                    |
@@ -151,9 +153,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.pdb.maxUnavailable`        | Maximum number of unavailable config pods allowed (`0` to disable)                                      | `1`                                         |
 | `configsvr.sidecars`                  | Attach additional containers (evaluated as a template)                                                  | `[]`                                        |
 | `configsvr.initContainers`            | Add additional init containers (evaluated as a template)                                                | `[]`                                        |
-| `configsvr.config`                    | MongoDB configuration                                                                                   | `nil`                                       |
+| `configsvr.config`                    | MongoDB&reg; configuration                                                                              | `nil`                                       |
 | `configsvr.configCM`                  | ConfigMap name with Config Server configuration (cannot be used with configsvr.config)                  | `nil`                                       |
-| `configsvr.mongodbExtraFlags`         | MongoDB additional command line flags                                                                   | `[]`                                        |
+| `configsvr.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                              | `[]`                                        |
 | `configsvr.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                               | `nil`                                       |
 | `configsvr.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                           | `nil`                                       |
 | `configsvr.extraEnvVarsSecret`        | Secret containing extra env vars (evaluated as a template)                                              | `nil`                                       |
@@ -200,9 +202,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `mongos.pdb.maxUnavailable`        | Maximum number of unavailable mongo pods allowed (`0` to disable)                                | `1`                            |
 | `mongos.sidecars`                  | Attach additional containers (evaluated as a template)                                           | `[]`                           |
 | `mongos.initContainers`            | Add additional init containers (evaluated as a template)                                         | `[]`                           |
-| `mongos.config`                    | MongoDB configuration                                                                            | `nil`                          |
-| `mongos.configCM`                  | ConfigMap name with MongoDB configuration (cannot be used with mongos.config)                    | `nil`                          |
-| `mongos.mongodbExtraFlags`         | MongoDB additional command line flags                                                            | `[]`                           |
+| `mongos.config`                    | MongoDB&reg; configuration                                                                       | `nil`                          |
+| `mongos.configCM`                  | ConfigMap name with MongoDB&reg; configuration (cannot be used with mongos.config)               | `nil`                          |
+| `mongos.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                       | `[]`                           |
 | `mongos.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                        | `nil`                          |
 | `mongos.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                    | `nil`                          |
 | `mongos.extraEnvVarsSecret`        | Secret containing extra env vars (evaluated as a template)                                       | `nil`                          |
@@ -237,9 +239,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.dataNode.pdb.maxUnavailable`        | Maximum number of unavailable data pods allowed (`0` to disable)                                     | `1`                                         |
 | `shardsvr.dataNode.sidecars`                  | Attach additional containers (evaluated as a template)                                               | `[]`                                        |
 | `shardsvr.dataNode.initContainers`            | Add additional init containers (evaluated as a template)                                             | `[]`                                        |
-| `shardsvr.dataNode.config`                    | MongoDB configuration                                                                                | `nil`                                       |
-| `shardsvr.dataNode.configCM`                  | ConfigMap name with MongoDB configuration (cannot be used with shardsvr.dataNode.config)             | `nil`                                       |
-| `shardsvr.dataNode.mongodbExtraFlags`         | MongoDB additional command line flags                                                                | `[]`                                        |
+| `shardsvr.dataNode.config`                    | MongoDB&reg; configuration                                                                           | `nil`                                       |
+| `shardsvr.dataNode.configCM`                  | ConfigMap name with MongoDB&reg; configuration (cannot be used with shardsvr.dataNode.config)        | `nil`                                       |
+| `shardsvr.dataNode.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                           | `[]`                                        |
 | `shardsvr.dataNode.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                            | `[]`                                        |
 | `shardsvr.dataNode.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                        | `nil`                                       |
 | `shardsvr.dataNode.extraEnvVarsSecret`        | Secret containing extra env vars (evaluated as a template)                                           | `nil`                                       |
@@ -278,9 +280,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.arbiter.schedulerName`             | Name of the k8s scheduler (other than default)                                                     | `nil`                          |
 | `shardsvr.arbiter.sidecars`                  | Attach additional containers (evaluated as a template)                                             | `[]`                           |
 | `shardsvr.arbiter.initContainers`            | Add additional init containers (evaluated as a template)                                           | `[]`                           |
-| `shardsvr.arbiter.config`                    | MongoDB configuration                                                                              | `nil`                          |
-| `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB configuration (cannot be used with shardsvr.arbiter.config)            | `nil`                          |
-| `shardsvr.arbiter.mongodbExtraFlags`         | MongoDB additional command line flags                                                              | `[]`                           |
+| `shardsvr.arbiter.config`                    | MongoDB&reg; configuration                                                                         | `nil`                          |
+| `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB&reg; configuration (cannot be used with shardsvr.arbiter.config)       | `nil`                          |
+| `shardsvr.arbiter.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                         | `[]`                           |
 | `shardsvr.arbiter.extraEnvVars`              | Array containing extra env vars (evaluated as a template)                                          | `nil`                          |
 | `shardsvr.arbiter.extraEnvVarsCM`            | ConfigMap containing extra env vars (evaluated as a template)                                      | `nil`                          |
 | `shardsvr.arbiter.extraEnvVarsSecret`        | Secret containing extra env vars (evaluated as a template)                                         | `nil`                          |
@@ -294,14 +296,15 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | Parameter                                     | Description                                                                        | Default                                                 |
 |-----------------------------------------------|------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                               | `false`                                                 |
-| `metrics.image.registry`                      | MongoDB exporter image registry                                                    | `docker.io`                                             |
-| `metrics.image.repository`                    | MongoDB exporter image name                                                        | `bitnami/mongodb-exporter`                              |
-| `metrics.image.tag`                           | MongoDB exporter image tag                                                         | `{TAG_NAME}`                                            |
+| `metrics.image.registry`                      | MongoDB&reg; exporter image registry                                               | `docker.io`                                             |
+| `metrics.image.repository`                    | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter`                              |
+| `metrics.image.tag`                           | MongoDB&reg; exporter image tag                                                    | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                  | `Always`                                                |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                   | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.containerPort`                       | Port of the Prometheus metrics container                                           | `9216`                                                  |
 | `metrics.podAnnotations.prometheus.io/scrape` | Additional annotations for Metrics exporter pod                                    | `true`                                                  |
 | `metrics.podAnnotations.prometheus.io/port`   | Additional annotations for Metrics exporter pod                                    | `"9216"`                                                |
-| `metrics.extraArgs`                           | String with extra arguments for the MongoDB Exporter                               | ``                                                      |
+| `metrics.extraArgs`                           | String with extra arguments for the MongoDB&reg; Exporter                          | ``                                                      |
 | `metrics.resources`                           | Exporter resource requests/limit                                                   | `{}`                                                    |
 | `metrics.livenessProbe.enabled`               | Enable/disable the Liveness Check of Prometheus metrics exporter                   | `false`                                                 |
 | `metrics.livenessProbe.initialDelaySeconds`   | Initial Delay for Liveness Check of Prometheus metrics exporter                    | `15`                                                    |
@@ -347,9 +350,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change MongoDB version
+### Change MongoDB&reg; version
 
-To modify the MongoDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the MongoDB&reg; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Sharding
 
@@ -360,7 +363,7 @@ This chart deploys a sharded cluster by default. Some characteristics of this ch
 
 ### Initialize a fresh instance
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
 
 The allowed extensions are `.sh`, and `.js`.
 
@@ -404,11 +407,11 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Using an external config server
 
-It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
+It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB&reg; sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
 
 ## Persistence
 
-The [Bitnami MongoDB](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image stores the MongoDB data and configurations at the `/bitnami/mongodb` path of the container.
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
@@ -472,6 +475,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 2.0.0
 
-MongoDB container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB. Refer to the following guide to upgrade your applications:
+MongoDB&reg; container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB&reg;. Refer to the following guide to upgrade your applications:
 
 - [Upgrade a Sharded Cluster to 4.4](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-sharded-cluster/)
