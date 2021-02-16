@@ -271,9 +271,9 @@ Return true if a hashring configmap object should be created
 
 {{/* Return the proper pod name of the replica.
 Usage:
-{{ include "thanos.receive.podFQDN" (dict "root" . "extra" $suffix ) }}
+{{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}
 */}}
-{{- define "thanos.receive.podFQDN" -}}
+{{- define "thanos.receive.podFqdn" -}}
 {{- if .root.Values.receive.service.additionalHeadless -}}
 {{- printf "\"%s-receive-headless-%d.%s.svc.%s:%d\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain (int .root.Values.receive.service.grpc.port) -}}
 {{- else -}}
@@ -292,7 +292,7 @@ Usage:
 {{- $root := . -}}
 {{- range $i := until $count -}}
 {{- $data := dict "root" $root "extra" $i -}}
-{{- $noop := (include "thanos.receive.podFQDN" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
+{{- $noop := (include "thanos.receive.podFqdn" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
 {{- end -}}
 [
   {
