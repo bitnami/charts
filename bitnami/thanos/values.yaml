@@ -1760,7 +1760,7 @@ receive:
   ## Log level
   ##
   logLevel: info
-  
+
   ## Replication Factor
   ##
   replicationFactor: 1
