@@ -163,6 +163,10 @@ azure:
   ## If you use Azure MSI, this should be set to true
   ##
   useManagedIdentityExtension: false
+  ## If you use Azure MSI, this is Client ID of Azure user-assigned managed identity (optional,
+  # system-assigned managed identity is used if empty)
+  #
+  userAssignedIdentityID: ""
 
 ## Cloudflare configuration to be set via arguments/env. variables
 ##

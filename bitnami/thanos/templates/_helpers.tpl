@@ -27,7 +27,7 @@ Return the proper Thanos image name
 Return the proper init container volume-permissions image name
 */}}
 {{- define "thanos.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions "global" .Values.global ) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
