@@ -7,5 +7,5 @@ metadata:
 spec:
   selector:
     matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
-{{ toYaml .Values.podDisruptionBudget | indent 2 }}
+{{- include "common.tplvalues.render" (dict "value" .Values.podDisruptionBudget "context" $) | nindent 2 }}
 {{- end -}}
