@@ -88,9 +88,6 @@ spec:
             {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
             - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
-            {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
-            {{- end }}
             {{- range $query.stores }}
             - --store={{ . }}
             {{- end }}
