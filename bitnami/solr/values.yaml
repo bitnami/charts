@@ -141,6 +141,22 @@ authentication:
 ##
 # existingSecret:
 
+##
+## TLS configuration
+##
+tls:
+  # Enable TLS traffic
+  enabled: false
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "keystore.p12" and "trustore.p12" with the files in JKS or P12 format.
+  ##   certificatesSecretName: cert-files
+  ##
+  # certificatesSecretName:
+
+  ## Name of the secret that contains the passwords for the certificate storage files. It should contains two keys called "tls-keystore-password" and "tls-truststore-password".
+  ## passwordsSecretName: my-passwords
+  # passwordsSecretName:
+
 ## Container Command (set to default if not set).
 ##
 command: []

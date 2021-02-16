@@ -83,3 +83,13 @@ Return  the proper Storage Class
 {{- printf "%s-%s" .Release.Name "zookeeper" -}}:{{- .Values.zookeeper.port -}}
 {{- end -}}
 {{- end -}}
+
+
+{{/* Return the solr url for probes */}}
+{{- define "solr.testUrl" -}}
+{{- if .Values.tls.enabled -}}
+{{- print "https://localhost"}}:{{.Values.service.port -}}/solr/
+{{- else -}}
+{{- printf "http://localhost"}}:{{.Values.service.port -}}/solr/
+{{- end -}}
+{{- end -}}
