@@ -1760,6 +1760,10 @@ receive:
   ## Log level
   ##
   logLevel: info
+  
+  ## Replication Factor
+  ##
+  replicationFactor: 1
 
   ## Provide any additional annotations which may be required
   ##
