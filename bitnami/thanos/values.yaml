@@ -59,7 +59,7 @@ clusterDomain: cluster.local
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
-# existingObjstoreSecret:
+existingObjstoreSecret: thanos-s3
 ##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 # existingObjstoreSecretItems: []
 
@@ -1777,14 +1777,9 @@ receive:
   ## Receive Configuration
   ## Specify content for receive hashring
   ##
-  config: |
-    [
-      {
-        "endpoints": [
-            "127.0.0.1:{{ .Values.receive.service.grpc.port }}"
-        ]
-      }
-    ]
+  config:
+    - endpoints:
+      - "127.0.0.1:{{ .Values.receive.service.grpc.port }}"
 
   ## Extra Flags to passed to Thanos Receive
   ##
