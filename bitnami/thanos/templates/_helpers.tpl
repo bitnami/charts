@@ -286,10 +286,10 @@ Usage:
 {{ include "thanos.receive.config" . }}
 */}}
 {{- define "thanos.receive.config" -}}
-{{- $root := . -}}
 {{- if not .Values.receive.config -}}
 {{- $count := int .Values.receive.replicaCount -}}
 {{- $endpoints_dict := dict "endpoints" (list)  -}}
+{{- $root := . -}}
 {{- range $i := until $count -}}
 {{- $data := dict "root" $root "extra" $i -}}
 {{- $noop := (include "thanos.receive.podFQDN" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
@@ -302,10 +302,10 @@ Usage:
   }
 ]
 {{- else -}}
-{{- if (typeIs "string" $root.Values.receive.config)}}
-{{- $root.Values.receive.config -}}
+{{- if (typeIs "string" .Values.receive.config)}}
+{{- .Values.receive.config -}}
 {{- else -}}
-{{- $root.Values.receive.config | toPrettyJson -}}
+{{- .Values.receive.config | toPrettyJson -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
