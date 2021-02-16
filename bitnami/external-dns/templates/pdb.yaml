@@ -2,7 +2,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ include "external-dns.fullname" . }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 spec:
   selector:
