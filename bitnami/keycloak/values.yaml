@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 12.0.2-debian-10-r6
+  tag: 12.0.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -532,6 +532,10 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+
+  ## The service port to be used by this ingress.
+  ## Default is http. Alternative is https.
+  servicePort: http
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
