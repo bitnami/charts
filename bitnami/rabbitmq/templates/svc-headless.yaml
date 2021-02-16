@@ -21,7 +21,9 @@ spec:
     - name: {{ .Values.service.distPortName }}
       port: {{ .Values.service.distPort }}
       targetPort: dist
+    {{- if .Values.service.managerPortEnabled }}
     - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
+    {{- end }}
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
