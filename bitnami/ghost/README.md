@@ -152,29 +152,30 @@ The following table lists the configurable parameters of the Ghost chart and the
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                                                                          | Default                        |
-|----------------------------------|--------------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                   | Kubernetes Service type                                                              | `LoadBalancer`                 |
-| `service.port`                   | Service HTTP port                                                                    | `80`                           |
-| `service.nodePorts.http`         | Kubernetes http node port                                                            | `""`                           |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation                                                 | `Cluster`                      |
-| `service.loadBalancerIP`         | LoadBalancerIP for the Ghost service                                                 | ``                             |
-| `service.annotations`            | Service annotations. Evaluated as a template                                         | `{}`                           |
-| `service.extraPorts`             | Service extra ports, normally used with the `sidecar` value. Evaluated as a template | `[]`                           |
-| `ingress.enabled`                | Enable ingress controller resource                                                   | `false`                        |
-| `ingress.certManager`            | Add annotations for cert-manager                                                     | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                                                | `ghost.local`                  |
-| `ingress.path`                   | Default path for the ingress resource                                                | `/`                            |
-| `ingress.tls`                    | Create TLS Secret                                                                    | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                                                  | `[]` (evaluated as a template) |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                   | `nil`                          |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                                                   | `nil`                          |
-| `ingress.extraPaths`             | Additional arbitrary path/backend objects                                            | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered                             | `nil`                          |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered                             | `nil`                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                                                      | `nil`                          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                               | `nil`                          |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                                       | `nil`                          |
+| Parameter                         | Description                                                                          | Default                        |
+|-----------------------------------|--------------------------------------------------------------------------------------|--------------------------------|
+| `service.type`                    | Kubernetes Service type                                                              | `LoadBalancer`                 |
+| `service.port`                    | Service HTTP port                                                                    | `80`                           |
+| `service.nodePorts.http`          | Kubernetes http node port                                                            | `""`                           |
+| `service.externalTrafficPolicy`   | Enable client source IP preservation                                                 | `Cluster`                      |
+| `service.loadBalancerIP`          | LoadBalancerIP for the Ghost service                                                 | ``                             |
+| `service.loadBalancerSourceRanges`| define loadBalancerSourceRanges if the service type is `LoadBalancer`                | `nil`                          |
+| `service.annotations`             | Service annotations. Evaluated as a template                                         | `{}`                           |
+| `service.extraPorts`              | Service extra ports, normally used with the `sidecar` value. Evaluated as a template | `[]`                           |
+| `ingress.enabled`                 | Enable ingress controller resource                                                   | `false`                        |
+| `ingress.certManager`             | Add annotations for cert-manager                                                     | `false`                        |
+| `ingress.hostname`                | Default host for the ingress resource                                                | `ghost.local`                  |
+| `ingress.path`                    | Default path for the ingress resource                                                | `/`                            |
+| `ingress.tls`                     | Create TLS Secret                                                                    | `false`                        |
+| `ingress.annotations`             | Ingress annotations                                                                  | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`      | Additional hostnames to be covered                                                   | `nil`                          |
+| `ingress.extraHosts[0].path`      | Additional hostnames to be covered                                                   | `nil`                          |
+| `ingress.extraPaths`              | Additional arbitrary path/backend objects                                            | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                             | `nil`                          |
+| `ingress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                             | `nil`                          |
+| `ingress.secrets[0].name`         | TLS Secret Name                                                                      | `nil`                          |
+| `ingress.secrets[0].certificate`  | TLS Secret Certificate                                                               | `nil`                          |
+| `ingress.secrets[0].key`          | TLS Secret Key                                                                       | `nil`                          |
 
 ### Database parameters
 
