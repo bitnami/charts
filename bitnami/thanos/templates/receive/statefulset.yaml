@@ -74,7 +74,7 @@ spec:
             - --receive.replication-factor=1
             - --objstore.config=$(OBJSTORE_CONFIG)
             - --tsdb.path=/var/thanos/receive
-            - --label=replica="$(NAME)"
+            - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention=15d
             - --receive.local-endpoint=127.0.0.1:10901
