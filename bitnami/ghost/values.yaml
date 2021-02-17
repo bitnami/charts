@@ -265,6 +265,9 @@ service:
   ##
   loadBalancerIP:
 
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
