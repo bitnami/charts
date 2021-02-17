@@ -37,7 +37,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: dataplatform
+name: dataplatform-bp1
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
