@@ -74,7 +74,7 @@ spec:
             - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             - --tsdb.path=/var/thanos/receive
-            - --label=replica="$(NAME)"
+            - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention=15d
             {{- if and (eq .Values.receive.replicaCount 1) .Values.receive.config }}

@@ -1507,6 +1507,10 @@ ruler:
   ##
   logLevel: info
 
+  ## Label to treat as a replica indicator along which data is deduplicated
+  ##
+  replicaLabel: replica
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -1764,6 +1768,9 @@ receive:
   ## Replication Factor
   ##
   replicationFactor: 1
+  ## Label to treat as a replica indicator along which data is deduplicated
+  ##
+  replicaLabel: replica
 
   ## Provide any additional annotations which may be required
   ##
