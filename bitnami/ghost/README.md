@@ -159,7 +159,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `service.nodePorts.http`          | Kubernetes http node port                                                            | `""`                           |
 | `service.externalTrafficPolicy`   | Enable client source IP preservation                                                 | `Cluster`                      |
 | `service.loadBalancerIP`          | LoadBalancerIP for the Ghost service                                                 | ``                             |
-| `service.loadBalancerSourceRanges`| define loadBalancerSourceRanges if the service type is `LoadBalancer`                | `[]`                          |
+| `service.loadBalancerSourceRanges`| define loadBalancerSourceRanges if the service type is `LoadBalancer`                | `[]`                           |
 | `service.annotations`             | Service annotations. Evaluated as a template                                         | `{}`                           |
 | `service.extraPorts`              | Service extra ports, normally used with the `sidecar` value. Evaluated as a template | `[]`                           |
 | `ingress.enabled`                 | Enable ingress controller resource                                                   | `false`                        |
