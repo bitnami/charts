@@ -646,6 +646,10 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
+## Configure PodDisruptionBudget
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget: {}
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
