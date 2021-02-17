@@ -133,6 +133,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `extraVolumes`                   | Array to add extra volumes                                                                | `[]` (evaluated as a template)                               |
 | `extraVolumeMounts`              | Array to add extra mount                                                                  | `[]` (evaluated as a template)                               |
 | `extraEnvVars`                   | Array to add extra environment variables                                                  | `[]` (evaluated as a template)                               |
+| `initContainers`                 | Add additional init containers to the Apache pods                                         | `{}` (evaluated as a template)                               |
+| `sidecars`                       | Add additional sidecar containers to the Apache pods                                      | `{}` (evaluated as a template)                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
