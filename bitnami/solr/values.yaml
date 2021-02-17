@@ -145,7 +145,7 @@ authentication:
 ## TLS configuration
 ##
 tls:
-  # Enable TLS traffic
+  ## Enable TLS traffic
   enabled: false
   ## Name of the secret that contains the certificates
   ## It should contains two keys called "keystore.p12" and "trustore.p12" with the files in JKS or P12 format.

@@ -207,11 +207,14 @@ spec:
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - curl -k -ILSs {{ include "solr.testUrl" . }} | grep -q 200
+            httpGet:
+              {{- if .Values.tls.enabled }}
+              scheme: "HTTPS"
+              {{- else }}
+              scheme: "HTTP"
+              {{- end }}
+              path: "/solr"
+              port: {{ .Values.service.port }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -222,11 +225,14 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - curl -k -ILSs {{ include "solr.testUrl" . }} | grep -q 200
+            httpGet:
+              {{- if .Values.tls.enabled }}
+              scheme: "HTTPS"
+              {{- else }}
+              scheme: "HTTP"
+              {{- end }}
+              path: "/solr"
+              port: {{ .Values.service.port }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

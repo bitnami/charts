@@ -74,22 +74,11 @@ Return  the proper Storage Class
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
-
 {{/* Return the proper Zookeeper host */}}
 {{- define "solr.zookeeper.host" -}}
 {{- if .Values.externalZookeeper.servers -}}
 {{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name "zookeeper" -}}:{{- .Values.zookeeper.port -}}
-{{- end -}}
-{{- end -}}
-
-
-{{/* Return the solr url for probes */}}
-{{- define "solr.testUrl" -}}
-{{- if .Values.tls.enabled -}}
-{{- print "https://localhost"}}:{{.Values.service.port -}}/solr/
-{{- else -}}
-{{- printf "http://localhost"}}:{{.Values.service.port -}}/solr/
 {{- end -}}
 {{- end -}}
