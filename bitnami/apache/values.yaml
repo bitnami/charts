@@ -34,6 +34,10 @@ image:
   ##
   debug: false
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
