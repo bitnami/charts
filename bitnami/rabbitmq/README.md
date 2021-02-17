@@ -170,6 +170,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.distPort`                 | Erlang distribution server port                                                   | `25672`                        |
 | `service.distPortName`             | Erlang distribution service port name                                             | `dist`                         |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType NodePort                       | `nil`                          |
+| `service.managerPortEnable`        | Enable the RabbitMQ Manager port                                                  | `true`                         |
 | `service.managerPort`              | RabbitMQ Manager port                                                             | `15672`                        |
 | `service.managerPortName`          | RabbitMQ Manager service port name                                                | `http-stats`                   |
 | `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType NodePort                 | `nil`                          |
