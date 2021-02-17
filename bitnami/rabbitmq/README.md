@@ -186,6 +186,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                              | `Cluster`                      |
 | `service.labels`                   | Service labels                                                                    | `{}` (evaluated as a template) |
 | `service.annotations`              | Service annotations                                                               | `{}` (evaluated as a template) |
+| `service.annotationsHeadless`      | Headless service annotations different from regular service                       | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
 | `ingress.path`                     | Path for the default host                                                         | `/`                            |
 | `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
