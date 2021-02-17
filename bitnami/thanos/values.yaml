@@ -1788,6 +1788,7 @@ receive:
   ## Receive Configuration Evaluated as a template
   ## json formatted string and yaml allowed.
   ## Specify content for receive hashring
+  ## if "" or {} will be specified the helm chart manages the hashring config.
   ##
   config:
     - endpoints:
