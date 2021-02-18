@@ -165,7 +165,6 @@ The following tables lists the configurable parameters of the solr chart and the
 | `tls.certificatesSecretName`           | Set the name of the secret that contains the certificates. It should contains two keys called "keystore.p12" and "truststore.12"                                                  | `nil`                             |
 | `tls.passwordsSecretName`              | Set the name of the secret that contains the passwords for the certificate files. It should contains two keys called "tls-keystore-password" and "tls-truststore-password".       | `nil`                             |
 
-
 ### Solr Traffic Exposure Parameters
 
 | Parameter                        | Description                                              | Default                        |
