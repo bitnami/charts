@@ -974,6 +974,14 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
+    ## ServiceMonitor extra labels
+    ##
+    # labels: {}
+
+    ## ServiceMonitor annotations
+    ##
+    # annotations: {}
+
 ## Mount TLS certificates
 ##
 tls:
