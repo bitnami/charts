@@ -282,7 +282,6 @@ data:
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
   prestop-sentinel.sh: |
     #!/bin/bash
-    #!/bin/bash
 
     . /opt/bitnami/scripts/libvalidations.sh
 
