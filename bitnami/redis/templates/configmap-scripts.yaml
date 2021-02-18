@@ -282,16 +282,9 @@ data:
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
   prestop-sentinel.sh: |
     #!/bin/bash
-    is_boolean_yes() {
-        local -r bool="${1:-}"
-        # comparison is performed without regard to the case of alphabetic characters
-        shopt -s nocasematch
-        if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
-            true
-        else
-            false
-        fi
-    }
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
 
     REDIS_SERVICE="{{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
