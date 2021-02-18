@@ -388,10 +388,10 @@ domainFilters: []
 ## Exclude subdomains (optional)
 ##
 excludeDomains: []
-## Limit possible target zones by zone id (optional)
+## Filter target zones by zone domain (optional)
 ##
 zoneNameFilters: []
-## Filter target zones by zone domain (optional)
+## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []
 ## Filter sources managed by external-dns via annotation using label selector semantics (optional)
