@@ -439,7 +439,7 @@ exporter:
     periodSeconds: 5
     timeoutSeconds: 15
     failureThreshold: 15
-    successThreshold: 15
+    successThreshold: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
