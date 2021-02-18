@@ -388,6 +388,9 @@ domainFilters: []
 ## Exclude subdomains (optional)
 ##
 excludeDomains: []
+## Filter target zones by zone domain (optional)
+##
+zoneNameFilters: []
 ## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []
