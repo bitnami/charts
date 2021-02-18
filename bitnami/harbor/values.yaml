@@ -2688,7 +2688,7 @@ postgresql:
   ## Name of existing secret to use for PostgreSQL passwords.
   ## If an existingSecret is used it will overwrite postgresqlUsername and postgresqlPassword.
   ## The secret has to contain at least the key postgresql-postgres-password.
-  existingSecret: secret
+  #existingSecret: secret
   postgresqlExtendedConf:
     maxConnections: 1024
   replication:
