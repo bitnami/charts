@@ -68,6 +68,8 @@ spec:
             - --pass-access-token=true
             - --pass-authorization-header=true
             - --skip-auth-regex=^\/config\.json$
+            - --skip-auth-regex=^\/custom_style\.css$
+            - --skip-auth-regex=^\/custom_locale\.json$
             - --skip-auth-regex=^\/favicon.*\.png$
             - --skip-auth-regex=^\/static\/
             - --skip-auth-regex=^\/$
@@ -89,8 +91,8 @@ spec:
         {{- end }}
         {{- if and .Values.pinnipedProxy.enabled }}
         - name: pinniped-proxy
-          args:
-            - /pinniped-proxy
+          command:
+            - pinniped-proxy
           env:
             - name: DEFAULT_PINNIPED_NAMESPACE
               value: {{ .Values.pinnipedProxy.defaultPinnipedNamespace }}
