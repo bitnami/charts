@@ -395,19 +395,58 @@ This chart provides several ways to manage passwords:
 - An existing secret with all the passwords
 - Passwords present among several secrets
 
-In the first case, you need to keep a copy of the secrets and indicate the values using the `--set` argument.
+In the first case, a new Secret including all the passwords will be created during the chart installation. When upgrading it is necessary to provide the secrets using the `--set` option as shown below:
 For example:
-```console
-$ helm upgrade keycloak bitnami/keycloak \
-    --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
-    --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
-    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
-    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
-```
+\```console
+  $ helm upgrade keycloak bitnami/keycloak \
+      --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
+      --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
+      --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+      --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+\```
 
-In the second, a Secret has been created with all the passwords. This secret name must indicated in the `auth.existingSecret.name` value. If the keys in the Secret are not the same as the expected ones, you can use `keyMapping`:
+When installing using an existing secret, passwords can be stored in single secret or separeted into differect secrets.
 
+To use a single existing secret `existingSecret` can be configured at values.yaml:
 
+\```yaml
+    existingSecret:
+      name: mySecret
+      keyMapping:
+        admin-password: myPasswordKey
+        management-password: myManagementPasswordKey
+        database-password: myDatabasePasswordKey
+        tls-keystore-password: myTlsKeystorePasswordKey
+        tls-truestore-password: myTlsTruestorePasswordKey
+\```
+
+The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
+
+Configuring multiple existing secrets can be done by using `auth.existingSecretPerPassword` instead:
+  
+\```yaml
+      existingSecretPerPassword:
+        keyMapping:
+          adminPassword: KEYCLOAK_ADMIN_PASSWORD
+          managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+          databasePassword: password
+          tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+          tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+        adminPassword:
+          name: mySecret
+        managementPassword:
+          name: mySecret
+        databasePassword:
+          name: myOtherSecret
+        tlsKeystorePassword:
+          name: mySecret
+        tlsTruststorePassword:
+          name: mySecret
+\```
+
+Additionally to the key mapping, a different Secret name can be configured per password. 
+
+> NOTE: 'auth.existingSecretPerPassword' will overwrite the configuration at 'auth.existingSecret'
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
