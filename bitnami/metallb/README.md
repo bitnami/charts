@@ -182,10 +182,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set livenessProbe.successThreshold=5 \
+  --set readinessProbe.successThreshold=5 \
     bitnami/metallb
 ```
-The above command sets the `livenessProbe.successThreshold` to `5`.
+The above command sets the `readinessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
 

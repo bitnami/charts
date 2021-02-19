@@ -1,0 +1,11 @@
+{{- if .Values.podDisruptionBudget -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "external-dns.fullname" . }}
+  labels: {{ include "external-dns.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
+{{- include "common.tplvalues.render" (dict "value" .Values.podDisruptionBudget "context" $) | nindent 2 }}
+{{- end -}}
