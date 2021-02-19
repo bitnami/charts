@@ -113,6 +113,9 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.saslMechanisms`                     | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                     |
 | `auth.saslInterBrokerMechanism`           | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                                         | `plain`                                                 |
 | `auth.jksSecret`                          | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                                      | `nil`                                                   |
+| `auth.jksKeystoreSAN`                          | The secret key from the jksSecret containing the keystore with a SAN certificate.                                      | `nil`                                                   |
+| `auth.jksTruststoreSecret`                          | Name of the existing secret containing your truststore if truststore not existing or different from the one in the jksSecret.                                      | `nil`                                                   |
+| `auth.jksTruststore`                          | The secret key from the jksSecret or jksTruststoreSecret if truststore key different from the default                                      | `nil`                                                   |
 | `auth.jksPassword`                        | Password to access the JKS files when they are password-protected                                                                                    | `nil`                                                   |
 | `auth.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                                           | `https`                                                 |
 | `auth.jaas.interBrokerUser`               | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                                                 |
@@ -254,6 +257,10 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.image.pullSecrets`      | Specify docker-registry secret names as an array                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
 | `metrics.kafka.extraFlags`             | Extra flags to be passed to Kafka exporter                                                                                       | `{}`                                                    |
 | `metrics.kafka.certificatesSecret`     | Name of the existing secret containing the optional certificate and key files                                                    | `nil`                                                   |
+| `metrics.kafka.tlsCert`     | The secret key from the certificatesSecret if `client-cert` key different from the default                                                   | `cert-file`                                                   |
+| `metrics.kafka.tlsKey`     | The secret key from the certificatesSecret if `client-key` key different from the default                                                    | `key-file`                                                   |
+| `metrics.kafka.tlsCaCert`     | The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default                                                   | `ca-file`                                                   |
+| `metrics.kafka.tlsCaSecret`     | Name of the existing secret containing the ca certificate file, if the ca cert can not be found in `metrics.kafka.certificatesSecret`                                        | `nil`                                                   |
 | `metrics.kafka.resources.limits`       | Kafka Exporter container resource limits                                                                                         | `{}`                                                    |
 | `metrics.kafka.resources.requests`     | Kafka Exporter container resource requests                                                                                       | `{}`                                                    |
 | `metrics.kafka.service.type`           | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`                                             |
@@ -354,7 +361,7 @@ If you enabled SASL authentication on any listener, you can set the SASL credent
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
+In order to configure TLS authentication/encryption, you **can** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.jksPassword` parameter to provide your password.
 
@@ -367,6 +374,12 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 > **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
 As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
+
+If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
+ - `auth.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.jksPassword` 
+ - `auth.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`). 
+ - `auth.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.jksSecret` with the `auth.jksKeystoreSAN`-value and use this as a keystore for **all** brokers
+> **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.jksPassword`
 
 You can deploy the chart with authentication using the following parameters:
 

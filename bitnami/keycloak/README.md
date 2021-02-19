@@ -185,6 +185,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `ingress.secrets[0].name`          | TLS Secret Name                                                                   | `nil`                          |
 | `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                            | `nil`                          |
 | `ingress.secrets[0].key`           | TLS Secret Key                                                                    | `nil`                          |
+| `ingress.servicePort`              | Service port to be used                                                           | `http`                          |
 | `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                           | `false`                        |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                        | `true`                         |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                    | `{}` (evaluated as a template) |

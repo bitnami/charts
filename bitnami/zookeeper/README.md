@@ -61,6 +61,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `nameOverride`      | String to partially override common.names.fullname | `nil`                             |
 | `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                             |
 | `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                   |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]` (evaluated as a template)    |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`                              |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                              |
 | `schedulerName`     | Kubernetes pod scheduler registry                  | `nil` (use the default-scheduler) |
