@@ -19,8 +19,10 @@ rules:
   - apiGroups:
       - extensions
       - "networking.k8s.io"
+      - getambassador.io
     resources:
       - ingresses
+      - hosts
     verbs:
       - get
       - list
