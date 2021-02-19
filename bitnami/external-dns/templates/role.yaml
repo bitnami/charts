@@ -57,6 +57,16 @@ rules:
       - get
       - watch
       - list
+  - apiGroups:
+      - gloo.solo.io
+      - gateway.solo.io
+    resources:
+      - proxies
+      - virtualservices
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}
