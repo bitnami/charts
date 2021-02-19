@@ -47,15 +47,26 @@ $ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common parameters
+
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+
 ## Parameters
 
 The following tables lists the configurable parameters of the Apache chart and their default values.
 
 | Parameter                        | Description                                                                               | Default                                                      |
 |----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`           | Global Docker image registry                                                              | `nil`                                                        |
-| `global.imagePullSecrets`        | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
-| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil`                                                        |
 | `image.registry`                 | Apache Docker image registry                                                              | `docker.io`                                                  |
 | `image.repository`               | Apache Docker image name                                                                  | `bitnami/apache`                                             |
 | `image.tag`                      | Apache Docker image tag                                                                   | `{TAG_NAME}`                                                 |
@@ -122,6 +133,8 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `extraVolumes`                   | Array to add extra volumes                                                                | `[]` (evaluated as a template)                               |
 | `extraVolumeMounts`              | Array to add extra mount                                                                  | `[]` (evaluated as a template)                               |
 | `extraEnvVars`                   | Array to add extra environment variables                                                  | `[]` (evaluated as a template)                               |
+| `initContainers`                 | Add additional init containers to the Apache pods                                         | `{}` (evaluated as a template)                               |
+| `sidecars`                       | Add additional sidecar containers to the Apache pods                                      | `{}` (evaluated as a template)                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

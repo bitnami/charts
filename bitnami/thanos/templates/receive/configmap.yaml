@@ -7,5 +7,5 @@ metadata:
     app.kubernetes.io/component: receive
 data:
   hashrings.json: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.receive.config  "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" (include "thanos.receive.config" .) "context" .) | nindent 4 }}
 {{ end }}

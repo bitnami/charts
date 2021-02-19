@@ -876,6 +876,23 @@ metrics:
     ##
     # certificatesSecret:
 
+    ## The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
+    ##
+    tlsCert: cert-file
+
+    ## The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
+    ##
+    tlsKey: key-file
+
+    ## Name of the existing secret containing the optional ca certificate
+    ## for Kafka Exporter client authentication
+    ##
+    # tlsCaSecret:
+
+    ## The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
+    ##
+    tlsCaCert: ca-file
+
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
