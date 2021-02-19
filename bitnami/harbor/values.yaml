@@ -2688,6 +2688,16 @@ postgresql:
   ## Name of existing secret to use for PostgreSQL passwords.
   ## If an existingSecret is used it will overwrite postgresqlUsername and postgresqlPassword.
   ## The secret has to contain at least the key postgresql-postgres-password.
+  ##
+  ## Example Secret:
+  ## apiVersion: v1
+  ## kind: Secret
+  ## metadata:
+  ##   name: mysecret
+  ## type: Opaque
+  ## data:
+  ##   postgresqlUsername: YWRtaW4=
+  ##   postgresqlPassword: MWYyZDFlMmU2N2Rm
   # existingSecret: secret
   postgresqlExtendedConf:
     maxConnections: 1024
