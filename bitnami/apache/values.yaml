@@ -34,6 +34,10 @@ image:
   ##
   debug: false
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
@@ -303,6 +307,30 @@ extraVolumeMounts: []
 ## An array to add extra env vars
 ##
 extraEnvVars: []
+
+## Add init containers to the Apache pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the Apache pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Service parameters
 ##

@@ -82,6 +82,7 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+    seLinuxOptions: {}
 
   ## Annotations to add to the statefulset
   ##
@@ -243,6 +244,7 @@ worker:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+    seLinuxOptions: {}
 
   ## Annotations to add to the statefulset
   ##

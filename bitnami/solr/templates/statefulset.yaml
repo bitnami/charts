@@ -84,9 +84,6 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.initContainers }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | nindent 8 }}
-        {{- end }}
       containers:
         - name: solr
           image: {{ include "solr.image" . }}
