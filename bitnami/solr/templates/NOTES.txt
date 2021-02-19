@@ -70,7 +70,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 {{- $secretNameSolr := include "solr.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
-  {{- $requiredSolrPassword := dict "valueKey" "solrPassword" "secret" $secretNameSolr "field" "solr-password" -}}
+  {{- $requiredSolrPassword := dict "valueKey" "authentication.adminPassword" "secret" $secretNameSolr "field" "solr-password" -}}
   {{- $requiredPasswords = append $requiredPasswords $requiredSolrPassword -}}
 {{- end -}}
 
