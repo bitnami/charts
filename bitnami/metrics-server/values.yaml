@@ -245,6 +245,9 @@ containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: false
   runAsNonRoot: true
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop: ["ALL"]
 
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
