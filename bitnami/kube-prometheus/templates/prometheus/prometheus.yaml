@@ -82,6 +82,7 @@ spec:
   {{- if .Values.prometheus.walCompression }}
   walCompression: {{ .Values.prometheus.walCompression }}
   {{- end }}
+  portName: "{{ .Values.prometheus.portName }}"
   routePrefix: "{{ .Values.prometheus.routePrefix }}"
   {{- if .Values.prometheus.secrets }}
   secrets: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.secrets "context" $) | nindent 4 }}
