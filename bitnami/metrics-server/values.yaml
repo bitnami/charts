@@ -81,6 +81,9 @@ securePort: 8443
 # if you use Weave network on EKS
 hostNetwork: false
 
+## Container command (using container default if not set)
+command: ["metrics-server"]
+
 ## Extra arguments to pass to the metrics-server
 ## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
 ##
@@ -206,6 +209,48 @@ resources:
   requests: {}
   #   cpu: 250m
   #   memory: 256Mi
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  failureThreshold: 3
+  httpGet:
+    path: /livez
+    port: https
+    scheme: HTTPS
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  failureThreshold: 3
+  httpGet:
+    path: /readyz
+    port: https
+    scheme: HTTPS
+  periodSeconds: 10
+
+## Custom Liveness probes for metrics-server
+##
+customLivenessProbe: {}
+
+## Custom Readiness probes metrics-server
+##
+customReadinessProbe: {}
+
+## Container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: false
 
 ## Extra volumes to mount
 ## Example Use Case: mount an `emptyDir` to allow running with a `readOnlyRootFilesystem: true`
