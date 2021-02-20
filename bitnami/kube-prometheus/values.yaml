@@ -939,7 +939,7 @@ prometheus:
   
   ## Port name used for the pods and governing service. This defaults to web
   ##
-  # portName: web
+  portName: web
 
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
