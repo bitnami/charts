@@ -31,7 +31,7 @@ spec:
       - namespace: {{ .Release.Namespace }}
         name: {{ template "kube-prometheus.alertmanager.fullname" . }}
         port: http
-        pathPrefix: "/"
+        pathPrefix: "{{ .Values.alertmanager.routePrefix }}"
     {{- else }}
       []
     {{- end }}
