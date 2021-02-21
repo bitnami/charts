@@ -139,7 +139,6 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `podSecurityContext.fsGroup`            | Ghost pods' group ID                                                                                                  | `1001`                                      |
 | `priorityClassName`                     | Define the priority class name to use for the ghost pods here.                                                        | `""`                                        |
 | `replicaCount`                          | Number of Ghost Pods to run                                                                                           | `1`                                         |
-| `strategy.type`                         | Kubernetes deployment strategy type                                                                                   | `RollingUpdate`                             |
 | `resources`                             | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                |
 | `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                       |
 | `smtpHost`                              | SMTP host                                                                                                             | `nil`                                       |
@@ -149,7 +148,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `smtpFromAddress`                       | SMTP from address                                                                                                     | `nil`                                       |
 | `smtpService`                           | SMTP service                                                                                                          | `nil`                                       |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template) |
-| `updateStrategy`                        | Deployment update strategy                                                                                            | `nil`                                       |
+| `updateStrategy`                        | Deployment update strategy                                                                                            | `RollingUpdate`                                       |
 
 ### Traffic Exposure Parameters
 

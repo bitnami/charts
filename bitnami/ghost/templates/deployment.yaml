@@ -15,9 +15,8 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
-  {{- if .Values.strategy }}
-  strategy:
-    type: {{ default "RollingUpdate" .Values.strategy.type }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:

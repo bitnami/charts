@@ -35,10 +35,6 @@ kubeVersion:
 ##
 replicaCount: 1
 
-## Deployment strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-# strategy:
-#   type: Recreate
 
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -500,6 +496,14 @@ customLivenessProbe: {}
 ## Custom Rediness probes Ghost
 ##
 customReadinessProbe: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
 
 ## Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
