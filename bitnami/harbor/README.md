@@ -733,6 +733,9 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                           | `true`      |
 | `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
 | `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
+| `externalRedis.sentinelEnabled`           | If external redis with sentinal is used, set it to `true`                                                 | `false`     |
+| `externalRedis.masterSet`                 | Name of sentinel masterSet if sentinel is used                                                            | `mymaster`  |
+| `externalRedis.sentinelHosts`             | Sentinel hosts and ports in the format <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>| `nil`       |
 | `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |
 | `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                   | `0`         |
 | `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                             | `1`         |

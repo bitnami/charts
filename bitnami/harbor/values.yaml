@@ -2660,6 +2660,8 @@ redis:
 ## If the Redis(TM) included in the chart is disabled, Harbor will use below
 ## Redis(TM) parameters to connect to an external Redis(TM) server.
 ##
+## Support for both Redis and Redis+Sentinel
+##
 externalRedis:
   ## Redis(TM) host
   ##
@@ -2667,6 +2669,17 @@ externalRedis:
   ## Redis(TM) port number
   ##
   port: 6379
+
+  ## Redis(TM) sentinel configuration
+  ##
+  ## If sentinel is enabled the below sentinel configurations are used as the hostname
+  ##
+  sentinelEnabled: false
+  sentinelMasterSet: 'mymaster'
+  ## Configure redis sentinel hostnames in the following pattern
+  ## <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>,<host_sentinal2>:<port_sentinel3>
+  sentinelHosts: ''
+
   ## Redis(TM) password
   ##
   password: ''
