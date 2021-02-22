@@ -71,13 +71,17 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --remote-write.address=0.0.0.0:19291
-            - --receive.replication-factor=1
+            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             - --tsdb.path=/var/thanos/receive
-            - --label=replica="$(NAME)"
+            - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention=15d
+            {{- if and (eq (int .Values.receive.replicaCount) (int 1)) .Values.receive.config }}
             - --receive.local-endpoint=127.0.0.1:10901
+            {{- else }}
+            - --receive.local-endpoint=$(NAME).thanos-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            {{- end }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
             {{- if .Values.receive.extraFlags }}
             {{- .Values.receive.extraFlags | toYaml | nindent 12 }}

@@ -11,8 +11,18 @@ metadata:
   labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
 spec:
+{{- if .type }}
+  type: {{ .type }}
+{{- else }}
   type: helm
+{{- end }}
   url: {{ .url }}
+{{- if .ociRepositories }}
+  ociRepositories:
+{{- range .ociRepositories }}
+  - {{ . }}
+{{- end }}
+{{- end }}
 {{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
   syncJobPodTemplate:
     spec:

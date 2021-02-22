@@ -388,6 +388,9 @@ domainFilters: []
 ## Exclude subdomains (optional)
 ##
 excludeDomains: []
+## Filter target zones by zone domain (optional)
+##
+zoneNameFilters: []
 ## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []
@@ -645,6 +648,10 @@ extraVolumes: []
 ## Configure extra volumeMounts
 ##
 extraVolumeMounts: []
+
+## Configure PodDisruptionBudget
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget: {}
 
 ## Prometheus Exporter / Metrics
 ##

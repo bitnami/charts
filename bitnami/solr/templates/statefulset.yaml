@@ -84,9 +84,6 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.initContainers }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | nindent 8 }}
-        {{- end }}
       containers:
         - name: solr
           image: {{ include "solr.image" . }}
@@ -162,6 +159,26 @@ spec:
             {{- end }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.host" . | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: SOLR_SSL_ENABLED
+              value: "yes"
+            - name: SOLR_SSL_KEY_STORE
+              value: /opt/bitnami/solr/certs/keystore.p12
+            - name: SOLR_SSL_KEY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  key: tls-keystore-password
+            - name: SOLR_SSL_TRUST_STORE
+              value: /opt/bitnami/solr/certs/truststore.p12
+            - name: SOLR_SSL_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  key: tls-truststore-password
+            - name: SOLR_SSL_CHECK_PEER_NAME
+              value: "false"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -188,7 +205,11 @@ spec:
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             httpGet:
+              {{- if .Values.tls.enabled }}
+              scheme: "HTTPS"
+              {{- else }}
               scheme: "HTTP"
+              {{- end }}
               path: "/solr"
               port: {{ .Values.service.port }}
           {{- else if .Values.customLivenessProbe }}
@@ -202,7 +223,11 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             httpGet:
+              {{- if .Values.tls.enabled }}
+              scheme: "HTTPS"
+              {{- else }}
               scheme: "HTTP"
+              {{- end }}
               path: "/solr"
               port: {{ .Values.service.port }}
           {{- else if .Values.customReadinessProbe }}
@@ -211,6 +236,12 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.tls.certificatesSecretName }}
+            - name: certs
+              mountPath: '/opt/bitnami/solr/certs'
+              readOnly: true
+            {{- end }}
+
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -228,6 +259,11 @@ spec:
         {{- else }}
         - name: data
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.tls.certificatesSecretName }}
+        - name: certs
+          secret:
+            secretName: {{ .Values.tls.certificatesSecretName }}
         {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:

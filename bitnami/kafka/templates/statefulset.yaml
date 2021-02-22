@@ -222,6 +222,16 @@ spec:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-passwords
             {{- end }}
+            {{- if (include "kafka.interBroker.saslAuthentication" .) }}
+            - name: KAFKA_INTER_BROKER_USER
+              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
+            - name: KAFKA_INTER_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: inter-broker-password
+            {{- end }}
+            {{- end }}
             {{- if .Values.auth.jaas.zookeeperUser }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL
               value: "SASL"
@@ -233,19 +243,11 @@ spec:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: zookeeper-password
             {{- end }}
-            {{- if (include "kafka.interBroker.saslAuthentication" .) }}
-            - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
-            - name: KAFKA_INTER_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.jaasSecretName" . }}
-                  key: inter-broker-password
-            {{- end }}
-            {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
               value: {{ .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+            - name: KAFKA_CFG_TLS_CLIENT_AUTH
+              value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- if .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD
               value: {{ .Values.auth.jksPassword | quote }}
