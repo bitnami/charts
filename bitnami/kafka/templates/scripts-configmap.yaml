@@ -114,11 +114,11 @@ data:
     {{- if and .Values.auth.jksTruststoreSecret .Values.auth.jksTruststore }}
     JKS_TRUSTSTORE="/truststore/{{ .Values.auth.jksTruststore }}"
     {{- else if .Values.auth.jksTruststoreSecret  }}
-    JKS_TRUSTSTORE="/truststore/kafka.trustore.jks"
+    JKS_TRUSTSTORE="/truststore/kafka.truststore.jks"
     {{- else if .Values.auth.jksTruststore  }}
     JKS_TRUSTSTORE="/certs/{{ .Values.auth.jksTruststore }}"
     {{- else }}
-    JKS_TRUSTSTORE="/certs/kafka.trustore.jks"
+    JKS_TRUSTSTORE="/certs/kafka.truststore.jks"
     {{- end }}
     
     {{- if .Values.auth.jksKeystoreSAN }}
