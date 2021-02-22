@@ -24,7 +24,9 @@ spec:
     metadata:
       annotations:
         checksum/configmap-env-vars: {{ include (print $.Template.BasePath "/configmap-env-vars.yaml") . | sha256sum }}
+        {{- if and (not .Values.auth.existingSecret) (not .Values.auth.existingSecretPerPassword) }}
         checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
         {{- if (include "keycloak.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
@@ -127,36 +129,61 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            {{- $secretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
+            {{- $globalSecretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName  }}
+                {{- if .Values.auth.existingSecretPerPassword }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }}
+                {{- else }}
+                  name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
+                {{- end }}
             - name: KEYCLOAK_MANAGEMENT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                {{- if .Values.auth.existingSecretPerPassword }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.managementPassword "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "managementPassword") }}
+                {{- else }}
+                  name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
+                {{- end }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                {{- if .Values.auth.existingSecretPerPassword }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.databasePassword "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "databasePassword") }}
+                {{- else }}
+                  name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
+                {{- end }}
             {{- if .Values.auth.tls.enabled }}
-            {{- if .Values.auth.tls.keystorePassword }}
+            {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
             - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                {{- if .Values.auth.existingSecretPerPassword }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
+                {{- else }}
+                  name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-keystore-password") }}
+                {{- end }}
             {{- end }}
-            {{- if .Values.auth.tls.truststorePassword }}
+            {{- if or .Values.auth.tls.truststorePassword .Values.auth.existingSecretPerPassword }}
             - name: KEYCLOAK_TLS_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                {{- if .Values.auth.existingSecretPerPassword }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
+                {{- else }}
+                  name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-truestore-password") }}
+                {{- end }}
             {{- end }}
             {{- end }}
             {{- if .Values.extraStartupArgs }}

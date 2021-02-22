@@ -90,6 +90,29 @@ auth:
   #     database-password: myDatabasePasswordKey
   #     tls-keystore-password: myTlsKeystorePasswordKey
   #     tls-truestore-password: myTlsTruestorePasswordKey
+  #
+  ## Map of already existing secrets containing passwords
+  ##
+  ## Override `existingSecret` and other secret values
+  ##
+  # existingSecretPerPassword:
+  #   keyMapping:
+  #     adminPassword: KEYCLOAK_ADMIN_PASSWORD
+  #     managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+  #     databasePassword: password
+  #     tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #     tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #   adminPassword:
+  #     name: keycloak-test2.credentials # release-name
+  #   managementPassword:
+  #     name: keycloak-test2.credentials
+  #   databasePassword:
+  #     name: keycloak.pocwatt-keycloak-cluster.credentials
+  #   tlsKeystorePassword:
+  #     name: keycloak-test2.credentials
+  #   tlsTruststorePassword:
+  #     name: keycloak-test2.credentials
+  #
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
