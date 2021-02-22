@@ -2,7 +2,7 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-global: {}
+# global:
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
@@ -14,7 +14,7 @@ global: {}
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.3-debian-10-r44
+  tag: 4.4.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -997,7 +997,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r76
+    tag: 0.11.2-debian-10-r79
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1034,11 +1034,15 @@ metrics:
     failureThreshold: 3
     successThreshold: 1
 
+  ## Metrics container port
+  ##
+  containerPort: 9216
+
   ## Metrics exporter pod Annotation
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9216"
+    prometheus.io/port: "{{ .Values.metrics.containerPort }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator

@@ -1507,6 +1507,10 @@ ruler:
   ##
   logLevel: info
 
+  ## Label to treat as a replica indicator along which data is deduplicated
+  ##
+  replicaLabel: replica
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -1761,6 +1765,13 @@ receive:
   ##
   logLevel: info
 
+  ## Replication Factor
+  ##
+  replicationFactor: 1
+  ## Label to treat as a replica indicator along which data is deduplicated
+  ##
+  replicaLabel: replica
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -1774,17 +1785,13 @@ receive:
   ##
   hostAliases: []
 
-  ## Receive Configuration
+  ## Receive Configuration Evaluated as a template
+  ## json formatted string and yaml allowed.
   ## Specify content for receive hashring
   ##
-  config: |
-    [
-      {
-        "endpoints": [
-            "127.0.0.1:10901"
-        ]
-      }
-    ]
+  # config:
+  #   - endpoints:
+  #     - "127.0.0.1:10901"
 
   ## Extra Flags to passed to Thanos Receive
   ##
@@ -1906,7 +1913,7 @@ receive:
     # successThreshold: 1
     # failureThreshold: 6
 
-  ## K8s Security Context for Thanos Bucket Web pods
+  ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
@@ -1954,6 +1961,8 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    ## RemoteWrite Port
+    ##
     remoteWrite:
       port: 19291
       ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -1975,6 +1984,10 @@ receive:
     ## Use to override service selector labels
     ##
     labelSelectorsOverride: {}
+
+    ## Create additional Headless service
+    ##
+    additionalHeadless: false
 
   ## Autoscaling parameters
   ##

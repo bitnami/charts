@@ -82,6 +82,7 @@ The following table lists the configurable parameters of the Discourse chart and
 | `persistence.existingClaim`  | Name of an existing PVC to reuse                                                          | `nil`                                                   |
 | `persistence.accessMode`     | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`                                         |
 | `persistence.size`           | Size of the PVC to request                                                                | `10Gi`                                                  |
+| `persistence.selector`       | Selector to match an existing Persistent Volume (this value is evaluated as a template)   | `{}`                                                    |
 | `updateStrategy`             | Update strategy of deployment                                                             | `{type: "RollingUpdate"}`                               |
 | `podAnnotations`             | Additional pod annotations                                                                | `{}`                                                    |
 | `podLabels`                  | Additional pod labels                                                                     | `{}` (evaluated as a template)                          |

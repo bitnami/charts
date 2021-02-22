@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 12.0.2-debian-10-r6
+  tag: 12.0.3-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,6 +90,29 @@ auth:
   #     database-password: myDatabasePasswordKey
   #     tls-keystore-password: myTlsKeystorePasswordKey
   #     tls-truestore-password: myTlsTruestorePasswordKey
+  #
+  ## Map of already existing secrets containing passwords
+  ##
+  ## Override `existingSecret` and other secret values
+  ##
+  # existingSecretPerPassword:
+  #   keyMapping:
+  #     adminPassword: KEYCLOAK_ADMIN_PASSWORD
+  #     managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+  #     databasePassword: password
+  #     tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #     tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #   adminPassword:
+  #     name: keycloak-test2.credentials # release-name
+  #   managementPassword:
+  #     name: keycloak-test2.credentials
+  #   databasePassword:
+  #     name: keycloak.pocwatt-keycloak-cluster.credentials
+  #   tlsKeystorePassword:
+  #     name: keycloak-test2.credentials
+  #   tlsTruststorePassword:
+  #     name: keycloak-test2.credentials
+  #
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
@@ -532,6 +555,10 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+
+  ## The service port to be used by this ingress.
+  ## Default is http. Alternative is https.
+  servicePort: http
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/

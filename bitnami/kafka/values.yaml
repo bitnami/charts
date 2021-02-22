@@ -275,6 +275,22 @@ auth:
   ##
   # jksSecret:
 
+  ## The secret key from the jksSecret containing the keystore with a SAN certificate. The SAN certificate in it should be
+  ## issued with Subject Alternative Names for all headless services. Example for 3 Broker:
+  ##  - kafka-0.kafka-headless.kafka.svc.cluster.local
+  ##  - kafka-1.kafka-headless.kafka.svc.cluster.local
+  ##  - kafka-2.kafka-headless.kafka.svc.cluster.local
+  ##
+  # jksKeystoreSAN:
+
+  ## Name of the existing secret containing your truststore if truststore not existing or different from the one in the jksSecret.
+  ##
+  # jksTruststoreSecret:
+
+  ## The secret key from the jksSecret or jksTruststoreSecret if truststore key different from the default (kafka.truststore.jks)
+  ##
+  # jksTruststore:
+
   ## Password to access the JKS files when they are password-protected.
   ##
   # jksPassword:
@@ -859,6 +875,23 @@ metrics:
     ## for Kafka Exporter client authentication
     ##
     # certificatesSecret:
+
+    ## The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
+    ##
+    tlsCert: cert-file
+
+    ## The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
+    ##
+    tlsKey: key-file
+
+    ## Name of the existing secret containing the optional ca certificate
+    ## for Kafka Exporter client authentication
+    ##
+    # tlsCaSecret:
+
+    ## The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
+    ##
+    tlsCaCert: ca-file
 
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

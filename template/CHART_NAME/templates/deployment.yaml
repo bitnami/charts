@@ -13,7 +13,7 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
-  strategy: {{- toYaml .Values.co%%MAIN_OBJECT_BLOCK%%ector.updateStrategy | nindent 4 }}
+  strategy: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

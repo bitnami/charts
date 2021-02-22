@@ -1,0 +1,50 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: spark.enabled
+    name: spark
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.x.x
+  - condition: solr.enabled
+    name: solr
+    repository: https://charts.bitnami.com/bitnami
+    version: 0.x.x
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: OCTO Data platform Kafka-Spark-Solr Helm Chart
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform
+keywords:
+  - dataplatform
+  - kafka
+  - spark
+  - solr
+  - zookeeper
+  - apache
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: dataplatform-bp1
+sources:
+  - https://github.com/bitnami/bitnami-docker-kafka
+  - https://kafka.apache.org/
+  - https://github.com/bitnami/bitnami-docker-spark
+  - https://spark.apache.org/
+  - https://lucene.apache.org/solr/
+  - https://github.com/bitnami/bitnami-docker-solr
+  - https://zookeeper.apache.org/
+  - https://github.com/bitnami/bitnami-docker-zookeeper
+version: 0.1.0

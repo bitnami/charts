@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB(R) image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.3-debian-10-r48
+  tag: 4.4.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -109,7 +109,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r50
+    tag: 1.19.6-debian-10-r51
     pullPolicy: IfNotPresent
 
 ## Deployment pod host aliases
@@ -538,7 +538,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.15-debian-10-r23
+      tag: 1.18.15-debian-10-r24
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -843,6 +843,7 @@ arbiter:
     # maxUnavailable: 1
 
   ## MongoDB(R) Arbiter service parameters
+  ##
   service:
     ## Service name
     ##
@@ -984,7 +985,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r77
+    tag: 0.11.2-debian-10-r79
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1017,6 +1018,10 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+
+  ## Prometheus exporter container port
+  ##
+  containerPort: 9216
 
   ## Prometheus Exporter service configuration
   ##
