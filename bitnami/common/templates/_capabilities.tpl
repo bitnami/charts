@@ -64,7 +64,7 @@ Return the appropriate apiVersion for ingress.
 Return the appropriate apiVersion for RBAC resources.
 */}}
 {{- define "common.capabilities.rbac.apiVersion" -}}
-{{- if semverCompare "<1.22-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- if semverCompare "<1.17-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "rbac.authorization.k8s.io/v1beta1" -}}
 {{- else -}}
 {{- print "rbac.authorization.k8s.io/v1" -}}
@@ -75,7 +75,7 @@ Return the appropriate apiVersion for RBAC resources.
 Return the appropriate apiVersion for CRDs.
 */}}
 {{- define "common.capabilities.crd.apiVersion" -}}
-{{- if semverCompare "<1.22-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "apiextensions.k8s.io/v1beta1" -}}
 {{- else -}}
 {{- print "apiextensions.k8s.io/v1" -}}
