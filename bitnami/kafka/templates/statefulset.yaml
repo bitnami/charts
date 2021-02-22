@@ -268,7 +268,7 @@ spec:
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
-              value: {{ .Values.logFlushIntervalMessages | quote }}
+              value: {{ .Values.logFlushIntervalMessages | replace "_" "" | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MS
               value: {{ .Values.logFlushIntervalMs | quote }}
             - name: KAFKA_CFG_LOG_RETENTION_BYTES

@@ -128,7 +128,7 @@ autoCreateTopicsEnable: true
 
 ## The number of messages to accept before forcing a flush of data to disk.
 ##
-logFlushIntervalMessages: 10000
+logFlushIntervalMessages: _10000
 
 ## The maximum amount of time a message can sit in a log before we force a flush.
 ##
