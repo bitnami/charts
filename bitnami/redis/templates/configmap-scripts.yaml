@@ -285,7 +285,7 @@ data:
 
     . /opt/bitnami/scripts/libvalidations.sh
 
-    REDIS_SERVICE="{{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ include "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
     if [[ -n "$REDIS_PASSWORD_FILE" ]]; then
       password_aux=$(cat "$REDIS_PASSWORD_FILE")
