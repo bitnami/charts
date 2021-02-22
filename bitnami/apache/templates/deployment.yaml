@@ -40,8 +40,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.cloneHtdocsFromGit.enabled }}
+      {{- if or .Values.initContainers .Values.cloneHtdocsFromGit.enabled }}
       initContainers:
+        {{- if .Values.cloneHtdocsFromGit.enabled }}
         - name: git-clone-repository
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -54,7 +55,13 @@ spec:
           volumeMounts:
             - name: htdocs
               mountPath: /app
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
+        {{- if .Values.cloneHtdocsFromGit.enabled }}
         - name: git-repo-syncer
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -70,9 +77,7 @@ spec:
           volumeMounts:
             - name: htdocs
               mountPath: /app
-      {{- else }}
-      containers:
-      {{- end }}
+        {{- end }}
         - name: apache
           image: {{ include "apache.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -152,6 +157,9 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if (include "apache.useHtdocs" .) }}

@@ -48,6 +48,10 @@ hostAliases: []
 ##
 clusterDomain: cluster.local
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}

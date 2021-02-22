@@ -23,6 +23,10 @@ data:
         root /app/custom-css/;
       }
 
+      location /custom_locale.json {
+        root /app/custom-locale/;
+      }
+
       location / {
         # Redirects are required to be relative otherwise the internal hostname will be exposed
         absolute_redirect off;
@@ -46,6 +50,8 @@ data:
     }
   custom_style.css: |-
 {{- .Values.dashboard.customStyle | nindent 4 }}
+  custom_locale.json: |-
+{{- .Values.dashboard.customLocale | toJson | nindent 4 }}
   config.json: |-
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",

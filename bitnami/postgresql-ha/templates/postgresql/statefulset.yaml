@@ -280,8 +280,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
@@ -295,8 +295,8 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}

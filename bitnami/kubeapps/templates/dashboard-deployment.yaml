@@ -55,6 +55,8 @@ spec:
               subPath: config.json
             - mountPath: /app/custom-css
               name: custom-css
+            - mountPath: /app/custom-locale
+              name: custom-locale
           ports:
             - name: http
               containerPort: 8080
@@ -80,3 +82,9 @@ spec:
             items:
               - key: custom_style.css
                 path: custom_style.css
+        - name: custom-locale
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_locale.json
+                path: custom_locale.json

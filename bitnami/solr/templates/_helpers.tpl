@@ -74,7 +74,6 @@ Return  the proper Storage Class
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
-
 {{/* Return the proper Zookeeper host */}}
 {{- define "solr.zookeeper.host" -}}
 {{- if .Values.externalZookeeper.servers -}}
