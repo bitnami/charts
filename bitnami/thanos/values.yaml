@@ -1765,6 +1765,9 @@ receive:
   ##
   logLevel: info
 
+  ## Replication Factor
+  ##
+  replicationFactor: 1
   ## Label to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
@@ -1782,17 +1785,13 @@ receive:
   ##
   hostAliases: []
 
-  ## Receive Configuration
+  ## Receive Configuration Evaluated as a template
+  ## json formatted string and yaml allowed.
   ## Specify content for receive hashring
   ##
-  config: |
-    [
-      {
-        "endpoints": [
-            "127.0.0.1:10901"
-        ]
-      }
-    ]
+  # config:
+  #   - endpoints:
+  #     - "127.0.0.1:10901"
 
   ## Extra Flags to passed to Thanos Receive
   ##
