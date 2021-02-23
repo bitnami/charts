@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "system:%s" (include "common.names.fullname" .) }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups:
@@ -30,7 +30,7 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-  name: {{ printf "system:%s-aggregated-reader" (include "common.names.fullname" .) }}
+  name: {{ include "common.names.fullname" . }}-view
 rules:
   - apiGroups:
       - metrics.k8s.io

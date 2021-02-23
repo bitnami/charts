@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ printf "%s:system:auth-delegator" (include "common.names.fullname" .) }}
+  name: {{ include "common.names.fullname" . }}-auth-delegator
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
