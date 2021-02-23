@@ -462,8 +462,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.redis.enabled true -}}
     {{- template "harbor.redis.fullname" . -}}
   {{- else -}}
-    {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-        {{- .Values.externalRedis.sentinelHosts -}}/{{- .Values.externalRedis.sentinelMasterSet -}}
+    {{- if eq .Values.externalRedis.sentinel.enabled true -}}
+        {{- .Values.externalRedis.sentinel.hosts -}}/{{- .Values.externalRedis.sentinel.masterSet -}}
     {{- else -}}
         {{- .Values.externalRedis.host -}}
     {{- end -}}
@@ -543,83 +543,83 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForJobservice" -}}
-  {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
       {{- template "harbor.redis.host" . -}}:{{ template "harbor.redis.port" . -}}/{{ template "harbor.redis.jobserviceDatabaseIndex" . -}}
+    {{- end -}}
+  {{- else -}}
+    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+    {{- else -}}
+      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForGC" -}}
-  {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- else -}}
       {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+    {{- else -}}
+      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 
 {{/*the username redis is used for a placeholder as no username needed in redis*/}}
 {{- define "harbor.redisForClairAdapter" -}}
-  {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
     {{- else -}}
       {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
     {{- end -}}
+  {{- else -}}
+    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
+    {{- else -}}
+      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "harbor.redisForTrivyAdapter" -}}
-  {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- else -}}
       {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- end -}}
+  {{- else -}}
+    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+    {{- else -}}
+      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "harbor.redisForCore" -}}
-  {{- if eq .Values.externalRedis.sentinelEnabled true -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- else -}}
       {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
+      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+    {{- else -}}
+      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
