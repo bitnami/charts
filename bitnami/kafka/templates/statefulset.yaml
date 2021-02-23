@@ -246,6 +246,8 @@ spec:
             {{- if (include "kafka.tlsEncryption" .) }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
               value: {{ .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+            - name: KAFKA_CFG_TLS_CLIENT_AUTH
+              value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- if .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD
               value: {{ .Values.auth.jksPassword | quote }}
@@ -266,7 +268,7 @@ spec:
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
-              value: {{ .Values.logFlushIntervalMessages | quote }}
+              value: {{ .Values.logFlushIntervalMessages | replace "_" "" | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MS
               value: {{ .Values.logFlushIntervalMs | quote }}
             - name: KAFKA_CFG_LOG_RETENTION_BYTES

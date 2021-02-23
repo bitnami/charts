@@ -1,6 +1,6 @@
 {{- if and .Values.rbac.create .Values.speaker.rbac.create -}}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "common.names.fullname" . }}-speaker
@@ -39,7 +39,7 @@ rules:
     verbs:
       - use
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}-pod-lister
@@ -59,7 +59,7 @@ rules:
     verbs:
       - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-speaker
@@ -80,7 +80,7 @@ roleRef:
   kind: ClusterRole
   name: {{ include "common.names.fullname" . }}-speaker
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-pod-lister
