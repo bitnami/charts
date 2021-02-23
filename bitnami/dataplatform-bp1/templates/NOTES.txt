@@ -10,7 +10,7 @@ The following components are being deployed to your cluster:
 
 To access the Kafka service from your local machine execute the following:
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/kafka-{{ include "common.names.fullname" . }} 9092:9092 &
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "kafka" "context" $ ) }} 9092:9092 &
    echo "Kafka service available at : http://127.0.0.1:9092"
 {{- end -}}
 
@@ -22,7 +22,7 @@ To access the Kafka service from your local machine execute the following:
 
 To access the Solr service from your local machine execute the following:
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/solr-{{ include "common.names.fullname" . }} 8983:8983 &
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "solr" "context" $ ) }} 8983:8983 &
    echo "Solr service available at : http://127.0.0.1:8983"
 {{- end -}}
 
@@ -34,7 +34,7 @@ To access the Solr service from your local machine execute the following:
 
 To access the Spark service from your local machine execute the following:
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/spark-{{ include "common.names.fullname" . }} 8080:80 &
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "spark" "context" $ ) }} 8080:80 &
    echo "Spark service available at : http://127.0.0.1:8080"
 {{- end -}}
 
@@ -46,6 +46,6 @@ To access the Spark service from your local machine execute the following:
 
 To access the Zookeeper service from your local machine execute the following:
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/zookeeper-{{ include "common.names.fullname" . }} 2181:2181 &
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "zookeeper" "context" $ ) }} 2181:2181 &
    echo "Zookeeper service available at : http://127.0.0.1:2181"
 {{- end -}}

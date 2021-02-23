@@ -230,6 +230,8 @@ ldap:
   binddn: ""
   bindpw: ""
   bslookup:
+  filter:
+  map:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
   tls_reqcert:

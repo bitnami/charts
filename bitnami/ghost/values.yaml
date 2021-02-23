@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.41.5-debian-10-r0
+  tag: 3.41.6-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -265,6 +265,9 @@ service:
   ##
   loadBalancerIP:
 
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
@@ -492,6 +495,14 @@ customLivenessProbe: {}
 ## Custom Rediness probes Ghost
 ##
 customReadinessProbe: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
 
 ## Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
