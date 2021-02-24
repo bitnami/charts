@@ -421,15 +421,7 @@ tolerations: []
 ## Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints:
-  - labelSelector:
-      matchLabels:
-        app: test
-        release: test2
-    maxSkew: 1
-    topologyKey: failure-domain.beta.kubernetes.io/zone
-    whenUnsatisfiable: DoNotSchedule
-
+topologySpreadConstraints: {}
 
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
