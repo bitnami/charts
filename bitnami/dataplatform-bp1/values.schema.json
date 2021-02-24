@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "kafka": {
+      "type": "object",
+      "title": "Kafka Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Deploy Kafka in the data platform cluster",
+          "form": true,
+          "description": "Whether to deploy a kafka as part of data platform. Switch this off in case kafka is not needed"
+        }
+      }
+    },
+    "spark": {
+        "type": "object",
+        "title": "Spark Details",
+        "form": true,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Deploy Spark in the data platform cluster",
+            "form": true,
+            "description": "Whether to deploy a Spark as part of data platform. Switch this off in case Spark is not needed"
+          }
+        }
+      },
+      "solr": {
+        "type": "object",
+        "title": "Solr Details",
+        "form": true,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Deploy Solr in the data platform cluster",
+            "form": true,
+            "description": "Whether to deploy a Solr as part of data platform. Switch this off in case Solr is not needed"
+          }
+        }
+      },
+      "wavefront": {
+        "type": "object",
+        "title": "Wavefront Observability Details",
+        "form": true,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Deploy Wavefront observability for the data platform cluster including configuration for metrics exporters for all the components",
+            "form": true,
+            "description": "Whether to deploy a Wavefront observability as part of data platform. Switch this off in case Wavefront is not needed"
+          },
+          "clusterName": {
+            "type": "string",
+            "title": "Provide the kubernetes cluster name to be configured in wavefront",
+            "form": true,
+            "description": "Kubernetes cluster name to be configured in wavefront, if not provided it will be defaulted to KUBERNETES_CLUSTER_NAME"
+          },          
+          "wavefront": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "title": "Provide the wavefront cluster url to be configured",
+                "form": true,
+                "description": "Wavefront cluster url to be configured to export the metrics to"
+                },
+              "token": {
+                "type": "string",
+                "title": "Provide the wavefront user API token to be used for the cluster url provided above",
+                "form": true,
+                "description": "Wavefront user API token to be used for the cluster url provided above"
+                }
+            }
+          }            
+        }
+      }
+  }
+}
