@@ -83,11 +83,11 @@ sentinel:
   parallelSyncs: 1
   port: 26379
 
-  ## Seconds to wait when cleaning nodes IPs
+  ## Delay seconds when cleaning nodes IPs
   ## When starting it will clean the sentiles IP (RESET "*") in all the nodes
-  ## This is the time to wait before sending the command to the next node
+  ## This is the delay time before sending the command to the next node
   ##
-  cleanWait: 5
+  cleanDelaySeconds: 5
 
   ## Additional Redis(TM) configuration for the sentinel nodes
   ## ref: https://redis.io/topics/config

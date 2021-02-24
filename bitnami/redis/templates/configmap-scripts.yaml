@@ -272,7 +272,7 @@ data:
       else
         redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} sentinel reset "*"
       fi
-      sleep {{ .Values.sentinel.cleanWait }}
+      sleep {{ .Values.sentinel.cleanDelaySeconds }}
     done
     echo "Sentinels clean up done"
 
