@@ -136,6 +136,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
 | `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
 | `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                            | `{}` (evaluated as a template) |
 | `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
 | `priorityClassName`         | Name of the existing priority class to be used by rabbitmq pods                           | `""`                           |
 | `podSecurityContext`        | RabbitMQ pods' Security Context                                                           | `{}`                           |
