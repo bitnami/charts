@@ -148,7 +148,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `smtpFromAddress`                       | SMTP from address                                                                                                     | `nil`                                       |
 | `smtpService`                           | SMTP service                                                                                                          | `nil`                                       |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template) |
-| `updateStrategy`                        | Deployment update strategy                                                                                            | `nil`                                       |
+| `updateStrategy`                        | Deployment update strategy                                                                                            | `RollingUpdate`                                       |
 
 ### Traffic Exposure Parameters
 

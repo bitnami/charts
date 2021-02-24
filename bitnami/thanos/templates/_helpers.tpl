@@ -275,9 +275,9 @@ Usage:
 */}}
 {{- define "thanos.receive.podFqdn" -}}
 {{- if .root.Values.receive.service.additionalHeadless -}}
-{{- printf "\"%s-receive-headless-%d.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
+{{- printf "\"%s-receive-%d.%s-receive-headless.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
 {{- else -}}
-{{- printf "\"%s-receive-%d.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
+{{- printf "\"%s-receive-%d.%s-receive.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
 {{- end -}}
 {{- end -}}
 
