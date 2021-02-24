@@ -14,16 +14,17 @@ data:
     #!/bin/bash
 
     . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libvalidations.sh
 
     not_exists_dns_entry() {
       myip=$(hostname -i)
 
       if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-          echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          error "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
           return 1
       fi
-      echo "$HEADLESS_SERVICE has my IP: ${myip}"
+      debug "$HEADLESS_SERVICE has my IP: ${myip}"
       return 0
     }
 
@@ -171,10 +172,10 @@ data:
       myip=$(hostname -i)
 
       if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-          echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          error "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
           return 1
       fi
-      echo "$HEADLESS_SERVICE has my IP: ${myip}"
+      debug "$HEADLESS_SERVICE has my IP: ${myip}"
       return 0
     }
 
@@ -210,7 +211,7 @@ data:
 
     # Clean sentineles from the current sentinel nodes
     for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)" | cut -f 1 -d ' ' | uniq ); do
-      echo "Cleaning sentinels in sentinel node: $node"
+      info "Cleaning sentinels in sentinel node: $node"
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
         redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*"
       else
@@ -218,7 +219,7 @@ data:
       fi
       sleep {{ .Values.sentinel.cleanDelaySeconds }}
     done
-    echo "Sentinels clean up done"
+    info "Sentinels clean up done"
 
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
       REDIS_MASTER_HOST="$(hostname -i)"
