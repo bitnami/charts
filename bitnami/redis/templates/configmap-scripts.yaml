@@ -12,6 +12,8 @@ data:
 {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
   start-node.sh: |
     #!/bin/bash
+    set -x
+
     is_boolean_yes() {
         local -r bool="${1:-}"
         # comparison is performed without regard to the case of alphabetic characters
@@ -22,9 +24,34 @@ data:
             false
         fi
     }
+    retry_while() {
+        local cmd="${1:?cmd is missing}"
+        local retries="${2:-12}"
+        local sleep_time="${3:-5}"
+        local return_value=1
+        read -r -a command <<< "$cmd"
+        for ((i = 1 ; i <= retries ; i+=1 )); do
+            "${command[@]}" && return_value=0 && break
+            sleep "$sleep_time"
+        done
+        return $return_value
+    }
+    not_exists_dns_entry() {
+      myip=$(hostname -i)
+
+      if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
+        echo "$HEADLESS_SERVICE is not resolving or not has my IP: ${myip}"
+        return 1
+      fi
+      echo "$HEADLESS_SERVICE has my IP: ${myip}"
+      return 0
+    }
 
     HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
+    # Waits for DNS to add this ip to the service DNS entry
+    retry_while not_exists_dns_entry
 
     export REDIS_REPLICATION_MODE="slave"
     if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
@@ -137,6 +164,7 @@ data:
 
   start-sentinel.sh: |
     #!/bin/bash
+    set -x
     replace_in_file() {
         local filename="${1:?filename is required}"
         local match_regex="${2:?match regex is required}"
@@ -184,6 +212,28 @@ data:
     host_id() {
       echo "$1" | openssl sha1 | awk '{print $2}'
     }
+    retry_while() {
+        local cmd="${1:?cmd is missing}"
+        local retries="${2:-12}"
+        local sleep_time="${3:-5}"
+        local return_value=1
+        read -r -a command <<< "$cmd"
+        for ((i = 1 ; i <= retries ; i+=1 )); do
+            "${command[@]}" && return_value=0 && break
+            sleep "$sleep_time"
+        done
+        return $return_value
+    }
+    not_exists_dns_entry() {
+      myip=$(hostname -i)
+
+      if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
+        echo "$HEADLESS_SERVICE is not resolving or not has my IP: ${myip}"
+        return 1
+      fi
+      echo "$HEADLESS_SERVICE has my IP: ${myip}"
+      return 0
+    }
 
     HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
@@ -207,16 +257,32 @@ data:
     fi
 
     export REDIS_REPLICATION_MODE="slave"
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
+
+    # Waits for DNS to add this ip to the service DNS entry
+    retry_while not_exists_dns_entry
+
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)")" ]]; then
       export REDIS_REPLICATION_MODE="master"
     fi
+
+    # Clean sentineles from the current sentinel nodes
+    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)" | cut -f 1 -d ' ' | uniq ); do
+      echo "Cleaning sentinels in sentinel node: $node"
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*" 
+      else
+        redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} sentinel reset "*"
+      fi
+      sleep {{ .Values.sentinel.cleanWait }}
+    done
+    echo "Sentinels clean up done"
 
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
       REDIS_MASTER_HOST="$(hostname -i)"
       REDIS_MASTER_PORT_NUMBER="{{ .Values.redisPort }}"
     else
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-namesentinel reset "*" {{ .Values.sentinel.masterSet }}"
       else
         sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
       fi
