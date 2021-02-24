@@ -282,7 +282,7 @@ Usage:
 {{ include "thanos.receive.config" . }}
 */}}
 {{- define "thanos.receive.config" -}}
-{{- if (not .Values.receive.config) -}}
+{{- if not .Values.receive.config -}}
 {{- if .Values.receive.service.additionalHeadless -}}
 {{- $count := int .Values.receive.replicaCount -}}
 {{- $endpoints_dict := dict "endpoints" (list)  -}}

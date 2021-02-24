@@ -59,7 +59,7 @@ clusterDomain: cluster.local
 ## Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
-existingObjstoreSecret: s3
+# existingObjstoreSecret:
 ##  optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 # existingObjstoreSecretItems: []
 
