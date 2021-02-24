@@ -12,7 +12,6 @@ data:
 {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
   start-node.sh: |
     #!/bin/bash
-    set -x
 
     is_boolean_yes() {
         local -r bool="${1:-}"
@@ -164,7 +163,7 @@ data:
 
   start-sentinel.sh: |
     #!/bin/bash
-    set -x
+
     replace_in_file() {
         local filename="${1:?filename is required}"
         local match_regex="${2:?match regex is required}"
