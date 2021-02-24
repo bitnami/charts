@@ -127,7 +127,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r18
+    tag: 1.19.7-debian-10-r1
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -198,6 +198,13 @@ frontend:
   ## Some K8s distributions such as GKE requires it
   ##
   proxypassAccessTokenAsBearer: false
+
+  ## Set an additional proxy header for all requests proxied via NGINX to the kubeops backend.
+  ## Authorization header(s) set in this way will be included with the request from kubeops to the
+  ## k8s service API URL.
+  ## Ref: https://github.com/kubeapps/kubeapps/blob/7e31d0e7241f826aa365856c134cf901d40890e7/pkg/http-handler/http-handler.go#L247
+  # proxypassExtraSetHeader: Authorization "Bearer $cookie_sessionid";
+
   ## Set large_client_header_buffers in nginx config
   ## Can be required when using OIDC or LDAP due to large cookies
   #
@@ -219,7 +226,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.1.0-scratch-r0
+    tag: 2.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -231,7 +238,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.1.0-scratch-r0
+    tag: 2.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -262,7 +269,12 @@ apprepository:
   #   caCert:
   #   # Create this apprepository in a custom namespace
   #   namespace:
-  # https://github.com/kubeapps/kubeapps/issues/478#issuecomment-422979262
+  #   # In case of an OCI registry, specify the type
+  #   type: oci
+  #   # And specify the list of repositories
+  #   ociRepositories:
+  #   - nginx
+  #   - jenkins
   ## AppRepository Controller containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -303,7 +315,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.14-debian-10-r12
+    tag: 1.18.16-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -328,7 +340,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.1.0-scratch-r0
+    tag: 2.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -372,7 +384,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.1.0-scratch-r0
+    tag: 2.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -437,7 +449,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.1.0-debian-10-r0
+    tag: 2.2.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -496,6 +508,13 @@ dashboard:
   ##      background-color: #991700;
   ##    }
   customStyle: ""
+  ## Custom translations injected to the Dashboard to customize the strings used in Kubeapps
+  ## Ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
+  ## e.g:
+  ## customLocale:
+  ##   "Kubeapps": "My Dashboard"
+  ##   "login-oidc": "Login with my company SSO"
+  customLocale: ""
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -547,7 +566,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.6-debian-10-r18
+  tag: 1.19.7-debian-10-r1
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -579,7 +598,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 6.1.1-debian-10-r113
+    tag: 7.0.1-debian-10-r5
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

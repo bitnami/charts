@@ -176,6 +176,13 @@ apprepo-{{ .name }}-secrets
 {{- end -}}
 
 {{/*
+Create name for the secrets related to oauth2_proxy
+*/}}
+{{- define "kubeapps.oauth2_proxy-secret.name" -}}
+{{ template "kubeapps.fullname" . }}-oauth2
+{{- end -}}
+
+{{/*
 Create name for pinniped-proxy based on the fullname.
 Currently used for a service name only.
 */}}

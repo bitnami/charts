@@ -85,7 +85,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `heapOpts`                                | Kafka's Java Heap size                                                                                                                               | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                       | Switch to enable topic deletion or not                                                                                                               | `false`                                                 |
 | `autoCreateTopicsEnable`                  | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments                    | `false`                                                 |
-| `logFlushIntervalMessages`                | The number of messages to accept before forcing a flush of data to disk                                                                              | `10000`                                                 |
+| `logFlushIntervalMessages`                | The number of messages to accept before forcing a flush of data to disk                                                                              | `_10000`                                                 |
 | `logFlushIntervalMs`                      | The maximum amount of time a message can sit in a log before we force a flush                                                                        | `1000`                                                  |
 | `logRetentionBytes`                       | A size-based retention policy for logs                                                                                                               | `_1073741824`                                           |
 | `logRetentionCheckIntervalMs`             | The interval at which log segments are checked to see if they can be deleted                                                                         | `300000`                                                |
@@ -376,8 +376,8 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
 
 If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
- - `auth.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.jksPassword` 
- - `auth.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`). 
+ - `auth.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.jksPassword`
+ - `auth.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
  - `auth.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.jksSecret` with the `auth.jksKeystoreSAN`-value and use this as a keystore for **all** brokers
 > **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.jksPassword`
 
