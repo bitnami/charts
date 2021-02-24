@@ -937,6 +937,10 @@ prometheus:
       ##
       tls: {}
 
+  ## Port name used for the pods and governing service. This defaults to web
+  ##
+  portName: web
+
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
@@ -1310,6 +1314,15 @@ alertmanager:
   ## AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster.
   ##
   additionalPeers: []
+
+  ## Prefix used to register routes, overriding externalUrl route.
+  ## Useful for proxies that rewrite URLs.
+  ##
+  routePrefix: /
+
+  ## Port name used for the pods and governing service. This defaults to web
+  ##
+  portName: web
 
 ## Exporters
 ##

@@ -417,7 +417,7 @@ git.plugins.repositories[0].path=plugins
 
 ### Existing Secrets
 
-You can use an existing secret to configure your Airflow auth, external Postgres, and extern Redis<sup>TM</sup> passwords:
+You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis<sup>TM</sup> passwords:
 
 ```console
 postgresql.enabled=false
