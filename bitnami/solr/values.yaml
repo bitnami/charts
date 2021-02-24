@@ -64,7 +64,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.8.0-debian-10-r11
+  tag: 8.8.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -333,8 +333,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -434,7 +434,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/solr
-    tag: 8.8.0-debian-10-r10
+    tag: 8.8.0-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

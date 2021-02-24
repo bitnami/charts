@@ -58,9 +58,6 @@ spec:
         - name: auth-proxy
           args:
             - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
-            - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
-            - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
-            - --cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
             - --upstream=http://localhost:8080/
             - --http-address=0.0.0.0:3000
             - --email-domain={{ .Values.authProxy.emailDomain }}
@@ -79,6 +76,22 @@ spec:
             {{- end }}
           image: {{ template "kubeapps.image" (list .Values.authProxy.image .Values.global) }}
           imagePullPolicy: {{ .Values.authProxy.image.pullPolicy | quote }}
+          env:
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientID
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientSecret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: cookieSecret
           ports:
             - name: proxy
               containerPort: 3000

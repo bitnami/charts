@@ -15,10 +15,11 @@ spec:
   {{- if index .Values.alertmanager "externalUrl" }}
   externalUrl: "{{ .Values.alertmanager.externalUrl }}"
   {{- else if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}
-  externalUrl: {{ if .Values.alertmanager.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.alertmanager.ingress.hosts 0).name }}/
+  externalUrl: {{ if .Values.alertmanager.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.alertmanager.ingress.hosts 0).name }}{{ .Values.alertmanager.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.alertmanager.service.port }}
+  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.alertmanager.service.port }}{{ .Values.alertmanager.routePrefix }}
   {{- end }}
+  portName: "{{ .Values.alertmanager.portName }}"
   paused: {{ .Values.alertmanager.paused }}
   logFormat: {{ .Values.alertmanager.logFormat }}
   logLevel: {{ .Values.alertmanager.logLevel }}
@@ -30,7 +31,7 @@ spec:
   configMaps: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configMaps "context" $) | nindent 4 }}
   {{- end }}
   resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
-  routePrefix: "/"
+  routePrefix: "{{ .Values.alertmanager.routePrefix }}"
   {{- if .Values.alertmanager.securityContext.enabled }}
   securityContext:
     runAsUser: {{ .Values.alertmanager.securityContext.runAsUser }}

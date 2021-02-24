@@ -208,6 +208,8 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -445,6 +447,8 @@ spec:
         - name: sentinel-tmp-conf
           emptyDir: {}
         - name: redis-tmp-conf
+          emptyDir: {}
+        - name: tmp
           emptyDir: {}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
