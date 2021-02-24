@@ -39,8 +39,8 @@ data:
       myip=$(hostname -i)
 
       if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-        echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-        return 1
+          echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          return 1
       fi
       echo "$HEADLESS_SERVICE has my IP: ${myip}"
       return 0
@@ -227,8 +227,8 @@ data:
       myip=$(hostname -i)
 
       if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-        echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-        return 1
+          echo "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          return 1
       fi
       echo "$HEADLESS_SERVICE has my IP: ${myip}"
       return 0
