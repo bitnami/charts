@@ -78,7 +78,7 @@ kafka:
     ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
     ##
     kafka:
-      enabled: '{{ .Values.wavefront.enabled }}'
+      enabled: false
       ## Prometheus Kafka Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
       ##
@@ -97,7 +97,7 @@ kafka:
     ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
     ##
     jmx:
-      enabled: '{{ .Values.wavefront.enabled }}'
+      enabled: false
       ## Prometheus JMX Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
       ##
@@ -181,7 +181,7 @@ spark:
   ## Metrics configuration
   ##
   metrics:
-    enabled: '{{ .Values.wavefront.enabled }}'
+    enabled: false
     ## Annotations for the Prometheus metrics on master nodes
     ##
     masterAnnotations:
@@ -231,7 +231,7 @@ solr:
   ## Configuration for the solr prometheus exporter
   ##
   exporter:
-    enabled: '{{ .Values.wavefront.enabled }}'
+    enabled: false
     ## Solr exporter port
     ##
     port: 9983
