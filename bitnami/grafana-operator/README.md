@@ -46,9 +46,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
-In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
+In the Bitnami catalog we offer both the *bitnami/grafana* and *bitnami/grafana-operator* charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation (with grafana-image-renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The *bitnami/grafana* chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
 ```
                     +--------------+             +-----+
@@ -85,8 +85,7 @@ The *bitnami/grafana-operator* chart deploys a Grafana Operator installation usi
             +-----------------+
 ```
 
-The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboards* and *GrafanaDataSources*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after
- deploying a *Grafana* object using *kubectl*:
+The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboards* and *GrafanaDataSources*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a *Grafana* object using *kubectl*:
 
 ```
 +--------------------+
@@ -125,7 +124,7 @@ The operator will extend the Kubernetes API with the following objects: *Grafana
 
 ```
 
-This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy mulitple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
 ## Parameters
 
@@ -140,12 +139,13 @@ The following tables list the configurable parameters of the grafana-operator ch
 
 ### Common parameters
 
-| Parameter           | Description                                                                                               | Default |
-|---------------------|-----------------------------------------------------------------------------------------------------------|---------|
-| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`   |
-| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil`   |
-| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`    |
-| `commonLabels`      | Common Labels which are applied to every ressource deployed                                               | `{}`    |
+| Parameter           | Description                                                                                               | Default                        |
+|---------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil`                          |
+| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`                           |
+| `commonLabels`      | Common Labels which are applied to every ressource deployed                                               | `{}`                           |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]` (evaluated as a template) |
 
 ### Grafana Operator parameters
 
@@ -200,6 +200,7 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `operator.prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                  | `""`                                                    |
 | `operator.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                            | `[]`                                                    |
 | `operator.prometheus.serviceMonitor.relabelings`       | Specify general relabeling                                                                          | `[]`                                                    |
+
 ### Grafana parameters
 
 | Parameter                                                   | Description                                                                                   | Default                                                 |
@@ -212,8 +213,8 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                   | `[]`                                                    |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                                                     |
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`                                                  |
-| `grafana.adminUsername`                                      | Set Grafana instance admin username                                                        | ``                                                     |
-| `grafana.adminPassword`                                      | Set Grafana instance admin password                                                        | ``                                                     |
+| `grafana.adminUsername`                                     | Set Grafana instance admin username                                                           | `""`                                                    |
+| `grafana.adminPassword`                                     | Set Grafana instance admin password                                                           | `""`                                                    |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                                                     |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`                                                 |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`                                         |
@@ -282,7 +283,15 @@ $ helm install my-release \
   --set livenessProbe.successThreshold=5 \
     bitnami/grafana-operator
 ```
+
 The above command sets the `livenessProbe.successThreshold` to `5`.
+
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+
+```bash
+$ helm install my-release -f values.yaml bitnami/grafana-operator
+```
+
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
@@ -296,6 +305,48 @@ Bitnami will release a new chart updating its containers if a new version of the
 After the installation you can create your Dashboards under a CRD of your kubernetes cluster.
 
 For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such your custom *Grafana*, *GrafanaDashboards* or *GrafanaDataSource* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+For instance, to deploy your custom *Grafana* definition, you can install the Grafana Operator using the values below:
+
+```yaml
+grafana:
+  enabled: false
+extraDeploy:
+  - apiVersion: integreatly.org/v1alpha1
+    baseImage: docker.io/bitnami/grafana:7
+    kind: Grafana
+    metadata:
+      name: grafana
+    spec:
+      deployment:
+        securityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+        containerSecurityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+          allowPrivilegeEscalation: false
+      service:
+        type: LoadBalancer
+      ingress:
+        enabled: false
+      config:
+        log:
+          mode: "console"
+          level: "warn"
+        security:
+          admin_user: "admin"
+          admin_password: "hello"
+        auth.anonymous:
+          enabled: true
+      dashboardLabelSelector:
+        - matchExpressions:
+            - { key: app, operator: In, values: [grafana] }
+```
 
 ## Troubleshooting
 
