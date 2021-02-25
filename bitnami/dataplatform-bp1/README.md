@@ -169,6 +169,23 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes   | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
 | `spark.metrics.resources.requests` | The requested resources for the metrics exporter container  | Spark exporter container resource requests for optimal resource usage size|
 
+### Wavefront chart parameters
+
+| Parameter                                  | Description                                                                                                            | Default                                                 |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `wavefront.enabled`                        | Switch to enable or disable the Wavefront helm chart                                                                   | `true`                                                  |
+| `wavefront.clusterName`                    | Unique name for the Kubernetes cluster (required)                                                                      | `KUBERNETES_CLUSTER_NAME`                               |
+| `wavefront.wavefront.url`                  | Wavefront URL for your cluster (required)                                                                              | `https://YOUR_CLUSTER.wavefront.com`                    |
+| `wavefront.wavefront.token`                | Wavefront API Token (required)                                                                                         | `YOUR_API_TOKEN`                                        |
+| `wavefront.wavefront.existingSecret`       | Name of an existing secret containing the token                                                                        | `nil`                                                   |
+| `wavefront.collector.discovery.enabled`    | Rules based and Prometheus endpoints auto-discovery                                                                    | `true`                                                  |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                               | `true`                                                 |
+| `wavefront.collector.discovery.config`     | Configuration for rules based auto-discovery                                                                           | Data Platform components pods discovery config                                                   |
+| `wavefront.collector.resources.limits`     | The resources limits for the collector container                                                                       | `{}`                                                    |
+| `wavefront.collector.resources.requests`   | The requested resources for the collector container                                                                    | Collectors pods resource requests for optimal resource usage size                       |
+| `wavefront.proxy.resources.limits`         | The resources limits for the proxy container                                                                           | `{}`                                                    |
+| `wavefront.proxy.resources.requests`       | The requested resources for the proxy container                                                                        | Proxy pods resource resource requests for optimal resource usage size                                |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console

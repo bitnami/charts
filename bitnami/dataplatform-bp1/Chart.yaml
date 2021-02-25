@@ -39,7 +39,7 @@ keywords:
   - solr
   - zookeeper
   - wavefront
-  - obesrvability
+  - observability
   - apache
 maintainers:
   - email: containers@bitnami.com
