@@ -407,7 +407,7 @@ triggerLoopOnEvent: false
 ##
 interval: "1m"
 ## Verbosity of the ExternalDNS logs. Available values are:
-## - panic, debug, info, warn, error, fatal
+## - panic, debug, info, warning, error, fatal, trace
 ##
 logLevel: info
 ## Formats of the ExternalDNS logs. Available values are:
