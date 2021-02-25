@@ -418,6 +418,12 @@ grafana:
       #   # allowed_domains: example.com
       #   allow_sign_up: True
 
+  # Mounting extra files into the Grafana Pod 
+  # Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
+  confiMaps: {}
+  # - ldap-config
+  secrets: {}
+
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
