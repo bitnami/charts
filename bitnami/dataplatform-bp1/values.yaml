@@ -283,9 +283,9 @@ wavefront:
   ## as well as auto-discovery capabilities.
   ##
   collector:
-  ## Rules based discovery configuration
-  ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
-  ##
+    ## Rules based discovery configuration
+    ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
+    ##
     resources:
       limits: {}
       requests:
