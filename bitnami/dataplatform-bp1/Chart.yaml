@@ -22,6 +22,7 @@ dependencies:
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
