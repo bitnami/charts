@@ -302,6 +302,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.service.createMaster}}
+            - name: kubectl
+              mountPath: /opt/bitnami/common/bin/kubectl
+            {{- end }}
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -370,8 +374,19 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
   {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled .Values.containerSecurityContext.enabled }}
-      {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
+      {{- if or $needsVolumePermissions (or .Values.sysctlImage.enabled .Values.sentinel.service.createMaster) }}
       initContainers:
+        {{- if .Values.sentinel.service.createMaster }}
+        - name: kubectl
+          image: bitnami/kubectl
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: kubectl
+              mountPath: /kubectl
+        {{- end }}
         {{- if $needsVolumePermissions }}
         - name: volume-permissions
           image: {{ template "redis.volumePermissions.image" . }}
@@ -421,6 +436,10 @@ spec:
           configMap:
             name: {{ template "redis.fullname" . }}-health
             defaultMode: 0755
+        {{- if .Values.sentinel.service.createMaster}}
+        - name: kubectl
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.usePasswordFile }}
         - name: redis-password
           secret:

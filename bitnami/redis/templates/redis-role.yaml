@@ -16,6 +16,11 @@ rules:
     verbs: ['use']
     resourceNames: [{{ template "redis.fullname" . }}]
 {{- end -}}
+{{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list", "patch"]
+{{- end -}}
 {{- if .Values.rbac.role.rules }}
 {{- toYaml .Values.rbac.role.rules | nindent 2 }}
 {{- end -}}

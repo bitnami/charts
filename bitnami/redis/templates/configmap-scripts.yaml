@@ -224,6 +224,10 @@ data:
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
       REDIS_MASTER_HOST="$(hostname -i)"
       REDIS_MASTER_PORT_NUMBER="{{ .Values.redisPort }}"
+  {{- if .Values.sentinel.service.createMaster }}
+      # Add isMaster label to master node for master service.
+      /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$REDIS_MASTER_HOST isMaster="true" --overwrite
+  {{- end }}
     else
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
         sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
@@ -290,6 +294,17 @@ data:
     {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+  {{- if .Values.sentinel.service.createMaster}}
+  update-master-label.sh: |
+    #!/bin/sh
+    # The following arguments are passed to the script:
+    #
+    # <master-name> <role> <state> <from-ip> <from-port> <to-ip> <to-port>
+    # $1            $2     $3      $4        $5          $6      $7
+
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$6 isMaster="true" --overwrite
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$4 isMaster="false" --overwrite
+  {{- end }}
 {{- else }}
   start-master.sh: |
     #!/bin/bash

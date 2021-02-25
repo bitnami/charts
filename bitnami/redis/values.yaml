@@ -151,6 +151,12 @@ sentinel:
     labels: {}
     loadBalancerIP:
 
+    ## Create master service pointing to the current master. This is useful when
+    ## Redis(TM) clients are not able to use sentinel, such as clients outside of
+    ## the Kubernetes Cluster.
+    ##
+    createMaster: false
+
   ## Additional commands to run prior to starting Redis(TM) node with sentinel
   ##
   preExecCmds: ""
