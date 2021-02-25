@@ -31,6 +31,7 @@ dependencies:
 description: OCTO Data platform Kafka-Spark-Solr Helm Chart
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp1
+icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
 keywords:
   - dataplatform
   - kafka
