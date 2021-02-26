@@ -422,7 +422,8 @@ grafana:
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ##
   confiMaps: {}
-  # - ldap-config
+  #  - myCustomConfigMap
+  #
   secrets: {}
 
   ## Configuring the read for jsonnetLibraries to pull in.
