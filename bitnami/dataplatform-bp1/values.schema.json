@@ -59,7 +59,7 @@
       "title": "Solr Metrics Details",
       "form": true,
       "properties": {
-        "metrics": {
+        "exporter": {
           "type": "object",
           "properties": {
             "enabled": {
