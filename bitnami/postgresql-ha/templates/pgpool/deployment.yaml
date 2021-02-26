@@ -59,6 +59,9 @@ spec:
       {{- if .Values.pgpool.securityContext.enabled }}
       securityContext: {{- omit .Values.pgpool.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      {{- end }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
         - name: init-chmod-data

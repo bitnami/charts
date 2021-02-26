@@ -118,6 +118,14 @@ metricsImage:
 ##
 clusterDomain: cluster.local
 
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  enabled: false
+  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  # name:
+
 ## Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
