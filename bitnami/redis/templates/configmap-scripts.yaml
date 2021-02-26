@@ -290,6 +290,33 @@ data:
     {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+  prestop-sentinel.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    REDIS_SERVICE="{{ include "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
+    if [[ -n "$REDIS_PASSWORD_FILE" ]]; then
+      password_aux=$(cat "$REDIS_PASSWORD_FILE")
+      export REDIS_PASSWORD="$password_aux"
+    fi
+
+    if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    else
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    fi
+    REDIS_SENTINEL_INFO=($($sentinel_info_command))
+    REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+
+    if [[ "$REDIS_MASTER_HOST" == "$(hostname -i)" ]]; then
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel failover mymaster
+      else
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} sentinel failover mymaster
+      fi
+    fi
 {{- else }}
   start-master.sh: |
     #!/bin/bash
