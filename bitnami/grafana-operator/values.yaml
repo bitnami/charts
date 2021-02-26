@@ -15,6 +15,10 @@
 ##
 # fullnameOverride:
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -222,12 +226,12 @@ grafana:
   ## Grafana admin username
   ## Ref: https://github.com/bitnami/charts/blob/master/bitnami/grafana-operator/crds/grafanas.yaml#L40
   ##
-  adminUsername:
+  adminUsername: ""
 
   ## Grafana admin password (plain text)
   ## Ref: https://github.com/bitnami/charts/blob/master/bitnami/grafana-operator/crds/grafanas.yaml#L43
   ##
-  adminPassword:
+  adminPassword: ""
 
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container

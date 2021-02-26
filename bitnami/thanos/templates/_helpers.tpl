@@ -274,11 +274,7 @@ Usage:
 {{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}
 */}}
 {{- define "thanos.receive.podFqdn" -}}
-{{- if .root.Values.receive.service.additionalHeadless -}}
-{{- printf "\"%s-receive-headless-%d.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
-{{- else -}}
-{{- printf "\"%s-receive-%d.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra .root.Release.Namespace .root.Values.clusterDomain -}}
-{{- end -}}
+{{- printf "\"%s-receive-%d.%s-receive-headless.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra (include "common.names.fullname" .root ) .root.Release.Namespace .root.Values.clusterDomain -}}
 {{- end -}}
 
 {{/* Returns a proper configuration when no config is specified
@@ -287,6 +283,7 @@ Usage:
 */}}
 {{- define "thanos.receive.config" -}}
 {{- if not .Values.receive.config -}}
+{{- if .Values.receive.service.additionalHeadless -}}
 {{- $count := int .Values.receive.replicaCount -}}
 {{- $endpoints_dict := dict "endpoints" (list)  -}}
 {{- $root := . -}}
@@ -301,6 +298,15 @@ Usage:
     ]
   }
 ]
+{{- else -}}
+[
+  {
+    "endpoints": [
+        "127.0.0.1:10901"
+    ]
+  }
+]
+{{- end -}}
 {{- else -}}
 {{- if (typeIs "string" .Values.receive.config)}}
 {{- .Values.receive.config -}}

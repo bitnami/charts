@@ -77,10 +77,10 @@ spec:
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention=15d
-            {{- if and (eq (int .Values.receive.replicaCount) (int 1)) .Values.receive.config }}
+            {{- if not .Values.receive.service.additionalHeadless }}
             - --receive.local-endpoint=127.0.0.1:10901
             {{- else }}
-            - --receive.local-endpoint=$(NAME).thanos-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            - --receive.local-endpoint=$(NAME).{{ include "common.names.fullname" . }}-receive-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
             {{- end }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
             {{- if .Values.receive.extraFlags }}
