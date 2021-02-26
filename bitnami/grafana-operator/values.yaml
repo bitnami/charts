@@ -418,7 +418,7 @@ grafana:
       #   # allowed_domains: example.com
       #   allow_sign_up: True
 
-  ## Mounting extra files into the Grafana Pod
+  ## Mount extra configmaps and secrets into the Grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ##
   confiMaps: {}
