@@ -26,4 +26,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/bitnami-docker-phpbb
   - https://www.phpbb.com/
-version: 10.1.1
+version: 10.1.2
