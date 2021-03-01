@@ -66,6 +66,9 @@ spec:
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      {{- end }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: init-chmod-data

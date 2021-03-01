@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.46-debian-10-r153
+  tag: 2.4.46-debian-10-r182
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -44,7 +44,7 @@ extraDeploy: []
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.0-debian-10-r26
+  tag: 2.30.1-debian-10-r17
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -267,7 +267,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r279
+    tag: 0.8.0-debian-10-r308
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
