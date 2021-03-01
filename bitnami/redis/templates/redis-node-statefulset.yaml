@@ -296,6 +296,13 @@ spec:
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
           volumeMounts:
             - name: start-scripts
