@@ -381,11 +381,8 @@ spec:
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectlImage.pullPolicy | quote }}
           command: {{- toYaml .Values.kubectlImage.command | nindent 12 }}
-          {{- if eq ( toString ( .Values.kubectl.securityContext.runAsUser )) "auto "}}
-          securityContext: {{- omit .Values.kubectl.securityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.kubectl.securityContext | toYaml | nindent 12 }}
-          {{- end }}
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - name: kubectl
               mountPath: /kubectl
