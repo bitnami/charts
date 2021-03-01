@@ -378,11 +378,14 @@ spec:
       initContainers:
         {{- if .Values.sentinel.service.createMaster }}
         - name: kubectl
-          image: bitnami/kubectl
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
-          securityContext:
-            runAsUser: 0
+          image: {{ template "redis.kubectl.image" . }}
+          imagePullPolicy: {{ .Values.kubectlImage.pullPolicy | quote }}
+          command: {{- toYaml .Values.kubectlImage.command | nindent 12 }}
+          {{- if eq ( toString ( .Values.kubectl.securityContext.runAsUser )) "auto "}}
+          securityContext: {{- omit .Values.kubectl.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.kubectl.securityContext | toYaml | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: kubectl
               mountPath: /kubectl

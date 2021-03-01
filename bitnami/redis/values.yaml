@@ -897,6 +897,22 @@ configmap: |-
   # Disable RDB persistence, AOF persistence already enabled.
   save ""
 
+## Kubectl InitContainer
+## used by Sentinel to update the isMaster label on the Redis(TM) pods
+##
+kubectlImage:
+  command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
+  registry: docker.io
+  repository: bitnami/kubectl
+  tag: "1.17"
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
 ## Sysctl InitContainer
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
 ##
