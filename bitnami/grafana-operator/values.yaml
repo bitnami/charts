@@ -421,7 +421,7 @@ grafana:
   ## Mount extra configmaps and secrets into the Grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ##
-  confiMaps: {}
+  configMaps: {}
   #  - myCustomConfigMap
   #
   secrets: {}
