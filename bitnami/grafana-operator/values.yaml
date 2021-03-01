@@ -424,7 +424,9 @@ grafana:
   configMaps: {}
   #  - myCustomConfigMap
   #
-  secrets: {}
+  secrets: []
+  #  - myCustomSecret
+  #
 
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
