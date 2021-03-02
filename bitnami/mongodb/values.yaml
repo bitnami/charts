@@ -857,7 +857,7 @@ serviceAccount:
   ##
   create: true
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the rabbitmq.fullname template
+  ## If not set and create is true, a name is generated using the mongodb.fullname template
   ##
   # name:
   ## Annotations for the Service Account
