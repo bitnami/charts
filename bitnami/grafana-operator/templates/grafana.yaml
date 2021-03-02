@@ -131,6 +131,12 @@ spec:
     {{- end }}
     path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
   config: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.config "context" $ ) | nindent 4 }}
+  {{- if .Values.grafana.configMaps }}
+  configMaps: {{ toYaml .Values.grafana.configMaps | nindent 4 }}
+  {{- end }}
+  {{- if .Values.grafana.secrets }}
+  secrets: {{ toYaml .Values.grafana.secrets | nindent 4 }}
+  {{- end }}
   dashboardLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardLabelSelectors "context" $ ) | nindent 4 }}
   jsonnet:
     libraryLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.jsonnetLibrarySelector "context" $ ) | nindent 6 }}

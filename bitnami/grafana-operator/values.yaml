@@ -422,6 +422,16 @@ grafana:
       #   # allowed_domains: example.com
       #   allow_sign_up: True
 
+  ## Mount extra configmaps and secrets into the Grafana pod
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
+  ##
+  configMaps: []
+  #  - myCustomConfigMap
+  #
+  secrets: []
+  #  - myCustomSecret
+  #
+
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##

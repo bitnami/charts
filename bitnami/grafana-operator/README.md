@@ -266,6 +266,8 @@ The following tables list the configurable parameters of the grafana-operator ch
 | `grafana.readinessProbe.timeoutSeconds`                     | When the probe times out                                                                      | `10`                                                    |
 | `grafana.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe to be considered successful after having failed   | `1`                                                     |
 | `grafana.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe to be considered failed after having succeeded     | `1`                                                     |
+| `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                | `[]`                                                    |
+| `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                                                    |
 
 ### PluginInit parameters
 
