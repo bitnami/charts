@@ -134,7 +134,7 @@ spec:
   {{- if .Values.grafana.configMaps }}
   configMaps: {{ toYaml .Values.grafana.configMaps | nindent 4 }}
   {{- end }}
-  {{- if .Values.grafana.configMaps }}
+  {{- if .Values.grafana.secrets }}
   secrets: {{ toYaml .Values.grafana.secrets | nindent 4 }}
   {{- end }}
   dashboardLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardLabelSelectors "context" $ ) | nindent 4 }}
