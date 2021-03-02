@@ -167,14 +167,17 @@ The following table lists the configurable parameters of the Cassandra chart and
 
 ### Persistence parameters
 
-| Parameter                  | Description                                     | Default                        |
-|----------------------------|-------------------------------------------------|--------------------------------|
-| `persistence.enabled`      | Enable Cassandra data persistence using PVC     | `true`                         |
-| `persistence.storageClass` | PVC Storage Class for Cassandra data volume     | `nil`                          |
-| `persistence.annotations`  | Persistent Volume Claim annotations Annotations | `{}` (evaluated as a template) |
-| `persistence.accessMode`   | PVC Access Mode for Cassandra data volume       | `[ReadWriteOnce]`              |
-| `persistence.size`         | PVC Storage Request for Cassandra data volume   | `8Gi`                          |
-| `persistence.mountPath`    | The path the volume will be mounted at          | `/bitnami/cassandra`           |
+| Parameter                        | Description                                         | Default                        |
+|----------------------------------|-----------------------------------------------------|--------------------------------|
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC         | `true`                         |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume         | `nil`                          |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume   | `nil`                          |
+| `persistence.annotations`        | Persistent Volume Claim annotations Annotations     | `{}` (evaluated as a template) |
+| `persistence.accessMode`         | PVC Access Mode for Cassandra data volume           | `[ReadWriteOnce]`              |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume       | `8Gi`                          |
+| `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume | `nil`                          |
+| `persistence.mountPath`          | The path the data volume will be mounted at         | `/bitnami/cassandra`           |
+| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at   | `nil`                          |
 
 ### Volume Permissions parameters
 
