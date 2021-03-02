@@ -176,7 +176,7 @@ spec:
               value: {{ template "common.names.fullname" . }}
             - name: POSTGRES_MASTER_PORT_NUMBER
               value: {{ include "postgresql.port" . | quote }}
-            {{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
+            {{- if not (eq (include "postgresql.username" .) "postgres")  }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
