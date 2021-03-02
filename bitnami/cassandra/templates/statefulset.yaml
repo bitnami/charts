@@ -4,9 +4,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -23,7 +23,7 @@ spec:
     {{- else if .Values.rollingUpdatePartition }}
     rollingUpdate:
       partition: {{ .Values.rollingUpdatePartition }}
-    {{- end }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -32,13 +32,13 @@ spec:
       {{- end }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
-        {{- if .Values.podAnnotations }}
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
-        {{- end }}
-        {{- if .Values.metrics.podAnnotations }}
-        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
-        {{- end }}
+      {{- if .Values.podAnnotations }}
+      {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.podAnnotations }}
+      {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+      {{- end }}
+    {{- end }}
     spec:
       {{- include "cassandra.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
@@ -92,6 +92,26 @@ spec:
                 xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
+            {{- if .Values.persistence.commitStorageClass }}
+            - /bin/sh
+            - -cx
+            - |
+              {{- if .Values.persistence.enabled }}
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+              {{- else }}
+              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              {{- end }}
+              mkdir -p {{ .Values.persistence.commitLogMountPath }}/commitlog
+              chmod 700 {{ .Values.persistence.commitLogMountPath }}/commitlog
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+              {{- else }}
+                xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+              {{- end }}
+              {{- end }}
+              {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
@@ -103,10 +123,14 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.persistence.commitStorageClass }}
+            - name: commitlog
+              mountPath: {{ .Values.persistence.commitLogMountPath }}
+        {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+      {{- end }}
       {{- end }}
       {{- if .Values.hostNetwork }}
       hostNetwork: true
@@ -130,7 +154,7 @@ spec:
                   export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
               fi
               /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
-            {{- end }}
+              {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
@@ -211,9 +235,13 @@ spec:
             - name: CASSANDRA_CQL_PORT_NUMBER
               value: {{ .Values.containerPorts.cql | quote }}
             {{- end }}
+            {{- if .Values.persistence.commitStorageClass }}
+            - name: CASSANDRA_COMMITLOG_DIR
+              value: {{ .Values.persistence.commitLogMountPath | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+          {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -222,7 +250,7 @@ spec:
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
-            {{- end }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -269,35 +297,39 @@ spec:
               containerPort: {{ .Values.containerPorts.intra | default "7000" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.intra }}
-              {{- end }}
+            {{- end }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.tls }}
-              {{- end }}
+            {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.jmx }}
-              {{- end }}
+            {{- end }}
             - name: cql
               containerPort: {{ .Values.containerPorts.cql | default "9042" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.cql }}
-              {{- end }}
+            {{- end }}
             {{- if .Values.cluster.enableRPC }}
             - name: thrift
               containerPort: {{ .Values.containerPorts.thrift | default "9160" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.thrift }}
-              {{- end }}
             {{- end }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.persistence.commitStorageClass }}
+            - name: commitlog
+              mountPath: {{ .Values.persistence.commitLogMountPath }}
+            {{- end }}
             {{- if .Values.tlsEncryptionSecretName }}
             - name: encryption-secrets
               mountPath: {{ .Values.persistence.mountPath }}/secrets
@@ -316,7 +348,7 @@ spec:
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "cassandra.metrics.image" . }}
@@ -339,7 +371,7 @@ spec:
               containerPort: {{ .Values.metrics.containerPorts.jmx | default "5555" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.metrics.containerPorts.jmx }}
-              {{- end }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
@@ -355,7 +387,7 @@ spec:
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
-        {{- end }}
+      {{- end }}
       volumes:
         {{- if .Values.tlsEncryptionSecretName }}
         - name: encryption-secrets
@@ -385,7 +417,7 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.persistence.enabled }}
+        {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
   {{- else }}
@@ -395,14 +427,31 @@ spec:
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
-        {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
-          {{- end }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+    {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+    {{- if .Values.persistence.commitStorageClass }}
+    - metadata:
+        name: commitlog
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
+      {{- end }}
+      spec:
+        accessModes:
+          {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.commitLogsize | quote }}
+      {{- include "cassandra.commitstorage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
   {{- end }}
