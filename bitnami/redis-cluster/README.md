@@ -151,6 +151,7 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `redis.command`                            | Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided.              | `nil`                            |
 | `redis.args`                               | Arguments for the provided command if needed                                                                       | `nil`                            |
 | `redis.schedulerName`                      | Name of an alternate scheduler                                                                                     | `nil`                            |
+| `redis.shareProcessNamespace`              | Redis pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                            | `false`                          |
 | `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes (this value is evaluated as a template)                  | `nil`                            |
 | `redis.podAffinityPreset`                  | Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                             |
 | `redis.podAntiAffinityPreset`              | Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                           |

@@ -68,6 +68,9 @@ spec:
       {{- if .Values.redis.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.redis.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.redis.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.redis.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.redis.schedulerName }}
       schedulerName: {{ .Values.redis.schedulerName | quote }}
       {{- end }}
@@ -193,7 +196,8 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.redis.livenessProbe.timeoutSeconds }}
+            # One second longer than command timeout should prevent generation of zombie processes.
+            timeoutSeconds: {{ add1 .Values.redis.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.redis.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
             exec:
@@ -208,7 +212,8 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.redis.readinessProbe.timeoutSeconds }}
+            # One second longer than command timeout should prevent generation of zombie processes.
+            timeoutSeconds: {{ add1 .Values.redis.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.redis.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
             exec:
