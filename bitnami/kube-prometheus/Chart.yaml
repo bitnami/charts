@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-prometheus
   - https://github.com/bitnami/bitnami-docker-alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 4.1.1
+version: 4.1.2

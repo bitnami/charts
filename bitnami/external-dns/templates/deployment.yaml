@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
