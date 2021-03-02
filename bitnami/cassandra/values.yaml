@@ -125,12 +125,12 @@ persistence:
     ## ref: https://github.com/bitnami/bitnami-docker-cassandra
     ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  #commitStorageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # commitStorageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
   annotations:
   ## Persistent Volume Access Mode
   ##
@@ -141,15 +141,13 @@ persistence:
   size: 8Gi
   ## Commit Log Persistent Volume size
   ##
-  #commitLogsize: 2Gi
+  # commitLogsize: 2Gi
   ## The path the volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
   ## The path the volume will be mounted at
   ##
-  #commitLogMountPath: /bitnami/cassandra/commitlog
-
-
+  # commitLogMountPath: /bitnami/cassandra/commitlog
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
