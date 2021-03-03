@@ -82,8 +82,10 @@ data:
         {{- end }}
       {{- end }}
 
+      {{- if .Values.collector.hostOSMetrics }}
       telegraf_sources:
       - plugins: []
+      {{- end }}
 
       {{- if .Values.collector.apiServerMetrics }}
       # Kubernetes API Server
