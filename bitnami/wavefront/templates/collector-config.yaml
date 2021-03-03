@@ -35,8 +35,7 @@ data:
       tags: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.tags "context" . ) | nindent 8 }}
     {{- end }}
     {{- if .Values.collector.filters }}
-      filters:
-{{ tpl (toYaml .Values.collector.filters) . | indent 8 }}
+      filters: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.filters "context" . ) | nindent 8 }}
     {{- end }}
 
     sources:
