@@ -107,6 +107,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false                            | `nil`                                     |
 | `collector.apiServerMetrics`               | Collect metrics about Kubernetes API server                                                                             | `false`                                   |
 | `collector.kubernetesState`                | Collect metrics about Kubernetes resource states                                                                        | `true`                                    |
+| `collector.filters`                        | Filters to apply towards all collected metrics                                                                          | See values.yaml                           |
 | `collector.tags`                           | Map of tags (key/value) to add to all metrics collected                                                                 | `nil`                                     |
 | `collector.events.enabled`                 | Events can also be collected and sent to Wavefront                                                                      | `false`                                   |
 | `collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery                                                                     | `true`                                    |
@@ -190,6 +191,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.zipkinPort`                  | Port for Zipkin format distributed tracing data (usually 9411)                                                         | `nil`                                     |
 | `proxy.traceSamplingRate`           | Distributed tracing data sampling rate (0 to 1)                                                                        | `nil`                                     |
 | `proxy.traceSamplingDuration`       | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                        | `nil`                                     |
+| `proxy.traceJaegerApplicationName`  | Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.      | `nil`                                     |
+| `proxy.traceZipkinApplicationName`  | Custom application name for traces received on Zipkin's traceZipkinListenerPorts.                                      | `nil`                                     |
 | `proxy.histogramPort`               | Port for histogram distribution format data (usually 40000)                                                            | `nil`                                     |
 | `proxy.histogramMinutePort`         | Port to accumulate 1-minute based histograms on Wavefront data format (usually 40001)                                  | `nil`                                     |
 | `proxy.histogramHourPort`           | Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)                                    | `nil`                                     |
