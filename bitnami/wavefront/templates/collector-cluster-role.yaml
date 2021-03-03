@@ -89,7 +89,7 @@ rules:
   - nonResourceURLs: ["/metrics"]
     verbs:
       - get
-{{- if .Values.tkgi.psp.enabled }}
+{{- if .Values.tkgi.enabled }}
 - apiGroups:
   - policy
   resources:

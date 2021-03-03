@@ -82,7 +82,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `serviceAccount.name`      | Name of Wavefront service account                                           | `nil`                                |
 | `podSecurityPolicy.create` | Create a PodSecurityPolicy resources                                        | `false`                              |
 | `projectPacific.enabled`   | Enable and create role binding for Tanzu kubernetes cluster                 | `false`                              |
-| `tkgi.psp.enabled`         | Enable and create role binding for Tanzu Kubernetes Grid Integrated Edition | `false`                              |
+| `tkgi.enabled`             | Enable and create role binding for Tanzu Kubernetes Grid Integrated Edition | `false`                              |
 
 ### Collector parameters
 
