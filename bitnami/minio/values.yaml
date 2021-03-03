@@ -311,7 +311,7 @@ tls:
   enabled: false
   ## Name of an existing secret holding the certificate information
   ##
-  secretName: tls-secret-volume
+  secretName: ""
  
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
