@@ -96,11 +96,19 @@ data:
           - 'kubernetes.node.ephemeral_storage.*'
 
       internal_stats_source:
+        {{- if .Values.collector.usePKSPrefix }}
+        prefix: pks.kubernetes.
+        {{- else }}
         prefix: kubernetes.
+        {{- end }}
 
       {{- if .Values.collector.kubernetesState }}
       kubernetes_state_source:
+        {{- if .Values.collector.usePKSPrefix }}
+        prefix: pks.kubernetes.
+        {{- else }}
         prefix: kubernetes.
+        {{- end }}
       {{- end }}
 
       telegraf_sources:
