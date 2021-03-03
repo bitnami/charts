@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/solr --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
+$ helm install my-release bitnami/solr
 ```
 
 ## Introduction
@@ -24,16 +24,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-This chart requires a Elasticsearch instance to work. You can use an already existing Elasticsearch instance.
-
  To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release \
-  --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
-  --set elasticsearch.port=<port of your ES instance> \
-  bitnami/solr
+$ helm install my-release bitnami/solr
 ```
 
 These commands deploy Solr on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
