@@ -308,7 +308,7 @@ readinessProbe:
 tls:
   ## If true, mount an existing secret to the container
   ## 
-	enabled: false
+  enabled: false
   ## Name of an existing secret holding the certificate information
   ##
   secretName: tls-secret-volume
