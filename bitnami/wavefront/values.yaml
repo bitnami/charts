@@ -178,10 +178,10 @@ collector:
   #     type: telegraf/mongodb
   #     selectors:
   #       images:
-  #       - '*mongodb:*'
+  #       - '*mongo:*'
   #     port: 27017
   #     conf: |
-  #       servers = ["mongodb://USER:PASSWORD${host}:${port}"]
+  #       servers = ["mongodb://USER:PASSWORD@${host}:${port}"]
   #       gather_perdb_stats = true
   #     filters:
   #       metricBlacklist:
