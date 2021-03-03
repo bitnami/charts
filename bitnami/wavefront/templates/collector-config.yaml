@@ -85,7 +85,11 @@ data:
         useServiceAccount: false
         {{- end }}
         insecure: true
+        {{- if .Values.collector.usePKSPrefix }}
+        prefix: pks.kubernetes.
+        {{- else }}
         prefix: kubernetes.
+        {{- end }}
         filters:
           metricBlacklist:
           - 'kubernetes.sys_container.*'

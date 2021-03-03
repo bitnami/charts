@@ -94,6 +94,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.image.pullPolicy`               | Image pull policy                                                                                                       | `IfNotPresent`                            |
 | `collector.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                        | `nil`                                     |
 | `collector.useDaemonset`                   | Use Wavefront collector in Daemonset mode                                                                               | `true`                                    |
+| `collector.usePKSPrefix`                   | (TKGi only) Prefix metrics with 'pks.kubernetes.'                                                                       | `false`                                   |
 | `collector.hostAliases`                    | Add deployment host aliases                                                                                             | `[]`                                      |
 | `collector.maxProx`                        | Max number of CPU cores that can be used (< 1 for default)                                                              | `0`                                       |
 | `collector.logLevel`                       | Min logging level (info, debug, trace)                                                                                  | `info`                                    |

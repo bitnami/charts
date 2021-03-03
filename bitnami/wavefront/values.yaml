@@ -67,6 +67,10 @@ collector:
   ##
   useDaemonset: true
 
+  ## If installing into a TKGi/PKS environment, set this to true
+  ##
+  # usePKSPrefix: false
+
   ## max number of CPUs that can be used simultaneously. Less than 1 for default (number of cores)
   ##
   # maxProcs: 0
