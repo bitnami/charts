@@ -41,7 +41,7 @@ The "Small" size data platform in default configuration deploys the following:
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
 
-One can optionally deploy the data platform with the wavefront observability framework in which case the wavefront collectors will be set up as a DaemonSet to collect the kubernetes cluster metrics to enable runtime feed into Tanzu Observability service. It will also be pre-configured to scrape the metrics from the prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
+The data platform can be optionally deployed with the wavefront observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
