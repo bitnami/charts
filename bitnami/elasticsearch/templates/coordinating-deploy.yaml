@@ -33,6 +33,9 @@ spec:
       {{- if .Values.coordinating.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.coordinating.schedulerName }}
+      schedulerName: {{ .Values.coordinating.schedulerName }}
+      {{- end }}
       {{- if .Values.coordinating.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
       {{- else }}

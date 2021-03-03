@@ -46,6 +46,9 @@ spec:
       {{- if .Values.data.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.data.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.data.schedulerName }}
+      schedulerName: {{ .Values.data.schedulerName }}
+      {{- end }}
       {{- if .Values.data.nodeSelector }}
       nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.data.nodeSelector "context" $) | nindent 8 }}
       {{- end }}

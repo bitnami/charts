@@ -29,6 +29,9 @@ spec:
       {{- if .Values.metrics.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.schedulerName }}
+      schedulerName: {{ .Values.metrics.schedulerName }}
+      {{- end }}
       containers:
         - name: metrics
           image: {{ include "elasticsearch.metrics.image" . }}
