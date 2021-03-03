@@ -477,6 +477,10 @@ persistence:
     ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
     ##
     selector:
+    ## Override the requests attribute
+    ## Sometime cloud providers use additional requests attributes to provision custom storage instance
+    ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
+    requests:
 
 ## Service parameters
 ##
