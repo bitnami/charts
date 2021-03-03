@@ -698,3 +698,11 @@ kube-state-metrics:
 ##
 projectPacific:
   enabled: false
+
+## Properties for TKGI environments
+##
+tkgi:
+  psp:
+    ## If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster.
+    ##
+    enabled: false

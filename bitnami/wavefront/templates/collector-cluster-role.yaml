@@ -87,4 +87,14 @@ rules:
   - nonResourceURLs: ["/metrics"]
     verbs:
       - get
+{{- if .Values.tkgi.psp.enabled }}
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+  resourceNames:
+  - pks-privileged
+{{- end }}
 {{- end }}

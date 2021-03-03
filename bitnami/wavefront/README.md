@@ -68,20 +68,21 @@ The following table lists the configurable parameters of the Wavefront chart and
 
 ### Common parameters
 
-| Parameter                  | Description                                                 | Default                              |
-|----------------------------|-------------------------------------------------------------|--------------------------------------|
-| `clusterName`              | Unique name for the Kubernetes cluster (required)           | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`            | Wavefront URL for your cluster (required)                   | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`          | Wavefront API Token (required)                              | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token             | `nil`                                |
-| `commonLabels`             | Labels to add to all deployed objects                       | `{}`                                 |
-| `commonAnnotations`        | Annotations to add to all deployed objects                  | `{}`                                 |
-| `extraDeploy`              | Array of extra objects to deploy with the release           | `[]` (evaluated as a template)       |
-| `rbac.create`              | Create RBAC resources                                       | `true`                               |
-| `serviceAccount.create`    | Create Wavefront service account                            | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                           | `nil`                                |
-| `podSecurityPolicy.create` | Create a PodSecurityPolicy resources                        | `false`                              |
-| `projectPacific.enabled`   | Enable and create role binding for Tanzu kubernetes cluster | `false`                              |
+| Parameter                  | Description                                                                 | Default                              |
+|----------------------------|-----------------------------------------------------------------------------|--------------------------------------|
+| `clusterName`              | Unique name for the Kubernetes cluster (required)                           | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.url`            | Wavefront URL for your cluster (required)                                   | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`          | Wavefront API Token (required)                                              | `YOUR_API_TOKEN`                     |
+| `wavefront.existingSecret` | Name of an existing secret containing the token                             | `nil`                                |
+| `commonLabels`             | Labels to add to all deployed objects                                       | `{}`                                 |
+| `commonAnnotations`        | Annotations to add to all deployed objects                                  | `{}`                                 |
+| `extraDeploy`              | Array of extra objects to deploy with the release                           | `[]` (evaluated as a template)       |
+| `rbac.create`              | Create RBAC resources                                                       | `true`                               |
+| `serviceAccount.create`    | Create Wavefront service account                                            | `true`                               |
+| `serviceAccount.name`      | Name of Wavefront service account                                           | `nil`                                |
+| `podSecurityPolicy.create` | Create a PodSecurityPolicy resources                                        | `false`                              |
+| `projectPacific.enabled`   | Enable and create role binding for Tanzu kubernetes cluster                 | `false`                              |
+| `tkgi.psp.enabled`         | Enable and create role binding for Tanzu Kubernetes Grid Integrated Edition | `false`                              |
 
 ### Collector parameters
 
