@@ -53,19 +53,6 @@ spec:
       hosts:
         - {{ .Values.ingress.hosts.core }}
       {{- end }}
-    {{- if .Values.notary.enabled }}
-    {{- if .Values.service.tls.notaryExistingSecret }}
-    - secretName: {{ .Values.service.tls.notaryExistingSecret | quote }}
-    {{- else if .Values.service.tls.existingSecret }}
-    - secretName: {{ .Values.service.tls.existingSecret | quote }}
-    {{- else }}
-    - secretName: {{ include "harbor.ingress" . | quote }}
-    {{- end }}
-      {{- if .Values.ingress.hosts.notary }}
-      hosts:
-        - {{ .Values.ingress.hosts.notary }}
-      {{- end }}
-    {{- end }}
   {{- end }}
   {{- if eq .Values.ingress.controller "ncp" }}
   backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.portal" .) "servicePort" "http" "context" $) | nindent 4 }}

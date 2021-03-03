@@ -1,7 +1,7 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 2.6.0
+appVersion: 2.6.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -20,6 +20,9 @@ description: A Helm chart for deploying Discourse to Kubernetes
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+keywords:
+  - community
+  - forum
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -32,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 2.1.3
+version: 2.3.1

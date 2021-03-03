@@ -11,7 +11,7 @@ dependencies:
 description: An open-source, cloud-native messaging system
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/nats
-icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-220x234.png
 keywords:
   - nats
   - messaging
@@ -24,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 6.1.1
+version: 6.2.1

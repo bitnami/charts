@@ -81,6 +81,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`                                          |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                                                 |
+| `hostAliases`        | Add deployment host aliases                                          | `[]`                                                    |
 | `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
 | `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
 | `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                                                    |
@@ -121,7 +122,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `extraVolumes`              | Array to add extra volumes                                                                | `[]` (evaluated as a template) |
 | `extraVolumeMounts`         | Array to add extra mount                                                                  | `[]` (evaluated as a template) |
 | `sidecars`                  | Attach additional containers to nginx pods                                                | `nil`                          |
-| `initContainers`       | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
+| `initContainers`            | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
 
 ### Custom NGINX application parameters
 
@@ -295,11 +296,85 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
 
+```
+                ┌────────────────┐           ┌────────────────┐           ┌────────────────┐
+                │     NGINX      │  ----->   │     NGINX      │  ----->   │      LDAP      │
+                │     server     │  <-----   |  ldap daemon   │  <-----   |     server     │
+                └────────────────┘           └────────────────┘           └────────────────┘
+
+```
+
 In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
 
-1. Use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block that will make NGINX such a proxy (see `values.yaml`). Alternatively, you can provide this configuration using an external Secret and the property `ldapDaemon.existingNginxServerBlockSecret`.
+1. NGINX server needs to be configured to be self-aware of the proxy. In order to do so, use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block, that will instruct NGINX to use it (see `values.yaml`). Alternatively, you can specify this server block configuration using an external Secret using the property `ldapDaemon.existingNginxServerBlockSecret`.
 
-2. Complete the aforementioned server block by specifying your LDAP Server connection details (see `values.yaml`). Alternatively, you can declare them using the property `ldapDaemon.ldapConfig`.
+2. Supply your LDAP Server connection details either in the aforementioned server block (setting request headers) or specifying them in `ldapDaemon.ldapConfig`. e.g. The following two approaches are equivalent:
+
+_Approach A) Specify connection details using the `ldapDaemon.ldapConfig` property_
+
+```yaml
+ldapDaemon:
+  enabled: true
+  ldapConfig:
+    uri: "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT"
+    baseDN: "dc=example,dc=org"
+    bindDN: "cn=admin,dc=example,dc=org"
+    bindPassword: "adminpassword"
+
+  nginxServerBlock: |-
+    server {
+    listen 0.0.0.0:{{ .Values.containerPorts.http }};
+
+    # You can provide a special subPath or the root
+    location = / {
+        auth_request /auth-proxy;
+    }
+
+    location = /auth-proxy {
+        internal;
+
+        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
+    }
+    }
+```
+
+_Approach B) Specify connection details directly in the server block_
+
+```yaml
+ldapDaemon:
+  enabled: true
+  nginxServerBlock: |-
+    server {
+    listen 0.0.0.0:{{ .Values.containerPorts.http }};
+
+    # You can provide a special subPath or the root
+    location = / {
+        auth_request /auth-proxy;
+    }
+
+    location = /auth-proxy {
+        internal;
+
+        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
+
+        ###############################################################
+        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
+        ###############################################################
+
+        # URL and port for connecting to the LDAP server
+        proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
+
+        # Base DN
+        proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
+
+        # Bind DN
+        proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
+
+        # Bind password
+        proxy_set_header X-Ldap-BindPass "adminpassword";
+    }
+    }
+```
 
 ### Adding extra environment variables
 

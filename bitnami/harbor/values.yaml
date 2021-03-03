@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.1.2-debian-10-r30
+  tag: 2.1.3-debian-10-r38
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,7 +39,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.1.3-debian-10-r0
+  tag: 2.1.3-debian-10-r39
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -65,7 +65,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.1.2-debian-10-r31
+  tag: 2.2.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.12.0-debian-10-r261
+  tag: 0.13.0-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -115,7 +115,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.1.2-debian-10-r31
+  tag: 2.1.3-debian-10-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,7 +140,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.1.2-debian-10-r31
+  tag: 2.1.3-debian-10-r39
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -165,7 +165,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.1.2-debian-10-r37
+  tag: 2.1.3-debian-10-r38
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -190,7 +190,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.1.2-debian-10-r33
+  tag: 2.1.3-debian-10-r39
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,7 +216,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.1.2-debian-10-r34
+  tag: 2.1.3-debian-10-r38
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -241,7 +241,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.1.2-debian-10-r30
+  tag: 2.1.3-debian-10-r39
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -266,7 +266,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.1.2-debian-10-r31
+  tag: 2.1.3-debian-10-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -291,7 +291,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.6-debian-10-r25
+  tag: 1.19.7-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -330,8 +330,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -548,7 +548,7 @@ persistence:
     ##
     caBundleSecretName:
     ## Specify whether to disable `redirect` for images and chart storage, for
-    ## backends which not supported it (such as using MinIO(TM) for `s3` storage type), please disable
+    ## backends which not supported it (such as using MinIO(R) for `s3` storage type), please disable
     ## it. To disable redirects, simply set `disableredirect` to `true` instead.
     ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect
     ##
@@ -2659,6 +2659,7 @@ redis:
 
 ## If the Redis(TM) included in the chart is disabled, Harbor will use below
 ## Redis(TM) parameters to connect to an external Redis(TM) server.
+## Support for both Redis(TM) and Redis+Sentinel(TM)
 ##
 externalRedis:
   ## Redis(TM) host
@@ -2667,6 +2668,18 @@ externalRedis:
   ## Redis(TM) port number
   ##
   port: 6379
+
+  ## Redis(TM) sentinel configuration
+  ## If sentinel is enabled the below sentinel configurations are used as the hostname
+  ##
+  sentinel:
+    enabled: false
+    masterSet: 'mymaster'
+    ## Configure redis sentinel hostnames in the following pattern
+    ## <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>,<host_sentinal2>:<port_sentinel3>
+    ##
+    hosts: ''
+
   ## Redis(TM) password
   ##
   password: ''
@@ -2685,6 +2698,20 @@ postgresql:
   nameOverride:
   postgresqlUsername: postgres
   postgresqlPassword: not-secure-database-password
+  ## Name of existing secret to use for PostgreSQL passwords.
+  ## If an existingSecret is used it will overwrite postgresqlUsername and postgresqlPassword.
+  ## The secret has to contain at least the key postgresql-postgres-password.
+  ##
+  ## Example Secret:
+  ## apiVersion: v1
+  ## kind: Secret
+  ## metadata:
+  ##   name: mysecret
+  ## type: Opaque
+  ## data:
+  ##   postgresqlUsername: YWRtaW4=
+  ##   postgresqlPassword: MWYyZDFlMmU2N2Rm
+  # existingSecret: secret
   postgresqlExtendedConf:
     maxConnections: 1024
   replication:

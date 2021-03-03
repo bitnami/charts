@@ -20,6 +20,11 @@ kubeVersion:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -42,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r59
+  tag: 12.0.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,7 +80,39 @@ auth:
   ##
   managementUser: manager
   managementPassword: ""
-
+  ## An already existing secret containing auth info
+  ##
+  # existingSecret:
+  #   name: mySecret
+  #   keyMapping:
+  #     admin-password: myPasswordKey
+  #     management-password: myManagementPasswordKey
+  #     database-password: myDatabasePasswordKey
+  #     tls-keystore-password: myTlsKeystorePasswordKey
+  #     tls-truestore-password: myTlsTruestorePasswordKey
+  #
+  ## Map of already existing secrets containing passwords
+  ##
+  ## Override `existingSecret` and other secret values
+  ##
+  # existingSecretPerPassword:
+  #   keyMapping:
+  #     adminPassword: KEYCLOAK_ADMIN_PASSWORD
+  #     managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+  #     databasePassword: password
+  #     tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #     tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  #   adminPassword:
+  #     name: keycloak-test2.credentials # release-name
+  #   managementPassword:
+  #     name: keycloak-test2.credentials
+  #   databasePassword:
+  #     name: keycloak.pocwatt-keycloak-cluster.credentials
+  #   tlsKeystorePassword:
+  #     name: keycloak-test2.credentials
+  #   tlsTruststorePassword:
+  #     name: keycloak-test2.credentials
+  #
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
@@ -96,6 +133,36 @@ auth:
     ## Password to access the truststore when it's password-protected.
     ##
     truststorePassword: ""
+    ## Init container parameters:
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/bitnami-shell
+      tag: "10"
+      pullPolicy: Always
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      pullSecrets: []
+      ##   - myRegistryKeySecretName
+    ## Init containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
+      limits: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
+      requests: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
 
 ## Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy
@@ -489,6 +556,10 @@ ingress:
   ##
   secrets: []
 
+  ## The service port to be used by this ingress.
+  ## Default is http. Alternative is https.
+  servicePort: http
+
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -631,6 +702,9 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_keycloak
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ##
+  existingSecret:
   ## PostgreSQL data Persistent Volume Storage Class
   ##
   persistence:

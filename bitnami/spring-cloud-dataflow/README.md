@@ -99,6 +99,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                             | `nil`                                                   |
 | `server.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                                                | `nil`                                                   |
 | `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                                     | `1`                                                     |
+| `server.hostAliases`                         | Add deployment host aliases                                                                                      | `[]`                                                    |
 | `server.strategyType`                        | Deployment Strategy Type                                                                                         | `RollingUpdate`                                         |
 | `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
 | `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
@@ -136,6 +137,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.ingress.extraHosts[0].path`          | Additional hostnames to be covered                                                                               | `nil`                                                   |
 | `server.ingress.extraTls[0].hosts[0]`        | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
 | `server.ingress.extraTls[0].secretName`      | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
+| `server.ingress.tls`                         | Enables TLS configuration for the Ingress component                                                              | `false`                                                 |
 | `server.ingress.secrets[0].name`             | TLS Secret Name                                                                                                  | `nil`                                                   |
 | `server.ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                                           | `nil`                                                   |
 | `server.ingress.secrets[0].key`              | TLS Secret Key                                                                                                   | `nil`                                                   |
@@ -153,6 +155,10 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `server.jdwp.port`                           | JDWP TCP port                                                                                                    | `5005`                                                  |
 | `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                               | `nil`                                                   |
 | `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                           | `nil`                                                   |
+| `server.proxy.host`                          | Proxy host                                                                                                       | `nil`                                                   |
+| `server.proxy.port`                          | Proxy port                                                                                                       | `nil`                                                   |
+| `server.proxy.user`                          | Proxy username (if authentication is required)                                                                   | `nil`                                                   |
+| `server.proxy.password`                      | Proxy password (if authentication is required)                                                                   | `nil`                                                   |
 
 ### Dataflow Skipper parameters
 
@@ -177,6 +183,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.nodeAffinityPreset.type`          | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
 | `skipper.nodeAffinityPreset.key`           | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                    |
 | `skipper.nodeAffinityPreset.values`        | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                    |
+| `skipper.hostAliases`                       | Add deployment host aliases                                                                               | `[]`                                                    |
 | `skipper.affinity`                         | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                          |
 | `skipper.nodeSelector`                     | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                          |
 | `skipper.tolerations`                      | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                          |
@@ -233,6 +240,8 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag                                                                     | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                             | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                        | `{}`                                                    |
+| `metrics.resources.requests`           | The requested resources for the Prometheus Rsocket Proxy container                                     | `{}`                                                    |
 | `metrics.kafka.service.httpPort`       | Prometheus Rsocket Proxy HTTP port                                                                     | `8080`                                                  |
 | `metrics.kafka.service.rsocketPort`    | Prometheus Rsocket Proxy Rsocket port                                                                  | `8080`                                                  |
 | `metrics.kafka.service.annotations`    | Annotations for Prometheus Rsocket Proxy service                                                       | `Check values.yaml file`                                |
@@ -297,13 +306,16 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 ### Kafka chart parameters
 
-| Parameter                             | Description                                 | Default |
-|---------------------------------------|---------------------------------------------|---------|
-| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false` |
-| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`     |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`     |
-| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`   |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`     |
+| Parameter                             | Description                                 | Default          |
+| ------------------------------------- | ------------------------------------------- | ---------------- |
+| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false`          |
+| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`              |
+| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`              |
+| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`            |
+| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`              |
+| `externalKafka.enabled`               | Enable/disable external Kafka               | `false`          |
+| `externalKafka.brokers`               | External Kafka brokers                      | `localhost:9092` |
+| `externalKafka.zkNodes`               | External Zookeeper nodes                    | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

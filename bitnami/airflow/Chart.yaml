@@ -1,7 +1,7 @@
 annotations:
   category: WorkFlow
 apiVersion: v2
-appVersion: 1.10.14
+appVersion: 2.0.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -19,7 +19,7 @@ dependencies:
 description: Apache Airflow is a platform to programmatically author, schedule and monitor workflows.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/airflow
-icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
   - apache
   - airflow
@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/bitnami-docker-airflow
   - https://airflow.apache.org/
-version: 7.1.4
+version: 8.0.5

@@ -15,7 +15,7 @@ dependencies:
 description: A highly scalable open-source full-text search and analytics engine
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch
-icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
 keywords:
   - elasticsearch
 maintainers:
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/bitnami-docker-elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 14.0.0
+version: 14.2.3

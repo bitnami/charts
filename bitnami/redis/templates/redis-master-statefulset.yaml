@@ -48,12 +48,15 @@ spec:
       {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.master.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.master.priorityClassName }}
-      priorityClassName: "{{ .Values.master.priorityClassName }}"
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
       {{- with .Values.master.affinity }}
       affinity: {{- tpl (toYaml .) $ | nindent 8 }}
@@ -185,6 +188,8 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -248,8 +253,8 @@ spec:
         image: "{{ template "redis.volumePermissions.image" . }}"
         imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
         command:
-          - /bin/sh
-          - -cx
+          - /bin/bash
+          - -ec
           - |
             {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
             chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.master.persistence.path }}
@@ -322,6 +327,8 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          emptyDir: {}
+        - name: tmp
           emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates

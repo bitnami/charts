@@ -11,7 +11,7 @@ dependencies:
 description: etcd is a distributed key value store that provides a reliable way to store data across a cluster of machines
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/etcd
-icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
 keywords:
   - etcd
   - cluster
@@ -25,4 +25,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/bitnami-docker-etcd
   - https://coreos.com/etcd/
-version: 5.5.1
+version: 5.6.1

@@ -43,6 +43,9 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.postgresql.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.postgresql.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -62,6 +65,9 @@ spec:
       {{- end }}
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -277,8 +283,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
@@ -292,8 +298,8 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
@@ -307,15 +313,15 @@ spec:
           resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
+            {{- if or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
             - name: postgresql-config
               mountPath: /bitnami/repmgr/conf
             {{- end }}
-            {{- if or (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
+            {{- if or .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
             - name: postgresql-extended-config
               mountPath: /bitnami/postgresql/conf/conf.d/
             {{- end }}
-            {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
+            {{- if or .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
             {{- end }}
@@ -403,12 +409,12 @@ spec:
           configMap:
             name: {{ printf "%s-hooks-scripts" (include "postgresql-ha.postgresql" .) }}
             defaultMode: 0755
-        {{- if or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
+        {{- if or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
         - name: postgresql-config
           configMap:
             name: {{ include "postgresql-ha.postgresqlConfigurationCM" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
+        {{- if or .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
         - name: postgresql-extended-config
           configMap:
             name: {{ template "postgresql-ha.postgresqlExtendedConfCM" . }}
@@ -423,7 +429,7 @@ spec:
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
         {{- end }}
-        {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
+        {{- if or .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.postgresqlInitdbScriptsCM" . }}

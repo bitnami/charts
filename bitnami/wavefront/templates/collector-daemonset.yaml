@@ -31,6 +31,9 @@ spec:
     spec:
       serviceAccountName: {{ template "wavefront.collector.serviceAccountName" . }}
       {{- include "wavefront.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.collector.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.collector.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.collector.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.collector.affinity "context" $) | nindent 8 }}
       {{- else }}

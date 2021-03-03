@@ -68,6 +68,8 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `fullnameOverride`                              | String to fully override postgres-ha.fullname template with a string                                                                                                                            | `nil`                                                        |
 | `clusterDomain`                                 | Default Kubernetes cluster domain                                                                                                                                                               | `cluster.local`                                              |
 | `extraDeploy`                                   | Array of extra objects to deploy with the release (evaluated as a template).                                                                                                                    | `nil`                                                        |
+| `serviceAccount.enabled`                        | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                                                                           | `false`                                                      |
+| `serviceAccount.name`                           | Name of existing service account                                                                                                                                                                | `nil`                                                        |
 | **PostgreSQL with Repmgr**                      |                                                                                                                                                                                                 |                                                              |
 | `postgresqlImage.registry`                      | Registry for PostgreSQL with Repmgr image                                                                                                                                                       | `docker.io`                                                  |
 | `postgresqlImage.repository`                    | Repository for PostgreSQL with Repmgr image                                                                                                                                                     | `bitnami/postgresql-repmgr`                                  |
@@ -75,6 +77,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                        | `IfNotPresent`                                               |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                | `[]` (does not add image pull secrets to deployed pods)      |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                         | `false`                                                      |
+| `postgresql.hostAliases`                    | Add deployment host aliases                                                               | `[]`                                          |
 | `postgresql.labels`                             | Map of labels to add to the statefulset. Evaluated as a template                                                                                                                                | `{}`                                                         |
 | `postgresql.podLabels`                          | Map of labels to add to the pods. Evaluated as a template                                                                                                                                       | `{}`                                                         |
 | `postgresql.replicaCount`                       | The number of replicas to deploy                                                                                                                                                                | `2`                                                          |
@@ -164,6 +167,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `pgpool.customUsers.passwords`                  | Comma or semicolon separated list of the associated passwords for the users to be added to pgpool_passwd                                                                                        | `nil`                                                        |
 | `pgpool.customUsersSecret`                      | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                                                                         | `nil`                                                        |
 | `pgpool.srCheckDatabase`                        | Name of the database to perform streaming replication checks                                                                                                                                    | `postgres`                                                   |
+| `pgpool.hostAliases`                    | Add deployment host aliases                                                               | `[]`                                          |
 | `pgpool.labels`                                 | Map of labels to add to the deployment. Evaluated as a template                                                                                                                                 | `{}`                                                         |
 | `pgpool.podLabels`                              | Map of labels to add to the pods. Evaluated as a template                                                                                                                                       | `{}`                                                         |
 | `pgpool.replicaCount`                           | The number of replicas to deploy                                                                                                                                                                | `1`                                                          |
@@ -270,7 +274,7 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `volumePermissions.securityContext.runAsUser`   | User ID for the Bitnami Minideb container                                                                                                                                                       | `0`                                                          |
 | **Persistence**                                 |                                                                                                                                                                                                 |                                                              |
 | `persistence.enabled`                           | Enable data persistence                                                                                                                                                                         | `true`                                                       |
-| `persistence.existingClaim`                     | Use a existing PVC which must be created manually before bound                                                                                                                                  | `nil`                                                        |
+| `persistence.existingClaim`                     | Use a existing PVC which must be created manually before bound. PVC will be shared between all replicas, which is useful for special cases only.                                               | `nil`                                                        |
 | `persistence.storageClass`                      | Specify the `storageClass` used to provision the volume                                                                                                                                         | `nil`                                                        |
 | `persistence.mountPath`                         | Path to mount data volume at                                                                                                                                                                    | `nil`                                                        |
 | `persistence.accessMode`                        | Access mode of data volume                                                                                                                                                                      | `ReadWriteOnce`                                              |
@@ -298,6 +302,8 @@ $ helm install my-release \
 ```
 
 The above command sets the password for user `postgres` to `password`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -414,28 +420,21 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 This helm chart also supports to customize the whole configuration file.
 
-Add your custom files to "files" in your working directory. Those files will be mounted as configMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
+You can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
 
-Alternatively, you can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters.
-
-In addition to these options, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the two previous options.
+In addition to this option, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the previous options.
 
 ### Allow settings to be loaded from files other than the default `postgresql.conf`
 
-If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can add your extended `.conf` files to "files/conf.d/" in your working directory.
-Those files will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
+If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can specify the extended configuration using the `postgresql.extendedConf` parameter. A file will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
 
-Alternatively, you can specify the extended configuration using the `postgresql.extendedConf` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the two previous options.
+In addition to this option, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the previous option.
 
 ### Initialize a fresh instance
 
-The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
 
-Alternatively, you can specify custom scripts using the `initdbScripts` parameter as dict.
-
-In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
+In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `postgresql.initdbScriptsCM` parameter. Note that this will override the two previous option. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
@@ -509,6 +508,11 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+### To 6.4.0
+
+Support for adding custom configuration files or initialization scripts by placing them under the "files" directory in the working directory was removed. This functionality was very confusing for users since they do not usually clone the repo nor they fetch the charts to their working directories.
+As an alternative to this feature, users can still use the equivalent parameters available in the `values.yaml` to load their custom configuration & scripts.
 
 ### To 6.0.0
 

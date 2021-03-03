@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the NATS chart and the
 | `image.tag`                | NATS image tag                                                                 | `{TAG_NAME}`                                            |
 | `image.pullPolicy`         | Image pull policy                                                              | `IfNotPresent`                                          |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods) |
+| `hostAliases`              | Add deployment host aliases                                                    | `[]`                                                    |
 | `auth.enabled`             | Switch to enable/disable client authentication                                 | `true`                                                  |
 | `auth.user`                | Client authentication user                                                     | `nats_client`                                           |
 | `auth.password`            | Client authentication password                                                 | `random alhpanumeric string (10)`                       |
@@ -213,6 +214,8 @@ $ helm install my-release \
 ```
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

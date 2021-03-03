@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.5.8-debian-10-r36
+  tag: 10.5.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -53,6 +53,11 @@ clusterDomain: cluster.local
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
 podManagementPolicy: OrderedReady
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## MariaDB Gallera K8s svc properties
 ##
@@ -147,6 +152,7 @@ securityContext:
 ##
 rootUser:
   ## MariaDB admin user
+  ##
   user: root
   ## MariaDB admin password
   ## Password is ignored if existingSecret is specified.
@@ -189,12 +195,14 @@ galera:
 
   ## Bootstraping options
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  ##
   bootstrap:
     ## Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node
     ##
     bootstrapFromNode:
     ## Force safe_to_bootstrap in grastate.date file.
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
+    ##
     forceSafeToBootstrap: false
 
   ## Credentials to perform backups
@@ -222,6 +230,8 @@ ldap:
   binddn: ""
   bindpw: ""
   bslookup:
+  filter:
+  map:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
   tls_reqcert:
@@ -266,15 +276,18 @@ mariadbConfiguration: |-
   bind_address=0.0.0.0
 
   ## Character set
+  ##
   collation_server=utf8_unicode_ci
   init_connect='SET NAMES utf8'
   character_set_server=utf8
 
   ## MyISAM
+  ##
   key_buffer_size=32M
   myisam_recover_options=FORCE,BACKUP
 
   ## Safety
+  ##
   skip_host_cache
   skip_name_resolve
   max_allowed_packet=16M
@@ -283,6 +296,7 @@ mariadbConfiguration: |-
   sysdate_is_now=1
 
   ## Binary Logging
+  ##
   log_bin=mysql-bin
   expire_logs_days=14
   # Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
@@ -291,6 +305,7 @@ mariadbConfiguration: |-
   binlog_format=row
 
   ## Caches and Limits
+  ##
   tmp_table_size=32M
   max_heap_table_size=32M
   # Re-enabling as now works with Maria 10.1.2
@@ -304,6 +319,7 @@ mariadbConfiguration: |-
   table_open_cache=4096
 
   ## InnoDB
+  ##
   innodb=FORCE
   innodb_strict_mode=1
   # Mandatory per https://github.com/codership/documentation/issues/25
@@ -321,6 +337,7 @@ mariadbConfiguration: |-
   innodb_file_format=Barracuda
 
   ## Logging
+  ##
   log_error=/opt/bitnami/mariadb/logs/mysqld.log
   slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
   log_queries_not_using_indexes=1
@@ -391,6 +408,7 @@ mariadbConfiguration: |-
 ## Can be used to specify command line flags, for example:
 ##
 ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+##
 
 ## Desired number of cluster nodes
 ##
@@ -431,6 +449,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -477,6 +496,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -576,6 +596,7 @@ startupProbe:
   timeoutSeconds: 1
   successThreshold: 1
   ## Let's wait 600 seconds by default, it should give enough time in any cluster for mysql to init
+  ##
   failureThreshold: 48
 
 ## Pod disruption budget configuration
@@ -597,7 +618,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r298
+    tag: 0.12.1-debian-10-r359
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -684,11 +705,13 @@ metrics:
 
     ## Additional labels to add to the PrometheusRule so it is picked up by the operator.
     ## If using the [Helm Chart](https://github.com/helm/charts/tree/master/stable/prometheus-operator) this is the name of the Helm release and 'app: prometheus-operator'
+    ##
     selector:
       app: prometheus-operator
       release: prometheus
 
     ## Rules as a map.
+    ##
     rules: {}
     #  - alert: MariaDB-Down
     #    annotations:

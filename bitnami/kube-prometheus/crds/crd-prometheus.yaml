@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.44.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.46.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
 
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -11,6 +11,8 @@ metadata:
 spec:
   group: monitoring.coreos.com
   names:
+    categories:
+      - prometheus-operator
     kind: Prometheus
     listKind: PrometheusList
     plural: prometheuses
@@ -2258,7 +2260,7 @@ spec:
                       type: string
                   type: object
                 podMonitorNamespaceSelector:
-                  description: Namespaces to be selected for PodMonitor discovery. If nil, only check own namespace.
+                  description: Namespace's labels to match for PodMonitor discovery. If nil, only check own namespace.
                   properties:
                     matchExpressions:
                       description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2639,6 +2641,11 @@ spec:
                       bearerTokenFile:
                         description: File to read bearer token for remote write.
                         type: string
+                      headers:
+                        additionalProperties:
+                          type: string
+                        description: Custom HTTP headers to be sent along with each remote write request. Be aware that headers that are set by Prometheus itself can't be overwritten. Only valid in Prometheus versions 2.25.0 and newer.
+                        type: object
                       name:
                         description: The name of the remote write queue, must be unique if specified. The name is used in metrics and logging in order to differentiate queues. Only valid in Prometheus versions 2.15.0 and newer.
                         type: string
@@ -2849,7 +2856,7 @@ spec:
                   description: Time duration Prometheus shall retain data for. Default is '24h', and must match the regular expression `[0-9]+(ms|s|m|h|d|w|y)` (milliseconds seconds minutes hours days weeks years).
                   type: string
                 retentionSize:
-                  description: Maximum amount of disk space used by blocks.
+                  description: "Maximum amount of disk space used by blocks. Supported units: B, KB, MB, GB, TB, PB, EB. Ex: `512MB`."
                   type: string
                 routePrefix:
                   description: The route prefix Prometheus registers HTTP handlers for. This is useful, if using ExternalURL and a proxy is rewriting HTTP routes of a request, and the actual ExternalURL is still true, but the server serves requests under a different route prefix. For example for use with `kubectl proxy`.
@@ -3019,7 +3026,7 @@ spec:
                   description: ServiceAccountName is the name of the ServiceAccount to use to run the Prometheus Pods.
                   type: string
                 serviceMonitorNamespaceSelector:
-                  description: Namespaces to be selected for ServiceMonitor discovery. If nil, only check own namespace.
+                  description: Namespace's labels to match for ServiceMonitor discovery. If nil, only check own namespace.
                   properties:
                     matchExpressions:
                       description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -3456,6 +3463,9 @@ spec:
                       required:
                         - key
                       type: object
+                    tracingConfigFile:
+                      description: TracingConfig specifies the path of the tracing configuration file. When used alongside with TracingConfig, TracingConfigFile takes precedence.
+                      type: string
                     version:
                       description: Version describes the version of Thanos to use.
                       type: string

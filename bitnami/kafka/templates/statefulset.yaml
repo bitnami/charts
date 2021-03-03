@@ -21,7 +21,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  podManagementPolicy: Parallel
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -61,7 +61,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-{{- include "kafka.imagePullSecrets" . | indent 6 }}
+      {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -160,7 +163,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ include "kafka.zookeeper.fullname" . | quote }}
               {{- else }}
-              value: {{ join "," .Values.externalZookeeper.servers | quote }}
+              value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}
@@ -190,6 +193,12 @@ spec:
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
+            {{- if eq .Values.externalAccess.service.type "NodePort" }}
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            {{- end }}
             {{- end }}
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
@@ -213,6 +222,16 @@ spec:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-passwords
             {{- end }}
+            {{- if (include "kafka.interBroker.saslAuthentication" .) }}
+            - name: KAFKA_INTER_BROKER_USER
+              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
+            - name: KAFKA_INTER_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: inter-broker-password
+            {{- end }}
+            {{- end }}
             {{- if .Values.auth.jaas.zookeeperUser }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL
               value: "SASL"
@@ -224,19 +243,11 @@ spec:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: zookeeper-password
             {{- end }}
-            {{- if (include "kafka.interBroker.saslAuthentication" .) }}
-            - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
-            - name: KAFKA_INTER_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kafka.jaasSecretName" . }}
-                  key: inter-broker-password
-            {{- end }}
-            {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
               value: {{ .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+            - name: KAFKA_CFG_TLS_CLIENT_AUTH
+              value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- if .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD
               value: {{ .Values.auth.jksPassword | quote }}
@@ -257,7 +268,7 @@ spec:
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
-              value: {{ .Values.logFlushIntervalMessages | quote }}
+              value: {{ .Values.logFlushIntervalMessages | replace "_" "" | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MS
               value: {{ .Values.logFlushIntervalMs | quote }}
             - name: KAFKA_CFG_LOG_RETENTION_BYTES
@@ -361,6 +372,11 @@ spec:
             - name: kafka-certificates
               mountPath: /certs
               readOnly: true
+            {{- if  .Values.auth.jksTruststoreSecret }}
+            - name: kafka-truststore
+              mountPath: /truststore
+              readOnly: true
+            {{- end }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
@@ -421,6 +437,12 @@ spec:
           secret:
             secretName: {{ include "kafka.jksSecretName" . }}
             defaultMode: 256
+        {{- if .Values.auth.jksTruststoreSecret }}
+        - name: kafka-truststore
+          secret:
+            secretName: {{ .Values.auth.jksTruststoreSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
@@ -464,7 +486,7 @@ spec:
     - metadata:
         name: logs
         {{- if .Values.logPersistence.annotations }}
-        annotations: {{- include "kafka.tplValue" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

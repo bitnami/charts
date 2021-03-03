@@ -79,7 +79,7 @@ Compile all warnings into a single message, and call fail.
 {{- if and .Values.mongodb.enabled .Values.externaldb.enabled -}}
 node: Database
     You can only use one database.
-    Please choose installing a MongoDB chart (--set mongodb.enabled=true) or
+    Please choose installing a MongoDB(R) chart (--set mongodb.enabled=true) or
     using an external database (--set externaldb.enabled=true)
 {{- end -}}
 {{- end -}}
