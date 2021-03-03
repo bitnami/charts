@@ -341,6 +341,17 @@ aggregator:
   ##
   replicaCount: 1
 
+  ## Create Ingress for the Aggregator deamonset
+  ## Helpful if you wish to expose fluentd Aggregator to be consumed from external services
+  ## ref. https://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    enabled: false
+    # namespace: default
+    # host: ingress.local
+    # servicePort: 9880
+    # path: /
+
   ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##

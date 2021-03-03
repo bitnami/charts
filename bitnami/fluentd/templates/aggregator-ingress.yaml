@@ -1,0 +1,16 @@
+{{ if .Values.aggregator.ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator
+  namespace: {{ .Values.aggregator.namespace}}
+spec:
+  rules:
+    - host: {{ .Values.aggregator.ingress.host }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ include "fluentd.fullname" . }}-aggregator
+              servicePort: {{ .Values.aggregator.ingress.servicePort }}
+            path: {{ .Values.aggregator.ingress.path }}
+{{- end -}}
