@@ -187,13 +187,13 @@ spark:
     masterAnnotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: '/metrics/'
-      prometheus.io/port: '{{ .Values.spark.master.webPort }}'
+      prometheus.io/port: '8080'
     ## Annotations for the Prometheus metrics on worker nodes
     ##
     workerAnnotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: '/metrics/'
-      prometheus.io/port: '{{ .Values.spark.worker.webPort }}'
+      prometheus.io/port: '8081'
 
 ## Solr Subchart parameters
 ##

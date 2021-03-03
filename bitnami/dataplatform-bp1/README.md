@@ -196,15 +196,19 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
-In case you need to deploy the data platform skipping any component, you can specify the 'enabled' parameter using the `--set <component>.enabled=false` argument to `helm install`. For Example,
+In case you need to deploy the data platform with Wavefront Observability Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
 
 ```console
-$ helm install my-release \
-  --set solr.enabled=false \
-  bitnami/dataplatform-bp1
+$ helm install my-release bitnami/dataplatform-bp1 \
+    --set kafka.metrics.kafka.enabled=true \
+    --set kafka.metrics.jmx.enabled=true \    
+    --set spark.metrics.enabled=true \
+    --set solr.exporter.enabled=true \
+    --set wavefront.enabled=true \
+    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+    --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-
-The above command deploys the data platform without Solr.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
