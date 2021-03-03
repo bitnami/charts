@@ -23,6 +23,7 @@ rules:
       - nodes
       - nodes/stats
       - pods
+      - replicationcontrollers
       - services
     verbs:
       - get

@@ -34,39 +34,10 @@ data:
     {{- if .Values.collector.tags }}
       tags: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.tags "context" . ) | nindent 8 }}
     {{- end }}
+    {{- if .Values.collector.filters }}
       filters:
-        # Filter out infrequently used kube-state-metrics.
-        metricBlacklist:
-        - 'kube.configmap.annotations.gauge'
-        - 'kube.configmap.metadata.resource.version.gauge'
-        - 'kube.endpoint.*'
-        - 'kube.job.owner.gauge'
-        - 'kube.job.labels.gauge'
-        - 'kube.job.spec.completions.gauge'
-        - 'kube.job.spec.parallelism.gauge'
-        - 'kube.job.status.start.time.gauge'
-        - 'kube.limitrange.*'
-        - 'kube.namespace.annotations.gauge'
-        - 'kube.persistentvolume.*'
-        - 'kube.persistentvolumeclaim.*'
-        - 'kube.pod.container.resource.limits.*'
-        - 'kube.pod.container.*.reason.gauge'
-        - 'kube.pod.owner.gauge'
-        - 'kube.pod.start.time.gauge'
-        - 'kube.pod.status.scheduled.gauge'
-        - 'kube.pod.status.scheduled.time.gauge'
-        - 'kube.replicationcontroller.created.gauge'
-        - 'kube.replicationcontroller.metadata.generation.gauge'
-        - 'kube.replicationcontroller.spec.replicas.gauge'
-        - 'kube.resourcequota.*'
-        - 'kube.secret.*'
-        - 'kube.statefulset.*'
-        - 'kube.storageclass.*'
-        # Filter out generated labels
-        tagExclude:
-        - 'label?controller?revision*'
-        - 'label?pod?template*'
-        - 'annotation_kubectl_kubernetes_io_last_applied_configuration'
+{{ tpl (toYaml .Values.collector.filters) . | indent 8 }}
+    {{- end }}
 
     sources:
       kubernetes_source:

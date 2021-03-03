@@ -124,6 +124,14 @@ collector:
   #   env: production
   #   region: us-west-2
 
+  ## Filters to apply towards all metrics collected by the collector
+  filters:
+    ## Filter out generated labels
+    tagExclude:
+      - 'label?controller?revision*'
+      - 'label?pod?template*'
+      - 'annotation_kubectl_kubernetes_io_last_applied_configuration'
+
   ## Events can also be collected and sent to Wavefront.
   ## Requires Wavefront Proxy 6.0 or greater.
   ## Events should be filtered before being enabled, see event filtering documentation for details
