@@ -152,10 +152,12 @@ collector:
   ## auto-discover Prometheus endpoints
   ##
   #   annotationPrefix: "wavefront.com"
+
   ## Whether to enable runtime discovery configurations
   ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
   ##
-  #   enableRuntimeConfigs: false
+    enableRuntimeConfigs: true
+
   ## Can be used to add additional discovery rules
   ##
   #   config:
