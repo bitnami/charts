@@ -67,6 +67,10 @@ collector:
   ##
   useDaemonset: true
 
+  ## If installing into a TKGi/PKS environment, set this to true
+  ##
+  # usePKSPrefix: false
+
   ## max number of CPUs that can be used simultaneously. Less than 1 for default (number of cores)
   ##
   # maxProcs: 0
@@ -120,6 +124,36 @@ collector:
   #   env: production
   #   region: us-west-2
 
+  ## If set to true, host OS metrics will be collected
+  ##
+  hostOSMetrics: false
+
+  ## Filters to apply towards all metrics collected by the collector
+  ##
+  filters:
+    # Optimized metrics collection to omit peripheral metrics.
+    metricDenyList:
+      - 'kubernetes.sys_container.*'
+      - 'kubernetes.collector.runtime.*'
+      - 'kubernetes.*.network.rx_rate'
+      - 'kubernetes.*.network.rx_errors_rate'
+      - 'kubernetes.*.network.tx_rate'
+      - 'kubernetes.*.network.tx_errors_rate'
+      - 'kubernetes.*.memory.page_faults'
+      - 'kubernetes.*.memory.page_faults_rate'
+      - 'kubernetes.*.memory.major_page_faults'
+      - 'kubernetes.*.memory.major_page_faults_rate'
+      - 'kubernetes.*.filesystem.inodes'
+      - 'kubernetes.*.filesystem.inodes_free'
+      - 'kubernetes.*.ephemeral_storage.request'
+      - 'kubernetes.*.ephemeral_storage.limit'
+
+    # Filter out generated labels
+    tagExclude:
+      - 'label?controller?revision*'
+      - 'label?pod?template*'
+      - 'annotation_kubectl_kubernetes_io_last_applied_configuration'
+
   ## Events can also be collected and sent to Wavefront.
   ## Requires Wavefront Proxy 6.0 or greater.
   ## Events should be filtered before being enabled, see event filtering documentation for details
@@ -148,10 +182,12 @@ collector:
   ## auto-discover Prometheus endpoints
   ##
   #   annotationPrefix: "wavefront.com"
+
   ## Whether to enable runtime discovery configurations
   ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
   ##
-  #   enableRuntimeConfigs: false
+    enableRuntimeConfigs: true
+
   ## Can be used to add additional discovery rules
   ##
   #   config:
@@ -172,10 +208,10 @@ collector:
   #     type: telegraf/mongodb
   #     selectors:
   #       images:
-  #       - '*mongodb:*'
+  #       - '*mongo:*'
   #     port: 27017
   #     conf: |
-  #       servers = ["mongodb://USER:PASSWORD${host}:${port}"]
+  #       servers = ["mongodb://USER:PASSWORD@${host}:${port}"]
   #       gather_perdb_stats = true
   #     filters:
   #       metricBlacklist:
@@ -604,6 +640,14 @@ proxy:
   ##
   # traceSamplingDuration: 500
 
+  ## Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.
+  ##
+  # traceJaegerApplicationName: MyJaegerDemo
+
+  ## Custom application name for traces received on Zipkin's traceZipkinListenerPorts.
+  ##
+  # traceZipkinApplicationName: MyZipkinDemo
+
   ## The port number the proxy will listen on for histogram distributions in Wavefront Distribution format.
   ##
   # histogramPort: 40000
@@ -691,4 +735,10 @@ kube-state-metrics:
 ## If enabled, a role binding to handle pod security policy will be installed within the Kubernetes cluster.
 ##
 projectPacific:
+  enabled: false
+
+## Properties for TKGI environments
+## If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster.
+##
+tkgi:
   enabled: false
