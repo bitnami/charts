@@ -32,7 +32,6 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -44,8 +43,6 @@ image:
 ##
 # fullnameOverride:
 
-## Bitnami Minideb image version
-## ref: https://hub.docker.com/r/bitnami/minideb/tags/
 ##
 sysctlImage:
   enabled: true
@@ -1033,7 +1030,7 @@ curator:
   ## Ensure that it is available at http://elasticsearch:9200
   ##
   # elasticsearch-s3-repository:
-  #   image: bitnami/minideb:latest
+  #   image: bitnami/minideb
   #   imagePullPolicy: "IfNotPresent"
   #   command:
   #   - "/bin/bash"
