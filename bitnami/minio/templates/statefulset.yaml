@@ -165,7 +165,7 @@ spec:
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
-            {{- if .Values.tls }}
+            {{- if .Values.tls.enabled }}
             - name: minio-certs
               mountPath: /opt/bitnami/minio/certs/
             {{- end }}
