@@ -2134,9 +2134,6 @@ metrics:
 ##
 volumePermissions:
   enabled: false
-  ## Bitnami Minideb image
-  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
-  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell

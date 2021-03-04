@@ -24,4 +24,4 @@ name: mxnet
 sources:
   - https://github.com/bitnami/bitnami-docker-mxnet
   - https://mxnet.apache.org/
-version: 2.2.1
+version: 2.2.2

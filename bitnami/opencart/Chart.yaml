@@ -29,4 +29,4 @@ name: opencart
 sources:
   - https://github.com/bitnami/bitnami-docker-opencart
   - https://opencart.com/
-version: 10.0.1
+version: 10.0.2
