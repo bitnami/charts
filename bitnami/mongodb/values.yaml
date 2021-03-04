@@ -603,6 +603,50 @@ externalAccess:
     ## Provide any additional annotations which may be required. Evaluated as a template
     ##
     annotations: {}
+  ## External Access to MongoDB(R) Hidden nodes configuration
+  ##
+  hidden:
+    ## Enable Kubernetes external cluster access to MongoDB(R) nodes
+    ##
+    enabled: false
+    ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
+    ## A new service per broker will be created
+    ##
+    service:
+      ## Service type. Allowed values: LoadBalancer or NodePort
+      ##
+      type: LoadBalancer
+      ## Port used when service type is LoadBalancer
+      ##
+      port: 27017
+      ## Array of load balancer IPs for each MongoDB(R) node. Length must be the same as replicaCount
+      ## Example:
+      ## loadBalancerIPs:
+      ##   - X.X.X.X
+      ##   - Y.Y.Y.Y
+      ##
+      loadBalancerIPs: []
+      ## Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## Example:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## Array of node ports used for each MongoDB(R) nodes. Length must be the same as replicaCount
+      ## Example:
+      ## nodePorts:
+      ##   - 30001
+      ##   - 30002
+      ##
+      nodePorts: []
+      ## When service type is NodePort, you can specify the domain used for MongoDB(R) advertised hostnames.
+      ## If not specified, the container will try to get the kubernetes node external IP
+      ##
+      # domain: mydomain.com
+      ## Provide any additional annotations which may be required. Evaluated as a template
+      ##
+      annotations: {}
 
 ##
 ## MongoDB(R) Arbiter parameters.
@@ -1104,3 +1148,267 @@ metrics:
     ##       summary: High request latency
     ##
     rules: {}
+
+##
+## MongoDB(R) Hidden node parameters.
+##
+hidden:
+  ## Enable deploying the MongoDB(R) Hidden Node
+  ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
+  ##
+  enabled: false
+
+  ## MongoDB(R) configuration file for Hidden nodes. For documentation of all options, see:
+  ##   http://docs.mongodb.org/manual/reference/configuration-options/
+  ##
+  configuration: ""
+
+  ## ConfigMap with MongoDB(R) configuration for Hidden nodes
+  ## NOTE: When it's set the hidden.configuration parameter is ignored
+  ##
+  # existingConfigmap:
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  # command:
+  # args:
+
+  ## Additional command line flags
+  ## Example:
+  ## extraFlags:
+  ##  - "--wiredTigerCacheSizeGB=2"
+  ##
+  extraFlags: []
+
+  ## Additional environment variables to set
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  # extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  # extraEnvVarsSecret:
+
+  ## Annotations to be added to the MongoDB(R) Hidden statefulset. Evaluated as a template.
+  ##
+  annotations: {}
+
+  ## Additional labels to be added to the MongoDB(R) Hidden statefulset. Evaluated as a template.
+  ##
+  labels: {}
+
+  ## Number of MongoDB(R) Hidden replicas to deploy.
+  ## Ignored when mongodb.architecture=standalone
+  ##
+  replicaCount: 1
+
+  ## StrategyType for MongoDB(R) Hidden statefulset
+  ## It can be set to RollingUpdate or Recreate by default.
+  ##
+  strategyType: RollingUpdate
+
+  ## MongoDB(R) Hidden should be initialized one by one when building the replicaset for the first time.
+  ##
+  podManagementPolicy: OrderedReady
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Labels for MongoDB(R) Hidden pods. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Annotations for MongoDB(R) Hidden pods. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## MongoDB(R) Hidden pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## MongoDB(R) Hidden containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## MongoDB(R) Hidden pods' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for MongoDB(R) Hidden pods.
+  ## Ignored when livenessProbe.enabled=true
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes MongoDB(R) Hidden pods
+  ## Ignored when readinessProbe.enabled=true
+  ##
+  customReadinessProbe: {}
+
+  ## Add init containers to the MongoDB(R) Hidden pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the MongoDB(R) Hidden pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+
+  ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) Hidden pods
+  ## Examples:
+  ## extraVolumeMounts:
+  ##   - name: extras
+  ##     mountPath: /usr/share/extras
+  ##     readOnly: true
+  ## extraVolumes:
+  ##   - name: extras
+  ##     emptyDir: {}
+  ##
+  extraVolumeMounts: []
+  extraVolumes: []
+
+  ## MongoDB(R) Hidden Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    ## PV Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    # storageClass: "-"
+    ## PV Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## PVC size
+    ##
+    size: 8Gi
+    ## PVC annotations
+    ##
+    annotations: {}
+    ## The path the volume will be mounted at, useful when using different
+    ## MongoDB(R) images.
+    ##
+    mountPath: /bitnami/mongodb
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ""
+    ## Fine tuning for volumeClaimTemplates
+    ##
+    volumeClaimTemplates:
+      ## A label query over volumes to consider for binding (e.g. when using local volumes)
+      ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+      ##
+      selector:
