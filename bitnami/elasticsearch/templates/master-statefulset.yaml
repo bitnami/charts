@@ -35,6 +35,9 @@ spec:
       {{- if .Values.master.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.master.schedulerName }}
+      schedulerName: {{ .Values.master.schedulerName }}
+      {{- end }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- else }}
