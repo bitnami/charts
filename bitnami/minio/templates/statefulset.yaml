@@ -177,7 +177,7 @@ spec:
           secret:
             secretName: {{ include "minio.secretName" . }}
         {{- end }}
-        {{- if .Values.tls }}
+        {{- if .Values.tls.enabled }}
         - name: minio-certs
           secret:
             secretName: {{ .Values.tls.secretName }}
