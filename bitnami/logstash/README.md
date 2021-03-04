@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -59,6 +59,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                              | `false`                                                 |
 | `kubeVersion`                              | Force target Kubernetes version (using Helm capabilities if not set)                                                 | `nil`                                                   |
+| `hostAliases`                              | Add deployment host aliases                                                                                          | `[]`                                                    |
 | `nameOverride`                             | String to partially override logstash.fullname template with a string (will prepend the release name)                | `nil`                                                   |
 | `fullnameOverride`                         | String to fully override logstash.fullname template with a string                                                    | `nil`                                                   |
 | `clusterDomain`                            | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                         |
@@ -100,6 +101,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
 | `service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
 | `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
+| `service.externalTrafficPolicy`            | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer.      | `Cluster`                                               |
 | `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
 | `ingress.hostname`                         | Default host for the ingress resource                                                                                | `logstash.local`                                        |
@@ -165,24 +167,6 @@ $ helm install my-release -f values.yaml bitnami/logstash
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
-
-- Increase the number of Logstash replicas:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Configure the way how to expose Logstash
 

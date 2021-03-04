@@ -28,7 +28,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.16+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -72,7 +72,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `global.labels`           | Additional labels to apply to all resource                                                                 | `{}`                                                    |
 | `nameOverride`            | String to partially override `kube-prometheus.name` template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`        | String to fully override `kube-prometheus.fullname` template with a string                                 | `nil`                                                   |
-| `rbac.create`             | Whether to create & use RBAC resources or not                                                               | `true`                                                  |
+| `rbac.create`             | Whether to create & use RBAC resources or not                                                              | `true`                                                  |
 | `rbac.apiVersion`         | Version of the RBAC API                                                                                    | `v1beta1`                                               |
 | `rbac.pspEnabled`         | PodSecurityPolicy                                                                                          | `true`                                                  |
 
@@ -86,6 +86,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `operator.image.tag`                                  | Prometheus Operator Image tag                                                                                 | `{TAG_NAME}`                                                     |
 | `operator.image.pullPolicy`                           | Prometheus Operator image pull policy                                                                         | `IfNotPresent`                                                   |
 | `operator.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                              | `[]` (does not add image pull secrets to deployed pods)          |
+| `operator.hostAliases`                                | Add deployment host aliases                                                                                   | `[]`                                                             |
 | `operator.serviceAccount.create`                      | Specify whether to create a ServiceAccount for Prometheus Operator                                            | `true`                                                           |
 | `operator.serviceAccount.name`                        | The name of the ServiceAccount to create                                                                      | Generated using the `kube-prometheus.operator.fullname` template |
 | `operator.schedulerName`                              | Name of the k8s scheduler (other than default)                                                                | `nil`                                                            |
@@ -134,11 +135,6 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `operator.configReloaderCpu`                          | Set the prometheus config reloader side-car CPU limit. If unset, uses the kube-prometheus project default     | `nil`                                                            |
 | `operator.configReloaderMemory`                       | Set the prometheus config reloader side-car memory limit. If unset, uses the kube-prometheus project default  | `nil`                                                            |
 | `operator.kubeletService.namespace`                   | Namespace to deploy the kubelet service                                                                       | `kube-system`                                                    |
-| `operator.configmapReload.image.registry`             | ConfigMap Reload image registry                                                                               | `docker.io`                                                      |
-| `operator.configmapReload.image.repository`           | ConfigMap Reload Image name                                                                                   | `bitnami/configmap-reload`                                       |
-| `operator.configmapReload.image.tag`                  | ConfigMap Reload Image tag                                                                                    | `{TAG_NAME}`                                                     |
-| `operator.configmapReload.image.pullPolicy`           | ConfigMap Reload image pull policy                                                                            | `IfNotPresent`                                                   |
-| `operator.configmapReload.image.pullSecrets`          | Specify docker-registry secret names as an array                                                              | `[]` (does not add image pull secrets to deployed pods)          |
 | `operator.prometheusConfigReloader.image.registry`    | Prometheus Config Reloader image registry                                                                     | same as `operator.image.registry`                                |
 | `operator.prometheusConfigReloader.image.repository`  | Prometheus Config Reloader Image name                                                                         | same as `operator.image.repository`                              |
 | `operator.prometheusConfigReloader.image.tag`         | Prometheus Config Reloader Image tag                                                                          | same as `operator.image.tag`                                     |
@@ -179,11 +175,18 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.serviceMonitor.relabelings`                    | Relabel configs                                                                                         | `[]`                                                                                                                                    |
 | `prometheus.ingress.enabled`                               | Enable ingress controller resource                                                                      | `false`                                                                                                                                 |
 | `prometheus.ingress.certManager`                           | Add annotations for cert-manager                                                                        | `false`                                                                                                                                 |
+| `prometheus.ingress.hostname`                              | Default host for the ingress resource                                                                   | `prometheus.local`                                                                                                                      |
+| `prometheus.ingress.path`                                  | Default path for the ingress resource                                                                   | `/`                                                                                                                                     |
+| `prometheus.ingress.tls`                                   | Create TLS Secret                                                                                       | `false`                                                                                                                                 |
 | `prometheus.ingress.annotations`                           | Ingress annotations                                                                                     | `[]`                                                                                                                                    |
-| `prometheus.ingress.hosts[0].name`                         | Hostname to your Prometheus installation                                                                | `prometheus.local`                                                                                                                      |
-| `prometheus.ingress.hosts[0].path`                         | Path within the url structure                                                                           | `/`                                                                                                                                     |
-| `prometheus.ingress.tls[0].hosts[0]`                       | TLS hosts                                                                                               | `prometheus.local`                                                                                                                      |
-| `prometheus.ingress.tls[0].secretName`                     | TLS Secret (certificates)                                                                               | `prometheus.local-tls`                                                                                                                  |
+| `prometheus.ingress.extraHosts[0].name`                    | Additional hostnames to be covered                                                                      | `nil`                                                                                                                                   |
+| `prometheus.ingress.extraHosts[0].path`                    | Additional hostnames to be covered                                                                      | `nil`                                                                                                                                   |
+| `prometheus.ingress.extraPaths`                            | Additional arbitrary path/backend objects                                                               | `nil`                                                                                                                                   |
+| `prometheus.ingress.extraTls[0].hosts[0]`                  | TLS configuration for additional hostnames to be covered                                                | `nil`                                                                                                                                   |
+| `prometheus.ingress.extraTls[0].secretName`                | TLS configuration for additional hostnames to be covered                                                | `nil`                                                                                                                                   |
+| `prometheus.ingress.secrets[0].name`                       | TLS Secret Name                                                                                         | `nil`                                                                                                                                   |
+| `prometheus.ingress.secrets[0].certificate`                | TLS Secret Certificate                                                                                  | `nil`                                                                                                                                   |
+| `prometheus.ingress.secrets[0].key`                        | TLS Secret Key                                                                                          | `nil`                                                                                                                                   |
 | `prometheus.externalUrl`                                   | External URL used to access Prometheus                                                                  | Generated from `prometheus.ingress` or Service data                                                                                     |
 | `prometheus.resources`                                     | CPU/Memory resource requests/limits for node                                                            | `{}`                                                                                                                                    |
 | `prometheus.podAffinityPreset`                             | Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                                                                                                                                    |
@@ -206,6 +209,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.externalLabels`                                | External labels to add to any time series                                                               | `{}`                                                                                                                                    |
 | `prometheus.replicaExternalLabelName`                      | Name of the external label used to denote replica name                                                  | `nil`                                                                                                                                   |
 | `prometheus.replicaExternalLabelNameClear`                 | Clear external label used to denote replica name                                                        | `false`                                                                                                                                 |
+| `prometheus.portName`                                      | Port name used for the pods and governing service. This defaults to web                                 | `web`                                                                                                                                   |
 | `prometheus.routePrefix`                                   | Prefix used to register routes, overriding externalUrl route                                            | `/`                                                                                                                                     |
 | `prometheus.prometheusExternalLabelName`                   | Name of the external label used to denote Prometheus instance name                                      | `nil`                                                                                                                                   |
 | `prometheus.prometheusExternalLabelNameClear`              | Clear external label used to denote Prometheus instance name                                            | `false`                                                                                                                                 |
@@ -234,14 +238,14 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.persistence.size`                              | Persistent Volume Size                                                                                  | `8Gi`                                                                                                                                   |
 | `prometheus.priorityClassName`                             | Priority class assigned to the Pods                                                                     | ``                                                                                                                                      |
 | `prometheus.containers`                                    | Containers allows injecting additional containers                                                       | `[]`                                                                                                                                    |
-| `prometheus.volumes`                                       | Volumes allows configuration of additional volumes. Evaluated as a template                              | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
+| `prometheus.volumes`                                       | Volumes allows configuration of additional volumes. Evaluated as a template                             | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
 | `prometheus.volumeMounts`                                  | VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template                   | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec) for details |
 | `prometheus.additionalPrometheusRules`                     | PrometheusRule defines recording and alerting rules for a Prometheus instance.                          | `[]`                                                                                                                                    |
 | `prometheus.additionalScrapeConfigs.enabled`               | Enable additional scrape configs                                                                        | `false` See [docs](#additional-scrape-configurations) for details.                                                                      |
 | `prometheus.additionalScrapeConfigs.type`                  | Indicates if the cart should use external additional scrape configs or internal configs                 | `external` See [docs](#additional-scrape-configurations) for details.                                                                   |
 | `prometheus.additionalScrapeConfigs.external.name`         | Name of the secret that Prometheus should use for the additional external scrape configuration          | `nil`                                                                                                                                   |
 | `prometheus.additionalScrapeConfigs.external.key`          | Name of the key inside the secret to be used for the additional external scrape configuration           | `nil`                                                                                                                                   |
-| `prometheus.additionalScrapeConfigs.internal.jobList`      | A list of Prometheus scrape jobs                                                                        | `[]` See [docs](#additional-scrape-configurations) for details.                                                                      |
+| `prometheus.additionalScrapeConfigs.internal.jobList`      | A list of Prometheus scrape jobs                                                                        | `[]` See [docs](#additional-scrape-configurations) for details.                                                                         |
 | `prometheus.additionalScrapeConfigsExternal.enabled`       | (deprecated) Enable additional scrape configs that are managed externally to this chart                 | `false` See [docs](#additional-scrape-configurations) for details.                                                                      |
 | `prometheus.additionalScrapeConfigsExternal.name`          | (deprecated) Name of the secret that Prometheus should use for the additional scrape configuration      | `nil`                                                                                                                                   |
 | `prometheus.additionalScrapeConfigsExternal.key`           | (deprecated) Name of the key inside the secret to be used for the additional scrape configuration       | `nil`                                                                                                                                   |
@@ -266,6 +270,13 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `prometheus.thanos.service.extraPorts`                     | Additional ports to expose from the Thanos sidecar container                                            | `[]`                                                                                                                                    |
 | `prometheus.thanos.resources.limits`                       | The resources limits for the Thanos sidecar container                                                   | `{}`                                                                                                                                    |
 | `prometheus.thanos.resources.requests`                     | The resources requests for the Thanos sidecar container                                                 | `{}`                                                                                                                                    |
+| `prometheus.thanos.ingress.enabled`                               | Enable ingress controller resource                                                                      | `false`                                                                                                                                 |
+| `prometheus.thanos.ingress.certManager`                           | Add annotations for cert-manager                                                                        | `false`                                                                                                                                 |
+| `prometheus.thanos.ingress.annotations`                           | Ingress annotations                                                                                     | `[]`                                                                                                                                    |
+| `prometheus.thanos.ingress.hosts[0].name`                         | Hostname to your Prometheus installation                                                                | `thanos.prometheus.local`                                                                                                                      |
+| `prometheus.thanos.ingress.hosts[0].path`                         | Path within the url structure                                                                           | `/`                                                                                                                                     |
+| `prometheus.thanos.ingress.tls[0].hosts[0]`                       | TLS hosts                                                                                               | `thanos.prometheus.local`                                                                                                                      |
+| `prometheus.thanos.ingress.tls[0].secretName`                     | TLS Secret (certificates)                                                                               | `prometheus.local-tls`                                                                                                                  |
 | `prometheus.serviceMonitor.enabled`                        | Creates a ServiceMonitor to monitor Prometheus itself                                                   | `true`                                                                                                                                  |
 
 ### Alertmanager Parameters
@@ -302,11 +313,18 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `alertmanager.serviceMonitor.relabelings`         | Relabel configs                                                                                                                | `[]`                                                                                                                                                                                                                                                |
 | `alertmanager.ingress.enabled`                    | Enable ingress controller resource                                                                                             | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.ingress.certManager`                | Add annotations for cert-manager                                                                                               | `false`                                                                                                                                                                                                                                             |
+| `alertmanager.ingress.hostname`                   | Default host for the ingress resource                                                                                          | `alertmanager.local`                                                                                                                                                                                                                                |
+| `alertmanager.ingress.path`                       | Default path for the ingress resource                                                                                          | `/`                                                                                                                                                                                                                                                 |
+| `alertmanager.ingress.tls`                        | Create TLS Secret                                                                                                              | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.ingress.annotations`                | Ingress annotations                                                                                                            | `[]`                                                                                                                                                                                                                                                |
-| `alertmanager.ingress.hosts[0].name`              | Hostname to your Alertmanager installation                                                                                     | `alertmanager.local`                                                                                                                                                                                                                                |
-| `alertmanager.ingress.hosts[0].path`              | Path within the url structure                                                                                                  | `/`                                                                                                                                                                                                                                                 |
-| `alertmanager.ingress.tls[0].hosts[0]`            | TLS hosts                                                                                                                      | `alertmanager.local`                                                                                                                                                                                                                                |
-| `alertmanager.ingress.tls[0].secretName`          | TLS Secret (certificates)                                                                                                      | `alertmanager.local-tls`                                                                                                                                                                                                                            |
+| `alertmanager.ingress.extraHosts[0].name`         | Additional hostnames to be covered                                                                                             | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.extraHosts[0].path`         | Additional hostnames to be covered                                                                                             | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.extraPaths`                 | Additional arbitrary path/backend objects                                                                                      | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.extraTls[0].hosts[0]`       | TLS configuration for additional hostnames to be covered                                                                       | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.extraTls[0].secretName`     | TLS configuration for additional hostnames to be covered                                                                       | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.secrets[0].name`            | TLS Secret Name                                                                                                                | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.secrets[0].certificate`     | TLS Secret Certificate                                                                                                         | `nil`                                                                                                                                                                                                                                               |
+| `alertmanager.ingress.secrets[0].key`             | TLS Secret Key                                                                                                                 | `nil`                                                                                                                                                                                                                                               |
 | `alertmanager.externalUrl`                        | External URL used to access Alertmanager                                                                                       | Generated from `alertmanager.ingress` or Service data                                                                                                                                                                                               |
 | `alertmanager.resources`                          | CPU/Memory resource requests/limits for node                                                                                   | `{}`                                                                                                                                                                                                                                                |
 | `alertmanager.podAffinityPreset`                  | Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                                                                                                                                                                                                                                                |
@@ -320,6 +338,8 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `alertmanager.config`                             | Alertmanager configuration directive                                                                                           | `{"global":{"resolve_timeout":"5m"},"route":{"group_by":["job"],"group_wait":"30s","group_interval":"5m","repeat_interval":"12h","receiver":"null","routes":[{"match":{"alertname":"Watchdog"},"receiver":"null"}]},"receivers":[{"name":"null"}]}` |
 | `alertmanager.externalConfig`                     | Alertmanager configuration is created externally. If true, `alertmanager.config` is ignored, and a secret will not be created. | `false` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/alerting.md) for details                                                                                                        |
 | `alertmanager.replicaCount`                       | Number of Alertmanager replicas desired                                                                                        | `1`                                                                                                                                                                                                                                                 |
+| `alertmanager.portName`                           | Port name used for the pods and governing service. This defaults to web                                                        | `web`                                                                                                                                                                                                                                               |
+| `alertmanager.routePrefix`                        | Prefix used to register routes, overriding externalUrl route                                                                   | `/`                                                                                                                                                                                                                                                 |
 | `alertmanager.logLevel`                           | Log level for Alertmanager                                                                                                     | `info`                                                                                                                                                                                                                                              |
 | `alertmanager.logFormat`                          | Log format for Alertmanager                                                                                                    | `logfmt`                                                                                                                                                                                                                                            |
 | `alertmanager.podMetadata`                        | Standard object’s metadata                                                                                                     | `{}`                                                                                                                                                                                                                                                |
@@ -334,7 +354,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `alertmanager.paused`                             | If true, the Operator won't process any Alertmanager configuration changes                                                     | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.listenLocal`                        | ListenLocal makes the Alertmanager server listen on loopback                                                                   | `false`                                                                                                                                                                                                                                             |
 | `alertmanager.containers`                         | Containers allows injecting additional containers                                                                              | `[]`                                                                                                                                                                                                                                                |
-| `prometheus.volumes`                              | Volumes allows configuration of additional volumes. Evaluated as a template                                                     | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
+| `prometheus.volumes`                              | Volumes allows configuration of additional volumes. Evaluated as a template                                                    | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
 | `prometheus.volumeMounts`                         | VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template                                          | `[]` See [docs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec) for details                                                                                                           |
 | `alertmanager.priorityClassName`                  | Priority class assigned to the Pods                                                                                            | ``                                                                                                                                                                                                                                                  |
 | `alertmanager.additionalPeers`                    | AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster             | `[]`                                                                                                                                                                                                                                                |
@@ -433,52 +453,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Modify the Log level for Prometheus Operator:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
-- Increase the number of days to retain metrics:
-
-```diff
--   retention: 10d
-+   retention: 30d
-```
-
-- Increase the number of Alertmanager replicas:
-
-```diff
--   replicaCount: 1
-+   replicaCount: 3
-```
-
-- Modify the Log level for Alertmanager:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
-- Increase the number of Prometheus replicas:
-
-```diff
--   replicaCount: 1
-+   replicaCount: 3
-```
-
-- Modify the Log level for Prometheus:
-
-```diff
--   logLevel: info
-+   logLevel: error
-```
-
 ### Additional scrape configurations
 
 The following values have been deprecated. See [Upgrading](#upgrading) below.
@@ -506,7 +480,7 @@ prometheus.additionalScrapeConfigs.type=internal
 prometheus.additionalScrapeConfigs.internal.jobList=
       - job_name: 'opentelemetry-collector'
         # metrics_path defaults to '/metrics'
-        # scheme defaults to 'http'.      
+        # scheme defaults to 'http'.
         static_configs:
           - targets: ['opentelemetry-collector:8889']
 ```
@@ -538,6 +512,14 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+
+### To 4.0.0
+
+This version standardizes the way of defining Ingress rules.
+When configuring a single hostname for the Prometheus Ingress rule, set the `prometheus.ingress.hostname` value. When defining more than one, set the `prometheus.ingress.extraHosts` array.
+When configuring a single hostname for the Alertmanager Ingress rule, set the `alertmanager.ingress.hostname` value. When defining more than one, set the `alertmanager.ingress.extraHosts` array.
+
+Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 3.4.0
 

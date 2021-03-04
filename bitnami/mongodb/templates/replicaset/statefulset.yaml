@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "mongodb.fullname" . }}-headless
+  serviceName: {{ include "mongodb.service.nameOverride" . }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
@@ -49,6 +49,9 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
       serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -212,7 +215,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-headless"
+              value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: "{{ include "mongodb.fullname" . }}-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_REPLICA_SET_NAME
@@ -369,7 +372,7 @@ spec:
             - -ec
           args:
             - |
-              /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           env:
           {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
@@ -385,7 +388,7 @@ spec:
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9216
+              containerPort: {{ .Values.metrics.containerPort }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

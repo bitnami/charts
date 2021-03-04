@@ -1,6 +1,6 @@
 {{- if and .Values.rbac.create .Values.speaker.rbac.create -}}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "common.names.fullname" . }}-speaker
@@ -39,7 +39,7 @@ rules:
     verbs:
       - use
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}-pod-lister
@@ -52,14 +52,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-  - ''
-  resources:
-  - pods
-  verbs:
-  - list
+  - apiGroups:
+      - ''
+    resources:
+      - pods
+    verbs:
+      - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-speaker
@@ -72,15 +72,15 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 subjects:
-- kind: ServiceAccount
-  name: {{ include "metallb.speakerServiceAccountName" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ include "metallb.speakerServiceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ include "common.names.fullname" . }}-speaker
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-pod-lister
@@ -97,6 +97,6 @@ roleRef:
   kind: Role
   name: {{ include "common.names.fullname" . }}-pod-lister
 subjects:
-- kind: ServiceAccount
-  name: {{ include "metallb.speakerServiceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ include "metallb.speakerServiceAccountName" . }}
 {{- end -}}

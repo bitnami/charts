@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -82,11 +82,13 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.debug`                              | Specify if debug values should be set on the master                                                                                        | `false`                                     |
 | `master.webPort`                            | Specify the port where the web interface will listen on the master                                                                         | `8080`                                      |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                                                      | `7077`                                      |
+| `master.hostAliases`                        | Add deployment host aliases                                                                                                                | `[]`                                        |
 | `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                                                 | No default                                  |
 | `master.configOptions`                      | Optional configuration if the form `-Dx=y`                                                                                                 | No default                                  |
 | `master.securityContext.enabled`            | Enable security context                                                                                                                    | `true`                                      |
 | `master.securityContext.fsGroup`            | Group ID for the container                                                                                                                 | `1001`                                      |
 | `master.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                      |
+| `master.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                          | `{}`                                        |
 | `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}` (The value is evaluated as a template) |
 | `master.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                       | `{}` (The value is evaluated as a template) |
 | `master.podAffinityPreset`                  | Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                        |
@@ -126,6 +128,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.memoryLimit`                        | Set the maximum memory the worker is allowed to use                                                                                                                                  | No default                                  |
 | `worker.coreLimit`                          | Se the maximum number of cores that the worker can use                                                                                                                               | No default                                  |
 | `worker.dir`                                | Set a custom working directory for the application                                                                                                                                   | No default                                  |
+| `worker.hostAliases`                        | Add deployment host aliases                                                                                                                                                          | `[]`                                        |
 | `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                                                                                                          | No default                                  |
 | `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                                                                                                                        | No default                                  |
 | `worker.replicaCount`                       | Set the number of workers                                                                                                                                                            | `2`                                         |
@@ -135,6 +138,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.securityContext.enabled`            | Enable security context                                                                                                                                                              | `true`                                      |
 | `worker.securityContext.fsGroup`            | Group ID for the container                                                                                                                                                           | `1001`                                      |
 | `worker.securityContext.runAsUser`          | User ID for the container                                                                                                                                                            | `1001`                                      |
+| `worker.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                                                                    | `{}`                                        |
 | `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                                                                  | `{}`                                        |
 | `worker.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                                                                 | `{}` (The value is evaluated as a template) |
 | `worker.podAffinityPreset`                  | Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                                              | `""`                                        |
@@ -249,56 +253,6 @@ $ helm install my-release -f values.yaml bitnami/spark
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable ingress controller
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- Enable RPC authentication and encryption:
-```diff
-- security.rpc.authenticationEnabled: false
-- security.rpc.encryptionEnabled: false
-+ security.rpc.authenticationEnabled: true
-+ security.rpc.encryptionEnabled: true
-```
-
-- Enable storage encryption:
-```diff
-- security.storageEncryptionEnabled: false
-+ security.storageEncryptionEnabled: true
-```
-
-- Configure SSL parameters:
-```diff
-- security.ssl.enabled: false
-- security.ssl.needClientAuth: false
-+ security.ssl.enabled: true
-+ security.ssl.needClientAuth: true
-```
-
-- Set a secret name for passwords:
-```diff
-+ security.passwordsSecretName: my-passwords-secret
-```
-
-- Set a secret name for certificates:
-```diff
-+ security.certificatesSecretName: my-certificates-secret
-```
-
-- Enable autoscaling depending on CPU:
-```diff
-- worker.autoscaling.enabled: false
-- worker.autoscaling.replicasMax: 5
-+ worker.autoscaling.enabled: true
-+ worker.autoscaling.replicasMax: 10
-```
 
 ### Using custom configuration
 

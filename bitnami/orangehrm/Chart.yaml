@@ -15,7 +15,7 @@ dependencies:
 description: OrangeHRM is a free HR management system that offers a wealth of modules to suit the needs of your business.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/orangehrm
-icon: https://bitnami.com/assets/stacks/orangehrm/img/orangehrm-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/orangehrm/img/orangehrm-stack-220x234.png
 keywords:
   - orangehrm
   - http
@@ -31,4 +31,4 @@ name: orangehrm
 sources:
   - https://github.com/bitnami/bitnami-docker-orangehrm
   - https://www.orangehrm.com
-version: 10.0.0
+version: 10.1.2

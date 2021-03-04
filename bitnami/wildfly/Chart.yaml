@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 21.0.2
+appVersion: 22.0.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ dependencies:
 description: Chart for Wildfly
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
-icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
 keywords:
   - wildfly
   - java
@@ -26,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 7.1.0
+version: 8.1.3

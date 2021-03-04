@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -67,10 +67,11 @@ The following table lists the configurable parameters of the PyTorch chart and t
 | `git.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                       | String to partially override common.names.fullname template with a string (will prepend the release name)                                                 | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override common.names.fullname template with a string                                                                                     | `nil`                                                   |
+| `hostAliases`                        | Add deployment host aliases                                                                                                                               | `[]`                                                    |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`        | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 | `service.type`                       | Kubernetes service type                                                                                                                                   | `ClusterIP`                                             |
@@ -141,22 +142,6 @@ $ helm install my-release -f values.yaml bitnami/pytorch
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Run PyTorch in distributed mode:
-```diff
-- mode: standalone
-+ mode: distributed
-```
-
-- Number of nodes that will run the code:
-```diff
-- #worldSize:
-+ worldSize: 4
-```
 
 ### Loading your files
 

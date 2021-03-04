@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -72,6 +72,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `plugins`                              | Array containing the Kibana plugins to be installed in deployment                                                                                                                                                                                                                                              | `[]`                                                                                                    |
 | `savedObjects.urls`                    | Array containing links to NDJSON files to be imported during Kibana initialization                                                                                                                                                                                                                             | `[]`                                                                                                    |
 | `savedObjects.configmap`               | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                                                                                                                                                                        | `[]`                                                                                                    |
+| `hostAliases`                          | Add deployment host aliases                                                                                                                                                                                                                                                                                    | `[]`                                                                                                    |
 | `extraConfiguration`                   | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template                                                                                                                                                       | `nil`                                                                                                   |
 | `configurationCM`                      | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                                                                                                                                                                       | `nil`                                                                                                   |
 | `extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                                                                                                                                                                            | `nil`                                                                                                   |
@@ -81,8 +82,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `extraVolumeMounts`                    | Array of extra volume mounts to be added to the Kibana deployment (evaluated as template). Normally used with `extraVolumes`.                                                                                                                                                                                  | `nil`                                                                                                   |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)                                                                                                                                                      | `false`                                                                                                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                                                                                                                                                                               | `docker.io`                                                                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                                                                                                                                                                                   | `bitnami/minideb`                                                                                       |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                                                                                                                                                                                    | `buster`                                                                                                |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                                                                                                                                                                                   | `bitnami/bitnami-shell`                                                                                 |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                                                                                                                                                                                    | `"10"`                                                                                                  |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                                                                                                                                                                            | `Always`                                                                                                |
 | `volumePermissions.resources`          | Init container resource requests/limit                                                                                                                                                                                                                                                                         | `nil`                                                                                                   |
 | `persistence.enabled`                  | Enable persistence                                                                                                                                                                                                                                                                                             | `true`                                                                                                  |
@@ -163,6 +164,8 @@ $ helm install my-release \
 
 The above command sets the Kibana admin user to `admin-user`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
@@ -178,17 +181,6 @@ $ helm install my-release -f values.yaml bitnami/kibana
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable metrics scraping
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Change Kibana version
 

@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -76,11 +76,13 @@ The following table lists the configurable parameters of the Discourse chart and
 | `serviceAccount.annotations` | Annotations to add to the service account                                                 | `{}`                                                    |
 | `serviceAccount.name`        | Name to be used for the service account                                                   | `""`                                                    |
 | `podSecurityContext`         | Pod security context specification                                                        | `{}`                                                    |
+| `hostAliases`                | Add deployment host aliases                                                               | `[]`                                                    |
 | `persistence.enabled`        | Whether to enable persistence based on Persistent Volume Claims                           | `true`                                                  |
 | `persistence.storageClass`   | PVC Storage Class                                                                         | `nil`                                                   |
 | `persistence.existingClaim`  | Name of an existing PVC to reuse                                                          | `nil`                                                   |
 | `persistence.accessMode`     | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`                                         |
 | `persistence.size`           | Size of the PVC to request                                                                | `10Gi`                                                  |
+| `persistence.selector`       | Selector to match an existing Persistent Volume (this value is evaluated as a template)   | `{}`                                                    |
 | `updateStrategy`             | Update strategy of deployment                                                             | `{type: "RollingUpdate"}`                               |
 | `podAnnotations`             | Additional pod annotations                                                                | `{}`                                                    |
 | `podLabels`                  | Additional pod labels                                                                     | `{}` (evaluated as a template)                          |
@@ -238,6 +240,8 @@ $ helm install my-release \
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively. Additionally, it sets the Postgresql `bn_discourse` user password to `secretpassword`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
@@ -291,38 +295,6 @@ Then you can deploy Discourse chart using the proper parameters:
 persistence.storageClass=nfs
 postgresql.persistence.storageClass=nfs
 ```
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable client source IP preservation:
-
-```diff
-- service.externalTrafficPolicy: Cluster
-+ service.externalTrafficPolicy: Local
-```
-
-- Make Redis<sup>TM</sup> use password for auth:
-
-```diff
-- redis.usePassword: false
-+ redis.usePassword: true
-```
-
-- PVC Access Mode:
-
-```diff
-- persistence.accessMode: ReadWriteOnce
-+ ## To use the portal and to ensure you can scale Discourse you need to provide a
-+ ## ReadWriteMany PVC, if you dont have a provisioner for this type of storage
-+ ## We recommend that you install the nfs provisioner and map it to a RWO volume
-+ ## helm install nfs-server stable/nfs-server-provisioner --set persistence.enabled=true,persistence.size=10Gi
-+ ##
-+ persistence.accessMode: ReadWriteMany
-```
-
-Note that [values-production.yaml](values-production.yaml) specifies ReadWriteMany PVCs are specified. This is intended to ease the process of replication (see [Setting up replication](#setting-up-replication)).
 
 ### Sidecars
 

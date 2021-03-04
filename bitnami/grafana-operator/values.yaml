@@ -15,6 +15,10 @@
 ##
 # fullnameOverride:
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -27,6 +31,7 @@ commonAnnotations: {}
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
 ## Constants it is using for creating instances:
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
+##
 operator:
   enabled: true
   ## Number of grafana-operator Pod replicas
@@ -48,7 +53,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.7.0-debian-10-r30
+    tag: 3.9.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -64,6 +69,7 @@ operator:
   args:
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
     ## ensure that the operator is able to get data from other namespaces.
+    ##
     scanAllNamespaces: false
     scanNamespaces: []
 
@@ -99,7 +105,13 @@ operator:
   ## requests:
   ##   cpu: 100m
   ##   memory: 128Mi
+  ##
   resources: {}
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -116,6 +128,7 @@ operator:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ''
     ## Node label key to match
     ## E.g.
@@ -191,7 +204,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.3.6-debian-10-r20
+    tag: 7.4.1-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -238,6 +251,7 @@ grafana:
   ## The amount of pods scheduled by the created deployment
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
+  ##
   replicaCount: 1
 
   ## Pod affinity preset
@@ -259,6 +273,7 @@ grafana:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -378,6 +393,10 @@ grafana:
     security:
       disable_initial_admin_creation: false
       disable_gravatar: false
+      # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
+      # admin_user:
+      # admin_password:
+      #
       # ## OIDC configuration
       # ##
       # auth:
@@ -396,6 +415,16 @@ grafana:
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
       #   allow_sign_up: True
+
+  ## Mount extra configmaps and secrets into the Grafana pod
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
+  ##
+  configMaps: []
+  #  - myCustomConfigMap
+  #
+  secrets: []
+  #  - myCustomSecret
+  #
 
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
@@ -434,7 +463,7 @@ grafanaPluginInit:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.3.6-debian-10-r20
+    tag: 7.4.1-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

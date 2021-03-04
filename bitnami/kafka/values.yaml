@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.7.0-debian-10-r1
+  tag: 2.7.0-debian-10-r68
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -39,6 +39,16 @@ image:
 ## String to fully override kafka.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
 
 ## Kubernetes Cluster Domain
 ##
@@ -118,7 +128,7 @@ autoCreateTopicsEnable: true
 
 ## The number of messages to accept before forcing a flush of data to disk.
 ##
-logFlushIntervalMessages: 10000
+logFlushIntervalMessages: _10000
 
 ## The maximum amount of time a message can sit in a log before we force a flush.
 ##
@@ -265,6 +275,22 @@ auth:
   ##
   # jksSecret:
 
+  ## The secret key from the jksSecret containing the keystore with a SAN certificate. The SAN certificate in it should be
+  ## issued with Subject Alternative Names for all headless services. Example for 3 Broker:
+  ##  - kafka-0.kafka-headless.kafka.svc.cluster.local
+  ##  - kafka-1.kafka-headless.kafka.svc.cluster.local
+  ##  - kafka-2.kafka-headless.kafka.svc.cluster.local
+  ##
+  # jksKeystoreSAN:
+
+  ## Name of the existing secret containing your truststore if truststore not existing or different from the one in the jksSecret.
+  ##
+  # jksTruststoreSecret:
+
+  ## The secret key from the jksSecret or jksTruststoreSecret if truststore key different from the default (kafka.truststore.jks)
+  ##
+  # jksTruststore:
+
   ## Password to access the JKS files when they are password-protected.
   ##
   # jksPassword:
@@ -398,6 +424,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -566,7 +593,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.15-debian-10-r12
+      tag: 1.17.17-debian-10-r39
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -660,6 +687,7 @@ persistence:
   ##
   annotations: {}
   ## Mount point for persistence
+  ##
   mountPath: /bitnami/kafka
 
 ## Log Persistence parameters
@@ -691,8 +719,8 @@ logPersistence:
   ##
   annotations: {}
   ## Mount path for persistent logs
+  ##
   mountPath: /opt/bitnami/kafka/logs
-
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -701,15 +729,13 @@ logPersistence:
 volumePermissions:
   enabled: false
   ## The security context for the volumePermissions init container
+  ##
   securityContext:
     runAsUser: 0
-  ## Bitnami Minideb image
-  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
-  ##
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -767,7 +793,7 @@ provisioning:
   image:
     registry: docker.io
     repository: bitnami/kafka
-    tag: 2.7.0-debian-10-r10
+    tag: 2.7.0-debian-10-r67
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -820,7 +846,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r315
+      tag: 1.2.0-debian-10-r376
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -846,6 +872,23 @@ metrics:
     ## for Kafka Exporter client authentication
     ##
     # certificatesSecret:
+
+    ## The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
+    ##
+    tlsCert: cert-file
+
+    ## The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
+    ##
+    tlsKey: key-file
+
+    ## Name of the existing secret containing the optional ca certificate
+    ## for Kafka Exporter client authentication
+    ##
+    # tlsCaSecret:
+
+    ## The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
+    ##
+    tlsCaCert: ca-file
 
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -908,7 +951,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.14.0-debian-10-r102
+      tag: 0.15.0-debian-10-r31
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

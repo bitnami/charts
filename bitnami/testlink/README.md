@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -88,6 +88,7 @@ The following table lists the configurable parameters of the TestLink chart and 
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
 | `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
 | `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
+| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
 | `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
 | `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
@@ -178,15 +179,15 @@ The following table lists the configurable parameters of the TestLink chart and 
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Metrics parameters
 
@@ -203,25 +204,25 @@ The following table lists the configurable parameters of the TestLink chart and 
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `"10"`                                   |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink). For more information please refer to the [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink) image documentation.
 
@@ -234,6 +235,8 @@ $ helm install my-release \
 ```
 
 The above command sets the TestLink administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 

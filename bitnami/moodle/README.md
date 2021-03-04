@@ -22,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -143,7 +143,7 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `ingress.hostname`               | Default host for the ingress resource                    | `minio.local`                  |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.annotations`            | Map of Ingress annotations                               | `{}` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
@@ -181,8 +181,8 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
@@ -216,8 +216,8 @@ The following table lists the configurable parameters of the Moodle<sup>TM</sup>
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `"10"`                                   |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
 | `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
@@ -237,6 +237,8 @@ $ helm install my-release \
 ```
 
 The above command sets the Moodle<sup>TM</sup> administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -287,7 +289,7 @@ ingress:
   #   kubernetes.io/ingress.class: nginx
   #   kubernetes.io/tls-acme: 'true'
 
-  ## Moodle server Ingress hostnames
+  ## Moodle(TM) server Ingress hostnames
   ## Must be provided if Ingress is enabled
   ##
   hosts:

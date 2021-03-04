@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -80,6 +80,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `database`                               | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                                                               | `postgresql`                                            |
 | `containerSecurityContext`               | Container security podSecurityContext                                                                                                         | `{ runAsUser: 1001, runAsNonRoot: true}`                |
 | `podSecurityContext`                     | Pod security context                                                                                                                          | `{}`                                                    |
+| `hostAliases`                            | Add deployment host aliases                                                                                                                   | `[]`                                                    |
 | `nodeSelector`                           | Node labels for pod assignment                                                                                                                | `{}`                                                    |
 | `tolerations`                            | Tolerations for pod assignment                                                                                                                | `[]`                                                    |
 | `affinity`                               | Affinity for pod assignment                                                                                                                   | `{}`                                                    |
@@ -114,6 +115,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `ingressController.resources`            | Configure resource requests and limits (kong ingress controller container)                                                                    | `nil`                                                   |
 | `ingressController.extraVolumeMounts`    | Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                                   |
 | `migration.resources`                    | Configure resource requests and limits  (migration container)                                                                                 | `nil`                                                   |
+| `migration.hostAliases`                  | Add deployment host aliases                                                                                                                   | `[]`                                                    |
 | `migration.extraVolumeMounts`            | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`.                    | `nil`                                                   |
 | `extraDeploy`                            | Array of extra objects to deploy with the release (evaluated as a template).                                                                  | `nil`                                                   |
 
@@ -192,7 +194,6 @@ The following tables list the configurable parameters of the kong chart and thei
 | `ingressController.extraEnvVarsSecret`          | Secret containing extra env vars to configure Kong Ingress Controller (in case of sensitive data)                   | `nil`                                                   |
 | `ingressController.rbac.create`                 | Create the necessary Service Accounts, Roles and Rolebindings for the Ingress Controller to work                    | `true`                                                  |
 | `ingressController.rbac.existingServiceAccount` | Use an existing service account for all the RBAC operations                                                         | `nil`                                                   |
-| `ingressController.installCRDs`                 | Install CustomResourceDefinitions (use `--skip-crds` on Helm 3)                                                     | `true`                                                  |
 | `ingressController.customResourceDeletePolicy`  | Add custom CRD resource delete policy (for Helm 2 support)                                                          | `nil`                                                   |
 | `ingressController.rbac.existingServiceAccount` | Use an existing service account for all the RBAC operations                                                         | `nil`                                                   |
 | `ingressController.ingressClass`                | Name of the class to register Kong Ingress Controller (useful when having other Ingress Controllers in the cluster) | `nil`                                                   |
@@ -266,38 +267,6 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Enable exposing Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable Pod Disruption Budget:
-
-```diff
-- pdb.enabled: false
-+ pdb.enabled: true
-```
-
-- Increase number of replicas to 4:
-
-```diff
-- replicaCount: 2
-+ replicaCount: 4
-```
-
-- Enable exposing Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Database backend
 

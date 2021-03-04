@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r296
+  tag: 1.9.20-debian-10-r323
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -32,7 +32,6 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref: https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -47,6 +46,15 @@ fullnameOverride:
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
@@ -254,6 +262,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -299,6 +308,7 @@ ingress:
   hosts:
   ## The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
 
   ## tls:
   ## - hosts:
@@ -337,6 +347,7 @@ ingress:
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -380,8 +391,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -476,6 +487,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: "/login.php"
@@ -522,7 +534,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r270
+    tag: 0.8.0-debian-10-r298
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -573,8 +585,8 @@ certificates:
 
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

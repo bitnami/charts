@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Parameters
 
@@ -56,6 +56,8 @@ The following table lists the helpers available in the library which are scoped 
 | `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
 | `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
 | `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
+| `common.capabilities.rbac.apiVersion`        | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
+| `common.capabilities.crd.apiVersion`         | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
 | `common.capabilities.supportsHelmVersion`    | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
@@ -132,7 +134,7 @@ The following table lists the helpers available in the library which are scoped 
 | `common.validations.values.postgresql.passwords` | This helper will ensure required password for PostgreSQL are not empty. It returns a shared error for all the values.         | `dict "secret" "postgresql-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use postgresql chart and the helper.                                                                                |
 | `common.validations.values.redis.passwords`      | This helper will ensure required password for Redis<sup>TM</sup> are not empty. It returns a shared error for all the values. | `dict "secret" "redis-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use redis chart and the helper.                                                                                          |
 | `common.validations.values.cassandra.passwords`  | This helper will ensure required password for Cassandra are not empty. It returns a shared error for all the values.          | `dict "secret" "cassandra-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use cassandra chart and the helper.                                                                                  |
-| `common.validations.values.mongodb.passwords`    | This helper will ensure required password for MongoDB are not empty. It returns a shared error for all the values.            | `dict "secret" "mongodb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mongodb chart and the helper.                                                                                      |
+| `common.validations.values.mongodb.passwords`    | This helper will ensure required password for MongoDB&reg; are not empty. It returns a shared error for all the values.            | `dict "secret" "mongodb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mongodb chart and the helper.                                                                                      |
 
 ### Warnings
 

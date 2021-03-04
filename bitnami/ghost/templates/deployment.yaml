@@ -15,6 +15,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -27,6 +30,9 @@ spec:
       {{- end }}
     spec:
       {{- include "ghost.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}

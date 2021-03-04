@@ -14,11 +14,10 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.9-debian-10-r82
+  tag: 3.8.14-debian-10-r0
 
   ## set to true if you would like to see extra information on logs
-  ## it turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -49,6 +48,11 @@ kubeVersion:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## RabbitMQ Authentication parameters
 ##
@@ -81,6 +85,7 @@ auth:
     serverCertificate: |-
     serverKey: |-
     # existingSecret: name-of-existing-secret-to-rabbitmq
+    existingSecretFullChain: false
 
 ## Value for the RABBITMQ_LOGS environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -412,6 +417,11 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
+
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
@@ -638,6 +648,8 @@ service:
   ## RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
+  managerPortEnabled: true
+
   managerPort: 15672
 
   ## RabbitMQ Manager service port name
@@ -706,6 +718,12 @@ service:
   ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
+  ## Headless Service annotations. Evaluated as a template
+  ## Example:
+  ## annotations:
+  ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
+  ##
+  annotationsHeadless: {}
 
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
@@ -716,7 +734,8 @@ ingress:
   ##
   enabled: false
 
-  ## Path for the default host
+  ## Path for the default host. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
   ##
   path: /
 
@@ -894,13 +913,10 @@ metrics:
 ##
 volumePermissions:
   enabled: false
-  ## Bitnami Minideb image
-  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
-  ##
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

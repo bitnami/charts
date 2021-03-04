@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.46-debian-10-r134
+  tag: 2.4.46-debian-10-r182
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -30,9 +30,12 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
@@ -40,7 +43,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.0-debian-10-r6
+  tag: 2.30.1-debian-10-r17
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -140,6 +143,15 @@ cloneHtdocsFromGit:
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Apache pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -254,7 +266,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r260
+    tag: 0.8.0-debian-10-r308
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -294,6 +306,30 @@ extraVolumeMounts: []
 ## An array to add extra env vars
 ##
 extraEnvVars: []
+
+## Add init containers to the Apache pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the Apache pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Service parameters
 ##

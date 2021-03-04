@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.0.1-debian-10-r115
+  tag: 3.0.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -25,8 +25,7 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -54,6 +53,11 @@ master:
   webPort: 8080
   clusterPort: 7077
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Set the master daemon memory limit.
   ##
   # daemonMemoryLimit:
@@ -77,6 +81,7 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+    seLinuxOptions: {}
 
   ## Annotations to add to the statefulset
   ##
@@ -183,6 +188,11 @@ worker:
   webPort: 8081
   # clusterPort:
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Add ports for exposing jobs running inside the worker nodes
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
   ##
@@ -233,6 +243,7 @@ worker:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+    seLinuxOptions: {}
 
   ## Annotations to add to the statefulset
   ##

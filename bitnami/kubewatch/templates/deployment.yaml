@@ -26,6 +26,9 @@ spec:
         {{- end }}
     spec:
       {{- include "kubewatch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -36,6 +39,9 @@ spec:
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ include "kubewatch.serviceAccountName" . }}

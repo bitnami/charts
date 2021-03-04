@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.4.1-debian-10-r54
+  tag: 0.4.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -33,6 +33,11 @@ image:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Number of Metrics Server replicas to deploy
 ##
@@ -61,7 +66,7 @@ serviceAccount:
 ##
 apiService:
   ## Specifies whether the v1beta1.metrics.k8s.io API service should be created
-  ## This should not be necessary in k8s version >= 1.8
+  ## This should not be necessary in k8s version >= 1.8, but depends on vendors and cloud providers.
   ##
   create: false
 
@@ -75,6 +80,9 @@ securePort: 8443
 # API server unable to communicate with metrics-server. As an example, this is required
 # if you use Weave network on EKS
 hostNetwork: false
+
+## Container command (using container default if not set)
+command: ["metrics-server"]
 
 ## Extra arguments to pass to the metrics-server
 ## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
@@ -120,6 +128,7 @@ podDisruptionBudget:
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -139,6 +148,11 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+
+## Topology Spread Constraints. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints
+##
+topologySpreadConstraints: []
 
 ## Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -178,6 +192,7 @@ service:
   ## have metrics-server show up in `kubectl cluster-info`
   ##  kubernetes.io/cluster-service: "true"
   ##  kubernetes.io/name: "Metrics-server"
+  ##
   labels: {}
 
 ## Metric Server containers' resource requests and limits
@@ -194,6 +209,51 @@ resources:
   requests: {}
   #   cpu: 250m
   #   memory: 256Mi
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  failureThreshold: 3
+  httpGet:
+    path: /livez
+    port: https
+    scheme: HTTPS
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  failureThreshold: 3
+  httpGet:
+    path: /readyz
+    port: https
+    scheme: HTTPS
+  periodSeconds: 10
+
+## Custom Liveness probes for metrics-server
+##
+customLivenessProbe: {}
+
+## Custom Readiness probes metrics-server
+##
+customReadinessProbe: {}
+
+## Container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop: ["ALL"]
+
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: false
 
 ## Extra volumes to mount
 ## Example Use Case: mount an `emptyDir` to allow running with a `readOnlyRootFilesystem: true`

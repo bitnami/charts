@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.10-debian-10-r1
+  tag: 6.0.12-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -40,16 +40,19 @@ image:
 # fullnameOverride:
 
 ## Cluster settings
+##
 cluster:
   enabled: true
   slaveCount: 2
 
 ## Use redis sentinel in the redis pod. This will disable the master and slave services and
 ## create one redis service with ports to the sentinel and the redis instances
+##
 sentinel:
   enabled: false
   ## Require password authentication on the sentinel itself
   ## ref: https://redis.io/topics/sentinel
+  ##
   usePassword: true
   ## Bitnami Redis(TM) Sentintel image version
   ## ref: https://hub.docker.com/r/bitnami/redis-sentinel/tags/
@@ -60,7 +63,7 @@ sentinel:
     ## Bitnami Redis(TM) image tag
     ## ref: https://github.com/bitnami/bitnami-docker-redis-sentinel#supported-tags-and-respective-dockerfile-links
     ##
-    tag: 6.0.10-debian-10-r0
+    tag: 6.0.12-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,10 +78,17 @@ sentinel:
   masterSet: mymaster
   initialCheckTimeout: 5
   quorum: 2
-  downAfterMilliseconds: 60000
+  downAfterMilliseconds: 20000
   failoverTimeout: 18000
   parallelSyncs: 1
   port: 26379
+
+  ## Delay seconds when cleaning nodes IPs
+  ## When starting it will clean the sentiles IP (RESET "*") in all the nodes
+  ## This is the delay time before sending the command to the next node
+  ##
+  cleanDelaySeconds: 5
+
   ## Additional Redis(TM) configuration for the sentinel nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -114,14 +124,17 @@ sentinel:
   #     memory: 256Mi
   #     cpu: 100m
   ## Redis(TM) Sentinel Service properties
+  ##
   service:
     ##  Redis(TM) Sentinel Service type
+    ##
     type: ClusterIP
     sentinelPort: 26379
     redisPort: 6379
 
     ## External traffic policy (when service type is LoadBalancer)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
     externalTrafficPolicy: Cluster
 
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -189,11 +202,11 @@ serviceAccount:
   create: false
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the fullname template
+  ##
   name:
   ## Add annotations to service account
   # annotations:
   #   iam.gke.io/gcp-service-account: "sa@project.iam.gserviceaccount.com"
-
 
 rbac:
   ## Specifies whether RBAC resources should be created
@@ -214,6 +227,7 @@ rbac:
     rules: []
 
 ## Redis(TM) pod Security Context
+##
 securityContext:
   enabled: true
   fsGroup: 1001
@@ -233,6 +247,7 @@ containerSecurityContext:
   runAsUser: 1001
 
 ## Use password authentication
+##
 usePassword: true
 ## Redis(TM) password (both master and slave)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
@@ -246,13 +261,16 @@ password: ""
 # existingSecretPasswordKey:
 
 ## Mount secrets as files instead of environment variables
+##
 usePasswordFile: false
 
-## Persist data to a persistent volume (Redis Master)
+## Persist data to a persistent volume (Redis(TM) Master)
+##
 persistence:
   ## A manually managed Persistent Volume and Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
+  ##
   existingClaim:
 
 # Redis(TM) port
@@ -300,12 +318,17 @@ master:
   ## ref: https://redis.io/topics/config
   ##
   configmap:
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Redis(TM) additional command line flags
   ##
   ## Can be used to specify command line flags, for example:
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
+  ##
   extraFlags: []
   ## Comma-separated list of Redis(TM) commands to disable
   ##
@@ -319,6 +342,7 @@ master:
 
   ## Redis(TM) Master additional pod labels and annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
   podLabels: {}
   podAnnotations: {}
 
@@ -391,13 +415,16 @@ master:
   affinity: {}
 
   ## Redis(TM) Master Service properties
+  ##
   service:
     ##  Redis(TM) Master Service type
+    ##
     type: ClusterIP
     port: 6379
 
     ## External traffic policy (when service type is LoadBalancer)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
     externalTrafficPolicy: Cluster
 
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -421,9 +448,11 @@ master:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
     ## Redis(TM) images.
+    ##
     path: /data
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
+    ##
     subPath: ""
     ## redis data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -438,6 +467,7 @@ master:
     size: 8Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+    ##
     matchLabels: {}
     matchExpressions: {}
     volumes:
@@ -446,6 +476,7 @@ master:
 
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ##
   statefulset:
     labels: {}
     annotations: {}
@@ -459,7 +490,7 @@ master:
 
   ## Redis(TM) Master pod priorityClassName
   ##
-  priorityClassName: ''
+  priorityClassName: {}
 
   ## An array to add extra env vars
   ## For example:
@@ -488,14 +519,18 @@ master:
 ##
 slave:
   ## Slave Service properties
+  ##
   service:
     ## Redis(TM) Slave Service type
+    ##
     type: ClusterIP
     ## Redis(TM) port
+    ##
     port: 6379
 
     ## External traffic policy (when service type is LoadBalancer)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
     externalTrafficPolicy: Cluster
 
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
@@ -513,7 +548,12 @@ slave:
     # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
   ## Redis(TM) slave port
+  ##
   port: 6379
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Can be used to specify command line arguments, for example:
   ## Note `exec` is prepended to command
   ##
@@ -526,8 +566,10 @@ slave:
   ##
   configmap:
   ## Redis(TM) extra flags
+  ##
   extraFlags: []
   ## List of Redis(TM) commands to disable
+  ##
   disableCommands:
     - FLUSHDB
     - FLUSHALL
@@ -607,11 +649,12 @@ slave:
   # schedulerName:
 
   ## Redis(TM) slave pod Annotation and Labels
+  ##
   podLabels: {}
   podAnnotations: {}
 
   ## Redis(TM) slave pod priorityClassName
-  # priorityClassName: ''
+  priorityClassName: {}
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -620,9 +663,11 @@ slave:
     enabled: true
     ## The path the volume will be mounted at, useful when using different
     ## Redis(TM) images.
+    ##
     path: /data
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
+    ##
     subPath: ""
     ## redis data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -637,11 +682,13 @@ slave:
     size: 8Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+    ##
     matchLabels: {}
     matchExpressions: {}
 
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ##
   statefulset:
     labels: {}
     annotations: {}
@@ -681,7 +728,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.15.1-debian-10-r2
+    tag: 1.17.1-debian-10-r9
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -701,6 +748,7 @@ metrics:
   # extraArgs: {}
 
   ## Metrics exporter pod Annotation and Labels
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9121"
@@ -716,6 +764,7 @@ metrics:
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ##
     selector:
       prometheus: kube-prometheus
 
@@ -740,6 +789,7 @@ metrics:
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
   prometheusRule:
     enabled: false
     additionalLabels: {}
@@ -782,12 +832,13 @@ metrics:
     rules: []
 
   ## Metrics exporter pod priorityClassName
-  # priorityClassName: ''
+  priorityClassName: {}
   service:
     type: ClusterIP
 
     ## External traffic policy (when service type is LoadBalancer)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
     externalTrafficPolicy: Cluster
 
     ## Use serviceLoadBalancerIP to request a specific static IP,
@@ -804,8 +855,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -842,12 +893,13 @@ configmap: |-
 
 ## Sysctl InitContainer
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
+##
 sysctlImage:
   enabled: false
   command: []
   registry: docker.io
-  repository: bitnami/minideb
-  tag: buster
+  repository: bitnami/bitnami-shell
+  tag: "10"
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

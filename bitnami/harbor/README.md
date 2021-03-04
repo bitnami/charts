@@ -26,7 +26,7 @@ This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -79,8 +79,8 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `podSecurityContext`                  | Pod security context                                                                                                                                                                           | `{ fsGroup: 1001 }`                                     |
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)                                      | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                                                               | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                                                                   | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                                                                    | `buster`                                                |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                                                                   | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                                                                    | `"10"`                                                  |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                               | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                            | `Always`                                                |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                                                         | `nil`                                                   |
@@ -143,7 +143,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `persistence.persistentVolumeClaim.trivy.storageClass`        | Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used(the default). Set it to `-` to disable dynamic provisioning                                                                                                                                                                                                | `nil`           |
 | `persistence.persistentVolumeClaim.trivy.accessMode`          | The access mode of the volume                                                                                                                                                                                                                                                                                                                                | `ReadWriteOnce` |
 | `persistence.persistentVolumeClaim.trivy.size`                | The size of the volume                                                                                                                                                                                                                                                                                                                                       | `5Gi`           |
-| `persistence.imageChartStorage.disableredirect`               | The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO<sup>TM</sup> for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail | `false`         |
+| `persistence.imageChartStorage.disableredirect`               | The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO&reg; for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail         | `false`         |
 | `persistence.imageChartStorage.caBundleSecretName`            | Specify the `caBundleSecretName` if the storage service uses a self-signed certificate. The secret must contain keys named `ca.crt` which will be injected into the trust store  of registry's and chartmuseum's containers.                                                                                                                                 |                 |
 | `persistence.imageChartStorage.type`                          | The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail              | `filesystem`    |
 | `persistence.imageChartStorage.azure.accountname`             | Azure storage type setting: Name of the Azure account                                                                                                                                                                                                                                                                                                        | `nil`           |
@@ -700,6 +700,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                            |
 | `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                       |
 | `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-a-secure-database-password` |
+| `postgresql.existingSecret`             | Set Postgresql password via an existing secret                                                            | `nil`                            |
 | `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{"maxConnections": "1024"}`     |
 | `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                          |
 | `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                           |
@@ -733,6 +734,9 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                           | `true`      |
 | `externalRedis.host`                      | Host of the external redis                                                                                | `localhost` |
 | `externalRedis.port`                      | Port of the external redis                                                                                | `6379`      |
+| `externalRedis.sentinel.enabled`          | If external redis with sentinal is used, set it to `true`                                                 | `false`     |
+| `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                                                            | `mymaster`  |
+| `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>| `nil`       |
 | `externalRedis.password`                  | Password for the external redis                                                                           | `nil`       |
 | `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                   | `0`         |
 | `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                             | `1`         |
@@ -753,6 +757,8 @@ $ helm install my-release \
 
 The above command sets the Harbor administrator account password to `password`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
@@ -766,46 +772,6 @@ $ helm install my-release -f values.yaml bitnami/harbor
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`:
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- The common name used to generate the certificate. It's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.secretName` is null:
-```diff
-- service.tls.commonName: "core.harbor.domain"
-+ service.tls.commonName: ""
-```
-
-- Option to ensure all passwords and keys are set by the user:
-```diff
-- forcePassword: false
-+ forcePassword: true
-```
-
-- Option to deploy Redis<sup>TM</sup> cluster:
-```diff
-- redis.cluster.enabled: false
-+ redis.cluster.enabled: true
-```
-
-- Option to deploy PostgreSQL replication cluster:
-```diff
-- postgresql.replication.enabled: false
-+ postgresql.replication.enabled: true
-```
-
-- Internal TLS is enabled by default:
-```diff
-- internalTLS.enabled: false
-+ internalTLS.enabled: true
-```
 
 ### Configure the way how to expose Harbor service:
 

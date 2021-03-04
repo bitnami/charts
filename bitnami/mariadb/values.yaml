@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.8-debian-10-r46
+  tag: 10.5.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,8 +28,8 @@ image:
   ##
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
   debug: false
 
 ## String to partially override mariadb.fullname template (will maintain the release name)
@@ -121,6 +121,11 @@ primary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MariaDB Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -190,6 +195,7 @@ primary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -314,6 +320,8 @@ primary:
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
     # existingClaim:
+    ## Subdirectory of the volume to mount
+    # subPath:
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -336,6 +344,7 @@ primary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MariaDB Primary pod(s)
@@ -410,6 +419,11 @@ secondary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MariaDB Secondary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -477,6 +491,7 @@ secondary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -597,6 +612,8 @@ secondary:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
+    ## Subdirectory of the volume to mount
+    # subPath:
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -619,6 +636,7 @@ secondary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MariaDB Secondary pod(s)
@@ -711,8 +729,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -729,7 +747,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r318
+    tag: 0.12.1-debian-10-r359
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

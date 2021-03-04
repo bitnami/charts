@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.1.1-debian-10-r209
+  tag: 4.1.1-debian-10-r267
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -30,6 +30,11 @@ image:
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
 kubeVersion:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## String to partially override redmine.fullname template (will maintain the release name)
 ##
@@ -131,12 +136,11 @@ replicas: 1
 ##
 containerSecurityContext:
   enabled: false
-  runAsUser: 1001
-  runAsNonRoot: true
+  runAsUser: 0
 
 podSecurityContext:
-  enabled: true
-  fsGroup: 1001
+  enabled: false
+  fsGroup: 0
 
 ## Redmine containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -590,7 +594,7 @@ mailReceiver:
   image:
     registry: docker.io
     repository: bitnami/redmine
-    tag: 4.1.1-debian-10-r208
+    tag: 4.1.1-debian-10-r266
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -830,8 +834,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -872,8 +876,8 @@ certificates:
   # - secret: more-custom-CAs
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -1,7 +1,7 @@
 annotations:
   category: CRM
 apiVersion: v2
-appVersion: 14.0.20210110
+appVersion: 14.0.20210210
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -13,7 +13,7 @@ dependencies:
 description: A suite of web based open source business apps.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
-icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
 keywords:
   - odoo
   - crm
@@ -27,4 +27,4 @@ name: odoo
 sources:
   - https://github.com/bitnami/bitnami-docker-odoo
   - https://www.odoo.com/
-version: 18.1.0
+version: 18.2.2

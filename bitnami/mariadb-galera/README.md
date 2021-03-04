@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -82,6 +82,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.loadBalancerSourceRanges`         | Address that are allowed when svc is `LoadBalancer`                                                                                                                                                                                                                              | `[]`                                                              |
 | `service.annotations`                      | Additional annotations for MariaDB Galera service                                                                                                                                                                                                                                | `{}`                                                              |
 | `service.headless.annotations`             | Annotations for the headless service. May be useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.                                                                                                                          | `{}`                                                              |
+| `hostAliases`                              | Add deployment host aliases                                                                                                                                                                                                                                                      | `[]`                                                              |
 | `clusterDomain`                            | Kubernetes DNS Domain name to use                                                                                                                                                                                                                                                | `cluster.local`                                                   |
 | `serviceAccount.create`                    | Specify whether a ServiceAccount should be created                                                                                                                                                                                                                               | `false`                                                           |
 | `serviceAccount.name`                      | The name of the ServiceAccount to create                                                                                                                                                                                                                                         | Generated using the common.names.fullname template                |
@@ -111,6 +112,8 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.bslookup`                            | LDAP base lookup                                                                                                                                                                                                                                                                 | `nil`                                                             |
 | `ldap.nss_initgroups_ignoreusers`          | LDAP ignored users                                                                                                                                                                                                                                                               | `root,nslcd`                                                      |
 | `ldap.scope`                               | LDAP search scope                                                                                                                                                                                                                                                                | `nil`                                                             |
+| `ldap.filter`                               | LDAP custom filter                                                                                                                                                                                                                                                                | `nil`                                                             |
+| `ldap.map`                               | LDAP custom map                                                                                                                                                                                                                                                                 | `nil`                                                             |
 | `ldap.tls_reqcert`                         | LDAP TLS check on server certificates                                                                                                                                                                                                                                            | `nil`                                                             |
 | `tls.enabled`                              | Enable TLS support for replication traffic                                                                                                                                                                                                                                       | `false`                                                           |
 | `tls.certificatesSecret`                   | Name of the secret that contains the certificates                                                                                                                                                                                                                                | `nil`                                                             |
@@ -206,6 +209,8 @@ $ helm install my-release \
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
@@ -234,28 +239,6 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Force users to specify a password:
-
-```diff
-- rootUser.forcePassword: false
-+ rootUser.forcePassword: true
-- db.forcePassword: false
-+ db.forcePassword: true
-- galera.mariabackup.forcePassword: false
-+ galera.mariabackup..forcePassword: true
-```
-
-- Start a side-car prometheus exporter:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
 ### Change MariaDB version
 
 To modify the MariaDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mariadb-galera/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
@@ -272,6 +255,8 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 - `ldap.bslookup`: LDAP base lookup. No defaults.
 - `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
 - `ldap.scope`: LDAP search scope. No defaults.
+- `ldap.filter`: LDAP custom search filter. No defaults.
+- `ldap.map`: LDAP custom map to use. No defaults.
 - `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
 
 For example:
@@ -285,6 +270,8 @@ ldap.bindpw="admin"
 ldap.bslookup="ou=group-ok,dc=example,dc=org"
 ldap.nss_initgroups_ignoreusers="root,nslcd"
 ldap.scope="sub"
+ldap.filter="AccountName"
+ldap.map="number"
 ldap.tls_reqcert="demand"
 ```
 
@@ -359,7 +346,7 @@ The feature allows for specifying a template string for a initContainer in the p
 ```yaml
 extraInitContainers:
 - name: initcontainer
-  image: bitnami/minideb:buster
+  image: bitnami/minideb
   command: ["/bin/sh", "-c"]
   args:
     - install_packages curl && curl http://api-service.local/db/starting;

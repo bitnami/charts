@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -74,6 +74,7 @@ The following tables lists the configurable parameters of the NATS chart and the
 | `image.tag`                | NATS image tag                                                                 | `{TAG_NAME}`                                            |
 | `image.pullPolicy`         | Image pull policy                                                              | `IfNotPresent`                                          |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods) |
+| `hostAliases`              | Add deployment host aliases                                                    | `[]`                                                    |
 | `auth.enabled`             | Switch to enable/disable client authentication                                 | `true`                                                  |
 | `auth.user`                | Client authentication user                                                     | `nats_client`                                           |
 | `auth.password`            | Client authentication password                                                 | `random alhpanumeric string (10)`                       |
@@ -214,6 +215,8 @@ $ helm install my-release \
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
 
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
@@ -229,67 +232,6 @@ $ helm install my-release -f values.yaml bitnami/nats
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration and horizontal scaling
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`. You can use this file instead of the default one.
-
-- Number of NATS nodes
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable and set the max. number of client connections, protocol control line, payload and duration the server can block on a socket write to a client
-
-```diff
-- # maxConnections: 100
-- # maxControlLine: 512
-- # maxPayload: 65536
-- # writeDeadline: "2s"
-+ maxConnections: 100
-+ maxControlLine: 512
-+ maxPayload: 65536
-+ writeDeadline: "2s"
-```
-
-- Enable NetworkPolicy:
-
-```diff
-- networkPolicy.enabled: false
-+ networkPolicy.enabled: true
-```
-
-- Disallow external connections:
-
-```diff
-- networkPolicy.allowExternal: true
-+ networkPolicy.allowExternal: false
-```
-
-- Enable ingress controller resource:
-
-```diff
-- ingress.enabled: false
-+ ingress.enabled: true
-```
-
-- Enable Prometheus metrics via exporter side-car:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
-
-- Enable PodDisruptionBudget:
-
-```diff
-- pdb.create: false
-+ pdb.create: true
-```
-
-To horizontally scale this chart, you can use the `--replicas` flag to modify the number of nodes in your NATS replica set.
 
 ### Adding extra environment variables
 

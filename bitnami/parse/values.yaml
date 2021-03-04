@@ -35,8 +35,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -76,7 +76,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.9.3-debian-10-r28
+    tag: 4.9.3-debian-10-r65
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,6 +88,11 @@ server:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Server Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -234,7 +239,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r251
+    tag: 2.1.0-debian-10-r288
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -246,6 +251,11 @@ dashboard:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Parse Dashboard Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -486,7 +496,7 @@ persistence:
   size: 8Gi
 
 ##
-## MongoDB chart configuration
+## MongoDB(R) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
@@ -495,14 +505,14 @@ mongodb:
   # make no difference in deploying the subchart. Change this when further standardizations
   # are added (externalDB)
   enabled: true
-  ## MongoDB Authentication parameters
+  ## MongoDB(R) Authentication parameters
   ##
   auth:
     ## Enable authentication
     ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
     ##
     enabled: true
-    ## MongoDB root password
+    ## MongoDB(R) root password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
@@ -521,3 +531,7 @@ mongodb:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 8Gi
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

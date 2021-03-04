@@ -1,0 +1,11 @@
+{{- if (include "thanos.receive.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+data:
+  hashrings.json: |-
+    {{- include "common.tplvalues.render" (dict "value" (include "thanos.receive.config" .) "context" .) | nindent 4 }}
+{{ end }}

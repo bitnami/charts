@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
@@ -27,11 +27,20 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.hostNetwork }}
       hostNetwork: true
@@ -43,8 +52,10 @@ spec:
           ports:
             - name: https
               containerPort: {{ .Values.securePort }}
-          command:
-            - metrics-server
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          args:
             - --secure-port={{ .Values.securePort }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
@@ -55,6 +66,19 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
           volumeMounts: {{- toYaml .Values.extraVolumeMounts | nindent 12 }}

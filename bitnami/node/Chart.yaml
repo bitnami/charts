@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 14.15.4
+appVersion: 14.16.0
 dependencies:
   - condition: mongodb.enabled
     name: mongodb
@@ -15,7 +15,7 @@ dependencies:
 description: Event-driven I/O server-side JavaScript environment based on V8
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/node
-icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-220x234.png
 keywords:
   - node
   - javascript
@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 15.0.0
+version: 15.1.4

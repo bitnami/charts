@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.0.4-debian-10-r80
+  tag: 5.1.0-debian-10-r0
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -56,6 +56,15 @@ extraDeploy: []
 ##
 command: []
 args: []
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## An array to add extra env vars to configure phpMyAdmin
 ## For example:
@@ -356,7 +365,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r262
+    tag: 0.8.0-debian-10-r313
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
