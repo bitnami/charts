@@ -219,32 +219,42 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 
 ### Exposure parameters
 
-| Parameter                                         | Description                                                                                            | Default                        |
-|---------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                                    | Kubernetes Service type                                                                                | `ClusterIP`                    |
-| `service.nameOverride`                            | MongoDB&reg; service name                                                                              | `{mongodb.fullname}-headless`  |
-| `service.port`                                    | MongoDB&reg; service port                                                                              | `27017`                        |
-| `service.portName`                                | MongoDB&reg; service port name                                                                         | `mongodb`                      |
-| `service.nodePort`                                | Port to bind to for NodePort and LoadBalancer service types                                            | `""`                           |
-| `service.clusterIP`                               | MongoDB&reg; service cluster IP                                                                        | `nil`                          |
-| `service.loadBalancerIP`                          | loadBalancerIP for MongoDB&reg; Service                                                                | `nil`                          |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
-| `service.annotations`                             | Service annotations                                                                                    | `{}` (evaluated as a template) |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to MongoDB&reg; nodes                                        | `false`                        |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs by querying the K8s API                     | `false`                        |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry (kubectl)                                                 | `docker.io`                    |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image name (kubectl)                                                     | `bitnami/kubectl`              |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (kubectl)                                                      | `{TAG_NAME}`                   |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy (kubectl)                                              | `Always`                       |
-| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                          | `{}`                           |
-| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                        | `{}`                           |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                        | `LoadBalancer`                 |
-| `externalAccess.service.port`                     | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
-| `externalAccess.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort | `nil`                          |
-| `externalAccess.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
+| Parameter                                                | Description                                                                                            | Default                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `service.type`                                           | Kubernetes Service type                                                                                | `ClusterIP`                    |
+| `service.nameOverride`                                   | MongoDB&reg; service name                                                                              | `{mongodb.fullname}-headless`  |
+| `service.port`                                           | MongoDB&reg; service port                                                                              | `27017`                        |
+| `service.portName`                                       | MongoDB&reg; service port name                                                                         | `mongodb`                      |
+| `service.nodePort`                                       | Port to bind to for NodePort and LoadBalancer service types                                            | `""`                           |
+| `service.clusterIP`                                      | MongoDB&reg; service cluster IP                                                                        | `nil`                          |
+| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB&reg; Service                                                                | `nil`                          |
+| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
+| `service.annotations`                                    | Service annotations                                                                                    | `{}` (evaluated as a template) |
+| `externalAccess.enabled`                                 | Enable Kubernetes external cluster access to MongoDB&reg; nodes                                        | `false`                        |
+| `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                     | `false`                        |
+| `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry (kubectl)                                                 | `docker.io`                    |
+| `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image name (kubectl)                                                     | `bitnami/kubectl`              |
+| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (kubectl)                                                      | `{TAG_NAME}`                   |
+| `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy (kubectl)                                              | `Always`                       |
+| `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                          | `{}`                           |
+| `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                        | `{}`                           |
+| `externalAccess.service.type`                            | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                        | `LoadBalancer`                 |
+| `externalAccess.service.port`                            | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
+| `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
+| `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
+| `externalAccess.service.domain`                          | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort | `nil`                          |
+| `externalAccess.service.nodePorts`                       | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
+| `externalAccess.service.annotations`                     | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
+| `externalAccess.hidden.enabled`                          | Enable Kubernetes external cluster access to MongoDB&reg; hidden nodes                                 | `false`                        |
+| `externalAccess.hidden.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                        | `LoadBalancer`                 |
+| `externalAccess.hidden.service.port`                     | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
+| `externalAccess.hidden.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
+| `externalAccess.hidden.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
+| `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort | `nil`                          |
+| `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
+| `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
+
+
 
 ### Persistence parameters
 
@@ -261,16 +271,16 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 
 ### RBAC parameters
 
-| Parameter                                                                                                                                                                                                                                                                         | Description                                             | Default                                         |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------|
-| `serviceAccount.create`                                                                                                                                                                                                                                                           | Enable creation of ServiceAccount for MongoDB&reg; pods | `true`                                          |
-| `serviceAccount.name`                                                                                                                                                                                                                                                             | Name of the created serviceAccount                      | Generated using the `mongodb.fullname` template |
-| `serviceAccount.annotations`                                                                                                                                                                                                                                                      | Additional Service Account annotations                  | `{}`                                            |
-| `rbac.create`                                                                                                                                                                                                                                                                     | Weather to create & use RBAC resources or not           | `false`                                         |
-| `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                       | `false` |                                                    | |                                                    | |                                                         |                                                 |
-| `podSecurityPolicy.allowPrivilegeEscalation`                                                                                                                                                                                                                                      | Enable privilege escalation                             | `false`                                         |
-| `podSecurityPolicy.privileged`                                                                                                                                                                                                                                                    | Allow privileged                                        | `false`                                         |
-| `podSecurityPolicy.spec`                     | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence       | `{}`    |                                                    | |                                                    | |                                                         |                                                 |
+| Parameter                                    | Description                                                                                          | Default                                         |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                              | `true`                                          |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
+| `rbac.create`                                | Weather to create & use RBAC resources or not                                                        | `false`                                         |
+| `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |
+| `podSecurityPolicy.spec`                     | The PSP Spec (See https://kubernetes.io/docs/concepts/policy/pod-security-policy/), takes precedence | `{}`                                            |
 
 ### Volume Permissions parameters
 
@@ -329,6 +339,57 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `arbiter.extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `{}`                                  |
 | `arbiter.extraVolumes`              | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `{}`                                  |
 | `arbiter.service.nameOverride`      | The arbiter service name                                                                          | `{mongodb.fullname}-arbiter-headless` |
+
+### Hidden Node parameters
+
+| Parameter                                                | Description                                                                                                          | Default                                                 |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `hidden.enabled`                                         | Enable deploying the hidden nodes                                                                                    | `false`                                                 |
+| `hidden.hostAliases`                                     | Add deployment host aliases                                                                                          | `[]`                                                    |
+| `hidden.configuration`                                   | Hidden node configuration file to be used                                                                            | `{}`                                                    |
+| `hidden.existingConfigmap`                               | Name of existing ConfigMap with Hidden node configuration                                                            | `nil`                                                   |
+| `hidden.command`                                         | Override default container command (useful when using custom images)                                                 | `nil`                                                   |
+| `hidden.args`                                            | Override default container args (useful when using custom images)                                                    | `nil`                                                   |
+| `hidden.extraFlags`                                      | Hidden node additional command line flags                                                                            | `[]`                                                    |
+| `hidden.extraEnvVars`                                    | Extra environment variables to add to Hidden node pods                                                               | `[]`                                                    |
+| `hidden.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars                                                                 | `nil`                                                   |
+| `hidden.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars (in case of sensitive data)                                        | `nil`                                                   |
+| `hidden.replicaCount`                                    | Number of hidden nodes (only when `architecture=replicaset`)                                                         | `2`                                                     |
+| `hidden.labels`                                          | Annotations to be added to the hidden node statefulset                                                               | `{}` (evaluated as a template)                          |
+| `hidden.annotations`                                     | Additional labels to be added to thehidden node statefulset                                                          | `{}` (evaluated as a template)                          |
+| `hidden.podManagementPolicy`                             | Pod management policy for hidden node                                                                                | `OrderedReady`                                          |
+| `hidden.strategyType`                                    | StrategyType for hidden node statefulset                                                                             | `RollingUpdate`                                         |
+| `hidden.podLabels`                                       | Hidden node pod labels                                                                                               | `{}` (evaluated as a template)                          |
+| `hidden.podAnnotations`                                  | Hidden node Pod annotations                                                                                          | `{}` (evaluated as a template)                          |
+| `hidden.priorityClassName`                               | Name of the existing priority class to be used by hidden node pod(s)                                                 | `""`                                                    |
+| `hidden.podAffinityPreset`                               | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                    |
+| `hidden.podAntiAffinityPreset`                           | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                  |
+| `hidden.nodeAffinityPreset.type`                         | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                    |
+| `hidden.nodeAffinityPreset.key`                          | Hidden Node label key to match Ignored if `affinity` is set.                                                         | `""`                                                    |
+| `hidden.nodeAffinityPreset.values`                       | Hidden Node label values to match. Ignored if `affinity` is set.                                                     | `[]`                                                    |
+| `hidden.affinity`                                        | Hidden node Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                          |
+| `hidden.nodeSelector`                                    | Hidden node Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                          |
+| `hidden.tolerations`                                     | Hidden node Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                          |
+| `hidden.resources.limits`                                | The resources limits for hidden node containers                                                                      | `{}`                                                    |
+| `hidden.resources.requests`                              | The requested resources for hidden node containers                                                                   | `{}`                                                    |
+| `hidden.livenessProbe`                                   | Liveness probe configuration for hidden node                                                                         | Check `values.yaml` file                                |
+| `hidden.readinessProbe`                                  | Readiness probe configuration for hidden node                                                                        | Check `values.yaml` file                                |
+| `hidden.customLivenessProbe`                             | Override default liveness probe for hidden node containers                                                           | `nil`                                                   |
+| `hidden.customReadinessProbe`                            | Override default readiness probe for hidden node containers                                                          | `nil`                                                   |
+| `hidden.pdb.create`                                      | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                                               | `false`                                                 |
+| `hidden.pdb.minAvailable`                                | Minimum number/percentage of hidden node pods that should remain scheduled                                           | `1`                                                     |
+| `hidden.pdb.maxUnavailable`                              | Maximum number/percentage of hidden node pods that may be made unavailable                                           | `nil`                                                   |
+| `initContainers`                                        | Add additional init containers for the hidden node pod(s)                                                            | `{}` (evaluated as a template)                          |
+| `hidden.sidecars`                                        | Add additional sidecar containers for the hidden node pod(s)                                                         | `{}` (evaluated as a template)                          |
+| `hidden.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the hidden node container(s)                            | `{}`                                                    |
+| `hidden.extraVolumes`                                    | Optionally specify extra list of additional volumes to the hidden node statefulset                                   | `{}`                                                    |
+| `hidden.persistence.enabled`                             | Enable hidden node data persistence using PVC                                                                        | `true`                                                  |
+| `hidden.persistence.storageClass`                        | PVC Storage Class for hidden node data volume                                                                        | `nil`                                                   |
+| `hidden.persistence.accessMode`                          | PVC Access Mode for hidden node data volume                                                                          | `ReadWriteOnce`                                         |
+| `hidden.persistence.size`                                | PVC Storage Request for hidden node data volume                                                                      | `8Gi`                                                   |
+| `hidden.persistence.mountPath`                           | Path to mount the volume at                                                                                          | `/bitnami/mongodb`                                      |
+| `hidden.persistence.subPath`                             | Subdirectory of the volume to mount at                                                                               | `""`                                                    |
+| `hidden.persistence.volumeClaimTemplates.selector`       | A label query over volumes to consider for binding (e.g. when using local volumes)                                   | ``                                                      |
 
 ### Metrics parameters
 
