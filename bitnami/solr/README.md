@@ -89,8 +89,8 @@ The following tables lists the configurable parameters of the solr chart and the
 | `rollingUpdate`                                           | Rolling Update configuration                                 | `nil`                                                     |
 | `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                   |
 | `volumePermissions.image.registry`                        | Init container volume-permissions image registry             | `docker.io`                                               |
-| `volumePermissions.image.repository`                      | Init container volume-permissions image name                 | `bitnami/minideb`                                         |
-| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                  | `buster`                                                  |
+| `volumePermissions.image.repository`                      | Init container volume-permissions image name                 | `bitnami/bitnami-shell`                                   |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                  | `"10"`                                                    |
 | `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy          | `Always`                                                  |
 | `volumePermissions.resources`                             | Init container volume-permissions CPU/Memory resource requests/limits | {}                                                        |
 | `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array             | `[]` (does not add image pull secrets to deployed pods)   |

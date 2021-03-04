@@ -198,8 +198,8 @@ The following tables list the configurable parameters of the Phabricator chart a
 |--------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`                | Enable init container that changes volume permissions in the data directory (                  | `false`                                                 |
 | `volumePermissions.image.registry`         | Init container volume-permissions image registry                                               | `docker.io`                                             |
-| `volumePermissions.image.repository`       | Init container volume-permissions image name                                                   | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`              | Init container volume-permissions image tag                                                    | `buster`                                                |
+| `volumePermissions.image.repository`       | Init container volume-permissions image name                                                   | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`              | Init container volume-permissions image tag                                                    | `"10"`                                                  |
 | `volumePermissions.image.pullSecrets`      | Specify docker-registry secret names as an array                                               | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.image.pullPolicy`       | Init container volume-permissions image pull policy                                            | `Always`                                                |
 | `volumePermissions.resources`              | Init container resource requests/limit                                                         | `nil`                                                   |

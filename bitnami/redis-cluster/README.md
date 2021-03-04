@@ -132,8 +132,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `service.loadBalancerIP`                | loadBalancerIP if service.type is `LoadBalancer`                                                                                                    | `nil`                                                   |
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                    | `docker.io`                                             |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                        | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `buster`                                                |
+| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                        | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                 | `Always`                                                |
 | `volumePermissions.resources`           | Init container volume-permissions CPU/Memory resource requests/limits                                                                               | {}                                                      |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
@@ -290,17 +290,17 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 
 #### Sysctl Image parameters
 
-| Parameter                  | Description                                                    | Default           |
-|----------------------------|----------------------------------------------------------------|-------------------|
-| `sysctlImage.enabled`      | Enable an init container to modify Kernel settings             | `false`           |
-| `sysctlImage.command`      | sysctlImage command to execute                                 | []                |
-| `sysctlImage.registry`     | sysctlImage Init container registry                            | `docker.io`       |
-| `sysctlImage.repository`   | sysctlImage Init container name                                | `bitnami/minideb` |
-| `sysctlImage.tag`          | sysctlImage Init container tag                                 | `buster`          |
-| `sysctlImage.pullPolicy`   | sysctlImage Init container pull policy                         | `Always`          |
-| `sysctlImage.mountHostSys` | Mount the host `/sys` folder to `/host-sys`                    | `false`           |
-| `sysctlImage.resources`    | sysctlImage Init container CPU/Memory resource requests/limits | {}                |
-| `sysctlImage.pullSecrets`  | Specify docker-registry secret names as an array               | `nil`             |
+| Parameter                  | Description                                                    | Default                 |
+|----------------------------|----------------------------------------------------------------|-------------------------|
+| `sysctlImage.enabled`      | Enable an init container to modify Kernel settings             | `false`                 |
+| `sysctlImage.command`      | sysctlImage command to execute                                 | []                      |
+| `sysctlImage.registry`     | sysctlImage Init container registry                            | `docker.io`             |
+| `sysctlImage.repository`   | sysctlImage Init container name                                | `bitnami/bitnami-shell` |
+| `sysctlImage.tag`          | sysctlImage Init container tag                                 | `"10"`                  |
+| `sysctlImage.pullPolicy`   | sysctlImage Init container pull policy                         | `Always`                |
+| `sysctlImage.mountHostSys` | Mount the host `/sys` folder to `/host-sys`                    | `false`                 |
+| `sysctlImage.resources`    | sysctlImage Init container CPU/Memory resource requests/limits | {}                      |
+| `sysctlImage.pullSecrets`  | Specify docker-registry secret names as an array               | `nil`                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
