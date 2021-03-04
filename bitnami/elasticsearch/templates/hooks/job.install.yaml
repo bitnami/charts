@@ -31,6 +31,9 @@ spec:
       {{- if $.Values.curator.priorityClassName }}
       priorityClassName: {{ $.Values.curator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.curator.schedulerName }}
+      schedulerName: {{ .Values.curator.schedulerName }}
+      {{- end }}
       {{- if $.Values.curator.affinity }}
       affinity: {{- include "elasticsearch.tplValue" (dict "value" $.Values.curator.affinity "context" $) | nindent 8 }}
       {{- end }}

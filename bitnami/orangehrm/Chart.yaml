@@ -31,4 +31,4 @@ name: orangehrm
 sources:
   - https://github.com/bitnami/bitnami-docker-orangehrm
   - https://www.orangehrm.com
-version: 10.1.1
+version: 10.1.2

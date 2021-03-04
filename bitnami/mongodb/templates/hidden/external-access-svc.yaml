@@ -1,0 +1,46 @@
+{{- if and (include "mongodb.hidden.enabled" .) .Values.externalAccess.hidden.enabled }}
+{{- $fullName := include "mongodb.fullname" . }}
+{{- $replicaCount := .Values.hidden.replicaCount | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $replicaCount }}
+{{- $targetPod := printf "%s-hidden-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-hidden-{{ $i }}-external
+  namespace: {{ include "mongodb.namespace" $ }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: hidden
+    pod: {{ $targetPod }}
+  {{- if $root.Values.externalAccess.hidden.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.hidden.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $root.Values.externalAccess.hidden.service.type }}
+  {{- if eq $root.Values.externalAccess.hidden.service.type "LoadBalancer" }}
+  {{- if not (empty $root.Values.externalAccess.hidden.service.loadBalancerIPs) }}
+  loadBalancerIP: {{ index $root.Values.externalAccess.hidden.service.loadBalancerIPs $i }}
+  {{- end }}
+  {{- if $root.Values.externalAccess.hidden.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.hidden.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  publishNotReadyAddresses: true
+  ports:
+    - name: {{ $root.Values.service.hidden.portName }}
+      port: {{ $root.Values.externalAccess.hidden.service.port }}
+      {{- if not (empty $root.Values.externalAccess.hidden.service.nodePorts) }}
+      nodePort: {{ index $root.Values.externalAccess.hidden.service.nodePorts $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+      targetPort: mongodb
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: hidden
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}

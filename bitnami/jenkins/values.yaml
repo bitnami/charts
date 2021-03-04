@@ -398,13 +398,10 @@ ingress:
 ##
 volumePermissions:
   enabled: false
-  ## Bitnami Minideb image
-  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
-  ##
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

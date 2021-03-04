@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 5.0.4
+appVersion: 5.1.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/bitnami-docker-phpmyadmin
   - https://www.phpmyadmin.net/
-version: 8.2.1
+version: 8.2.2

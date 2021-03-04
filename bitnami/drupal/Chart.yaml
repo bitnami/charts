@@ -31,4 +31,4 @@ name: drupal
 sources:
   - https://github.com/bitnami/bitnami-docker-drupal
   - http://www.drupal.org/
-version: 10.2.3
+version: 10.2.4

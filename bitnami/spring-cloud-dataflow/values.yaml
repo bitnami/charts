@@ -34,7 +34,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.7.1-debian-10-r6
+    tag: 2.7.1-debian-10-r35
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -60,7 +60,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.7.1-debian-10-r9
+      tag: 2.7.1-debian-10-r39
 
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -432,7 +432,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.6.1-debian-10-r9
+    tag: 2.6.1-debian-10-r38
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -753,7 +753,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.15-debian-10-r15
+    tag: 1.18.16-debian-10-r13
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -814,7 +814,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.3.0-debian-10-r54
+    tag: 1.3.0-debian-10-r83
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
