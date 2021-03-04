@@ -65,7 +65,7 @@ extraDeploy: []
 auth:
   ## Role-based access control parameters
   ## ref: https://etcd.io/docs/current/op-guide/authentication/
-  ## 
+  ##
   rbac:
     enabled: true
     ## Allow to use etcd without configuring RBAC authentication
@@ -546,7 +546,7 @@ metrics:
     tlsConfig: {}
 
 ## Start a new etcd cluster recovering the data from an existing snapshot
-## before bootstrapping 
+## before bootstrapping
 ##
 startFromSnapshot:
   enabled: false
