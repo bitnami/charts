@@ -113,6 +113,16 @@ allowNoneAuthentication: true
 ##
 # maxProcs:
 
+# Auto Compaction Parameters
+#
+# auto compaction mode , by default periodic
+#autoCompactionMode: periodic
+#
+# auto compaction retention is interpred on the basis of auto compaction mode
+# by default 0 , means disabled
+#autoCompactionRetention: 0
+#
+
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-etcd#security
 ##
