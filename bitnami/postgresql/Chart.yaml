@@ -26,4 +26,4 @@ name: postgresql
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 10.3.8
+version: 10.3.9
