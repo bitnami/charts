@@ -65,5 +65,10 @@ To access the MinIO(R) web UI:
    WARN: MinIO(R) Web UI is disabled.
 {{- end }}
 
+{{- if and (.Values.tls.enabled) (not .Values.tls.secretName) }}
+
+   NOTE: Since tls is enabled, the name of a secret (containing the certificats) has to be provided.
+{{- end }}
+
 {{ include "minio.validateValues" . }}
 {{ include "minio.checkRollingTags" . }}
