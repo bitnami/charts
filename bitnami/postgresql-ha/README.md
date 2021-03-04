@@ -438,7 +438,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecret`) are supported in both StatefulSet by prepending `postgresql` or `pgpool` to the parameter, depending on the use case (see above parameters table).
 
-The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the `postgresql` container. Only `.sh` in the case of the `pgpool` one.
+The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
 
 +info: https://github.com/bitnami/bitnami-docker-postgresql#initializing-a-new-instance and https://github.com/bitnami/bitnami-docker-pgpool#initializing-with-custom-scripts
 
