@@ -31,4 +31,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 10.2.2
+version: 10.2.3

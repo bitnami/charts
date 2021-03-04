@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
   - http://www.redmine.org/
-version: 15.2.4
+version: 15.2.5
