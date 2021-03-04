@@ -27,4 +27,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 6.6.0
+version: 6.6.1
