@@ -501,7 +501,6 @@ sysctlImage:
     - /bin/sh
     - -c
     - |-
-      install_packages procps
       sysctl -w net.core.somaxconn=10000
       echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
 ```
