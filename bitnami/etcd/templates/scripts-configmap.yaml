@@ -1,10 +1,10 @@
-{{- $replicaCount := int .Values.statefulset.replicaCount }}
+{{- $replicaCount := int .Values.replicaCount }}
 {{- $clientPort := int .Values.service.port }}
 {{- $peerPort := int .Values.service.peerPort }}
 {{- $etcdAuthOptions := include "etcd.authOptions" . }}
-{{- $etcdFullname := include "etcd.fullname" . }}
+{{- $etcdFullname := include "common.names.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
-{{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+{{- $etcdHeadlessServiceName := printf "%s-headless" $etcdFullname }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
 {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
@@ -20,229 +20,315 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "etcd.fullname" . }}-scripts
-  labels: {{- include "etcd.labels" . | nindent 4 }}
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
-  setup.sh: |-
+  liblog.sh: |-
     #!/bin/bash
-
-    set -o errexit
-    set -o pipefail
-    set -o nounset
-
-    # Debug section
-    exec 3>&1
-    exec 4>&2
-
-    if [[ "${BITNAMI_DEBUG:-false}" = true ]]; then
-        echo "==> Bash debug is on"
-    else
-        echo "==> Bash debug is off"
-        exec 1>/dev/null
-        exec 2>/dev/null
-    fi
+    #
+    # Library for logging functions
 
     # Constants
-    HOSTNAME="$(hostname -s)"
-    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
-    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
-    export ROOT_PASSWORD="${ETCD_ROOT_PASSWORD:-}"
-    if [[ -n "${ETCD_ROOT_PASSWORD:-}" ]]; then
-      unset ETCD_ROOT_PASSWORD
-    fi
+    RESET='\033[0m'
+    RED='\033[38;5;1m'
+    GREEN='\033[38;5;2m'
+    YELLOW='\033[38;5;3m'
+    MAGENTA='\033[38;5;5m'
+    CYAN='\033[38;5;6m'
+
     # Functions
-    ## Store member id for later member replacement
-    store_member_id() {
-        while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
-        etcdctl $AUTH_OPTIONS member list | grep -w "$HOSTNAME" | awk '{ print $1}' | awk -F "," '{ print $1}' > "$ETCD_DATA_DIR/member_id"
-        echo "==> Stored member id: $(cat ${ETCD_DATA_DIR}/member_id)" 1>&3 2>&4
-        exit 0
-    }
-    ## Configure RBAC
-    configure_rbac() {
-        # When there's more than one replica, we can assume the 1st member
-        # to be created is "{{ $etcdFullname }}-0" since a statefulset is used
-        if [[ -n "${ROOT_PASSWORD:-}" ]] && [[ "$HOSTNAME" == "{{ $etcdFullname }}-0" ]]; then
-            echo "==> Configuring RBAC authentication!" 1>&3 2>&4
-            etcd &
-            ETCD_PID=$!
-            while ! etcdctl $AUTH_OPTIONS member list; do sleep 1; done
-            echo "$ROOT_PASSWORD" | etcdctl $AUTH_OPTIONS user add root --interactive=false
-            etcdctl $AUTH_OPTIONS auth enable
-            kill "$ETCD_PID"
-            sleep 5
+    stderr_print() {
+        local bool="${BITNAMI_QUIET:-false}"
+        shopt -s nocasematch
+        if ! [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
+            printf "%b\\n" "${*}" >&2
         fi
     }
-    ## Checks whether there was a disaster or not
+    log() {
+        stderr_print "${CYAN}${MODULE:-} ${MAGENTA}$(date "+%T.%2N ")${RESET}${*}"
+    }
+    info() {
+        log "${GREEN}INFO ${RESET} ==> ${*}"
+    }
+    warn() {
+        log "${YELLOW}WARN ${RESET} ==> ${*}"
+    }
+    error() {
+        log "${RED}ERROR${RESET} ==> ${*}"
+    }
+    debug() {
+        local bool="${BITNAMI_DEBUG:-false}"
+        shopt -s nocasematch
+        if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
+            log "${MAGENTA}DEBUG${RESET} ==> ${*}"
+        fi
+    }
+  libos.sh: |-
+    #!/bin/bash
+    #
+    # Library for operating system actions
+
+    # Load Generic Libraries
+    . /scripts/liblog.sh
+
+    # Functions
+    debug_execute() {
+        if ${BITNAMI_DEBUG:-false}; then
+            "$@"
+        else
+            "$@" >/dev/null 2>&1
+        fi
+    }
+  libetcd.sh: |-
+    #!/bin/bash
+    #
+    # Bitnami etcd library
+
+    # shellcheck disable=SC1091
+
+    # Load Generic Libraries
+    . /scripts/liblog.sh
+
+    # Constants
+    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
+    export HOSTNAME="$(hostname -s)"
+    export ROOT_PASSWORD="${ETCD_ROOT_PASSWORD:-}"
+    [[ -n "${ETCD_ROOT_PASSWORD:-}" ]] && unset -v ETCD_ROOT_PASSWORD
+    alias etcdctl="etcdctl {{ $etcdAuthOptions }}"
+
+    # Functions
+    ########################
+    # Recalculate etcdctl endpoints
+    ########################
+    recalculate_endpoints() {
+        local -r only_others=${1:-false}
+        local -r this_endpoint="${ETCD_ADVERTISE_CLIENT_URLS#{{ $etcdClientProtocol }}://}"
+
+        while ! etcdctl member list; do sleep 1; done
+        if [[ $(etcdctl member list | wc -l) -ne $(wc -w <<< "${ETCDCTL_ENDPOINTS//,/ }") ]]; then
+            export ETCDCTL_ENDPOINTS="$(etcdctl member list | awk -F "," '{print $5}' | tr -d ' ' | tr '\n' ',' | sed 's/,*$//g')"
+        fi
+        if [[ $only_others = true ]]; then
+            export ETCDCTL_ENDPOINTS="$(tr -s , <<< ${ETCDCTL_ENDPOINTS//$this_endpoint/})"
+        fi
+        debug "New endpoints: $ETCDCTL_ENDPOINTS"
+    }
+    ########################
+    # Store the member ID in a volume to be persisted
+    ########################
+    store_member_id() {
+        while ! etcdctl member list; do sleep 1; done
+        etcdctl member list | grep -w "$HOSTNAME" | awk -F "," '{ print $1}' > "${ETCD_DATA_DIR}/member_id"
+        debug "Stored member ID: $(cat ${ETCD_DATA_DIR}/member_id)"
+    }
+    ########################
+    # Configure etcd RBAC (do not confuse with K8s RBAC)
+    ########################
+    configure_rbac() {
+        info "Configuring RBAC authentication"
+        etcd &
+        local etcd_pid=$!
+        while ! etcdctl member list; do sleep 1; done
+        echo "$ROOT_PASSWORD" | etcdctl user add root --interactive=false
+        etcdctl auth enable
+        kill "$etcd_pid"
+        sleep 5
+    }
+    ########################
+    # Check whether the member was successfully removed from the cluster
+    ########################
+    was_member_removed() {
+        local return_value=0
+
+        if (grep -sqE "^Member[[:space:]]+[a-z0-9]+\s+removed\s+from\s+cluster\s+[a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
+           ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
+            rm -rf ${ETCD_DATA_DIR}/*
+        else
+            return_value=1
+        fi
+        rm -f "$(dirname "$ETCD_DATA_DIR")/member_removal.log"
+        return $return_value
+    }
+    ########################
+    # Checks whether there was a disaster or not
+    ########################
     is_disastrous_failure() {
-        local endpoints_array=(${ETCDCTL_ENDPOINTS//,/ })
-        local active_endpoints=0
+        local -r -a endpoints_array=(${ETCDCTL_ENDPOINTS//,/ })
         local -r min_endpoints=$((({{ $replicaCount }} + 1)/2))
+        local active_endpoints=0
+        local return_value=1
 
         for e in "${endpoints_array[@]}"; do
-            if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && (unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS  endpoint health --endpoints="$e"); then
+            if [[ "$e" != "$ETCD_ADVERTISE_CLIENT_URLS" ]] && (unset -v ETCDCTL_ENDPOINTS; etcdctl endpoint health --endpoints="$e" >/dev/null 2>&1); then
+                debug "$e endpoint is active"
                 active_endpoints=$((active_endpoints + 1))
             fi
         done
 {{- if .Values.disasterRecovery.enabled }}
         if [[ -f "/snapshots/.disaster_recovery" ]]; then
             if [[ $active_endpoints -eq $(({{ $replicaCount }} - 1)) ]]; then
-                echo "==> I'm the last to recover from the disaster!" 1>&3 2>&4
-                rm "/snapshots/.disaster_recovery" 1>&3 2>&4
+                debug "Last member to recover from the disaster!"
+                rm "/snapshots/.disaster_recovery"
             fi
-            true
+            return_value=0
         else
             if [[ $active_endpoints -lt $min_endpoints ]]; then
-                touch "/snapshots/.disaster_recovery" 1>&3 2>&4
-                true
-            else
-                false
+                touch "/snapshots/.disaster_recovery"
+                return_value=0
             fi
         fi
 {{- else }}
-        if [[ $active_endpoints -lt $min_endpoints ]]; then
-            true
-        else
-            false
-        fi
+        [[ $active_endpoints -lt $min_endpoints ]] && return_value=0
+        return $return_value
 {{- end }}
     }
 
-    ## Check whether the member was successfully removed from the cluster
-    should_add_new_member() {
-        return_value=0
-        if (grep -E "^Member[[:space:]]+[a-z0-9]+\s+removed\s+from\s+cluster\s+[a-z0-9]+$" "$(dirname "$ETCD_DATA_DIR")/member_removal.log") || \
-           ! ([[ -d "$ETCD_DATA_DIR/member/snap" ]] && [[ -f "$ETCD_DATA_DIR/member_id" ]]); then
-            rm -rf $ETCD_DATA_DIR/* 1>&3 2>&4
-        else
-            return_value=1
-        fi
-        rm -f "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 1>&3 2>&4
-        return $return_value
-    }
+  setup.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+    shopt -s expand_aliases
+
+    # Load Libraries
+    . /scripts/liblog.sh
+    . /scripts/libos.sh
+    . /scripts/libetcd.sh
 
     if [[ ! -d "$ETCD_DATA_DIR" ]]; then
-        echo "==> Creating data dir..." 1>&3 2>&4
-        echo "==> There is no data at all. Initializing a new member of the cluster..." 1>&3 2>&4
+        info "There is no data from previous deployments"
+{{- if gt $replicaCount 1 }}
+        if [[ "$ETCD_INITIAL_CLUSTER_STATE" = "new" ]] && [[ $ETCD_INITIAL_CLUSTER = *"$ETCD_INITIAL_ADVERTISE_PEER_URLS"* ]]; then
+            info "Bootstrapping a new cluster"
+        else
+            info "Adding new member to existing cluster"
+            mkdir -p "$ETCD_DATA_DIR"
+            recalculate_endpoints
+            etcdctl member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" | grep "^ETCD_" > "${ETCD_DATA_DIR}/new_member_envs"
+            sed -ie "s/^/export /" "${ETCD_DATA_DIR}/new_member_envs"
+            rm "${ETCD_DATA_DIR}/new_member_envse"
+            debug "Loading env vars of existing cluster"
+            . "${ETCD_DATA_DIR}/new_member_envs"
+        fi
+{{- end }}
 {{- if .Values.startFromSnapshot.enabled }}
         if [[ -f "{{ $initSnapshotPath }}" ]]; then
-            echo "==> Initializing member by restoring etcd cluster from snapshot..." 1>&3 2>&4
-            etcdctl snapshot restore {{ $initSnapshotPath }} \
+            info "Initializing member by restoring etcd cluster from snapshot"
+            debug_execute \etcdctl snapshot restore {{ $initSnapshotPath }} \
             {{- if gt $replicaCount 1 }}
               --name $ETCD_NAME \
               --initial-cluster $ETCD_INITIAL_CLUSTER \
               --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
               --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS \
             {{- end }}
-              --data-dir $ETCD_DATA_DIR 1>&3 2>&4
-            store_member_id & 1>&3 2>&4
+              --data-dir $ETCD_DATA_DIR
+            debug_execute store_member_id &
         else
-            echo "==> There was no snapshot to perform data recovery!!" 1>&3 2>&4
+            error "There was no snapshot to perform data recovery!"
             exit 1
         fi
 {{- else }}
-        store_member_id & 1>&3 2>&4
-        configure_rbac
+        debug_execute store_member_id &
+        # When there's more than one replica, we can assume there's one member
+        # with hostname "{{ $etcdFullname }}-0" since a statefulset is used
+        [[ -n "${ROOT_PASSWORD:-}" ]] && [[ "$HOSTNAME" = "{{ $etcdFullname }}-0" ]] && configure_rbac
 {{- end }}
     else
-        echo "==> Detected data from previous deployments..." 1>&3 2>&4
+        info "Detected data from previous deployments"
         if [[ $(stat -c "%a" "$ETCD_DATA_DIR") != *700 ]]; then
-            echo "==> Setting data directory permissions to 700 in a recursive way (required in etcd >=3.4.10)" 1>&3 2>&4
+            debug "Setting data directory permissions to 700 in a recursive way (required in etcd >=3.4.10)"
             chmod -R 700 $ETCD_DATA_DIR
-        else
-            echo "==> The data directory is already configured with the proper permissions" 1>&3 2>&4
         fi
-        if [[ {{ $replicaCount }} -eq 1 ]]; then
-            echo "==> Single node cluster detected!!" 1>&3 2>&4
-        elif is_disastrous_failure; then
-            echo "==> Cluster not responding!!" 1>&3 2>&4
+{{- if gt $replicaCount 1 }}
+        if is_disastrous_failure; then
+            warn "Cluster not responding!"
 {{- if .Values.disasterRecovery.enabled }}
             latest_snapshot_file="$(find /snapshots/ -maxdepth 1 -type f -name 'db-*' | sort | tail -n 1)"
             if [[ "${latest_snapshot_file}" != "" ]]; then
-                echo "==> Restoring etcd cluster from snapshot..." 1>&3 2>&4
+                info "Restoring etcd cluster from snapshot"
 
-                rm -rf $ETCD_DATA_DIR 1>&3 2>&4
-                etcdctl snapshot restore "${latest_snapshot_file}" \
+                rm -rf $ETCD_DATA_DIR
+                debug_execute \etcdctl snapshot restore "${latest_snapshot_file}" \
                   --name $ETCD_NAME \
                   --data-dir $ETCD_DATA_DIR \
                   --initial-cluster $ETCD_INITIAL_CLUSTER \
                   --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
-                  --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS 1>&3 2>&4
-                store_member_id & 1>&3 2>&4
+                  --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS
+                debug_execute store_member_id &
             else
-                echo "==> There was no snapshot to perform data recovery!!" 1>&3 2>&4
+                error "There was no snapshot to perform data recovery!!"
                 exit 1
             fi
 {{- else }}
-            echo "==> Disaster recovery is disabled, the cluster will try to recover on it's own..." 1>&3 2>&4
+            warn "Disaster recovery is disabled, the cluster will try to recover on it's own"
 {{- end }}
-        elif should_add_new_member; then
-            echo "==> Adding new member to existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" | grep "^ETCD_" > "$ETCD_DATA_DIR/new_member_envs"
-            sed -ie "s/^/export /" "$ETCD_DATA_DIR/new_member_envs"
-            echo "==> Loading env vars of existing cluster..." 1>&3 2>&4
-            source "$ETCD_DATA_DIR/new_member_envs" 1>&3 2>&4
-            store_member_id & 1>&3 2>&4
+        elif was_member_removed; then
+            info "Adding new member to existing cluster"
+            recalculate_endpoints
+            etcdctl member add "$HOSTNAME" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" | grep "^ETCD_" > "${ETCD_DATA_DIR}/new_member_envs"
+            sed -ie "s/^/export /" "${ETCD_DATA_DIR}/new_member_envs"
+            rm "${ETCD_DATA_DIR}/new_member_envse"
+            debug "Loading env vars of existing cluster"
+            . "${ETCD_DATA_DIR}/new_member_envs"
+            debug_execute store_member_id &
         else
-            echo "==> Updating member in existing cluster..." 1>&3 2>&4
-            etcdctl $AUTH_OPTIONS member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}" 1>&3 2>&4
+            info "Updating member in existing cluster"
+            export ETCD_INITIAL_CLUSTER_STATE=existing
+            recalculate_endpoints true
+            etcdctl member update "$(cat "$ETCD_DATA_DIR/member_id")" --peer-urls="{{ $etcdPeerProtocol }}://${HOSTNAME}.{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ $peerPort }}"
         fi
+{{- end }}
     fi
-
     {{- if .Values.configFileConfigMap }}
-    exec etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml 1>&3 2>&4
+    exec etcd --config-file /opt/bitnami/etcd/conf/etcd.conf.yml
     {{- else }}
-    exec etcd 1>&3 2>&4
+    exec etcd
     {{- end }}
+
   prestop-hook.sh: |-
     #!/bin/bash
 
     set -o errexit
     set -o pipefail
     set -o nounset
+    shopt -s expand_aliases
 
-    # Debug section
-    exec 3>&1
-    exec 4>&2
+    # Load Generic Libraries
+    . /scripts/libetcd.sh
 
-    if [[ "${BITNAMI_DEBUG:-false}" = true ]]; then
-      echo "==> Bash debug is on"
-    else
-      echo "==> Bash debug is off"
-      exec 1>/dev/null
-      exec 2>/dev/null
-    fi
+    recalculate_endpoints true
+    etcdctl member remove --debug=true "$(cat "${ETCD_DATA_DIR}/member_id")" > "$(dirname "$ETCD_DATA_DIR")/member_removal.log"
 
-    # Constants
-    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
-    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
-
-    etcdctl $AUTH_OPTIONS member remove --debug=true "$(cat "$ETCD_DATA_DIR/member_id")" > "$(dirname "$ETCD_DATA_DIR")/member_removal.log" 2>&1
   probes.sh: |-
     #!/bin/bash
 
     set -o errexit
     set -o pipefail
     set -o nounset
+    shopt -s expand_aliases
 
-    # Debug section
-    exec 3>&1
-    exec 4>&2
+    # Load Generic Libraries
+    . /scripts/liblog.sh
+    . /scripts/libetcd.sh
 
-    if [[ "${BITNAMI_DEBUG:-false}" = true ]]; then
-        echo "==> Bash debug is on"
+    debug "Probing etcd cluster"
+    debug 'Probe command: "etcdctl endpoint health"'
+    # It's important to unset ETCDCTL_ENDPOINTS to avoid checking every endpoint 
+    if (unset -v ETCDCTL_ENDPOINTS; etcdctl endpoint health --endpoints="${ETCD_ADVERTISE_CLIENT_URLS#{{ $etcdClientProtocol }}://}"); then
+        exit 0
     else
-        echo "==> Bash debug is off"
-        exec 1>/dev/null
-        exec 2>/dev/null
+        error "Unhealthy endpoint!"
+        exit 1
     fi
 
-    # Constants
-    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
-
-    echo "==> [DEBUG] Probing etcd cluster"
-    echo "==> [DEBUG] Probe command: \"etcdctl $AUTH_OPTIONS endpoint health\""
-    etcdctl $AUTH_OPTIONS endpoint health
 {{- if .Values.disasterRecovery.enabled }}
   save-snapshot.sh: |-
     #!/bin/bash
@@ -250,45 +336,33 @@ data:
     set -o errexit
     set -o pipefail
     set -o nounset
+    shopt -s expand_aliases
 
-    # Debug section
-    exec 3>&1
-    exec 4>&2
+    # Load Generic Libraries
+    . /scripts/liblog.sh
+    . /scripts/libetcd.sh
 
-    if [[ "${BITNAMI_SNAPSHOT_DEBUG:-false}" = true ]] || [[ "${BITNAMI_DEBUG:-false}" = true ]]; then
-        echo "==> Bash debug is on"
-        set -x
-    else
-        echo "==> Bash debug is off"
-        exec 1>/dev/null
-        exec 2>/dev/null
-    fi
+    mkdir -p "/snapshots"
+    recalculate_endpoints
+    endpoints_array=(${ETCDCTL_ENDPOINTS//,/ })
 
-    # Constants
-    AUTH_OPTIONS={{ $etcdAuthOptions | quote }}
-    export ETCDCTL_ENDPOINTS={{ join "," $endpoints | quote }}
-
-    mkdir -p "/snapshots" 1>&3 2>&4
-
-    read -r -a endpoints <<< "$(tr ',;' ' ' <<< "$ETCDCTL_ENDPOINTS")"
-    for endp in "${endpoints[@]}"; do
-        echo "Using endpoint $endp" 1>&3 2>&4
-        if (unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS endpoint health --endpoints=${endp}); then
-            echo "Snapshotting the keyspace..." 1>&3 2>&4
+    for e in "${endpoints_array[@]}"; do
+        debug "Using endpoint $e"
+        if (unset -v ETCDCTL_ENDPOINTS; etcdctl endpoint health --endpoints=${e}); then
+            info "Snapshotting the keyspace"
             current_time="$(date -u "+%Y-%m-%d_%H-%M")"
-            unset -v ETCDCTL_ENDPOINTS; etcdctl $AUTH_OPTIONS snapshot save "/snapshots/db-${current_time}" --endpoints=${endp} 1>&3 2>&4
+            unset -v ETCDCTL_ENDPOINTS; etcdctl snapshot save "/snapshots/db-${current_time}" --endpoints=${e}
             find /snapshots/ -maxdepth 1 -type f -name 'db-*' \! -name "db-${current_time}" \
                 | sort -r \
                 | tail -n+$((1 + {{ $snapshotHistoryLimit }})) \
-                | xargs rm -f 1>&3 2>&4
+                | xargs rm -f
             exit 0
         else
-            echo "Warning - etcd endpoint ${ETCDCTL_ENDPOINTS} not healthy" 1>&3 2>&4
-            echo "Trying another endpoint." 1>&3 2>&4
+            warn "etcd endpoint ${ETCDCTL_ENDPOINTS} not healthy. Trying a different endpoint"
         fi
     done
 
-    # exit with error if all endpoints are bad
-    echo "Error - all etcd endpoints are unhealthy!" 1>&3 2>&4
+    error "all etcd endpoints are unhealthy!"
     exit 1
+
 {{- end }}
