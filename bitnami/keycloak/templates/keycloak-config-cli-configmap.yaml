@@ -1,0 +1,15 @@
+{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.config (not .Values.keycloakConfigCli.existingConfigmap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.keycloakConfigCli.configmapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak-config-cli
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+data:
+  config.json: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.config "context" $) | nindent 4 }}
+{{- end }}

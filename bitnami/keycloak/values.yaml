@@ -730,77 +730,131 @@ externalDatabase:
   ##
   database: bitnami_keycloak
 
+## Configuration for keycloak-config-cli
+## ref: https://github.com/adorsys/keycloak-config-cli
 ##
-## Below is the implementation of Keycloak Configuration as Code.
-##
-KcCasC:
-  ## Whether to enable Keycloak Configuration as Code.
+keycloakConfigCli:
+  ## Whether to enable keycloak-config-cli
   ##
   enabled: false
 
+  ## Bitnami keycloak-config-cli image
+  ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
+  ##
   image:
-    repository: docker.io/adorsys/keycloak-config-cli
-    tag: "v{{ .Chart.AppVersion }}-11.0.3"
+    registry: docker.io
+    repository: bitnami/keycloak-config-cli
+    tag: 3.1.0-debian-10-r8
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    pullSecrets: []
-    # - myRegistrKeySecretName
+    # pullSecrets:
+    #   - myRegistryKeySecretName
 
-  # Count of re(!)tries. A value of 2 means 3 tries in total.
+  ## Annotations for keycloak-config-cli job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: "post-install,post-upgrade,post-rollback"
+    helm.sh/hook-delete-policy: "hook-succeeded,before-hook-creation"
+    helm.sh/hook-weight: "5"
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## Job pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## keycloak-config-cli resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## keycloak-config-cli containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  ## keycloak-config-cli pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Number of retries before considering a Job as failed
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy
+  ##
   backoffLimit: 1
 
-  # annotations of the Job. Define helm post hook here
-  annotations:
-    "helm.sh/hook": "post-install,post-upgrade,post-rollback"
-    "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
-    "helm.sh/hook-weight": "5"
-
-  labels: {}
-
-  resources: {}
-    # limits:
-    #   cpu: "100m"
-    #   memory: "1024Mi"
-    # requests:
-  #   cpu: "100m"
-  #   memory: "1024Mi"
-
-  env:
-    KEYCLOAK_URL: http://keycloak:8080
-    KEYCLOAK_USER: admin
-    IMPORT_PATH: /config/
-
-  secrets: {}
-  #  KEYCLOAK_PASSWORD:
-
-  # Specifies an existing secret to be used for the admin password
-  existingSecret: ""
-
-  # The key in the existing secret that stores the password
-  existingSecretKey: password
-
-  # The name of the service account to use.
-  serviceAccount: ""
-
-  securityContext: {}
-  containerSecurityContext: {}
-
-  ## Additional pod labels
+  ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
   podLabels: {}
 
-  ## Extra Annotations to be added to pod
+  ## Annotations for job pod
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
   podAnnotations: {}
 
-  config: {}
-    # <realm name>:
-    #   inline:
-    #     realm: <realm name>
-    #     clients: []
-    # <realm name>:
-  #   file: <path>
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
 
-  existingConfigSecret: ""
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the job
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## keycloak-config-cli realm configuration
+  ## Example:
+  ## config: |
+  ##   {
+  ##     "realm": "myrealm",
+  ##     "clients": []
+  ##   }
+  ##
+  config:
+
+  ## ConfigMap with keycloak-config-cli configuration
+  ## NOTE: This will override keycloakConfigCli.config
+  ##
+  existingConfigmap:
