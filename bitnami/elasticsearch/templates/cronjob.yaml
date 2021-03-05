@@ -3,7 +3,7 @@ apiVersion: {{ template "cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ template "elasticsearch.curator.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: curator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: curator
@@ -23,17 +23,17 @@ spec:
   {{- end }}
   jobTemplate:
     metadata:
-      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: curator
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: curator
         {{- if .Values.curator.podLabels }}
-        {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.curator.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
       template:
         metadata:
-          labels: {{- include "elasticsearch.labels" . | nindent 12 }}
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
             app.kubernetes.io/component: curator
             ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
             app: curator
@@ -67,7 +67,7 @@ spec:
           serviceAccountName: {{ include "elasticsearch.curator.serviceAccountName" . }}
           {{- end }}
           {{- if .Values.curator.affinity }}
-          affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.affinity "context" $) | nindent 12 }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.curator.affinity "context" $) | nindent 12 }}
           {{- else }}
           affinity:
             podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.curator.podAffinityPreset "component" "curator" "context" $) | nindent 14 }}
@@ -75,10 +75,10 @@ spec:
             nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.curator.nodeAffinityPreset.type "key" .Values.curator.nodeAffinityPreset.key "values" .Values.curator.nodeAffinityPreset.values) | nindent 14 }}
           {{- end }}
           {{- if .Values.curator.nodeSelector }}
-          nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.nodeSelector "context" $) | nindent 12 }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.curator.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.curator.tolerations }}
-          tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.curator.tolerations "context" $) | nindent 12 }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.curator.tolerations "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.curator.securityContext }}
           securityContext: {{- toYaml .Values.curator.securityContext | nindent 12 }}

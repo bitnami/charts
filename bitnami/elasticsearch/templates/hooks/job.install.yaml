@@ -6,7 +6,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "elasticsearch.curator.fullname" . }}-curator-on-{{ $kind }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: curator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: curator
@@ -19,7 +19,7 @@ metadata:
 spec:
  template:
     metadata:
-      labels: {{- include "elasticsearch.labels" . | nindent 10 }}
+      labels: {{- include "common.labels.standard" . | nindent 10 }}
         app.kubernetes.io/component: curator
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: curator
@@ -35,13 +35,13 @@ spec:
       schedulerName: {{ .Values.curator.schedulerName }}
       {{- end }}
       {{- if $.Values.curator.affinity }}
-      affinity: {{- include "elasticsearch.tplValue" (dict "value" $.Values.curator.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.curator.nodeSelector }}
-      nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" $.Values.curator.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.curator.tolerations }}
-      tolerations: {{- include "elasticsearch.tplValue" (dict "value" $.Values.curator.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.tolerations "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ template "elasticsearch.curator.fullname" . }}

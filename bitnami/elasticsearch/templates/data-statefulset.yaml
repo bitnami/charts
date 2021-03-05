@@ -1,8 +1,8 @@
-apiVersion: {{ template "statefulset.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "elasticsearch.data.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: data
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: data
@@ -16,19 +16,19 @@ spec:
       partition: {{ .Values.data.updateStrategy.rollingUpdatePartition }}
     {{- end }}
   selector:
-    matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: data
   podManagementPolicy: Parallel
   replicas: {{ .Values.data.replicas }}
   serviceName: {{ template "elasticsearch.data.fullname" . }}
   template:
     metadata:
-      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: data
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: data
         {{- if .Values.data.podLabels }}
-        {{- include "elasticsearch.tplValue" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- with .Values.data.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
@@ -36,7 +36,7 @@ spec:
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.data.affinity }}
-      affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.data.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.data.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAffinityPreset "component" "data" "context" $) | nindent 10 }}
@@ -50,10 +50,10 @@ spec:
       schedulerName: {{ .Values.data.schedulerName }}
       {{- end }}
       {{- if .Values.data.nodeSelector }}
-      nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.data.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.data.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.data.tolerations }}
-      tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "elasticsearch.data.serviceAccountName" . }}
       {{- if .Values.data.securityContext.enabled }}
@@ -129,17 +129,17 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "data"
             {{- if .Values.extraEnvVars }}
-            {{- include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsConfigMap }}
             - configMapRef:
-                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "elasticsearch.tplValue" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:
@@ -199,7 +199,7 @@ spec:
         {{- if .Values.config }}
         - name: "config"
           configMap:
-            name: {{ template "elasticsearch.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

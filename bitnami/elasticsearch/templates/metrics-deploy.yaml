@@ -1,25 +1,25 @@
 {{- if .Values.metrics.enabled }}
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "elasticsearch.metrics.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: metrics
 spec:
   selector:
-    matchLabels: {{- include "elasticsearch.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
   replicas: 1
   template:
     metadata:
-      labels: {{- include "elasticsearch.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: metrics
         {{- if .Values.metrics.podLabels }}
-        {{- include "elasticsearch.tplValue" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- with .Values.metrics.podAnnotations }}
       annotations: {{ toYaml . | nindent 8 }}
@@ -64,7 +64,7 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
       {{- if .Values.metrics.affinity }}
-      affinity: {{- include "elasticsearch.tplValue" (dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
@@ -72,9 +72,9 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.nodeAffinityPreset.type "key" .Values.metrics.nodeAffinityPreset.key "values" .Values.metrics.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.metrics.nodeSelector }}
-      nodeSelector: {{- include "elasticsearch.tplValue" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.tolerations }}
-      tolerations: {{- include "elasticsearch.tplValue" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}
