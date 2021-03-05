@@ -67,7 +67,8 @@ To access the MinIO(R) web UI:
 
 {{- if and (.Values.tls.enabled) (not .Values.tls.secretName) }}
 
-   NOTE: Since tls is enabled, the name of a secret (containing the certificats) has to be provided.
+   ERROR: Since TLS is enabled, the name of a secret containing the certificates has to be provided.
+   {{- fail -}}
 {{- end }}
 
 {{ include "minio.validateValues" . }}
