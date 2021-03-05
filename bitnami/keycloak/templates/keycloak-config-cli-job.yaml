@@ -23,9 +23,13 @@ spec:
         {{- if .Values.keycloakConfigCli.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.keycloakConfigCli.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if (include "keycloak. keycloakConfigCli.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/keycloak-config-cli-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.keycloakConfigCli.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
