@@ -118,6 +118,14 @@ cloneStaticSiteFromGit:
   ##
   interval: 60
 
+  ## Additional environment variables to set for the in the containers that clone static site from git
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+
 ## Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
 ## serverBlock: |-
