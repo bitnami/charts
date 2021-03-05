@@ -12,6 +12,10 @@
 ##
 kubeVersion:
 
+## Test
+##
+test:
+
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
