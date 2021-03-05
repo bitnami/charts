@@ -3,7 +3,14 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -58,7 +65,12 @@ spec:
           {{- end }}
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          args: {{- toYaml .Values.arguments | nindent 12 }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.arguments }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.arguments "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.persistence.enabled }}
             - -e/cache-state/memory_file
           {{- end }}

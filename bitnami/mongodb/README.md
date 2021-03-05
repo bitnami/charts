@@ -268,6 +268,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `persistence.mountPath`                     | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
 | `persistence.subPath`                       | Subdirectory of the volume to mount at                                             | `""`                            |
 | `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
+| `persistence.volumeClaimTemplates.requests` | Custom PVC requests attributes                                                     | `{}` (evaluated as a template)  |
 
 ### RBAC parameters
 

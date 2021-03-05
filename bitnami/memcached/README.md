@@ -45,24 +45,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Memcached chart and their default values.
+The following tables lists the configurable parameters of the Memcached chart and their default values per section/component:
+
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common parameters
+
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+
+### Memcached parameters
 
 | Parameter                                | Description                                                                               | Default                                                      |
 |------------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                   | Global Docker image registry                                                              | `nil`                                                        |
-| `global.imagePullSecrets`                | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                         | Memcached image registry                                                                  | `docker.io`                                                  |
 | `image.repository`                       | Memcached Image name                                                                      | `bitnami/memcached`                                          |
 | `image.tag`                              | Memcached Image tag                                                                       | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                       | Memcached image pull policy                                                               | `IfNotPresent`                                               |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                           | String to partially override common.names.fullname template with a string                 | `nil`                                                        |
-| `fullnameOverride`                       | String to fully override common.names.fullname template with a string                     | `nil`                                                        |
-| `clusterDomain`                          | Kubernetes cluster domain                                                                 | `cluster.local`                                              |
 | `architecture`                           | Memcached architecture. Allowed values: standalone or high-availability                   | `standalone`                                                 |
 | `replicaCount`                           | Number of containers                                                                      | `1`                                                          |
+| `command`                                | Default container command (useful when using custom images)                               | `[]`                                                         |
+| `arguments`                              | Default container args (useful when using custom images)                                  | `["/run.sh"]`                                                |
 | `extraEnv`                               | Additional env vars to pass                                                               | `{}`                                                         |
-| `arguments`                              | Arguments to pass                                                                         | `["/run.sh"]`                                                |
 | `hostAliases`                            | Add deployment host aliases                                                               | `[]`                                                         |
 | `memcachedUsername`                      | Memcached admin user                                                                      | `nil`                                                        |
 | `memcachedPassword`                      | Memcached admin password                                                                  | `nil`                                                        |
