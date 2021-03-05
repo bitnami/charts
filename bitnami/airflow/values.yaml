@@ -78,8 +78,7 @@ web:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Number of web replicas
@@ -224,8 +223,7 @@ scheduler:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Number of scheduler replicas
@@ -342,8 +340,7 @@ worker:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Port where the worker will be exposed

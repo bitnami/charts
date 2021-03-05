@@ -60,6 +60,9 @@ spec:
             {{- toYaml $value | nindent 14 }}
             {{- end }}
           {{- end }}
+          {{- if .Values.curator.schedulerName }}
+          schedulerName: {{ .Values.curator.schedulerName }}
+          {{- end }}
           {{- if .Values.curator.rbac.enabled }}
           serviceAccountName: {{ include "elasticsearch.curator.serviceAccountName" . }}
           {{- end }}

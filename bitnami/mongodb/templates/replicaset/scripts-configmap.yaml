@@ -85,4 +85,30 @@ data:
     fi
 
     exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+  setup-hidden.sh: |-
+    #!/bin/bash
+
+    {{- if .Values.externalAccess.hidden.enabled }}
+    {{- if eq .Values.externalAccess.hidden.service.type "LoadBalancer" }}
+    {{- if .Values.externalAccess.autoDiscovery.enabled }}
+    export MONGODB_ADVERTISED_HOSTNAME="$(<${SHARED_FILE})"
+    {{- else }}
+    ID="${MY_POD_NAME#"{{ $fullname }}-hidden-"}"
+    export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ .Values.externalAccess.hidden.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    {{- end }}
+    {{- else if eq .Values.externalAccess.hidden.service.type "NodePort" }}
+    {{- if .Values.externalAccess.hidden.service.domain }}
+    export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.hidden.service.domain }}
+    {{- else }}
+    export MONGODB_ADVERTISED_HOSTNAME=$(curl -s https://ipinfo.io/ip)
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    echo "Configuring node as a hidden node"
+    export MONGODB_REPLICA_SET_MODE="hidden"
+    export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
+    export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    export MONGODB_ROOT_PASSWORD="" MONGODB_USERNAME="" MONGODB_DATABASE="" MONGODB_PASSWORD=""
+    exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
 {{- end }}

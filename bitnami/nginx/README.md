@@ -90,39 +90,42 @@ The following tables lists the configurable parameters of the NGINX chart and th
 
 ### NGINX deployment parameters
 
-| Parameter                   | Description                                                                               | Default                        |
-|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
-| `replicaCount`              | Number of NGINX replicas to deploy                                                        | `1`                            |
-| `strategyType`              | Deployment Strategy Type                                                                  | `RollingUpdate`                |
-| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `nodeAffinityPreset.key`    | Node label key to match Ignored if `affinity` is set.                                     | `""`                           |
-| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
-| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
-| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
-| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
-| `podLabels`                 | Additional labels for NGINX pods                                                          | `{}` (evaluated as a template) |
-| `podAnnotations`            | Annotations for NGINX pods                                                                | `{}` (evaluated as a template) |
-| `podSecurityContext`        | NGINX pods' Security Context                                                              | Check `values.yaml` file       |
-| `containerSecurityContext`  | NGINX containers' Security Context                                                        | Check `values.yaml` file       |
-| `containerPorts.http`       | Sets http port inside NGINX container                                                     | `8080`                         |
-| `containerPorts.https`      | Sets https port inside NGINX container                                                    | `nil`                          |
-| `resources.limits`          | The resources limits for the NGINX container                                              | `{}`                           |
-| `resources.requests`        | The requested resources for the NGINX container                                           | `{}`                           |
-| `livenessProbe`             | Liveness probe configuration for NGINX                                                    | Check `values.yaml` file       |
-| `readinessProbe`            | Readiness probe configuration for NGINX                                                   | Check `values.yaml` file       |
-| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                          |
-| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                          |
-| `autoscaling.enabled`       | Enable autoscaling for NGINX deployment                                                   | `false`                        |
-| `autoscaling.minReplicas`   | Minimum number of replicas to scale back                                                  | `nil`                          |
-| `autoscaling.maxReplicas`   | Maximum number of replicas to scale out                                                   | `nil`                          |
-| `autoscaling.targetCPU`     | Target CPU utilization percentage                                                         | `nil`                          |
-| `autoscaling.targetMemory`  | Target Memory utilization percentage                                                      | `nil`                          |
-| `extraVolumes`              | Array to add extra volumes                                                                | `[]` (evaluated as a template) |
-| `extraVolumeMounts`         | Array to add extra mount                                                                  | `[]` (evaluated as a template) |
-| `sidecars`                  | Attach additional containers to nginx pods                                                | `nil`                          |
-| `initContainers`            | Additional init containers (this value is evaluated as a template)                        | `[]`                           |
+| Parameter                    | Description                                                                                    | Default                                              |
+|------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `replicaCount`               | Number of NGINX replicas to deploy                                                             | `1`                                                  |
+| `strategyType`               | Deployment Strategy Type                                                                       | `RollingUpdate`                                      |
+| `podAffinityPreset`          | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`                                                 |
+| `podAntiAffinityPreset`      | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `soft`                                               |
+| `nodeAffinityPreset.type`    | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                                 |
+| `nodeAffinityPreset.key`     | Node label key to match Ignored if `affinity` is set.                                          | `""`                                                 |
+| `nodeAffinityPreset.values`  | Node label values to match. Ignored if `affinity` is set.                                      | `[]`                                                 |
+| `affinity`                   | Affinity for pod assignment                                                                    | `{}` (evaluated as a template)                       |
+| `nodeSelector`               | Node labels for pod assignment                                                                 | `{}` (evaluated as a template)                       |
+| `tolerations`                | Tolerations for pod assignment                                                                 | `[]` (evaluated as a template)                       |
+| `podLabels`                  | Additional labels for NGINX pods                                                               | `{}` (evaluated as a template)                       |
+| `podAnnotations`             | Annotations for NGINX pods                                                                     | `{}` (evaluated as a template)                       |
+| `podSecurityContext`         | NGINX pods' Security Context                                                                   | Check `values.yaml` file                             |
+| `containerSecurityContext`   | NGINX containers' Security Context                                                             | Check `values.yaml` file                             |
+| `containerPorts.http`        | Sets http port inside NGINX container                                                          | `8080`                                               |
+| `containerPorts.https`       | Sets https port inside NGINX container                                                         | `nil`                                                |
+| `resources.limits`           | The resources limits for the NGINX container                                                   | `{}`                                                 |
+| `resources.requests`         | The requested resources for the NGINX container                                                | `{}`                                                 |
+| `livenessProbe`              | Liveness probe configuration for NGINX                                                         | Check `values.yaml` file                             |
+| `readinessProbe`             | Readiness probe configuration for NGINX                                                        | Check `values.yaml` file                             |
+| `customLivenessProbe`        | Override default liveness probe                                                                | `nil`                                                |
+| `customReadinessProbe`       | Override default readiness probe                                                               | `nil`                                                |
+| `autoscaling.enabled`        | Enable autoscaling for NGINX deployment                                                        | `false`                                              |
+| `autoscaling.minReplicas`    | Minimum number of replicas to scale back                                                       | `nil`                                                |
+| `autoscaling.maxReplicas`    | Maximum number of replicas to scale out                                                        | `nil`                                                |
+| `autoscaling.targetCPU`      | Target CPU utilization percentage                                                              | `nil`                                                |
+| `autoscaling.targetMemory`   | Target Memory utilization percentage                                                           | `nil`                                                |
+| `extraVolumes`               | Array to add extra volumes                                                                     | `[]` (evaluated as a template)                       |
+| `extraVolumeMounts`          | Array to add extra mount                                                                       | `[]` (evaluated as a template)                       |
+| `sidecars`                   | Attach additional containers to nginx pods                                                     | `nil`                                                |
+| `initContainers`             | Additional init containers (this value is evaluated as a template)                             | `[]`                                                 |
+| `serviceAccount.create`      | Enable creation of ServiceAccount for nginx pod                                                | `false`                                              |
+| `serviceAccount.name`        | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `common.names.fullname` template |
+| `serviceAccount.annotations` | Annotations for service account.                                                               | `{}`                                                 |
 
 ### Custom NGINX application parameters
 
