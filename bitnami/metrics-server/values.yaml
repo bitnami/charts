@@ -61,6 +61,10 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
+  ## Automount API credentials for a service account.
+  ##
+  # automountServiceAccountToken: true
+
 
 ## API service parameters
 ##
