@@ -753,9 +753,11 @@ keycloakConfigCli:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
 
   ## Annotations for keycloak-config-cli job
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -847,7 +849,7 @@ keycloakConfigCli:
   ## keycloak-config-cli configuration files
   ## NOTE: nil keys will be considered files to import locally
   ## Example:
-  ## config:
+  ## configuration:
   ##   realm1.json: |
   ##     {
   ##       "realm": "realm1",
@@ -858,9 +860,9 @@ keycloakConfigCli:
   ##     realm: realm3
   ##     clients: []
   ##
-  config: {}
+  configuration: {}
 
   ## ConfigMap with keycloak-config-cli configuration
-  ## NOTE: This will override keycloakConfigCli.config
+  ## NOTE: This will override keycloakConfigCli.configuration
   ##
   existingConfigmap:

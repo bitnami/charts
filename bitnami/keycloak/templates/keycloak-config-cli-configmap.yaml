@@ -1,4 +1,4 @@
-{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.config (not .Values.keycloakConfigCli.existingConfigmap) }}
+{{- if (include "keycloak.keycloakConfigCli.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
