@@ -24,7 +24,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-        {{- if (include "keycloak. keycloakConfigCli.createConfigmap" .) }}
+        {{- if (include "keycloak.keycloakConfigCli.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/keycloak-config-cli-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.keycloakConfigCli.podAnnotations }}
