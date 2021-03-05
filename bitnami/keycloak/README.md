@@ -89,8 +89,8 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.keystorePassword`       | Password to access the keystore when it's password-protected                                                                                                  | `nil`                                                   |
 | `auth.tls.truststorePassword`     | Password to access the truststore when it's password-protected                                                                                                | `nil`                                                   |
 | `auth.tls.image.registry`         | TLS init container image registry                                                                                                                             | `docker.io`                                             |
-| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/minideb`                                       |
-| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `buster`                                                |
+| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/bitnami-shell`                                 |
+| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `"10"`                                                  |
 | `auth.tls.image.pullPolicy`       | TLS init container image pull policy                                                                                                                          | `Always`                                                |
 | `auth.tls.image.pullSecrets`      | TLS init container image pull secrets                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `auth.tls.resources.limits`       | The resources limits for the TLS init container                                                                                                               | `{}`                                                    |
@@ -102,7 +102,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.existingSecretPerPassword.databasePassword.name`  | Name of the secret which contains the database password. Overrides `existingSecret` and `databaseEncryptedPassword` and  | `nil`                                                   |
 | `auth.existingSecretPerPassword.tlsKeystorePassword.name`  | Name of the secret which contains the JKS keystore password. Overrides `existingSecret` and `keystorePassword` and  | `nil`                                                   |
 | `auth.existingSecretPerPassword.tlsTruststorePassword.name`  | Name of the secret which contains the JKS truststore password. Overrides `existingSecret` and `truststorePassword` and  | `nil`                                                   |
-| `auth.existingSecretPerPassword.keyMapping`  | Key mapping between the expected keys and the existing secrets' keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`        
+| `auth.existingSecretPerPassword.keyMapping`  | Key mapping between the expected keys and the existing secrets' keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`
 | `proxyAddressForwarding`          | Enable Proxy Address Forwarding                                                                                                                               | `false`                                                 |
 | `serviceDiscovery.enabled`        | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                                                                                      | `false`                                                 |
 | `serviceDiscovery.protocol`       | Sets the protocol that Keycloak nodes would use to discover new peers                                                                                         | `kubernetes.KUBE_PING`                                  |
@@ -424,7 +424,7 @@ To use a single existing secret `existingSecret` can be configured at values.yam
 The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
 
 Configuring multiple existing secrets can be done by using `auth.existingSecretPerPassword` instead:
-  
+
 \```yaml
       existingSecretPerPassword:
         keyMapping:
@@ -445,7 +445,7 @@ Configuring multiple existing secrets can be done by using `auth.existingSecretP
           name: mySecret
 \```
 
-Additionally to the key mapping, a different Secret name can be configured per password. 
+Additionally to the key mapping, a different Secret name can be configured per password.
 
 > NOTE: 'auth.existingSecretPerPassword' will overwrite the configuration at 'auth.existingSecret'
 ## Troubleshooting

@@ -27,4 +27,4 @@ name: joomla
 sources:
   - https://github.com/bitnami/bitnami-docker-joomla
   - http://www.joomla.org/
-version: 10.1.2
+version: 10.1.3

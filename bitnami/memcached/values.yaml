@@ -31,25 +31,29 @@ image:
   ##
   debug: false
 
-## Extra environment vars to pass.
-## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
-##
-extraEnv: []
-
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
-
-## Number of containers to run
-##
-replicaCount: 1
 
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
-# Cluster domain
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Kubernetes Cluster Domain
+##
 clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Memcached architecture. Allowed values: standalone or high-availability
 ##
@@ -69,6 +73,24 @@ hostAliases: []
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
 ##
 # memcachedPassword:
+
+## Number of containers to run
+##
+replicaCount: 1
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+arguments:
+  - /run.sh
+  # - -m <maxMemoryLimit>
+  # - -I <maxItemSize>
+  # - -vv
+
+## Extra environment vars to pass.
+## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+##
+extraEnv: []
 
 ## Service parameters
 ##
@@ -204,15 +226,6 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
-
-## Args for running memcached
-## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
-##
-arguments:
-  - /run.sh
-  # - -m <maxMemoryLimit>
-  # - -I <maxItemSize>
-  # - -vv
 
 ## Prometheus Exporter / Metrics
 ##

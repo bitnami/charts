@@ -175,14 +175,14 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 
 ### Volume Permissions parameters
 
-| Parameter                            | Description                                                                                                          | Default           |
-|--------------------------------------|----------------------------------------------------------------------------------------------------------------------|-------------------|
-| `volumePermissions.enabled`          | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`           |
-| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                     | `docker.io`       |
-| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                         | `bitnami/minideb` |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                          | `buster`          |
-| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                  | `Always`          |
-| `volumePermissions.resources`        | Init container resource requests/limit                                                                               | `nil`             |
+| Parameter                            | Description                                                                                                          | Default                 |
+|--------------------------------------|----------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `volumePermissions.enabled`          | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                                     | `docker.io`             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                                                          | `"10"`                  |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                                                               | `nil`                   |
 
 ### Metrics parameters
 
