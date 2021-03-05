@@ -50,6 +50,15 @@ Return the keycloak-config-cli configuration configmap.
 {{- end -}}
 
 {{/*
+Return true if a configmap object should be created for keycloak-config-cli
+*/}}
+{{- define "keycloak.keycloakConfigCli.createConfigmap" -}}
+{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "keycloak.imagePullSecrets" -}}

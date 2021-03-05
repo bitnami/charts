@@ -68,7 +68,7 @@ spec:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
                 {{- end }}
-            {{- if or .Values.keycloakConfigCli.config .Values.keycloakConfigCli.existingConfigmap }}
+            {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: IMPORT_PATH
               value: /config/
             {{- end }}
@@ -88,9 +88,9 @@ spec:
                 name: {{ .Values.keycloakConfigCli.extraEnvVarsSecret }}
             {{- end }}
           {{- end }}
-          {{- if or .Values.keycloakConfigCli.config .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
+          {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
           volumeMounts:
-            {{- if or .Values.keycloakConfigCli.config .Values.keycloakConfigCli.existingConfigmap }}
+            {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: config-volume
               mountPath: /config
             {{- end }}
@@ -101,9 +101,9 @@ spec:
           {{- if .Values.keycloakConfigCli.resources }}
           resources: {{- toYaml .Values.keycloakConfigCli.resources | nindent 12 }}
           {{- end }}
-      {{- if or .Values.keycloakConfigCli.config .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumes }}
+      {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumes }}
       volumes:
-        {{- if or .Values.keycloakConfigCli.config .Values.keycloakConfigCli.existingConfigmap }}
+        {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
         - name: config-volume
           configMap:
             name: {{ include "keycloak.keycloakConfigCli.configmapName" . }}
