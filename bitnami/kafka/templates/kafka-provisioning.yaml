@@ -26,7 +26,7 @@ spec:
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
-      schedulerName: {{ .Values.provisioning.schedulerName }}
+      schedulerName: {{ .Values.provisioning.schedulerName | quote }}
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
