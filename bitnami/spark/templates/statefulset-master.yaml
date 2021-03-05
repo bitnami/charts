@@ -59,6 +59,10 @@ spec:
         seLinuxOptions: {{- include "common.tplvalues.render" (dict "value" .Values.master.securityContext.seLinuxOptions "context" $) | nindent 10 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       containers:
         - name: spark-master
           image: {{ template "spark.image" . }}

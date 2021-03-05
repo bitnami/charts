@@ -58,6 +58,10 @@ spec:
         {{- if .Values.worker.securityContext.seLinuxOptions }}
         seLinuxOptions: {{- include "common.tplvalues.render" (dict "value" .Values.worker.securityContext.seLinuxOptions "context" $) | nindent 10 }}
         {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       {{- end }}
       containers:
         - name: spark-worker
