@@ -309,9 +309,9 @@ mongodb: auth.username, auth.database
 Validate values of MongoDB(R) - service type for external access
 */}}
 {{- define "mongodb.validateValues.externalAccessServiceType" -}}
-{{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
+{{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
 mongodb: externalAccess.service.type
-    Available service type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort, LoadBalancer or ClusterIP.
 {{- end -}}
 {{- end -}}
 
