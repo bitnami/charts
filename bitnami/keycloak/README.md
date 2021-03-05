@@ -148,7 +148,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `keycloakConfigCli.extraEnvVarsSecret`       | Secret with extra environment variables                                                         | `nil`                                                    |
 | `keycloakConfigCli.extraVolumes`             | Extra volumes to add to the job                                                                 | `[]`                                                     |
 | `keycloakConfigCli.extraVolumeMounts`        | Extra volume mounts to add to the container                                                     | `[]`                                                     |
-| `keycloakConfigCli.config`                   | keycloak-config-cli realm configuration                                                         | `nil`                                                    |
+| `keycloakConfigCli.config`                   | keycloak-config-cli realms configuration                                                        | `{}`                                                     |
 | `keycloakConfigCli.existingConfigmap`        | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config` | `nil`                                                    |
 
 ### Keycloak deployment/statefulset parameters

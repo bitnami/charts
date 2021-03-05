@@ -30,8 +30,8 @@ spec:
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       restartPolicy: Never
-      {{- if .Values.keycloakConfigCli.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.keycloakConfigCli.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.keycloakConfigCli.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.keycloakConfigCli.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" $) | nindent 8 }}
@@ -46,12 +46,12 @@ spec:
           {{- if .Values.keycloakConfigCli.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.keycloakConfigCli.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.keycloakConfigCli.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.keycloakConfigCli.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: KEYCLOAK_URL
-              value: {{ printf "http://%s-headless" (include "keycloak.fullname" .) }}
+              value: {{ printf "http://%s-headless:%d/auth" (include "keycloak.fullname" .) (.Values.containerPorts.http | int) }}
             - name: KEYCLOAK_USER
               value: {{ .Values.auth.adminUser | quote }}
             - name: KEYCLOAK_PASSWORD
@@ -68,6 +68,8 @@ spec:
             - name: IMPORT_PATH
               value: /config/
             {{- end }}
+            - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
+              value: "true"
             {{- if .Values.keycloakConfigCli.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

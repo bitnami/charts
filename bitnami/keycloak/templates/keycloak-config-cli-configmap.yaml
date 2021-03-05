@@ -10,6 +10,12 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
 data:
-  config.json: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.config "context" $) | nindent 4 }}
+  {{- range $fileName, $fileContent := .Values.keycloakConfigCli.config }}
+  {{- if $fileContent }}
+  {{ $fileName }}: |
+    {{- include "common.tplvalues.render" (dict "value" $fileContent "context" $) | nindent 4 }}
+  {{- else }}
+    {{- ($.Files.Glob $fileName).AsConfig | nindent 2 }}
+  {{- end }}
+  {{- end }}
 {{- end }}

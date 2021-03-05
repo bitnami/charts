@@ -844,15 +844,21 @@ keycloakConfigCli:
   ##
   extraVolumeMounts: []
 
-  ## keycloak-config-cli realm configuration
+  ## keycloak-config-cli configuration files
+  ## NOTE: nil keys will be considered files to import locally
   ## Example:
-  ## config: |
-  ##   {
-  ##     "realm": "myrealm",
-  ##     "clients": []
-  ##   }
+  ## config:
+  ##   realm1.json: |
+  ##     {
+  ##       "realm": "realm1",
+  ##       "clients": []
+  ##     }
+  ##   files/realm2.yaml:
+  ##   realm3.yaml: |
+  ##     realm: realm3
+  ##     clients: []
   ##
-  config:
+  config: {}
 
   ## ConfigMap with keycloak-config-cli configuration
   ## NOTE: This will override keycloakConfigCli.config
