@@ -17,7 +17,7 @@ spec:
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
-    {{- if .Values.auth.client.clientPortNameOverride }}
+    {{- if .Values.service.clientPortNameOverride }}
     {{- if .Values.auth.client.secureTransport }}
     - name: {{ .Values.service.clientPortNameOverride }}-ssl
     {{- else}}
@@ -28,7 +28,7 @@ spec:
     {{- end }}
       port: {{ .Values.service.port  }}
       targetPort: client
-    {{- if .Values.auth.client.peerPortNameOverride }}
+    {{- if .Values.service.peerPortNameOverride }}
     {{- if .Values.auth.peer.secureTransport }}
     - name: {{ .Values.service.peerPortNameOverride }}-ssl
     {{- else}}

@@ -209,6 +209,8 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `disasterRecovery.cronjob.historyLimit`         | Number of successful finished jobs to retain                                          | `1`                                                         |
 | `disasterRecovery.cronjob.snapshotHistoryLimit` | Number of etcd snapshots to retain, tagged by date                                    | `1`                                                         |
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                                      | `{}` (evaluated as a template)                              |
+| `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                                     | `{}`                                                        |
+| `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                                   | `{}`                                                        |
 | `disasterRecovery.pvc.existingClaim`            | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template.    | `nil`                                                       |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                                   | `2Gi`                                                       |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                                    | `nfs`                                                       |
