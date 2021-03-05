@@ -30,7 +30,7 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: {{ $root.Values.service.hidden.portName }}
+    - name: {{ $root.Values.service.portName }}
       port: {{ $root.Values.externalAccess.hidden.service.port }}
       {{- if not (empty $root.Values.externalAccess.hidden.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.hidden.service.nodePorts $i }}
