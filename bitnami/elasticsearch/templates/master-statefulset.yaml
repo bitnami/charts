@@ -65,16 +65,15 @@ spec:
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
-            - /scripts/sysctl.sh
+            - /bin/bash
+            - -ec
+            - |
+              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
           securityContext:
             privileged: true
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: initcontainer-script
-              mountPath: /scripts/sysctl.sh
-              subPath: sysctl.sh
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
         - name: volume-permissions
@@ -200,12 +199,6 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
       volumes:
-        {{- if .Values.sysctlImage.enabled }}
-        - name: initcontainer-script
-          configMap:
-            name: {{ include "elasticsearch.fullname" . }}-initcontainer
-            defaultMode: 0755
-        {{- end }}
         {{- if .Values.config }}
         - name: config
           configMap:
