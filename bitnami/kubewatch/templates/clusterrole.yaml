@@ -15,14 +15,15 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - pods
-      - namespaces
-      - services
-      - deployments
-      - replicationcontrollers
-      - replicasets
       - daemonsets
+      - deployments
+      - events
+      - namespaces
       - persistentvolumes
+      - pods
+      - replicasets
+      - replicationcontrollers
+      - services
     verbs:
       - list
       - watch
