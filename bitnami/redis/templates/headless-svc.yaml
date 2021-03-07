@@ -15,11 +15,11 @@ spec:
   publishNotReadyAddresses: true
   {{- end }}
   ports:
-    - name: redis
+    - name: tcp-redis
       port: {{ .Values.redisPort }}
       targetPort: redis
   {{- if .Values.sentinel.enabled }}
-    - name: redis-sentinel
+    - name: tcp-sentinel
       port: {{ .Values.sentinel.port }}
       targetPort: redis-sentinel
   {{- end }}

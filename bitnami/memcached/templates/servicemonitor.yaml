@@ -5,11 +5,19 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+  {{- end }}
 spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}

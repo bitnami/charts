@@ -1,7 +1,7 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 2.6.2
+appVersion: 2.6.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 2.3.1
+version: 2.3.2

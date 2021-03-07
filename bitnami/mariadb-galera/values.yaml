@@ -28,7 +28,6 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH debugging in minideb-extras-base
   ##
   debug: false
 
@@ -525,7 +524,7 @@ persistence:
 ##
 extraInitContainers: []
 # - name: do-something
-#   image: bitnami/minideb:buster
+#   image: bitnami/minideb
 #   command: ['do', 'something']
 
 ## Additional containers

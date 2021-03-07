@@ -23,6 +23,8 @@ rules:
       - nodes
       - nodes/stats
       - pods
+      - replicationcontrollers
+      - secrets
       - services
     verbs:
       - get
@@ -87,4 +89,14 @@ rules:
   - nonResourceURLs: ["/metrics"]
     verbs:
       - get
+{{- if .Values.tkgi.enabled }}
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+  resourceNames:
+  - pks-privileged
+{{- end }}
 {{- end }}

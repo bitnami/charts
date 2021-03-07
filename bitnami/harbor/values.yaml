@@ -28,8 +28,7 @@ coreImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -54,8 +53,7 @@ portalImage:
   ##
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -79,8 +77,7 @@ jobserviceImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -104,8 +101,7 @@ chartMuseumImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -129,8 +125,7 @@ registryImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -154,8 +149,7 @@ registryctlImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -179,8 +173,7 @@ trivyImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -205,8 +198,7 @@ clairImage:
   ##
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -230,8 +222,7 @@ clairAdapterImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -255,8 +246,7 @@ notaryServerImage:
   #  - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -280,8 +270,7 @@ notarySignerImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -306,8 +295,7 @@ nginxImage:
   ##
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 

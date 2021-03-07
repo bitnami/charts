@@ -22,4 +22,4 @@ name: spark
 sources:
   - https://github.com/bitnami/bitnami-docker-spark
   - https://spark.apache.org/
-version: 5.2.2
+version: 5.2.3
