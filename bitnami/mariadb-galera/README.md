@@ -346,7 +346,7 @@ The feature allows for specifying a template string for a initContainer in the p
 ```yaml
 extraInitContainers:
 - name: initcontainer
-  image: bitnami/minideb:buster
+  image: bitnami/minideb
   command: ["/bin/sh", "-c"]
   args:
     - install_packages curl && curl http://api-service.local/db/starting;

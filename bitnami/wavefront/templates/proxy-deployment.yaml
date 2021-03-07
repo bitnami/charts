@@ -86,6 +86,8 @@ spec:
               {{- if .Values.proxy.zipkinPort }} --traceZipkinListenerPorts {{ .Values.proxy.zipkinPort }}{{- end -}}
               {{- if .Values.proxy.traceSamplingRate }} --traceSamplingRate {{ .Values.proxy.traceSamplingRate }}{{- end -}}
               {{- if .Values.proxy.traceSamplingDuration }} --traceSamplingDuration {{ .Values.proxy.traceSamplingDuration }}{{- end -}}
+              {{- if .Values.proxy.traceJaegerApplicationName }} --traceJaegerApplicationName {{ .Values.proxy.traceJaegerApplicationName }}{{- end -}}
+              {{- if .Values.proxy.traceZipkinApplicationName }} --traceZipkinApplicationName {{ .Values.proxy.traceZipkinApplicationName }}{{- end -}}
               {{- if .Values.proxy.histogramPort }} --histogramDistListenerPorts {{ .Values.proxy.histogramPort }}{{- end -}}
               {{- if .Values.proxy.histogramMinutePort }} --histogramMinuteListenerPorts {{ .Values.proxy.histogramMinutePort }}{{- end -}}
               {{- if .Values.proxy.histogramHourPort }} --histogramHourListenerPorts {{ .Values.proxy.histogramHourPort }}{{- end -}}
