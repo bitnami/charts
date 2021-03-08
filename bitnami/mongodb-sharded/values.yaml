@@ -300,6 +300,11 @@ shardsvr:
       values: []
     ## Affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## You can set arbiterLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+    ## affinity:
+    ##   matchLabels:
+    ##     shard: "{{ .arbiterLoopId }}"
+    ##
     ## Note: shardsvr.arbiter.podAffinityPreset, shardsvr.arbiter.podAntiAffinityPreset, and shardsvr.arbiter.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
