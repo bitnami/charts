@@ -136,7 +136,7 @@ server:
 
   ## Dataflow Server port
   ##
-  port: 8080
+  containerPort: 8080
 
   ## Dataflow Server node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity

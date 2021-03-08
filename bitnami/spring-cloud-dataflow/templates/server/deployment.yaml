@@ -168,7 +168,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.server.port }}
+              containerPort: {{ .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.jdwp.enabled }}
             - name: jdwp
