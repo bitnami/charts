@@ -20,6 +20,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query
+        {{- if and $query.enabled $query.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $query.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap $query.podAnnotations }}
       annotations:
         {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap }}

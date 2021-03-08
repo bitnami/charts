@@ -19,6 +19,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: bucketweb
+        {{- if and .Values.bucketweb.enabled .Values.bucketweb.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.bucketweb.podAnnotations }}
