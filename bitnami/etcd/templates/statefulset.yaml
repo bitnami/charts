@@ -24,7 +24,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/configmap-scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -116,12 +115,25 @@ spec:
                   fieldPath: metadata.name
             - name: ETCDCTL_API
               value: "3"
+            - name: ETCD_START_FROM_SNAPSHOT
+              value: {{ ternary "yes" "no" .Values.startFromSnapshot.enabled | quote }}
+            - name: ETCD_DISASTER_RECOVERY
+              value: {{ ternary "yes" "no" .Values.disasterRecovery.enabled | quote }}
             - name: ETCD_NAME
               value: "$(MY_POD_NAME)"
             - name: ETCD_DATA_DIR
               value: "/bitnami/etcd/data"
             - name: ETCD_LOG_LEVEL
               value: {{ ternary "debug" "info" .Values.image.debug | quote }}
+            - name: ALLOW_NONE_AUTHENTICATION
+              value: {{ ternary "yes" "no" (and (not .Values.auth.rbac.enabled) .Values.auth.rbac.allowNoneAuthentication) | quote }}
+            {{- if .Values.auth.rbac.enabled }}
+            - name: ETCD_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "etcd.secretName" . }}
+                  key: etcd-root-password
+            {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS
@@ -140,20 +152,15 @@ spec:
             - name: ETCD_INITIAL_CLUSTER_STATE
               value: {{ default (ternary "new" "existing" .Release.IsInstall) .Values.initialClusterState | quote }}
             {{- $initialCluster := list }}
+            {{- $endpoints := list }}
             {{- range $e, $i := until $replicaCount }}
             {{- $initialCluster = append $initialCluster (printf "%s-%d=%s://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdPeerProtocol $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $peerPort) }}
+            {{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $clientPort) }}
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
-            {{- end }}
-            - name: ALLOW_NONE_AUTHENTICATION
-              value: {{ ternary "yes" "no" (and (not .Values.auth.rbac.enabled) .Values.auth.rbac.allowNoneAuthentication) | quote }}
-            {{- if .Values.auth.rbac.enabled }}
-            - name: ETCD_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "etcd.secretName" . }}
-                  key: etcd-root-password
+            - name: ETCDCTL_ENDPOINTS
+              value: {{ join "," $endpoints | quote }}
             {{- end }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
             - name: ETCD_AUTO_TLS
@@ -214,7 +221,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /scripts/probes.sh
+                - /opt/bitnami/scripts/etcd/healthcheck.sh
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -227,7 +234,7 @@ spec:
           readinessProbe:
             exec:
               command:
-                - /scripts/probes.sh
+                - /opt/bitnami/scripts/etcd/healthcheck.sh
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -240,7 +247,7 @@ spec:
           startupProbe:
             exec:
               command:
-                - /scripts/probes.sh
+                - /opt/bitnami/scripts/etcd/healthcheck.sh
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -253,8 +260,6 @@ spec:
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: scripts
-              mountPath: /scripts
             - name: data
               mountPath: /bitnami/etcd
             {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
@@ -286,10 +291,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: scripts
-          configMap:
-            name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 0755
         {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
         - name: init-snapshot-volume
           persistentVolumeClaim:

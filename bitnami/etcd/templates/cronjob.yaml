@@ -37,12 +37,27 @@ spec:
               securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               command:
-                - /scripts/save-snapshot.sh
+                - /opt/bitnami/scripts/etcd/snapshot.sh
               env:
               - name: BITNAMI_DEBUG
                 value: {{ ternary "true" "false" .Values.image.debug | quote }}
               - name: ETCDCTL_API
                 value: "3"
+              {{- $replicaCount := int .Values.replicaCount }}
+              {{- $clientPort := int .Values.service.port }}
+              {{- $etcdFullname := include "common.names.fullname" . }}
+              {{- $releaseNamespace := .Release.Namespace }}
+              {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+              {{- $clusterDomain := .Values.clusterDomain }}
+              {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
+              {{- $endpoints := list }}
+              {{- range $e, $i := until $replicaCount }}
+              {{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $clientPort) }}
+              {{- end }}
+              - name: ETCDCTL_ENDPOINTS
+                value: {{ join "," $endpoints | quote }}
+              - name: ETCD_SNAPSHOT_HISTORY_LIMIT
+                value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
               {{- if .Values.auth.client.secureTransport }}
               - name: ETCD_CERT_FILE
                 value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
@@ -69,8 +84,6 @@ spec:
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
               {{- end }}
               volumeMounts:
-                - name: scripts
-                  mountPath: /scripts
                 - name: snapshot-volume
                   mountPath: /snapshots
                 {{- if .Values.auth.client.secureTransport }}
@@ -85,10 +98,6 @@ spec:
                 secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
                 defaultMode: 256
             {{- end }}
-            - name: scripts
-              configMap:
-                name: {{ include "common.names.fullname" . }}-scripts
-                defaultMode: 0755
             - name: snapshot-volume
               persistentVolumeClaim:
                 claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}

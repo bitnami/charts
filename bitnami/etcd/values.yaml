@@ -177,8 +177,7 @@ extraEnvVarsSecret: ""
 
 ## Command and args for running the container (set to default if not set). Use array form
 ##
-command:
-  - /scripts/setup.sh
+command: []
 args: []
 
 ## Number of replicas
@@ -209,7 +208,7 @@ lifecycleHooks:
   preStop:
     exec:
       command:
-        - /scripts/prestop-hook.sh
+        - /opt/bitnami/scripts/etcd/prestop.sh
 
 ## etcd container ports to open
 ##
