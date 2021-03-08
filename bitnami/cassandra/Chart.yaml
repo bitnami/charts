@@ -23,4 +23,5 @@ name: cassandra
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
   - http://cassandra.apache.org
-version: 7.3.5
+
+version: 7.4.0
