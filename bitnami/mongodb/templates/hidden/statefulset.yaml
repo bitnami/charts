@@ -1,0 +1,480 @@
+{{- if (include "mongodb.hidden.enabled" .) }}
+{{- $replicaCount := int .Values.hidden.replicaCount }}
+{{- $loadBalancerIPListLength := len .Values.externalAccess.hidden.service.loadBalancerIPs }}
+{{- if not (and .Values.externalAccess.hidden.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.hidden.service.type "LoadBalancer")) }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "mongodb.fullname" . }}-hidden
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: hidden
+    {{- if .Values.hidden.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hidden.labels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.hidden.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  serviceName: {{ include "mongodb.fullname" . }}-hidden-headless
+  podManagementPolicy: {{ .Values.hidden.podManagementPolicy }}
+  replicas: {{ .Values.hidden.replicaCount }}
+  updateStrategy:
+    type: {{ .Values.hidden.strategyType }}
+    {{- if (eq "OnDelete" .Values.hidden.strategyType) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: hidden
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: hidden
+        {{- if .Values.hidden.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations }}
+      annotations:
+        {{- if (include "mongodb.hidden.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/hidden/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.hidden.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "mongodb.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.schedulerName }}
+      schedulerName: "{{ .Values.schedulerName }}"
+      {{- end }}
+      serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+      {{- if .Values.hidden.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAffinityPreset "component" "" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAntiAffinityPreset "component" "" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.hidden.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.hidden.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hidden.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hidden.priorityClassName }}
+      priorityClassName: {{ .Values.hidden.priorityClassName }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.hidden.initContainers (and .Values.volumePermissions.enabled .Values.hidden.persistence.enabled) (and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
+      initContainers:
+        {{- if .Values.hidden.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hidden.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.hidden.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "mongodb.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              mkdir -p {{ .Values.hidden.persistence.mountPath }}{{- if .Values.hidden.persistence.subPath }}/{{ .Values.hidden.persistence.subPath }}{{- end }}
+              {{- if and .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled }}
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.hidden.persistence.mountPath }}{{- if .Values.hidden.persistence.subPath }}/{{ .Values.hidden.persistence.subPath }}{{- end }}"
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: datadir
+              mountPath: {{ .Values.hidden.persistence.mountPath }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: generate-tls-certs
+          image: {{ include "mongodb.tls.image" . }}
+          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          env:
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+          - name: certs-volume
+            mountPath: /certs/CAs
+          - name: certs
+            mountPath: /certs
+          command:
+            - sh
+            - "-c"
+            - |
+              /bin/bash <<'EOF'
+              my_hostname=$(hostname)
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+              cp /certs/CAs/* /certs/
+              cat >/certs/openssl.cnf <<EOL
+              [req]
+              req_extensions = v3_req
+              distinguished_name = req_distinguished_name
+              [req_distinguished_name]
+              [ v3_req ]
+              basicConstraints = CA:FALSE
+              keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+              subjectAltName = @alt_names
+              [alt_names]
+              DNS.1 = $svc
+              DNS.2 = $my_hostname
+              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+              DNS.4 = localhost
+              DNS.5 = 127.0.0.1
+              {{- if .Values.externalAccess.hidden.service.loadBalancerIPs }}
+              {{- range $key, $val := .Values.externalAccess.hidden.service.loadBalancerIPs }}
+              IP.{{ $key }} = {{ $val | quote }}
+              {{- end }}
+              {{- end }}
+              EOL
+
+              export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+              #Create the client/server certificate
+              openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+              #Signing the server certificate with the CA cert and key
+              openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+              rm /certs/mongo.csr
+              #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+              cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+              cd /certs/
+              shopt -s extglob
+              rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              EOF
+        {{- end }}
+        {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
+        - name: auto-discovery
+          image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
+          imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
+          command:
+            - /scripts/auto-discovery.sh
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SHARED_FILE
+              value: "/shared/info.txt"
+          {{- if .Values.externalAccess.autoDiscovery.resources }}
+          resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: shared
+              mountPath: /shared
+            - name: scripts
+              mountPath: /scripts/auto-discovery.sh
+              subPath: auto-discovery.sh
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: mongodb
+          image: {{ include "mongodb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hidden.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /scripts/setup-hidden.sh
+          {{- end }}
+          {{- if .Values.hidden.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
+            - name: SHARED_FILE
+              value: "/shared/info.txt"
+            {{- end }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_SERVICE_NAME
+              value: "{{ include "mongodb.fullname" . }}-headless"
+            - name: MONGODB_REPLICA_SET_MODE
+              value: "hidden"
+            - name: MONGODB_INITIAL_PRIMARY_HOST
+              value: "{{ include "mongodb.fullname" . }}-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+            - name: MONGODB_REPLICA_SET_NAME
+              value: {{ .Values.replicaSetName | quote }}
+            {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+            {{- end }}
+            {{- if .Values.auth.username }}
+            - name: MONGODB_USERNAME
+              value: {{ .Values.auth.username | quote }}
+            {{- end }}
+            {{- if .Values.auth.database }}
+            - name: MONGODB_DATABASE
+              value: {{ .Values.auth.database | quote }}
+            {{- end }}
+            {{- if .Values.auth.enabled }}
+            {{- if and .Values.auth.username .Values.auth.database }}
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-password
+            {{- end }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-replica-set-key
+            {{- end }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: {{ .Values.systemLogVerbosity | quote }}
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
+            - name: MONGODB_ENABLE_IPV6
+              value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+              value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- end }}
+            {{- if .Values.hidden.extraFlags }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: {{ .Values.hidden.extraFlags | join " " | quote }}
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: MONGODB_CLIENT_EXTRA_FLAGS
+              value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- end }}
+            {{- if .Values.hidden.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hidden.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.hidden.extraEnvVarsCM .Values.hidden.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.hidden.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.hidden.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.hidden.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.hidden.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          {{- if .Values.hidden.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: {{ .Values.hidden.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hidden.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hidden.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.hidden.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.hidden.livenessProbe.failureThreshold }}
+          {{- else if .Values.hidden.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hidden.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+              {{- if .Values.tls.enabled }}
+                - --tls
+                - --tlsCertificateKeyFile=/certs/mongodb.pem
+                - --tlsCAFile=/certs/mongodb-ca-cert
+              {{- end }}
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: {{ .Values.hidden.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hidden.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hidden.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.hidden.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.hidden.readinessProbe.failureThreshold }}
+          {{- else if .Values.hidden.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hidden.resources }}
+          resources: {{- toYaml .Values.hidden.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: datadir
+              mountPath: {{ .Values.hidden.persistence.mountPath }}
+              subPath: {{ .Values.hidden.persistence.subPath }}
+            {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }}
+            {{- if or .Values.hidden.configuration .Values.hidden.existingConfigmap }}
+            - name: config
+              mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
+              subPath: mongodb.conf
+            {{- end }}
+            - name: scripts
+              mountPath: /scripts/setup-hidden.sh
+              subPath: setup-hidden.sh
+            {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
+            - name: shared
+              mountPath: /shared
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: certs
+              mountPath: /certs
+            {{- end }}
+            {{- if .Values.hidden.extraVolumeMounts }}
+            {{- toYaml .Values.hidden.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ template "mongodb.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+          env:
+          {{- if .Values.auth.enabled }}
+          - name: MONGODB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "mongodb.secretName" . }}
+                key: mongodb-root-password
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.tls.enabled }}
+          - name: certs
+            mountPath: /certs
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: 9216
+          {{- if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hidden.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hidden.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "mongodb.initdbScriptsCM" . }}
+        {{- end }}
+        {{- if or .Values.hidden.configuration .Values.hidden.existingConfigmap }}
+        - name: config
+          configMap:
+            name: {{ include "mongodb.hidden.configmapName" . }}
+        {{- end }}
+        {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
+        - name: shared
+          emptyDir: {}
+        {{- end }}
+        - name: scripts
+          configMap:
+            name: {{ include "mongodb.fullname" . }}-scripts
+            defaultMode: 0755
+        {{- if .Values.hidden.extraVolumes }}
+        {{- toYaml .Values.hidden.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: certs
+          emptyDir: {}
+        - name: certs-volume
+          secret:
+            secretName: {{ template "mongodb.caSecretName" . }}
+            items:
+            - key: mongodb-ca-cert
+              path: mongodb-ca-cert
+              mode: 511
+            - key: mongodb-ca-key
+              path: mongodb-ca-key
+              mode: 511
+        {{- end }}
+  {{- if not .Values.hidden.persistence.enabled }}
+        - name: datadir
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+        {{- if .Values.hidden.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.hidden.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.hidden.persistence.size | quote }}
+        {{- if .Values.hidden.persistence.volumeClaimTemplates.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{ include "common.storage.class" (dict "persistence" .Values.hidden.persistence "global" .Values.global) }}
+  {{- end }}
+{{- end }}
+{{- end }}

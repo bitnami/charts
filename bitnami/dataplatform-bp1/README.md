@@ -16,6 +16,7 @@ Helm chart blueprint for this data platform deployment, covering:
 -   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
 -   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
+-   Optional Wavefront Observability framework configuration 
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
@@ -39,6 +40,8 @@ The "Small" size data platform in default configuration deploys the following:
 2. Kafka with 3 nodes using the zookeeper deployed above
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
+
+The data platform can be optionally deployed with the wavefront observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -116,6 +119,12 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | `kafka.resources.limits`    | The resources limits for Kafka containers                                   | `{}`                                                                                 |
 | `kafka.resources.requests`  | The requested resources for Kafka containers for a small kubernetes cluster | Kafka pods Resource requests set for optimal resource usage                          |
 | `kafka.affinity`            | Affinity for pod assignment                                                 | Kafka pods affinity rules set for best possible resiliency (evaluated as a template) |
+| `kafka.metrics.kafka.enabled`  | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                          | `false`                                                 |
+| `kafka.metrics.kafka.resources.requests`       | Kafka Exporter container resource requests              | Kafka Exporter pod resource requests set for optimal resource usage      |
+| `kafka.metrics.kafka.service.port`               | Kafka Exporter Prometheus port                                                                                                    | `9308`    |
+| `kafka.metrics.jmx.enabled`                      | Whether or not to expose JMX metrics to Prometheus                                                                                | `false`   |
+| `kafka.metrics.jmx.resources.requests`           | JMX Exporter container resource requests                  | JMX exporter pod resource requests set for best possible resiliency    |
+| `kafka.metrics.jmx.service.port`                 | JMX Exporter Prometheus port                                                                                                      | `5556`    |
 | `kafka.zookeeper.enabled`   | Switch to enable or disable the Zookeeper helm chart                        | `false` Common Zookeeper deployment used for kafka and solr                          |
 | `kafka.externalZookeeper.servers` | Server or list of external Zookeeper servers to use                         | Zookeeper installed as a subchart to be used                                         |
 
@@ -133,6 +142,10 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | `solr.javaMem`                   | Java memory options to pass to the Solr container   | Solr Java Heap size set for optimal resource usage                                  |
 | `solr.heap`                      | Java Heap options to pass to the solr container     | `nil`                                                                               |
 | `solr.affinity`                  | Affinity for Solr pods assignment                   | Solr pods Affinity rules set for best possible resiliency (evaluated as a template) |
+| `solr.exporter.enabled`          | Start a prometheus exporter                         | `false`                                                                             |
+| `solr.exporter.port`             | Solr exporter port                                  | `9983`                                                                              |
+| `solr.exporter.resources`        | Exporter resource requests/limit                    | Solr exporter pod resource requests for optimal resource usage size                 |
+| `solr.exporter.affinity`         | Affinity for Solr pods assignment                   | Solr exporter pod affinity rules for best possible resiliency (evaluated as a template) |
 | `solr.zookeeper.enabled`         | Enable Zookeeper deployment. Needed for Solr cloud. | `false` common zookeeper used between kafka and solr                                |
 | `solr.externalZookeeper.servers` | Servers for an already existing Zookeeper.          | Zookeeper installed as a subchart to be used                                        |
 
@@ -143,12 +156,35 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | Parameter                   | Description                                      | Default                                                                                     |
 |:----------------------------|:-------------------------------------------------|:--------------------------------------------------------------------------------------------|
 | `spark.enabled`             | Switch to enable or disable the Spark helm chart | `true`                                                                                      |
+| `spark.master.webPort`      | Specify the port where the web interface will listen on the master                                                                  | `8080`   |
 | `spark.master.affinity`     | Spark master affinity for pod assignment         | Spark master pod Affinity rules set for best possible resiliency (evaluated as a template)  |
 | `spark.master.resources`    | CPU/Memory resource requests/limits for Master   | Spark master pods resource requests set for optimal resource usage                          |
-| `spark.worker.javaOptions`  | Set options for the JVM in the form `-Dx=y`      | No default                                                                                  |
 | `spark.worker.replicaCount` | Set the number of workers                        | `2`                                                                                         |
+| `spark.worker.webPort`      | Specify the port where the web interface will listen on the worker                                                                         | `8081`    |
+| `spark.worker.javaOptions`  | Set options for the JVM in the form `-Dx=y`      | No default                                                                                  |
 | `spark.worker.affinity`     | Spark worker affinity for pod assignment         | Spark worker pods Affinity rules set for best possible resiliency (evaluated as a template) |
 | `spark.worker.resources`    | CPU/Memory resource requests/limits for worker   | Spark worker pods resource requests set for optimal resource usage                          |
+| `spark.metrics.enabled`     | Start a side-car prometheus exporter                                                                                           | `false`       |
+| `spark.metrics.masterAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the master nodes  | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8080"}` |
+| `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes   | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
+| `spark.metrics.resources.requests` | The requested resources for the metrics exporter container  | Spark exporter container resource requests for optimal resource usage size|
+
+### Wavefront chart parameters
+
+| Parameter                                  | Description                                                                                                            | Default                                                 |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `wavefront.enabled`                        | Switch to enable or disable the Wavefront helm chart                                                                   | `true`                                                  |
+| `wavefront.clusterName`                    | Unique name for the Kubernetes cluster (required)                                                                      | `KUBERNETES_CLUSTER_NAME`                               |
+| `wavefront.wavefront.url`                  | Wavefront URL for your cluster (required)                                                                              | `https://YOUR_CLUSTER.wavefront.com`                    |
+| `wavefront.wavefront.token`                | Wavefront API Token (required)                                                                                         | `YOUR_API_TOKEN`                                        |
+| `wavefront.wavefront.existingSecret`       | Name of an existing secret containing the token                                                                        | `nil`                                                   |
+| `wavefront.collector.discovery.enabled`    | Rules based and Prometheus endpoints auto-discovery                                                                    | `true`                                                  |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                               | `true`                                                 |
+| `wavefront.collector.discovery.config`     | Configuration for rules based auto-discovery                                                                           | Data Platform components pods discovery config                                                   |
+| `wavefront.collector.resources.limits`     | The resources limits for the collector container                                                                       | `{}`                                                    |
+| `wavefront.collector.resources.requests`   | The requested resources for the collector container                                                                    | Collectors pods resource requests for optimal resource usage size                       |
+| `wavefront.proxy.resources.limits`         | The resources limits for the proxy container                                                                           | `{}`                                                    |
+| `wavefront.proxy.resources.requests`       | The requested resources for the proxy container                                                                        | Proxy pods resource resource requests for optimal resource usage size                                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -160,15 +196,19 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
-In case you need to deploy the data platform skipping any component, you can specify the 'enabled' parameter using the `--set <component>.enabled=false` argument to `helm install`. For Example,
+In case you need to deploy the data platform with Wavefront Observability Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
 
 ```console
-$ helm install my-release \
-  --set solr.enabled=false \
-  bitnami/dataplatform-bp1
+$ helm install my-release bitnami/dataplatform-bp1 \
+    --set kafka.metrics.kafka.enabled=true \
+    --set kafka.metrics.jmx.enabled=true \    
+    --set spark.metrics.enabled=true \
+    --set solr.exporter.enabled=true \
+    --set wavefront.enabled=true \
+    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+    --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-
-The above command deploys the data platform without Solr.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 

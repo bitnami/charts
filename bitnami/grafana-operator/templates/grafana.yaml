@@ -100,12 +100,6 @@ spec:
   {{- if .Values.grafana.resources }}
   resources: {{- toYaml .Values.grafana.resources | nindent 4 }}
   {{- end }}
-  {{- if .Values.grafana.adminUsername }}
-  adminUsername: {{ .Values.grafana.adminUsername }}
-  {{- end }}
-  {{- if .Values.grafana.adminPassword }}
-  adminPassword: {{ .Values.grafana.adminPassword }}
-  {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}

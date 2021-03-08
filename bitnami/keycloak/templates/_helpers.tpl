@@ -32,10 +32,37 @@ Return the proper Keycloak image name
 {{- end -}}
 
 {{/*
+Return the proper keycloak-config-cli image name
+*/}}
+{{- define "keycloak.keycloakConfigCli.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.keycloakConfigCli.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the keycloak-config-cli configuration configmap.
+*/}}
+{{- define "keycloak.keycloakConfigCli.configmapName" -}}
+{{- if .Values.keycloakConfigCli.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.keycloakConfigCli.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-keycloak-config-cli-configmap" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for keycloak-config-cli
+*/}}
+{{- define "keycloak.keycloakConfigCli.createConfigmap" -}}
+{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "keycloak.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.keycloakConfigCli.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*

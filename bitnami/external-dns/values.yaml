@@ -574,6 +574,9 @@ serviceAccount:
   ## Annotations for the Service Account
   ##
   annotations: {}
+  ## Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
 
 ## RBAC parameteres
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/

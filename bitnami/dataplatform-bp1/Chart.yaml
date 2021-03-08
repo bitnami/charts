@@ -19,6 +19,10 @@ dependencies:
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -26,13 +30,16 @@ dependencies:
     version: 1.x.x
 description: OCTO Data platform Kafka-Spark-Solr Helm Chart
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform
+home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp1
+icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
 keywords:
   - dataplatform
   - kafka
   - spark
   - solr
   - zookeeper
+  - wavefront
+  - observability
   - apache
 maintainers:
   - email: containers@bitnami.com
@@ -47,4 +54,8 @@ sources:
   - https://github.com/bitnami/bitnami-docker-solr
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 0.1.0
+  - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
+  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+  - https://github.com/wavefrontHQ/wavefront-proxy
+version: 0.2.0
