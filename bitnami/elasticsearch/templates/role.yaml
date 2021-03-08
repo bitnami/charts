@@ -2,8 +2,8 @@
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ include "elasticsearch.curator.name" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  name: {{ include "elasticsearch.curator.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     role: curator
     component: elasticsearch-curator-configmap
 rules:
