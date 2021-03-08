@@ -302,6 +302,16 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 5
 
+## Enable tls in front of MinIO(R) containers.
+##
+tls:
+  ## If true, mount an existing secret to the container
+  ##
+  enabled: false
+  ## Name of an existing secret holding the certificate information
+  ##
+  secretName: ""
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##

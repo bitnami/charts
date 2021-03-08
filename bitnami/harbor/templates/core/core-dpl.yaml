@@ -22,7 +22,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.core.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podLabels "context" $) | nindent 8 }}

@@ -165,6 +165,10 @@ spec:
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: minio-certs
+              mountPath: /opt/bitnami/minio/certs/
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
       volumes:
@@ -172,6 +176,18 @@ spec:
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: minio-certs
+          secret:
+            secretName: {{ .Values.tls.secretName }}
+            items:
+            - key: tls.crt 
+              path: public.crt
+            - key: tls.key
+              path: private.key
+            - key: ca.crt
+              path: CAs/public.crt
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data

@@ -30,7 +30,7 @@ spec:
     {{- end }}
   {{- end }}
   ports:
-    - name: redis
+    - name: tcp-redis
       port: {{ .Values.slave.service.port }}
       targetPort: redis
       {{- if .Values.slave.service.nodePort }}

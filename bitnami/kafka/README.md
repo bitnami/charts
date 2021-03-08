@@ -135,12 +135,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 ### Kafka provisioning parameters
 
-| Parameter                | Description                      | Default                  |
-|--------------------------|----------------------------------|--------------------------|
-| `provisioning.enabled`   | Enable kafka provisioning Job    | `false`                  |
-| `provisioning.image`     | Kafka provisioning Job image     | `Check values.yaml file` |
-| `provisioning.resources` | Kafka provisioning Job resources | `Check values.yaml file` |
-| `provisioning.topics`    | Kafka provisioning topics        | `[]`                     |
+| Parameter                    | Description                                                           | Default                  |
+|------------------------------|-----------------------------------------------------------------------|--------------------------|
+| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                  |
+| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file` |
+| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file` |
+| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                     |
+| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                    |
 
 ### Statefulset parameters
 
@@ -165,6 +166,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `containerSecurityContext`  | Kafka containers' Security Context                                                        | `{}`                                               |
 | `resources.limits`          | The resources limits for Kafka containers                                                 | `{}`                                               |
 | `resources.requests`        | The requested resources for Kafka containers                                              | `{}`                                               |
+| `schedulerName`             | Name of the k8s scheduler (other than default)                                            | `nil`                                              |
 | `livenessProbe`             | Liveness probe configuration for Kafka                                                    | `Check values.yaml file`                           |
 | `readinessProbe`            | Readiness probe configuration for Kafka                                                   | `Check values.yaml file`                           |
 | `customLivenessProbe`       | Custom Liveness probe configuration for Kafka                                             | `{}`                                               |
@@ -263,6 +265,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.tlsCaSecret`     | Name of the existing secret containing the ca certificate file, if the ca cert can not be found in `metrics.kafka.certificatesSecret`                                        | `nil`                                                   |
 | `metrics.kafka.resources.limits`       | Kafka Exporter container resource limits                                                                                         | `{}`                                                    |
 | `metrics.kafka.resources.requests`     | Kafka Exporter container resource requests                                                                                       | `{}`                                                    |
+| `metrics.kafka.schedulerName`          | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `nil`                                                   |
 | `metrics.kafka.service.type`           | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`                                             |
 | `metrics.kafka.service.port`           | Kafka Exporter Prometheus port                                                                                                   | `9308`                                                  |
 | `metrics.kafka.service.nodePort`       | Kubernetes HTTP node port                                                                                                        | `""`                                                    |

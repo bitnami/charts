@@ -144,7 +144,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.12.0-debian-10-r0
+    tag: 1.13.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -328,7 +328,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.16.2-debian-10-r54
+    tag: 1.17.1-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -581,7 +581,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r49
+    tag: 1.19.7-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
