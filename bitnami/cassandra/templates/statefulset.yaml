@@ -123,7 +123,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
             {{- end }}
@@ -235,7 +235,7 @@ spec:
             - name: CASSANDRA_CQL_PORT_NUMBER
               value: {{ .Values.containerPorts.cql | quote }}
             {{- end }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - name: CASSANDRA_COMMITLOG_DIR
               value: {{ .Values.persistence.commitLogMountPath | quote }}
             {{- end }}
@@ -437,7 +437,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
     {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
-    {{- if .Values.persistence.commitStorageClass }}
+    {{- if .Values.persistence.commitLogMountPath }}
     - metadata:
         name: commitlog
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
